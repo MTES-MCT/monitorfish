@@ -47,6 +47,14 @@ class GetActivityReportsUTests {
     @MockitoBean
     private lateinit var missionRepository: MissionRepository
 
+    @MockitoBean
+    private lateinit var infractionRepository: InfractionRepository
+
+    @org.junit.jupiter.api.BeforeEach
+    fun setUp() {
+        given(infractionRepository.findInfractionsThreatCharacterization()).willReturn(emptyList())
+    }
+
     companion object {
         val fixedClock: Clock = Clock.systemUTC()
 
@@ -202,6 +210,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -359,6 +368,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -501,6 +511,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -590,6 +601,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -673,6 +685,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -753,6 +766,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -893,6 +907,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -1013,6 +1028,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -1098,6 +1114,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),
@@ -1203,6 +1220,7 @@ class GetActivityReportsUTests {
                     vesselRepository,
                     missionRepository,
                     fleetSegmentRepository,
+                    infractionRepository,
                     fixedClock,
                 ).execute(
                     ZonedDateTime.now(),

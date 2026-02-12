@@ -71,5 +71,7 @@ class JpaInfractionRepositoryITests : AbstractDBTests() {
         )
         assertThat(infractions.first().threat).isEqualTo("Activités INN")
         assertThat(infractions.first().threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(infractions.first().isrCode).isEqualTo("AUT-020")
+        assertThat(infractions.first().isrName).isEqualTo("Licence and authorisation")
     }
 }

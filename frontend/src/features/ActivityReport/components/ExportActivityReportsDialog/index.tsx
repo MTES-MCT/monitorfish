@@ -68,9 +68,7 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
       <StyledDialogTitle>Exporter les ACT-REP</StyledDialogTitle>
       <StyledDialogBody>
         <StyledParagraph>
-          Exporter les <i>Activity Report</i> (ACT-REP) au format CSV.
-          <br />
-          Attention à bien finaliser le document avec les infractions avant envoi.
+          Exporter les <i>Activity Report</i> (ACT-REP) avec les codes ISR au format CSV.
         </StyledParagraph>
         <div>
           Du

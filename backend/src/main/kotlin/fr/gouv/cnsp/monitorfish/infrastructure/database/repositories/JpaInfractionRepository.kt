@@ -35,6 +35,8 @@ class JpaInfractionRepository(
                 infraction = it[1] as String,
                 threat = it[2] as String,
                 threatCharacterization = it[3] as String,
+                isrCode = it.getOrNull(4) as? String,
+                isrName = it.getOrNull(5) as? String,
             )
         }
 }

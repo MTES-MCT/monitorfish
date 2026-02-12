@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.J
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReports
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -433,6 +434,17 @@ class MissionActionsControllerITests {
                                         districtCode = "AY",
                                         hasLogbookEsacapt = false,
                                     ),
+                                infractions =
+                                    listOf(
+                                        ActivityReportInfraction(
+                                            isrCode = "AUT-020",
+                                            isrName = "Licence and authorisation",
+                                        ),
+                                        ActivityReportInfraction(
+                                            isrCode = "VAM-020",
+                                            isrName = "Automatic Identification System (AIS)",
+                                        ),
+                                    ),
                             ),
                         ),
                     jdpSpecies = listOf("BSS", "MAK", "LTH"),
@@ -455,7 +467,16 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.activityReports[0].vesselNationalIdentifier", equalTo("AYFR000654")))
             .andExpect(jsonPath("$.activityReports[0].controlUnits[0].id", equalTo(1234)))
             .andExpect(jsonPath("$.activityReports[0].vessel.vesselId", equalTo(1)))
-            .andExpect(jsonPath("$.jdpSpecies.length()", equalTo(3)))
+            .andExpect(jsonPath("$.activityReports[0].infractions.length()", equalTo(2)))
+            .andExpect(jsonPath("$.activityReports[0].infractions[0].isrCode", equalTo("AUT-020")))
+            .andExpect(jsonPath("$.activityReports[0].infractions[0].isrName", equalTo("Licence and authorisation")))
+            .andExpect(jsonPath("$.activityReports[0].infractions[1].isrCode", equalTo("VAM-020")))
+            .andExpect(
+                jsonPath(
+                    "$.activityReports[0].infractions[1].isrName",
+                    equalTo("Automatic Identification System (AIS)"),
+                ),
+            ).andExpect(jsonPath("$.jdpSpecies.length()", equalTo(3)))
             .andExpect(jsonPath("$.jdpSpecies[0]", equalTo("BSS")))
 
         runBlocking {

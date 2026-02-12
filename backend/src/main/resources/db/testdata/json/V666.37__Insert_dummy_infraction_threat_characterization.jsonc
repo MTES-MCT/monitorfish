@@ -423,72 +423,86 @@
             {
                 "id": 1,
                 "natinf_code": 2608,
-                "threat_characterization_id": 1
+                "threat_characterization_id": 1,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 2,
                 "natinf_code": 2609,
-                "threat_characterization_id": 2
+                "threat_characterization_id": 2,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 3,
                 "natinf_code": 2610,
-                "threat_characterization_id": 3
+                "threat_characterization_id": 3,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 4,
                 "natinf_code": 22070,
-                "threat_characterization_id": 4
+                "threat_characterization_id": 4,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 5,
                 "natinf_code": 27879,
-                "threat_characterization_id": 5
+                "threat_characterization_id": 5,
+                "isr_code": "AUT-010"
             },
             {
                 "id": 6,
                 "natinf_code": 27900,
-                "threat_characterization_id": 6
+                "threat_characterization_id": 6,
+                "isr_code": "PHO-030"
             },
             {
                 "id": 7,
                 "natinf_code": 27898,
-                "threat_characterization_id": 7
+                "threat_characterization_id": 7,
+                "isr_code": "PHO-030"
             },
             {
                 "id": 8,
                 "natinf_code": 27885,
-                "threat_characterization_id": 8
+                "threat_characterization_id": 8,
+                "isr_code": "DUT-020"
             },
             {
                 "id": 9,
                 "natinf_code": 12922,
-                "threat_characterization_id": 9
+                "threat_characterization_id": 9,
+                "isr_code": "DUT-040"
             },
             {
                 "id": 10,
                 "natinf_code": 27685,
-                "threat_characterization_id": 9
+                "threat_characterization_id": 9,
+                "isr_code": "DUT-040"
             },
             {
                 "id": 11,
                 "natinf_code": 2584,
-                "threat_characterization_id": 10
+                "threat_characterization_id": 10,
+                "isr_code": "DUT-020"
             },
             {
                 "id": 12,
                 "natinf_code": 2604,
-                "threat_characterization_id": 10
+                "threat_characterization_id": 10,
+                "isr_code": "DUT-020"
             },
             {
                 "id": 13,
                 "natinf_code": 4234,
-                "threat_characterization_id": 10
+                "threat_characterization_id": 10,
+                "isr_code": "DUT-020"
             },
             {
                 "id": 14,
                 "natinf_code": 22035,
-                "threat_characterization_id": 10
+                "threat_characterization_id": 10,
+                "isr_code": "DUT-020"
             },
             {
                 "id": 15,
@@ -503,252 +517,302 @@
             {
                 "id": 17,
                 "natinf_code": 27714,
-                "threat_characterization_id": 12
+                "threat_characterization_id": 12,
+                "isr_code": "PHO-060"
             },
             {
                 "id": 18,
                 "natinf_code": 27688,
-                "threat_characterization_id": 13
+                "threat_characterization_id": 13,
+                "isr_code": "VAM-020"
             },
             {
                 "id": 19,
                 "natinf_code": 2603,
-                "threat_characterization_id": 14
+                "threat_characterization_id": 14,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 20,
                 "natinf_code": 12912,
-                "threat_characterization_id": 14
+                "threat_characterization_id": 14,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 21,
                 "natinf_code": 22070,
-                "threat_characterization_id": 14
+                "threat_characterization_id": 14,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 22,
                 "natinf_code": 30792,
-                "threat_characterization_id": 14
+                "threat_characterization_id": 14,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 23,
                 "natinf_code": 32099,
-                "threat_characterization_id": 14
+                "threat_characterization_id": 14,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 24,
                 "natinf_code": 10400,
-                "threat_characterization_id": 15
+                "threat_characterization_id": 15,
+                "isr_code": "PHO-080"
             },
             {
                 "id": 25,
                 "natinf_code": 27715,
-                "threat_characterization_id": 15
+                "threat_characterization_id": 15,
+                "isr_code": "PHO-080"
             },
             {
                 "id": 26,
                 "natinf_code": 27718,
-                "threat_characterization_id": 15
+                "threat_characterization_id": 15,
+                "isr_code": "PHO-080"
             },
             {
                 "id": 27,
                 "natinf_code": 27721,
-                "threat_characterization_id": 15
+                "threat_characterization_id": 15,
+                "isr_code": "PHO-080"
             },
             {
                 "id": 28,
                 "natinf_code": 2593,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 29,
                 "natinf_code": 7057,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 30,
                 "natinf_code": 7059,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 31,
                 "natinf_code": 7060,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 32,
                 "natinf_code": 12891,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 33,
                 "natinf_code": 12898,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 34,
                 "natinf_code": 12918,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 35,
                 "natinf_code": 27724,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 36,
                 "natinf_code": 27724,
-                "threat_characterization_id": 17
+                "threat_characterization_id": 17,
+                "isr_code": "GEA-030"
             },
             {
                 "id": 37,
                 "natinf_code": 27725,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 38,
                 "natinf_code": 27725,
-                "threat_characterization_id": 17
+                "threat_characterization_id": 17,
+                "isr_code": "GEA-030"
             },
             {
                 "id": 39,
                 "natinf_code": 27731,
-                "threat_characterization_id": 16
+                "threat_characterization_id": 16,
+                "isr_code": "GEA-010"
             },
             {
                 "id": 40,
                 "natinf_code": 7063,
-                "threat_characterization_id": 18
+                "threat_characterization_id": 18,
+                "isr_code": "CLS-010"
             },
             {
                 "id": 41,
                 "natinf_code": 7064,
-                "threat_characterization_id": 18
+                "threat_characterization_id": 18,
+                "isr_code": "CLS-010"
             },
             {
                 "id": 42,
                 "natinf_code": 28347,
-                "threat_characterization_id": 18
+                "threat_characterization_id": 18,
+                "isr_code": "CLS-010"
             },
             {
                 "id": 43,
                 "natinf_code": 27730,
-                "threat_characterization_id": 19
+                "threat_characterization_id": 19,
+                "isr_code": "CLS-010"
             },
             {
                 "id": 44,
                 "natinf_code": 2600,
-                "threat_characterization_id": 20
+                "threat_characterization_id": 20,
+                "isr_code": "PHO-010"
             },
             {
                 "id": 45,
                 "natinf_code": 27729,
-                "threat_characterization_id": 21
+                "threat_characterization_id": 21,
+                "isr_code": "VES-010"
             },
             {
                 "id": 46,
                 "natinf_code": 7983,
-                "threat_characterization_id": 22
+                "threat_characterization_id": 22,
+                "isr_code": "PHO-021"
             },
             {
                 "id": 47,
                 "natinf_code": 7984,
-                "threat_characterization_id": 22
+                "threat_characterization_id": 22,
+                "isr_code": "PHO-021"
             },
             {
                 "id": 48,
                 "natinf_code": 28346,
-                "threat_characterization_id": 22
+                "threat_characterization_id": 22,
+                "isr_code": "PHO-021"
             },
             {
                 "id": 49,
                 "natinf_code": 27688,
-                "threat_characterization_id": 23
+                "threat_characterization_id": 23,
+                "isr_code": "VAM-030"
             },
             {
                 "id": 50,
                 "natinf_code": 12900,
-                "threat_characterization_id": 24
+                "threat_characterization_id": 24,
+                "isr_code": "CER-010"
             },
             {
                 "id": 51,
                 "natinf_code": 12902,
-                "threat_characterization_id": 24
+                "threat_characterization_id": 24,
+                "isr_code": "CER-010"
             },
             {
                 "id": 52,
                 "natinf_code": 28348,
-                "threat_characterization_id": 24
+                "threat_characterization_id": 24,
+                "isr_code": "CER-010"
             },
             {
                 "id": 53,
                 "natinf_code": 33914,
-                "threat_characterization_id": 25
+                "threat_characterization_id": 25,
+                "isr_code": "PHO-130"
             },
             {
                 "id": 54,
                 "natinf_code": 7064,
-                "threat_characterization_id": 12
+                "threat_characterization_id": 12,
+                "isr_code": "PHO-060"
             },
             {
                 "id": 55,
                 "natinf_code": 12902,
-                "threat_characterization_id": 12
+                "threat_characterization_id": 12,
+                "isr_code": "PHO-060"
             },
             {
                 "id": 56,
                 "natinf_code": 27717,
-                "threat_characterization_id": 12
+                "threat_characterization_id": 12,
+                "isr_code": "PHO-060"
             },
             {
                 "id": 57,
                 "natinf_code": 33914,
-                "threat_characterization_id": 12
+                "threat_characterization_id": 12,
+                "isr_code": "PHO-060"
             },
             {
                 "id": 58,
                 "natinf_code": 27688,
-                "threat_characterization_id": 26
+                "threat_characterization_id": 26,
+                "isr_code": "VAM-010"
             },
             {
                 "id": 59,
                 "natinf_code": 7060,
-                "threat_characterization_id": 27
+                "threat_characterization_id": 27,
+                "isr_code": "CLS-023"
             },
             {
                 "id": 60,
                 "natinf_code": 7062,
-                "threat_characterization_id": 27
+                "threat_characterization_id": 27,
+                "isr_code": "CLS-023"
             },
             {
                 "id": 61,
                 "natinf_code": 2596,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 62,
                 "natinf_code": 7061,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 63,
                 "natinf_code": 27686,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 64,
                 "natinf_code": 27687,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 65,
                 "natinf_code": 32071,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 66,
                 "natinf_code": 22806,
-                "threat_characterization_id": 29
+                "threat_characterization_id": 29,
+                "isr_code": "AUT-020"
             },
             {
                 "id": 67,
@@ -778,182 +842,218 @@
             {
                 "id": 72,
                 "natinf_code": 22807,
-                "threat_characterization_id": 35
+                "threat_characterization_id": 35,
+                "isr_code": "REP-040"
             },
             {
                 "id": 73,
                 "natinf_code": 22808,
-                "threat_characterization_id": 36
+                "threat_characterization_id": 36,
+                "isr_code": "REP-071"
             },
             {
                 "id": 74,
                 "natinf_code": 27695,
-                "threat_characterization_id": 28
+                "threat_characterization_id": 28,
+                "isr_code": "CLS-022"
             },
             {
                 "id": 75,
                 "natinf_code": 27696,
-                "threat_characterization_id": 27
+                "threat_characterization_id": 27,
+                "isr_code": "CLS-023"
             },
             {
                 "id": 76,
                 "natinf_code": 27728,
-                "threat_characterization_id": 37
+                "threat_characterization_id": 37,
+                "isr_code": "PHO-010"
             },
             {
                 "id": 77,
                 "natinf_code": 27748,
-                "threat_characterization_id": 37
+                "threat_characterization_id": 37,
+                "isr_code": "PHO-010"
             },
             {
                 "id": 78,
                 "natinf_code": 34314,
-                "threat_characterization_id": 37
+                "threat_characterization_id": 37,
+                "isr_code": "PHO-010"
             },
             {
                 "id": 79,
                 "natinf_code": 27726,
-                "threat_characterization_id": 38
+                "threat_characterization_id": 38,
+                "isr_code": "PHO-040"
             },
             {
                 "id": 80,
                 "natinf_code": 27689,
-                "threat_characterization_id": 39
+                "threat_characterization_id": 39,
+                "isr_code": "REP-072"
             },
             {
                 "id": 81,
                 "natinf_code": 27885,
-                "threat_characterization_id": 40
+                "threat_characterization_id": 40,
+                "isr_code": "REP-072"
             },
             {
                 "id": 82,
                 "natinf_code": 27689,
-                "threat_characterization_id": 41
+                "threat_characterization_id": 41,
+                "isr_code": "REP-090"
             },
             {
                 "id": 83,
                 "natinf_code": 27885,
-                "threat_characterization_id": 42
+                "threat_characterization_id": 42,
+                "isr_code": "REP-090"
             },
             {
                 "id": 84,
                 "natinf_code": 27689,
-                "threat_characterization_id": 43
+                "threat_characterization_id": 43,
+                "isr_code": "REP-080"
             },
             {
                 "id": 85,
                 "natinf_code": 27689,
-                "threat_characterization_id": 44
+                "threat_characterization_id": 44,
+                "isr_code": "REP-040"
             },
             {
                 "id": 86,
                 "natinf_code": 27689,
-                "threat_characterization_id": 45
+                "threat_characterization_id": 45,
+                "isr_code": "REP-030"
             },
             {
                 "id": 87,
                 "natinf_code": 31004,
-                "threat_characterization_id": 46
+                "threat_characterization_id": 46,
+                "isr_code": "PHO-110"
             },
             {
                 "id": 88,
                 "natinf_code": 27689,
-                "threat_characterization_id": 47
+                "threat_characterization_id": 47,
+                "isr_code": "REP-060"
             },
             {
                 "id": 89,
                 "natinf_code": 27885,
-                "threat_characterization_id": 48
+                "threat_characterization_id": 48,
+                "isr_code": "REP-060"
             },
             {
                 "id": 90,
                 "natinf_code": 27689,
-                "threat_characterization_id": 49
+                "threat_characterization_id": 49,
+                "isr_code": "REP-130"
             },
             {
                 "id": 91,
                 "natinf_code": 27689,
-                "threat_characterization_id": 50
+                "threat_characterization_id": 50,
+                "isr_code": "REP-010"
             },
             {
                 "id": 92,
                 "natinf_code": 27885,
-                "threat_characterization_id": 51
+                "threat_characterization_id": 51,
+                "isr_code": "REP-010"
             },
             {
                 "id": 93,
                 "natinf_code": 27689,
-                "threat_characterization_id": 52
+                "threat_characterization_id": 52,
+                "isr_code": "REP-010"
             },
             {
                 "id": 94,
                 "natinf_code": 27885,
-                "threat_characterization_id": 53
+                "threat_characterization_id": 53,
+                "isr_code": "REP-020"
             },
             {
                 "id": 95,
                 "natinf_code": 27689,
-                "threat_characterization_id": 54
+                "threat_characterization_id": 54,
+                "isr_code": "REP-150"
             },
             {
                 "id": 96,
                 "natinf_code": 27885,
-                "threat_characterization_id": 55
+                "threat_characterization_id": 55,
+                "isr_code": "REP-150"
             },
             {
                 "id": 97,
                 "natinf_code": 27689,
-                "threat_characterization_id": 56
+                "threat_characterization_id": 56,
+                "isr_code": "REP-073"
             },
             {
                 "id": 98,
                 "natinf_code": 27727,
-                "threat_characterization_id": 57
+                "threat_characterization_id": 57,
+                "isr_code": "PHO-070"
             },
             {
                 "id": 99,
                 "natinf_code": 30835,
-                "threat_characterization_id": 58
+                "threat_characterization_id": 58,
+                "isr_code": "REP-160"
             },
             {
                 "id": 100,
                 "natinf_code": 27885,
-                "threat_characterization_id": 59
+                "threat_characterization_id": 59,
+                "isr_code": "REP-160"
             },
             {
                 "id": 101,
                 "natinf_code": 27712,
-                "threat_characterization_id": 60
+                "threat_characterization_id": 60,
+                "isr_code": "REP-140"
             },
             {
                 "id": 102,
                 "natinf_code": 27689,
-                "threat_characterization_id": 61
+                "threat_characterization_id": 61,
+                "isr_code": "REP-071"
             },
             {
                 "id": 103,
                 "natinf_code": 27885,
-                "threat_characterization_id": 62
+                "threat_characterization_id": 62,
+                "isr_code": "REP-071"
             },
             {
                 "id": 104,
                 "natinf_code": 27689,
-                "threat_characterization_id": 63
+                "threat_characterization_id": 63,
+                "isr_code": "REP-999"
             },
             {
                 "id": 105,
                 "natinf_code": 27693,
-                "threat_characterization_id": 64
+                "threat_characterization_id": 64,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 106,
                 "natinf_code": 32326,
-                "threat_characterization_id": 65
+                "threat_characterization_id": 65,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 107,
                 "natinf_code": 32327,
-                "threat_characterization_id": 66
+                "threat_characterization_id": 66,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 108,
@@ -968,22 +1068,26 @@
             {
                 "id": 110,
                 "natinf_code": 30028,
-                "threat_characterization_id": 69
+                "threat_characterization_id": 69,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 111,
                 "natinf_code": 30029,
-                "threat_characterization_id": 70
+                "threat_characterization_id": 70,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 112,
                 "natinf_code": 31122,
-                "threat_characterization_id": 71
+                "threat_characterization_id": 71,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 113,
                 "natinf_code": 31123,
-                "threat_characterization_id": 72
+                "threat_characterization_id": 72,
+                "isr_code": "AUT-080"
             },
             {
                 "id": 114,
@@ -1003,17 +1107,20 @@
             {
                 "id": 117,
                 "natinf_code": 31116,
-                "threat_characterization_id": 75
+                "threat_characterization_id": 75,
+                "isr_code": "AUT-070"
             },
             {
                 "id": 118,
                 "natinf_code": 1508,
-                "threat_characterization_id": 76
+                "threat_characterization_id": 76,
+                "isr_code": "AUT-070"
             },
             {
                 "id": 119,
                 "natinf_code": 1509,
-                "threat_characterization_id": 76
+                "threat_characterization_id": 76,
+                "isr_code": "AUT-070"
             },
             {
                 "id": 120,

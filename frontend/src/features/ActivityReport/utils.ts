@@ -3,7 +3,7 @@ import { range, sortBy } from 'lodash-es'
 import { JDP, UNTARGETED_SPECIES_CODE } from './constants'
 import { MissionAction } from '../Mission/missionAction.types'
 
-import type { ActivityReportWithId } from './types'
+import type { ActivityReport, ActivityReportWithId } from './types'
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 export function formatDMDCoordinateForActivityReport(coordinate: string | undefined): string {
@@ -17,13 +17,76 @@ export function formatDMDCoordinateForActivityReport(coordinate: string | undefi
   return `${hemisphere}${nextCoordinate}`
 }
 
-/**
- * Adds 'SPECIES' related columns, 'INFR' related columns and 'COMMENT' column to JDP_CSV_MAP_BASE
- */
-export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
-  const numberOfSpeciesColumns = 10
-  const numberOfInfractionColumns = 10
+function populateInfractionsColumnsForMed(
+  numberOfInfractionColumnsForMED: number,
+  baseCsvMap: DownloadAsCsvMap<
+    ActivityReport & {
+      id: number
+    }
+  >
+) {
+  range(numberOfInfractionColumnsForMED).forEach(index => {
+    const count = index + 1
 
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionClass${count}`] = {
+      label: `INFR${count}_CLASS1`,
+      transform: activity => (activity.infractions[count - 1]?.isrCode ? 'ISR' : '')
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionCode${count}`] = {
+      label: `INFR${count}_CODE1`,
+      transform: activity => activity.infractions[count - 1]?.isrCode ?? ''
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionDescription${count}`] = {
+      label: `INFR${count}_DESCRIPTION`,
+      transform: activity => activity.infractions[count - 1]?.isrName ?? ''
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionLegalReference${count}`] = `INFR${count}_LEGAL_REFERENCE`
+  })
+}
+
+function populateInfractionsColumnsForAllJDPExceptMed(
+  numberOfInfractionColumns: number,
+  baseCsvMap: DownloadAsCsvMap<
+    ActivityReport & {
+      id: number
+    }
+  >,
+  jdp: JDP.NORTH_SEA | JDP.WESTERN_WATERS
+) {
+  range(numberOfInfractionColumns).forEach(index => {
+    const count = index + 1
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionClass${count}`] = {
+      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CLASS` : `INFR_CLASS${count}`,
+      transform: () => 'ISR'
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionCode${count}`] = {
+      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CODE` : `INFR_CODE${count}`,
+      transform: activity => activity.infractions[count - 1]?.isrCode ?? ''
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    baseCsvMap[`infractionDescription${count}`] = {
+      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_DESCRIPTION` : `INFR_REMARK${count}`,
+      transform: activity => activity.infractions[count - 1]?.isrName ?? ''
+    }
+  })
+}
+
+function populateSpeciesColumns(
+  numberOfSpeciesColumns: number,
+  baseCsvMap: DownloadAsCsvMap<ActivityReport & { id: number }>
+) {
   range(numberOfSpeciesColumns).forEach(index => {
     const count = index + 1
 
@@ -60,33 +123,30 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
       }
     }
   })
+}
 
-  range(numberOfInfractionColumns).forEach(index => {
-    const count = index + 1
+/**
+ * Adds 'SPECIES' related columns, 'INFR' related columns and 'COMMENT' column to JDP_CSV_MAP_BASE and JDP_CSV_MAP_BASE
+ */
+export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>, jdp: JDP) {
+  const numberOfSpeciesColumns = 10
+  const numberOfInfractionColumns = 10
+  const numberOfInfractionColumnsForMED = 5
 
-    // eslint-disable-next-line no-param-reassign
-    baseCsvMap[`infractionClass${count}`] = jdp === JDP.WESTERN_WATERS ? `INFR${count}_CLASS` : `INFR_CLASS${count}`
+  if (jdp === JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC) {
+    populateInfractionsColumnsForMed(numberOfInfractionColumnsForMED, baseCsvMap)
 
-    // eslint-disable-next-line no-param-reassign
-    baseCsvMap[`infractionCode${count}`] = {
-      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CODE` : `INFR_CODE${count}`,
-      transform: activity => {
-        const allNatinfs = getInfractionsKeys(activity.action, 'natinf')
-
-        return allNatinfs[count - 1] ?? ''
-      }
-    }
+    populateSpeciesColumns(numberOfSpeciesColumns, baseCsvMap)
 
     // eslint-disable-next-line no-param-reassign
-    baseCsvMap[`infractionDescription${count}`] = {
-      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_DESCRIPTION` : `INFR_REMARK${count}`,
-      transform: activity => {
-        const allComments = getInfractionsKeys(activity.action, 'comments')
+    baseCsvMap['action.otherComments'] = `COMMENT`
 
-        return allComments[count - 1] ?? ''
-      }
-    }
-  })
+    return baseCsvMap
+  }
+
+  populateSpeciesColumns(numberOfSpeciesColumns, baseCsvMap)
+
+  populateInfractionsColumnsForAllJDPExceptMed(numberOfInfractionColumns, baseCsvMap, jdp)
 
   // eslint-disable-next-line no-param-reassign
   baseCsvMap['action.otherComments'] = `COMMENT`
@@ -123,16 +183,6 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
       : speciesOnboardWithoutOtherSpecies
 
   return sortBy(groupedSpeciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
-}
-
-function getInfractionsKeys(action: MissionAction.MissionAction, key: string): string[] {
-  return ([] as string[]).concat.apply([], [getInfractionsWithRecordKey(action.infractions, key)])
-}
-
-function getInfractionsWithRecordKey(infractions: MissionAction.Infraction[], key: string): string[] {
-  return infractions
-    .filter(infraction => infraction.infractionType === MissionAction.InfractionType.WITH_RECORD)
-    .map(infraction => infraction[key])
 }
 
 export function getPatrolType(activity: ActivityReportWithId): string {

@@ -12,9 +12,15 @@ export type ActivityReport = {
   activityCode: ActivityCode
   controlUnits: LegacyControlUnit.LegacyControlUnit[]
   faoArea: string | undefined
+  infractions: ActivityReportInfraction[]
   segment: string | undefined
   vessel: Vessel.SelectedVessel
   vesselNationalIdentifier: string
+}
+
+export type ActivityReportInfraction = {
+  isrCode: string
+  isrName: string
 }
 
 export type ActivityReportWithId = ActivityReport & {

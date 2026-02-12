@@ -29,7 +29,7 @@ context('Side Window > Mission List > Export Activity Reports', () => {
       endMonth,
       endDay
     ])
-    // Hack to close the date picker popup
+    // Hack to close the date picker popupœ
     cy.get('h4').contains('Exporter les ACT-REP').click().wait(250)
     cy.fill('JDP', 'JDP NS-01')
 

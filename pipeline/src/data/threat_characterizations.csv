@@ -15,7 +15,7 @@ id,name,threat_id
 19,Espèce protégée,3
 20,Immersion espèces,3
 21,Marquage espèces,3
-23,REM,3
+23,REM - caméra,3
 25,Tracabilité,3
 37,Rejet,5
 38,Tri,5
@@ -72,7 +72,6 @@ id,name,threat_id
 101,Engin non-conforme,3
 102,Marquage engin actif,3
 103,Marquage engin passif,3
-104,Dispositif d'écrémage illégal,3
 105,Usage illégal système détection poisson,3
 106,Usage illégal DCP,3
 107,Dispositif illégal pour le tri,3
@@ -116,3 +115,6 @@ id,name,threat_id
 145,Securité / hygiène,11
 146,Logement / hygiène,11
 147,Titres de sécurité - certificat prévention pollution,11
+148,Sécurité maritime - VFI,11
+149,Sécurité maritime - feux éteints,11
+150,Sécurité maritime - défaut de veille,11

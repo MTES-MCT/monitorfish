@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { JDP_CSV_MAP_BASE } from '../components/ExportActivityReportsDialog/csvMap'
+import { JDP_CSV_MAP_BASE, MED_JDP_CSV_MAP } from '../components/ExportActivityReportsDialog/csvMap'
 import { JDP } from '../constants'
 import {
   formatDMDCoordinateForActivityReport,
@@ -96,13 +96,15 @@ describe('utils', () => {
     // @ts-ignore
     expect(csvMap.nbFish10?.label).toEqual('NB_IND10')
 
-    expect(csvMap.infractionClass1).toEqual('INFR1_CLASS')
+    // @ts-ignore
+    expect(csvMap.infractionClass1?.label).toEqual('INFR1_CLASS')
     // @ts-ignore
     expect(csvMap.infractionCode1?.label).toEqual('INFR1_CODE')
     // @ts-ignore
     expect(csvMap.infractionDescription1?.label).toEqual('INFR1_DESCRIPTION')
 
-    expect(csvMap.infractionClass6).toEqual('INFR6_CLASS')
+    // @ts-ignore
+    expect(csvMap.infractionClass6?.label).toEqual('INFR6_CLASS')
     // @ts-ignore
     expect(csvMap.infractionCode6?.label).toEqual('INFR6_CODE')
     // @ts-ignore
@@ -113,13 +115,13 @@ describe('utils', () => {
 
   it('getJDPCsvMap Should be dynamically generated with species, infractions and control comment for MEDITERRANEAN_AND_EASTERN_ATLANTIC', async () => {
     // When
-    const csvMap = getJDPCsvMap(JDP_CSV_MAP_BASE, JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
+    const csvMap = getJDPCsvMap(MED_JDP_CSV_MAP, JDP.MEDITERRANEAN_AND_EASTERN_ATLANTIC)
 
     // Then
-    expect(Object.keys(csvMap)).toHaveLength(91)
+    expect(Object.keys(csvMap)).toHaveLength(79)
 
     // @ts-ignore
-    expect(csvMap.eventHour?.label).toEqual('EVENT_HOUR')
+    expect(csvMap.eventTime?.label).toEqual('EVENT_TIME')
 
     // @ts-ignore
     expect(csvMap.species1?.label).toEqual('SPECIES1')
@@ -135,17 +137,19 @@ describe('utils', () => {
     // @ts-ignore
     expect(csvMap.nbFish10?.label).toEqual('NB_IND10')
 
-    expect(csvMap.infractionClass1).toEqual('INFR_CLASS1')
     // @ts-ignore
-    expect(csvMap.infractionCode1?.label).toEqual('INFR_CODE1')
+    expect(csvMap.infractionClass1?.label).toEqual('INFR1_CLASS1')
     // @ts-ignore
-    expect(csvMap.infractionDescription1?.label).toEqual('INFR_REMARK1')
+    expect(csvMap.infractionCode1?.label).toEqual('INFR1_CODE1')
+    // @ts-ignore
+    expect(csvMap.infractionDescription1?.label).toEqual('INFR1_DESCRIPTION')
 
-    expect(csvMap.infractionClass6).toEqual('INFR_CLASS6')
     // @ts-ignore
-    expect(csvMap.infractionCode6?.label).toEqual('INFR_CODE6')
+    expect(csvMap.infractionClass5?.label).toEqual('INFR5_CLASS1')
     // @ts-ignore
-    expect(csvMap.infractionDescription6?.label).toEqual('INFR_REMARK6')
+    expect(csvMap.infractionCode5?.label).toEqual('INFR5_CODE1')
+    // @ts-ignore
+    expect(csvMap.infractionDescription5?.label).toEqual('INFR5_DESCRIPTION')
 
     expect(csvMap['action.otherComments']).toEqual('COMMENT')
   })

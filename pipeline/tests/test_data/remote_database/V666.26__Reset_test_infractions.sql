@@ -1,6 +1,7 @@
 DELETE FROM public.infraction_threat_characterization;
 DELETE FROM public.threat_characterizations;
 DELETE FROM public.threats;
+DELETE FROM public.isr;
 DELETE FROM infractions;
 
 INSERT INTO infractions (
@@ -101,6 +102,7 @@ INSERT INTO infractions (
     (     27718, 'Reg test',   'Cat test', 'Infraction test'),
     (     27719, 'Reg test',   'Cat test', 'Infraction test'),
     (     27721, 'Reg test',   'Cat test', 'Infraction test'),
+    (     27723, 'Reg test',   'Cat test', 'Infraction test'),
     (     27724, 'Reg pêche 5',             'Pêche', 'Infraction 2'),
     (     27725, 'Reg test',   'Cat test', 'Infraction test'),
     (     27726, 'Reg test',   'Cat test', 'Infraction test'),
@@ -137,6 +139,10 @@ INSERT INTO infractions (
     (     33915, 'Reg test',   'Cat test', 'Infraction test'),
     (     34308, 'Reg test',   'Cat test', 'Infraction test'),
     (     34309, 'Reg test',   'Cat test', 'Infraction test'),
+    (     27252, 'Reg test',   'Cat test', 'Infraction test'),
+    (     28710, 'Reg test',   'Cat test', 'Infraction test'),
+    (     28713, 'Reg test',   'Cat test', 'Infraction test'),
+    (     4473, 'Reg test',   'Cat test', 'Infraction test'),
     (     34314, 'Reg test',   'Cat test', 'Infraction test');
 
 

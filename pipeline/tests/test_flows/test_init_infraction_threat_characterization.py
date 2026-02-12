@@ -14,6 +14,7 @@ def test_flow(reset_test_data):
     infraction_threat_characterization_query = (
         "SELECT * FROM infraction_threat_characterization ORDER BY id"
     )
+    isr_query = "SELECT * FROM isr ORDER BY code"
 
     initial_threats = read_query(threats_query, db="monitorfish_remote")
     initial_threat_characterizations = read_query(
@@ -33,6 +34,7 @@ def test_flow(reset_test_data):
     infraction_threat_characterization_after_first_run = read_query(
         infraction_threat_characterization_query, db="monitorfish_remote"
     )
+    isr_after_first_run = read_query(isr_query, db="monitorfish_remote")
 
     # Verify counts increased from test data
     assert len(initial_threats) == 2
@@ -41,6 +43,7 @@ def test_flow(reset_test_data):
     assert len(threat_characterizations_after_first_run) > 110
     assert len(initial_infraction_threat_characterization) == 2
     assert len(infraction_threat_characterization_after_first_run) > 160
+    assert len(isr_after_first_run) > 67
 
     # Re-running should succeed and lead to the same data
     state = init_infraction_threat_characterization_flow(return_state=True)
@@ -53,6 +56,7 @@ def test_flow(reset_test_data):
     infraction_threat_characterization_after_second_run = read_query(
         infraction_threat_characterization_query, db="monitorfish_remote"
     )
+    isr_after_second_run = read_query(isr_query, db="monitorfish_remote")
 
     pd.testing.assert_frame_equal(threats_after_first_run, threats_after_second_run)
     pd.testing.assert_frame_equal(
@@ -63,3 +67,4 @@ def test_flow(reset_test_data):
         infraction_threat_characterization_after_first_run,
         infraction_threat_characterization_after_second_run,
     )
+    pd.testing.assert_frame_equal(isr_after_first_run, isr_after_second_run)

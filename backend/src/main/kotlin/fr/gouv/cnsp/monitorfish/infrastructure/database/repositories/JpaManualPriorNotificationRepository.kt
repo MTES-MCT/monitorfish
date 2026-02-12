@@ -74,10 +74,12 @@ class JpaManualPriorNotificationRepository(
         try {
             val manualPriorNotificationEntity =
                 dbManualPriorNotificationRepository
-                    .save(ManualPriorNotificationEntity.fromPriorNotification(
-                        mapper = mapper,
-                        priorNotification = newOrNextPriorNotification
-                    ))
+                    .save(
+                        ManualPriorNotificationEntity.fromPriorNotification(
+                            mapper = mapper,
+                            priorNotification = newOrNextPriorNotification,
+                        ),
+                    )
 
             return manualPriorNotificationEntity.toPriorNotification(mapper)
         } catch (e: IllegalArgumentException) {
@@ -106,8 +108,9 @@ class JpaManualPriorNotificationRepository(
         nextPnoValue.isSent = isSent
         nextPnoValue.isVerified = isVerified
 
-        val updatedManualPriorNotification = manualPriorNotification
-            .copy(value = mapper.writeValueAsString(nextPnoValue))
+        val updatedManualPriorNotification =
+            manualPriorNotification
+                .copy(value = mapper.writeValueAsString(nextPnoValue))
 
         dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
     }
@@ -123,8 +126,9 @@ class JpaManualPriorNotificationRepository(
         val nextPnoValue: PNO = mapper.readValue(manualPriorNotification.value, PNO::class.java)
         nextPnoValue.isInvalidated = true
 
-        val updatedManualPriorNotification = manualPriorNotification
-            .copy(value = mapper.writeValueAsString(nextPnoValue))
+        val updatedManualPriorNotification =
+            manualPriorNotification
+                .copy(value = mapper.writeValueAsString(nextPnoValue))
 
         dbManualPriorNotificationRepository.save(updatedManualPriorNotification)
     }

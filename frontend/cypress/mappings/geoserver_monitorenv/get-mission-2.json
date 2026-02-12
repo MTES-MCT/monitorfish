@@ -35,7 +35,7 @@
       "updatedAtUtc": "2024-01-23T02:49:25.923703Z",
       "envActions": [],
       "missionSource": "POSEIDON_CNSP",
-      "isUnderJdp": false,
+      "isUnderJdp": true,
       "isGeometryComputedFromControls": false
     }
   }

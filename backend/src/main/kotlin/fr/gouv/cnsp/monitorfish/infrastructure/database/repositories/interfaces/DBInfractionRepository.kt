@@ -13,7 +13,9 @@ interface DBInfractionRepository : CrudRepository<InfractionEntity, Long> {
             itc.natinf_code AS natinf_code,
             i.infraction AS infraction,
             t.name AS threat,
-            tc.name AS threat_characterization
+            tc.name AS threat_characterization,
+            isr.code AS isr_code,
+            isr.name AS isr_name
         FROM
             infraction_threat_characterization itc
         INNER JOIN
@@ -25,6 +27,9 @@ interface DBInfractionRepository : CrudRepository<InfractionEntity, Long> {
         INNER JOIN
             threats t
             ON tc.threat_id = t.id
+        LEFT JOIN
+            isr
+            ON itc.isr_code = isr.code
     """,
         nativeQuery = true,
     )

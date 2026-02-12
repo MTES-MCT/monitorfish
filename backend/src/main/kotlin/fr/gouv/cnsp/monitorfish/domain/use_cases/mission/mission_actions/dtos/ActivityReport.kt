@@ -14,4 +14,5 @@ data class ActivityReport(
     val vesselNationalIdentifier: String,
     val controlUnits: List<LegacyControlUnit>,
     val vessel: Vessel,
+    val infractions: List<ActivityReportInfraction> = listOf(),
 )

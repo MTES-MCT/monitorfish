@@ -129,4 +129,109 @@ export const JDP_CSV_MAP_BASE: DownloadAsCsvMap<ActivityReportWithId> = {
   LOCATION: 'LOCATION'
   // 'SPECIES', 'INFR' and 'COMMENT' are added in getJDPCsvMap()
 }
+
+export const MED_JDP_CSV_MAP: DownloadAsCsvMap<ActivityReportWithId> = {
+  patrolCode: {
+    label: 'PATROL_CODE',
+    transform: activity => getPatrolType(activity) + (activity.controlUnits[0]?.name ?? '')
+  },
+  NATIONAL_REFERENCE: 'NATIONAL_REFERENCE',
+  eventType: {
+    label: 'EVENT_TYPE',
+    transform: () => 'INSPECTION'
+  },
+  eventDate: {
+    label: 'EVENT_DATE',
+    transform: activity => {
+      const dateTime = customDayjs(activity.action.actionDatetimeUtc)
+
+      return dateTime.format('YYYYMMDD')
+    }
+  },
+  eventTime: {
+    label: 'EVENT_TIME',
+    transform: activity => {
+      const dateTime = customDayjs(activity.action.actionDatetimeUtc)
+
+      return dateTime.format('HH:mm')
+    }
+  },
+  leadingState: {
+    label: 'LS',
+    transform: () => 'FRA'
+  },
+  PS1: {
+    label: 'PS1',
+    transform: () => 'FRA'
+  },
+  // Not filled
+  PS2: 'PS2',
+  // Not filled
+  PS3: 'PS3',
+  objectType: {
+    label: 'OBJECT_TYPE',
+    transform: () => 'Vessel'
+  },
+  objectState: {
+    label: 'OBJECT_STATE',
+    transform: activity => toAlpha3(activity.vessel.flagState) ?? 'UNK'
+  },
+  vesselNationalIdentifier: 'OBJECT_NATIONAL_ID',
+  'vessel.vesselName': 'NA',
+  'vessel.ircs': 'RC',
+  'vessel.internalReferenceNumber': 'CFR',
+  activityCode: 'ACTIVITY_CODE',
+  gearCode: {
+    label: 'GEAR_CODE',
+    transform: activity => activity.action.gearOnboard[0]?.gearCode ?? ''
+  },
+  meshSize: {
+    label: 'MESH_SIZE',
+    transform: activity =>
+      activity.action.gearOnboard[0]?.controlledMesh ?? activity.action.gearOnboard[0]?.declaredMesh ?? ''
+  },
+  fleetSegment: {
+    label: 'FLEET_SEGMENT',
+    transform: activity => activity.segment ?? ''
+  },
+  eventArea: {
+    label: 'EVENT_AREA',
+    transform: activity => activity.faoArea ?? ''
+  },
+  areaSystem: 'AREA_SYSTEM',
+  areaCode: 'AREA_CODE',
+  latitude: {
+    label: 'LA',
+    transform: activity => {
+      const dmdCoordinates = getCoordinates(
+        [activity.action.longitude, activity.action.latitude],
+        WSG84_PROJECTION,
+        CoordinatesFormat.DEGREES_MINUTES_DECIMALS
+      )
+
+      return formatDMDCoordinateForActivityReport(dmdCoordinates[0])
+    }
+  },
+  longitude: {
+    label: 'LO',
+    transform: activity => {
+      const dmdCoordinates = getCoordinates(
+        [activity.action.longitude, activity.action.latitude],
+        WSG84_PROJECTION,
+        CoordinatesFormat.DEGREES_MINUTES_DECIMALS
+      )
+
+      return formatDMDCoordinateForActivityReport(dmdCoordinates[1])
+    }
+  },
+  countryCode: {
+    label: 'COUNTRY_CODE',
+    transform: () => 'FRA'
+  },
+  'action.portName': 'PORT_NAME',
+  'action.portLocode': 'PORT_CODE',
+  // Not filled
+  LOCATION: 'LOCATION'
+  // 'SPECIES', 'INFR' and 'COMMENT' are added in getJDPCsvMap()
+}
 /* eslint-enable sort-keys-fix/sort-keys-fix */

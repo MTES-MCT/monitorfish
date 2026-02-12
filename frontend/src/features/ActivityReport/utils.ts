@@ -31,27 +31,19 @@ function populateInfractionsColumnsForMed(
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionClass${count}`] = {
       label: `INFR${count}_CLASS1`,
-      transform: () => 'ISR'
+      transform: activity => (activity.infractions[count - 1]?.isrCode ? 'ISR' : '')
     }
 
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionCode${count}`] = {
       label: `INFR${count}_CODE1`,
-      transform: activity => {
-        const allNatinfs = getInfractionsKeys(activity.action, 'natinf')
-
-        return allNatinfs[count - 1] ?? ''
-      }
+      transform: activity => activity.infractions[count - 1]?.isrCode ?? ''
     }
 
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionDescription${count}`] = {
       label: `INFR${count}_DESCRIPTION`,
-      transform: activity => {
-        const allComments = getInfractionsKeys(activity.action, 'comments')
-
-        return allComments[count - 1] ?? ''
-      }
+      transform: activity => activity.infractions[count - 1]?.isrName ?? ''
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -72,26 +64,21 @@ function populateInfractionsColumnsForAllJDPExceptMed(
     const count = index + 1
 
     // eslint-disable-next-line no-param-reassign
-    baseCsvMap[`infractionClass${count}`] = jdp === JDP.WESTERN_WATERS ? `INFR${count}_CLASS` : `INFR_CLASS${count}`
+    baseCsvMap[`infractionClass${count}`] = {
+      label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CLASS` : `INFR_CLASS${count}`,
+      transform: () => 'ISR'
+    }
 
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionCode${count}`] = {
       label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_CODE` : `INFR_CODE${count}`,
-      transform: activity => {
-        const allNatinfs = getInfractionsKeys(activity.action, 'natinf')
-
-        return allNatinfs[count - 1] ?? ''
-      }
+      transform: activity => activity.infractions[count - 1]?.isrCode ?? ''
     }
 
     // eslint-disable-next-line no-param-reassign
     baseCsvMap[`infractionDescription${count}`] = {
       label: jdp === JDP.WESTERN_WATERS ? `INFR${count}_DESCRIPTION` : `INFR_REMARK${count}`,
-      transform: activity => {
-        const allComments = getInfractionsKeys(activity.action, 'comments')
-
-        return allComments[count - 1] ?? ''
-      }
+      transform: activity => activity.infractions[count - 1]?.isrName ?? ''
     }
   })
 }
@@ -196,16 +183,6 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
       : speciesOnboardWithoutOtherSpecies
 
   return sortBy(groupedSpeciesOnboard, ({ declaredWeight }) => declaredWeight).reverse()
-}
-
-function getInfractionsKeys(action: MissionAction.MissionAction, key: string): string[] {
-  return ([] as string[]).concat.apply([], [getInfractionsWithRecordKey(action.infractions, key)])
-}
-
-function getInfractionsWithRecordKey(infractions: MissionAction.Infraction[], key: string): string[] {
-  return infractions
-    .filter(infraction => infraction.infractionType === MissionAction.InfractionType.WITH_RECORD)
-    .map(infraction => infraction[key])
 }
 
 export function getPatrolType(activity: ActivityReportWithId): string {

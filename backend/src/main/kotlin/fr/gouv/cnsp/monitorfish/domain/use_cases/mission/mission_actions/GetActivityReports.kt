@@ -156,17 +156,19 @@ class GetActivityReports(
                     val segment = getFleetSegment(control, jdp, fleetSegments)
 
                     val enrichedInfractions =
-                        control.infractions.filter { it.infractionType == InfractionType.WITH_RECORD }.map { infraction ->
+                        control.infractions.filter { it.infractionType == InfractionType.WITH_RECORD }.mapNotNull { infraction ->
                             val key =
                                 infraction.natinf?.let { natinf ->
                                     Triple(natinf, infraction.threat, infraction.threatCharacterization)
                                 }
                             val (isrCode, isrName) = key?.let { isrByNatinfAndThreat[it] } ?: Pair(null, null)
-                            ActivityReportInfraction(
-                                infraction = infraction,
-                                isrCode = isrCode,
-                                isrName = isrName,
-                            )
+
+                            return@mapNotNull isrCode?.let {
+                                ActivityReportInfraction(
+                                    isrCode = isrCode,
+                                    isrName = isrName,
+                                )
+                            }
                         }
 
                     ActivityReport(

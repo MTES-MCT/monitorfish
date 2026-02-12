@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
@@ -39,20 +38,16 @@ data class ActivityReportDataOutput(
 }
 
 data class ActivityReportInfractionDataOutput(
-    val infractionType: InfractionType?,
     val isrCode: String?,
     val isrName: String?,
 ) {
     companion object {
         fun fromActivityReportInfraction(
             activityReportInfraction: ActivityReportInfraction,
-        ): ActivityReportInfractionDataOutput {
-            val infraction = activityReportInfraction.infraction
-            return ActivityReportInfractionDataOutput(
-                infractionType = infraction.infractionType,
+        ): ActivityReportInfractionDataOutput =
+            ActivityReportInfractionDataOutput(
                 isrCode = activityReportInfraction.isrCode,
                 isrName = activityReportInfraction.isrName,
             )
-        }
     }
 }

@@ -437,22 +437,10 @@ class MissionActionsControllerITests {
                                 infractions =
                                     listOf(
                                         ActivityReportInfraction(
-                                            infraction =
-                                                Infraction(
-                                                    infractionType = InfractionType.WITH_RECORD,
-                                                    natinf = 2608,
-                                                    natinfDescription = "Pêche sans autorisation",
-                                                ),
                                             isrCode = "AUT-020",
                                             isrName = "Licence and authorisation",
                                         ),
                                         ActivityReportInfraction(
-                                            infraction =
-                                                Infraction(
-                                                    infractionType = InfractionType.WITHOUT_RECORD,
-                                                    natinf = 27688,
-                                                    natinfDescription = "AIS non opérationnel",
-                                                ),
                                             isrCode = "VAM-020",
                                             isrName = "Automatic Identification System (AIS)",
                                         ),
@@ -480,10 +468,8 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.activityReports[0].controlUnits[0].id", equalTo(1234)))
             .andExpect(jsonPath("$.activityReports[0].vessel.vesselId", equalTo(1)))
             .andExpect(jsonPath("$.activityReports[0].infractions.length()", equalTo(2)))
-            .andExpect(jsonPath("$.activityReports[0].infractions[0].infractionType", equalTo("WITH_RECORD")))
             .andExpect(jsonPath("$.activityReports[0].infractions[0].isrCode", equalTo("AUT-020")))
             .andExpect(jsonPath("$.activityReports[0].infractions[0].isrName", equalTo("Licence and authorisation")))
-            .andExpect(jsonPath("$.activityReports[0].infractions[1].infractionType", equalTo("WITHOUT_RECORD")))
             .andExpect(jsonPath("$.activityReports[0].infractions[1].isrCode", equalTo("VAM-020")))
             .andExpect(
                 jsonPath(

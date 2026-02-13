@@ -81,6 +81,8 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <FormikINNRadio />
 
+            <ControlQualityField withLastHaul />
+
             <ControlQualityField />
 
             <FormikOtherControlsCheckboxes />

@@ -1,7 +1,8 @@
 import { monitorfishApi } from '@api/api'
+import { MissionAction } from '@features/Mission/missionAction.types'
+import { MissionActionSchema } from '@features/Mission/schemas/MissionActionSchema'
 import { FrontendApiError } from '@libs/FrontendApiError'
-
-import type { MissionAction } from '@features/Mission/missionAction.types'
+import { parseOrReturn } from '@utils/parseOrReturn'
 
 export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
 export const MISSION_ACTIONS_EEZ_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la ZEE de la position"
@@ -44,7 +45,13 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
         },
         url: '/mission_actions/controls'
       }),
-      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: MissionAction.MissionControlsSummary) => {
+        // TODO For now we only validate the MissionAction subpart of the payload with zod
+        parseOrReturn<MissionAction.MissionAction>(baseQueryReturnValue.controls, MissionActionSchema, true)
+
+        return baseQueryReturnValue
+      }
     }),
 
     updateMissionAction: builder.mutation<void, MissionAction.MissionAction>({

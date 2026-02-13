@@ -1,6 +1,7 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionsToCreateUpdateOrDelete } from '@features/Mission/components/MissionForm/utils'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { missionActionApi } from '@features/Mission/missionActionApi'
 import { monitorfishMissionApi } from '@features/Mission/monitorfishMissionApi'
 import { saveMission } from '@features/Mission/useCases/saveMission'
@@ -11,6 +12,8 @@ import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
+
+import MissionActionType = MissionAction.MissionActionType
 
 export const saveMissionAndMissionActionsByDiff =
   (
@@ -38,16 +41,27 @@ export const saveMissionAndMissionActionsByDiff =
           await dispatch(missionActionApi.endpoints.deleteMissionAction.initiate(missionActionId)).unwrap()
         }),
         ...createdOrUpdatedMissionActions.map(async missionActionData => {
-          if (missionActionData.id === undefined) {
-            await dispatch(missionActionApi.endpoints.createMissionAction.initiate(missionActionData)).unwrap()
+          const missionActionDataWithExtraProps = {
+            ...missionActionData,
+            /**
+             * The last haul control is only required for controls at sea
+             */
+            isLastHaul:
+              missionActionData.actionType === MissionActionType.SEA_CONTROL ? missionActionData.isLastHaul : false
+          }
+
+          if (missionActionDataWithExtraProps.id === undefined) {
+            await dispatch(
+              missionActionApi.endpoints.createMissionAction.initiate(missionActionDataWithExtraProps)
+            ).unwrap()
           } else {
             await dispatch(
               missionActionApi.endpoints.updateMissionAction.initiate({
-                ...missionActionData,
-                id: missionActionData.id,
+                ...missionActionDataWithExtraProps,
+                id: missionActionDataWithExtraProps.id,
                 /**
                  * This field is not used in the backend use-case, we add this property to
-                 * respected the MissionAction type (using `portName` when fetching missions actions).
+                 * respect the MissionAction type (using `portName` when fetching missions actions).
                  */
                 portName: undefined
               })

@@ -1,20 +1,17 @@
+import { z } from 'zod'
+
+import { LegacyControlUnitResourceSchema as _LegacyControlUnitResourceSchema } from './schemas/LegacyControlUnitResourceSchema'
+import { LegacyControlUnitSchema as _LegacyControlUnitSchema } from './schemas/LegacyControlUnitSchema'
+
 import type { Undefine } from '@mtes-mct/monitor-ui'
 
 export namespace LegacyControlUnit {
-  export interface LegacyControlUnit {
-    administration: string
-    contact: string | undefined
-    id: number
-    isArchived: boolean
-    name: string
-    resources: LegacyControlUnitResource[]
-  }
+  export const LegacyControlUnitResourceSchema = _LegacyControlUnitResourceSchema
+  export const LegacyControlUnitSchema = _LegacyControlUnitSchema
+
+  export type LegacyControlUnitResource = z.infer<typeof LegacyControlUnitResourceSchema>
+  export type LegacyControlUnit = z.infer<typeof LegacyControlUnitSchema>
 
   export type LegacyControlUnitDraft = Omit<Undefine<LegacyControlUnit>, 'resources'> &
     Pick<LegacyControlUnit, 'resources'>
-
-  export interface LegacyControlUnitResource {
-    id: number
-    name: string
-  }
 }

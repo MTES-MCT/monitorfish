@@ -118,6 +118,8 @@ class MissionActionEntity(
     val hasSomeGearsSeized: Boolean,
     @Column(name = "has_some_species_seized")
     val hasSomeSpeciesSeized: Boolean,
+    @Column(name = "is_last_haul")
+    val isLastHaul: Boolean? = null,
     @Column(name = "species_quantity_seized")
     val speciesQuantitySeized: Int? = null,
     @Column(name = "completed_by")
@@ -184,6 +186,7 @@ class MissionActionEntity(
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
                 isFromPoseidon = missionAction.isFromPoseidon,
                 isDeleted = missionAction.isDeleted,
+                isLastHaul = missionAction.isLastHaul,
                 hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
                 hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
                 speciesQuantitySeized = missionAction.speciesQuantitySeized,
@@ -254,6 +257,7 @@ class MissionActionEntity(
                 ),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
             isDeleted = isDeleted,
+            isLastHaul = isLastHaul ?: false,
             hasSomeGearsSeized = hasSomeGearsSeized,
             hasSomeSpeciesSeized = hasSomeSpeciesSeized,
             speciesQuantitySeized = speciesQuantitySeized,

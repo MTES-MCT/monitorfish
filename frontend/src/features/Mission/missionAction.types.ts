@@ -1,101 +1,35 @@
-import type { LegacyControlUnit } from '../ControlUnit/legacyControlUnit'
+import { z } from 'zod'
+
+import { MissionAction as MissionActionConstants } from './missionAction.constants'
+import { FleetSegmentSchema } from './schemas/FleetSegmentSchema'
+import { GearControlSchema } from './schemas/GearControlSchema'
+import { InfractionSchema } from './schemas/InfractionSchema'
+import { MissionActionSchema } from './schemas/MissionActionSchema'
+import { NatinfSchema } from './schemas/NatinfSchema'
+import { SpeciesControlSchema } from './schemas/SpeciesControlSchema'
+import { ThreatSchema } from './schemas/ThreatSchema'
+
+import type { ThreatCharacterizationSchema } from '@features/Mission/schemas/ThreatCharacterizationSchema'
 
 export namespace MissionAction {
-  export interface MissionAction {
-    actionDatetimeUtc: string
-    actionType: MissionActionType
-    completedBy: string | undefined
-    completion: CompletionStatus
-    controlQualityComments: string | undefined
-    controlUnits: LegacyControlUnit.LegacyControlUnit[]
-    districtCode: string | undefined
-    emitsAis: ControlCheck | undefined
-    emitsVms: ControlCheck | undefined
-    externalReferenceNumber: string | undefined
-    facade: string | undefined
-    faoAreas: string[]
-    flagState: string | undefined
-    gearOnboard: GearControl[]
-    hasSomeGearsSeized: boolean
-    hasSomeSpeciesSeized: boolean
-    id: number
-    infractions: Infraction[]
-    internalReferenceNumber: string | undefined
-    ircs: string | undefined
-    isAdministrativeControl: boolean | undefined
-    isComplianceWithWaterRegulationsControl: boolean | undefined
-    isFromPoseidon: boolean | undefined
-    isSafetyEquipmentAndStandardsComplianceControl: boolean | undefined
-    isSeafarersControl: boolean | undefined
-    latitude: number | undefined
-    licencesAndLogbookObservations: string | undefined
-    licencesMatchActivity: ControlCheck | undefined
-    logbookMatchesActivity: ControlCheck | undefined
-    longitude: number | undefined
-    missionId: number
-    numberOfVesselsFlownOver: number | undefined
-    otherComments: string | undefined
-    portLocode: string | undefined
-    // This field is added by the API
-    portName: string | undefined
-    segments: FleetSegment[]
-    seizureAndDiversion: boolean | undefined
-    seizureAndDiversionComments: string | undefined
-    separateStowageOfPreservedSpecies: ControlCheck | undefined
-    speciesObservations: string | undefined
-    speciesOnboard: SpeciesControl[]
-    speciesQuantitySeized: number | undefined
-    speciesSizeControlled: boolean | undefined
-    speciesWeightControlled: boolean | undefined
-    unitWithoutOmegaGauge: boolean | undefined
-    userTrigram: string | undefined
-    vesselId: number | undefined
-    vesselName: string | undefined
-    vesselTargeted: ControlCheck | undefined
-  }
-
   // ---------------------------------------------------------------------------
-  // Constants
+  // Re-exported constants from missionAction.constants.ts
+  export import ControlCheck = MissionActionConstants.ControlCheck
+  export import FlightGoal = MissionActionConstants.FlightGoal
+  export import FLIGHT_GOAL_LABEL = MissionActionConstants.FLIGHT_GOAL_LABEL
+  export import InfractionType = MissionActionConstants.InfractionType
+  export import INFRACTION_TYPE_LABEL = MissionActionConstants.INFRACTION_TYPE_LABEL
+  export import MissionActionType = MissionActionConstants.MissionActionType
+  export import CompletionStatus = MissionActionConstants.CompletionStatus
 
-  /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-  export enum ControlCheck {
-    NO = 'NO',
-    NOT_APPLICABLE = 'NOT_APPLICABLE',
-    YES = 'YES'
-  }
-
-  export enum FlightGoal {
-    VMS_AIS_CHECK = 'VMS_AIS_CHECK',
-    UNAUTHORIZED_FISHING = 'UNAUTHORIZED_FISHING',
-    CLOSED_AREA = 'CLOSED_AREA'
-  }
-
-  export const FLIGHT_GOAL_LABEL: Record<FlightGoal, string> = {
-    VMS_AIS_CHECK: 'Vérifications VMS/AIS',
-    UNAUTHORIZED_FISHING: 'Pêche sans autorisation',
-    CLOSED_AREA: 'Zones fermées'
-  }
-
-  export enum InfractionType {
-    WITH_RECORD = 'WITH_RECORD',
-    WITHOUT_RECORD = 'WITHOUT_RECORD',
-    PENDING = 'PENDING'
-  }
-
-  export const INFRACTION_TYPE_LABEL: Record<InfractionType, string> = {
-    [InfractionType.WITH_RECORD]: 'Avec PV',
-    [InfractionType.WITHOUT_RECORD]: 'Sans PV',
-    [InfractionType.PENDING]: 'En attente'
-  }
-
-  export enum MissionActionType {
-    AIR_CONTROL = 'AIR_CONTROL',
-    AIR_SURVEILLANCE = 'AIR_SURVEILLANCE',
-    LAND_CONTROL = 'LAND_CONTROL',
-    OBSERVATION = 'OBSERVATION',
-    SEA_CONTROL = 'SEA_CONTROL'
-  }
-  /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
+  export type FleetSegment = z.infer<typeof FleetSegmentSchema>
+  export type GearControl = z.infer<typeof GearControlSchema>
+  export type Infraction = z.infer<typeof InfractionSchema>
+  export type MissionAction = z.infer<typeof MissionActionSchema>
+  export type Natinf = z.infer<typeof NatinfSchema>
+  export type SpeciesControl = z.infer<typeof SpeciesControlSchema>
+  export type Threat = z.infer<typeof ThreatSchema>
+  export type ThreatCharacterization = z.infer<typeof ThreatCharacterizationSchema>
 
   // ---------------------------------------------------------------------------
   // Types
@@ -103,48 +37,6 @@ export namespace MissionAction {
   export type ControlAndText = {
     control: MissionAction | undefined
     text: string
-  }
-
-  export type FleetSegment = {
-    segment: string | undefined
-    segmentName: string | undefined
-  }
-
-  export type GearControl = {
-    comments: string | undefined
-    controlledMesh: number | undefined
-    declaredMesh: number | undefined
-    gearCode: string
-    gearName: string
-    gearWasControlled: boolean | undefined
-    hasUncontrolledMesh: boolean
-  }
-
-  type Natinf = {
-    label: string
-    value: string
-  }
-
-  type ThreatCharacterization = {
-    children: Array<Natinf>
-    label: string
-    value: string
-  }
-
-  type Threat = {
-    children: Array<ThreatCharacterization>
-    label: string
-    value: string
-  }
-
-  export type Infraction = {
-    comments: string
-    infractionType: InfractionType
-    natinf?: number
-    natinfDescription?: string
-    threat?: string
-    threatCharacterization?: string
-    threats?: Array<Threat>
   }
 
   export type LastControls = {
@@ -162,19 +54,6 @@ export namespace MissionAction {
     numberOfControlsWithSomeSpeciesSeized: number
     numberOfDiversions: number
     vesselId: number
-  }
-
-  export type SpeciesControl = {
-    controlledWeight: number | undefined
-    declaredWeight: number | undefined
-    nbFish: number | undefined
-    speciesCode: string
-    underSized: boolean | undefined
-  }
-
-  export enum CompletionStatus {
-    COMPLETED = 'COMPLETED',
-    TO_COMPLETE = 'TO_COMPLETE'
   }
 
   export enum FrontCompletionStatus {

@@ -16,6 +16,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
     const actionsFormValues = [
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
+        actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
         completedBy: undefined,
         controlQualityComments: undefined,
@@ -47,6 +48,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isAdministrativeControl: undefined,
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
+        isLastHaul: false,
         isINNControl: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
@@ -57,6 +59,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         logbookMatchesActivity: undefined,
         longitude: -4.281934312813745,
         numberOfVesselsFlownOver: undefined,
+        observationsByUnit: undefined,
         otherComments: undefined,
         portLocode: undefined,
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
@@ -92,6 +95,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
     const originalMissionActions = [
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
+        actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
         completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
@@ -126,6 +130,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
         isINNControl: false,
+        isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         latitude: 47.648401281163814,
@@ -135,6 +140,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         longitude: -4.281934312813745,
         missionId: 43,
         numberOfVesselsFlownOver: undefined,
+        observationsByUnit: undefined,
         otherComments: undefined,
         portLocode: undefined,
         portName: undefined,
@@ -190,6 +196,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
     const actionsFormValues = [
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
+        actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
         completedBy: undefined,
         controlQualityComments: undefined,
@@ -223,6 +230,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
         isINNControl: false,
+        isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         isValid: true,
@@ -233,6 +241,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         longitude: -4.281934312813745,
         missionId: 43,
         numberOfVesselsFlownOver: undefined,
+        observationsByUnit: undefined,
         otherComments: undefined,
         portLocode: undefined,
         portName: undefined,
@@ -270,6 +279,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
     const originalMissionActions = [
       {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
+        actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
         completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
@@ -304,6 +314,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
         isINNControl: false,
+        isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         latitude: 47.648401281163814,
@@ -313,6 +324,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         longitude: -4.281934312813745,
         missionId: 43,
         numberOfVesselsFlownOver: undefined,
+        observationsByUnit: undefined,
         otherComments: undefined,
         portLocode: undefined,
         portName: undefined,

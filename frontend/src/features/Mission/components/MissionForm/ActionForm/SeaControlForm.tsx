@@ -78,7 +78,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <VesselFleetSegmentsField label="Segment de flotte" />
 
-            <ControlQualityField />
+            <ControlQualityField withLastHaul />
 
             <FormikOtherControlsCheckboxes />
 

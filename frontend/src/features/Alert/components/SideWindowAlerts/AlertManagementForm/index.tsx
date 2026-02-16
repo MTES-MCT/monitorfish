@@ -25,6 +25,7 @@ import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindow
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import {
   Accent,
   Button,
@@ -85,8 +86,20 @@ export function AlertManagementForm() {
 
       if (isCreation) {
         await createAlert(cleanedData).unwrap()
+
+        trackEvent({
+          action: `Création d'une alerte`,
+          category: 'ALERT_MANAGEMENT',
+          name: 'CNSP'
+        })
       } else {
         await updateAlert(cleanedData).unwrap()
+
+        trackEvent({
+          action: `Mise-à-jour d'une alerte`,
+          category: 'ALERT_MANAGEMENT',
+          name: 'CNSP'
+        })
       }
 
       dispatch(alertActions.setEditedAlertSpecification(undefined))
@@ -138,6 +151,12 @@ export function AlertManagementForm() {
           withAutomaticClosing: true
         })
       )
+
+      trackEvent({
+        action: `Suppression d'une alerte`,
+        category: 'ALERT_MANAGEMENT',
+        name: 'CNSP'
+      })
     } catch (e) {
       dispatch(
         addSideWindowBanner({

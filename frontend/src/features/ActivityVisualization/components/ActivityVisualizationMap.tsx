@@ -1,22 +1,23 @@
 import { useGetActivityVisualizationQuery } from '@features/ActivityVisualization/apis'
 import { trackEvent } from '@hooks/useTracking'
-import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useEffect } from 'react'
 
 import { LoginBackground } from '../../../auth/components/Login'
+import { useGetUserEmail } from '../../../auth/hooks/useGetUserEmail'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 
 export function ActivityVisualizationMap() {
-  const isSuperUser = useIsSuperUser()
+  const email = useGetUserEmail()
+
   const { data: html } = useGetActivityVisualizationQuery()
 
   useEffect(() => {
     trackEvent({
       action: `Affichage des données d'activité (Kepler)`,
       category: 'VISIT',
-      name: isSuperUser ? 'CNSP' : 'EXT'
+      name: email
     })
-  }, [isSuperUser])
+  }, [email])
 
   useEffect(() => {
     if (!html) {

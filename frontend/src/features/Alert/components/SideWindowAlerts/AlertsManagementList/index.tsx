@@ -11,6 +11,7 @@ import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWith
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import {
   Button,
@@ -113,6 +114,12 @@ export function AlertsManagementList() {
       return
     }
 
+    trackEvent({
+      action: `Désactivation d'une alerte`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
+
     // Only deactivation needs confirmation
     dispatch(deactivateAlert(deactivateConfirmationModal.alertSpecification.id))
     setDeactivateConfirmationModal({ alertSpecification: undefined, isOpen: false })
@@ -139,6 +146,12 @@ export function AlertsManagementList() {
     if (!deleteConfirmationModal.alertSpecification?.id) {
       return
     }
+
+    trackEvent({
+      action: `Suppression d'une alerte`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
 
     dispatch(deleteAlert(deleteConfirmationModal.alertSpecification.id))
     setDeleteConfirmationModal({ alertSpecification: undefined, isOpen: false })
@@ -183,6 +196,12 @@ export function AlertsManagementList() {
 
   const openHowAlertsWorksDialog = () => {
     setIsHowAlertsWorksDialogOpen(true)
+
+    trackEvent({
+      action: `Affichage de l'explication des alertes`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
   }
 
   const addAlert = () => {

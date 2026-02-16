@@ -216,22 +216,19 @@ const Input = styled.input<{
 }>`
   margin: 0;
   border: ${p => (p.$hasError ? '1px solid red' : 'none')};
-  border-radius: 0;
   border-radius: 2px;
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   height: 40px;
   width: 100%;
-  padding: 0 5px 0 10px;
   flex: 3;
-  transition: all 0.7s;
   background: ${p =>
     p.$flagState ? `url(${p.$baseUrl}/flags/${p.$flagState.toLowerCase()}.svg) no-repeat scroll, white` : 'white'};
   background-size: 20px;
   background-position-y: center;
   background-position-x: 16px;
-  padding-left: ${p => (p.$flagState ? 45 : 16)}px;
+  padding: 0 5px 0 ${p => (p.$flagState ? 45 : 16)}px;
 
   &:disabled {
     background-color: var(--rs-input-disabled-bg);

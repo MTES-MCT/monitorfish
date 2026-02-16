@@ -1,6 +1,7 @@
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { getMissionActionDataFromFormValues } from '@features/Mission/components/MissionForm/utils'
 import { isMissionActionFormValid } from '@features/Mission/components/MissionForm/utils/isMissionActionFormValid'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { missionActionApi } from '@features/Mission/missionActionApi'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
@@ -8,6 +9,8 @@ import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { MainAppThunk } from '@store'
+
+import MissionActionType = MissionAction.MissionActionType
 
 export const autoSaveMissionAction =
   (
@@ -45,9 +48,16 @@ export const autoSaveMissionAction =
         missionActionApi.endpoints.updateMissionAction.initiate({
           ...missionActionData,
           id: missionActionData.id,
+
+          /**
+           * The last haul control is only required for controls at sea
+           */
+          isLastHaul:
+            missionActionData.actionType === MissionActionType.SEA_CONTROL ? missionActionData.isLastHaul : false,
+
           /**
            * This field is not used in the backend use-case, we add this property to
-           * respected the MissionAction type (using `portName` when fetching missions actions).
+           * respect the MissionAction type (using `portName` when fetching missions actions).
            */
           portName: undefined
         })

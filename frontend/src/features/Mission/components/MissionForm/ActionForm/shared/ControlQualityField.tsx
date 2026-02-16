@@ -4,7 +4,10 @@ import styled from 'styled-components'
 
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
-export function ControlQualityField() {
+type ControlQualityFieldProps = Readonly<{
+  withLastHaul?: boolean
+}>
+export function ControlQualityField({ withLastHaul = false }: ControlQualityFieldProps) {
   return (
     <Wrapper isLight legend="Qualité du contrôle">
       <FormikMultiRadio
@@ -19,13 +22,26 @@ export function ControlQualityField() {
           { label: 'Non concerné', value: MissionAction.ControlCheck.NOT_APPLICABLE }
         ]}
       />
-      <FormikCheckbox label="Unité sans jauge oméga" name="unitWithoutOmegaGauge" />
+      {withLastHaul && (
+        <FormikMultiRadio
+          isErrorMessageHidden
+          isInline
+          isRequired
+          label="Last haul effectué"
+          name="isLastHaul"
+          options={[
+            { label: 'Oui', value: true },
+            { label: 'Non', value: false }
+          ]}
+        />
+      )}
       <FormikTextarea
         label="Observations sur le déroulé du contrôle"
         name="controlQualityComments"
         placeholder="Éléments marquants dans vos échanges avec l’unité, problèmes rencontrés..."
         rows={2}
       />
+      <FormikCheckbox label="Unité sans jauge oméga" name="unitWithoutOmegaGauge" />
     </Wrapper>
   )
 }

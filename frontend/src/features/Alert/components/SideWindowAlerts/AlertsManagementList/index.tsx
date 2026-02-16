@@ -11,6 +11,7 @@ import { PageWithUnderlineTitle } from '@features/SideWindow/components/PageWith
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import {
   Button,
@@ -38,7 +39,6 @@ import styled, { css } from 'styled-components'
 import { Row } from './Row'
 
 import type { AlertSpecification } from '@features/Alert/types'
-import {trackEvent} from "@hooks/useTracking";
 
 export function AlertsManagementList() {
   const dispatch = useMainAppDispatch()

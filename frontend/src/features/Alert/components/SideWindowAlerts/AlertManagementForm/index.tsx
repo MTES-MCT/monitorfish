@@ -25,6 +25,7 @@ import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindow
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { trackEvent } from '@hooks/useTracking'
 import {
   Accent,
   Button,
@@ -47,7 +48,6 @@ import styled from 'styled-components'
 import { SpeciesOnBoardCriteria } from './Criteria/SpeciesOnBoardCriteria'
 
 import type { AlertSpecification } from '@features/Alert/types'
-import {trackEvent} from "@hooks/useTracking";
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()

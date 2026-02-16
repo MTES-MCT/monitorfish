@@ -38,6 +38,7 @@ import styled, { css } from 'styled-components'
 import { Row } from './Row'
 
 import type { AlertSpecification } from '@features/Alert/types'
+import {trackEvent} from "@hooks/useTracking";
 
 export function AlertsManagementList() {
   const dispatch = useMainAppDispatch()
@@ -113,6 +114,12 @@ export function AlertsManagementList() {
       return
     }
 
+    trackEvent({
+      action: `Désactivation d'une alerte`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
+
     // Only deactivation needs confirmation
     dispatch(deactivateAlert(deactivateConfirmationModal.alertSpecification.id))
     setDeactivateConfirmationModal({ alertSpecification: undefined, isOpen: false })
@@ -139,6 +146,12 @@ export function AlertsManagementList() {
     if (!deleteConfirmationModal.alertSpecification?.id) {
       return
     }
+
+    trackEvent({
+      action: `Suppression d'une alerte`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
 
     dispatch(deleteAlert(deleteConfirmationModal.alertSpecification.id))
     setDeleteConfirmationModal({ alertSpecification: undefined, isOpen: false })
@@ -183,6 +196,12 @@ export function AlertsManagementList() {
 
   const openHowAlertsWorksDialog = () => {
     setIsHowAlertsWorksDialogOpen(true)
+
+    trackEvent({
+      action: `Affichage de l'explication des alertes`,
+      category: 'ALERT_MANAGEMENT',
+      name: 'CNSP'
+    })
   }
 
   const addAlert = () => {

@@ -47,6 +47,7 @@ import styled from 'styled-components'
 import { SpeciesOnBoardCriteria } from './Criteria/SpeciesOnBoardCriteria'
 
 import type { AlertSpecification } from '@features/Alert/types'
+import {trackEvent} from "@hooks/useTracking";
 
 export function AlertManagementForm() {
   const dispatch = useMainAppDispatch()
@@ -85,8 +86,20 @@ export function AlertManagementForm() {
 
       if (isCreation) {
         await createAlert(cleanedData).unwrap()
+
+        trackEvent({
+          action: `Création d'une alerte`,
+          category: 'ALERT_MANAGEMENT',
+          name: 'CNSP'
+        })
       } else {
         await updateAlert(cleanedData).unwrap()
+
+        trackEvent({
+          action: `Mise-à-jour d'une alerte`,
+          category: 'ALERT_MANAGEMENT',
+          name: 'CNSP'
+        })
       }
 
       dispatch(alertActions.setEditedAlertSpecification(undefined))
@@ -138,6 +151,12 @@ export function AlertManagementForm() {
           withAutomaticClosing: true
         })
       )
+
+      trackEvent({
+        action: `Suppression d'une alerte`,
+        category: 'ALERT_MANAGEMENT',
+        name: 'CNSP'
+      })
     } catch (e) {
       dispatch(
         addSideWindowBanner({

@@ -1,11 +1,17 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -22,6 +28,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
+import org.mockito.Mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -33,6 +40,9 @@ import java.time.ZonedDateTime
 class GetVesselUTests {
     @MockitoBean
     private lateinit var positionRepository: PositionRepository
+
+    @Mock
+    private val reportingRepository: ReportingRepository = mock()
 
     @MockitoBean
     private lateinit var vesselRepository: VesselRepository
@@ -118,6 +128,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
                     getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
@@ -209,6 +220,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
                     getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
@@ -260,6 +272,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
                     getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = 123,
@@ -314,6 +327,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
                     getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = null,
@@ -365,6 +379,7 @@ class GetVesselUTests {
                     vesselGroupRepository = vesselGroupRepository,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
                     getAuthorizedUser = getAuthorizedUser,
                 ).execute(
                     vesselId = null,
@@ -381,5 +396,140 @@ class GetVesselUTests {
 
         // Then
         assertThat(pair.second.enrichedActiveVessel.riskFactor.impactRiskFactor).isEqualTo(defaultImpactRiskFactor)
+    }
+
+    @Test
+    fun `execute Should return deduplicated reporting types from findAll by CFR and by vessel id`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            listOf(),
+        )
+        given(vesselRepository.findVesselById(any())).willReturn(null)
+        given(logbookReportRepository.findAllCfrWithVisioCaptures()).willReturn(listOf())
+        given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(VesselRiskFactor())
+
+        val reportingByCfr =
+            Reporting.Observation(
+                id = 1,
+                vesselId = 123,
+                vesselName = "VESSEL",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "EXT",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                reportingActor = ReportingActor.OPS,
+                title = "Observation 1",
+                createdBy = "test@example.gouv.fr",
+            )
+        val reportingByVesselId =
+            Reporting.InfractionSuspicion(
+                id = 2,
+                vesselId = 123,
+                vesselName = "VESSEL",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "EXT",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                reportingActor = ReportingActor.OPS,
+                title = "Infraction suspicion",
+                natinfCode = 123,
+                threat = "threat",
+                threatCharacterization = "threat characterization",
+                createdBy = "test@example.gouv.fr",
+            )
+        // Duplicate reporting returned by both queries
+        val duplicateReporting =
+            Reporting.Observation(
+                id = 1,
+                vesselId = 123,
+                vesselName = "VESSEL",
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "EXT",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                reportingActor = ReportingActor.OPS,
+                title = "Observation 1",
+                createdBy = "test@example.gouv.fr",
+            )
+
+        given(
+            reportingRepository.findAll(
+                eq(
+                    ReportingFilter(
+                        isArchived = false,
+                        isDeleted = false,
+                        vesselInternalReferenceNumbers = listOf("FR224226850"),
+                    ),
+                ),
+            ),
+        ).willReturn(listOf(reportingByCfr))
+        given(
+            reportingRepository.findAll(
+                eq(
+                    ReportingFilter(
+                        isArchived = false,
+                        isDeleted = false,
+                        vesselIds = listOf(123),
+                    ),
+                ),
+            ),
+        ).willReturn(listOf(reportingByVesselId, duplicateReporting))
+
+        // When
+        val pair =
+            runBlocking {
+                GetVessel(
+                    vesselRepository = vesselRepository,
+                    logbookReportRepository = logbookReportRepository,
+                    logbookRawMessageRepository = logbookRawMessageRepository,
+                    getVesselPositions = getVesselPositions,
+                    riskFactorRepository = riskFactorRepository,
+                    beaconRepository = beaconRepository,
+                    producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
+                    vesselGroupRepository = vesselGroupRepository,
+                    vesselProfileRepository = vesselProfileRepository,
+                    lastPositionRepository = lastPositionRepository,
+                    reportingRepository = reportingRepository,
+                    getAuthorizedUser = getAuthorizedUser,
+                ).execute(
+                    vesselId = 123,
+                    internalReferenceNumber = "FR224226850",
+                    externalReferenceNumber = "",
+                    ircs = "",
+                    trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    fromDateTime = null,
+                    toDateTime = null,
+                    userEmail = "user@gouv.fr",
+                )
+            }
+
+        // Then
+        assertThat(pair.second.enrichedActiveVessel.reportingTypes).hasSize(2)
+        assertThat(pair.second.enrichedActiveVessel.reportingTypes).containsExactlyInAnyOrder(
+            ReportingType.OBSERVATION,
+            ReportingType.INFRACTION_SUSPICION,
+        )
+        assertThat(pair.second.enrichedActiveVessel.hasInfractionSuspicion).isTrue()
+        assertThat(pair.second.enrichedActiveVessel.numberOfReportings).isEqualTo(2)
     }
 }

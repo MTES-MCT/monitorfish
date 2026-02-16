@@ -81,7 +81,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
         assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
-        assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
@@ -96,8 +95,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPositions = jpaLastPositionRepository.findAll()
         val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
         assertThat(lastPosition.alerts).hasSize(0)
-        assertThat(lastPosition.reportings).hasSize(1)
-        assertThat(lastPosition.reportings).contains("ALERT")
     }
 
     @Test
@@ -108,7 +105,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
         assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
-        assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
@@ -123,7 +119,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPositions = jpaLastPositionRepository.findAll()
         val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
         assertThat(lastPosition.alerts).hasSize(0)
-        assertThat(lastPosition.reportings).hasSize(0)
     }
 
     @Test
@@ -134,7 +129,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
         assertThat(previousLastPosition.alerts).hasSize(2)
         assertThat(previousLastPosition.alerts).contains("FAR manquant en 24h")
-        assertThat(previousLastPosition.reportings).hasSize(0)
         cacheManager.getCache("vessels_all_position")?.clear()
 
         // When
@@ -150,7 +144,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val lastPosition = lastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
         assertThat(lastPosition.alerts).hasSize(1)
         assertThat(lastPosition.alerts).contains("FAR manquant en 24h")
-        assertThat(lastPosition.reportings).hasSize(0)
     }
 
     @Test

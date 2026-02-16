@@ -78,6 +78,20 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findCurrentInfractionSuspicionsByVesselId(vesselId: Int): List<ReportingEntity>
 
+    @Query(
+        value = """
+        SELECT
+            id,
+            type,
+            vessel_id,
+            internal_reference_number
+        FROM reportings
+        WHERE archived = false AND deleted = false
+        """,
+        nativeQuery = true,
+    )
+    fun findAllCurrent(): List<Array<Any>>
+
     @Modifying(clearAutomatically = true)
     @Query(
         value = """

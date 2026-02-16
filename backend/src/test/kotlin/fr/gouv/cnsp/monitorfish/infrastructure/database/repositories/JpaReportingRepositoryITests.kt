@@ -349,6 +349,17 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAll Should return reportings for given vessel ids`() {
+        val filter = ReportingFilter(vesselIds = listOf(123456))
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.all { it.vesselId == 123456 }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
     fun `findAll Should return non-archived, non-deleted, ALERT & INFRACTION_SUSPICION reportings`() {
         val filter =
             ReportingFilter(

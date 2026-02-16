@@ -1,4 +1,3 @@
-import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../../types'
@@ -59,7 +58,6 @@ const ActiveVesselBaseSchema = z.strictObject({
   mmsi: z.string().optional(),
   probabilityRiskFactor: z.number(),
   producerOrganization: z.string().optional(),
-  reportings: z.array(z.enum(ReportingType)),
   riskFactor: z.number(),
   segments: z.array(z.string()),
   speciesArray: z.array(z.string()),

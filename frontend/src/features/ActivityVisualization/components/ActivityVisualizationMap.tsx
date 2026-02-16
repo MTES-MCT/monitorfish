@@ -3,8 +3,8 @@ import { trackEvent } from '@hooks/useTracking'
 import { useEffect } from 'react'
 
 import { LoginBackground } from '../../../auth/components/Login'
+import { useGetUserEmail } from '../../../auth/hooks/useGetUserEmail'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
-import {useGetUserEmail} from "../../../auth/hooks/useGetUserEmail";
 
 export function ActivityVisualizationMap() {
   const email = useGetUserEmail()

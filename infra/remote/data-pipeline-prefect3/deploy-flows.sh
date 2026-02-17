@@ -8,5 +8,5 @@ docker run -t --rm --network=host --name monitorfish-pipeline-deploy-flows \
     -e MONITORFISH_VERSION \
     -e PREFECT_API_URL \
     -e LOGBOOK_FILES_GID \
-    docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$MONITORFISH_VERSION \
+    ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$MONITORFISH_VERSION \
     python main.py

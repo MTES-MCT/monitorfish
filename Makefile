@@ -82,8 +82,10 @@ run-front:
 
 .PHONY: run-back-with-monitorenv ##LOCAL ▶️  Run backend API when running MonitorEnv app (in another terminal)
 run-back-with-monitorenv: run-monitorenv
+	./frontend/node_modules/.bin/import-meta-env-prepare -u -x ./backend/.env.example -p ./backend/.env.local.defaults
+
 	docker compose up -d --quiet-pull --wait db
-	cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	@bash -c 'set -a; source .env; cd backend && MONITORENV_URL=http://localhost:9880 ./gradlew bootRun'
 
 .PHONY: run-monitorenv ##LOCAL ▶️  Run MonitorEnv app containers
 run-monitorenv: docker-env
@@ -173,7 +175,7 @@ run-back-with-monitorenv-for-cypress: run-monitorenv run-stubbed-apis
 run-back-for-puppeteer: docker-env run-stubbed-apis
 	docker compose up -d --quiet-pull --wait db
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml up -d monitorenv-app
-	cd backend && MONITORFISH_OIDC_ENABLED=false MONITORENV_URL=http://localhost:9880 ./gradlew bootRun --args='--spring.profiles.active=local --spring.config.additional-location=$(INFRA_FOLDER)'
+	@bash -c 'set -a; source .env; cd backend && MONITORFISH_OIDC_ENABLED=false MONITORENV_URL=http://localhost:9880 MONITORFISH_SCHEDULING_ENABLED=false ./gradlew bootRun'
 
 .PHONY: run-front-for-puppeteer ##TEST ▶️  Run frontend when using Puppeteer 📝
 run-front-for-puppeteer:

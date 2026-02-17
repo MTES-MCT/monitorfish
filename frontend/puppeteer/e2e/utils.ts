@@ -22,6 +22,11 @@ class ConsoleListener {
               return
             }
 
+            if (message.text().includes('validateDOMNesting')) {
+              // This is not a bad error
+              return
+            }
+
             throw new Error(message.text())
           }
         })

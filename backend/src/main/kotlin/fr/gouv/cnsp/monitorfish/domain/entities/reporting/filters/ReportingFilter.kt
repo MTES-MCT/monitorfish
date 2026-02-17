@@ -7,4 +7,5 @@ data class ReportingFilter(
     val isDeleted: Boolean? = null,
     val types: List<ReportingType>? = null,
     val vesselInternalReferenceNumbers: List<String>? = null,
+    val vesselIds: List<Int>? = null,
 )

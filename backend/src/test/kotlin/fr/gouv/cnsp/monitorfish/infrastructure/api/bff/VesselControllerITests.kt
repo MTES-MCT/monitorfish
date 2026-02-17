@@ -155,6 +155,7 @@ class VesselControllerITests {
                     riskFactor = VesselRiskFactor(),
                     vesselGroups = listOf(),
                     landingPort = null,
+                    reportingTypes = listOf(ReportingType.INFRACTION_SUSPICION),
                 ),
             ),
         )
@@ -179,7 +180,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].course", equalTo(position.course)))
             .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
             .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
-            .andExpect(jsonPath("$[0].reportings.length()", equalTo(0)))
+            .andExpect(jsonPath("$[0].hasInfractionSuspicion", equalTo(true)))
             .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
@@ -321,6 +322,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.vessel.riskFactor.controlPriorityLevel", equalTo(0.25)))
             .andExpect(jsonPath("$.vessel.riskFactor.riskFactor", equalTo(1.74)))
             .andExpect(jsonPath("$.vessel.underCharter", equalTo(true)))
+            .andExpect(jsonPath("$.vessel.reportings.length()", equalTo(0)))
             .andExpect(jsonPath("$.vessel.producerOrganization.organizationName", equalTo("OP")))
             .andExpect(
                 jsonPath(

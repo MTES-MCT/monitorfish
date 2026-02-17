@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
@@ -17,16 +18,25 @@ import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.time.ZonedDateTime
 
 @Repository
 class JpaReportingRepository(
     private val dbReportingRepository: DBReportingRepository,
-    @Autowired private val entityManager: EntityManager,
+    private val entityManager: EntityManager,
     private val mapper: ObjectMapper,
 ) : ReportingRepository {
+    override fun findAllCurrent(): List<CurrentReporting> =
+        dbReportingRepository.findAllCurrent().map { row ->
+            CurrentReporting(
+                id = row[0] as Int,
+                type = ReportingType.valueOf(row[1] as String),
+                vesselId = row[2] as Int?,
+                internalReferenceNumber = row[3] as String?,
+            )
+        }
+
     override fun save(
         alert: PendingAlert,
         validationDate: ZonedDateTime?,
@@ -62,17 +72,37 @@ class JpaReportingRepository(
 
         filter?.let {
             it.isArchived?.let { isArchived ->
-                predicates.add(getIsArchivedPredicate(isArchived, reportingEntity, criteriaBuilder))
+                predicates.add(
+                    getIsArchivedPredicate(
+                        isArchived = isArchived,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
             }
             it.isDeleted?.let { isDeleted ->
-                predicates.add(getIsDeletedPredicate(isDeleted, reportingEntity, criteriaBuilder))
+                predicates.add(
+                    getIsDeletedPredicate(
+                        isDeleted = isDeleted,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
             }
             it.types?.let { types ->
-                predicates.add(getTypesPredicate(types, reportingEntity))
+                predicates.add(getTypesPredicate(types = types, reportingEntity = reportingEntity))
             }
             it.vesselInternalReferenceNumbers?.let { vesselInternalReferenceNumbers ->
                 predicates.add(
-                    getVesselInternalReferenceNumbersPredicate(vesselInternalReferenceNumbers, reportingEntity),
+                    getVesselInternalReferenceNumbersPredicate(
+                        vesselInternalReferenceNumbers = vesselInternalReferenceNumbers,
+                        reportingEntity = reportingEntity,
+                    ),
+                )
+            }
+            it.vesselIds?.let { vesselIds ->
+                predicates.add(
+                    getVesselIdsPredicate(vesselIds = vesselIds, reportingEntity = reportingEntity),
                 )
             }
         }
@@ -200,5 +230,13 @@ class JpaReportingRepository(
     ): Predicate =
         reportingEntity.get<String>("internalReferenceNumber").`in`(
             *vesselInternalReferenceNumbers.toTypedArray(),
+        )
+
+    private fun getVesselIdsPredicate(
+        vesselIds: List<Int>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate =
+        reportingEntity.get<String>("vesselId").`in`(
+            *vesselIds.toTypedArray(),
         )
 }

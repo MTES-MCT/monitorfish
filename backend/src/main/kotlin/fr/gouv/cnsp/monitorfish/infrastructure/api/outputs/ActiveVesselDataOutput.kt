@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -42,7 +41,6 @@ sealed class ActiveVesselBaseDataOutput(
     open val underCharter: Boolean? = null,
     open val isAtPort: Boolean,
     open val producerOrganization: String? = null,
-    open val reportings: List<String> = listOf(),
     // Properties for efficient filtering in frontend
     open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     open val gearsArray: List<String>,
@@ -103,7 +101,6 @@ sealed class ActiveVesselBaseDataOutput(
                     isAtPort = lastPosition.isAtPort,
                     alerts = lastPosition.alerts ?: listOf(),
                     beaconMalfunctionId = lastPosition.beaconMalfunctionId,
-                    reportings = lastPosition.reportings,
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     coordinates =
                         transformCoordinatesToOpenlayersProjection(
@@ -113,10 +110,7 @@ sealed class ActiveVesselBaseDataOutput(
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasAlert = lastPosition.alerts?.isNotEmpty() ?: false,
                     hasBeaconMalfunction = lastPosition.beaconMalfunctionId != null,
-                    hasInfractionSuspicion =
-                        lastPosition.reportings.any {
-                            listOf(ReportingType.ALERT.name, ReportingType.INFRACTION_SUSPICION.name).contains(it)
-                        },
+                    hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
                     isFiltered = 0,
                     lastPositionSentAt = lastPosition.dateTime.toInstant().toEpochMilli(),
                     speciesArray = enrichedActiveVessel.speciesArray,
@@ -134,9 +128,6 @@ sealed class ActiveVesselBaseDataOutput(
                     landingPortLocode = enrichedActiveVessel.landingPort?.locode,
                 )
             } ?: run {
-                require(enrichedActiveVessel.vessel != null) {
-                    "A vessel must be found from the referential when a last position not found."
-                }
                 val riskFactor =
                     RiskFactorDataOutput.fromVesselRiskFactor(
                         vesselRiskFactor = enrichedActiveVessel.riskFactor,
@@ -145,18 +136,18 @@ sealed class ActiveVesselBaseDataOutput(
 
                 ActiveVesselEmittingLogbookDataOutput(
                     id = index,
-                    vesselId = enrichedActiveVessel.vessel.id,
-                    vesselFeatureId = enrichedActiveVessel.vessel.toVesselCompositeIdentifier(),
+                    vesselId = enrichedActiveVessel.vessel?.id,
+                    vesselFeatureId = enrichedActiveVessel.vessel?.toVesselCompositeIdentifier() ?: "",
                     internalReferenceNumber = enrichedActiveVessel.vesselProfile?.cfr,
-                    ircs = enrichedActiveVessel.vessel.ircs,
-                    mmsi = enrichedActiveVessel.vessel.mmsi,
-                    externalReferenceNumber = enrichedActiveVessel.vessel.externalReferenceNumber,
-                    vesselName = enrichedActiveVessel.vessel.vesselName,
-                    flagState = enrichedActiveVessel.vessel.flagState,
+                    ircs = enrichedActiveVessel.vessel?.ircs,
+                    mmsi = enrichedActiveVessel.vessel?.mmsi,
+                    externalReferenceNumber = enrichedActiveVessel.vessel?.externalReferenceNumber,
+                    vesselName = enrichedActiveVessel.vessel?.vesselName,
+                    flagState = enrichedActiveVessel.vessel?.flagState,
                     lastLogbookMessageDateTime = null,
-                    length = enrichedActiveVessel.vessel.length,
-                    district = enrichedActiveVessel.vessel.district,
-                    districtCode = enrichedActiveVessel.vessel.districtCode,
+                    length = enrichedActiveVessel.vessel?.length,
+                    district = enrichedActiveVessel.vessel?.district,
+                    districtCode = enrichedActiveVessel.vessel?.districtCode,
                     speciesOnboard =
                         enrichedActiveVessel.riskFactor.speciesOnboard.map {
                             SpeciesLastPositionDataOutput.fromSpeciesLastPosition(
@@ -173,14 +164,12 @@ sealed class ActiveVesselBaseDataOutput(
                     detectabilityRiskFactor = riskFactor.detectabilityRiskFactor,
                     riskFactor = riskFactor.riskFactor,
                     segments = enrichedActiveVessel.segments,
-                    underCharter = enrichedActiveVessel.vessel.underCharter,
+                    underCharter = enrichedActiveVessel.vessel?.underCharter,
                     isAtPort = false,
                     isFiltered = 0,
-                    // TODO add reportings
-                    reportings = listOf(),
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     gearsArray = enrichedActiveVessel.gearsArray,
-                    hasInfractionSuspicion = false,
+                    hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
                     speciesArray = enrichedActiveVessel.speciesArray,
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
@@ -219,7 +208,6 @@ data class ActiveVesselEmittingPositionDataOutput(
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganization: String? = null,
-    override val reportings: List<String> = listOf(),
     // Properties for efficient filtering in frontend
     override val gearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
@@ -271,7 +259,6 @@ data class ActiveVesselEmittingPositionDataOutput(
         isAtPort = isAtPort,
         isFiltered = isFiltered,
         producerOrganization = producerOrganization,
-        reportings = reportings,
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
@@ -309,7 +296,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganization: String? = null,
-    override val reportings: List<String> = listOf(),
     override val landingPortLocode: String?,
     // Properties for efficient filtering in frontend
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
@@ -343,7 +329,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
         underCharter = underCharter,
         isAtPort = isAtPort,
         producerOrganization = producerOrganization,
-        reportings = reportings,
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,

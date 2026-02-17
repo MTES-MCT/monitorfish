@@ -59,7 +59,7 @@ data class SelectedVesselDataOutput(
     val lastPositionDateTime: ZonedDateTime? = null,
     val emissionPeriod: Duration? = null,
     val alerts: List<String> = listOf(),
-    val reportings: List<String> = listOf(),
+    val reportings: List<ReportingType> = listOf(),
     val vesselIdentifier: VesselIdentifier? = null,
     val hasInfractionSuspicion: Boolean = false,
     val hasAlert: Boolean = false,
@@ -79,7 +79,7 @@ data class SelectedVesselDataOutput(
     val groups: List<Any> = listOf(),
 ) {
     companion object {
-        fun fromEnrichedActiveVessel(enrichedActiveVessel: EnrichedActiveVessel): SelectedVesselDataOutput? =
+        fun fromEnrichedActiveVessel(enrichedActiveVessel: EnrichedActiveVessel) =
             SelectedVesselDataOutput(
                 activityOrigin = enrichedActiveVessel.activityOrigin,
                 vesselId = enrichedActiveVessel.vessel?.id,
@@ -145,12 +145,9 @@ data class SelectedVesselDataOutput(
                 lastPositionDateTime = enrichedActiveVessel.lastPosition?.dateTime,
                 emissionPeriod = enrichedActiveVessel.lastPosition?.emissionPeriod,
                 alerts = enrichedActiveVessel.lastPosition?.alerts ?: listOf(),
-                reportings = enrichedActiveVessel.lastPosition?.reportings ?: listOf(),
+                reportings = enrichedActiveVessel.reportingTypes,
                 hasAlert = enrichedActiveVessel.lastPosition?.alerts?.isNotEmpty() ?: false,
-                hasInfractionSuspicion =
-                    enrichedActiveVessel.lastPosition?.reportings?.any {
-                        listOf(ReportingType.ALERT.name, ReportingType.INFRACTION_SUSPICION.name).contains(it)
-                    } ?: false,
+                hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
                 vesselIdentifier = enrichedActiveVessel.lastPosition?.vesselIdentifier,
                 segments = enrichedActiveVessel.lastPosition?.segments ?: listOf(),
                 groups =
@@ -202,6 +199,7 @@ data class SelectedVesselDataOutput(
                 logbookEquipmentStatus = vessel.logbookEquipmentStatus,
                 hasLogbookEsacapt = vessel.hasLogbookEsacapt,
                 hasVisioCaptures = vessel.hasVisioCaptures,
+                reportings = emptyList(),
                 // TODO Unused in the frontend - to remove ?
                 riskFactor = RiskFactorDataOutput.fromVesselRiskFactor(VesselRiskFactor()),
             )

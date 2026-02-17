@@ -9,6 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -18,6 +20,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
@@ -35,6 +38,9 @@ class GetActiveVesselsUTests {
     private val lastPositionRepository: LastPositionRepository = mock()
 
     @Mock
+    private val reportingRepository: ReportingRepository = mock()
+
+    @Mock
     private val vesselGroupRepository: VesselGroupRepository = mock()
 
     @Mock
@@ -49,6 +55,7 @@ class GetActiveVesselsUTests {
     private val getActiveVessels =
         GetActiveVessels(
             lastPositionRepository,
+            reportingRepository,
             vesselGroupRepository,
             getAuthorizedUser,
             logbookReportRepository,
@@ -1434,12 +1441,19 @@ class GetActiveVesselsUTests {
                 flagState = vesselThatShouldMatchWithPriorNotification.flagState,
                 hasLogbookEsacapt = false,
             )
+        val vesselProfile =
+            VesselProfile(
+                cfr = vesselThatShouldMatchWithPriorNotification.cfr!!,
+                segments = null,
+                gears = null,
+                species = null,
+            )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
                     lastPosition = it,
-                    vesselProfile = null,
-                    vessel = vessel,
+                    vesselProfile = vesselProfile,
+                    vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
                     landingPort = null,
@@ -1482,9 +1496,7 @@ class GetActiveVesselsUTests {
         val fakePriorNotification =
             PriorNotificationFaker
                 .fakePriorNotification()
-                .copy(
-                    vessel = vessel,
-                )
+                .copy(vessel = vessel)
 
         given(logbookReportRepository.findAllAcknowledgedPriorNotifications(any())).willReturn(
             listOf(
@@ -1509,5 +1521,265 @@ class GetActiveVesselsUTests {
         // Then
         assertThat(activeVessels).hasSize(4)
         assertThat(activeVessels[0].landingPort).isEqualTo(fakePriorNotification.port)
+    }
+
+    @Test
+    fun `execute Should return reporting types When vessel has reportings matched by vesselId`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.ALERT,
+                    vesselId = 1,
+                    internalReferenceNumber = null,
+                ),
+            ),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).isEqualTo(listOf(ReportingType.ALERT))
+    }
+
+    @Test
+    fun `execute Should return reporting types When vessel has reportings matched by CFR`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 2,
+                    type = ReportingType.OBSERVATION,
+                    vesselId = null,
+                    internalReferenceNumber = "FR123",
+                ),
+            ),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).isEqualTo(listOf(ReportingType.OBSERVATION))
+    }
+
+    @Test
+    fun `execute Should return deduplicated reporting types When same reporting matches by both vesselId and CFR`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    vesselId = 1,
+                    internalReferenceNumber = "FR123",
+                ),
+            ),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).isEqualTo(listOf(ReportingType.INFRACTION_SUSPICION))
+    }
+
+    @Test
+    fun `execute Should return multiple reporting types When vessel has distinct reportings from both vesselId and CFR`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.ALERT,
+                    vesselId = 1,
+                    internalReferenceNumber = null,
+                ),
+                CurrentReporting(
+                    id = 2,
+                    type = ReportingType.OBSERVATION,
+                    vesselId = null,
+                    internalReferenceNumber = "FR123",
+                ),
+            ),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).hasSize(2)
+        assertThat(activeVessels[0].reportingTypes).containsExactlyInAnyOrder(
+            ReportingType.ALERT,
+            ReportingType.OBSERVATION,
+        )
+    }
+
+    @Test
+    fun `execute Should return empty reporting types When vessel has no reportings`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(emptyList())
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].reportingTypes).isEmpty()
     }
 }

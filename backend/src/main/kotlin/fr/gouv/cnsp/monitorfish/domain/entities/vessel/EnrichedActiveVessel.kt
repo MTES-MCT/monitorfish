@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
@@ -19,6 +20,7 @@ data class EnrichedActiveVessel(
     val producerOrganization: ProducerOrganizationMembership?,
     val riskFactor: VesselRiskFactor,
     val landingPort: Port?,
+    val reportingTypes: List<ReportingType> = emptyList(),
 ) {
     private val logger: Logger = LoggerFactory.getLogger(EnrichedActiveVessel::class.java)
 
@@ -27,6 +29,10 @@ data class EnrichedActiveVessel(
     val gearsArray: List<String>
     val speciesArray: List<String>
     val activityOrigin: ActivityOrigin
+    val hasInfractionSuspicion =
+        reportingTypes.any {
+            listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it)
+        }
 
     init {
         activityType = computeActivityTypeFrom(lastPosition)

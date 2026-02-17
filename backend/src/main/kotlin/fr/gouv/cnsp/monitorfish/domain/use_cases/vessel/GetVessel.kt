@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
@@ -29,6 +30,7 @@ class GetVessel(
     private val vesselGroupRepository: VesselGroupRepository,
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
+    private val reportingRepository: ReportingRepository,
     private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
@@ -59,6 +61,28 @@ class GetVessel(
                     toDateTime = toDateTime,
                 )
 
+            val reportingsByCfrFuture =
+                async {
+                    reportingRepository.findAll(
+                        ReportingFilter(
+                            isArchived = false,
+                            isDeleted = false,
+                            vesselInternalReferenceNumbers = listOf(internalReferenceNumber),
+                        ),
+                    )
+                }
+            val reportingsByVesselIdFuture =
+                async {
+                    vesselId?.let {
+                        reportingRepository.findAll(
+                            ReportingFilter(
+                                isArchived = false,
+                                isDeleted = false,
+                                vesselIds = listOf(it),
+                            ),
+                        )
+                    } ?: listOf()
+                }
             val vesselFuture =
                 async {
                     vesselId?.let { vesselRepository.findVesselById(vesselId) }
@@ -121,6 +145,13 @@ class GetVessel(
                     null -> null
                 }
 
+            val reportingTypes =
+                (
+                    reportingsByCfrFuture.await() +
+                        reportingsByVesselIdFuture.await()
+                ).distinctBy { it.id }
+                    .map { it.type }
+
             val enrichedActiveVessel =
                 EnrichedActiveVessel(
                     lastPosition = lastPosition,
@@ -136,6 +167,7 @@ class GetVessel(
                     producerOrganization = vesselProducerOrganization.await(),
                     riskFactor = vesselRiskFactor.await() ?: VesselRiskFactor(),
                     landingPort = null,
+                    reportingTypes = reportingTypes,
                 )
 
             val foundVesselGroups =

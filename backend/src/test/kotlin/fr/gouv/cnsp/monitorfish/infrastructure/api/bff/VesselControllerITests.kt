@@ -180,7 +180,6 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].course", equalTo(position.course)))
             .andExpect(jsonPath("$[0].positionType", equalTo(PositionType.AIS.toString())))
             .andExpect(jsonPath("$[0].dateTime", equalTo(position.dateTime.toOffsetDateTime().toString())))
-            .andExpect(jsonPath("$[0].numberOfReportings", equalTo(1)))
             .andExpect(jsonPath("$[0].hasInfractionSuspicion", equalTo(true)))
             .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))

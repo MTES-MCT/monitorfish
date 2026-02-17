@@ -33,7 +33,6 @@ data class EnrichedActiveVessel(
         reportingTypes.any {
             listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it)
         }
-    val numberOfReportings = reportingTypes.size
 
     init {
         activityType = computeActivityTypeFrom(lastPosition)

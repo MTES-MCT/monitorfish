@@ -41,7 +41,6 @@ sealed class ActiveVesselBaseDataOutput(
     open val underCharter: Boolean? = null,
     open val isAtPort: Boolean,
     open val producerOrganization: String? = null,
-    open val numberOfReportings: Int,
     // Properties for efficient filtering in frontend
     open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     open val gearsArray: List<String>,
@@ -102,7 +101,6 @@ sealed class ActiveVesselBaseDataOutput(
                     isAtPort = lastPosition.isAtPort,
                     alerts = lastPosition.alerts ?: listOf(),
                     beaconMalfunctionId = lastPosition.beaconMalfunctionId,
-                    numberOfReportings = enrichedActiveVessel.numberOfReportings,
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     coordinates =
                         transformCoordinatesToOpenlayersProjection(
@@ -169,7 +167,6 @@ sealed class ActiveVesselBaseDataOutput(
                     underCharter = enrichedActiveVessel.vessel?.underCharter,
                     isAtPort = false,
                     isFiltered = 0,
-                    numberOfReportings = enrichedActiveVessel.numberOfReportings,
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
@@ -211,7 +208,6 @@ data class ActiveVesselEmittingPositionDataOutput(
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganization: String? = null,
-    override val numberOfReportings: Int,
     // Properties for efficient filtering in frontend
     override val gearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
@@ -263,7 +259,6 @@ data class ActiveVesselEmittingPositionDataOutput(
         isAtPort = isAtPort,
         isFiltered = isFiltered,
         producerOrganization = producerOrganization,
-        numberOfReportings = numberOfReportings,
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
@@ -301,7 +296,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
     override val underCharter: Boolean? = null,
     override val isAtPort: Boolean,
     override val producerOrganization: String? = null,
-    override val numberOfReportings: Int,
     override val landingPortLocode: String?,
     // Properties for efficient filtering in frontend
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
@@ -335,7 +329,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
         underCharter = underCharter,
         isAtPort = isAtPort,
         producerOrganization = producerOrganization,
-        numberOfReportings = numberOfReportings,
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,

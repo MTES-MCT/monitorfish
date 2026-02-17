@@ -196,16 +196,16 @@ restart-remote-app: prune-old-images
 
 .PHONY: deploy-pipeline-flows ##RUN ▶️  Deploy pipeline flows
 deploy-pipeline-flows: prune-old-images
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \
+	docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline-prefect3/deploy-flows.sh
 
 register-pipeline-flows-prod:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
+	docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-prod.sh
 
 .PHONY: register-pipeline-flows-int ##RUN ▶️  Register pipeline flows in STAGING
 register-pipeline-flows-int:
-	docker pull docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
+	docker pull ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline:$(MONITORFISH_VERSION) && \
 	infra/remote/data-pipeline/register-flows-int.sh
 
 .PHONY: init-remote-sig ##RUN Initialize Geoserver layers
@@ -270,9 +270,9 @@ docker-build:
 		--build-arg SENTRY_ORG=$(SENTRY_ORG) \
 		--build-arg SENTRY_PROJECT=$(SENTRY_PROJECT)
 docker-tag:
-	docker tag monitorfish-app:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+	docker tag monitorfish-app:$(VERSION) ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-push:
-	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
+	docker push ghcr.io/mtes-mct/monitorfish/monitorfish-app:$(VERSION)
 docker-compose-down:
 	docker compose -f ./infra/docker/docker-compose.cypress.yml down -v
 docker-compose-up:
@@ -304,9 +304,9 @@ docker-test-pipeline-prefect-3: fetch-external-data-prefect-3 run-data-warehouse
 	 monitorfish-pipeline-prefect3:$(VERSION) \
 	 coverage run -m pytest --pdb --ignore=tests/test_data/external tests
 docker-tag-pipeline-prefect-3:
-	docker tag monitorfish-pipeline-prefect3:$(VERSION) docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
+	docker tag monitorfish-pipeline-prefect3:$(VERSION) ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
 docker-push-pipeline-prefect-3:
-	docker push docker.pkg.github.com/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
+	docker push ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline-prefect3:$(VERSION)
 
 # ----------------------------------------------------------
 # Remote: Pipeline commands

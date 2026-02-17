@@ -17,20 +17,33 @@ export enum Seafront {
   CORSE = 'Corse',
   GUADELOUPE = 'Guadeloupe',
   GUYANE = 'Guyane',
+  HORS_ZEE_OI = 'Hors ZEE Océan Indien ',
+  LA_REUNION = 'La Réunion',
   MARTINIQUE = 'Martinique',
   MAYOTTE = 'Mayotte',
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
   SA = 'SA',
-  SUD_OCEAN_INDIEN = 'Sud Océan Indien'
+  SAINT_PIERRE_MIQUELON = 'St Pierre et Miquelon',
+  SAINT_MARTIN = 'St Martin',
+  SAINT_BARTHELEMY = 'St Barthélémy ',
+  SUD_OCEAN_INDIEN = 'Sud Océan Indien',
+  TAAF = 'TAAF'
 }
 
 export const SEAFRONT_GROUP_SEAFRONTS: Record<SeafrontGroup, Seafront[]> = {
   MED: [Seafront.CORSE, Seafront.MED],
   MEMN: [Seafront.MEMN],
   NAMO: [Seafront.NAMO],
-  OUTREMEROA: [Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE],
-  OUTREMEROI: [Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN],
+  OUTREMEROA: [
+    Seafront.SAINT_PIERRE_MIQUELON,
+    Seafront.SAINT_MARTIN,
+    Seafront.SAINT_BARTHELEMY,
+    Seafront.GUADELOUPE,
+    Seafront.GUYANE,
+    Seafront.MARTINIQUE
+  ],
+  OUTREMEROI: [Seafront.HORS_ZEE_OI, Seafront.LA_REUNION, Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN, Seafront.TAAF],
   SA: [Seafront.SA]
 }

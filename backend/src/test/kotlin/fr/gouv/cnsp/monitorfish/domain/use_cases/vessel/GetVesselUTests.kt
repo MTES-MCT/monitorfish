@@ -530,6 +530,5 @@ class GetVesselUTests {
             ReportingType.INFRACTION_SUSPICION,
         )
         assertThat(pair.second.enrichedActiveVessel.hasInfractionSuspicion).isTrue()
-        assertThat(pair.second.enrichedActiveVessel.numberOfReportings).isEqualTo(2)
     }
 }

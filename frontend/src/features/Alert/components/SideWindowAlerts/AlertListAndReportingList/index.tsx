@@ -1,4 +1,4 @@
-import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { ReportingTable } from '@features/Reporting/components/ReportingTable'
 import { Header } from '@features/SideWindow/components/Header'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -8,31 +8,21 @@ import styled from 'styled-components'
 
 import { AlertAndReportingTab } from './constants'
 import { PendingAlertsList } from './PendingAlertsList'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { setSelectedTab } from '../slice'
 
 type AlertListAndReportingListProps = {
   isFromUrl: boolean
-  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup
 }
 export function AlertListAndReportingList({ isFromUrl, selectedSeafrontGroup }: AlertListAndReportingListProps) {
   const dispatch = useMainAppDispatch()
   const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const silencedAlerts = useMainAppSelector(state => state.alert.silencedAlerts)
 
-  const filteredSilencedAlerts = useMemo(() => {
-    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
-      return silencedAlerts.filter(silencedAlert => !silencedAlert.value.seaFront)
-    }
-
-    return silencedAlerts.filter(silencedAlert => {
-      const seafronts = ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup]
-        ? ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts
-        : []
-
-      return silencedAlert.value.seaFront && seafronts.includes(silencedAlert.value.seaFront)
-    })
-  }, [silencedAlerts, selectedSeafrontGroup])
+  const filteredSilencedAlerts = useMemo(
+    () => filterBySeafrontGroup(silencedAlerts, selectedSeafrontGroup, a => a.value.seaFront),
+    [silencedAlerts, selectedSeafrontGroup]
+  )
 
   return (
     <Wrapper>

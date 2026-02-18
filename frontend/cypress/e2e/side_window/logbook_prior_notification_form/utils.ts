@@ -132,7 +132,7 @@ export function getPriorNotificationsFakeResponse({
         MED: 0,
         MEMN: 1,
         NAMO: 0,
-        NONE: 0,
+        NO_FACADE: 0,
         OUTREMEROA: 0,
         OUTREMEROI: 0,
         SA: 0

@@ -1,7 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
-import { type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
 import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
@@ -35,7 +35,7 @@ import type { Reporting } from '@features/Reporting/types'
 
 type ReportingTableProps = Readonly<{
   isFromUrl: boolean
-  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup
 }>
 export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()

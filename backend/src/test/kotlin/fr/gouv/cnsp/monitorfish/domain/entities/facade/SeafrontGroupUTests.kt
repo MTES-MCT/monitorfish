@@ -17,12 +17,12 @@ class SeafrontGroupUTests {
     }
 
     @Test
-    fun `fromSeafront should return NONE with a null seafront`() {
+    fun `fromSeafront should return NO_FACADE with a null seafront`() {
         // When
         val result = SeafrontGroup.fromSeafront(null)
 
         // Then
-        assertThat(result).isEqualTo(SeafrontGroup.NONE)
+        assertThat(result).isEqualTo(SeafrontGroup.NO_FACADE)
     }
 
     @Test
@@ -50,21 +50,21 @@ class SeafrontGroupUTests {
     }
 
     @Test
-    fun `hasSeafront should return false for NONE group with a non-null seafront`() {
+    fun `hasSeafront should return false for NO_FACADE group with a non-null seafront`() {
         // Given
         val seafront = Seafront.CORSE
 
         // When
-        val result = SeafrontGroup.NONE.hasSeafront(seafront)
+        val result = SeafrontGroup.NO_FACADE.hasSeafront(seafront)
 
         // Then
         assertThat(result).isFalse()
     }
 
     @Test
-    fun `hasSeafront should return true for NONE group with a null seafront`() {
+    fun `hasSeafront should return true for NO_FACADE group with a null seafront`() {
         // When
-        val result = SeafrontGroup.NONE.hasSeafront(null)
+        val result = SeafrontGroup.NO_FACADE.hasSeafront(null)
 
         // Then
         assertThat(result).isTrue()
@@ -100,15 +100,22 @@ class SeafrontGroupUTests {
         val result = SeafrontGroup.OUTREMEROA.toSeafronts()
 
         // Then
-        assertThat(result).containsExactlyInAnyOrder(Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE)
+        assertThat(result).containsExactlyInAnyOrder(
+            Seafront.SAINT_PIERRE_MIQUELON,
+            Seafront.SAINT_MARTIN,
+            Seafront.SAINT_BARTHELEMY,
+            Seafront.GUADELOUPE,
+            Seafront.GUYANE,
+            Seafront.MARTINIQUE,
+        )
     }
 
     @Test
-    fun `toSeafronts should return an empty list for NONE group`() {
+    fun `toSeafronts should return POLYNESIE_CLIPPERTON for NO_FACADE group`() {
         // When
-        val result = SeafrontGroup.NONE.toSeafronts()
+        val result = SeafrontGroup.NO_FACADE.toSeafronts()
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result).containsExactlyInAnyOrder(Seafront.POLYNESIE_CLIPPERTON)
     }
 }

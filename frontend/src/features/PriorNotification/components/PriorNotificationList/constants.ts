@@ -1,11 +1,11 @@
-import { ALL_SEAFRONT_GROUP, SeafrontGroup, type AllSeafrontGroup, type NoSeafrontGroup } from '@constants/seafront'
+import { ALL_SEAFRONT_GROUP, SeafrontGroup, type AllSeafrontGroup } from '@constants/seafront'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { getOptionsFromLabelledEnum, RichBoolean, type Option } from '@mtes-mct/monitor-ui'
 
 import type { FilterStatus, ListFilter } from './types'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */
-export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, string> = {
+export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = {
   ALL: 'Tout',
   MED: 'MED',
   MEMN: 'MEMN',
@@ -13,7 +13,7 @@ export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup | NoSeafron
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
-  NONE: 'Hors f.'
+  NO_FACADE: 'Hors f.'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 

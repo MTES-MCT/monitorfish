@@ -1,65 +1,9 @@
-import {
-  ALL_SEAFRONT_GROUP,
-  type AllSeafrontGroup,
-  Seafront,
-  SEAFRONT_GROUP_SEAFRONTS,
-  SeafrontGroup
-} from '@constants/seafront'
-
 export enum PendingAlertValueType {
   MISSING_DEP_ALERT = 'MISSING_DEP_ALERT',
   MISSING_FAR_48_HOURS_ALERT = 'MISSING_FAR_48_HOURS_ALERT',
   MISSING_FAR_ALERT = 'MISSING_FAR_ALERT',
   POSITION_ALERT = 'POSITION_ALERT',
   SUSPICION_OF_UNDER_DECLARATION_ALERT = 'SUSPICION_OF_UNDER_DECLARATION_ALERT'
-}
-
-export const ALERTS_MENU_SEAFRONT_TO_SEAFRONTS: Record<
-  SeafrontGroup | AllSeafrontGroup,
-  {
-    menuSeafront: SeafrontGroup | AllSeafrontGroup
-    seafronts: Seafront[]
-  }
-> = {
-  ALL: {
-    menuSeafront: ALL_SEAFRONT_GROUP,
-    seafronts: [
-      Seafront.CORSE,
-      Seafront.GUADELOUPE,
-      Seafront.GUYANE,
-      Seafront.MARTINIQUE,
-      Seafront.MAYOTTE,
-      Seafront.MED,
-      Seafront.MEMN,
-      Seafront.NAMO,
-      Seafront.SA,
-      Seafront.SUD_OCEAN_INDIEN
-    ]
-  },
-  MED: {
-    menuSeafront: SeafrontGroup.MED,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.MED
-  },
-  MEMN: {
-    menuSeafront: SeafrontGroup.MEMN,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.MEMN
-  },
-  NAMO: {
-    menuSeafront: SeafrontGroup.NAMO,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.NAMO
-  },
-  OUTREMEROA: {
-    menuSeafront: SeafrontGroup.OUTREMEROA,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.OUTREMEROA
-  },
-  OUTREMEROI: {
-    menuSeafront: SeafrontGroup.OUTREMEROI,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.OUTREMEROI
-  },
-  SA: {
-    menuSeafront: SeafrontGroup.SA,
-    seafronts: SEAFRONT_GROUP_SEAFRONTS.SA
-  }
 }
 
 export enum SilencedAlertPeriod {

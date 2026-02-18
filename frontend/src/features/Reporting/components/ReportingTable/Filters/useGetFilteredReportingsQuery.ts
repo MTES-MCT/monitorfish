@@ -1,6 +1,5 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
-import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, type SeafrontGroup } from '@constants/seafront'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '@features/Alert/constants'
+import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -10,7 +9,7 @@ import { useMemo } from 'react'
 
 import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
 
-export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup) => {
+export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
 
@@ -21,20 +20,9 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
   const currentSeafrontReportings = useMemo(() => {
     const currentReportings = data ?? []
 
-    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
-      return currentReportings
-        .filter(reporting => !reporting.value.seaFront)
-        .filter(reporting => reportingTypesDisplayed.includes(reporting.type))
-    }
-
-    return currentReportings
-      .filter(
-        reporting =>
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup] &&
-          reporting.value.seaFront &&
-          ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts.includes(reporting.value.seaFront)
-      )
-      .filter(reporting => reportingTypesDisplayed.includes(reporting.type))
+    return filterBySeafrontGroup(currentReportings, selectedSeafrontGroup, r => r.value.seaFront).filter(reporting =>
+      reportingTypesDisplayed.includes(reporting.type)
+    )
   }, [data, selectedSeafrontGroup, reportingTypesDisplayed])
 
   const fuse = useMemo(

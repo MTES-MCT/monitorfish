@@ -1,4 +1,4 @@
-import { NO_SEAFRONT_GROUP, type NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
 import { silenceAlert } from '@features/Alert/useCases/silenceAlert'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -27,7 +27,6 @@ import styled from 'styled-components'
 import { getPendingAlertsTableColumns } from './columns'
 import { PendingAlertsRow } from './PendingAlertsRow'
 import { SilenceAlertMenu } from './SilenceAlertMenu'
-import { ALERTS_MENU_SEAFRONT_TO_SEAFRONTS } from '../../../constants'
 import { SUB_MENU_LABEL } from '../constants'
 import { resetFocusOnPendingAlert } from '../slice'
 
@@ -36,7 +35,7 @@ import type { MutableRefObject } from 'react'
 
 export type PendingAlertsListProps = Readonly<{
   numberOfSilencedAlerts: number
-  selectedSeafrontGroup: SeafrontGroup | NoSeafrontGroup
+  selectedSeafrontGroup: SeafrontGroup
 }>
 export function PendingAlertsList({ numberOfSilencedAlerts, selectedSeafrontGroup }: PendingAlertsListProps) {
   const dispatch = useMainAppDispatch()
@@ -61,17 +60,10 @@ export function PendingAlertsList({ numberOfSilencedAlerts, selectedSeafrontGrou
     setSilenceAlertMenuState(undefined)
   }, [])
 
-  const currentSeafrontAlerts = useMemo(() => {
-    if (selectedSeafrontGroup === NO_SEAFRONT_GROUP) {
-      return pendingAlerts.filter(pendingAlert => !pendingAlert.value.seaFront)
-    }
-
-    return pendingAlerts.filter(
-      pendingAlert =>
-        pendingAlert.value.seaFront &&
-        (ALERTS_MENU_SEAFRONT_TO_SEAFRONTS[selectedSeafrontGroup].seafronts || []).includes(pendingAlert.value.seaFront)
-    )
-  }, [pendingAlerts, selectedSeafrontGroup])
+  const currentSeafrontAlerts = useMemo(
+    () => filterBySeafrontGroup(pendingAlerts, selectedSeafrontGroup, a => a.value.seaFront),
+    [pendingAlerts, selectedSeafrontGroup]
+  )
 
   const numberOfAlertsMessage = `${numberOfSilencedAlerts} ${pluralize('suspension', numberOfSilencedAlerts)} d'${pluralize('alerte', numberOfSilencedAlerts)} en ${
     SUB_MENU_LABEL[selectedSeafrontGroup]

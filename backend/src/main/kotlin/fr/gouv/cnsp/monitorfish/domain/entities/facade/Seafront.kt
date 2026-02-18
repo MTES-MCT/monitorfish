@@ -17,7 +17,13 @@ enum class Seafront(
     NAMO("NAMO"),
     CORSE("Corse"),
     HORS_FACADE("Hors façade"),
-
+    OI_HORS_ZEE("Océan Indien Hors ZEE"),
+    LA_REUNION("La Réunion"),
+    POLYNESIE_CLIPPERTON("Polynésie et Clipperton"),
+    SAINT_PIERRE_MIQUELON("Saint-Pierre et Miquelon"),
+    SAINT_MARTIN("Saint-Martin"),
+    SAINT_BARTHELEMY("Saint-Barthélemy"),
+    TAAF("TAAF"),
     ;
 
     companion object {

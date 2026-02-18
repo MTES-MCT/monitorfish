@@ -5,7 +5,7 @@ import {
   IS_PRIOR_NOTIFICATION_ZERO
 } from './constants'
 
-import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { DateAsStringRange, RichBoolean, UndefineExcept } from '@mtes-mct/monitor-ui'
 
@@ -23,7 +23,7 @@ export type ListFilter = UndefineExcept<
     lastControlPeriod: LastControlPeriod
     portLocodes: string[]
     priorNotificationTypes: string[]
-    seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup
+    seafrontGroup: SeafrontGroup | AllSeafrontGroup
     searchQuery: string
     specyCodes: string[]
     statuses: FilterStatus[]

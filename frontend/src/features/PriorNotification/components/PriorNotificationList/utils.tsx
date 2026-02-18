@@ -1,11 +1,5 @@
 import { UNKNOWN_COUNTRY_CODE } from '@constants/index'
-import {
-  SeafrontGroup,
-  type NoSeafrontGroup,
-  NO_SEAFRONT_GROUP,
-  ALL_SEAFRONT_GROUP,
-  type AllSeafrontGroup
-} from '@constants/seafront'
+import { SeafrontGroup, ALL_SEAFRONT_GROUP, type AllSeafrontGroup } from '@constants/seafront'
 import { Logbook } from '@features/Logbook/Logbook.types'
 import {
   BLUEFIN_TUNA_EXTENDED_SPECY_CODES,
@@ -330,12 +324,12 @@ export function sortPriorNotificationTypesByPriority(priorNotificationTypes: str
   return [...communityTypes.sort(), ...designatedPortsTypes.sort(), ...otherTypes]
 }
 
-export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) {
+export function getTitle(seafrontGroup: SeafrontGroup | AllSeafrontGroup) {
   switch (seafrontGroup) {
     case ALL_SEAFRONT_GROUP:
       return 'Tous les préavis'
 
-    case NO_SEAFRONT_GROUP:
+    case SeafrontGroup.NO_FACADE:
       return 'Préavis hors façade'
 
     default:

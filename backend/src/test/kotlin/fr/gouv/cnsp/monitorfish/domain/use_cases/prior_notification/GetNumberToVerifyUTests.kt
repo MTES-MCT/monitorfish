@@ -126,6 +126,6 @@ class GetNumberToVerifyUTests {
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.ALL]).isEqualTo(2)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.NAMO]).isEqualTo(1)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.OUTREMEROA]).isEqualTo(1)
-        assertThat(result.perSeafrontGroupCount[SeafrontGroup.NONE]).isEqualTo(0)
+        assertThat(result.perSeafrontGroupCount[SeafrontGroup.NO_FACADE]).isEqualTo(0)
     }
 }

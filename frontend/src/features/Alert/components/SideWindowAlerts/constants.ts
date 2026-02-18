@@ -1,7 +1,7 @@
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { getOptionsFromLabelledEnum } from '@mtes-mct/monitor-ui'
 
-import type { NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import type { SeafrontGroup } from '@constants/seafront'
 import type { AlertSpecification } from '@features/Alert/types'
 
 export enum AdditionalSubMenu {
@@ -9,7 +9,7 @@ export enum AdditionalSubMenu {
   SUSPENDED_ALERTS = 'SUSPENDED_ALERTS'
 }
 
-export type AlertSubMenu = SeafrontGroup | NoSeafrontGroup | AdditionalSubMenu
+export type AlertSubMenu = SeafrontGroup | AdditionalSubMenu
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
@@ -19,7 +19,7 @@ export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
   MED: 'MED',
   OUTREMEROA: 'OUTRE-MER OA',
   OUTREMEROI: 'OUTRE-MER OI',
-  NONE: 'Hors façade',
+  NO_FACADE: 'Hors façade',
   SUSPENDED_ALERTS: 'Suspension d’alertes',
   ALERT_MANAGEMENT: 'Gestion alertes'
 }

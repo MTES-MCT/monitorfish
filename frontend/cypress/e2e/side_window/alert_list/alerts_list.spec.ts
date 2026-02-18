@@ -30,7 +30,7 @@ context('Side Window > Alert List', () => {
     /**
      * Sub menu "Hors f." should be found
      */
-    cy.get('[data-cy="side-window-sub-menu-NONE"]').click()
+    cy.get('[data-cy="side-window-sub-menu-NO_FACADE"]').click()
     cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 1)
 
     /**

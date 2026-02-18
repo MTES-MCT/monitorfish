@@ -1,4 +1,4 @@
-import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
@@ -559,7 +559,7 @@ export namespace Logbook {
   // API
 
   export type ApiListExtraData = {
-    perSeafrontGroupCount: Record<SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup, number>
+    perSeafrontGroupCount: Record<SeafrontGroup | AllSeafrontGroup, number>
   }
 
   export type ApiFilter = Partial<{
@@ -572,7 +572,7 @@ export namespace Logbook {
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined
     priorNotificationTypes: string[] | undefined
-    seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup | undefined
+    seafrontGroup: SeafrontGroup | AllSeafrontGroup | undefined
     searchQuery: string | undefined
     specyCodes: string[] | undefined
     states: PriorNotification.State[] | undefined

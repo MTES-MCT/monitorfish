@@ -1,5 +1,5 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { NO_SEAFRONT_GROUP, SEAFRONT_GROUP_SEAFRONTS, SeafrontGroup } from '@constants/seafront'
+import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { AlertManagementForm } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm'
 import { AlertsManagementList } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList'
@@ -38,33 +38,19 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
 
   const countAlertsOrReportingForSeafrontGroup = useCallback(
     (seaFrontGroup: string): number => {
-      if (seaFrontGroup === NO_SEAFRONT_GROUP && selectedTab === AlertAndReportingTab.ALERT) {
-        return pendingAlerts.filter(pendingAlert => !pendingAlert.value.seaFront).length
-      }
-
-      if (seaFrontGroup === NO_SEAFRONT_GROUP && selectedTab === AlertAndReportingTab.REPORTING) {
-        return (
-          currentReportings
-            ?.filter(reporting => !reporting.value.seaFront)
-            ?.filter(reporting => reportingTypesDisplayed.includes(reporting.type))?.length ?? 0
-        )
-      }
-
-      const seafronts = SEAFRONT_GROUP_SEAFRONTS[seaFrontGroup]
-      if (!seafronts) {
+      if (!Object.values(SeafrontGroup).includes(seaFrontGroup as SeafrontGroup)) {
         return 0
       }
 
+      const group = seaFrontGroup as SeafrontGroup
       if (selectedTab === AlertAndReportingTab.ALERT) {
-        return pendingAlerts.filter(pendingAlert => seafronts.includes(pendingAlert.value.seaFront)).length
+        return filterBySeafrontGroup(pendingAlerts, group, a => a.value.seaFront).length
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        return (
-          currentReportings
-            ?.filter(reporting => seafronts.includes(reporting.value.seaFront))
-            ?.filter(reporting => reportingTypesDisplayed.includes(reporting.type))?.length ?? 0
-        )
+        return filterBySeafrontGroup(currentReportings ?? [], group, r => r.value.seaFront).filter(reporting =>
+          reportingTypesDisplayed.includes(reporting.type)
+        ).length
       }
 
       return 0

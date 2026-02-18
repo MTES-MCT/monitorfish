@@ -46,7 +46,7 @@ import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
 import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
 import { ReportingList } from '../ReportingList'
 
-import type { AllSeafrontGroup, NoSeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 
 type PriorNotificationListProps = Readonly<{
   isFromUrl: boolean
@@ -124,20 +124,19 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   }, [loadingState.isLoadingNewPage, loadingState.isLoadingNextPage, forceUpdate])
 
   const handleSubMenuChange = useCallback(
-    (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup) => {
+    (nextSeafrontGroup: SeafrontGroup | AllSeafrontGroup) => {
       dispatch(priorNotificationActions.setListFilterValues({ seafrontGroup: nextSeafrontGroup }))
     },
     [dispatch]
   )
 
   const subMenuCounter = useCallback(
-    (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number =>
-      extraData?.perSeafrontGroupCount[seafrontGroup] ?? 0,
+    (seafrontGroup: SeafrontGroup | AllSeafrontGroup): number => extraData?.perSeafrontGroupCount[seafrontGroup] ?? 0,
     [extraData]
   )
 
   const subMenuBadgeCounter = useCallback(
-    (seafrontGroup: SeafrontGroup | AllSeafrontGroup | NoSeafrontGroup): number | undefined =>
+    (seafrontGroup: SeafrontGroup | AllSeafrontGroup): number | undefined =>
       priorNotificationToVerify?.perSeafrontGroupCount[seafrontGroup],
     [priorNotificationToVerify]
   )

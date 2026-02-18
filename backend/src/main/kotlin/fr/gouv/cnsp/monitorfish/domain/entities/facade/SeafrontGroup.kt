@@ -8,7 +8,7 @@ enum class SeafrontGroup {
     OUTREMEROA,
     OUTREMEROI,
     SA,
-    NONE,
+    NO_FACADE,
     ;
 
     companion object {
@@ -18,22 +18,37 @@ enum class SeafrontGroup {
                 MED to listOf(Seafront.CORSE, Seafront.MED),
                 MEMN to listOf(Seafront.MEMN),
                 NAMO to listOf(Seafront.NAMO),
-                OUTREMEROA to listOf(Seafront.GUADELOUPE, Seafront.GUYANE, Seafront.MARTINIQUE),
-                OUTREMEROI to listOf(Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN),
+                OUTREMEROA to
+                    listOf(
+                        Seafront.SAINT_PIERRE_MIQUELON,
+                        Seafront.SAINT_MARTIN,
+                        Seafront.SAINT_BARTHELEMY,
+                        Seafront.GUADELOUPE,
+                        Seafront.GUYANE,
+                        Seafront.MARTINIQUE,
+                    ),
+                OUTREMEROI to
+                    listOf(
+                        Seafront.OI_HORS_ZEE,
+                        Seafront.LA_REUNION,
+                        Seafront.MAYOTTE,
+                        Seafront.SUD_OCEAN_INDIEN,
+                        Seafront.TAAF,
+                    ),
                 SA to listOf(Seafront.SA),
-                NONE to emptyList(),
+                NO_FACADE to listOf(Seafront.POLYNESIE_CLIPPERTON),
             )
 
         fun fromSeafront(seafront: Seafront?): SeafrontGroup =
             seafront?.let { groupToSeafronts.entries.first { it.key != ALL && it.value.contains(seafront) }.key }
-                ?: NONE
+                ?: NO_FACADE
     }
 
     fun hasSeafront(seafront: Seafront?): Boolean {
         if (this == ALL) {
             return true
         }
-        if (this == NONE) {
+        if (this == NO_FACADE) {
             return seafront == null
         }
 

@@ -197,9 +197,9 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.getDataCy('side-window-sub-menu-MEMN').click()
     cy.wait('@getPriorNotificationsForMEMN')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
-    cy.intercept('GET', `${apiPathBase}*seafrontGroup=NONE*`).as('getPriorNotificationsForNONE')
-    cy.getDataCy('side-window-sub-menu-NONE').click()
-    cy.wait('@getPriorNotificationsForNONE')
+    cy.intercept('GET', `${apiPathBase}*seafrontGroup=NO_FACADE*`).as('getPriorNotificationsForNO_FACADE')
+    cy.getDataCy('side-window-sub-menu-NO_FACADE').click()
+    cy.wait('@getPriorNotificationsForNO_FACADE')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
   })
 

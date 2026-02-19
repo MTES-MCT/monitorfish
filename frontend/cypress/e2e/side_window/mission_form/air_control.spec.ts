@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Air Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('3 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('4 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -57,6 +57,9 @@ context('Side Window > Mission Form > Air Control', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
+    // INN
+    cy.fill('Contrôle INN', 'Non')
+
     // Complété par
     cy.fill('Complété par', 'Alice', { index: 1 })
 
@@ -82,6 +85,7 @@ context('Side Window > Mission Form > Air Control', () => {
           gearOnboard: [],
           id: 2,
           internalReferenceNumber: 'FAK000999999',
+          isINNControl: false,
           ircs: 'CALLME',
           latitude: 47.084,
           licencesAndLogbookObservations: null,

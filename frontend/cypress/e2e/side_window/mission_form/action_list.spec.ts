@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Ajouter un contrôle en mer')
     cy.get('*[data-cy="action-list-item"]').contains('Contrôle en mer')
     cy.get('*[data-cy="action-list-item"]').should('have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
-    cy.getDataCy('action-completion-status').contains('12 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').eq(0).should('exist')
 
     cy.wait(250)

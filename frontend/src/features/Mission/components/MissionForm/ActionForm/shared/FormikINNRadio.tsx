@@ -38,8 +38,9 @@ export function FormikINNRadio() {
       <FormikMultiRadio
         isErrorMessageHidden
         isInline
+        isLabelHidden
         isRequired
-        label=""
+        label="Contrôle INN"
         name="isINNControl"
         options={[
           { label: 'Oui', value: true },

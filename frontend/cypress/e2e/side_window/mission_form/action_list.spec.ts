@@ -80,6 +80,7 @@ context('Side Window > Mission Form > Action List', () => {
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: null,
           isAdministrativeControl: null,
+          isINNControl: false,
           isComplianceWithWaterRegulationsControl: null,
           isFromPoseidon: false,
           isSafetyEquipmentAndStandardsComplianceControl: null,

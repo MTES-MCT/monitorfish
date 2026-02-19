@@ -65,6 +65,7 @@ data class MissionAction(
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
+    val isINNControl: Boolean = false,
     @Patchable
     var observationsByUnit: String? = null,
 ) {

@@ -58,6 +58,9 @@ class MissionActionsControllerITests {
     @MockitoBean
     private lateinit var getActivityReports: GetActivityReports
 
+    @MockitoBean
+    private lateinit var isPointInFrenchEez: IsPointInFrenchEez
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 

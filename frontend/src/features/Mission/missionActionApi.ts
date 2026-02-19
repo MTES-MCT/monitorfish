@@ -4,6 +4,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
 export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
+export const MISSION_ACTIONS_EEZ_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la ZEE de la position"
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -20,6 +21,18 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
         method: 'DELETE',
         url: `/mission_actions/${missionActionId}`
       })
+    }),
+
+    getIsInFrenchEez: builder.query<boolean, { latitude: number; longitude: number }>({
+      query: ({ latitude, longitude }) => ({
+        method: 'GET',
+        params: {
+          latitude,
+          longitude
+        },
+        url: '/mission_actions/is-in-french-eez'
+      }),
+      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_EEZ_ERROR_MESSAGE, response)
     }),
 
     getVesselControls: builder.query<MissionAction.MissionControlsSummary, { fromDate: string; vesselId: number }>({
@@ -44,5 +57,9 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useCreateMissionActionMutation, useDeleteMissionActionMutation, useUpdateMissionActionMutation } =
-  missionActionApi
+export const {
+  useCreateMissionActionMutation,
+  useDeleteMissionActionMutation,
+  useGetIsInFrenchEezQuery,
+  useUpdateMissionActionMutation
+} = missionActionApi

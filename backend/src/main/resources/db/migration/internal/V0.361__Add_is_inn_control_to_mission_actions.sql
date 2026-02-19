@@ -1,0 +1,1 @@
+ALTER TABLE mission_actions ADD COLUMN is_inn_control BOOLEAN NOT NULL DEFAULT FALSE;

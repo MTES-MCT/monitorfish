@@ -92,6 +92,7 @@ data class MissionActionDataOutput(
     val isComplianceWithWaterRegulationsControl: Boolean? = null,
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
+    val isINNControl: Boolean = false,
     val observationsByUnit: String? = null,
 ) {
     companion object {
@@ -157,6 +158,7 @@ data class MissionActionDataOutput(
             isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
             isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = missionAction.isSeafarersControl,
+            isINNControl = missionAction.isINNControl,
             observationsByUnit = missionAction.observationsByUnit,
         )
     }

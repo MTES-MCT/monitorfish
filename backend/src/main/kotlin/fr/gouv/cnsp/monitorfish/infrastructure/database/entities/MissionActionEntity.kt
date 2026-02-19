@@ -134,6 +134,8 @@ class MissionActionEntity(
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     @Column(name = "is_seafarers_control")
     val isSeafarersControl: Boolean? = null,
+    @Column(name = "is_inn_control")
+    val isInnControl: Boolean,
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
 ) {
@@ -193,6 +195,7 @@ class MissionActionEntity(
                 isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
                 isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
                 isSeafarersControl = missionAction.isSeafarersControl,
+                isInnControl = missionAction.isINNControl,
                 observationsByUnit = missionAction.observationsByUnit,
             )
     }
@@ -264,6 +267,7 @@ class MissionActionEntity(
             isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
+            isINNControl = isInnControl,
             observationsByUnit = observationsByUnit,
         )
 

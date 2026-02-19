@@ -38,6 +38,7 @@ export const dummyAction = {
   isAdministrativeControl: undefined,
   isComplianceWithWaterRegulationsControl: undefined,
   isFromPoseidon: false,
+  isINNControl: false,
   isSafetyEquipmentAndStandardsComplianceControl: undefined,
   isSeafarersControl: undefined,
   isValid: true,

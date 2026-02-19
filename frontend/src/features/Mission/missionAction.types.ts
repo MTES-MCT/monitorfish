@@ -25,6 +25,7 @@ export namespace MissionAction {
     isAdministrativeControl: boolean | undefined
     isComplianceWithWaterRegulationsControl: boolean | undefined
     isFromPoseidon: boolean | undefined
+    isINNControl: boolean
     isSafetyEquipmentAndStandardsComplianceControl: boolean | undefined
     isSeafarersControl: boolean | undefined
     latitude: number | undefined

@@ -79,6 +79,7 @@ data class AddMissionActionDataInput(
     var isComplianceWithWaterRegulationsControl: Boolean? = null,
     var isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     var isSeafarersControl: Boolean? = null,
+    var isINNControl: Boolean = false,
 ) {
     fun toMissionAction() =
         MissionAction(
@@ -130,5 +131,6 @@ data class AddMissionActionDataInput(
             isComplianceWithWaterRegulationsControl = isComplianceWithWaterRegulationsControl,
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
+            isINNControl = isINNControl,
         )
 }

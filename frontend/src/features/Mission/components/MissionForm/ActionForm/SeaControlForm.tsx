@@ -1,5 +1,6 @@
 import { ActionFormHeader } from '@features/Mission/components/MissionForm/ActionForm/shared/ActionFormHeader'
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
@@ -77,6 +78,8 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             <hr />
 
             <VesselFleetSegmentsField label="Segment de flotte" />
+
+            <FormikINNRadio />
 
             <ControlQualityField />
 

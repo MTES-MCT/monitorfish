@@ -77,6 +77,7 @@ export const AirControlFormLiveSchema = object({
 
 export const AirControlFormCompletionSchema = AirControlFormLiveSchema.concat(
   object({
+    isINNControl: boolean().required(HIDDEN_ERROR),
     completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
@@ -178,6 +179,8 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
       is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
       then: schema => schema.required(HIDDEN_ERROR)
     }),
+
+    isINNControl: boolean().required(HIDDEN_ERROR),
 
     infractions: array().of(
       object({

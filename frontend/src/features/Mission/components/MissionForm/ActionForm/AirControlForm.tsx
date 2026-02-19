@@ -1,4 +1,5 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
@@ -55,6 +56,8 @@ export function AirControlForm({ initialValues, onChange }: AirControlFormProps)
             </FieldsetGroup>
 
             <FormikOtherControlsCheckboxes />
+
+            <FormikINNRadio />
 
             <FormikAuthor />
           </FormBody>

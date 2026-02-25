@@ -1,4 +1,4 @@
-Sphinx==7.4.7
+Sphinx==9.1.0
 sphinx-rtd-theme==3.0.2
 sphinx-intl==2.3.2
 sphinx-autoapi==3.6.1

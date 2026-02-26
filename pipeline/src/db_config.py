@@ -1,4 +1,5 @@
 import clickhouse_connect as ch
+import oracledb
 import sqlalchemy as sa
 from clickhouse_connect.driver.httpclient import HttpClient
 from dotenv import get_key
@@ -109,6 +110,9 @@ def create_engine(db: str, **kwargs) -> sa.engine.Engine:
         sa.engine.Engine: sqlalchemy engine for selected database.
     """
     connection_string = make_connection_string(db)
+
+    if db_env[db]["client"] == "ORACLE_CLIENT":
+        oracledb.init_oracle_client()
 
     engine = sa.create_engine(connection_string, **kwargs)
 

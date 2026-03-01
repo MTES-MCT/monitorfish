@@ -5,7 +5,7 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 plugins {
     `java-library`
     `maven-publish`
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "4.0.3"
     id("org.jetbrains.kotlin.plugin.spring") version "2.3.0"
     kotlin("jvm") version "2.3.0"
     id("org.jetbrains.kotlin.plugin.allopen") version "2.3.0"

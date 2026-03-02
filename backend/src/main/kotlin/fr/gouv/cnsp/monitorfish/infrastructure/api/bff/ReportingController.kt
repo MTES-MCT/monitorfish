@@ -46,11 +46,13 @@ class ReportingController(
         return ReportingDataOutput.fromReporting(createdReporting, controlUnit)
     }
 
-    @GetMapping(value = ["/search"])
+    @GetMapping(value = ["/display"])
     @Operation(summary = "Get reportings to be displayed by filter")
     fun getReportings(
         @RequestParam(required = false)
         isArchived: Boolean?,
+        @RequestParam(required = false)
+        isIUU: Boolean?,
         @RequestParam(required = false)
         reportingType: ReportingType?,
         @RequestParam(required = true)
@@ -61,7 +63,14 @@ class ReportingController(
         endDate: ZonedDateTime?,
     ): List<DisplayedReportingDataOutput> =
         getReportings
-            .execute(isArchived, reportingType, reportingPeriod, startDate, endDate)
+            .execute(
+                isArchived = isArchived,
+                isIUU = isIUU,
+                reportingType = reportingType,
+                reportingPeriod = reportingPeriod,
+                startDate = startDate,
+                endDate = endDate
+            )
             .map { DisplayedReportingDataOutput.fromReporting(it) }
 
     @GetMapping(value = [""])

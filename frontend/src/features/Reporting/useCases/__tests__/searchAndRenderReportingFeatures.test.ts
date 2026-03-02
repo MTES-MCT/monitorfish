@@ -20,7 +20,7 @@ import type { ApiSearchFilter, DisplayedReporting } from '../../types'
 jest.mock('../../reportingApi', () => ({
   reportingApi: {
     endpoints: {
-      searchReportings: {
+      displayReportings: {
         // @ts-ignore
         initiate: jest.fn()
       }
@@ -66,6 +66,7 @@ const dummyReporting: DisplayedReporting = {
 const baseFilter: ApiSearchFilter = {
   endDate: undefined,
   isArchived: undefined,
+  isIUU: undefined,
   reportingPeriod: ReportingSearchPeriod.LAST_3_MONTHS,
   reportingType: undefined,
   startDate: undefined
@@ -98,7 +99,7 @@ describe('searchAndRenderReportingFeatures()', () => {
     await searchAndRenderReportingFeatures(filter)(mockDispatch, jest.fn(), undefined)
 
     // Then
-    expect(reportingApi.endpoints.searchReportings.initiate).not.toHaveBeenCalled()
+    expect(reportingApi.endpoints.displayReportings.initiate).not.toHaveBeenCalled()
   })
 
   it('Should call API, build features, and fill vector source on success', async () => {
@@ -106,7 +107,7 @@ describe('searchAndRenderReportingFeatures()', () => {
     // @ts-ignore
     const mockInitiateResult = { unwrap: jest.fn().mockResolvedValue([dummyReporting]) }
     // @ts-ignore
-    ;(reportingApi.endpoints.searchReportings.initiate as jest.Mock).mockReturnValue(mockInitiateResult)
+    ;(reportingApi.endpoints.displayReportings.initiate as jest.Mock).mockReturnValue(mockInitiateResult)
 
     // @ts-ignore
     const mockDispatch = jest.fn().mockReturnValue(mockInitiateResult)
@@ -116,7 +117,7 @@ describe('searchAndRenderReportingFeatures()', () => {
     await searchAndRenderReportingFeatures(baseFilter)(mockDispatch, jest.fn(), undefined)
 
     // Then
-    expect(reportingApi.endpoints.searchReportings.initiate).toHaveBeenCalledWith(baseFilter)
+    expect(reportingApi.endpoints.displayReportings.initiate).toHaveBeenCalledWith(baseFilter)
     expect(REPORTINGS_VECTOR_SOURCE.clear).toHaveBeenCalledWith(true)
     expect(REPORTINGS_VECTOR_SOURCE.addFeatures).toHaveBeenCalledWith(expect.arrayContaining([expect.any(Object)]))
   })
@@ -127,7 +128,7 @@ describe('searchAndRenderReportingFeatures()', () => {
     // @ts-ignore
     const mockInitiateResult = { unwrap: jest.fn().mockRejectedValue(mockError) }
     // @ts-ignore
-    ;(reportingApi.endpoints.searchReportings.initiate as jest.Mock).mockReturnValue(mockInitiateResult)
+    ;(reportingApi.endpoints.displayReportings.initiate as jest.Mock).mockReturnValue(mockInitiateResult)
 
     // @ts-ignore
     const mockDispatch = jest.fn().mockReturnValue(mockInitiateResult)

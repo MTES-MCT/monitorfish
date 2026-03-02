@@ -15,7 +15,7 @@ export const searchAndRenderReportingFeatures =
     }
 
     try {
-      const reportings = await dispatch(reportingApi.endpoints.searchReportings.initiate(filter)).unwrap()
+      const reportings = await dispatch(reportingApi.endpoints.displayReportings.initiate(filter)).unwrap()
 
       const features = reportings.map(reporting => buildReportingFeature(reporting))
 

@@ -85,7 +85,7 @@ export function ReportingDetails({
 
           <EditButton
             accent={Accent.PRIMARY}
-            disabled={!isSelected}
+            disabled={true}
             Icon={Icon.EditUnbordered}
             onClick={() => {}}
             size={Size.SMALL}

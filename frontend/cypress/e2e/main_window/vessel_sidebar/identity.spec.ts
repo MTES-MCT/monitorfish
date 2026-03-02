@@ -49,7 +49,7 @@ context('Vessel sidebar identity tab', () => {
     cy.clickButton('Identité')
 
     // When creating a vessel contact
-    cy.fill("Modalité de contact avec l'unité", 'Nouvelle modalité de contact')
+    cy.fill("Modalité de contact avec le navire", 'Nouvelle modalité de contact')
     cy.fill('Contact à mettre à jour', true)
     cy.clickButton('Valider')
 
@@ -67,14 +67,14 @@ context('Vessel sidebar identity tab', () => {
     })
 
     // When cancelling modifications
-    cy.fill("Modalité de contact avec l'unité", 'Autre modalité de contact')
+    cy.fill("Modalité de contact avec le navire", 'Autre modalité de contact')
     cy.fill('Contact à mettre à jour', false)
     cy.clickButton('Annuler')
     // Then
     cy.get('#contactMethod').should('have.value', 'Nouvelle modalité de contact')
 
     // When updating a vessel contact method
-    cy.fill("Modalité de contact avec l'unité", 'Autre modalité de contact')
+    cy.fill("Modalité de contact avec le navire", 'Autre modalité de contact')
     cy.fill('Contact à mettre à jour', false)
     cy.clickButton('Valider')
     // Then

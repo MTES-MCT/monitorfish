@@ -61,7 +61,7 @@ export function InterestPointMapButton() {
     <>
       <MapToolButton
         data-cy="interest-point"
-        Icon={Icon.Report}
+        Icon={Icon.Landmark}
         isActive={isOpened}
         onClick={openOrCloseInterestPoint}
         title="Créer un point d'intérêt"

@@ -22,7 +22,7 @@ import { backofficeProducerOrganizationMembershipReducer } from '@features/Produ
 import { regulatoryLayerSearchReducer } from '@features/Regulation/components/RegulationSearch/slice'
 import { regulationReducer, type RegulationState } from '@features/Regulation/slice'
 import { reportingTableFiltersReducer } from '@features/Reporting/components/ReportingTable/Filters/slice'
-import { reportingReducer } from '@features/Reporting/slice'
+import { reportingReducer, type ReportingState } from '@features/Reporting/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
@@ -149,7 +149,12 @@ export const mainReducer = {
     priorNotificationReducer
   ),
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
-  reporting: reportingReducer,
+  reporting: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<ReportingState>('mainPersistorReporting', ['displayFilters'])
+    },
+    reportingReducer
+  ),
   reportingTableFilters: reportingTableFiltersReducer,
   sideWindow: sideWindowReducer,
   station: stationReducer,

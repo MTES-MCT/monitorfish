@@ -6,14 +6,20 @@ export function parseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray:
 export function parseOrReturn<T>(body: unknown, schema: z.ZodType<any>, isArray: boolean): T | T[] {
   try {
     if (!isArray) {
-      return schema.parse(body)
+      return schema.parse(body, {
+        reportInput: true
+      })
     }
 
     if (!Array.isArray(body)) {
       throw new Error('Expected an array for parsing.')
     }
 
-    return body.map(bodyElement => schema.parse(bodyElement))
+    return body.map(bodyElement =>
+      schema.parse(bodyElement, {
+        reportInput: true
+      })
+    )
   } catch (e) {
     // eslint-disable-next-line no-new
     new FrontendError('Failing validating type', e)

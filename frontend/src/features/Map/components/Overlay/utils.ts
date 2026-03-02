@@ -1,6 +1,7 @@
 import { containsXY } from 'ol/extent'
 
-import type { OverlayCardMargins } from './types'
+import { type OverlayCardMargins, OverlayPosition } from './types'
+
 import type { Extent } from 'ol/extent'
 
 function getOuterExtentPosition(boxSize: number, x: number, y: number) {
@@ -38,17 +39,6 @@ function getOuterExtentPosition(boxSize: number, x: number, y: number) {
       y: y + boxSize
     }
   }
-}
-
-export enum OverlayPosition {
-  BOTTOM = 'BOTTOM',
-  BOTTOM_LEFT = 'BOTTOM_LEFT',
-  BOTTOM_RIGHT = 'BOTTOM_RIGHT',
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT',
-  TOP = 'TOP',
-  TOP_LEFT = 'TOP_LEFT',
-  TOP_RIGHT = 'TOP_RIGHT'
 }
 
 /**
@@ -115,4 +105,21 @@ export function getOverlayPosition(boxSize: number, x: number, y: number, extent
   }
 
   return OverlayPosition.BOTTOM
+}
+
+export function computeSmartPositionAndOffset(
+  x: number,
+  y: number,
+  extent: Extent,
+  boxSize: number,
+  margins: OverlayCardMargins,
+  overlayHeight: number
+): { offset: number[]; position: OverlayPosition } {
+  const position = getOverlayPosition(boxSize, x, y, extent)
+  const margin = getTopLeftMargin(position, margins)
+
+  return {
+    offset: [margin[1], margin[0] + overlayHeight / 2],
+    position
+  }
 }

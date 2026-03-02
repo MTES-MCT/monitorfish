@@ -1,15 +1,11 @@
+import { useMapOverlay } from '@features/Map/components/Overlay/hooks/useMapOverlay'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
-import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import { getCoordinates, usePrevious } from '@mtes-mct/monitor-ui'
-import { noop } from 'lodash-es'
 import LineString from 'ol/geom/LineString'
-import Overlay from 'ol/Overlay'
 import { transform } from 'ol/proj'
 import { getLength } from 'ol/sphere'
-import { createRef, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import EditSVG from '../../icons/Bouton_edition.svg?react'
@@ -17,10 +13,18 @@ import DeleteSVG from '../../icons/Suppression.svg?react'
 
 import type { InterestPoint } from '../types'
 
-const X = 0
-const Y = 1
 export const initialOffsetValue = [-90, 60]
 const MIN_ZOOM = 7
+
+function coordinatesAreModified(_coordinates, _previousCoordinates) {
+  return (
+    !Number.isNaN(_coordinates[0]) &&
+    !Number.isNaN(_coordinates[1]) &&
+    !Number.isNaN(_previousCoordinates[0]) &&
+    !Number.isNaN(_previousCoordinates[1]) &&
+    (_coordinates[0] !== _previousCoordinates[0] || _coordinates[1] !== _previousCoordinates[1])
+  )
+}
 
 // TODO Type that.
 export type InterestPointOverlayProps = {
@@ -37,128 +41,41 @@ export function InterestPointOverlay({
   onEdit,
   zoomHasChanged
 }: InterestPointOverlayProps) {
-  const ref: any = createRef()
   const { coordinates } = interestPoint.geometry
 
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
-  const currentOffset = useRef(initialOffsetValue)
-  const currentCoordinates = useRef<number[]>([])
-  const interestPointCoordinates = useRef(coordinates)
-  const isThrottled = useRef(false)
-  const [isDisplayed, setIsDisplayed] = useState(false)
-  const [hiddenByZoom, setHiddenByZoom] = useState(false)
-  const overlay = useMemo(
-    () =>
-      new Overlay({
-        autoPan: false,
-        element: ref.current,
-        offset: currentOffset.current,
-        position: coordinates,
-        positioning: 'center-left'
-      }),
-
-    // We exclude `ref` on purpose here to avoid infinite re-renders
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [coordinates]
-  )
-
-  const moveInterestPointWithThrottle = (target, delay: number) => {
-    if (isThrottled.current || overlay.getOffset() === initialOffsetValue) {
-      return
-    }
-
-    isThrottled.current = true
-    setTimeout(() => {
-      if (!interestPointCoordinates.current) {
-        return
-      }
-
-      const offset = target.getOffset()
-      const pixel = monitorfishMap.getPixelFromCoordinate(interestPointCoordinates.current)
-
-      const { width } = target.getElement().getBoundingClientRect()
-      const nextXPixelCenter = pixel[X] + offset[X] + width / 2
-      const nextYPixelCenter = pixel[Y] + offset[Y]
-
-      const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
-      currentCoordinates.current = nextCoordinates
-      onDrag(interestPoint.id, interestPointCoordinates.current, nextCoordinates, offset)
-
-      isThrottled.current = false
-    }, delay)
-  }
-
-  useMoveOverlayWhenDragging(overlay, currentOffset, moveInterestPointWithThrottle, isDisplayed, () => {})
-  useMoveOverlayWhenZooming(overlay, initialOffsetValue, zoomHasChanged, currentOffset, moveInterestPointWithThrottle)
   const previousCoordinates = usePrevious(coordinates)
 
-  function coordinatesAreModified(_coordinates, _previousCoordinates) {
-    return (
-      !Number.isNaN(_coordinates[0]) &&
-      !Number.isNaN(_coordinates[1]) &&
-      !Number.isNaN(_previousCoordinates[0]) &&
-      !Number.isNaN(_previousCoordinates[1]) &&
-      (_coordinates[0] !== _previousCoordinates[0] || _coordinates[1] !== _previousCoordinates[1])
-    )
-  }
+  const olCoordinates = useMemo(() => transform(coordinates, WSG84_PROJECTION, OPENLAYERS_PROJECTION), [coordinates])
 
+  const { overlayElementRef, resetOffset } = useMapOverlay({
+    coordinates: olCoordinates,
+    initialOffset: initialOffsetValue,
+    onDrag: (anchorCoords, nextCoords, offset) => onDrag(interestPoint.id, anchorCoords, nextCoords, offset),
+    zoomHasChanged
+  })
+
+  // Reset offset when feature jumps > 10km
   useEffect(() => {
-    interestPointCoordinates.current = transform(coordinates, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-
     if (coordinates && previousCoordinates && coordinatesAreModified(coordinates, previousCoordinates)) {
       const line = new LineString([coordinates, previousCoordinates])
-      const distance = getLength(line, { projection: OPENLAYERS_PROJECTION })
-
-      if (distance > 10) {
-        currentOffset.current = initialOffsetValue
-        overlay.setOffset(initialOffsetValue)
+      if (getLength(line, { projection: OPENLAYERS_PROJECTION }) > 10) {
+        resetOffset()
       }
     }
-  }, [coordinates, overlay, previousCoordinates])
+  }, [coordinates, previousCoordinates, resetOffset])
 
-  useEffect(
-    () => {
-      if (!ref.current) {
-        return noop
-      }
-
-      const coordinatesAsOpenLayerProjection = transform(coordinates, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      overlay.setPosition(coordinatesAsOpenLayerProjection)
-      overlay.setElement(ref.current)
-
-      monitorfishMap.addOverlay(overlay)
-      setTimeout(() => {
-        setIsDisplayed(true)
-      }, 50)
-
-      return () => {
-        setIsDisplayed(false)
-        monitorfishMap.removeOverlay(overlay)
-      }
-    },
-
-    // We exclude `ref` on purpose here to avoid infinite re-renders
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [coordinates, overlay]
-  )
-
-  useEffect(() => {
-    if (zoomHasChanged < MIN_ZOOM) {
-      setHiddenByZoom(true)
-    } else {
-      setHiddenByZoom(false)
-    }
-  }, [zoomHasChanged])
+  const isHiddenByZoom = typeof zoomHasChanged === 'number' && zoomHasChanged < MIN_ZOOM
 
   const onInterestPointEdit = () => {
-    overlay.setOffset(initialOffsetValue)
+    resetOffset()
     onEdit(interestPoint.id)
   }
 
   return (
     <WrapperToBeKeptForDOMManagement>
-      <div ref={ref}>
-        {!hiddenByZoom && (
+      <div ref={overlayElementRef}>
+        {!isHiddenByZoom && (
           <InterestPointOverlayElement>
             <Header>
               <Name data-cy="interest-point-name" title={interestPoint.properties.name ?? 'Aucun Libellé'}>

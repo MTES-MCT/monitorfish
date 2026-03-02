@@ -1,5 +1,6 @@
 import { COLORS } from '@constants/constants'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '@features/Map/components/Overlay'
+import { OverlayPosition } from '@features/Map/components/Overlay/types'
+import { getOverlayPosition, getTopLeftMargin } from '@features/Map/components/Overlay/utils'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { getMapResolution } from '@features/Map/utils'

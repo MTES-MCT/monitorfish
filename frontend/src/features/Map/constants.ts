@@ -60,6 +60,7 @@ export enum MapBox {
   MISSIONS = 'MISSIONS',
   NEW_FEATURES = 'NEW_FEATURES',
   REGULATIONS = 'REGULATIONS',
+  REPORTINGS = 'REPORTINGS',
   VESSEL_GROUPS = 'VESSEL_GROUPS',
   VESSEL_VISIBILITY = 'VESSEL_VISIBILITY'
 }
@@ -103,6 +104,7 @@ export enum LayerType {
   MISSION = 'MISSION',
   REGULATORY = 'REGULATORY',
   REGULATORY_PREVIEW = 'REGULATORY_PREVIEW',
+  REPORTINGS = 'REPORTINGS',
   STATION = 'STATION',
   VESSEL = 'VESSEL',
   VESSEL_ALERT = 'VESSEL_ALERT',
@@ -130,6 +132,13 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
     code: MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT,
     type: LayerType.MISSION,
     zIndex: 1001,
+    isClickable: true,
+    isHoverable: true
+  },
+  [MonitorFishMap.MonitorFishLayer.REPORTING]: {
+    code: MonitorFishMap.MonitorFishLayer.REPORTING,
+    type: LayerType.REPORTINGS,
+    zIndex: 500,
     isClickable: true,
     isHoverable: true
   },

@@ -1,7 +1,7 @@
 import { featureHas, featurePropertyIsNotEmpty, stateIs } from '@features/Map/layers/styles/utils/webgl'
 import { VesselFeature } from '@features/Vessel/types/vessel'
+import { THEME } from '@mtes-mct/monitor-ui'
 
-import { theme } from '../../../ui/theme'
 import { booleanToInt } from '../../../utils'
 
 import type { WebGLStyle } from 'ol/style/webgl'
@@ -41,7 +41,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     true
   ]
 
-  const defaultVesselColor = ['case', stateIs('isLight'), theme.color.lightGray, theme.color.charcoal]
+  const defaultVesselColor = ['case', stateIs('isLight'), THEME.color.lightGray, THEME.color.charcoal]
   const booleanFilter = [
     'all',
     hideNonSelectedVesselsCondition,

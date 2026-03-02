@@ -6,8 +6,9 @@ import VesselTrackCard from './VesselTrackCard'
 import { COLORS } from '../../../../constants/constants'
 import { LayerProperties } from '../../constants'
 import { monitorfishMap } from '../../monitorfishMap'
-import { getOverlayPosition, getTopLeftMargin, OverlayPosition } from '../Overlay/index'
+import { getOverlayPosition, getTopLeftMargin } from '../Overlay/utils.ts'
 import { getMapResolution } from '../../utils'
+import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
 
 const overlayBoxSize = 240
 const margins = {

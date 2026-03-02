@@ -52,7 +52,7 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
     }
     dispatch(
       addMainWindowBanner({
-        children: "La modalité de contact avec l'unité a été mise à jour",
+        children: 'La modalité de contact avec le navire a été mise à jour',
         isClosable: true,
         isFixed: true,
         level: Level.SUCCESS,
@@ -80,7 +80,11 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
     >
       {({ dirty, resetForm }) => (
         <ContactForm>
-          <StyledFormikTextarea label="Modalité de contact avec l'unité" name="contactMethod" readOnly={!isSuperUser} />
+          <StyledFormikTextarea
+            label="Modalité de contact avec le navire"
+            name="contactMethod"
+            readOnly={!isSuperUser}
+          />
           <Footer>
             <FormikCheckbox
               label="Contact à mettre à jour"

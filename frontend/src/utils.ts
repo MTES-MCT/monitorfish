@@ -7,20 +7,6 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './features/Map/constant
 import type { Polygon } from 'geojson'
 import type { Extent } from 'ol/extent'
 
-export const customHexToRGB = (
-  hexColor: string | undefined
-): [number | undefined, number | undefined, number | undefined] => {
-  if (!hexColor) {
-    return [undefined, undefined, undefined]
-  }
-  const [r, g, b] = hexColor.substring(1).match(/.{1,2}/g) ?? []
-  if (!r || !g || !b) {
-    return [undefined, undefined, undefined]
-  }
-
-  return [parseInt(r, 16), parseInt(g, 16), parseInt(b, 16)]
-}
-
 export const booleanToInt = boolean => (boolean ? 1 : 0)
 export const calculatePointsDistance = (coord1, coord2) => {
   const dx = coord1[0] - coord2[0]
@@ -86,31 +72,6 @@ export const getDateTime = (dateString: string | undefined | null, withoutSecond
   return `${getDay(date)}/${getMonth(date)}/${date.getUTCFullYear()} à ${time}`
 }
 
-/**
- * get the date before nofMonths for a given {@param date}
- * @param {Date} date
- * @param {Number} nofMonths no of months to get date before
- * @returns {Date} date before nofMonths months
- */
-export function getDateMonthsBefore(date, nofMonths) {
-  const thisMonth = date.getMonth()
-  // set the month index of the date by subtracting nofMonths from the current month index
-  date.setMonth(thisMonth - nofMonths)
-  // When trying to add or subtract months from a Javascript Date() Object which is any end date of a month,
-  // JS automatically advances your Date object to next month's first date if the resulting date does not exist in its month.
-  // For example when you add 1 month to October 31, 2008 , it gives Dec 1, 2008 since November 31, 2008 does not exist.
-  // if the result of subtraction is negative and add 6 to the index and check if JS has auto advanced the date,
-  // then set the date again to last day of previous month
-  // Else check if the result of subtraction is non negative, subtract nofMonths to the index and check the same.
-  if (thisMonth - nofMonths < 0 && date.getMonth() !== thisMonth + nofMonths) {
-    date.setDate(0)
-  } else if (thisMonth - nofMonths >= 0 && date.getMonth() !== thisMonth - nofMonths) {
-    date.setDate(0)
-  }
-
-  return date
-}
-
 /** @deprecated Use `@libs/localStorageManager`. */
 export const getLocalStorageState = <T>(defaultValue: T, key: string): T => {
   const stickyValue = window.localStorage.getItem(key)
@@ -145,7 +106,7 @@ export function timeagoFrenchLocale(_, index, totalSec) {
     const days = remainder >= 1 ? daysFloored + 1 : daysFloored
     const noun = days === 1 ? 'jour' : 'jours'
 
-    return [`il y a ${days} ${noun}`, `${days} ${noun}`]
+    return [`il y a ${days} ${noun}`, `dans ${days} ${noun}`]
   }
 
   // For 9-12 days ago, Convert “1 week ago” to “__ days ago”
@@ -153,7 +114,7 @@ export function timeagoFrenchLocale(_, index, totalSec) {
   if (index === 8) {
     const days = Math.round(totalSec / (SECONDS * MINUTES * HOURS))
     if (days > 8) {
-      return days === 13 ? ['il y a 2 semaines', '2 semaines'] : [`il y a ${days} jours`, `${days} jours`]
+      return days === 13 ? ['il y a 2 semaines', 'dans 2 semaines'] : [`il y a ${days} jours`, `dans ${days} jours`]
     }
   }
 
@@ -161,27 +122,27 @@ export function timeagoFrenchLocale(_, index, totalSec) {
   if (index === 9 || index === 10) {
     const days = Math.round(totalSec / (SECONDS * MINUTES * HOURS))
     if (days <= 62) {
-      return [`il y a ${days} jours`, `${days} jours`]
+      return [`il y a ${days} jours`, `dans ${days} jours`]
     }
 
-    return ['il y a %s mois', '%s mois']
+    return ['il y a %s mois', 'dans %s mois']
   }
 
   return [
-    ["à l'instant", 'un instant'],
-    ['il y a %s secondes', '%s secondes'],
-    ['il y a 1 minute', '1 minute'],
-    ['il y a %s minutes', '%s minutes'],
-    ['il y a 1 heure', '1 heure'],
-    ['il y a %s heures', '%s heures'],
-    ['il y a 1 jour', '1 jour'],
-    ['il y a %s jours', '%s jours'],
-    ['il y a 1 semaine', '1 semaine'],
-    ['il y a %s semaines', '%s semaines'],
-    ['il y a 1 mois', '1 mois'],
-    ['il y a %s mois', '%s mois'],
-    ['il y a 1 an', '1 an'],
-    ['il y a %s ans', '%s ans']
+    ["à l'instant", 'dans un instant'],
+    ['il y a %s secondes', 'dans %s secondes'],
+    ['il y a 1 minute', 'dans 1 minute'],
+    ['il y a %s minutes', 'dans %s minutes'],
+    ['il y a 1 heure', 'dans 1 heure'],
+    ['il y a %s heures', 'dans %s heures'],
+    ['il y a 1 jour', 'dans 1 jour'],
+    ['il y a %s jours', 'dans %s jours'],
+    ['il y a 1 semaine', 'dans 1 semaine'],
+    ['il y a %s semaines', 'dans %s semaines'],
+    ['il y a 1 mois', 'dans 1 mois'],
+    ['il y a %s mois', 'dans %s mois'],
+    ['il y a 1 an', 'dans 1 an'],
+    ['il y a %s ans', 'dans %s ans']
   ][index]
 }
 

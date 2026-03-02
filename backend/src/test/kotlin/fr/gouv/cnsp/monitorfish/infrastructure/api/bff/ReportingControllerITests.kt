@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
@@ -60,6 +61,9 @@ class ReportingControllerITests {
 
     @MockitoBean
     private lateinit var getAllCurrentReportings: GetAllCurrentReportings
+
+    @MockitoBean
+    private lateinit var getReportings: GetReportings
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -462,5 +466,49 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
+    }
+
+    @Test
+    fun `Should search reportings`() {
+        // Given
+        val reporting =
+            Reporting.InfractionSuspicion(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                id = 1,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                reportingActor = ReportingActor.OPS,
+                natinfCode = 27689,
+                title = "Pêche IUU - Zone exclusive",
+                threat = "Activités INN",
+                threatCharacterization = "Pêche sans autorisation par navire tiers",
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                underCharter = false,
+                createdBy = "test@example.gouv.fr",
+                latitude = 6.3,
+                longitude = -52.5,
+            )
+        given(getReportings.execute(anyOrNull(), anyOrNull(), any(), anyOrNull(), anyOrNull()))
+            .willReturn(listOf(reporting))
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/reportings/search")
+                    .param("reportingPeriod", "LAST_MONTH")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].flagState", equalTo("FR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", equalTo("Pêche IUU - Zone exclusive")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].coordinates").exists())
     }
 }

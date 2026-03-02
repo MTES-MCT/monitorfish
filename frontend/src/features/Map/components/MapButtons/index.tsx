@@ -4,6 +4,7 @@ import { ControlUnitListMapButton } from '@features/ControlUnit/components/Contr
 import { LayersSidebar } from '@features/LayersSidebar/components'
 import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
+import { ReportingMapButton } from '@features/Reporting/components/ReportingMapButton'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
 import { VesselSidebar } from '@features/Vessel/components/VesselSidebar/components'
 import { VesselSidebarHeader } from '@features/Vessel/components/VesselSidebar/components/VesselSidebarHeader'
@@ -61,6 +62,9 @@ export function MapButtons() {
   )
   const isVesselGroupMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isVesselGroupMapButtonDisplayed
+  )
+  const isReportingMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isReportingMapButtonDisplayed
   )
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
@@ -131,6 +135,11 @@ export function MapButtons() {
             {isSuperUser && isControlUnitListMapButtonDisplayed && (
               <MenuItem>
                 <ControlUnitListMapButton />
+              </MenuItem>
+            )}
+            {isSuperUser && isReportingMapButtonDisplayed && (
+              <MenuItem>
+                <ReportingMapButton />
               </MenuItem>
             )}
           </Group>

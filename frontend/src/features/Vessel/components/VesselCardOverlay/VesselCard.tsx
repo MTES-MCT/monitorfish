@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
-import { OverlayPosition } from '@features/Map/components/Overlay'
+import { OverlayPosition } from '@features/Map/components/Overlay/types'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { getOverlayMargins } from '@features/Vessel/components/VesselCardOverlay/utils'

@@ -1,11 +1,13 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedReportingSchema'
 import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
-import type { FormEditedReporting, Reporting, ReportingCreation } from './types'
+import type { ApiSearchFilter, DisplayedReporting, FormEditedReporting, Reporting, ReportingCreation } from './types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -82,6 +84,17 @@ export const reportingApi = monitorfishApi.injectEndpoints({
         parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, true)
     }),
 
+    searchReportings: builder.query<DisplayedReporting[], ApiSearchFilter>({
+      providesTags: () => [{ type: RtkCacheTagType.Reportings }],
+      query: filters => ({
+        method: 'GET',
+        url: getUrlOrPathWithQueryParams('/reportings/search', filters)
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
+        parseOrReturn<DisplayedReporting>(baseQueryReturnValue, DisplayedReportingSchema, true)
+    }),
+
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: ({ id, nextReportingFormData }) => ({
@@ -96,4 +109,4 @@ export const reportingApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetReportingsQuery } = reportingApi
+export const { useGetReportingsQuery, useSearchReportingsQuery } = reportingApi

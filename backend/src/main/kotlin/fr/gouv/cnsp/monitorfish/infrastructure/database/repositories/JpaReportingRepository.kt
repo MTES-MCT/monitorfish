@@ -105,6 +105,33 @@ class JpaReportingRepository(
                     getVesselIdsPredicate(vesselIds = vesselIds, reportingEntity = reportingEntity),
                 )
             }
+            it.hasPosition?.let { hasPosition ->
+                predicates.add(
+                    getHasPositionPredicate(
+                        hasPosition = hasPosition,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
+            }
+            it.afterCreationDate?.let { after ->
+                predicates.add(
+                    getAfterCreationDatePredicate(
+                        after = after,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
+            }
+            it.beforeCreationDate?.let { before ->
+                predicates.add(
+                    getBeforeCreationDatePredicate(
+                        before = before,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
+            }
         }
 
         criteriaQuery.select(reportingEntity).where(*predicates.toTypedArray())
@@ -239,4 +266,41 @@ class JpaReportingRepository(
         reportingEntity.get<String>("vesselId").`in`(
             *vesselIds.toTypedArray(),
         )
+
+    private fun getAfterCreationDatePredicate(
+        after: ZonedDateTime,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate =
+        criteriaBuilder.greaterThanOrEqualTo(
+            reportingEntity.get("creationDate"),
+            after,
+        )
+
+    private fun getBeforeCreationDatePredicate(
+        before: ZonedDateTime,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate =
+        criteriaBuilder.lessThanOrEqualTo(
+            reportingEntity.get("creationDate"),
+            before,
+        )
+
+    private fun getHasPositionPredicate(
+        hasPosition: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate =
+        if (hasPosition) {
+            criteriaBuilder.and(
+                criteriaBuilder.isNotNull(reportingEntity.get<Double>("latitude")),
+                criteriaBuilder.isNotNull(reportingEntity.get<Double>("longitude")),
+            )
+        } else {
+            criteriaBuilder.or(
+                criteriaBuilder.isNull(reportingEntity.get<Double>("latitude")),
+                criteriaBuilder.isNull(reportingEntity.get<Double>("longitude")),
+            )
+        }
 }

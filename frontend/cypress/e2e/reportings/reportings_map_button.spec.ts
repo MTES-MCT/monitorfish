@@ -1,9 +1,9 @@
 context('Reportings Map Button', () => {
   beforeEach(() => {
     cy.login('superuser')
-    cy.intercept('GET', '/bff/v1/reportings/search*').as('searchReportings')
+    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
     cy.visit('/#@-188008.06,6245230.27,8.70')
-    cy.wait('@searchReportings')
+    cy.wait('@displayReportings')
     cy.wait(500)
   })
 

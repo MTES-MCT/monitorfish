@@ -83,13 +83,7 @@ export function ReportingDetails({
           )}
           {reporting.title && <Title $hasMarginTop={!reporting.threat}>{reporting.title}</Title>}
 
-          <EditButton
-            accent={Accent.PRIMARY}
-            disabled={true}
-            Icon={Icon.EditUnbordered}
-            onClick={() => {}}
-            size={Size.SMALL}
-          >
+          <EditButton accent={Accent.PRIMARY} disabled Icon={Icon.EditUnbordered} onClick={() => {}} size={Size.SMALL}>
             Modifier le signalement
           </EditButton>
         </Body>

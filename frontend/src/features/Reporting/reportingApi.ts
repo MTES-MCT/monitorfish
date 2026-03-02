@@ -73,6 +73,17 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
+    displayReportings: builder.query<DisplayedReporting[], ApiSearchFilter>({
+      providesTags: () => [{ type: RtkCacheTagType.Reportings }],
+      query: filters => ({
+        method: 'GET',
+        url: getUrlOrPathWithQueryParams('/reportings/display', filters)
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
+        parseOrReturn<DisplayedReporting>(baseQueryReturnValue, DisplayedReportingSchema, true)
+    }),
+
     getReportings: builder.query<Reporting.Reporting[], void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
@@ -82,17 +93,6 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
         parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, true)
-    }),
-
-    searchReportings: builder.query<DisplayedReporting[], ApiSearchFilter>({
-      providesTags: () => [{ type: RtkCacheTagType.Reportings }],
-      query: filters => ({
-        method: 'GET',
-        url: getUrlOrPathWithQueryParams('/reportings/search', filters)
-      }),
-      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
-      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
-        parseOrReturn<DisplayedReporting>(baseQueryReturnValue, DisplayedReportingSchema, true)
     }),
 
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({
@@ -109,4 +109,4 @@ export const reportingApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetReportingsQuery, useSearchReportingsQuery } = reportingApi
+export const { useDisplayReportingsQuery, useGetReportingsQuery } = reportingApi

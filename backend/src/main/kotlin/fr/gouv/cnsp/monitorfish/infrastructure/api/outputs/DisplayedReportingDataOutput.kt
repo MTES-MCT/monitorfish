@@ -32,7 +32,7 @@ class DisplayedReportingDataOutput(
                 id = reporting.id!!,
                 type = reporting.type,
                 coordinates =
-                    if (reporting.longitude != null && reporting.longitude != null) {
+                    if (reporting.longitude != null && reporting.latitude != null) {
                         transformCoordinatesToOpenlayersProjection(
                             longitude = reporting.longitude!!,
                             latitude = reporting.latitude!!,

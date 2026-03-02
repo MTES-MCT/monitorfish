@@ -13,6 +13,7 @@ const INITIAL_STATE: ReportingState = {
   displayFilters: {
     endDate: undefined,
     isArchived: undefined,
+    isIUU: undefined,
     reportingPeriod: ReportingSearchPeriod.LAST_3_MONTHS,
     reportingType: undefined,
     startDate: undefined

@@ -89,6 +89,15 @@ class JpaReportingRepository(
                     ),
                 )
             }
+            it.isIUU?.let { isIUU ->
+                predicates.add(
+                    getIsIUUPredicate(
+                        isIUU = isIUU,
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
+            }
             it.types?.let { types ->
                 predicates.add(getTypesPredicate(types = types, reportingEntity = reportingEntity))
             }
@@ -245,6 +254,12 @@ class JpaReportingRepository(
         reportingEntity: Root<ReportingEntity>,
         criteriaBuilder: CriteriaBuilder,
     ): Predicate = criteriaBuilder.equal(reportingEntity.get<Boolean>("isDeleted"), isDeleted)
+
+    private fun getIsIUUPredicate(
+        isIUU: Boolean,
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate = criteriaBuilder.equal(reportingEntity.get<Boolean>("isIuu"), isIUU)
 
     private fun getTypesPredicate(
         types: List<ReportingType>,

@@ -5,6 +5,11 @@ export const STATUS_OPTIONS = [
   { label: 'En cours', value: 'NOT_ARCHIVED' }
 ]
 
+export const IUU_OPTIONS = [
+  { label: 'Signalement INN', value: 'IUU' },
+  { label: 'Signalement non INN', value: 'NOT_IUU' }
+]
+
 export const REPORTING_TYPE_OPTIONS = [
   {
     label: ReportingTypeCharacteristics.INFRACTION_SUSPICION.displayName,

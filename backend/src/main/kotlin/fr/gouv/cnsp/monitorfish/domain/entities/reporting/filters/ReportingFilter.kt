@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 data class ReportingFilter(
     val isArchived: Boolean? = null,
     val isDeleted: Boolean? = null,
+    val isIUU: Boolean? = null,
     val types: List<ReportingType>? = null,
     val vesselInternalReferenceNumbers: List<String>? = null,
     val vesselIds: List<Int>? = null,

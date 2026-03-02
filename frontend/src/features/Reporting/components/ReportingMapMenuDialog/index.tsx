@@ -1,6 +1,10 @@
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
-import { REPORTING_TYPE_OPTIONS, STATUS_OPTIONS } from '@features/Reporting/components/ReportingMapMenuDialog/constants'
+import {
+  IUU_OPTIONS,
+  REPORTING_TYPE_OPTIONS,
+  STATUS_OPTIONS
+} from '@features/Reporting/components/ReportingMapMenuDialog/constants'
 import { REPORTING_SEARCH_PERIOD_AS_OPTIONS } from '@features/Reporting/constants'
 import { reportingActions } from '@features/Reporting/slice'
 import { type ApiSearchFilter, ReportingSearchPeriod } from '@features/Reporting/types'
@@ -61,6 +65,22 @@ export function ReportingMapMenuDialog() {
     applyFilter({ ...displayFilters, reportingPeriod: nextReportingPeriod })
   }
 
+  const updateIsIUU = (nextValue: string | undefined) => {
+    const nextIsIUU = (function () {
+      if (nextValue === 'IUU') {
+        return true
+      }
+
+      if (nextValue === 'NOT_IUU') {
+        return false
+      }
+
+      return undefined
+    })()
+
+    applyFilter({ ...displayFilters, isIUU: nextIsIUU })
+  }
+
   const updateCustomPeriod = (nextCustomPeriod: DateAsStringRange | undefined) => {
     applyFilter({ ...displayFilters, endDate: nextCustomPeriod?.[1], startDate: nextCustomPeriod?.[0] })
   }
@@ -77,6 +97,18 @@ export function ReportingMapMenuDialog() {
   }
   const toggleCreateReporting = () => {}
   const toggleReportingList = () => {}
+
+  const iuuValue = (function () {
+    if (displayFilters.isIUU === true) {
+      return 'IUU'
+    }
+
+    if (displayFilters.isIUU === false) {
+      return 'NOT_IUU'
+    }
+
+    return undefined
+  })()
 
   const archivedValue = (function () {
     if (displayFilters.isArchived === true) {
@@ -156,6 +188,16 @@ export function ReportingMapMenuDialog() {
               options={REPORTING_TYPE_OPTIONS}
               placeholder="Type"
               value={displayFilters.reportingType}
+            />
+            <Select
+              isLabelHidden
+              isLight
+              label="INN / non INN"
+              name="isIUU"
+              onChange={value => updateIsIUU(value)}
+              options={IUU_OPTIONS}
+              placeholder="INN / non INN"
+              value={iuuValue}
             />
           </FilterRow>
           <StyledFooter>

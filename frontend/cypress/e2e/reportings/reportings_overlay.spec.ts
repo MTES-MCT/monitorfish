@@ -1,10 +1,10 @@
 context('Reportings overlay', () => {
   beforeEach(() => {
     cy.login('superuser')
-    cy.intercept('GET', '/bff/v1/reportings/search*').as('searchReportings')
+    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
     // Center on NAMO area near reporting id=8 (lat=48.1, lon=-4.9) and id=9 (lat=47.4, lon=-5.2)
     cy.visit('/#@-545000,6135000,10.50')
-    cy.wait('@searchReportings')
+    cy.wait('@displayReportings')
     cy.wait(3000)
   })
 

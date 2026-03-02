@@ -110,6 +110,7 @@ export const ReportingOriginActorLabel: Record<ReportingOriginActor, string> = {
 export type ApiSearchFilter = {
   endDate: string | undefined
   isArchived: boolean | undefined
+  isIUU: boolean | undefined
   reportingPeriod: ReportingSearchPeriod
   reportingType: ReportingType | undefined
   startDate: string | undefined

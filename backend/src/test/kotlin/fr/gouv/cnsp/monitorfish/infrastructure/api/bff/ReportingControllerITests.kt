@@ -479,6 +479,7 @@ class ReportingControllerITests {
                 id = 1,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
+                isIUU = false,
                 creationDate = ZonedDateTime.now(),
                 reportingActor = ReportingActor.OPS,
                 natinfCode = 27689,
@@ -493,13 +494,21 @@ class ReportingControllerITests {
                 latitude = 6.3,
                 longitude = -52.5,
             )
-        given(getReportings.execute(anyOrNull(), anyOrNull(), any(), anyOrNull(), anyOrNull()))
-            .willReturn(listOf(reporting))
+        given(
+            getReportings.execute(
+                isArchived = anyOrNull(),
+                isIUU = anyOrNull(),
+                reportingType = anyOrNull(),
+                reportingPeriod = any(),
+                startDate = anyOrNull(),
+                endDate = anyOrNull(),
+            ),
+        ).willReturn(listOf(reporting))
 
         // When
         api
             .perform(
-                get("/bff/v1/reportings/search")
+                get("/bff/v1/reportings/display")
                     .param("reportingPeriod", "LAST_MONTH")
                     .with(authenticatedRequest()),
             )

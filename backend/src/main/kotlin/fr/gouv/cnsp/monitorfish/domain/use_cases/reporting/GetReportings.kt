@@ -18,6 +18,7 @@ class GetReportings(
 
     fun execute(
         isArchived: Boolean?,
+        isIUU: Boolean?,
         reportingType: ReportingType?,
         reportingPeriod: ReportingPeriod,
         startDate: ZonedDateTime?,
@@ -50,6 +51,7 @@ class GetReportings(
             ReportingFilter(
                 isArchived = isArchived,
                 isDeleted = false,
+                isIUU = isIUU,
                 types = reportingType?.let { listOf(it) },
                 afterCreationDate = afterCreationDate,
                 beforeCreationDate = beforeCreationDate,

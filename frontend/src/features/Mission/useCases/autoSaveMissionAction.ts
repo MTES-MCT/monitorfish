@@ -50,10 +50,13 @@ export const autoSaveMissionAction =
           id: missionActionData.id,
 
           /**
-           * The last haul control is only required for controls at sea
+           * The last haul control is only required for controls at sea or land
            */
           isLastHaul:
-            missionActionData.actionType === MissionActionType.SEA_CONTROL ? missionActionData.isLastHaul : false,
+            missionActionData.actionType === MissionActionType.SEA_CONTROL ||
+            missionActionData.actionType === MissionActionType.LAND_CONTROL
+              ? missionActionData.isLastHaul
+              : false,
 
           /**
            * This field is not used in the backend use-case, we add this property to

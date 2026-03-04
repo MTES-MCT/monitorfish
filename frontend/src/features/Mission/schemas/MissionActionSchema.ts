@@ -34,6 +34,7 @@ export const MissionActionSchema = z.strictObject({
   isAdministrativeControl: booleanOrUndefined,
   isComplianceWithWaterRegulationsControl: booleanOrUndefined,
   isFromPoseidon: booleanOrUndefined,
+  isINNControl: z.boolean(),
   isLastHaul: z.boolean(),
   isSafetyEquipmentAndStandardsComplianceControl: booleanOrUndefined,
   isSeafarersControl: booleanOrUndefined,

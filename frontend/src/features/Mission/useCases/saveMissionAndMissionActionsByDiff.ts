@@ -44,10 +44,13 @@ export const saveMissionAndMissionActionsByDiff =
           const missionActionDataWithExtraProps = {
             ...missionActionData,
             /**
-             * The last haul control is only required for controls at sea
+             * The last haul control is only required for controls at sea or land
              */
             isLastHaul:
-              missionActionData.actionType === MissionActionType.SEA_CONTROL ? missionActionData.isLastHaul : false
+              missionActionData.actionType === MissionActionType.SEA_CONTROL ||
+              missionActionData.actionType === MissionActionType.LAND_CONTROL
+                ? missionActionData.isLastHaul
+                : false
           }
 
           if (missionActionDataWithExtraProps.id === undefined) {

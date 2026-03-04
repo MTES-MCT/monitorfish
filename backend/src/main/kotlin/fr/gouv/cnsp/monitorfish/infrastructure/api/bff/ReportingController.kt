@@ -69,9 +69,8 @@ class ReportingController(
                 reportingType = reportingType,
                 reportingPeriod = reportingPeriod,
                 startDate = startDate,
-                endDate = endDate
-            )
-            .map { DisplayedReportingDataOutput.fromReporting(it) }
+                endDate = endDate,
+            ).map { DisplayedReportingDataOutput.fromReporting(it) }
 
     @GetMapping(value = [""])
     @Operation(summary = "Get all current reportings")

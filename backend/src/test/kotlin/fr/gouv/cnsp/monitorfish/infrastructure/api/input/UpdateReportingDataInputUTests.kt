@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,7 +16,8 @@ class UpdateReportingDataInputUTests {
         // Given
         val input =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
                 title = "Test reporting",
                 threatHierarchy =
@@ -51,7 +53,8 @@ class UpdateReportingDataInputUTests {
         // Given
         val input =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
                 title = "Test reporting",
                 threatHierarchy =
@@ -87,7 +90,8 @@ class UpdateReportingDataInputUTests {
         // Given
         val input =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
                 title = "Test reporting",
                 threatHierarchy =
@@ -123,7 +127,8 @@ class UpdateReportingDataInputUTests {
         // Given
         val input =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
                 title = "Test reporting",
                 threatHierarchy = null,
@@ -144,7 +149,8 @@ class UpdateReportingDataInputUTests {
         val expirationDate = ZonedDateTime.now().plusDays(30)
         val input =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.UNIT,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1234,
                 authorContact = "abc@example.com",
@@ -176,7 +182,7 @@ class UpdateReportingDataInputUTests {
         val result = input.toUpdatedReportingValues()
 
         // Then
-        assertThat(result.reportingActor).isEqualTo(ReportingActor.UNIT)
+        assertThat(result.reportingSource).isEqualTo(ReportingSource.UNIT)
         assertThat(result.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat(result.controlUnitId).isEqualTo(1234)
         assertThat(result.authorContact).isEqualTo("abc@example.com")

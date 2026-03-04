@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -420,15 +420,16 @@ class GetVesselUTests {
                 id = 1,
                 vesselId = 123,
                 vesselName = "VESSEL",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "EXT",
+                cfr = "FR224226850",
+                externalMarker = "EXT",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Observation 1",
                 createdBy = "test@example.gouv.fr",
             )
@@ -437,15 +438,16 @@ class GetVesselUTests {
                 id = 2,
                 vesselId = 123,
                 vesselName = "VESSEL",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "EXT",
+                cfr = "FR224226850",
+                externalMarker = "EXT",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Infraction suspicion",
                 natinfCode = 123,
                 threat = "threat",
@@ -458,15 +460,16 @@ class GetVesselUTests {
                 id = 1,
                 vesselId = 123,
                 vesselName = "VESSEL",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "EXT",
+                cfr = "FR224226850",
+                externalMarker = "EXT",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Observation 1",
                 createdBy = "test@example.gouv.fr",
             )

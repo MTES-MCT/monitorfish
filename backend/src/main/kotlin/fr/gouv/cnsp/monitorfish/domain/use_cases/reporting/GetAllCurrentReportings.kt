@@ -38,9 +38,9 @@ class GetAllCurrentReportings(
         val currentReportingsWithCharterInfo =
             currentReportings.map { reporting ->
                 val vesselIdentifier = reporting.vesselIdentifier
-                val internalReferenceNumber = reporting.internalReferenceNumber
+                val internalReferenceNumber = reporting.cfr
                 val ircs = reporting.ircs
-                val externalReferenceNumber = reporting.externalReferenceNumber
+                val externalReferenceNumber = reporting.externalMarker
 
                 val underCharter =
                     getIsUnderCharter(
@@ -146,7 +146,7 @@ class GetAllCurrentReportings(
             }
         } catch (e: Throwable) {
             logger.debug(
-                "Last position not found for vessel \"${reporting.internalReferenceNumber}/${reporting.ircs}/${reporting.externalReferenceNumber}\" " +
+                "Last position not found for vessel \"${reporting.cfr}/${reporting.ircs}/${reporting.externalMarker}\" " +
                     "and vessel identifier \"${reporting.vesselIdentifier}\": ${e.message}",
             )
 

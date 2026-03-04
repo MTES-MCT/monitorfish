@@ -32,11 +32,15 @@ data class ReportingEntity(
     @Column(name = "vessel_name")
     val vesselName: String? = null,
     @Column(name = "internal_reference_number")
-    val internalReferenceNumber: String? = null,
+    val cfr: String? = null,
     @Column(name = "external_reference_number")
-    val externalReferenceNumber: String? = null,
+    val externalMarker: String? = null,
     @Column(name = "ircs")
     val ircs: String? = null,
+    @Column(name = "mmsi")
+    val mmsi: String? = null,
+    @Column(name = "imo")
+    val imo: String? = null,
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "vessel_identifier", columnDefinition = "vessel_identifier")
@@ -44,6 +48,8 @@ data class ReportingEntity(
     @Column(name = "flag_state")
     @Convert(converter = CountryCodeConverter::class)
     val flagState: CountryCode,
+    @Column(name = "length", nullable = true)
+    val length: Double? = null,
     @Column(name = "creation_date", nullable = false)
     val creationDate: ZonedDateTime,
     @Column(name = "validation_date", nullable = true)
@@ -55,8 +61,14 @@ data class ReportingEntity(
     val value: String,
     @Column(name = "archived", nullable = false)
     val isArchived: Boolean,
+    @Column(name = "is_fishing", nullable = true)
+    val isFishing: Boolean? = null,
+    @Column(name = "gear_code", nullable = true)
+    val gearCode: String? = null,
     @Column(name = "archiving_date_utc", nullable = true)
     val archivingDate: ZonedDateTime? = null,
+    @Column(name = "last_update_date_utc", nullable = false)
+    val lastUpdateDate: ZonedDateTime,
     @Column(name = "deleted", nullable = false)
     val isDeleted: Boolean,
     @Column(name = "is_iuu", nullable = false)
@@ -85,8 +97,8 @@ data class ReportingEntity(
             vesselName = alert.vesselName,
             type = ReportingType.ALERT,
             vesselId = alert.vesselId,
-            internalReferenceNumber = alert.internalReferenceNumber,
-            externalReferenceNumber = alert.externalReferenceNumber,
+            cfr = alert.internalReferenceNumber,
+            externalMarker = alert.externalReferenceNumber,
             ircs = alert.ircs,
             vesselIdentifier = alert.vesselIdentifier,
             flagState = alert.flagState,
@@ -99,6 +111,14 @@ data class ReportingEntity(
             latitude = alert.latitude,
             longitude = alert.longitude,
             createdBy = "SYSTEM",
+            mmsi = null,
+            imo = null,
+            length = null,
+            expirationDate = null,
+            isFishing = null,
+            gearCode = null,
+            archivingDate = null,
+            lastUpdateDate = validationDate ?: ZonedDateTime.now(),
         )
 
         fun fromReporting(
@@ -108,9 +128,12 @@ data class ReportingEntity(
             vesselName = reporting.vesselName,
             vesselId = reporting.vesselId,
             type = reporting.type,
-            internalReferenceNumber = reporting.internalReferenceNumber,
-            externalReferenceNumber = reporting.externalReferenceNumber,
+            cfr = reporting.cfr,
+            externalMarker = reporting.externalMarker,
             ircs = reporting.ircs,
+            mmsi = reporting.mmsi,
+            imo = reporting.imo,
+            length = reporting.length,
             vesselIdentifier = reporting.vesselIdentifier,
             flagState = reporting.flagState,
             creationDate = reporting.creationDate,
@@ -121,6 +144,12 @@ data class ReportingEntity(
             isDeleted = false,
             isIuu = reporting.isIUU,
             createdBy = reporting.createdBy,
+            isFishing = reporting.isFishing,
+            gearCode = reporting.gearCode,
+            archivingDate = reporting.archivingDate,
+            lastUpdateDate = reporting.lastUpdateDate,
+            latitude = reporting.latitude,
+            longitude = reporting.longitude,
         )
     }
 }

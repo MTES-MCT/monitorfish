@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -41,13 +41,14 @@ class GetAllCurrentReportingsUTests {
         // Given
         val currentReporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 27689,
                 title = "A title",
                 threat = "Activités INN",
@@ -83,7 +84,7 @@ class GetAllCurrentReportingsUTests {
         // Then
         assertThat(reportings).hasSize(1)
         val (reporting, _) = reportings.first()
-        assertThat(reporting.internalReferenceNumber).isEqualTo("FRFGRGR")
+        assertThat(reporting.cfr).isEqualTo("FRFGRGR")
         assertThat(reporting.underCharter).isTrue
         assertThat(reporting.infraction).isNotNull
     }
@@ -93,13 +94,14 @@ class GetAllCurrentReportingsUTests {
         // Given
         val currentReporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = null,
-                externalReferenceNumber = "RGD",
+                cfr = null,
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Activités INN",

@@ -23,6 +23,7 @@ sealed class Reporting {
     abstract val archivingDate: ZonedDateTime?
     abstract val isArchived: Boolean
     abstract val isDeleted: Boolean
+    abstract val isIUU: Boolean
     abstract val latitude: Double?
     abstract val longitude: Double?
     abstract val createdBy: String
@@ -67,6 +68,7 @@ sealed class Reporting {
         override val archivingDate: ZonedDateTime? = null,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
+        override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
         override val createdBy: String,
@@ -109,6 +111,7 @@ sealed class Reporting {
         override val archivingDate: ZonedDateTime? = null,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
+        override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
         override val createdBy: String,
@@ -217,6 +220,7 @@ sealed class Reporting {
         override val archivingDate: ZonedDateTime? = null,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
+        override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
         override val createdBy: String,

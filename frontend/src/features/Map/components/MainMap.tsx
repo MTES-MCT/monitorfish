@@ -1,5 +1,8 @@
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { layerActions } from '@features/Map/layer.slice'
+import { ReportingOverlay } from '@features/Reporting/components/ReportingOverlay'
+import { SelectedReportingOverlay } from '@features/Reporting/components/SelectedReportingOverlay'
+import { ReportingLayer } from '@features/Reporting/layers/ReportingLayer'
 import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -126,6 +129,9 @@ export function MainMap() {
       {isSuperUser && <SelectedMissionActionsLayer />}
       {isSuperUser && <ControlOverlay feature={hoveredFeature} />}
       {isSuperUser && <SelectedControlOverlay />}
+      {isSuperUser && <ReportingLayer />}
+      {isSuperUser && <ReportingOverlay feature={hoveredFeature} />}
+      {isSuperUser && <SelectedReportingOverlay />}
 
       <RegulatoryLayerSearch />
 

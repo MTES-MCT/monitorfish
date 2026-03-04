@@ -1,6 +1,6 @@
+import { useMoveOverlayWhenDragging } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenDragging'
+import { useMoveOverlayWhenZooming } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenZooming'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
-import { useMoveOverlayWhenZooming } from '@hooks/useMoveOverlayWhenZooming'
 import Overlay from 'ol/Overlay'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'

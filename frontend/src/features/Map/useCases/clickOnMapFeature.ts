@@ -1,5 +1,7 @@
 import { missionFormActions } from '@features/Mission/components/MissionForm/slice'
 import { showRegulatoryZoneMetadata } from '@features/Regulation/useCases/showRegulatoryZoneMetadata'
+import { reportingActions } from '@features/Reporting/slice'
+import { type Reporting } from '@features/Reporting/types'
 import { stationActions } from '@features/Station/slice'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { showVesselTrack } from '@features/Vessel/useCases/showVesselTrack'
@@ -46,6 +48,13 @@ export const clickOnMapFeature =
         featureProjection: OPENLAYERS_PROJECTION
       })
       dispatch(missionFormActions.setSelectedMissionGeoJSON(featureGeoJSON as GeoJSONFeature<Point>))
+
+      return
+    }
+
+    if (clickedFeatureId.includes(LayerProperties.REPORTING.code)) {
+      ;(mapClick.feature as Reporting.ReportingFeature).set('isSelected', true)
+      dispatch(reportingActions.toggleSelectedReportingFeatureId(clickedFeatureId))
 
       return
     }

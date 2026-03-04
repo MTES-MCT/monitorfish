@@ -1,4 +1,5 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
+import { hoverOnMapFeature } from '@features/Map/useCases/hoverOnMapFeature'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { platformModifierKeyOnly } from 'ol/events/condition'
@@ -98,6 +99,7 @@ export function BaseMap({
         if (setCurrentFeature) {
           setCurrentFeature(undefined)
         }
+        hoverOnMapFeature(undefined)
         // eslint-disable-next-line no-param-reassign
         ;(openLayerMap.getTarget() as HTMLElement).style.cursor = ''
 
@@ -106,6 +108,7 @@ export function BaseMap({
 
       if (setCurrentFeature) {
         setCurrentFeature(feature as Feature | FeatureWithCodeAndEntityId | undefined)
+        hoverOnMapFeature(feature as Feature | FeatureWithCodeAndEntityId | undefined)
       }
       // eslint-disable-next-line no-param-reassign
       ;(openLayerMap.getTarget() as HTMLElement).style.cursor = 'pointer'

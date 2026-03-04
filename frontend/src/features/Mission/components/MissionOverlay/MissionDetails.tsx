@@ -1,5 +1,6 @@
 import { Bold } from '@components/style'
-import { OverlayPosition } from '@features/Map/components/Overlay'
+import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
+import { OverlayPosition } from '@features/Map/components/Overlay/types'
 import { CompletionStatusTag } from '@features/Mission/components/MissionForm/shared/CompletionStatusTag'
 import { MissionStatusTag } from '@features/Mission/components/MissionForm/shared/MissionStatusTag'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -120,12 +121,7 @@ export function MissionDetails({ isSelected, mission, overlayPosition }: Mission
         </EditButton>
       </Wrapper>
       {!isSelected && (
-        <TrianglePointer>
-          {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
-          {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow />}
-          {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow />}
-          {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow />}
-        </TrianglePointer>
+        <OverlayTrianglePointer cardHeight={201} cardWidth={260} margins={margins} overlayPosition={overlayPosition} />
       )}
     </>
   )
@@ -204,63 +200,4 @@ const Body = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-`
-
-const TrianglePointer = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  height: auto;
-  width: auto;
-`
-
-const BottomTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 11px 6px 0 6px;
-  border-color: ${p => p.theme.color.white} transparent transparent transparent;
-  margin-left: ${-margins.xMiddle - 6}px;
-  margin-top: -4px;
-  clear: top;
-`
-
-const TopTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-top: transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 11px solid ${p => p.theme.color.white};
-  border-left: 6px solid transparent;
-  margin-left: ${-margins.xMiddle - 6}px;
-  margin-top: ${margins.yBottom + 45}px;
-  clear: top;
-`
-
-const RightTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-right: transparent;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 11px solid ${p => p.theme.color.white};
-  margin-left: ${-margins.xRight - 40}px;
-  margin-top: ${margins.yMiddle + 25}px;
-  clear: top;
-`
-
-const LeftTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-top: 6px solid transparent;
-  border-right: 11px solid ${p => p.theme.color.white};
-  border-bottom: 6px solid transparent;
-  border-left: transparent;
-  margin-left: -11px;
-  margin-top: ${margins.yMiddle + 25}px;
-  clear: top;
 `

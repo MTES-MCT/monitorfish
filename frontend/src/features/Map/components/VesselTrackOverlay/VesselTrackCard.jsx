@@ -7,7 +7,8 @@ import { COLORS } from '../../../../constants/constants'
 import { getCoordinates } from '../../../../coordinates'
 import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../constants'
-import { OverlayPosition } from '../Overlay/index'
+
+import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
 
 timeago.register('fr', timeagoFrenchLocale)
 

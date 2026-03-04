@@ -44,6 +44,6 @@ describe('utils', () => {
     const formattedDate = timeagoFrenchLocale(undefined, 8, tenDaysAgo)
 
     // Then
-    expect(formattedDate).toEqual(['il y a 10 jours', '10 jours'])
+    expect(formattedDate).toEqual(['il y a 10 jours', 'dans 10 jours'])
   })
 })

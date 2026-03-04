@@ -1,7 +1,7 @@
+import { useMoveOverlayWhenDragging } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenDragging'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { getMapResolution } from '@features/Map/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useMoveOverlayWhenDragging } from '@hooks/useMoveOverlayWhenDragging'
 import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -11,7 +11,7 @@ import { margins } from './constants'
 import { ControlDetails } from './ControlDetails'
 import { OPENLAYERS_PROJECTION } from '../../constants'
 import { monitorfishMap } from '../../monitorfishMap'
-import { getOverlayPosition, getTopLeftMargin } from '../Overlay'
+import { getOverlayPosition, getTopLeftMargin } from '../Overlay/utils'
 
 import type { Mission } from '../../../Mission/mission.types'
 

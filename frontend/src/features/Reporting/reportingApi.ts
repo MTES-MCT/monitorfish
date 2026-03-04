@@ -1,11 +1,13 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedReportingSchema'
 import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
 import { FrontendApiError } from '@libs/FrontendApiError'
+import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
-import type { FormEditedReporting, Reporting, ReportingCreation } from './types'
+import type { ApiSearchFilter, DisplayedReporting, FormEditedReporting, Reporting, ReportingCreation } from './types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -71,6 +73,17 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
+    displayReportings: builder.query<DisplayedReporting[], ApiSearchFilter>({
+      providesTags: () => [{ type: RtkCacheTagType.Reportings }],
+      query: filters => ({
+        method: 'GET',
+        url: getUrlOrPathWithQueryParams('/reportings/display', filters)
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
+        parseOrReturn<DisplayedReporting>(baseQueryReturnValue, DisplayedReportingSchema, true)
+    }),
+
     getReportings: builder.query<Reporting.Reporting[], void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
@@ -96,4 +109,4 @@ export const reportingApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useGetReportingsQuery } = reportingApi
+export const { useDisplayReportingsQuery, useGetReportingsQuery } = reportingApi

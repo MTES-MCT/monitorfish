@@ -1,8 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DisplayedReportingDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.*
+import java.time.ZonedDateTime
 
 @RestController
 @RequestMapping("/bff/v1/reportings")
@@ -23,6 +27,7 @@ class ReportingController(
     private val deleteReportings: DeleteReportings,
     private val getAllCurrentReportings: GetAllCurrentReportings,
     private val addReporting: AddReporting,
+    private val getReportings: GetReportings,
 ) {
     @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Create a reporting")
@@ -40,6 +45,33 @@ class ReportingController(
 
         return ReportingDataOutput.fromReporting(createdReporting, controlUnit)
     }
+
+    @GetMapping(value = ["/display"])
+    @Operation(summary = "Get reportings to be displayed by filter")
+    fun getReportings(
+        @RequestParam(required = false)
+        isArchived: Boolean?,
+        @RequestParam(required = false)
+        isIUU: Boolean?,
+        @RequestParam(required = false)
+        reportingType: ReportingType?,
+        @RequestParam(required = true)
+        reportingPeriod: ReportingPeriod,
+        @RequestParam(required = false)
+        startDate: ZonedDateTime?,
+        @RequestParam(required = false)
+        endDate: ZonedDateTime?,
+    ): List<DisplayedReportingDataOutput> =
+        getReportings
+            .execute(
+                isArchived = isArchived,
+                isIUU = isIUU,
+                reportingType = reportingType,
+                reportingPeriod = reportingPeriod,
+                startDate = startDate,
+                endDate = endDate
+            )
+            .map { DisplayedReportingDataOutput.fromReporting(it) }
 
     @GetMapping(value = [""])
     @Operation(summary = "Get all current reportings")

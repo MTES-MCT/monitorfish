@@ -141,6 +141,7 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
 
     // Qualité du contrôle
     vesselTargeted: string().required(HIDDEN_ERROR),
+    isLastHaul: boolean().required(HIDDEN_ERROR),
 
     // Saisi par / Complété par
     completedBy: string().trim().required(HIDDEN_ERROR)
@@ -190,6 +191,7 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
 
     // Qualité du contrôle
     vesselTargeted: string().required(HIDDEN_ERROR),
+    isLastHaul: boolean().required(HIDDEN_ERROR),
 
     // Saisi par / Complété par
     completedBy: string().trim().required(HIDDEN_ERROR)

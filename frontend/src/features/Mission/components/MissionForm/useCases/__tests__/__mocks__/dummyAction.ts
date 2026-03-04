@@ -5,6 +5,7 @@ import CompletionStatus = MissionAction.CompletionStatus
 
 export const dummyAction = {
   actionDatetimeUtc: '2023-12-08T08:27:00Z',
+  actionEndDatetimeUtc: undefined,
   actionType: MissionActionType.SEA_CONTROL,
   completedBy: undefined,
   completion: CompletionStatus.COMPLETED,
@@ -39,6 +40,7 @@ export const dummyAction = {
   isComplianceWithWaterRegulationsControl: undefined,
   isFromPoseidon: false,
   isINNControl: false,
+  isLastHaul: false,
   isSafetyEquipmentAndStandardsComplianceControl: undefined,
   isSeafarersControl: undefined,
   isValid: true,
@@ -49,6 +51,7 @@ export const dummyAction = {
   longitude: -4.281934312813745,
   missionId: 123,
   numberOfVesselsFlownOver: undefined,
+  observationsByUnit: undefined,
   otherComments: undefined,
   portLocode: undefined,
   portName: undefined,

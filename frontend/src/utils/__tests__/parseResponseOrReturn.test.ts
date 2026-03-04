@@ -3,7 +3,7 @@ import { ActiveVesselEmittingPositionSchema } from '@features/Vessel/schemas/Act
 import { expect } from '@jest/globals'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
-describe('utils/parseResponseOrReturn()', () => {
+describe('utils/parseOrReturn()', () => {
   it('should return the original response and print an error', () => {
     const object = { dummy: true }
 

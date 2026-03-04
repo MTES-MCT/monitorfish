@@ -180,6 +180,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
+    cy.fill('Last haul effectué', 'Non')
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -233,6 +234,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           isINNControl: false,
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: 'QGDF',
+          isLastHaul: false,
           latitude: 47.084,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',

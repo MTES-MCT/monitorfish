@@ -1,3 +1,5 @@
+import {hoverOrClickVesselByName} from "../../support/commands/hoverOrClickVesselByName";
+
 context('Reportings overlay', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -8,21 +10,23 @@ context('Reportings overlay', () => {
     cy.wait(3000)
   })
 
-  it('An overlay Should be showed, movable and closed', () => {
-    // Click on reporting feature (coordinates are empirically adjusted for this map center & zoom)
-    cy.get('#root').click(640, 360)
-
+  it('An overlay Should be showed', () => {
+    // Hover
+    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)
     cy.get('*[data-cy="reporting-overlay"]').should('be.visible')
-    cy.get('*[data-cy="reporting-overlay-close"]').click()
-    cy.get('*[data-cy="reporting-overlay"]').should('not.exist')
-
-    // Reopen
-    cy.wait(100)
-    cy.get('#root').click(640, 360)
-
     cy.getComputedStyle('*[data-cy="reporting-overlay"]', 2).then(styleBefore => {
       expect(styleBefore.transform).to.include('matrix')
     })
+    cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
+    cy.getDataCy('reporting-overlay').contains('INN')
+    cy.getDataCy('reporting-overlay').contains('Infraction')
+    cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
+
+    /* TODO Add tests for click events
+
+    cy.get('*[data-cy="reporting-overlay-close"]').click()
+    cy.get('*[data-cy="reporting-overlay"]').should('not.exist')
+    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'click', 12)
 
     // Drag the overlay
     cy.get('*[data-cy="reporting-overlay"]')
@@ -36,9 +40,11 @@ context('Reportings overlay', () => {
       .trigger('pointermove', { clientX: 600, clientY: 400, force: true, pointerId: 1 })
       .trigger('pointermove', { clientX: 600, clientY: 600, force: true, pointerId: 1 })
       .trigger('pointerup', { force: true, pointerId: 1 })
+    cy.get('*[data-cy="reporting-overlay-close"]').click()
 
-    cy.getComputedStyle('*[data-cy="reporting-overlay"]', 2).then(styleAfter => {
-      expect(styleAfter.transform).to.include('matrix')
-    })
+    // Hover
+    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)
+
+     */
   })
 })

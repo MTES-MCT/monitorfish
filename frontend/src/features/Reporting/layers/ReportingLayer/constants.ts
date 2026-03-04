@@ -13,6 +13,7 @@ export const REPORTINGS_VECTOR_LAYER = new WebGLPointsLayer({
   style: reportingWebGLStyle,
   zIndex: LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex
 }) as MonitorFishMap.WebGLPointsLayerWithName
+REPORTINGS_VECTOR_LAYER.name = LayerProperties.REPORTING.code
 
 export const REPORTINGS_LINE_VECTOR_SOURCE = new VectorSource()
 

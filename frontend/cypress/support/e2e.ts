@@ -28,7 +28,7 @@ declare global {
         }>
       ): void
 
-      hoverVesselByName(vesselName: string): Cypress.Chainable
+      hoverVesselByName(vesselName: string, layerName?: string, action?: 'hover' | 'click'): Cypress.Chainable
 
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
 

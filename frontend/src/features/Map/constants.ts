@@ -104,7 +104,7 @@ export enum LayerType {
   MISSION = 'MISSION',
   REGULATORY = 'REGULATORY',
   REGULATORY_PREVIEW = 'REGULATORY_PREVIEW',
-  REPORTINGS = 'REPORTINGS',
+  REPORTING = 'REPORTING',
   STATION = 'STATION',
   VESSEL = 'VESSEL',
   VESSEL_ALERT = 'VESSEL_ALERT',
@@ -137,7 +137,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   },
   [MonitorFishMap.MonitorFishLayer.REPORTING]: {
     code: MonitorFishMap.MonitorFishLayer.REPORTING,
-    type: LayerType.REPORTINGS,
+    type: LayerType.REPORTING,
     zIndex: 500,
     isClickable: true,
     isHoverable: true

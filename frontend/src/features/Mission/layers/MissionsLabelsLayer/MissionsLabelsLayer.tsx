@@ -29,7 +29,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
 
   const vectorSourceRef = useRef<VectorSource>()
-  const layerRef = useRef<InstanceType<typeof Vector>>()
+  const layerRef = useRef<Vector<Feature<Geometry>>>()
 
   const getVectorSource = useCallback(() => {
     if (!vectorSourceRef.current) {
@@ -60,11 +60,12 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    getLayer().setProperties({ code: LayerProperties.MISSIONS_LABEL.code })
-    monitorfishMap.getLayers().push(getLayer())
+    const layer = getLayer()
+    layer.setProperties({ code: LayerProperties.MISSIONS_LABEL.code })
+    monitorfishMap.getLayers().push(layer)
 
     return () => {
-      monitorfishMap.removeLayer(getLayer())
+      monitorfishMap.removeLayer(layer)
     }
   }, [getLayer])
 

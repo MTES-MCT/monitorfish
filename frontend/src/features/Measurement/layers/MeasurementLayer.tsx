@@ -61,7 +61,7 @@ function UnmemoizedMeasurementLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const layerRef = useRef<VectorLayer>()
+  const layerRef = useRef<VectorLayer<Feature>>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new VectorLayer({

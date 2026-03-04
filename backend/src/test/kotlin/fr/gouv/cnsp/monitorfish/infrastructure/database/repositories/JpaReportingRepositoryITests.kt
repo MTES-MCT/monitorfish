@@ -56,7 +56,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reporting).hasSize(16)
+        assertThat(reporting).hasSize(816)
         assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
         val positionAlert = reporting.last() as Reporting.Alert
@@ -98,7 +98,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(16)
+        assertThat(reportings).hasSize(816)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -140,7 +140,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findAll()
 
         // Then
-        assertThat(reportings).hasSize(16)
+        assertThat(reportings).hasSize(816)
         assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
         assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
@@ -528,5 +528,27 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(archivedReportings).isEqualTo(1)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return reportings with position when hasPosition is true`() {
+        val filter = ReportingFilter(hasPosition = true)
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.all { it.latitude != null && it.longitude != null }).isEqualTo(true)
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return no reportings when hasPosition is false`() {
+        val filter = ReportingFilter(hasPosition = false)
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        // All test-data reportings have a position, so none match hasPosition = false
+        assertThat(result).isEmpty()
     }
 }

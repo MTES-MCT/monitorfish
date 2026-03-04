@@ -1,0 +1,1 @@
+ALTER TABLE reportings ADD COLUMN is_iuu BOOLEAN NOT NULL DEFAULT false;

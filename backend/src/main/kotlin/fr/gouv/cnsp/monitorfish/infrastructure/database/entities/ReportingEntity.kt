@@ -59,6 +59,8 @@ data class ReportingEntity(
     val archivingDate: ZonedDateTime? = null,
     @Column(name = "deleted", nullable = false)
     val isDeleted: Boolean,
+    @Column(name = "is_iuu", nullable = false)
+    val isIuu: Boolean = false,
     @Column(name = "latitude")
     val latitude: Double? = null,
     @Column(name = "longitude")
@@ -93,6 +95,7 @@ data class ReportingEntity(
             value = mapper.writeValueAsString(alert.value),
             isArchived = false,
             isDeleted = false,
+            isIuu = false,
             latitude = alert.latitude,
             longitude = alert.longitude,
             createdBy = "SYSTEM",
@@ -116,6 +119,7 @@ data class ReportingEntity(
             value = mapper.writeValueAsString(ReportingMapper.getValueFromReporting(reporting)),
             isArchived = false,
             isDeleted = false,
+            isIuu = reporting.isIUU,
             createdBy = reporting.createdBy,
         )
     }

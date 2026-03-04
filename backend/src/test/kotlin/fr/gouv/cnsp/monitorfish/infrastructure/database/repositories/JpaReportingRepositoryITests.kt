@@ -57,8 +57,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reporting).hasSize(816)
-        assertThat(reporting.last().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(reporting.last().externalReferenceNumber).isEqualTo("RGD")
+        assertThat(reporting.last().cfr).isEqualTo("FRFGRGR")
+        assertThat(reporting.last().externalMarker).isEqualTo("RGD")
         val positionAlert = reporting.last() as Reporting.Alert
         assertThat(positionAlert.seaFront).isEqualTo("NAMO")
         assertThat(reporting.last().creationDate).isEqualTo(creationDate)
@@ -75,14 +75,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val creationDate = ZonedDateTime.now()
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 126,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = creationDate,
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = creationDate,
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -99,11 +100,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reportings).hasSize(816)
-        assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
+        assertThat(reportings.last().cfr).isEqualTo("FRFGRGR")
+        assertThat(reportings.last().externalMarker).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last() as Reporting.InfractionSuspicion
-        assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(infraction.reportingSource).isEqualTo(ReportingSource.OPS)
         assertThat(infraction.natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
@@ -118,13 +119,14 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val creationDate = ZonedDateTime.now()
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 523,
                 creationDate = creationDate,
+                lastUpdateDate = creationDate,
                 flagState = CountryCode.FR,
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -141,11 +143,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reportings).hasSize(816)
-        assertThat(reportings.last().internalReferenceNumber).isEqualTo("FRFGRGR")
-        assertThat(reportings.last().externalReferenceNumber).isEqualTo("RGD")
+        assertThat(reportings.last().cfr).isEqualTo("FRFGRGR")
+        assertThat(reportings.last().externalMarker).isEqualTo("RGD")
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last() as Reporting.InfractionSuspicion
-        assertThat(infraction.reportingActor).isEqualTo(ReportingActor.OPS)
+        assertThat(infraction.reportingSource).isEqualTo(ReportingSource.OPS)
         assertThat(infraction.natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
@@ -166,13 +168,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reporting).hasSize(2)
-        assertThat(reporting.last().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.last().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.last().isArchived).isEqualTo(true)
         assertThat(reporting.last().isDeleted).isEqualTo(false)
         val positionAlertOne = reporting.last() as Reporting.Alert
         assertThat(positionAlertOne.seaFront).isEqualTo("NAMO")
 
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
         val positionAlertTwo = reporting.first() as Reporting.Alert
@@ -192,7 +194,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reporting).hasSize(1)
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
         val positionAlertTwo = reporting.first() as Reporting.Alert
@@ -211,13 +213,13 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(reporting).hasSize(2)
-        assertThat(reporting.last().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.last().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.last().isArchived).isEqualTo(true)
         assertThat(reporting.last().isDeleted).isEqualTo(false)
         val positionAlertOne = reporting.last() as Reporting.Alert
         assertThat(positionAlertOne.seaFront).isEqualTo("NAMO")
 
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
         val positionAlertTwo = reporting.first() as Reporting.Alert
@@ -236,7 +238,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(reporting).hasSize(1)
 
-        assertThat(reporting.first().internalReferenceNumber).isEqualTo("ABC000180832")
+        assertThat(reporting.first().cfr).isEqualTo("ABC000180832")
         assertThat(reporting.first().isArchived).isEqualTo(false)
         assertThat(reporting.first().isDeleted).isEqualTo(false)
         val positionAlertTwo = reporting.first() as Reporting.Alert
@@ -343,7 +345,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         assertThat(result).hasSizeGreaterThan(0)
         assertThat(
-            result.all { listOf("ABC000180832", "ABC000042310").contains(it.internalReferenceNumber) },
+            result.all { listOf("ABC000180832", "ABC000042310").contains(it.cfr) },
         ).isEqualTo(true)
     }
 
@@ -384,17 +386,18 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 523,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 flagState = CountryCode.FR,
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 authorContact = "Jean Bon",
                 title = "Une observation",
@@ -410,10 +413,10 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(reportingId = 7, updatedReporting)
 
         // Then
-        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
+        assertThat(reporting.cfr).isEqualTo("ABC000042310")
         assertThat(
-            (reporting as Reporting.InfractionSuspicion).reportingActor,
-        ).isEqualTo(updatedReporting.reportingActor)
+            (reporting as Reporting.InfractionSuspicion).reportingSource,
+        ).isEqualTo(updatedReporting.reportingSource)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
@@ -430,18 +433,19 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val updatedExpirationDate = ZonedDateTime.now()
         val updatedReporting =
             Reporting.Observation(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 523,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 expirationDate = updatedExpirationDate,
                 flagState = CountryCode.FR,
                 type = ReportingType.OBSERVATION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 authorContact = "Jean Bon",
                 title = "Une observation",
@@ -452,8 +456,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(reportingId = 8, updatedReporting)
 
         // Then
-        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000597493")
-        assertThat((reporting as Reporting.Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
+        assertThat(reporting.cfr).isEqualTo("ABC000597493")
+        assertThat((reporting as Reporting.Observation).reportingSource).isEqualTo(updatedReporting.reportingSource)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
@@ -466,17 +470,18 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         // Given
         val updatedReporting =
             Reporting.Observation(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 523,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 flagState = CountryCode.FR,
                 type = ReportingType.OBSERVATION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 id = 7,
                 controlUnitId = 1,
                 authorContact = "Jean Bon",
@@ -488,9 +493,9 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(7, updatedReporting)
 
         // Then
-        assertThat(reporting.internalReferenceNumber).isEqualTo("ABC000042310")
+        assertThat(reporting.cfr).isEqualTo("ABC000042310")
         assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
-        assertThat((reporting as Reporting.Observation).reportingActor).isEqualTo(updatedReporting.reportingActor)
+        assertThat((reporting as Reporting.Observation).reportingSource).isEqualTo(updatedReporting.reportingSource)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)

@@ -270,7 +270,7 @@ class JpaReportingRepository(
         vesselInternalReferenceNumbers: List<String>,
         reportingEntity: Root<ReportingEntity>,
     ): Predicate =
-        reportingEntity.get<String>("internalReferenceNumber").`in`(
+        reportingEntity.get<String>("cfr").`in`(
             *vesselInternalReferenceNumbers.toTypedArray(),
         )
 

@@ -78,7 +78,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
             <VesselFleetSegmentsField label="Segment de flotte" />
 
-            <ControlQualityField />
+            <ControlQualityField withLastHaul />
 
             <FormikOtherControlsCheckboxes />
 

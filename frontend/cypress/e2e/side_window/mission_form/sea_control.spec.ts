@@ -81,7 +81,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('14 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -180,6 +180,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
+    cy.fill('Last haul effectué', 'Non')
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -233,6 +234,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           isINNControl: false,
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: 'QGDF',
+          isLastHaul: false,
           latitude: 47.084,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',

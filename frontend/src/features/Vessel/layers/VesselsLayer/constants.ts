@@ -11,4 +11,4 @@ export const VESSELS_VECTOR_LAYER = new WebGLPointsLayer({
   source: VESSELS_VECTOR_SOURCE as any,
   style: getWebGLVesselStyle(),
   zIndex: LayerProperties[MonitorFishMap.MonitorFishLayer.VESSELS].zIndex
-}) as MonitorFishMap.WebGLPointsLayerWithName
+})

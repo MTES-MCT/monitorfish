@@ -20,8 +20,7 @@ export const renderVesselBeaconMalfunctionFeatures = (): MainAppThunk => async (
   const isLayerFound = monitorfishMap
     .getLayers()
     .getArray()
-    // @ts-ignore
-    ?.find(layer => layer.name === MonitorFishMap.MonitorFishLayer.VESSEL_BEACON_MALFUNCTION)
+    ?.find(layer => layer.get('code') === MonitorFishMap.MonitorFishLayer.VESSEL_BEACON_MALFUNCTION)
   if (!isLayerFound) {
     return
   }

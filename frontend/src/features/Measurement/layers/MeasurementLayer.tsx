@@ -21,7 +21,6 @@ import MeasurementOverlay from '../components/MeasurementOverlay'
 import { removeMeasurementDrawed, resetMeasurementTypeToAdd, setCircleMeasurementInDrawing } from '../slice'
 import { saveMeasurement } from '../useCases/saveMeasurement'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { MeasurementInProgress } from '@features/Measurement/types'
 import type { Type } from 'ol/geom/Geometry'
 import type Geometry from 'ol/geom/Geometry'
@@ -62,7 +61,7 @@ function UnmemoizedMeasurementLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const layerRef = useRef<MonitorFishMap.VectorLayerWithName>()
+  const layerRef = useRef<VectorLayer>()
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new VectorLayer({
@@ -76,11 +75,11 @@ function UnmemoizedMeasurementLayer() {
       })
     }
 
-    return layerRef.current as MonitorFishMap.VectorLayerWithName
+    return layerRef.current
   }, [getVectorSource])
 
   useEffect(() => {
-    getLayer().name = LayerProperties.MEASUREMENT.code
+    getLayer().setProperties({ code: LayerProperties.MEASUREMENT.code })
     monitorfishMap.getLayers().push(getLayer())
 
     return () => {

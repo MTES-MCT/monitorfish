@@ -38,7 +38,11 @@ function UnmemoizedVesselsLayer() {
     }
     const styleVariables = getWebGLVesselStyleVariables(initStyles)
     VESSELS_VECTOR_LAYER.updateStyleVariables(styleVariables)
-    VESSELS_VECTOR_LAYER.name = MonitorFishMap.MonitorFishLayer.VESSELS
+    VESSELS_VECTOR_LAYER.setProperties({
+      code: MonitorFishMap.MonitorFishLayer.VESSELS,
+      isClickable: true,
+      isHoverable: true
+    })
 
     monitorfishMap.getLayers().push(VESSELS_VECTOR_LAYER)
 

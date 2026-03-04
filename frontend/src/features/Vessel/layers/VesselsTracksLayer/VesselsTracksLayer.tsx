@@ -1,6 +1,6 @@
 import { LogbookMessageOverlay } from '@features/Logbook/overlays/LogbookMessageOverlay'
 import CloseVesselTrackOverlay from '@features/Map/components/CloseVesselTrackOverlay'
-import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import {
   VESSEL_TRACK_VECTOR_LAYER,
   VESSEL_TRACK_VECTOR_SOURCE
@@ -43,13 +43,7 @@ function VesselsTracksLayer() {
     [vesselsTracksShowed]
   )
 
-  useEffect(() => {
-    monitorfishMap.getLayers().push(VESSEL_TRACK_VECTOR_LAYER)
-
-    return () => {
-      monitorfishMap.removeLayer(VESSEL_TRACK_VECTOR_LAYER)
-    }
-  }, [])
+  useMapLayer(VESSEL_TRACK_VECTOR_LAYER)
 
   useEffect(() => {
     function showSelectedVesselTrack() {

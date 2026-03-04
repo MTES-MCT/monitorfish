@@ -1,3 +1,4 @@
+import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import {
   SELECTED_VESSEL_VECTOR_LAYER,
   SELECTED_VESSEL_VECTOR_SOURCE
@@ -11,7 +12,6 @@ import { transform } from 'ol/proj'
 import React, { useEffect } from 'react'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../Map/constants'
-import { monitorfishMap } from '../../../Map/monitorfishMap'
 
 function VesselSelectedLayerUnmemoized() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
@@ -23,13 +23,7 @@ function VesselSelectedLayerUnmemoized() {
     SELECTED_VESSEL_VECTOR_LAYER.setStyle(getSelectedVesselStyle(isLight))
   }, [isLight])
 
-  useEffect(() => {
-    monitorfishMap.getLayers().push(SELECTED_VESSEL_VECTOR_LAYER)
-
-    return () => {
-      monitorfishMap.removeLayer(SELECTED_VESSEL_VECTOR_LAYER)
-    }
-  }, [])
+  useMapLayer(SELECTED_VESSEL_VECTOR_LAYER)
 
   useEffect(() => {
     SELECTED_VESSEL_VECTOR_SOURCE.clear(true)

@@ -20,8 +20,7 @@ export const renderVesselAlertFeatures = (): MainAppThunk => async (_, getState)
   const isLayerFound = monitorfishMap
     .getLayers()
     .getArray()
-    // @ts-ignore
-    ?.find(layer => layer.name === MonitorFishMap.MonitorFishLayer.VESSEL_ALERT)
+    ?.find(layer => layer.get('code') === MonitorFishMap.MonitorFishLayer.VESSEL_ALERT)
   if (!isLayerFound) {
     return
   }

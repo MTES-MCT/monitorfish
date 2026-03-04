@@ -20,8 +20,8 @@ export const getVectorOLLayer =
       source,
       style: feature => [getRegulatoryLayerStyle(feature, nextVisibleLayer)]
     })
-    // TODO Fix generic `Feature<Geometry>` typings with custom ones.
-    ;(newLayer as any).name = name
+
+    newLayer.setProperties({ code: name, isClickable: true, isHoverable: true })
 
     return newLayer
   }

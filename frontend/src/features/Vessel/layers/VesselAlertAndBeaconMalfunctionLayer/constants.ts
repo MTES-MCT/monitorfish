@@ -1,5 +1,4 @@
 import { LayerProperties } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { getVesselAlertAndBeaconMalfunctionStyle } from '@features/Vessel/layers/VesselAlertAndBeaconMalfunctionLayer/style'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
@@ -13,9 +12,9 @@ export const VESSEL_ALERT_AND_BEACON_MALFUNCTION_LAYER = (function () {
     updateWhileAnimating: true,
     updateWhileInteracting: true,
     zIndex: LayerProperties.VESSEL_ALERT_AND_BEACON_MALFUNCTION.zIndex
-  }) as MonitorFishMap.VectorLayerWithName
+  })
 
-  layer.name = LayerProperties.VESSEL_ALERT_AND_BEACON_MALFUNCTION.code
+  layer.setProperties({ code: LayerProperties.VESSEL_ALERT_AND_BEACON_MALFUNCTION.code })
 
   return layer
 })()

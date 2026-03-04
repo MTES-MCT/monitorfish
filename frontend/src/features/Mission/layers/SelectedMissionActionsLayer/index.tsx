@@ -65,7 +65,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer>
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
@@ -82,7 +82,11 @@ export function UnmemoizedSelectedMissionActionsLayer() {
   }, [getVectorSource])
 
   useEffect(() => {
-    getVectorLayer().name = MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED
+    getVectorLayer().setProperties({
+      code: MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED,
+      isClickable: true,
+      isHoverable: true
+    })
     monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {

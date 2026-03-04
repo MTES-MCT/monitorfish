@@ -15,7 +15,6 @@ import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { MissionLabelOverlay } from '../../components/MissionUnitLabelOverlay'
 
 import type { FeatureAndLabel } from './types'
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -30,7 +29,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
 
   const vectorSourceRef = useRef<VectorSource>()
-  const layerRef = useRef<MonitorFishMap.VectorLayerWithName>()
+  const layerRef = useRef<InstanceType<typeof Vector>>()
 
   const getVectorSource = useCallback(() => {
     if (!vectorSourceRef.current) {
@@ -61,7 +60,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   }, [getVectorSource])
 
   useEffect(() => {
-    getLayer().name = LayerProperties.MISSIONS_LABEL.code
+    getLayer().setProperties({ code: LayerProperties.MISSIONS_LABEL.code })
     monitorfishMap.getLayers().push(getLayer())
 
     return () => {
@@ -116,8 +115,8 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
     const missionsLayer = monitorfishMap
       .getLayers()
       .getArray()
-      ?.find(olLayer => (olLayer as MonitorFishMap.VectorLayerWithName).name === LayerProperties.MISSION_PIN_POINT.code)
-    const missionsLayerSource = (missionsLayer as MonitorFishMap.VectorLayerWithName)?.getSource()
+      ?.find(olLayer => olLayer.get('code') === LayerProperties.MISSION_PIN_POINT.code)
+    const missionsLayerSource = (missionsLayer as InstanceType<typeof Vector>)?.getSource()
 
     const isHidden = !isSuperUser || !isMissionsLayerDisplayed || !missionsLayerSource || currentZoom < MIN_ZOOM
     addLabelsToAllFeaturesInExtent(

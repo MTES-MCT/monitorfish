@@ -12,6 +12,7 @@ import {
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
+import type BaseLayer from 'ol/layer/Base'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
 
@@ -68,7 +69,7 @@ export function keepOnlyInitialGeometriesOfMultiPolygon(
 }
 
 export function layersNotInCurrentOLMap(olLayers, layer) {
-  return !olLayers.getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
+  return !olLayers.getArray().some(layer_ => layer_.get('code') === getLayerNameNormalized(layer))
 }
 
 export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFishMap.ShowableLayer[], layer) {
@@ -76,29 +77,26 @@ export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFish
 }
 
 export function layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer) {
-  return administrativeLayers.some(administrativeLayer => olLayer.name?.includes(administrativeLayer.code))
+  return administrativeLayers.some(administrativeLayer =>
+    (olLayer.get('code') as string | undefined)?.includes(administrativeLayer.code)
+  )
 }
 
 export function layersNotInShowedLayers(_showedLayers, olLayer) {
-  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.get('code'))
+}
+
+export function getOLLayerByCode(code: string): BaseLayer | undefined {
+  return monitorfishMap
+    .getLayers()
+    .getArray()
+    .find(l => l.get('code') === code)
 }
 
 export const administrativeLayers = Object.keys(LayerProperties)
   .map(layer => LayerProperties[layer])
   .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
   .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
-
-export const hoverableLayerCodes = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.isHoverable)
-  .map(layer => layer.code)
-
-export const clickableLayerCodes = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.isClickable)
-  .map(layer => layer.code)
 
 export function getMapResolution(): number {
   const resolution = monitorfishMap.getView().getResolution()

@@ -12,8 +12,7 @@ export const getVesselFeaturesInExtent = throttle(
     const vesselsLayer = monitorfishMap
       .getLayers()
       .getArray()
-      // @ts-ignore
-      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
+      ?.find(olLayer => olLayer.get('code') === MonitorFishMap.MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
 
@@ -28,8 +27,7 @@ export const getVesselFeatures = throttle(
     const vesselsLayer = monitorfishMap
       .getLayers()
       .getArray()
-      // @ts-ignore
-      ?.find(olLayer => olLayer.name === MonitorFishMap.MonitorFishLayer.VESSELS)
+      ?.find(olLayer => olLayer.get('code') === MonitorFishMap.MonitorFishLayer.VESSELS)
       // @ts-ignore
       ?.getSource()
 

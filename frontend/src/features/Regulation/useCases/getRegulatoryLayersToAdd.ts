@@ -31,8 +31,7 @@ export const getRegulatoryLayersToAdd =
 
 function layersNotInCurrentOLMap(olLayers: BaseLayer[], layer: MonitorFishMap.ShowedLayer) {
   return !olLayers.some(
-    // TODO Create a custom `BaseLayer`.
-    olLayer => (olLayer as any).name === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
+    olLayer => olLayer.get('code') === getLayerNameNormalized({ type: LayerProperties.REGULATORY.code, ...layer })
   )
 }
 

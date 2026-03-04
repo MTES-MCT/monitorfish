@@ -10,7 +10,7 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
@@ -143,13 +143,14 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -170,14 +171,14 @@ class ReportingControllerITests {
                     .content(
                         objectMapper.writeValueAsString(
                             CreateReportingDataInput(
-                                internalReferenceNumber = "FRFGRGR",
-                                externalReferenceNumber = "RGD",
+                                cfr = "FRFGRGR",
+                                externalMarker = "RGD",
                                 ircs = "6554fEE",
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 creationDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
-                                reportingActor = ReportingActor.OPS,
+                                reportingSource = ReportingSource.OPS,
                                 title = "A title",
                                 threatHierarchy =
                                     ThreatHierarchyDataInput(
@@ -206,7 +207,7 @@ class ReportingControllerITests {
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", equalTo("FR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.createdBy", equalTo("test")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
@@ -217,13 +218,14 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.UNIT,
                 natinfCode = 123456,
                 controlUnitId = 1234,
                 title = "A title",
@@ -247,14 +249,14 @@ class ReportingControllerITests {
                     .content(
                         objectMapper.writeValueAsString(
                             CreateReportingDataInput(
-                                internalReferenceNumber = "FRFGRGR",
-                                externalReferenceNumber = "RGD",
+                                cfr = "FRFGRGR",
+                                externalMarker = "RGD",
                                 ircs = "6554fEE",
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 creationDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
-                                reportingActor = ReportingActor.UNIT,
+                                reportingSource = ReportingSource.UNIT,
                                 controlUnitId = 1234,
                                 title = "A title",
                                 threatHierarchy =
@@ -283,7 +285,7 @@ class ReportingControllerITests {
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("UNIT")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("UNIT")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnitId", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.id", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.name", equalTo("Cross Etel")))
@@ -296,13 +298,14 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -338,13 +341,14 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -364,7 +368,8 @@ class ReportingControllerITests {
                     .content(
                         objectMapper.writeValueAsString(
                             UpdateReportingDataInput(
-                                reportingActor = ReportingActor.OPS,
+                                flagState = CountryCode.FR,
+                                reportingSource = ReportingSource.OPS,
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 threatHierarchy =
                                     ThreatHierarchyDataInput(
@@ -403,12 +408,13 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 flagState = CountryCode.FR,
                 ircs = "6554fEE",
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 123456,
                 title = "A title",
                 threat = "Obligations déclaratives",
@@ -429,13 +435,13 @@ class ReportingControllerITests {
                     .content(
                         objectMapper.writeValueAsString(
                             CreateReportingDataInput(
-                                internalReferenceNumber = "FRFGRGR",
-                                externalReferenceNumber = "RGD",
+                                cfr = "FRFGRGR",
+                                externalMarker = "RGD",
                                 flagState = CountryCode.FR,
                                 ircs = "6554fEE",
                                 creationDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
-                                reportingActor = ReportingActor.OPS,
+                                reportingSource = ReportingSource.OPS,
                                 title = "A title",
                                 threatHierarchy =
                                     ThreatHierarchyDataInput(
@@ -463,7 +469,7 @@ class ReportingControllerITests {
             // Then
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingActor", equalTo("OPS")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
@@ -473,15 +479,16 @@ class ReportingControllerITests {
         // Given
         val reporting =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 id = 1,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 isIUU = false,
                 creationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 27689,
                 title = "Pêche IUU - Zone exclusive",
                 threat = "Activités INN",

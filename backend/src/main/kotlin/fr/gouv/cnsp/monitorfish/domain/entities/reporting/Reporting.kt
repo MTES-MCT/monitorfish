@@ -12,18 +12,24 @@ sealed class Reporting {
     abstract val type: ReportingType
     abstract val vesselId: Int?
     abstract val vesselName: String?
-    abstract val internalReferenceNumber: String?
-    abstract val externalReferenceNumber: String?
+    abstract val cfr: String?
+    abstract val externalMarker: String?
     abstract val ircs: String?
+    abstract val mmsi: String?
+    abstract val imo: String?
+    abstract val length: Double?
+    abstract val gearCode: String?
     abstract val vesselIdentifier: VesselIdentifier?
     abstract val flagState: CountryCode
     abstract val creationDate: ZonedDateTime
+    abstract val lastUpdateDate: ZonedDateTime
     abstract val validationDate: ZonedDateTime?
     abstract val expirationDate: ZonedDateTime?
     abstract val archivingDate: ZonedDateTime?
     abstract val isArchived: Boolean
     abstract val isDeleted: Boolean
     abstract val isIUU: Boolean
+    abstract val isFishing: Boolean
     abstract val latitude: Double?
     abstract val longitude: Double?
     abstract val createdBy: String
@@ -57,15 +63,21 @@ sealed class Reporting {
         override val type: ReportingType = ReportingType.ALERT,
         override val vesselId: Int? = null,
         override val vesselName: String? = null,
-        override val internalReferenceNumber: String? = null,
-        override val externalReferenceNumber: String? = null,
+        override val cfr: String? = null,
+        override val externalMarker: String? = null,
         override val ircs: String? = null,
+        override val mmsi: String? = null,
+        override val imo: String? = null,
+        override val length: Double? = null,
+        override val gearCode: String? = null,
         override val vesselIdentifier: VesselIdentifier? = null,
         override val flagState: CountryCode,
         override val creationDate: ZonedDateTime,
+        override val lastUpdateDate: ZonedDateTime = ZonedDateTime.now(),
         override val validationDate: ZonedDateTime? = null,
         override val expirationDate: ZonedDateTime? = null,
         override val archivingDate: ZonedDateTime? = null,
+        override val isFishing: Boolean = false,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
         override val isIUU: Boolean = false,
@@ -100,15 +112,21 @@ sealed class Reporting {
         override val type: ReportingType = ReportingType.INFRACTION_SUSPICION,
         override val vesselId: Int? = null,
         override val vesselName: String? = null,
-        override val internalReferenceNumber: String? = null,
-        override val externalReferenceNumber: String? = null,
+        override val cfr: String? = null,
+        override val externalMarker: String? = null,
         override val ircs: String? = null,
+        override val mmsi: String? = null,
+        override val imo: String? = null,
+        override val length: Double? = null,
+        override val gearCode: String? = null,
         override val vesselIdentifier: VesselIdentifier? = null,
         override val flagState: CountryCode,
         override val creationDate: ZonedDateTime,
+        override val lastUpdateDate: ZonedDateTime,
         override val validationDate: ZonedDateTime? = null,
         override val expirationDate: ZonedDateTime? = null,
         override val archivingDate: ZonedDateTime? = null,
+        override val isFishing: Boolean = false,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
         override val isIUU: Boolean = false,
@@ -118,9 +136,11 @@ sealed class Reporting {
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
         // InfractionSuspicion-specific fields
-        val reportingActor: ReportingActor,
+        val reportingSource: ReportingSource,
+        val otherSourceType: OtherSource? = null,
         val controlUnitId: Int? = null,
         val authorContact: String? = null,
+        val satelliteType: SatelliteSource? = null,
         val title: String,
         val description: String? = null,
         val natinfCode: Int,
@@ -130,23 +150,28 @@ sealed class Reporting {
         override val dml: String? = null,
     ) : Reporting() {
         fun checkReportingActorAndFieldsRequirements() =
-            when (reportingActor) {
-                ReportingActor.UNIT ->
+            when (reportingSource) {
+                ReportingSource.UNIT ->
                     require(controlUnitId != null) {
                         "An unit must be set"
                     }
-                ReportingActor.DML ->
+                ReportingSource.DML ->
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
-                ReportingActor.DIRM ->
+                ReportingSource.DIRM ->
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
-                ReportingActor.OTHER ->
+                ReportingSource.OTHER -> {
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
+
+                    require(otherSourceType != null) {
+                        "An actor type must be set"
+                    }
+                }
                 else -> {}
             }
     }
@@ -155,7 +180,18 @@ sealed class Reporting {
         when (command.type) {
             ReportingType.INFRACTION_SUSPICION ->
                 copy(
-                    reportingActor = command.reportingActor,
+                    vesselId = command.vesselId,
+                    vesselName = command.vesselName,
+                    cfr = command.cfr,
+                    externalMarker = command.externalMarker,
+                    ircs = command.ircs,
+                    mmsi = command.mmsi,
+                    imo = command.imo,
+                    length = command.length,
+                    gearCode = command.gearCode,
+                    vesselIdentifier = command.vesselIdentifier,
+                    flagState = command.flagState,
+                    reportingSource = command.reportingSource,
                     controlUnitId = command.controlUnitId,
                     authorContact = command.authorContact,
                     title = command.title,
@@ -173,13 +209,17 @@ sealed class Reporting {
             ReportingType.OBSERVATION ->
                 Observation(
                     id = id,
-                    vesselId = vesselId,
-                    vesselName = vesselName,
-                    internalReferenceNumber = internalReferenceNumber,
-                    externalReferenceNumber = externalReferenceNumber,
-                    ircs = ircs,
-                    vesselIdentifier = vesselIdentifier,
-                    flagState = flagState,
+                    vesselId = command.vesselId,
+                    vesselName = command.vesselName,
+                    cfr = command.cfr,
+                    externalMarker = command.externalMarker,
+                    ircs = command.ircs,
+                    mmsi = command.mmsi,
+                    imo = command.imo,
+                    length = command.length,
+                    gearCode = command.gearCode,
+                    vesselIdentifier = command.vesselIdentifier,
+                    flagState = command.flagState,
                     creationDate = creationDate,
                     validationDate = validationDate,
                     expirationDate = updateExpirationDate(command.expirationDate),
@@ -189,17 +229,18 @@ sealed class Reporting {
                     latitude = latitude,
                     longitude = longitude,
                     createdBy = createdBy,
-                    infraction = infraction,
-                    underCharter = underCharter,
-                    reportingActor = command.reportingActor,
+                    reportingSource = command.reportingSource,
                     controlUnitId = command.controlUnitId,
                     authorContact = command.authorContact,
                     title = command.title,
                     description = command.description,
+                    lastUpdateDate = lastUpdateDate,
+                    otherSourceType = otherSourceType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }
 
+            ReportingType.ALERT -> TODO()
             else ->
                 error("Invalid target type")
         }
@@ -209,15 +250,21 @@ sealed class Reporting {
         override val type: ReportingType = ReportingType.OBSERVATION,
         override val vesselId: Int? = null,
         override val vesselName: String? = null,
-        override val internalReferenceNumber: String? = null,
-        override val externalReferenceNumber: String? = null,
+        override val cfr: String? = null,
+        override val externalMarker: String? = null,
+        override val mmsi: String? = null,
+        override val imo: String? = null,
+        override val length: Double? = null,
+        override val gearCode: String? = null,
         override val ircs: String? = null,
         override val vesselIdentifier: VesselIdentifier? = null,
         override val flagState: CountryCode,
         override val creationDate: ZonedDateTime,
+        override val lastUpdateDate: ZonedDateTime,
         override val validationDate: ZonedDateTime? = null,
         override val expirationDate: ZonedDateTime? = null,
         override val archivingDate: ZonedDateTime? = null,
+        override val isFishing: Boolean = false,
         override val isArchived: Boolean,
         override val isDeleted: Boolean,
         override val isIUU: Boolean = false,
@@ -227,32 +274,39 @@ sealed class Reporting {
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
         // Observation-specific fields
-        val reportingActor: ReportingActor,
+        val reportingSource: ReportingSource,
+        val otherSourceType: OtherSource? = null,
         val controlUnitId: Int? = null,
         val authorContact: String? = null,
+        val satelliteType: SatelliteSource? = null,
         val title: String,
         val description: String? = null,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
         fun checkReportingActorAndFieldsRequirements() =
-            when (reportingActor) {
-                ReportingActor.UNIT ->
+            when (reportingSource) {
+                ReportingSource.UNIT ->
                     require(controlUnitId != null) {
                         "An unit must be set"
                     }
-                ReportingActor.DML ->
+                ReportingSource.DML ->
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
-                ReportingActor.DIRM ->
+                ReportingSource.DIRM ->
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
-                ReportingActor.OTHER ->
+                ReportingSource.OTHER -> {
                     require(!authorContact.isNullOrEmpty()) {
                         "An author contact must be set"
                     }
+
+                    require(otherSourceType != null) {
+                        "An actor type must be set"
+                    }
+                }
                 else -> {}
             }
     }
@@ -261,7 +315,18 @@ sealed class Reporting {
         when (command.type) {
             ReportingType.OBSERVATION ->
                 copy(
-                    reportingActor = command.reportingActor,
+                    vesselId = command.vesselId,
+                    vesselName = command.vesselName,
+                    cfr = command.cfr,
+                    externalMarker = command.externalMarker,
+                    ircs = command.ircs,
+                    mmsi = command.mmsi,
+                    imo = command.imo,
+                    length = command.length,
+                    gearCode = command.gearCode,
+                    vesselIdentifier = command.vesselIdentifier,
+                    flagState = command.flagState,
+                    reportingSource = command.reportingSource,
                     controlUnitId = command.controlUnitId,
                     authorContact = command.authorContact,
                     title = command.title,
@@ -278,13 +343,17 @@ sealed class Reporting {
 
                 InfractionSuspicion(
                     id = id,
-                    vesselId = vesselId,
-                    vesselName = vesselName,
-                    internalReferenceNumber = internalReferenceNumber,
-                    externalReferenceNumber = externalReferenceNumber,
-                    ircs = ircs,
-                    vesselIdentifier = vesselIdentifier,
-                    flagState = flagState,
+                    vesselId = command.vesselId,
+                    vesselName = command.vesselName,
+                    cfr = command.cfr,
+                    externalMarker = command.externalMarker,
+                    ircs = command.ircs,
+                    mmsi = command.mmsi,
+                    imo = command.imo,
+                    length = command.length,
+                    gearCode = command.gearCode,
+                    vesselIdentifier = command.vesselIdentifier,
+                    flagState = command.flagState,
                     creationDate = creationDate,
                     validationDate = validationDate,
                     expirationDate = updateExpirationDate(command.expirationDate),
@@ -296,7 +365,7 @@ sealed class Reporting {
                     createdBy = createdBy,
                     infraction = infraction,
                     underCharter = underCharter,
-                    reportingActor = command.reportingActor,
+                    reportingSource = command.reportingSource,
                     controlUnitId = command.controlUnitId,
                     authorContact = command.authorContact,
                     title = command.title,
@@ -304,6 +373,8 @@ sealed class Reporting {
                     natinfCode = command.natinfCode,
                     threat = command.threat,
                     threatCharacterization = command.threatCharacterization,
+                    lastUpdateDate = lastUpdateDate,
+                    otherSourceType = otherSourceType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }

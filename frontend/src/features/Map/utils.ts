@@ -3,8 +3,7 @@ import { FrontendError } from '@libs/FrontendError'
 import { GeoJSON } from 'ol/format'
 
 import {
-  LayerProperties,
-  LayerType,
+  AdminLayerProperties,
   OPENLAYERS_PROJECTION,
   OpenLayersGeometryType,
   WSG84_PROJECTION
@@ -72,7 +71,7 @@ export function layersNotInCurrentOLMap(olLayers, layer) {
   return !olLayers.getArray().some(layer_ => layer_.get('code') === getLayerNameNormalized(layer))
 }
 
-export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFishMap.ShowableLayer[], layer) {
+export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFishMap.AdminShowableLayer[], layer) {
   return administrativeLayers.some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
 }
 
@@ -93,10 +92,7 @@ export function getOLLayerByCode(code: string): BaseLayer | undefined {
     .find(l => l.get('code') === code)
 }
 
-export const administrativeLayers = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+export const administrativeLayers = Object.values(AdminLayerProperties)
 
 export function getMapResolution(): number {
   const resolution = monitorfishMap.getView().getResolution()

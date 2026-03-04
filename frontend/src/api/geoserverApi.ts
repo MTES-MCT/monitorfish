@@ -1,4 +1,4 @@
-import { LayerProperties, WSG84_PROJECTION } from '@features/Map/constants'
+import { AdminLayerProperties, WSG84_PROJECTION } from '@features/Map/constants'
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { GEOSERVER_BACKOFFICE_URL, GEOSERVER_URL } from './geoserver'
@@ -74,7 +74,7 @@ function buildAdministrativeSubZonesUrl(type: string, geoserverURL: string, sort
   const sortByQuery = sortBy ? `&sortBy=${sortBy}` : ''
   const baseUrl = `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:${type}&outputFormat=application/json&srsname=${WSG84_PROJECTION}`
 
-  if (type === LayerProperties.FAO.code) {
+  if (type === AdminLayerProperties.FAO.code) {
     const filter = "f_level='DIVISION'"
 
     return `${baseUrl}&CQL_FILTER=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}${sortByQuery}`

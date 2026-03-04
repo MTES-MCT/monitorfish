@@ -69,7 +69,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<Feature>>
 
   useEffect(() => {
     function getVectorLayer() {

@@ -1,19 +1,17 @@
-import { LayerProperties } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
-import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm/hooks/useGetNatinfsAsOptions'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import VectorLayer from 'ol/layer/Vector'
-import VectorSource from 'ol/source/Vector'
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 
-import { selectedMissionActionsStyles } from './styles'
+import {
+  SELECTED_MISSION_ACTIONS_VECTOR_LAYER,
+  SELECTED_MISSION_ACTIONS_VECTOR_SOURCE
+} from './constants'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionActionFeature, getMissionActionFeatureZone } from '../../features'
 import { NEW_MISSION_ID } from '../constants'
 
 import type { Feature } from 'ol'
-import type { MutableRefObject } from 'react'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
   const natinfsAsOptions = useGetNatinfsAsOptions()
@@ -56,43 +54,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
     )
   }, [selectedMissionGeoJSON, missions])
 
-  const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const getVectorSource = useCallback(() => {
-    if (vectorSourceRef.current === undefined) {
-      vectorSourceRef.current = new VectorSource()
-    }
-
-    return vectorSourceRef.current
-  }, [])
-
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer>
-  const getVectorLayer = useCallback(() => {
-    if (vectorLayerRef.current === undefined) {
-      vectorLayerRef.current = new VectorLayer({
-        className: MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED,
-        source: getVectorSource(),
-        style: selectedMissionActionsStyles,
-        updateWhileAnimating: true,
-        updateWhileInteracting: true,
-        zIndex: LayerProperties.MISSION_ACTION_SELECTED.zIndex
-      })
-    }
-
-    return vectorLayerRef.current
-  }, [getVectorSource])
-
-  useEffect(() => {
-    getVectorLayer().setProperties({
-      code: MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED,
-      isClickable: true,
-      isHoverable: true
-    })
-    monitorfishMap.getLayers().push(getVectorLayer())
-
-    return () => {
-      monitorfishMap.removeLayer(getVectorLayer())
-    }
-  }, [getVectorLayer])
+  useMapLayer(SELECTED_MISSION_ACTIONS_VECTOR_LAYER)
 
   useEffect(() => {
     // If a mission is opened in the form, we can't display another selected mission
@@ -100,13 +62,13 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       return
     }
 
-    getVectorSource().clear(true)
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.clear(true)
 
-    getVectorSource().addFeatures(selectedMissionActions.concat(selectedMissionActionsZones))
-  }, [selectedMissionActions, selectedMissionActionsZones, draft?.mainFormValues, getVectorSource])
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(selectedMissionActions.concat(selectedMissionActionsZones))
+  }, [selectedMissionActions, selectedMissionActionsZones, draft?.mainFormValues])
 
   useEffect(() => {
-    getVectorSource().clear(true)
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.clear(true)
     if (!draft?.actionsFormValues) {
       return
     }
@@ -125,9 +87,8 @@ export function UnmemoizedSelectedMissionActionsLayer() {
           .filter((action): action is Feature => !!action)
       : []
 
-    getVectorSource().addFeatures(actionFeatures.concat(actionZonesFeatures))
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(actionFeatures.concat(actionZonesFeatures))
   }, [
-    getVectorSource,
     natinfsAsOptions,
     missionId,
     draft?.actionsFormValues,

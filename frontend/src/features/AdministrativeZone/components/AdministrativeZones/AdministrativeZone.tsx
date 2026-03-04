@@ -11,7 +11,7 @@ type AdministrativeZoneType = Readonly<{
   isGrouped?: boolean
   isShown: boolean
   showOrHideZone: (isShown: boolean) => void
-  zone: MonitorFishMap.ShowableLayer
+  zone: MonitorFishMap.AdminShowableLayer
 }>
 export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
   return (

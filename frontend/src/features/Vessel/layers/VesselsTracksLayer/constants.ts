@@ -1,5 +1,4 @@
 import { LayerProperties } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 
@@ -15,9 +14,9 @@ export const VESSEL_TRACK_VECTOR_LAYER = (function () {
     updateWhileAnimating: false,
     updateWhileInteracting: false,
     zIndex: LayerProperties.VESSEL_TRACK.zIndex
-  }) as MonitorFishMap.VectorLayerWithName
+  })
 
-  layer.name = LayerProperties.VESSEL_TRACK.code
+  layer.setProperties({ code: LayerProperties.VESSEL_TRACK.code, isClickable: true, isHoverable: true })
 
   return layer
 })()

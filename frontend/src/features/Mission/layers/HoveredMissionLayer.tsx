@@ -23,7 +23,7 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
     return vectorSourceRef.current as VectorSource
   }, [])
 
-  const vectorLayerRef = useRef<MonitorFishMap.VectorLayerWithName>()
+  const vectorLayerRef = useRef<VectorLayer>()
   const getVectorLayer = useCallback(() => {
     if (vectorLayerRef.current === undefined) {
       vectorLayerRef.current = new VectorLayer({
@@ -37,11 +37,11 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
       })
     }
 
-    return vectorLayerRef.current as MonitorFishMap.VectorLayerWithName
+    return vectorLayerRef.current
   }, [getVectorSource])
 
   useEffect(() => {
-    getVectorLayer().name = MonitorFishMap.MonitorFishLayer.MISSION_HOVER
+    getVectorLayer().setProperties({ code: MonitorFishMap.MonitorFishLayer.MISSION_HOVER })
     monitorfishMap.getLayers().push(getVectorLayer())
 
     return () => {

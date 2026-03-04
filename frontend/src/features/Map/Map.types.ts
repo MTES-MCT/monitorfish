@@ -39,16 +39,21 @@ export namespace MonitorFishMap {
     simplifiedFeatures: string | null
   }
 
-  export type VectorLayerWithName = VectorLayer<Feature<Geometry>> & {
-    name?: string
-  }
+  /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
+  export type VectorLayerWithName = VectorLayer<Feature<Geometry>>
 
-  export type VectorImageLayerWithName = VectorImageLayer<Feature<Geometry>> & {
-    name?: string
-  }
+  /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
+  export type VectorImageLayerWithName = VectorImageLayer<Feature<Geometry>>
 
-  export type WebGLPointsLayerWithName = WebGLPointsLayer<any> & {
-    name?: string
+  /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
+  export type WebGLPointsLayerWithName = WebGLPointsLayer<any>
+
+  export interface MonitorFishLayerOLProperties {
+    code: string
+    isClickable?: boolean
+    isHoverable?: boolean
+    isIntersectable?: boolean
+    zoneNamePropertyKey?: string
   }
 
   export enum MonitorFishLayer {

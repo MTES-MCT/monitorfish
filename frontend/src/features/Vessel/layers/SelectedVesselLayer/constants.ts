@@ -1,5 +1,4 @@
 import { LayerProperties } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
 
@@ -12,9 +11,9 @@ export const SELECTED_VESSEL_VECTOR_LAYER = (function () {
     updateWhileAnimating: false,
     updateWhileInteracting: false,
     zIndex: LayerProperties.SELECTED_VESSEL.zIndex
-  }) as MonitorFishMap.VectorLayerWithName
+  })
 
-  layer.name = LayerProperties.SELECTED_VESSEL.code
+  layer.setProperties({ code: LayerProperties.SELECTED_VESSEL.code, isClickable: true, isHoverable: true })
 
   return layer
 })()

@@ -12,9 +12,6 @@ import { MapCoordinatesBox } from './MapCoordinatesBox'
 import { monitorfishMap } from '../monitorfishMap'
 import { resetAnimateToRegulatoryLayer } from '../slice'
 import { clickOnMapFeature } from '../useCases/clickOnMapFeature'
-import { clickableLayerCodes, hoverableLayerCodes } from '../utils'
-
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'
@@ -63,10 +60,7 @@ export function BaseMap({
 
       const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer =>
-          !!clickableLayerCodes.find(clickableLayerName =>
-            (layer as MonitorFishMap.VectorLayerWithName).name?.includes(clickableLayerName)
-          )
+        layerFilter: layer => layer.get('isClickable') === true
       })
       const isCtrl = platformModifierKeyOnly(event)
       const mapClick = { ctrlKeyPressed: isCtrl, feature }
@@ -84,10 +78,7 @@ export function BaseMap({
       const pixel = openLayerMap.getEventPixel(event.originalEvent)
       const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer =>
-          !!hoverableLayerCodes.find(hoverableLayerName =>
-            (layer as MonitorFishMap.VectorLayerWithName).name?.includes(hoverableLayerName)
-          )
+        layerFilter: layer => layer.get('isHoverable') === true
       })
 
       if (handlePointerMove) {

@@ -109,6 +109,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
+    cy.fill('Last haul effectué', 'Oui')
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
@@ -162,6 +163,7 @@ context('Side Window > Mission Form > Land Control', () => {
           id: 2,
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
+          isLastHaul: true,
           latitude: null,
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
           licencesMatchActivity: 'NO',

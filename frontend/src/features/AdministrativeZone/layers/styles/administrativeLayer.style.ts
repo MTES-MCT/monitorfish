@@ -24,7 +24,9 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
             text: `${
-              (AdminLayerProperties.EEZ.zoneNamePropertyKey && feature?.get(AdminLayerProperties.EEZ.zoneNamePropertyKey)) || ''
+              (AdminLayerProperties.EEZ.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.EEZ.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })
@@ -41,7 +43,9 @@ export function getAdministrativeLayerStyle(type: string) {
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (AdminLayerProperties.FAO.zoneNamePropertyKey && feature?.get(AdminLayerProperties.FAO.zoneNamePropertyKey)) || ''
+              (AdminLayerProperties.FAO.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.FAO.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })
@@ -57,7 +61,9 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (AdminLayerProperties.AEM.zoneNamePropertyKey && feature?.get(AdminLayerProperties.AEM.zoneNamePropertyKey)) || ''
+              (AdminLayerProperties.AEM.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.AEM.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })

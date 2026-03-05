@@ -5,7 +5,9 @@ import type BaseLayer from 'ol/layer/Base'
 
 export function useMapLayer(layer: BaseLayer | undefined, condition = true) {
   useEffect(() => {
-    if (!layer || !condition) return
+    if (!layer || !condition) {
+      return undefined
+    }
 
     monitorfishMap.getLayers().push(layer)
 

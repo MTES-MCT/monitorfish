@@ -2,18 +2,13 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { FrontendError } from '@libs/FrontendError'
 import { GeoJSON } from 'ol/format'
 
-import {
-  AdminLayerProperties,
-  OPENLAYERS_PROJECTION,
-  OpenLayersGeometryType,
-  WSG84_PROJECTION
-} from './constants'
+import { AdminLayerProperties, OPENLAYERS_PROJECTION, OpenLayersGeometryType, WSG84_PROJECTION } from './constants'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
-import type BaseLayer from 'ol/layer/Base'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
+import type BaseLayer from 'ol/layer/Base'
 
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
 

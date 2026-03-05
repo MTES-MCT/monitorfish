@@ -105,16 +105,12 @@ export function RegulatoryLayers({
         const regulatoryLayers = monitorfishMap
           .getLayers()
           .getArray()
-          .filter(layer =>
-            (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code)
-          )
+          .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
           const vectorSource = (layer as VectorImageLayer<Feature<Geometry>>).getSource()
 
           if (vectorSource) {
-            const layerToFeatures = layersToFeatures?.find(
-              layerToFeature => layerToFeature.name === layer.get('code')
-            )
+            const layerToFeatures = layersToFeatures?.find(layerToFeature => layerToFeature.name === layer.get('code'))
             if (layerToFeatures) {
               const features = showSimplifiedFeatures
                 ? layerToFeatures.simplifiedFeatures || layerToFeatures.features

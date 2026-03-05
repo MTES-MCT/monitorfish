@@ -1,5 +1,5 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { Reporting } from '../../types'
@@ -12,17 +12,17 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
   }
 
   switch (reporting.value.reportingActor) {
-    case ReportingOriginActor.UNIT:
+    case ReportingOriginSource.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OPS:
+    case ReportingOriginSource.OPS:
       return `Pôle OPS (${reporting.createdBy})`
-    case ReportingOriginActor.SIP:
+    case ReportingOriginSource.SIP:
       return `Pôle SIP (${reporting.createdBy})`
-    case ReportingOriginActor.DIRM:
+    case ReportingOriginSource.DIRM:
       return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.DML:
+    case ReportingOriginSource.DML:
       return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginActor.OTHER:
+    case ReportingOriginSource.OTHER:
       return reporting.value.authorContact ?? ''
     default:
       return ''

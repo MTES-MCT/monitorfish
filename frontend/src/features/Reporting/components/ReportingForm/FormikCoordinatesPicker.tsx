@@ -1,0 +1,137 @@
+import {InteractionListener, OpenLayersGeometryType} from '@features/Map/constants'
+import {fitToExtent} from '@features/Map/slice'
+import {getCoordinatesExtent} from '@features/Map/useCases/getCoordinatesExtent'
+import {convertToGeoJSONGeometryObject} from '@features/Map/utils'
+import {HIDDEN_ERROR} from '@features/Mission/components/MissionForm/constants'
+import {useListenForDrawedGeometry} from '@hooks/useListenForDrawing'
+import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
+import {useMainAppSelector} from '@hooks/useMainAppSelector'
+import {getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '@mtes-mct/monitor-ui'
+import {useField} from 'formik'
+import Feature from 'ol/Feature'
+import Point from 'ol/geom/Point'
+import {transform} from 'ol/proj'
+import {useCallback, useEffect, useMemo} from 'react'
+
+import type {FormEditedReporting} from '../../types'
+import type {Point as GeoJSONPoint} from 'geojson'
+import type {Coordinate} from 'ol/coordinate'
+import {addOrEditReportingCoordinates} from "@features/Reporting/useCases/addOrEditReportingCoordinates";
+
+type FormikCoordinatesPickerProps = {
+  isLight: boolean
+}
+export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProps) {
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const listener = useMainAppSelector(state => state.draw.listener)
+
+  const [{ value: longitudeValue }, longitudeMeta, longitudeHelpers] =
+    useField<FormEditedReporting['longitude']>('longitude')
+  const [{ value: latitudeValue }, latitudeMeta, latitudeHelpers] =
+    useField<FormEditedReporting['latitude']>('latitude')
+
+  const error = longitudeMeta.error ?? latitudeMeta.error
+
+  const dispatch = useMainAppDispatch()
+  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.REPORTING_POINT)
+
+  const coordinates = useMemo(() => {
+    if (!longitudeValue || !latitudeValue) {
+      return []
+    }
+
+    const printedCoordinates = getCoordinates([longitudeValue, latitudeValue], WSG84_PROJECTION, coordinatesFormat)
+
+    return [
+      {
+        latitude: latitudeValue,
+        longitude: longitudeValue,
+        name: `${printedCoordinates[0]}, ${printedCoordinates[1]}`
+      }
+    ]
+  }, [longitudeValue, latitudeValue, coordinatesFormat])
+
+  /**
+   * Update formik fields after drawedGeometry modification
+   */
+  useEffect(
+    () => {
+      if (drawedGeometry?.type === OpenLayersGeometryType.POINT) {
+        longitudeHelpers.setValue(drawedGeometry.coordinates[0])
+        latitudeHelpers.setValue(drawedGeometry.coordinates[1])
+      }
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [drawedGeometry]
+  )
+
+  const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
+    if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
+      return
+    }
+
+    const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
+    dispatch(fitToExtent(bufferedExtent))
+  }
+
+  const addOrEditCoordinates = useCallback(async () => {
+    if (!longitudeValue || !latitudeValue) {
+      dispatch(addOrEditReportingCoordinates(undefined))
+
+      return
+    }
+
+    const nextGeometry = getGeometryFromCoordinates(longitudeValue, latitudeValue)
+    dispatch(addOrEditReportingCoordinates(nextGeometry))
+  }, [dispatch, longitudeValue, latitudeValue])
+
+  const deleteCoordinates = useCallback(
+    () => {
+      if (!longitudeValue || !latitudeValue) {
+        return
+      }
+
+      longitudeHelpers.setValue(undefined)
+      latitudeHelpers.setValue(undefined)
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [longitudeValue, latitudeValue]
+  )
+
+  return (
+    <>
+      <MultiLocationEditor
+        defaultValue={coordinates}
+        error={error}
+        isLight={isLight}
+        isErrorMessageHidden={error === HIDDEN_ERROR}
+        label="Localisation"
+        labelPropName="name"
+        onCenter={centeredCoordinates =>
+          handleCenterOnMap([centeredCoordinates.longitude, centeredCoordinates.latitude])
+        }
+        onDelete={deleteCoordinates}
+        onEdit={addOrEditCoordinates}
+        pointOptions={{
+          buttonLabel: 'Ajouter un point',
+          initialValue: {
+            name: 'Nouvelle coordonnée'
+          },
+          isButtonDisabled: !!coordinates.length || listener === InteractionListener.CONTROL_POINT,
+          onAdd: addOrEditCoordinates
+        }}
+      />
+    </>
+  )
+}
+
+function getGeometryFromCoordinates(longitudeValue: number, latitudeValue: number) {
+  const coordinates = transform([longitudeValue, latitudeValue], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+  const feature = new Feature({
+    geometry: new Point(coordinates)
+  })
+
+  return convertToGeoJSONGeometryObject<GeoJSONPoint>(feature.getGeometry() as Point)
+}

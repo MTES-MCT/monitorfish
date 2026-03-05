@@ -1,40 +1,45 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { customDayjs } from '@mtes-mct/monitor-ui'
-import { object, string } from 'yup'
+import z from 'zod'
 
-export const CreateOrEditReportingSchema = object({
-  reportingActor: string().required('Veuillez renseigner l&apos;origine du signalement.'),
-  title: string().required('Veuillez renseigner le titre du signalement.'),
-  type: string().oneOf(Object.values(ReportingType)).required('Veuillez renseigner le type de signalement.'),
-  threatHierarchy: object().when('type', {
-    is: (type?: string) => type === ReportingType.INFRACTION_SUSPICION,
-    then: schema => schema.required('Veuillez renseigner le NATINF.')
-  }),
-  controlUnitId: string().test({
-    message: 'Veuillez renseigner l&apos;unité',
-    test: (controlUnitId, context) =>
-      context.parent.reportingActor === ReportingOriginActor.UNIT ? !!controlUnitId : true
-  }),
-  expirationDate: string().test({
-    message: 'La date de fin de validité doit être dans le futur.',
-    test: expirationDate => (expirationDate ? customDayjs().isBefore(expirationDate) : true)
-  }),
-  authorContact: string().test({
-    message: 'Veuillez renseigner le contact',
-    test: (authorContact, context) => {
-      const { reportingActor } = context.parent
-      if (
-        reportingActor === ReportingOriginActor.DML ||
-        reportingActor === ReportingOriginActor.DIRM ||
-        reportingActor === ReportingOriginActor.OTHER
-      ) {
-        return !!authorContact
-      }
-
-      return true
+export const CreateOrEditReportingSchema = z
+  .object({
+    authorContact: z.string().optional(),
+    controlUnitId: z.number().optional(),
+    expirationDate: z.string().optional(),
+    reportingSource: z.enum(ReportingOriginSource),
+    threatHierarchy: z.any().optional(),
+    title: z.string().min(1, 'Veuillez renseigner le titre du signalement.'),
+    type: z.enum(ReportingType)
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === ReportingType.INFRACTION_SUSPICION && !data.threatHierarchy) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Veuillez renseigner le NATINF.',
+        path: ['threatHierarchy']
+      })
+    }
+    if (data.reportingSource === ReportingOriginSource.UNIT && !data.controlUnitId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner l'unité",
+        path: ['controlUnitId']
+      })
+    }
+    if (data.reportingSource === ReportingOriginSource.OTHER && !data.authorContact) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Veuillez renseigner le contact',
+        path: ['authorContact']
+      })
+    }
+    if (data.expirationDate && !customDayjs().isBefore(data.expirationDate)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'La date de fin de validité doit être dans le futur.',
+        path: ['expirationDate']
+      })
     }
   })
-})

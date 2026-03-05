@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import type { ReactNode } from 'react'
+import type {ReactNode} from 'react'
 
 type MapComponentStyleType = {
   children: ReactNode
-  className?: string
+  className?: string | undefined
   isHidden?: boolean | undefined
 }
 

@@ -28,12 +28,14 @@ import type { Point as GeoJSONPoint } from 'geojson'
 import type { MultiPolygon } from 'ol/geom'
 
 const INTERACTION_LISTENER_TITLE_PLACEHOLDER: Partial<Record<InteractionListener, string>> = {
+  [InteractionListener.REPORTING_POINT]: 'un point de signalement',
   [InteractionListener.CONTROL_POINT]: 'un point de contrôle',
   [InteractionListener.MISSION_ZONE]: 'une zone de mission',
   [InteractionListener.VESSELS_LIST]: 'une zone de filtre',
   [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: 'une zone de groupe'
 }
 const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, string>> = {
+  [InteractionListener.REPORTING_POINT]: 'le point de signalement',
   [InteractionListener.CONTROL_POINT]: 'le point de contrôle',
   [InteractionListener.MISSION_ZONE]: 'la zone de mission',
   [InteractionListener.VESSELS_LIST]: 'la zone de filtre',
@@ -174,7 +176,8 @@ export function DrawLayerModal() {
       title={`Vous êtes en train d'ajouter ${listener && INTERACTION_LISTENER_TITLE_PLACEHOLDER[listener]}`}
       validateButtonText={`Valider ${listener && INTERACTION_LISTENER_BUTTON_LABEL[listener]}`}
     >
-      {listener === InteractionListener.CONTROL_POINT && (
+      {(listener === InteractionListener.CONTROL_POINT ||
+        listener === InteractionListener.REPORTING_POINT) && (
         <CoordinatesInputWrapper>
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}

@@ -4,6 +4,8 @@ import { getFormFields } from '@features/Reporting/components/ReportingForm/util
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Formik } from 'formik'
 import { useCallback, useEffect } from 'react'
 
@@ -12,7 +14,7 @@ import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
 import type { FormEditedReporting, Reporting, ReportingCreation } from '../../types'
-import type { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import type { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type ReportingFormProps = {
@@ -21,7 +23,7 @@ type ReportingFormProps = {
   hasWhiteBackground?: boolean
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
-  vesselIdentity: Vessel.VesselIdentity
+  vesselIdentity?: Vessel.VesselIdentity | undefined
   windowContext: WindowContext
 }
 export function ReportingForm({
@@ -34,6 +36,11 @@ export function ReportingForm({
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
+
+  const displayedErrorKey =
+    windowContext === WindowContext.MainWindow
+      ? DisplayedErrorKey.MAIN_WINDOW_REPORTING_FORM_ERROR
+      : DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR
 
   const handleClose = useCallback(() => {
     if (onIsDirty) {
@@ -68,19 +75,22 @@ export function ReportingForm({
         creationDate: new Date().toISOString(),
         description: nextReporting.description,
         expirationDate: nextReporting.expirationDate,
-        externalReferenceNumber: vesselIdentity.externalReferenceNumber ?? undefined,
-        flagState: vesselIdentity.flagState.toUpperCase(),
-        internalReferenceNumber: vesselIdentity.internalReferenceNumber ?? undefined,
-        ircs: vesselIdentity.ircs ?? undefined,
-        reportingActor: nextReporting.reportingActor as ReportingOriginActor,
+        externalMarker: vesselIdentity?.externalReferenceNumber ?? nextReporting.externalMarker,
+        flagState: (vesselIdentity?.flagState ?? nextReporting.flagState ?? '').toUpperCase(),
+        cfr: vesselIdentity?.internalReferenceNumber ?? nextReporting.cfr,
+        imo: nextReporting.imo,
+        ircs: vesselIdentity?.ircs ?? nextReporting.ircs,
+        length: nextReporting.length,
+        mmsi: nextReporting.mmsi,
+        reportingSource: nextReporting.reportingSource as ReportingOriginSource,
         threatHierarchy:
           nextReporting.type === ReportingType.INFRACTION_SUSPICION ? nextReporting.threatHierarchy : undefined,
         title: nextReporting.title as string,
         type: nextReporting.type,
         validationDate: undefined,
-        vesselId: vesselIdentity.vesselId ?? undefined,
-        vesselIdentifier: vesselIdentity.vesselIdentifier ?? undefined,
-        vesselName: vesselIdentity.vesselName ?? undefined
+        vesselId: vesselIdentity?.vesselId ?? nextReporting.vesselId,
+        vesselIdentifier: vesselIdentity?.vesselIdentifier ?? nextReporting.vesselIdentifier,
+        vesselName: vesselIdentity?.vesselName ?? nextReporting.vesselName
       }
 
       dispatch(addReporting(nextReportingWithMissingProperties))
@@ -101,11 +111,18 @@ export function ReportingForm({
 
   return (
     <Formik
-      initialValues={getFormFields(editedReporting?.value, editedReporting?.type, editedReporting?.expirationDate)}
+      initialValues={getFormFields(editedReporting)}
       onSubmit={createOrEditReporting}
-      validationSchema={CreateOrEditReportingSchema}
+      validate={toFormikValidationSchema(CreateOrEditReportingSchema)}
     >
-      <Form className={className} hasWhiteBackground={hasWhiteBackground} onClose={handleClose} onIsDirty={onIsDirty} />
+      <Form
+        className={className}
+        displayedErrorKey={displayedErrorKey}
+        hasWhiteBackground={hasWhiteBackground}
+        onClose={handleClose}
+        onIsDirty={onIsDirty}
+        vesselIdentity={vesselIdentity}
+      />
     </Formik>
   )
 }

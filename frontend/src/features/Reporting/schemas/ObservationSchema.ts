@@ -1,5 +1,7 @@
 import { Seafront } from '@constants/seafront'
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { OtherSourceType } from '@features/Reporting/types/OtherSourceType'
+import { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
 import z from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../../types'
@@ -12,9 +14,11 @@ export const ObservationSchema = z.strictObject({
   authorTrigram: stringOrUndefined,
   controlUnit: z.union([z.custom<LegacyControlUnit.LegacyControlUnit>(), z.undefined()]),
   controlUnitId: numberOrUndefined,
+  otherSourceType: z.enum(OtherSourceType).or(z.undefined()),
+  satelliteType: z.enum(SatelliteSource).or(z.undefined()),
   description: stringOrUndefined,
   dml: stringOrUndefined,
-  reportingActor: z.enum(ReportingOriginActor),
+  reportingSource: z.enum(ReportingOriginSource).or(z.undefined()),
   seaFront: z.union([z.enum(Seafront), z.undefined()]),
   title: z.string()
 })

@@ -19,6 +19,7 @@ import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadba
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
+import {ReportingMapForm} from "@features/Reporting/components/ReportingMapForm";
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -73,6 +74,7 @@ export function MainWindow() {
         <VesselLoader />
         <APIWorker />
 
+        <ReportingMapForm/>
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
         <VesselGroupMainWindowEdition />

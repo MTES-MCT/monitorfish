@@ -88,7 +88,12 @@ export function ReportingMapMenuDialog() {
     )
     dispatch(reportingActions.unsetSelectedReportingFeatureIds())
   }
-  const toggleCreateReporting = () => {}
+  const toggleCreateReporting = () => {
+    dispatch(setRightMapBoxDisplayed(undefined))
+    dispatch(displayedComponentActions.setDisplayedComponents({
+      isReportingMapFormDisplayed: true
+    }))
+  }
   const toggleReportingList = () => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }
@@ -124,7 +129,7 @@ export function ReportingMapMenuDialog() {
 
   return (
     isRendered && (
-      <Wrapper $isOpen={isOpened} data-cy="reporting-map-menu-box">
+      <Wrapper isOpen={isOpened} data-cy="reporting-map-menu-box">
         <Header>
           <CloseButton Icon={Icon.Close} onClick={toggleMenu} title="Fermer" />
           <MapMenuDialog.Title>Signalements</MapMenuDialog.Title>
@@ -196,7 +201,7 @@ export function ReportingMapMenuDialog() {
             />
           </FilterRow>
           <StyledFooter>
-            <Button accent={Accent.PRIMARY} disabled Icon={Icon.Plus} onClick={toggleCreateReporting}>
+            <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={toggleCreateReporting}>
               Créer un nouveau signalement INN
             </Button>
             <Button accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleReportingList}>

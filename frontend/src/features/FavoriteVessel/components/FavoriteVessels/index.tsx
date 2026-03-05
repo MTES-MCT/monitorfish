@@ -56,8 +56,8 @@ export function FavoriteVessels() {
       />
       {isRendered && (
         <FavoriteVesselsBox
-          $isLeftBox
-          $isOpen={isOpened}
+          isLeftBox
+          isOpen={isOpened}
           data-cy="favorite-vessels-box"
           isHidden={!!previewFilteredVesselsMode}
         >

@@ -120,7 +120,7 @@ export function Account() {
     <>
       <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isRendered && (
-        <MapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-account-box">
+        <MapToolBox hideBoxShadow isOpen={isOpened} data-cy="map-account-box">
           <StyledContainer>
             <StyledHeader>
               <MapMenuDialog.Title>Mon compte</MapMenuDialog.Title>

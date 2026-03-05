@@ -76,7 +76,7 @@ export function NewFeatures() {
         title="Nouveautés MonitorFish"
       />
       {isRendered && (
-        <StyledMapToolBox $hideBoxShadow $isOpen={isOpened} data-cy="map-new-features-box">
+        <StyledMapToolBox hideBoxShadow isOpen={isOpened} data-cy="map-new-features-box">
           <StyledContainer>
             <MapMenuDialog.Header>
               <MapMenuDialog.Title>Nouveautés MonitorFish</MapMenuDialog.Title>

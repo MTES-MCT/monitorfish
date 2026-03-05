@@ -40,10 +40,10 @@ export function LayersSidebar() {
       />
       {isRegulationSearchRendered && (
         <Sidebar
-          $hideBoxShadow
-          $isLeftBox
-          $isOpen={isRegulationSearchOpened}
-          $isTransparent
+          hideBoxShadow
+          isLeftBox
+          isOpen={isRegulationSearchOpened}
+          isTransparent
           data-cy="layers-sidebar-box"
         >
           <RegulationSearch />
@@ -61,7 +61,7 @@ export function LayersSidebar() {
         </Sidebar>
       )}
       {!isRegulationSearchRendered && isMetadataPanelRendered && (
-        <Sidebar $hideBoxShadow $isLeftBox $isOpen={isMetadataPanelOpened} $isTransparent>
+        <Sidebar hideBoxShadow isLeftBox isOpen={isMetadataPanelOpened} isTransparent>
           <RegulatoryZoneMetadataShifter $isLeftMapBoxOpened={!!leftMapBoxOpened} $isOpen={isMetadataPanelOpened}>
             <RegulatoryZoneMetadata />
           </RegulatoryZoneMetadataShifter>

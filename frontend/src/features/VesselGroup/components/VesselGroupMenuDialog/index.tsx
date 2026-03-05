@@ -76,7 +76,7 @@ export function VesselGroupMenuDialog() {
 
   return (
     isRendered && (
-      <VesselGroupMenuDialogWrapper $isOpen={isOpened} data-cy="vessel-groups-menu-box">
+      <VesselGroupMenuDialogWrapper isOpen={isOpened} data-cy="vessel-groups-menu-box">
         <Header>
           <CloseButton Icon={Icon.Close} onClick={toggleVesselGroupsMenu} title="Fermer" />
           <Title>Groupes de navires</Title>

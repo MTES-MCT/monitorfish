@@ -14,10 +14,14 @@ export function RightMenuOnHoverArea() {
   const isControlUnitListDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitListDialogDisplayed
   )
+  const isReportingMapFormDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isReportingMapFormDisplayed
+  )
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)
-  const shouldExpand = !selectedVessel || !!rightMapBoxOpened || isControlUnitListDialogDisplayed
+  const hasNoSidebarOpened = !(!!selectedVessel || !!isReportingMapFormDisplayed)
+  const shouldExpand = hasNoSidebarOpened || !!rightMapBoxOpened || isControlUnitListDialogDisplayed
 
   useEffect(() => {
     if (shouldExpand) {

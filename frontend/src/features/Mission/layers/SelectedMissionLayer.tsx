@@ -1,6 +1,6 @@
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { memo, useEffect, useMemo } from 'react'

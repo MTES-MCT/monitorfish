@@ -1,5 +1,5 @@
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
+import { MonitorFishMap } from '@features/Map/Map.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 

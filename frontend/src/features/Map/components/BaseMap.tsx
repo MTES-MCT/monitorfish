@@ -12,6 +12,7 @@ import { MapCoordinatesBox } from './MapCoordinatesBox'
 import { monitorfishMap } from '../monitorfishMap'
 import { resetAnimateToRegulatoryLayer } from '../slice'
 import { clickOnMapFeature } from '../useCases/clickOnMapFeature'
+
 import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { MainAppThunk } from '@store'

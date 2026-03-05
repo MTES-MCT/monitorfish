@@ -3,10 +3,7 @@ import { useGetNatinfsAsOptions } from '@features/Mission/components/MissionForm
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect, useMemo } from 'react'
 
-import {
-  SELECTED_MISSION_ACTIONS_VECTOR_LAYER,
-  SELECTED_MISSION_ACTIONS_VECTOR_SOURCE
-} from './constants'
+import { SELECTED_MISSION_ACTIONS_VECTOR_LAYER, SELECTED_MISSION_ACTIONS_VECTOR_SOURCE } from './constants'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionActionFeature, getMissionActionFeatureZone } from '../../features'
 import { NEW_MISSION_ID } from '../constants'
@@ -88,12 +85,7 @@ export function UnmemoizedSelectedMissionActionsLayer() {
       : []
 
     SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(actionFeatures.concat(actionZonesFeatures))
-  }, [
-    natinfsAsOptions,
-    missionId,
-    draft?.actionsFormValues,
-    draft?.mainFormValues?.isGeometryComputedFromControls
-  ])
+  }, [natinfsAsOptions, missionId, draft?.actionsFormValues, draft?.mainFormValues?.isGeometryComputedFromControls])
 
   return null
 }

@@ -100,9 +100,11 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [dispatch])
 
   useEffect(() => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       setIsPreloading(false)
     }, 500)
+
+    return () => clearTimeout(id)
   }, [])
 
   useEffect(() => {

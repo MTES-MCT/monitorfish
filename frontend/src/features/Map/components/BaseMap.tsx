@@ -2,6 +2,7 @@ import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { hoverOnMapFeature } from '@features/Map/useCases/hoverOnMapFeature'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { unByKey } from 'ol/Observable'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
 import { Children, useCallback, useEffect, useRef, useState } from 'react'
@@ -138,11 +139,15 @@ export function BaseMap({
   useEffect(() => {
     monitorfishMap.setTarget(mapElement.current)
 
-    monitorfishMap.on('click', event => handleMapClick(event, monitorfishMap))
-    monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap))
-    monitorfishMap.on('movestart', () => throttleAndHandleMovingAndZoom(monitorfishMap))
-    monitorfishMap.on('moveend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
-    monitorfishMap.on('loadend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
+    const keys = [
+      monitorfishMap.on('click', event => handleMapClick(event, monitorfishMap)),
+      monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap)),
+      monitorfishMap.on('movestart', () => throttleAndHandleMovingAndZoom(monitorfishMap)),
+      monitorfishMap.on('moveend', () => throttleAndHandleMovingAndZoom(monitorfishMap)),
+      monitorfishMap.on('loadend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
+    ]
+
+    return () => keys.forEach(unByKey)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

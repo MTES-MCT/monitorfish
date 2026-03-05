@@ -1,5 +1,4 @@
 import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
-import { LayerType } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,6 +16,8 @@ import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
 
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
 import type { MonitorFishMap } from '@features/Map/Map.types'
+
+const ADMINISTRATIVE_LAYER_TYPE = 'ADMINISTRATIVE'
 
 export type AdministrativeZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
@@ -43,7 +44,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
   }, [dispatch])
 
   useEffect(() => {
-    setIsOpened(layersSidebarOpenedLayerType === LayerType.ADMINISTRATIVE)
+    setIsOpened(layersSidebarOpenedLayerType === ADMINISTRATIVE_LAYER_TYPE)
   }, [layersSidebarOpenedLayerType, setIsOpened])
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
   // TODO Simplify this callback with a direct call to the action rather than a function-wrapper.
   const showOrHideZone = useCallback(
-    (zone: MonitorFishMap.ShowableLayer) => (isShown: boolean) => {
+    (zone: MonitorFishMap.AdminShowableLayer) => (isShown: boolean) => {
       if (isShown) {
         dispatch(
           hideLayer({
@@ -82,7 +83,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
     if (isOpened) {
       dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
     } else {
-      dispatch(layerActions.setLayersSideBarOpenedLayerType(LayerType.ADMINISTRATIVE))
+      dispatch(layerActions.setLayersSideBarOpenedLayerType(ADMINISTRATIVE_LAYER_TYPE))
       dispatch(closeRegulatoryZoneMetadata())
     }
   }

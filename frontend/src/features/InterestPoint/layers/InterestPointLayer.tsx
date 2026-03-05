@@ -1,5 +1,6 @@
 import { INTEREST_POINT_VECTOR_LAYER, INTEREST_POINT_VECTOR_SOURCE } from '@features/InterestPoint/layers/constants'
 import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
+import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { parseInt } from 'lodash-es'
@@ -41,13 +42,7 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
   const previousMapZoom = useRef<number | undefined>(undefined)
   const [interestPointToCoordinates, setInterestPointToCoordinates] = useState(new Map())
 
-  useEffect(() => {
-    monitorfishMap.getLayers().push(INTEREST_POINT_VECTOR_LAYER)
-
-    return () => {
-      monitorfishMap.removeLayer(INTEREST_POINT_VECTOR_LAYER)
-    }
-  }, [])
+  useMapLayer(INTEREST_POINT_VECTOR_LAYER)
 
   useEffect(() => {
     function drawExistingFeaturesOnMap() {

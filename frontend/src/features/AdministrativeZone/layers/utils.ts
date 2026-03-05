@@ -21,8 +21,8 @@ export const getVectorOLLayer = (
     source: getVectorSource(type, zone, isBackoffice),
     style: feature => [getAdministrativeLayerStyle(type)(feature as Feature)]
   })
-  // @ts-ignore
-  layer.name = getLayerNameFromTypeAndZone(type, zone)
+
+  layer.setProperties({ code: getLayerNameFromTypeAndZone(type, zone) })
 
   return layer
 }

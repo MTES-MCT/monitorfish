@@ -1,9 +1,13 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
+import type { Feature } from 'ol'
+import type { Geometry } from 'ol/geom'
+import type VectorLayer from 'ol/layer/Vector'
 
-export function getLayer(name: MonitorFishMap.MonitorFishLayer): MonitorFishMap.VectorLayerWithName | undefined {
-  return (monitorfishMap.getLayers().getArray() as MonitorFishMap.VectorLayerWithName[]).find(
-    layer => layer.name === name
-  ) as MonitorFishMap.VectorLayerWithName | undefined
+export function getLayer(name: MonitorFishMap.MonitorFishLayer): VectorLayer<Feature<Geometry>> | undefined {
+  return monitorfishMap
+    .getLayers()
+    .getArray()
+    .find(layer => layer.get('code') === name) as VectorLayer<Feature<Geometry>> | undefined
 }

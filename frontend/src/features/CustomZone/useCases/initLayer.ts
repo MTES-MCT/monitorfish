@@ -29,8 +29,9 @@ export const initLayer = (): MainAppThunk => (_, getState) => {
     }),
     style: feature => getLayerStyle(feature as Feature<Geometry>),
     zIndex: LayerProperties.CUSTOM.zIndex
-  }) as MonitorFishMap.VectorImageLayerWithName
-  customZoneLayer.name = MonitorFishMap.MonitorFishLayer.CUSTOM
+  })
+
+  customZoneLayer.setProperties({ code: MonitorFishMap.MonitorFishLayer.CUSTOM })
 
   monitorfishMap.getLayers().push(customZoneLayer)
 }

@@ -690,7 +690,7 @@ def test_extract_vessels_with_species_onboard(
 
     res = (
         extract_vessels_with_species_onboard(
-            species_specs, species_catch_areas=["27.7", "27.8.c"]
+            species_specs, species_catch_areas=["27.7", "fao_areas.27.8.c"]
         )
         .sort_values(["cfr", "species"])
         .reset_index(drop=True)

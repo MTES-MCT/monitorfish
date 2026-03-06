@@ -340,7 +340,9 @@ def extract_vessels_with_species_onboard(
 
     if species_catch_areas:
         query_filepath = "monitorfish/vessels_species_onboard_with_areas.sql"
-        params["areas_regex_array"] = [f"{a}%" for a in species_catch_areas]
+        params["areas_regex_array"] = [
+            f"{a.replace('fao_areas.', '')}%" for a in species_catch_areas
+        ]
     else:
         query_filepath = "monitorfish/vessels_species_onboard.sql"
 

@@ -1,6 +1,6 @@
 // TODO Remove legacy colors.
 
-import { LayerProperties } from '@features/Map/constants'
+import { AdminLayerProperties } from '@features/Map/constants'
 import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
@@ -12,7 +12,7 @@ import type Feature from 'ol/Feature'
 
 export function getAdministrativeLayerStyle(type: string) {
   switch (type) {
-    case LayerProperties.EEZ.code:
+    case AdminLayerProperties.EEZ.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -24,11 +24,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
             text: `${
-              (LayerProperties.EEZ.zoneNamePropertyKey && feature?.get(LayerProperties.EEZ.zoneNamePropertyKey)) || ''
+              (AdminLayerProperties.EEZ.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.EEZ.zoneNamePropertyKey)) ||
+              ''
             }`
           })
         })
-    case LayerProperties.FAO.code:
+    case AdminLayerProperties.FAO.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -41,45 +43,13 @@ export function getAdministrativeLayerStyle(type: string) {
             overflow: true,
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.FAO.zoneNamePropertyKey && feature?.get(LayerProperties.FAO.zoneNamePropertyKey)) || ''
-            }`
-          })
-        })
-    case LayerProperties.AEM.code:
-      return (feature: Feature | undefined) =>
-        new Style({
-          stroke: new Stroke({
-            color: '#767AB2',
-            width: 1
-          }),
-          text: new Text({
-            fill: new Fill({ color: THEME.color.gunMetal }),
-            font: '12px Marianne',
-            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${
-              (LayerProperties.AEM.zoneNamePropertyKey && feature?.get(LayerProperties.AEM.zoneNamePropertyKey)) || ''
-            }`
-          })
-        })
-    case LayerProperties.effort_zones_areas.code:
-      return (feature: Feature | undefined) =>
-        new Style({
-          stroke: new Stroke({
-            color: '#767AB2',
-            width: 1
-          }),
-          text: new Text({
-            fill: new Fill({ color: THEME.color.gunMetal }),
-            font: '12px Marianne',
-            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
-            text: `${
-              (LayerProperties.effort_zones_areas.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.effort_zones_areas.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.FAO.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.FAO.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.cormoran.code:
+    case AdminLayerProperties.AEM.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -91,13 +61,49 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cormoran.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.cormoran.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.AEM.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.AEM.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.situations.code:
+    case AdminLayerProperties.effort_zones_areas.code:
+      return (feature: Feature | undefined) =>
+        new Style({
+          stroke: new Stroke({
+            color: '#767AB2',
+            width: 1
+          }),
+          text: new Text({
+            fill: new Fill({ color: THEME.color.gunMetal }),
+            font: '12px Marianne',
+            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
+            text: `${
+              (AdminLayerProperties.effort_zones_areas.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.effort_zones_areas.zoneNamePropertyKey)) ||
+              ''
+            }`
+          })
+        })
+    case AdminLayerProperties.cormoran.code:
+      return (feature: Feature | undefined) =>
+        new Style({
+          stroke: new Stroke({
+            color: '#767AB2',
+            width: 1
+          }),
+          text: new Text({
+            fill: new Fill({ color: THEME.color.gunMetal }),
+            font: '12px Marianne',
+            stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
+            text: `${
+              (AdminLayerProperties.cormoran.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.cormoran.zoneNamePropertyKey)) ||
+              ''
+            }`
+          })
+        })
+    case AdminLayerProperties.situations.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -109,13 +115,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.situations.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.situations.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.situations.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.situations.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.rectangles_stat.code:
+    case AdminLayerProperties.rectangles_stat.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -127,13 +133,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.rectangles_stat.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.rectangles_stat.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.rectangles_stat.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.rectangles_stat.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.THREE_MILES.code:
+    case AdminLayerProperties.THREE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -141,7 +147,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case LayerProperties.SIX_MILES.code:
+    case AdminLayerProperties.SIX_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -149,7 +155,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case LayerProperties.TWELVE_MILES.code:
+    case AdminLayerProperties.TWELVE_MILES.code:
       return () =>
         new Style({
           stroke: new Stroke({
@@ -157,7 +163,7 @@ export function getAdministrativeLayerStyle(type: string) {
             width: 2
           })
         })
-    case LayerProperties.cgpm_areas.code:
+    case AdminLayerProperties.cgpm_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -169,13 +175,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cgpm_areas.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.cgpm_areas.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.cgpm_areas.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.cgpm_areas.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.cgpm_statistical_rectangles_areas.code:
+    case AdminLayerProperties.cgpm_statistical_rectangles_areas.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -187,13 +193,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.cgpm_statistical_rectangles_areas.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.saltwater_limit.code:
+    case AdminLayerProperties.saltwater_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -205,13 +211,13 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.saltwater_limit.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.saltwater_limit.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.saltwater_limit.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.saltwater_limit.zoneNamePropertyKey)) ||
               ''
             }`
           })
         })
-    case LayerProperties.transversal_sea_limit.code:
+    case AdminLayerProperties.transversal_sea_limit.code:
       return (feature: Feature | undefined) =>
         new Style({
           stroke: new Stroke({
@@ -223,8 +229,8 @@ export function getAdministrativeLayerStyle(type: string) {
             font: '12px Marianne',
             stroke: new Stroke({ color: 'rgba(255,255,255,0.4)', width: 2 }),
             text: `${
-              (LayerProperties.transversal_sea_limit.zoneNamePropertyKey &&
-                feature?.get(LayerProperties.transversal_sea_limit.zoneNamePropertyKey)) ||
+              (AdminLayerProperties.transversal_sea_limit.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.transversal_sea_limit.zoneNamePropertyKey)) ||
               ''
             }`
           })

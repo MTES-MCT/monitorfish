@@ -22,6 +22,8 @@ function UnmemoizedStationLayer({ hoveredFeatureId }: StationLayerProps) {
     new VectorLayerWithCode({
       className: MonitorFishMap.MonitorFishLayer.STATION,
       code: MonitorFishMap.MonitorFishLayer.STATION,
+      isClickable: true,
+      isHoverable: true,
       source: vectorSourceRef.current,
       style: getFeatureStyle,
       zIndex: LayerProperties.STATION.zIndex

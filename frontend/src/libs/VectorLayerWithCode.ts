@@ -6,18 +6,14 @@ import type { Geometry } from 'ol/geom'
 import type { Options as LayerVectorOptions } from 'ol/layer/Vector'
 
 type Options<T extends Feature<Geometry>> = LayerVectorOptions<T> & {
-  code: MonitorFishMap.MonitorFishLayer
+  code: MonitorFishMap.MonitorFishLayer | string
+  isClickable?: boolean
+  isHoverable?: boolean
 }
 
 export class VectorLayerWithCode<T extends Feature<Geometry> = Feature<Geometry>> extends VectorLayer<T> {
-  public code: MonitorFishMap.MonitorFishLayer
-  /** @deprecated Replaced by `code`. */
-  public name: MonitorFishMap.MonitorFishLayer
-
-  constructor({ code, ...originalOptions }: Options<T>) {
+  constructor({ code, isClickable, isHoverable, ...originalOptions }: Options<T>) {
     super(originalOptions)
-
-    this.code = code
-    this.name = code
+    this.setProperties({ code, isClickable, isHoverable })
   }
 }

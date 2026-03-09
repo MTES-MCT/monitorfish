@@ -8,7 +8,6 @@ import { useCallback, useEffect, useRef } from 'react'
 
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Feature } from 'ol'
 import type Geometry from 'ol/geom/Geometry'
 import type { MutableRefObject } from 'react'
@@ -30,7 +29,7 @@ export function RegulatoryLayerSearch() {
     return vectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<Feature<Geometry>>>
 
   useEffect(() => {
     function getVectorLayer() {
@@ -43,7 +42,7 @@ export function RegulatoryLayerSearch() {
           updateWhileInteracting: true,
           zIndex: LayerProperties.DRAW.zIndex
         })
-        vectorLayerRef.current.name = LayerProperties.DRAW.code
+        vectorLayerRef.current.setProperties({ code: LayerProperties.DRAW.code })
       }
 
       return vectorLayerRef.current

@@ -64,7 +64,7 @@ export function RegulatoryLayers({
       const regulatoryLayers = monitorfishMap
         .getLayers()
         .getArray()
-        .filter(layer => (layer as MonitorFishMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code))
+        .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
 
       if (!regulatoryZoneMetadata) {
         removeMetadataIsShowedProperty(regulatoryLayers)
@@ -74,7 +74,7 @@ export function RegulatoryLayers({
 
       const layerToAddProperty = regulatoryLayers.find(
         layer =>
-          (layer as MonitorFishMap.VectorLayerWithName)?.name ===
+          layer.get('code') ===
           `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
       )
 
@@ -105,16 +105,12 @@ export function RegulatoryLayers({
         const regulatoryLayers = monitorfishMap
           .getLayers()
           .getArray()
-          .filter(layer =>
-            (layer as MonitorFishMap.VectorLayerWithName)?.name?.includes(LayerProperties.REGULATORY.code)
-          )
+          .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
         regulatoryLayers.forEach(layer => {
-          const vectorSource = (layer as MonitorFishMap.VectorLayerWithName).getSource()
+          const vectorSource = (layer as VectorImageLayer<Feature<Geometry>>).getSource()
 
           if (vectorSource) {
-            const layerToFeatures = layersToFeatures?.find(
-              layerToFeature => layerToFeature.name === (layer as MonitorFishMap.VectorLayerWithName)?.name
-            )
+            const layerToFeatures = layersToFeatures?.find(layerToFeature => layerToFeature.name === layer.get('code'))
             if (layerToFeatures) {
               const features = showSimplifiedFeatures
                 ? layerToFeatures.simplifiedFeatures || layerToFeatures.features
@@ -149,7 +145,7 @@ function sortRegulatoryLayersFromAreas(layersToFeatures, olLayers) {
   const sortedLayersToArea = [...layersToFeatures].sort((a, b) => a.area - b.area).reverse()
 
   sortedLayersToArea.forEach((layerAndArea, index) => {
-    const foundLayer = olLayers.find(layer => layer?.name === layerAndArea.name)
+    const foundLayer = olLayers.find(layer => layer?.get('code') === layerAndArea.name)
 
     if (foundLayer) {
       foundLayer.setZIndex(index + 1)
@@ -177,11 +173,11 @@ function removeRegulatoryLayersToMap(showedLayers, olLayers) {
 }
 
 function layersNotPresentInShowedLayers(showedLayers, olLayer) {
-  return !showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+  return !showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.get('code'))
 }
 
 function layersOfTypeRegulatoryLayerInCurrentMap(olLayer) {
-  return olLayer?.name?.includes(LayerProperties.REGULATORY.code)
+  return (olLayer?.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code)
 }
 
 function addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty) {

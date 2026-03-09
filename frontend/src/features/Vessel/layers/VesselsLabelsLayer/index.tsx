@@ -1,3 +1,4 @@
+import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import {
   filterNonSelectedVessels,
@@ -63,13 +64,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isThrottled = useRef(false)
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
-  useEffect(() => {
-    monitorfishMap.getLayers().push(VESSELS_LABEL_VECTOR_LAYER)
-
-    return () => {
-      monitorfishMap.removeLayer(VESSELS_LABEL_VECTOR_LAYER)
-    }
-  }, [])
+  useMapLayer(VESSELS_LABEL_VECTOR_LAYER)
 
   const moveVesselLabelLine = useCallback(
     (featureId, fromCoordinates, toCoordinates, offset, opacity) => {

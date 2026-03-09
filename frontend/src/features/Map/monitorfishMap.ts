@@ -7,8 +7,6 @@ import View from 'ol/View'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './constants'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
-
 const centeredOnFrance = [2.99049, 46.82801]
 
 export const monitorfishMap = new OpenLayerMap({
@@ -37,7 +35,7 @@ if (isCypress()) {
       const layer = monitorfishMap
         .getLayers()
         .getArray()
-        .find(l => (l as unknown as MonitorFishMap.VectorLayerWithName).name === name)
+        .find(l => l.get('code') === name)
 
       // @ts-ignore
       return layer?.values_?.source?.getFeatures() ?? []

@@ -1,4 +1,3 @@
-import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
@@ -38,7 +37,6 @@ function UnmemoizedVesselsLayer() {
     }
     const styleVariables = getWebGLVesselStyleVariables(initStyles)
     VESSELS_VECTOR_LAYER.updateStyleVariables(styleVariables)
-    VESSELS_VECTOR_LAYER.name = MonitorFishMap.MonitorFishLayer.VESSELS
 
     monitorfishMap.getLayers().push(VESSELS_VECTOR_LAYER)
 

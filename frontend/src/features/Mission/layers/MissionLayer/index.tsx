@@ -30,7 +30,7 @@ function UnmemoizedMissionLayer() {
   }, [draft?.mainFormValues, missionId])
 
   const vectorSourceRef = useRef<VectorSource<Feature<Point>>>()
-  const layerRef = useRef<MonitorFishMap.WebGLPointsLayerWithName>()
+  const layerRef = useRef<WebGLPointsLayer<any>>()
 
   function getVectorSource() {
     if (!vectorSourceRef.current) {
@@ -74,7 +74,11 @@ function UnmemoizedMissionLayer() {
   }, [dispatch, missions, missionId, editedMissionFeaturePoint])
 
   useEffect(() => {
-    getLayer().name = LayerProperties.MISSION_PIN_POINT.code
+    getLayer().setProperties({
+      code: LayerProperties.MISSION_PIN_POINT.code,
+      isClickable: true,
+      isHoverable: true
+    })
     monitorfishMap.getLayers().push(getLayer())
     window.addEventListener('beforeunload', () => {
       monitorfishMap.removeLayer(getLayer())

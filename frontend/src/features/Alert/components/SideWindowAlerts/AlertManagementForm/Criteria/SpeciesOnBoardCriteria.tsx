@@ -1,6 +1,6 @@
 import { useGetAdministrativeSubZonesQuery } from '@api/geoserverApi'
 import { useGetSpeciesQuery } from '@api/specy'
-import { LayerProperties } from '@features/Map/constants'
+import { AdminLayerProperties } from '@features/Map/constants'
 import { FieldsetGroupSpinner } from '@features/Mission/components/MissionForm/shared/FieldsetGroup'
 import { Tag } from '@features/Regulation/components/RegulationForm/Tag'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
@@ -31,7 +31,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
     error: administrativeZonesError,
     isLoading: isLoadingAdministrativeZones
   } = useGetAdministrativeSubZonesQuery(
-    { fromBackoffice: false, type: LayerProperties.FAO.code },
+    { fromBackoffice: false, type: AdminLayerProperties.FAO.code },
     { skip: !isCriteriaOpened }
   )
 
@@ -40,7 +40,7 @@ export function SpeciesOnBoardCriteria({ onDelete, speciesAsOptions }: SpeciesOn
       return undefined
     }
 
-    const zoneNameKey = LayerProperties.FAO.zoneNamePropertyKey
+    const zoneNameKey = AdminLayerProperties.FAO.zoneNamePropertyKey
     if (!zoneNameKey) {
       return undefined
     }

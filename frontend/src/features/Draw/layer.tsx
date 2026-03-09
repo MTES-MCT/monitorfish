@@ -22,7 +22,6 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { addFeatureToDrawedFeature } from './useCases/addFeatureToDrawedFeature'
 import { setDrawedGeometry } from './useCases/setDrawedGeometry'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type Geometry from 'ol/geom/Geometry'
 import type { GeometryFunction } from 'ol/interaction/Draw'
 import type { ModifyEvent } from 'ol/interaction/Modify'
@@ -70,7 +69,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<Feature>>
 
   useEffect(() => {
     function getVectorLayer() {
@@ -83,7 +82,7 @@ function UnmemoizedDrawLayer() {
           updateWhileInteracting: true,
           zIndex: LayerProperties.DRAW.zIndex
         })
-        vectorLayerRef.current.name = LayerProperties.DRAW.code
+        vectorLayerRef.current.setProperties({ code: LayerProperties.DRAW.code })
       }
 
       return vectorLayerRef.current

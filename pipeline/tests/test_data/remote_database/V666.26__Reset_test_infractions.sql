@@ -147,18 +147,33 @@ INSERT INTO infractions (
 
 
 INSERT INTO public.threats (
-     id,            name) VALUES
-    ( 1, 'Test Threat 1'),
-    ( 2, 'Test Threat 2');
+     id,                                    name) VALUES
+    ( 1,                         'Test Threat 1'),
+    ( 2,                         'Test Threat 2'),
+    ( 3,                         'Activités INN'),
+    ( 4,                   'Entrave au contrôle'),
+    ( 5, 'Mesures techniques et de conservation'),
+    ( 6,                      'Terres Australes'),
+    ( 7,            'Obligation de débarquement'),
+    ( 8,              'Obligations déclaratives'),
+    ( 9,                'Sécurité / gens de mer');
 
-ALTER SEQUENCE threats_id_seq RESTART WITH 3;
+ALTER SEQUENCE threats_id_seq RESTART WITH 10;
 
 INSERT INTO public.threat_characterizations (
      id,                      name, threat_id) VALUES
-    ( 1, 'Test Characterization 1',         1),
-    ( 2, 'Test Characterization 2',         2);
+    ( 1,      'Test Characterization 1', 1),
+    ( 2,      'Test Characterization 2', 2),
+    ( 3,                          'VMS', 8),
+    ( 4,               'Zone interdite', 5),
+    ( 5,                          'DEP', 8),
+    ( 6,                    'FAR (JPE)', 8),
+    ( 7, 'JPE non fonctionnel / absent', 8),
+    ( 8,           'Marge de tolérance', 8),
+    ( 9,                          'PNO', 8);
 
-ALTER SEQUENCE threat_characterizations_id_seq RESTART WITH 3;
+
+ALTER SEQUENCE threat_characterizations_id_seq RESTART WITH 10;
 
 INSERT INTO public.infraction_threat_characterization (
      natinf_code, threat_characterization_id) VALUES

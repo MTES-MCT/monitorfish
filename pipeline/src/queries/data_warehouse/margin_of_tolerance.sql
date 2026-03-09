@@ -1,7 +1,7 @@
 WITH estimated_live_weights AS (
     SELECT cfr, trip_number, species, SUM(weight) AS elw_weight
     FROM monitorfish.catches
-    WHERE far_datetime_utc >= NOW() - Interval '1 year' AND flag_state = 'FRA'
+    WHERE far_datetime_utc >= {from_datetime_utc:DateTime}
     GROUP BY cfr, trip_number, species
 ),
 
@@ -12,7 +12,7 @@ live_weight_equivalents AS (
         species,
         SUM(weight * COALESCE(conversion_factor, 1)) AS lwe_weight
     FROM monitorfish.landings
-    WHERE landing_datetime_utc >= NOW() - Interval '1 year' AND flag_state = 'FRA'
+    WHERE landing_datetime_utc >= {from_datetime_utc:DateTime}
     GROUP BY cfr, trip_number, species
 ),
 
@@ -34,7 +34,7 @@ live_weight_equivalents_top_5 AS (
         AND lwe_weight / (SUM(lwe_weight) OVER (PARTITION BY cfr, trip_number)) >= 0.1
 ),
 
-ok_trips AS (
+compliant_trips AS (
     SELECT
         lwe.cfr AS cfr,
         lwe.trip_number AS trip_number
@@ -46,39 +46,10 @@ ok_trips AS (
         elw.species = lwe.species
     GROUP BY lwe.cfr, lwe.trip_number
     HAVING Min(elw_weight BETWEEN min_allowed_elw AND max_allowed_elw) = 1
-),
-
-nb_ok_trips AS (
-    SELECT
-        cfr,
-        COUNT(*) AS nb_trips
-    FROM ok_trips
-    GROUP BY cfr
-),
-
-all_trips AS (
-    SELECT DISTINCT cfr, trip_number
-    FROM monitorfish.catches
-    WHERE far_datetime_utc >= NOW() - Interval '1 year' AND flag_state = 'FRA'
-    UNION ALL
-    SELECT DISTINCT cfr, trip_number
-    FROM monitorfish.landings
-    WHERE landing_datetime_utc >= NOW() - Interval '1 year' AND flag_state = 'FRA'
-),
-
-nb_total_trips AS (
-    SELECT
-        cfr,
-        COUNT(DISTINCT trip_number) AS nb_trips
-    FROM all_trips
-    GROUP BY cfr
 )
 
 SELECT
-    tt.cfr,
-    tt.nb_trips AS nb_total_trips,
-    tt.nb_trips - okt.nb_trips AS nb_nok_trips,
-    (tt.nb_trips - okt.nb_trips) / tt.nb_trips AS nct_over_tt
-FROM nb_total_trips tt
-LEFT JOIN nb_ok_trips okt
-ON tt.cfr = okt.cfr
+    cfr,
+    COUNT(*) AS compliant_trips
+FROM compliant_trips
+GROUP BY cfr

@@ -1,6 +1,6 @@
 services:
   geoserver:
-    image: kartoza/geoserver:2.18.0
+    image: kartoza/geoserver:2.26.0
     restart: always
     ports:
       - 8081:8080

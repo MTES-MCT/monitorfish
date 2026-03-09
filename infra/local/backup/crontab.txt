@@ -1,0 +1,1 @@
+13 21 * * * bash -l -c '/home/eig56/monitorfish/infra/remote/backup/pg_backup_rotated.sh > /home/eig56/monitorfish/backups/cron.log 2>&1'

@@ -20,8 +20,13 @@ This guide covers database dump, restore, user creation, and regulatory data man
 
 2. Fetch the dump with `scp`:
    ```bash
-   scp root@<IP>:/<FOLDER> .
+   scp root@<IP>:/<FOLDER>/cnsp_backup.sql .
    ```
+
+3. Send with scp:
+```bash
+scp cnsp_backup.sql eig56@10.56.205.40:/tmp
+```
 
 ## Restore a Database
 
@@ -41,12 +46,16 @@ PGCLIENTENCODING=UTF-8 psql \
 Create the user:
 
 ```bash
-sudo -u postgres psql -c "CREATE USER geoserver WITH PASSWORD 'PASSWORD';"
+psql -U adl
+CREATE USER geoserver WITH PASSWORD 'PASSWORD';
 ```
 
 Grant permissions (run in psql):
 
 ```sql
+-- Connect to cnsp database
+\c cnsp
+
 -- Grant connect and schema usage
 GRANT CONNECT ON DATABASE cnsp TO geoserver;
 GRANT USAGE ON SCHEMA prod TO geoserver;
@@ -74,7 +83,7 @@ sudo systemctl reload postgresql
 Create the user:
 
 ```bash
-sudo -u postgres psql -c "CREATE USER geomatique WITH PASSWORD 'PASSWORD';"
+CREATE USER geomatique WITH PASSWORD 'PASSWORD';
 ```
 
 Grant permissions (run in psql):
@@ -112,16 +121,15 @@ sudo systemctl reload postgresql
 Create the user and grant read-only access:
 
 ```bash
-# Create user
-sudo -u postgres psql -c "CREATE USER monitorfish WITH PASSWORD 'yourpassword';"
+-- Create user
+CREATE USER monitorfish WITH PASSWORD 'PASSWORD';
 
-# Grant read-only access on cnsp database, schema prod
-sudo -u postgres psql -d cnsp -c "
+-- Grant read-only access on cnsp database, schema prod
 GRANT CONNECT ON DATABASE cnsp TO monitorfish;
 GRANT USAGE ON SCHEMA prod TO monitorfish;
 GRANT SELECT ON ALL TABLES IN SCHEMA prod TO monitorfish;
 ALTER DEFAULT PRIVILEGES IN SCHEMA prod GRANT SELECT ON TABLES TO monitorfish;
-"
+
 ```
 
 Add the user to pg_hba.conf for remote connections:

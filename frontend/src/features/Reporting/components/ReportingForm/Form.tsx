@@ -1,5 +1,6 @@
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
+import { FormikCoordinatesPicker } from '@features/Reporting/components/ReportingForm/FormikCoordinatesPicker'
 import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
@@ -24,8 +25,9 @@ import {
   MultiRadio
 } from '@mtes-mct/monitor-ui'
 import { Form as FormikForm, type FormikErrors, useFormikContext } from 'formik'
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   OtherSourceTypeLabel,
@@ -38,25 +40,49 @@ import type { FormEditedReporting, InfractionSuspicion } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
-import {FormikCoordinatesPicker} from "@features/Reporting/components/ReportingForm/FormikCoordinatesPicker";
 
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
   hasWhiteBackground: boolean
+  hideButtons?: boolean
+  onAutoSave?: (values: FormEditedReporting) => void
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
+  onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
+  submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
   vesselIdentity?: Vessel.VesselIdentity | undefined
 }>
-export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose, onIsDirty, vesselIdentity }: FormProps) {
-  const { dirty, errors, initialValues, setFieldValue, setValues, values } = useFormikContext<FormEditedReporting>()
+
+const DEBOUNCE_DELAY = 500
+
+export function Form({
+  className,
+  displayedErrorKey,
+  hasWhiteBackground,
+  hideButtons = false,
+  onAutoSave,
+  onClose,
+  onIsDirty,
+  onVesselStateChange,
+  submitRef,
+  vesselIdentity
+}: FormProps) {
+  const { dirty, errors, initialValues, isValid, setFieldValue, setValues, submitForm, values } =
+    useFormikContext<FormEditedReporting>()
+  const submitFormRef = submitRef
   const formRef = useRef<HTMLFormElement | null>(null)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
   const dispatch = useMainAppDispatch()
   const { gearsAsOptions } = useGetGearsAsOptions()
+  const debouncedAutoSave = useDebouncedCallback((currentValues: FormEditedReporting) => {
+    onAutoSave?.(currentValues)
+  }, DEBOUNCE_DELAY)
 
   const [selectedVessel, setSelectedVessel] = useState<Vessel.VesselIdentity | undefined>(() => {
-    if (vesselIdentity) return vesselIdentity
+    if (vesselIdentity) {
+      return vesselIdentity
+    }
     if (initialValues.vesselId && initialValues.vesselName) {
       return {
         beaconNumber: undefined,
@@ -72,6 +98,7 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
         vesselName: initialValues.vesselName
       }
     }
+
     return undefined
   })
   const [isVesselAbsent, setIsVesselAbsent] = useState(
@@ -107,6 +134,7 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
         vesselIdentifier: undefined,
         vesselName: undefined
       })
+
       return
     }
     setValues({
@@ -150,6 +178,31 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
     }
   }, [dirty, onIsDirty])
 
+  useEffect(() => {
+    if (submitFormRef) {
+      submitFormRef.current = submitForm
+    }
+  }, [submitForm, submitFormRef])
+
+  useEffect(() => {
+    onVesselStateChange?.(values.vesselName, values.flagState)
+  }, [onVesselStateChange, values.flagState, values.vesselName])
+
+  useEffect(() => {
+    if (!onAutoSave || !isValid || !dirty) {
+      return
+    }
+
+    debouncedAutoSave(values)
+  }, [debouncedAutoSave, dirty, isValid, onAutoSave, values])
+
+  useEffect(
+    () => () => {
+      debouncedAutoSave.cancel()
+    },
+    [debouncedAutoSave]
+  )
+
   return (
     <StyledForm
       ref={formRef}
@@ -183,7 +236,7 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
           options={getOptionsFromLabelledEnum(SatelliteSourceLabel)}
         />
       )}
-      {(values.reportingSource === ReportingOriginSource.OTHER) && (
+      {values.reportingSource === ReportingOriginSource.OTHER && (
         <FormikSelect
           isLight={!hasWhiteBackground}
           label="Autres types de source"
@@ -200,8 +253,8 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
           placeholder="Ex: Yannick Attal (06 24 25 01 91)"
         />
       )}
-      <StyledHr/>
-      <FormikCoordinatesPicker isLight={!hasWhiteBackground}/>
+      <StyledHr />
+      <FormikCoordinatesPicker isLight={!hasWhiteBackground} />
       {vesselIdentity === undefined && (
         <>
           <StyledHr />
@@ -236,7 +289,12 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
                     <ReadOnlyField label="Autre marquage coque">{values.externalMarker ?? '-'}</ReadOnlyField>
                   </TwoCol>
                   <TwoCol>
-                    <FormikSelect isLight={!hasWhiteBackground} label="Engin" name="gearCode" options={gearsAsOptions ?? []} />
+                    <FormikSelect
+                      isLight={!hasWhiteBackground}
+                      label="Engin"
+                      name="gearCode"
+                      options={gearsAsOptions ?? []}
+                    />
                     <FormikNumberInput isLight={!hasWhiteBackground} label="Longueur" name="length" />
                   </TwoCol>
                   <FormikCheckbox label="Navire en action de pêche" name="isFishing" />
@@ -257,8 +315,13 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
               <FormikTextInput isLight={!hasWhiteBackground} label="Marquage extérieur" name="externalMarker" />
               <FormikTextInput isLight={!hasWhiteBackground} label="IRCS" name="ircs" />
               <FormikTextInput isLight={!hasWhiteBackground} label="Pavillon" name="flagState" />
-              <FormikSelect isLight={!hasWhiteBackground} label="Engin de pêche" name="gearCode" options={gearsAsOptions ?? []} />
-              <FormikNumberInput isLight={!hasWhiteBackground} label="Longueur" name="length" />
+              <FormikSelect
+                isLight
+                label="Engin de pêche"
+                name="gearCode"
+                options={gearsAsOptions ?? []}
+              />
+              <FormikNumberInput isLight label="Longueur" name="length" />
               <FormikCheckbox label="En pêche" name="isFishing" />
             </>
           )}
@@ -306,7 +369,6 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
         <CheckTreePicker
           error={(errors as FormikErrors<Partial<InfractionSuspicion>>).threatHierarchy as string | undefined}
           isLight={!hasWhiteBackground}
-          placement={"top"}
           isRequired
           isSelect
           label="Type d’infraction et NATINF"
@@ -319,6 +381,7 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
             }
           }}
           options={threatCharacterizationOptions}
+          placement="top"
           searchable
           value={
             values.type === ReportingType.INFRACTION_SUSPICION && values.threatHierarchy
@@ -335,12 +398,16 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
         name="expirationDate"
         withTime={false}
       />
-      <ValidateButton accent={Accent.PRIMARY} type="submit">
-        Valider
-      </ValidateButton>
-      <CancelButton accent={Accent.SECONDARY} onClick={onClose}>
-        Annuler
-      </CancelButton>
+      {!hideButtons && (
+        <>
+          <ValidateButton accent={Accent.PRIMARY} type="submit">
+            Valider
+          </ValidateButton>
+          <CancelButton accent={Accent.SECONDARY} onClick={onClose}>
+            Annuler
+          </CancelButton>
+        </>
+      )}
     </StyledForm>
   )
 }
@@ -348,6 +415,11 @@ export function Form({ className, displayedErrorKey, hasWhiteBackground, onClose
 const VesselSection = styled.div`
   background: ${p => p.theme.color.gainsboro};
   padding: 8px;
+  z-index: 9999;
+
+  div:first-of-type {
+    width: 100%;
+  }
 `
 
 const ValidateButton = styled(Button)`

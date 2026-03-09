@@ -1,47 +1,69 @@
-import styled from "styled-components"
-import {MapToolBox} from "@features/Map/components/MapButtons/shared/MapToolBox";
-import {useMainAppSelector} from "@hooks/useMainAppSelector";
-import { useDisplayMapBox } from "@hooks/useDisplayMapBox";
-import {useGetTopOffset} from "@hooks/useGetTopOffset";
-import {Accent, Button, Icon, MapMenuDialog, THEME} from "@mtes-mct/monitor-ui";
-import {ReportingForm} from "@features/Reporting/components/ReportingForm";
-import {WindowContext} from "@api/constants";
-import {displayedComponentActions} from "../../../../domain/shared_slices/DisplayedComponent";
-import {useMainAppDispatch} from "@hooks/useMainAppDispatch";
+import { WindowContext } from '@api/constants'
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { ReportingForm } from '@features/Reporting/components/ReportingForm'
+import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { useGetTopOffset } from '@hooks/useGetTopOffset'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { useCallback, useRef, useState } from 'react'
+import styled from 'styled-components'
+
+import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 
 export function ReportingMapForm() {
   const dispatch = useMainAppDispatch()
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
   const top = useGetTopOffset()
   const { isOpened, isRendered } = useDisplayMapBox(isReportingMapFormDisplayed)
+  const [vesselName, setVesselName] = useState<string | undefined>(undefined)
+  const [flagState, setFlagState] = useState<string | undefined>(undefined)
+  const submitRef = useRef<(() => Promise<void>) | undefined>(undefined)
 
   const onClose = () => {
-    dispatch(displayedComponentActions.setDisplayedComponents({
-      isReportingMapFormDisplayed: false
-    }))
+    dispatch(
+      displayedComponentActions.setDisplayedComponents({
+        isReportingMapFormDisplayed: false
+      })
+    )
   }
 
-  const saveAndClose = () => {}
+  const handleVesselStateChange = useCallback((name: string | undefined, flag: string | undefined) => {
+    setVesselName(name)
+    setFlagState(flag)
+  }, [])
 
   return (
     <>
       {isRendered && (
-        <Wrapper $top={top} isOpen={isOpened} data-cy="map-reporting-form">
+        <Wrapper $top={top} data-cy="map-reporting-form" isOpen={isOpened}>
           <Header>
             <HeaderTitle>
               <Icon.Report color={THEME.color.white} />
-              <MapMenuDialog.Title>NOUVEAU SIGNALEMENT INN</MapMenuDialog.Title>
+              <MapMenuDialog.Title>
+                {!vesselName && 'NOUVEAU SIGNALEMENT INN'}
+                {vesselName ? `${vesselName}${flagState ? ` (${flagState})` : ''}` : ''}
+              </MapMenuDialog.Title>
             </HeaderTitle>
             <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
           </Header>
           <Body>
-            <ReportingForm hasWhiteBackground editedReporting={undefined} onClose={onClose} windowContext={WindowContext.MainWindow} />
+            <ReportingForm
+              autoSave
+              editedReporting={undefined}
+              hasWhiteBackground
+              hideButtons
+              onClose={onClose}
+              onVesselStateChange={handleVesselStateChange}
+              submitRef={submitRef}
+              windowContext={WindowContext.MainWindow}
+            />
           </Body>
           <StyledFooter>
             <Button accent={Accent.TERTIARY} onClick={onClose} title="Fermer">
               Fermer
             </Button>
-            <Button accent={Accent.TERTIARY} onClick={saveAndClose} title="Enregistrer et fermer">
+            <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
               Enregistrer et fermer
             </Button>
           </StyledFooter>

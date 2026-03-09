@@ -1,41 +1,50 @@
 import { WindowContext } from '@api/constants'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import { getFormFields } from '@features/Reporting/components/ReportingForm/utils'
-import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { autoSaveReporting } from '@features/Reporting/useCases/autoSaveReporting'
+import { buildReportingCreation } from '@features/Reporting/useCases/utils'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Formik } from 'formik'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef, type MutableRefObject } from 'react'
 
 import { Form } from './Form'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
-import type { FormEditedReporting, Reporting, ReportingCreation } from '../../types'
-import type { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import type { FormEditedReporting, Reporting } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type ReportingFormProps = {
+  autoSave?: boolean
   className?: string | undefined
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground?: boolean
+  hideButtons?: boolean
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
+  onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
+  submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
   vesselIdentity?: Vessel.VesselIdentity | undefined
   windowContext: WindowContext
 }
 export function ReportingForm({
+  autoSave = false,
   className,
   editedReporting,
   hasWhiteBackground = false,
+  hideButtons = false,
   onClose,
   onIsDirty,
+  onVesselStateChange,
+  submitRef,
   vesselIdentity,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
+  const autoSavedReportingRef = useRef<Reporting.Reporting | undefined>(undefined)
 
   const displayedErrorKey =
     windowContext === WindowContext.MainWindow
@@ -50,15 +59,37 @@ export function ReportingForm({
     onClose()
   }, [onClose, onIsDirty])
 
+  const handleAutoSave = useCallback(
+    async (nextReporting: FormEditedReporting) => {
+      const created = await dispatch(
+        autoSaveReporting(
+          nextReporting,
+          autoSavedReportingRef.current,
+          editedReporting?.id,
+          vesselIdentity,
+          windowContext
+        )
+      )
+
+      if (created) {
+        autoSavedReportingRef.current = created
+      }
+    },
+    [dispatch, editedReporting?.id, vesselIdentity, windowContext]
+  )
+
   const createOrEditReporting = useCallback(
     async (nextReporting: FormEditedReporting) => {
-      if (editedReporting?.id) {
+      const effectiveId = editedReporting?.id ?? autoSavedReportingRef.current?.id
+      const effectiveSource = editedReporting ?? autoSavedReportingRef.current
+
+      if (effectiveId && effectiveSource) {
         await dispatch(
           updateReporting(
-            extractVesselIdentityProps(editedReporting),
-            editedReporting.id,
+            extractVesselIdentityProps(effectiveSource),
+            effectiveId,
             nextReporting,
-            editedReporting.type,
+            effectiveSource.type,
             windowContext
           )
         )
@@ -68,32 +99,7 @@ export function ReportingForm({
         return
       }
 
-      const nextReportingWithMissingProperties: ReportingCreation = {
-        authorContact: nextReporting.authorContact,
-        controlUnit: nextReporting.controlUnit,
-        controlUnitId: nextReporting.controlUnitId,
-        creationDate: new Date().toISOString(),
-        description: nextReporting.description,
-        expirationDate: nextReporting.expirationDate,
-        externalMarker: vesselIdentity?.externalReferenceNumber ?? nextReporting.externalMarker,
-        flagState: (vesselIdentity?.flagState ?? nextReporting.flagState ?? '').toUpperCase(),
-        cfr: vesselIdentity?.internalReferenceNumber ?? nextReporting.cfr,
-        imo: nextReporting.imo,
-        ircs: vesselIdentity?.ircs ?? nextReporting.ircs,
-        length: nextReporting.length,
-        mmsi: nextReporting.mmsi,
-        reportingSource: nextReporting.reportingSource as ReportingOriginSource,
-        threatHierarchy:
-          nextReporting.type === ReportingType.INFRACTION_SUSPICION ? nextReporting.threatHierarchy : undefined,
-        title: nextReporting.title as string,
-        type: nextReporting.type,
-        validationDate: undefined,
-        vesselId: vesselIdentity?.vesselId ?? nextReporting.vesselId,
-        vesselIdentifier: vesselIdentity?.vesselIdentifier ?? nextReporting.vesselIdentifier,
-        vesselName: vesselIdentity?.vesselName ?? nextReporting.vesselName
-      }
-
-      dispatch(addReporting(nextReportingWithMissingProperties))
+      dispatch(addReporting(buildReportingCreation(nextReporting, vesselIdentity)))
 
       handleClose()
     },
@@ -119,8 +125,12 @@ export function ReportingForm({
         className={className}
         displayedErrorKey={displayedErrorKey}
         hasWhiteBackground={hasWhiteBackground}
+        hideButtons={hideButtons}
+        onAutoSave={autoSave ? handleAutoSave : undefined}
         onClose={handleClose}
         onIsDirty={onIsDirty}
+        onVesselStateChange={onVesselStateChange}
+        submitRef={submitRef}
         vesselIdentity={vesselIdentity}
       />
     </Formik>

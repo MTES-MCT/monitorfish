@@ -93,7 +93,6 @@ export const layersGroups: Record<string, MonitorFishMap.CodeAndName> = {
 }
 
 export enum LayerType {
-  ADMINISTRATIVE = 'ADMINISTRATIVE',
   BASE_LAYER = 'BASE_LAYER',
   CUSTOM = 'CUSTOM',
   DRAW = 'DRAW',
@@ -124,16 +123,12 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.VESSELS]: {
     code: MonitorFishMap.MonitorFishLayer.VESSELS,
     type: LayerType.VESSEL,
-    zIndex: 1000,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 1000
   },
   [MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT]: {
     code: MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT,
     type: LayerType.MISSION,
-    zIndex: 1001,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 1001
   },
   [MonitorFishMap.MonitorFishLayer.REPORTING]: {
     code: MonitorFishMap.MonitorFishLayer.REPORTING,
@@ -155,9 +150,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED]: {
     code: MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED,
     type: LayerType.MISSION,
-    zIndex: 82,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 82
   },
   [MonitorFishMap.MonitorFishLayer.MISSIONS_LABEL]: {
     code: MonitorFishMap.MonitorFishLayer.MISSIONS_LABEL,
@@ -167,9 +160,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.SELECTED_VESSEL]: {
     code: MonitorFishMap.MonitorFishLayer.SELECTED_VESSEL,
     type: LayerType.VESSEL,
-    zIndex: 995,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 995
   },
   [MonitorFishMap.MonitorFishLayer.DRAW]: {
     code: MonitorFishMap.MonitorFishLayer.DRAW,
@@ -179,16 +170,12 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.STATION]: {
     code: MonitorFishMap.MonitorFishLayer.STATION,
     type: LayerType.STATION,
-    zIndex: 1001,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 1001
   },
   [MonitorFishMap.MonitorFishLayer.FILTERED_VESSELS]: {
     code: MonitorFishMap.MonitorFishLayer.FILTERED_VESSELS,
     type: LayerType.VESSEL,
-    zIndex: 1000,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 1000
   },
   [MonitorFishMap.MonitorFishLayer.VESSEL_ALERT]: {
     code: MonitorFishMap.MonitorFishLayer.VESSEL_ALERT,
@@ -218,15 +205,12 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.VESSEL_TRACK]: {
     code: MonitorFishMap.MonitorFishLayer.VESSEL_TRACK,
     type: LayerType.VESSEL,
-    zIndex: 990,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 990
   },
   [MonitorFishMap.MonitorFishLayer.VESSEL_ESTIMATED_POSITION]: {
     code: MonitorFishMap.MonitorFishLayer.VESSEL_ESTIMATED_POSITION,
     type: LayerType.VESSEL,
-    zIndex: 99,
-    isHoverable: true
+    zIndex: 99
   },
   [MonitorFishMap.MonitorFishLayer.MEASUREMENT]: {
     code: MonitorFishMap.MonitorFishLayer.MEASUREMENT,
@@ -240,244 +224,216 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   },
   [MonitorFishMap.MonitorFishLayer.REGULATORY]: {
     code: 'regulations',
-    type: LayerType.REGULATORY,
-    isClickable: true,
-    isHoverable: true
+    type: LayerType.REGULATORY
   },
   [MonitorFishMap.MonitorFishLayer.CUSTOM]: {
     code: MonitorFishMap.MonitorFishLayer.CUSTOM,
     name: 'Zone manuelle',
     type: LayerType.CUSTOM,
-    isClickable: false,
-    isHoverable: false,
     zIndex: 1009,
-    isIntersectable: true
-  },
-  [MonitorFishMap.MonitorFishLayer.EEZ]: {
-    code: 'eez_areas',
-    name: AdministrativeAreaTypeLabel.EEZ_AREA,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'union',
-    isIntersectable: true
-  },
-  [MonitorFishMap.MonitorFishLayer.FAO]: {
-    code: 'fao_areas',
-    name: AdministrativeAreaTypeLabel.FAO_AREA,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'f_code',
-    isIntersectable: true
-  },
-  [MonitorFishMap.MonitorFishLayer.THREE_MILES]: {
-    code: '3_miles_areas',
-    name: '3 Milles',
-    type: LayerType.ADMINISTRATIVE
-  },
-  [MonitorFishMap.MonitorFishLayer.SIX_MILES]: {
-    code: '6_miles_areas',
-    name: '6 Milles',
-    type: LayerType.ADMINISTRATIVE
-  },
-  [MonitorFishMap.MonitorFishLayer.TWELVE_MILES]: {
-    code: '12_miles_areas',
-    name: '12 Milles',
-    type: LayerType.ADMINISTRATIVE
-  },
-  [MonitorFishMap.MonitorFishLayer.eaux_occidentales_australes]: {
-    code: '1241_eaux_occidentales_australes_areas',
-    name: 'Eaux occidentales australes',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.eaux_occidentales_septentrionales]: {
-    code: '1241_eaux_occidentales_septentrionales_areas',
-    name: 'Eaux occidentales septentrionales',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.eaux_union_dans_oi_et_atl_ouest]: {
-    code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
-    name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.mer_baltique]: {
-    code: '1241_mer_baltique_areas',
-    name: 'Mer Baltique',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.mer_du_nord]: {
-    code: '1241_mer_du_nord_areas',
-    name: 'Mer du Nord',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.mer_mediterranee]: {
-    code: '1241_mer_mediterranee_areas',
-    name: 'Mer Méditerranée',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.mer_noire]: {
-    code: '1241_mer_noire_areas',
-    name: 'Mer Noire',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.mer_celtique]: {
-    code: '1241_mer_celtique_areas',
-    name: 'Mer Celtique',
-    group: layersGroups.TWELVE_FORTY_ONE,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.cormoran]: {
-    code: 'cormoran_areas',
-    name: 'Zones Cormoran (NAMO-SA)',
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'zonex',
-    isIntersectable: true
-  },
-  [MonitorFishMap.MonitorFishLayer.AEM]: {
-    code: 'aem_areas',
-    name: 'Zones AEM (MED)',
-    type: LayerType.ADMINISTRATIVE,
-    zoneNamePropertyKey: 'name'
-  },
-  [MonitorFishMap.MonitorFishLayer.CCAMLR]: {
-    code: 'fao_ccamlr_areas',
-    name: 'CCAMLR',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.ICCAT]: {
-    code: 'fao_iccat_areas',
-    name: 'ICCAT',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.IOTC]: {
-    code: 'fao_iotc_areas',
-    name: 'IOTC',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.NEAFC]: {
-    code: 'neafc_regulatory_area',
-    name: 'NEAFC',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.NAFO]: {
-    code: 'nafo_regulatory_area',
-    name: 'NAFO',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.SIOFA]: {
-    code: 'fao_siofa_areas',
-    name: 'SIOFA',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.rectangles_stat]: {
-    code: 'rectangles_stat_areas',
-    name: 'Rectangles statistiques',
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'icesname',
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.cgpm_areas]: {
-    code: 'cgpm_areas',
-    name: 'CGPM',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'SMU_CODE',
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.cgpm_statistical_rectangles_areas]: {
-    code: 'cgpm_statistical_rectangles_areas',
-    name: 'CGPM (Rectangles statistiques)',
-    group: layersGroups.ORGP,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'sect_cod',
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.effort_zones_areas]: {
-    code: 'effort_zones_areas',
-    name: "Zones d'effort",
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    zoneNamePropertyKey: 'zone',
-    isIntersectable: false
-  },
-  [MonitorFishMap.MonitorFishLayer.situations]: {
-    code: 'situs_areas',
-    name: 'Zones pour situation VMS',
-    group: layersGroups.VMS_SITUATION,
-    type: LayerType.ADMINISTRATIVE,
-    hasSearchableZones: true,
-    hasFetchableZones: true,
-    zoneNamePropertyKey: 'libelle',
     isIntersectable: true
   },
   [MonitorFishMap.MonitorFishLayer.REGULATORY_PREVIEW]: {
     code: 'regulatory_preview',
     type: LayerType.REGULATORY_PREVIEW
+  }
+}
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+
+/**
+ * /!\ Do not modify the code property : it is the Geoserver layer name, hence the name of the PostGIS table
+ */
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+export const AdminLayerProperties: Record<MonitorFishMap.AdminLayer, MonitorFishMap.AdminShowableLayer> = {
+  [MonitorFishMap.AdminLayer.EEZ]: {
+    code: 'eez_areas',
+    name: AdministrativeAreaTypeLabel.EEZ_AREA,
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'union',
+    isIntersectable: true
   },
-  [MonitorFishMap.MonitorFishLayer.navigation_category_two]: {
+  [MonitorFishMap.AdminLayer.FAO]: {
+    code: 'fao_areas',
+    name: AdministrativeAreaTypeLabel.FAO_AREA,
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'f_code',
+    isIntersectable: true
+  },
+  [MonitorFishMap.AdminLayer.THREE_MILES]: {
+    code: '3_miles_areas',
+    name: '3 Milles'
+  },
+  [MonitorFishMap.AdminLayer.SIX_MILES]: {
+    code: '6_miles_areas',
+    name: '6 Milles'
+  },
+  [MonitorFishMap.AdminLayer.TWELVE_MILES]: {
+    code: '12_miles_areas',
+    name: '12 Milles'
+  },
+  [MonitorFishMap.AdminLayer.eaux_occidentales_australes]: {
+    code: '1241_eaux_occidentales_australes_areas',
+    name: 'Eaux occidentales australes',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.eaux_occidentales_septentrionales]: {
+    code: '1241_eaux_occidentales_septentrionales_areas',
+    name: 'Eaux occidentales septentrionales',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.eaux_union_dans_oi_et_atl_ouest]: {
+    code: '1241_eaux_union_dans_oi_et_atl_ouest_areas',
+    name: "Eaux de l'Union dans l'OI et l'Atl. ouest",
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.mer_baltique]: {
+    code: '1241_mer_baltique_areas',
+    name: 'Mer Baltique',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.mer_du_nord]: {
+    code: '1241_mer_du_nord_areas',
+    name: 'Mer du Nord',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.mer_mediterranee]: {
+    code: '1241_mer_mediterranee_areas',
+    name: 'Mer Méditerranée',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.mer_noire]: {
+    code: '1241_mer_noire_areas',
+    name: 'Mer Noire',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.mer_celtique]: {
+    code: '1241_mer_celtique_areas',
+    name: 'Mer Celtique',
+    group: layersGroups.TWELVE_FORTY_ONE,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.cormoran]: {
+    code: 'cormoran_areas',
+    name: 'Zones Cormoran (NAMO-SA)',
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'zonex',
+    isIntersectable: true
+  },
+  [MonitorFishMap.AdminLayer.AEM]: {
+    code: 'aem_areas',
+    name: 'Zones AEM (MED)',
+    zoneNamePropertyKey: 'name'
+  },
+  [MonitorFishMap.AdminLayer.CCAMLR]: {
+    code: 'fao_ccamlr_areas',
+    name: 'CCAMLR',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.ICCAT]: {
+    code: 'fao_iccat_areas',
+    name: 'ICCAT',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.IOTC]: {
+    code: 'fao_iotc_areas',
+    name: 'IOTC',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.NEAFC]: {
+    code: 'neafc_regulatory_area',
+    name: 'NEAFC',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.NAFO]: {
+    code: 'nafo_regulatory_area',
+    name: 'NAFO',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.SIOFA]: {
+    code: 'fao_siofa_areas',
+    name: 'SIOFA',
+    group: layersGroups.ORGP,
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.rectangles_stat]: {
+    code: 'rectangles_stat_areas',
+    name: 'Rectangles statistiques',
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'icesname',
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.cgpm_areas]: {
+    code: 'cgpm_areas',
+    name: 'CGPM',
+    group: layersGroups.ORGP,
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'SMU_CODE',
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.cgpm_statistical_rectangles_areas]: {
+    code: 'cgpm_statistical_rectangles_areas',
+    name: 'CGPM (Rectangles statistiques)',
+    group: layersGroups.ORGP,
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'sect_cod',
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.effort_zones_areas]: {
+    code: 'effort_zones_areas',
+    name: "Zones d'effort",
+    hasSearchableZones: true,
+    zoneNamePropertyKey: 'zone',
+    isIntersectable: false
+  },
+  [MonitorFishMap.AdminLayer.situations]: {
+    code: 'situs_areas',
+    name: 'Zones pour situation VMS',
+    group: layersGroups.VMS_SITUATION,
+    hasSearchableZones: true,
+    hasFetchableZones: true,
+    zoneNamePropertyKey: 'libelle',
+    isIntersectable: true
+  },
+  [MonitorFishMap.AdminLayer.navigation_category_two]: {
     code: 'navigation_category_two_areas',
     name: '2ème',
-    group: layersGroups.NAVIGATION_CATEGORY,
-    type: LayerType.ADMINISTRATIVE
+    group: layersGroups.NAVIGATION_CATEGORY
   },
-  [MonitorFishMap.MonitorFishLayer.navigation_category_three]: {
+  [MonitorFishMap.AdminLayer.navigation_category_three]: {
     code: 'navigation_category_three_areas',
     name: '3ème',
-    group: layersGroups.NAVIGATION_CATEGORY,
-    type: LayerType.ADMINISTRATIVE
+    group: layersGroups.NAVIGATION_CATEGORY
   },
-  [MonitorFishMap.MonitorFishLayer.navigation_category_four]: {
+  [MonitorFishMap.AdminLayer.navigation_category_four]: {
     code: 'navigation_category_four_areas',
     name: '4ème',
-    group: layersGroups.NAVIGATION_CATEGORY,
-    type: LayerType.ADMINISTRATIVE
+    group: layersGroups.NAVIGATION_CATEGORY
   },
-  [MonitorFishMap.MonitorFishLayer.navigation_category_five]: {
+  [MonitorFishMap.AdminLayer.navigation_category_five]: {
     code: 'navigation_category_five_areas',
     name: '5ème',
-    group: layersGroups.NAVIGATION_CATEGORY,
-    type: LayerType.ADMINISTRATIVE
+    group: layersGroups.NAVIGATION_CATEGORY
   },
-  [MonitorFishMap.MonitorFishLayer.saltwater_limit]: {
+  [MonitorFishMap.AdminLayer.saltwater_limit]: {
     code: 'saltwater_limit_areas',
     name: 'Limites de salure des eaux',
-    type: LayerType.ADMINISTRATIVE,
     zoneNamePropertyKey: 'objnam'
   },
-  [MonitorFishMap.MonitorFishLayer.transversal_sea_limit]: {
+  [MonitorFishMap.AdminLayer.transversal_sea_limit]: {
     code: 'transversal_sea_limit_areas',
     name: 'Limites transversales de mer',
-    type: LayerType.ADMINISTRATIVE,
     zoneNamePropertyKey: 'objnam'
   }
 }

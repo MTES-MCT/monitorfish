@@ -12,8 +12,8 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 
 type AdministrativeZonesGroupType = {
   group: MonitorFishMap.CodeAndName
-  showOrHideZone: (zone: MonitorFishMap.ShowableLayer) => (isShown: boolean) => void
-  zones: MonitorFishMap.ShowableLayer[]
+  showOrHideZone: (zone: MonitorFishMap.AdminShowableLayer) => (isShown: boolean) => void
+  zones: MonitorFishMap.AdminShowableLayer[]
 }
 
 export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: AdministrativeZonesGroupType) {

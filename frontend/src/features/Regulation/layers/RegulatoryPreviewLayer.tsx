@@ -10,7 +10,6 @@ import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 
 import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { ZoneFilter } from '@features/Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -23,7 +22,7 @@ type RegulatoryPreviewLayerProps = Readonly<{
 }>
 function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelected }: RegulatoryPreviewLayerProps) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<MonitorFishMap.VectorLayerWithName>
+  const layerRef = useRef() as MutableRefObject<Vector<Feature<Geometry>>>
 
   const dispatch = useHybridAppDispatch()
 
@@ -68,7 +67,7 @@ function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelect
   }, [dispatch, zoneSelected, regulatoryZonesToPreview])
 
   useEffect(() => {
-    getLayer().name = LayerProperties.REGULATORY_PREVIEW.code
+    getLayer().setProperties({ code: LayerProperties.REGULATORY_PREVIEW.code })
     monitorfishMap.getLayers().push(getLayer())
 
     return () => {

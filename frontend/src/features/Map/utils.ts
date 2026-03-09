@@ -2,18 +2,13 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { FrontendError } from '@libs/FrontendError'
 import { GeoJSON } from 'ol/format'
 
-import {
-  LayerProperties,
-  LayerType,
-  OPENLAYERS_PROJECTION,
-  OpenLayersGeometryType,
-  WSG84_PROJECTION
-} from './constants'
+import { AdminLayerProperties, OPENLAYERS_PROJECTION, OpenLayersGeometryType, WSG84_PROJECTION } from './constants'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
+import type BaseLayer from 'ol/layer/Base'
 
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
 
@@ -68,37 +63,31 @@ export function keepOnlyInitialGeometriesOfMultiPolygon(
 }
 
 export function layersNotInCurrentOLMap(olLayers, layer) {
-  return !olLayers.getArray().some(layer_ => layer_.name === getLayerNameNormalized(layer))
+  return !olLayers.getArray().some(layer_ => layer_.get('code') === getLayerNameNormalized(layer))
 }
 
-export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFishMap.ShowableLayer[], layer) {
+export function layerOfTypeAdministrativeLayer(administrativeLayers: MonitorFishMap.AdminShowableLayer[], layer) {
   return administrativeLayers.some(administrativeLayer => layer.type?.includes(administrativeLayer.code))
 }
 
 export function layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers, olLayer) {
-  return administrativeLayers.some(administrativeLayer => olLayer.name?.includes(administrativeLayer.code))
+  return administrativeLayers.some(administrativeLayer =>
+    (olLayer.get('code') as string | undefined)?.includes(administrativeLayer.code)
+  )
 }
 
 export function layersNotInShowedLayers(_showedLayers, olLayer) {
-  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.name)
+  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.get('code'))
 }
 
-export const administrativeLayers = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.type === LayerType.ADMINISTRATIVE)
+export function getOLLayerByCode(code: string): BaseLayer | undefined {
+  return monitorfishMap
+    .getLayers()
+    .getArray()
+    .find(l => l.get('code') === code)
+}
 
-export const hoverableLayerCodes = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.isHoverable)
-  .map(layer => layer.code)
-
-export const clickableLayerCodes = Object.keys(LayerProperties)
-  .map(layer => LayerProperties[layer])
-  .filter((layer): layer is MonitorFishMap.ShowableLayer => layer !== undefined)
-  .filter(layer => layer.isClickable)
-  .map(layer => layer.code)
+export const administrativeLayers = Object.values(AdminLayerProperties)
 
 export function getMapResolution(): number {
   const resolution = monitorfishMap.getView().getResolution()

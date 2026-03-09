@@ -1,5 +1,3 @@
-DELETE FROM public.risk_elements;
-
 INSERT INTO risk_elements (
     code, name, threat_characterization_id
 ) VALUES 

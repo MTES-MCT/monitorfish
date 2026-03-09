@@ -1,5 +1,7 @@
 import pandas as pd
+from sqlalchemy import text
 
+from src.db_config import create_engine
 from src.flows.init_infraction_threat_characterization import (
     init_infraction_threat_characterization_flow,
 )
@@ -7,6 +9,7 @@ from src.read_query import read_query
 
 
 def test_flow(reset_test_data):
+    risk_elements_query = "SELECT * FROM risk_elements ORDER BY code"
     threats_query = "SELECT * FROM threats ORDER BY id"
     threat_characterizations_query = (
         "SELECT * FROM threat_characterizations ORDER BY id"
@@ -16,6 +19,14 @@ def test_flow(reset_test_data):
     )
     isr_query = "SELECT * FROM isr ORDER BY code"
 
+    e = create_engine("monitorfish_remote")
+
+    with e.begin() as con:
+        con.execute(text("DELETE FROM risk_elements"))
+        con.execute(text("DELETE FROM infraction_threat_characterization"))
+        con.execute(text("DELETE FROM threat_characterizations"))
+        con.execute(text("DELETE FROM threats"))
+
     initial_threats = read_query(threats_query, db="monitorfish_remote")
     initial_threat_characterizations = read_query(
         threat_characterizations_query, db="monitorfish_remote"
@@ -23,6 +34,7 @@ def test_flow(reset_test_data):
     initial_infraction_threat_characterization = read_query(
         infraction_threat_characterization_query, db="monitorfish_remote"
     )
+    initial_risk_elements = read_query(risk_elements_query, db="monitorfish_remote")
 
     state = init_infraction_threat_characterization_flow(return_state=True)
     assert state.is_completed()
@@ -35,13 +47,18 @@ def test_flow(reset_test_data):
         infraction_threat_characterization_query, db="monitorfish_remote"
     )
     isr_after_first_run = read_query(isr_query, db="monitorfish_remote")
+    risk_elements_after_first_run = read_query(
+        risk_elements_query, db="monitorfish_remote"
+    )
 
     # Verify counts increased from test data
-    assert len(initial_threats) == 2
+    assert len(initial_risk_elements) == 0
+    assert len(initial_threats) == 0
     assert len(threats_after_first_run) == 9
-    assert len(initial_threat_characterizations) == 2
+    assert len(initial_threat_characterizations) == 0
+    assert len(risk_elements_after_first_run) == 4
     assert len(threat_characterizations_after_first_run) > 110
-    assert len(initial_infraction_threat_characterization) == 2
+    assert len(initial_infraction_threat_characterization) == 0
     assert len(infraction_threat_characterization_after_first_run) > 160
     assert len(isr_after_first_run) > 67
 
@@ -57,6 +74,9 @@ def test_flow(reset_test_data):
         infraction_threat_characterization_query, db="monitorfish_remote"
     )
     isr_after_second_run = read_query(isr_query, db="monitorfish_remote")
+    risk_elements_after_second_run = read_query(
+        risk_elements_query, db="monitorfish_remote"
+    )
 
     pd.testing.assert_frame_equal(threats_after_first_run, threats_after_second_run)
     pd.testing.assert_frame_equal(
@@ -68,3 +88,6 @@ def test_flow(reset_test_data):
         infraction_threat_characterization_after_second_run,
     )
     pd.testing.assert_frame_equal(isr_after_first_run, isr_after_second_run)
+    pd.testing.assert_frame_equal(
+        risk_elements_after_first_run, risk_elements_after_second_run
+    )

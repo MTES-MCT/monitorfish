@@ -1,5 +1,3 @@
-from ast import literal_eval
-
 import pandas as pd
 from prefect import flow, get_run_logger, task
 from sqlalchemy import DDL, Table
@@ -12,9 +10,17 @@ from src.utils import delete
 
 
 @task
-def extract_threat():
+def extract_threats():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/threats.csv",
+        encoding="utf8",
+    )
+
+
+@task
+def extract_risk_elements():
+    return pd.read_csv(
+        LIBRARY_LOCATION / "data/risk_elements.csv",
         encoding="utf8",
     )
 
@@ -49,10 +55,12 @@ def load_threat_characterization_and_join_table(
     threat_characterizations: pd.DataFrame,
     infraction_threat_characterization: pd.DataFrame,
     isr: pd.DataFrame,
+    risk_elements: pd.DataFrame,
     threats_table: Table,
     threat_characterizations_table: Table,
     infraction_threat_characterization_table: Table,
     isr_table: Table,
+    risk_elements_table: Table,
 ):
     logger = get_run_logger()
 
@@ -60,7 +68,13 @@ def load_threat_characterization_and_join_table(
 
     with e.begin() as con:
         delete(
-            tables=[infraction_threat_characterization_table, threat_characterizations_table, threats_table, isr_table],
+            tables=[
+                infraction_threat_characterization_table,
+                risk_elements_table,
+                threat_characterizations_table,
+                threats_table,
+                isr_table,
+            ],
             connection=con,
             logger=logger,
         )
@@ -122,18 +136,39 @@ def load_threat_characterization_and_join_table(
             ],
         )
 
+        load(
+            risk_elements,
+            table_name="risk_elements",
+            schema="public",
+            connection=con,
+            logger=logger,
+            how="append",
+        )
+
 
 @flow(name="Monitorfish - Init infractions threat characterization")
 def init_infraction_threat_characterization_flow():
+    risk_elements_table = get_table("risk_elements")
     threats_table = get_table("threats")
     threat_characterizations_table = get_table("threat_characterizations")
-    infraction_threat_characterization_table = get_table("infraction_threat_characterization")
+    infraction_threat_characterization_table = get_table(
+        "infraction_threat_characterization"
+    )
     isr_table = get_table("isr")
-    threats = extract_threat()
+    threats = extract_threats()
+    risk_elements = extract_risk_elements()
     threat_characterizations = extract_threat_characterization()
     infraction_threat_characterization = extract_infraction_threat_characterization()
     isr = extract_isr()
     load_threat_characterization_and_join_table(
-        threats, threat_characterizations, infraction_threat_characterization, isr,
-        threats_table, threat_characterizations_table, infraction_threat_characterization_table, isr_table
+        threats,
+        threat_characterizations,
+        infraction_threat_characterization,
+        isr,
+        risk_elements,
+        threats_table,
+        threat_characterizations_table,
+        infraction_threat_characterization_table,
+        isr_table,
+        risk_elements_table,
     )

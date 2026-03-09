@@ -1,3 +1,4 @@
+DELETE FROM public.risk_elements;
 DELETE FROM public.infraction_threat_characterization;
 DELETE FROM public.threat_characterizations;
 DELETE FROM public.threats;

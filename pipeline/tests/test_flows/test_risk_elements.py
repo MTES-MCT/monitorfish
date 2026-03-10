@@ -13,37 +13,56 @@ from tests.mocks import get_utcnow_mock_factory
 def expected_vessels_risk_elements() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "risk_element_code": ["MOT_MR", "MOT_MR", "MOT_MR"],
-            "cfr": ["ABC000306959", "CFR000888888", "XXX123456789"],
+            "risk_element_code": [
+                "CLA_CM",
+                "MOT_MR",
+                "CLA_CM",
+                "MOT_MR",
+                "CLA_CM",
+                "MOT_MR",
+            ],
+            "cfr": [
+                "ABC000306959",
+                "ABC000306959",
+                "CFR000888888",
+                "CFR000888888",
+                "SOME_VESSEL",
+                "XXX123456789",
+            ],
             "metrics": [
+                {"nb_reportings": 0},
                 {
                     "total_trips": 2,
                     "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.0,
                 },
+                {"nb_reportings": 0},
                 {
                     "total_trips": 2,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
                 },
+                {"nb_reportings": 1},
                 {
                     "total_trips": 1,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
                 },
             ],
-            "risk_level": [1, 4, 4],
+            "risk_level": [1, 1, 1, 4, 2, 4],
         }
     )
 
 
 @patch(
-    "src.flows.risk_elements.get_utcnow", get_utcnow_mock_factory(datetime(2050, 1, 1))
+    "src.flows.risk_elements.get_utcnow", get_utcnow_mock_factory(datetime(2010, 1, 1))
 )
 def test_risk_elements_flow(
-    reset_test_data, add_catches, add_landings, expected_vessels_risk_elements
+    reset_test_data, add_catches, add_landings, add_vms, expected_vessels_risk_elements
 ):
-    vessels_risk_elements_query = "SELECT * FROM vessels_risk_elements ORDER BY cfr;"
+    vessels_risk_elements_query = (
+        "SELECT * FROM vessels_risk_elements ORDER BY cfr, risk_element_code;"
+    )
 
     initial_vessels_risk_elements = read_query(
         vessels_risk_elements_query, db="monitorfish_remote"

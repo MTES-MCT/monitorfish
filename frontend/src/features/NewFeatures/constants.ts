@@ -7,6 +7,19 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-03-10',
+        description: `Les signalements sont désormais affichés sur la carte.
+
+Vous pouvez :
+- **filtrer** les signalements par type, statut et période,
+- **cliquer** sur une icône pour afficher le détail du signalement.
+
+Les points d'intérêts se retrouvent maintenant en-dessous de l'outil de mesure.`,
+        for: 'CNSP',
+        title: `Affichage des signalements sur la carte`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2025-12-17',
         description: `Les infractions (codes NATINF) sont désormais catégorisées selon leur famille et leur type dans les comptes rendus de contrôles à partir de l'année 2026.
 

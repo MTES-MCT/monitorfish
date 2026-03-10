@@ -6,12 +6,12 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { getMapResolution } from '@features/Map/utils'
 import { noop } from 'lodash-es'
 import Overlay from 'ol/Overlay'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type OverlayPositioning = ConstructorParameters<typeof Overlay>[0]['positioning']
 
 type UseMapOverlayResult = {
-  overlayElementRef: React.RefObject<HTMLDivElement>
+  overlayElementRef: RefObject<HTMLDivElement>
   overlayPosition: OverlayPosition | undefined
   /** Resets the overlay offset to `initialOffset` (e.g. when the feature jumps far away). */
   resetOffset: () => void
@@ -34,6 +34,7 @@ type UseMapOverlayParams = {
   onDrag?: ((anchorCoordinates: number[], nextCoordinates: number[], offset: number[]) => void) | undefined
   overlayHeight?: number
   positioning?: OverlayPositioning
+  zIndex?: number | undefined
   zoomHasChanged?: number | undefined
 }
 export function useMapOverlay({
@@ -43,6 +44,7 @@ export function useMapOverlay({
   onDrag,
   overlayHeight,
   positioning = 'center-left',
+  zIndex,
   zoomHasChanged
 }: UseMapOverlayParams): UseMapOverlayResult {
   const overlayElementRef = useRef<HTMLDivElement>(null)
@@ -70,6 +72,11 @@ export function useMapOverlay({
 
     overlay.setElement(overlayElementRef.current)
     monitorfishMap.addOverlay(overlay)
+
+    const container = overlay.getElement()?.parentElement
+    if (zIndex !== undefined && container) {
+      container.style.zIndex = String(zIndex)
+    }
 
     const timer = setTimeout(() => setIsDisplayed(true), 50)
 

@@ -1,6 +1,6 @@
 SELECT 
     internal_reference_number AS cfr,
-    COUNT(*) AS nb_reportings
+    COUNT(*) AS occurrences
 FROM reportings
 WHERE value->>'name' IN (
         'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur',

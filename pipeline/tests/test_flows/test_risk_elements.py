@@ -30,19 +30,19 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
                 "XXX123456789",
             ],
             "metrics": [
-                {"nb_reportings": 0},
+                {"occurrences": 0},
                 {
                     "total_trips": 2,
                     "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.0,
                 },
-                {"nb_reportings": 0},
+                {"occurrences": 0},
                 {
                     "total_trips": 2,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
                 },
-                {"nb_reportings": 1},
+                {"occurrences": 1},
                 {
                     "total_trips": 1,
                     "compliant_trips": 0,

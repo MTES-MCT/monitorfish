@@ -16,16 +16,22 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
             "risk_element_code": [
                 "CLA_CM",
                 "MOT_MR",
+                "VMS_MR",
                 "CLA_CM",
                 "MOT_MR",
+                "VMS_MR",
                 "CLA_CM",
+                "VMS_MR",
                 "MOT_MR",
             ],
             "cfr": [
                 "ABC000306959",
                 "ABC000306959",
+                "ABC000306959",
                 "CFR000888888",
                 "CFR000888888",
+                "CFR000888888",
+                "SOME_VESSEL",
                 "SOME_VESSEL",
                 "XXX123456789",
             ],
@@ -36,20 +42,23 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
                     "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.0,
                 },
+                {"occurrences": 1},
                 {"occurrences": 0},
                 {
                     "total_trips": 2,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
                 },
+                {"occurrences": 0},
                 {"occurrences": 1},
+                {"occurrences": 0},
                 {
                     "total_trips": 1,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
                 },
             ],
-            "risk_level": [1, 1, 1, 4, 2, 4],
+            "risk_level": [1, 1, 2, 1, 4, 1, 2, 1, 4],
         }
     )
 

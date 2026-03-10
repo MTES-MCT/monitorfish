@@ -40,7 +40,11 @@ def extract_occurrences(
         RiskElement.CLA_CM: (
             "monitorfish_remote",
             "monitorfish/fishing_in_closed_areas.sql",
-        )
+        ),
+        RiskElement.VMS_MR: (
+            "monitorfish_remote",
+            "monitorfish/targeted_malfunctions.sql",
+        ),
     }
 
     db_name, query_filepath = queries[risk_element]
@@ -167,6 +171,9 @@ def risk_elements_flow():
     cla_cm_occurrences = extract_occurrences(
         RiskElement.CLA_CM, from_datetime_utc=from_datetime_utc
     )
+    targeted_vms_malfunction_occurrences = extract_occurrences(
+        RiskElement.VMS_MR, from_datetime_utc=from_datetime_utc
+    )
 
     # Transform
     mot_mr_vessels_risk_elements = compute_vessels_risk_elements(
@@ -175,7 +182,11 @@ def risk_elements_flow():
     cla_cm_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
         vms_vessels, cla_cm_occurrences, RiskElement.CLA_CM
     )
+    vms_mr_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
+        vms_vessels, targeted_vms_malfunction_occurrences, RiskElement.VMS_MR
+    )
 
     # Load
     load_vessels_risk_elements(mot_mr_vessels_risk_elements)
     load_vessels_risk_elements(cla_cm_vessels_risk_elements)
+    load_vessels_risk_elements(vms_mr_vessels_risk_elements)

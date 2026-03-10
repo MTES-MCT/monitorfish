@@ -33,6 +33,8 @@ export function ReportingMapForm() {
     setFlagState(flag)
   }, [])
 
+  const isReportingArchived = true
+
   return (
     <>
       {isRendered && (
@@ -47,9 +49,12 @@ export function ReportingMapForm() {
             </HeaderTitle>
             <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
           </Header>
+          <SaveHeadBand>
+            Dernière modif. le 28/11/25 à 17h11
+          </SaveHeadBand>
           <Body>
-            <ReportingForm
-              autoSave
+            <StyledReportingForm
+              autoSave={!isReportingArchived}
               editedReporting={undefined}
               hasWhiteBackground
               hideButtons
@@ -63,15 +68,19 @@ export function ReportingMapForm() {
             <Button accent={Accent.TERTIARY} onClick={onClose} title="Fermer">
               Fermer
             </Button>
-            <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
+            {isReportingArchived && <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
               Enregistrer et fermer
-            </Button>
+            </Button>}
           </StyledFooter>
         </Wrapper>
       )}
     </>
   )
 }
+
+const StyledReportingForm = styled(ReportingForm)`
+  padding: 16px;
+`
 
 const StyledFooter = styled(MapMenuDialog.Footer)`
   background-color: ${p => p.theme.color.charcoal};
@@ -80,10 +89,19 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
   flex-shrink: 0;
   text-align: right;
   width: unset;
+  flex-direction: row;
 
   button {
     margin-left: auto;
   }
+`
+
+const SaveHeadBand = styled.div`
+  color: ${p => p.theme.color.slateGray};
+  font-style: italic;
+  padding: 9px 16px;
+  height: 22px;
+  box-shadow: 0 3px 4px #7077854d;
 `
 
 const HeaderTitle = styled.span`
@@ -102,7 +120,7 @@ const Header = styled(MapMenuDialog.Header)`
 `
 
 const Body = styled(MapMenuDialog.Body)`
-  padding: 16px;
+  padding: 0;
   flex: 1;
   min-height: 0;
   overflow-y: auto;

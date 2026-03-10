@@ -132,6 +132,33 @@ def add_enriched_catches(add_monitorfish_database):
 
 
 @fixture
+def add_catches(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.catches table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_catches_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.catches table")
+    client.command(
+        """
+        INSERT INTO TABLE monitorfish.catches
+        SELECT * FROM file('catches.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.catches table")
+    client.command("DROP TABLE monitorfish.catches")
+
+
+@fixture
 def add_landings(add_monitorfish_database):
     client = create_datawarehouse_client()
     print("Creating monitorfish.landings table")

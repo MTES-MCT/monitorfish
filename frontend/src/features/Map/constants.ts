@@ -133,9 +133,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.REPORTING]: {
     code: MonitorFishMap.MonitorFishLayer.REPORTING,
     type: LayerType.REPORTING,
-    zIndex: 500,
-    isClickable: true,
-    isHoverable: true
+    zIndex: 1002
   },
   [MonitorFishMap.MonitorFishLayer.MISSION_HOVER]: {
     code: MonitorFishMap.MonitorFishLayer.MISSION_HOVER,

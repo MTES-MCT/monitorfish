@@ -12,8 +12,12 @@ export const REPORTINGS_VECTOR_LAYER = new WebGLPointsLayer({
   source: REPORTINGS_VECTOR_SOURCE as any,
   style: reportingWebGLStyle,
   zIndex: LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex
-}) as MonitorFishMap.WebGLPointsLayerWithName
-REPORTINGS_VECTOR_LAYER.name = LayerProperties.REPORTING.code
+})
+REPORTINGS_VECTOR_LAYER.setProperties({
+  code: MonitorFishMap.MonitorFishLayer.REPORTING,
+  isClickable: true,
+  isHoverable: true
+})
 
 export const REPORTINGS_LINE_VECTOR_SOURCE = new VectorSource()
 
@@ -21,4 +25,4 @@ export const REPORTINGS_LINE_VECTOR_LAYER = new Vector({
   source: REPORTINGS_LINE_VECTOR_SOURCE,
   style: reportingLineStyle,
   zIndex: (LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex ?? 500) - 1
-}) as MonitorFishMap.VectorLayerWithName
+})

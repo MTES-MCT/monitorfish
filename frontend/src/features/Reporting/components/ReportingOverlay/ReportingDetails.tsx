@@ -65,7 +65,7 @@ export function ReportingDetails({
             <Tags>
               {reporting.isIUU && <Tag accent={Accent.PRIMARY}>INN</Tag>}
               {reporting.isArchived && (
-                <Tag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.gunMetal}>
+                <Tag backgroundColor={THEME.color.white} borderColor={THEME.color.gunMetal}>
                   Archivé
                 </Tag>
               )}
@@ -109,8 +109,12 @@ const Wrapper = styled.div`
 `
 
 const Tags = styled.div`
-  display: flex;
+  display: inline-flex;
   gap: 8px;
+
+  span {
+    line-height: 20px;
+  }
 `
 
 const EditButton = styled(Button)`

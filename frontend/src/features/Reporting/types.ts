@@ -75,13 +75,13 @@ type ReportingTypeCharacteristic = {
 export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCharacteristic> = {
   ALERT: {
     code: ReportingType.ALERT,
-    displayName: 'Alerte',
+    displayName: "Suspicion d'infraction (alerte)",
     isInfractionSuspicion: true,
     name: 'ALERTE'
   },
   INFRACTION_SUSPICION: {
     code: ReportingType.INFRACTION_SUSPICION,
-    displayName: 'Infraction (suspicion)',
+    displayName: "Suspicion d'infraction",
     isInfractionSuspicion: true,
     name: "SUSPICION d'INFRACTION"
   },

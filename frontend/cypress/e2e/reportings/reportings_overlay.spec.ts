@@ -19,7 +19,7 @@ context('Reportings overlay', () => {
     })
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
-    cy.getDataCy('reporting-overlay').contains('Infraction')
+    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction')
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
 
     /* TODO Add tests for click events

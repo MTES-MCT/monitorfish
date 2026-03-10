@@ -5,32 +5,20 @@ import Point from 'ol/geom/Point'
 
 import { hoverOnMapFeature } from '../hoverOnMapFeature'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * We need to have
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-// @ts-ignore
 jest.mock('@features/Reporting/layers/ReportingLayer/constants', () => ({
   REPORTINGS_VECTOR_SOURCE: {
-    // @ts-ignore
     changed: jest.fn(),
-    // @ts-ignore
     getFeatures: jest.fn()
   }
 }))
 
 describe('hoverOnMapFeature()', () => {
   beforeEach(() => {
-    // @ts-ignore
     jest.clearAllMocks()
-    // @ts-ignore
     ;(REPORTINGS_VECTOR_SOURCE.getFeatures as jest.Mock).mockReturnValue([])
   })
 
   afterAll(() => {
-    // @ts-ignore
     jest.resetModules()
   })
 
@@ -39,9 +27,7 @@ describe('hoverOnMapFeature()', () => {
     const hoveredFeature = new Feature({ geometry: new Point([0, 0]) })
     hoveredFeature.setId('REPORTING:7')
     hoveredFeature.set('isHovered', true)
-    // @ts-ignore
     const setSpy = jest.spyOn(hoveredFeature, 'set')
-    // @ts-ignore
     ;(REPORTINGS_VECTOR_SOURCE.getFeatures as jest.Mock).mockReturnValue([hoveredFeature])
 
     // When
@@ -56,7 +42,6 @@ describe('hoverOnMapFeature()', () => {
     // Given
     const reportingFeature = new Feature({ geometry: new Point([0, 0]) })
     reportingFeature.setId('REPORTING:7')
-    // @ts-ignore
     const setSpy = jest.spyOn(reportingFeature, 'set')
 
     // When
@@ -70,7 +55,6 @@ describe('hoverOnMapFeature()', () => {
     // Given
     const vesselFeature = new Feature({ geometry: new Point([0, 0]) })
     vesselFeature.setId('VESSELS')
-    // @ts-ignore
     const setSpy = jest.spyOn(vesselFeature, 'set')
 
     // When

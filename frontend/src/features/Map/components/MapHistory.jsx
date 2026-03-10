@@ -11,7 +11,7 @@ const savedMapViewLocalStorageKey = 'mapView'
 const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
   useEffect(() => {
     // restore view on browser history navigation
-    window.addEventListener('popstate', event => {
+    const handlePopState = event => {
       if (event.state === null) {
         return
       }
@@ -19,7 +19,13 @@ const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger 
       monitorfishMap.getView().setCenter(event.state.center)
       monitorfishMap.getView().setZoom(event.state.zoom)
       setShouldUpdateView(false)
-    })
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
   }, [setShouldUpdateView])
 
   useEffect(() => {

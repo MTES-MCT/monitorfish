@@ -9,14 +9,7 @@ import type { Threat } from '@features/Infraction/types'
 
 // Import after mocking to get the mocked version
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-// @ts-ignore
 jest.mock('../../apis', () => ({
-  // @ts-ignore
   useGetThreatCharacterizationsQuery: jest.fn()
 }))
 
@@ -50,7 +43,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   ]
 
   it('should return empty array when API returns no data', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: undefined
     } as any)
@@ -61,7 +53,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should return API data without unknown threat when threats param is undefined', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -72,7 +63,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should return API data without unknown threat when threats param is empty array', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -83,7 +73,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should add UNKNOWN_THREAT when single value with default threat, default characterization and natinf', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -129,7 +118,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should NOT add UNKNOWN_THREAT when multiple threats provided', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -165,7 +153,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should NOT add UNKNOWN_THREAT when natinf is missing', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -190,7 +177,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should NOT add UNKNOWN_THREAT when threat has multiple characterizations', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -220,7 +206,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should NOT add UNKNOWN_THREAT when characterization has multiple natinfs', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)
@@ -248,7 +233,6 @@ describe('hooks/useGetThreatCharacterizationAsTreeOptions()', () => {
   })
 
   it('should NOT add UNKNOWN_THREAT when natinf value is empty string', () => {
-    // @ts-ignore
     jest.spyOn(infractionApis, 'useGetThreatCharacterizationsQuery').mockReturnValue({
       data: mockApiData
     } as any)

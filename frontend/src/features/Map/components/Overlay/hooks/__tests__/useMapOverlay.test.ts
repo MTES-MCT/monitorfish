@@ -5,65 +5,40 @@ import Overlay from 'ol/Overlay'
 
 import { useMapOverlay } from '../useMapOverlay'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-// @ts-ignore
 jest.mock('ol/Overlay', () => ({
   __esModule: true,
-  // @ts-ignore
   default: jest.fn().mockImplementation(opts => ({
     _options: opts,
-    // @ts-ignore
     getElement: jest.fn().mockReturnValue(null),
-    // @ts-ignore
     getOffset: jest.fn().mockReturnValue([0, 0]),
-    // @ts-ignore
     on: jest.fn().mockReturnValue({ key: 'mockKey' }),
-    // @ts-ignore
     setElement: jest.fn(),
-    // @ts-ignore
     setOffset: jest.fn(),
-    // @ts-ignore
     setPosition: jest.fn()
   }))
 }))
 
-// @ts-ignore
 jest.mock('@features/Map/monitorfishMap', () => ({
   monitorfishMap: {
-    // @ts-ignore
     addOverlay: jest.fn(),
-    // @ts-ignore
     getCoordinateFromPixel: jest.fn(),
-    // @ts-ignore
     getPixelFromCoordinate: jest.fn(),
     getView: () => ({
-      // @ts-ignore
       calculateExtent: jest.fn().mockReturnValue([0, 0, 1000, 1000])
     }),
-    // @ts-ignore
     removeOverlay: jest.fn()
   }
 }))
 
-// @ts-ignore
 jest.mock('@features/Map/utils', () => ({
-  // @ts-ignore
   getMapResolution: jest.fn().mockReturnValue(1)
 }))
 
-// @ts-ignore
 jest.mock('@features/Map/components/Overlay/hooks/useMoveOverlayWhenDragging', () => ({
-  // @ts-ignore
   useMoveOverlayWhenDragging: jest.fn()
 }))
 
-// @ts-ignore
 jest.mock('@features/Map/components/Overlay/hooks/useMoveOverlayWhenZooming', () => ({
-  // @ts-ignore
   useMoveOverlayWhenZooming: jest.fn()
 }))
 
@@ -73,7 +48,7 @@ const INITIAL_OFFSET = [5, 10]
 
 /** Returns the overlay instance created by the hook in the current test. */
 function getOverlayInstance() {
-  return (Overlay as any).mock.results[0]?.value
+  return (Overlay as jest.Mock).mock.results[0]?.value
 }
 
 describe('useMapOverlay()', () => {

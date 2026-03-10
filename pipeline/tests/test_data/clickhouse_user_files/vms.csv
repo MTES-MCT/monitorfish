@@ -1,0 +1,7 @@
+id,cfr,external_reference_number,ircs,vessel_name,flag_state,latitude,longitude,speed,course,date_time,is_manual,is_at_port,meters_from_previous_position,time_since_previous_position,average_speed,is_fishing,time_emitting_at_sea,network_type
+53588549,CFR000888888,UB888888,888888,VESSEL88,FR,48.7177,-3.9666,0.0,229.0,2024-01-01,false,false,0.0,1.0,0.0,true,0.0,
+53588550,CFR000888888,UB888888,888888,VESSEL88,FR,48.6347,-2.4801,0.5,331.0,2024-01-01,false,false,0.0,1.0,0.0,true,0.0,
+53588550,CFR000888888,UB888888,888888,VESSEL88,FR,49.6347,-2.8801,0.5,231.0,2024-01-06,false,false,0.0,1.0,0.0,true,0.0,
+53588551,SOME_VESSEL,UBVVESSEL,VESSEL,SOME VESSEL,FR,48.8361,-1.6028,0.0,249.0,2024-01-01,false,false,0.0,0.25,0.0,true,0.0,
+53588557,ABC000306959,UB306959,306959,ÉTABLIR IMPRESSION LORSQUE,FR,46.498,-1.7893,0.0,295.0,2024-01-01,false,false,0.0,1.0,0.0,true,0.0,
+53588559,ABC000306959,UB306959,306959,ÉTABLIR IMPRESSION LORSQUE,FR,46.6957,-1.9421,0.0,0.0,2024-01-01,false,false,13.483613,1.0,0.0072805686,true,0.0,

@@ -81,7 +81,7 @@ export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCh
   },
   INFRACTION_SUSPICION: {
     code: ReportingType.INFRACTION_SUSPICION,
-    displayName: 'Infraction (suspicion)',
+    displayName: "Suspicion d'infraction",
     isInfractionSuspicion: true,
     name: "SUSPICION d'INFRACTION"
   },

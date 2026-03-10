@@ -8,12 +8,12 @@ import {
 import { REPORTING_SEARCH_PERIOD_AS_OPTIONS } from '@features/Reporting/constants'
 import { reportingActions } from '@features/Reporting/slice'
 import { type ApiSearchFilter, ReportingSearchPeriod } from '@features/Reporting/types'
-import { searchAndRenderReportingFeatures } from '@features/Reporting/useCases/searchAndRenderReportingFeatures'
+import { SideWindowMenuKey } from '@features/SideWindow/constants'
+import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, DateRangePicker, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
-import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
@@ -30,15 +30,8 @@ export function ReportingMapMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.REPORTINGS)
 
-  useEffect(() => {
-    dispatch(searchAndRenderReportingFeatures(displayFilters))
-    // This should be run only at mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const applyFilter = (nextFilter: ApiSearchFilter) => {
     dispatch(reportingActions.setDisplayFilters(nextFilter))
-    dispatch(searchAndRenderReportingFeatures(nextFilter))
   }
 
   const updateReportingType = (nextReportingType: ReportingType | undefined) => {
@@ -96,7 +89,9 @@ export function ReportingMapMenuDialog() {
     dispatch(reportingActions.unsetSelectedReportingFeatureIds())
   }
   const toggleCreateReporting = () => {}
-  const toggleReportingList = () => {}
+  const toggleReportingList = () => {
+    dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
+  }
 
   const iuuValue = (function () {
     if (displayFilters.isIUU === true) {
@@ -201,8 +196,8 @@ export function ReportingMapMenuDialog() {
             />
           </FilterRow>
           <StyledFooter>
-            <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={toggleCreateReporting}>
-              Créer un nouveau signalement
+            <Button accent={Accent.PRIMARY} disabled Icon={Icon.Plus} onClick={toggleCreateReporting}>
+              Créer un nouveau signalement INN
             </Button>
             <Button accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleReportingList}>
               Voir la vue détaillée des signalements

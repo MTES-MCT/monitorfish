@@ -1,4 +1,5 @@
 import { useMapOverlay } from '@features/Map/components/Overlay/hooks/useMapOverlay'
+import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -46,11 +47,14 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
     (reportingProperties?.isIUU || !!reportingProperties?.expirationDate || reportingProperties?.isArchived) ?? false
   const tagOffset = hasTag ? TAG_ROW_HEIGHT : 0
   const overlayHeight = OVERLAY_HEIGHT + tagOffset
-  const dynamicMargins = {
-    ...margins,
-    yBottom: margins.yBottom - tagOffset,
-    yMiddle: margins.yMiddle - Math.round(tagOffset / 2)
-  }
+  const dynamicMargins = useMemo(
+    () => ({
+      ...margins,
+      yBottom: margins.yBottom - tagOffset,
+      yMiddle: margins.yMiddle - Math.round(tagOffset / 2)
+    }),
+    [tagOffset]
+  )
 
   const { overlayElementRef, overlayPosition } = useMapOverlay({
     coordinates: olCoordinates,
@@ -58,6 +62,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
     margins: dynamicMargins,
     onDrag,
     overlayHeight,
+    zIndex: LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex,
     zoomHasChanged
   })
 
@@ -70,7 +75,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
 
   return (
     <WrapperToBeKeptForDOMManagement>
-      <div ref={overlayElementRef}>
+      <Overlay ref={overlayElementRef}>
         {reportingProperties && (
           <ReportingDetails
             cardHeight={overlayHeight}
@@ -82,10 +87,12 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
             reporting={reportingProperties}
           />
         )}
-      </div>
+      </Overlay>
     </WrapperToBeKeptForDOMManagement>
   )
 }
+
+const Overlay = styled.div``
 
 /** Stays in the React DOM tree so React can cleanly unmount it. OL manages the inner div instead. */
 const WrapperToBeKeptForDOMManagement = styled.div``

@@ -13,21 +13,10 @@ import configureStore from 'redux-mock-store'
 
 import type { PendingAlertReporting } from '@features/Reporting/types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * We need to have
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-// @ts-ignore
 jest.mock('../../../useCases/archiveReporting', () => ({ archiveReporting: jest.fn() }))
-// @ts-ignore
 jest.mock('../../../../../hooks/useMainAppDispatch', () => ({ useMainAppDispatch: () => {} }))
-// @ts-ignore
 jest.mock('../../../useCases/deleteReporting', () => ({ deleteReporting: jest.fn() }))
-// @ts-ignore
 jest.mock('../../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
-// @ts-ignore
 jest.mock('../../../../Alert/apis', () => ({
   useGetAllAlertSpecificationsQuery: () => ({ data: [] })
 }))
@@ -35,7 +24,6 @@ jest.mock('../../../../Alert/apis', () => ({
 describe('ReportingCard()', () => {
   afterAll(() => {
     // Reset module registry to clear the mock
-    // @ts-ignore
     jest.resetModules()
   })
 

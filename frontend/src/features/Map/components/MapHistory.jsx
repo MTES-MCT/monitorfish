@@ -20,6 +20,7 @@ const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger 
       monitorfishMap.getView().setZoom(event.state.zoom)
       setShouldUpdateView(false)
     }
+
     window.addEventListener('popstate', handlePopState)
 
     return () => {

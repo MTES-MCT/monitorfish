@@ -116,7 +116,6 @@ export function MainMap() {
 
       <DrawLayer />
 
-      {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
       {isSuperUser && <MissionLayer />}
       {isSuperUser && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
       {isSuperUser && <SelectedMissionLayer />}
@@ -143,7 +142,6 @@ export function MainMap() {
       </FrontendErrorBoundary>
 
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
-      {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
       <VesselsLayer />
       {areVesselsDisplayed && <VesselEstimatedPositionLayer />}
       {areVesselsDisplayed && <VesselSelectedLayer />}

@@ -33,7 +33,7 @@ def extract_vms_vessels(from_datetime_utc: datetime) -> pd.DataFrame:
 
 
 @task
-def extract_reportings(
+def extract_occurrences(
     risk_element: RiskElement, from_datetime_utc: datetime
 ) -> pd.DataFrame:
     queries = {
@@ -74,28 +74,28 @@ def extract_compliant_trips(
 
 
 @task
-def compute_reportings_vessels_risk_elements(
-    vessels: pd.DataFrame, reportings: pd.DataFrame, risk_element: RiskElement
+def compute_occurrences_vessels_risk_elements(
+    vessels: pd.DataFrame, occurrences: pd.DataFrame, risk_element: RiskElement
 ):
     res = duckdb.sql(
         """
         SELECT
             v.cfr,
-            COALESCE(r.nb_reportings, 0) AS nb_reportings
+            COALESCE(o.occurrences, 0) AS occurrences
         FROM vessels v
-        LEFT JOIN reportings r
-        ON v.cfr = r.cfr
+        LEFT JOIN occurrences o
+        ON v.cfr = o.cfr
     """
     ).to_df()
 
     res["metrics"] = df_to_dict_series(
-        res[["nb_reportings"]],
+        res[["occurrences"]],
         result_colname="metrics",
     )
 
     # 0 reportings = 1, 1 reporting = 2, 2 or 3 reportings = 3, 4+ reportings = 4
     risk_thresholds = [-0.1, 0.5, 1.5, 3.5, 1000000]
-    res["risk_level"] = pd.cut(res.nb_reportings, risk_thresholds, labels=False) + 1
+    res["risk_level"] = pd.cut(res.occurrences, risk_thresholds, labels=False) + 1
 
     res["risk_element_code"] = risk_element.value
 
@@ -164,7 +164,7 @@ def risk_elements_flow():
     mot_mr_compliant_trips = extract_compliant_trips(
         RiskElement.MOT_MR, from_datetime_utc=from_datetime_utc
     )
-    cla_cm_reportings = extract_reportings(
+    cla_cm_occurrences = extract_occurrences(
         RiskElement.CLA_CM, from_datetime_utc=from_datetime_utc
     )
 
@@ -172,8 +172,8 @@ def risk_elements_flow():
     mot_mr_vessels_risk_elements = compute_vessels_risk_elements(
         total_trips, mot_mr_compliant_trips, RiskElement.MOT_MR
     )
-    cla_cm_vessels_risk_elements = compute_reportings_vessels_risk_elements(
-        vms_vessels, cla_cm_reportings, RiskElement.CLA_CM
+    cla_cm_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
+        vms_vessels, cla_cm_occurrences, RiskElement.CLA_CM
     )
 
     # Load

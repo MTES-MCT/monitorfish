@@ -1,0 +1,5 @@
+code,name,threat_characterization_id
+PNO_MR,Prior notification misrecording,60
+MOT_MR,Exceeding the margin of tolerance,56
+VMS_MR,Unjustified VMS failure,110
+CLA_CM,Fishing in closed area,113

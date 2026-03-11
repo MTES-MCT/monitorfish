@@ -135,6 +135,7 @@ object TestUtils {
                     id = id,
                     validationDate = validationDate,
                     creationDate = creationDate,
+                    reportingDate = ZonedDateTime.now(),
                     lastUpdateDate = creationDate,
                     isArchived = isArchived ?: false,
                     isDeleted = false,

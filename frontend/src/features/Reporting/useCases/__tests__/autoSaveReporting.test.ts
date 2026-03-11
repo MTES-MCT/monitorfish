@@ -1,12 +1,11 @@
 import { WindowContext } from '@api/constants'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { addReporting } from '@features/Reporting/useCases/addReporting'
 import { autoSaveReporting } from '@features/Reporting/useCases/autoSaveReporting'
 import { buildReportingCreation } from '@features/Reporting/useCases/utils'
 import { describe, expect, it, beforeEach } from '@jest/globals'
 
-import { addVesselReporting } from '../../../Vessel/slice'
-import { renderVesselFeatures } from '../../../Vessel/useCases/rendering/renderVesselFeatures'
 import { reportingApi } from '../../reportingApi'
 import { updateReporting } from '../updateReporting'
 
@@ -23,17 +22,14 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 jest.mock('../../reportingApi', () => ({
   reportingApi: {
     endpoints: {
-      createReporting: { initiate: jest.fn() },
-      updateReporting: { initiate: jest.fn() }
+      createReporting: { initiate: jest.fn() }
     }
   }
 }))
 // @ts-ignore
 jest.mock('../updateReporting', () => ({ updateReporting: jest.fn() }))
 // @ts-ignore
-jest.mock('../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
-// @ts-ignore
-jest.mock('../../../Vessel/slice', () => ({ addVesselReporting: jest.fn() }))
+jest.mock('../addReporting', () => ({ addReporting: jest.fn() }))
 
 const aValidFormReporting: FormEditedReporting = {
   authorContact: undefined,
@@ -47,6 +43,7 @@ const aValidFormReporting: FormEditedReporting = {
   imo: undefined,
   ircs: undefined,
   isFishing: undefined,
+  isUnknownVessel: true,
   latitude: undefined,
   length: undefined,
   longitude: undefined,
@@ -111,24 +108,9 @@ describe('autoSaveReporting()', () => {
   })
 
   it('Should create reporting on first auto-save', async () => {
-    const createRequest = {}
-    const createdReporting = {
-      ...aSavedReporting,
-      id: 43,
-      vesselName: 'CREATED REPORTING'
-    } as Reporting.Reporting
+    const dispatch = jest.fn(action => action)
 
-    ;(reportingApi.endpoints.createReporting.initiate as jest.Mock).mockReturnValue(createRequest)
-
-    const dispatch = jest.fn(action => {
-      if (action === createRequest) {
-        return { unwrap: jest.fn().mockResolvedValue(createdReporting) }
-      }
-
-      return action
-    })
-
-    const result = await autoSaveReporting(
+    await autoSaveReporting(
       aValidFormReporting,
       undefined,
       undefined,
@@ -136,15 +118,13 @@ describe('autoSaveReporting()', () => {
       WindowContext.MainWindow
     )(dispatch, jest.fn())
 
-    expect(reportingApi.endpoints.createReporting.initiate).toHaveBeenCalledWith(
+    expect(addReporting).toHaveBeenCalledWith(
       expect.objectContaining({
         ...buildReportingCreation(aValidFormReporting, vesselIdentity),
         creationDate: expect.any(String)
       })
     )
-    expect(addVesselReporting).toHaveBeenCalled()
-    expect(renderVesselFeatures).toHaveBeenCalled()
-    expect(result).toEqual(createdReporting)
+    expect(updateReporting).not.toHaveBeenCalled()
   })
 
   it('Should update existing draft on subsequent auto-save', async () => {
@@ -169,16 +149,7 @@ describe('autoSaveReporting()', () => {
   })
 
   it('Should update existing reporting when editedReportingId is provided', async () => {
-    const updateRequest = {}
-    ;(reportingApi.endpoints.updateReporting.initiate as jest.Mock).mockReturnValue(updateRequest)
-
-    const dispatch = jest.fn(action => {
-      if (action === updateRequest) {
-        return { unwrap: jest.fn().mockResolvedValue(undefined) }
-      }
-
-      return action
-    })
+    const dispatch = jest.fn(action => action)
 
     await autoSaveReporting(
       aValidFormReporting,
@@ -188,10 +159,13 @@ describe('autoSaveReporting()', () => {
       WindowContext.MainWindow
     )(dispatch, jest.fn())
 
-    expect(reportingApi.endpoints.updateReporting.initiate).toHaveBeenCalledWith({
-      id: 99,
-      nextReportingFormData: aValidFormReporting
-    })
+    expect(updateReporting).toHaveBeenCalledWith(
+      vesselIdentity,
+      99,
+      aValidFormReporting,
+      aValidFormReporting.type,
+      WindowContext.MainWindow
+    )
     expect(reportingApi.endpoints.createReporting.initiate).not.toHaveBeenCalled()
   })
 })

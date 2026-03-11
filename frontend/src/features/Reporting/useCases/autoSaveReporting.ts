@@ -1,9 +1,6 @@
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
-import { reportingApi } from '@features/Reporting/reportingApi'
+import { addReporting } from '@features/Reporting/useCases/addReporting'
 import { buildReportingCreation } from '@features/Reporting/useCases/utils'
-import { addVesselReporting } from '@features/Vessel/slice'
-import { VesselFeature } from '@features/Vessel/types/vessel'
-import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 
 import { updateReporting } from './updateReporting'
@@ -27,44 +24,12 @@ export const autoSaveReporting =
     }
 
     const effectiveId = editedReportingId ?? autoSavedReporting?.id
-    const effectiveSource = autoSavedReporting
+    const identity = autoSavedReporting ? extractVesselIdentityProps(autoSavedReporting) : vesselIdentity
+    const previousType = autoSavedReporting?.type ?? nextReporting.type
 
-    if (effectiveId && effectiveSource) {
-      await dispatch(
-        updateReporting(
-          extractVesselIdentityProps(effectiveSource),
-          effectiveId,
-          nextReporting,
-          effectiveSource.type,
-          windowContext
-        )
-      )
-
-      return effectiveSource
+    if (effectiveId && identity) {
+      return await dispatch(updateReporting(identity, effectiveId, nextReporting, previousType, windowContext))
     }
 
-    if (effectiveId && !effectiveSource) {
-      await dispatch(
-        reportingApi.endpoints.updateReporting.initiate({
-          id: effectiveId,
-          nextReportingFormData: nextReporting
-        })
-      ).unwrap()
-
-      return undefined
-    }
-
-    const created = await dispatch(
-      reportingApi.endpoints.createReporting.initiate(buildReportingCreation(nextReporting, vesselIdentity))
-    ).unwrap()
-
-    dispatch(
-      addVesselReporting({
-        reportingType: created.type,
-        vesselFeatureId: VesselFeature.getVesselFeatureId(vesselIdentity ?? null)
-      })
-    )
-    dispatch(renderVesselFeatures())
-
-    return created
+    return await dispatch(addReporting(buildReportingCreation(nextReporting, vesselIdentity)))
   }

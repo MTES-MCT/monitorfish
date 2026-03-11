@@ -3,6 +3,7 @@ import { RtkCacheTagType } from '@api/constants'
 import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedReportingSchema'
 import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
@@ -15,6 +16,7 @@ const CREATE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu créer ce signalemen
 const DELETE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu supprimer ce signalement."
 const DELETE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu supprimer ces signalements."
 const GET_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des signalements."
+const GET_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le signalement."
 const UPDATE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu modifier ce signalement."
 
 export const reportingApi = monitorfishApi.injectEndpoints({
@@ -84,6 +86,22 @@ export const reportingApi = monitorfishApi.injectEndpoints({
         parseOrReturn<DisplayedReporting>(baseQueryReturnValue, DisplayedReportingSchema, true)
     }),
 
+    getReportingById: builder.query<Reporting.EditableReporting, number>({
+      query: reportingId => ({
+        method: 'GET',
+        url: `/reportings/${reportingId}`
+      }),
+      transformErrorResponse: response => new FrontendApiError(GET_REPORTING_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: Reporting.Reporting) => {
+        const parsed = parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, false)
+        if (parsed.type === ReportingType.ALERT) {
+          throw new Error('Cannot edit a pending alert reporting')
+        }
+
+        return parsed as Reporting.EditableReporting
+      }
+    }),
+
     getReportings: builder.query<Reporting.Reporting[], void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: () => ({
@@ -109,4 +127,4 @@ export const reportingApi = monitorfishApi.injectEndpoints({
   })
 })
 
-export const { useDisplayReportingsQuery, useGetReportingsQuery } = reportingApi
+export const { useDisplayReportingsQuery, useGetReportingByIdQuery, useGetReportingsQuery } = reportingApi

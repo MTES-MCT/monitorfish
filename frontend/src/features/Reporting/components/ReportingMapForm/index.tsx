@@ -1,23 +1,27 @@
 import { WindowContext } from '@api/constants'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { ReportingForm } from '@features/Reporting/components/ReportingForm'
+import type { Reporting } from '@features/Reporting/types'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
+import {AutoSaveTag} from "@features/Mission/components/MissionForm/shared/AutoSaveTag";
 
 export function ReportingMapForm() {
   const dispatch = useMainAppDispatch()
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
   const top = useGetTopOffset()
   const { isOpened, isRendered } = useDisplayMapBox(isReportingMapFormDisplayed)
   const [vesselName, setVesselName] = useState<string | undefined>(undefined)
   const [flagState, setFlagState] = useState<string | undefined>(undefined)
+  const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
   const submitRef = useRef<(() => Promise<void>) | undefined>(undefined)
 
   const onClose = () => {
@@ -33,7 +37,11 @@ export function ReportingMapForm() {
     setFlagState(flag)
   }, [])
 
-  const isReportingArchived = true
+  const handleAutoSaved = useCallback((reporting: Reporting.Reporting) => {
+    setAutoSavedLastUpdateDate(reporting.lastUpdateDate)
+  }, [])
+
+  const lastUpdateDate = autoSavedLastUpdateDate ?? editedReporting?.lastUpdateDate
 
   return (
     <>
@@ -42,22 +50,28 @@ export function ReportingMapForm() {
           <Header>
             <HeaderTitle>
               <Icon.Report color={THEME.color.white} />
-              <MapMenuDialog.Title>
+              <StyledTitle>
+                {vesselName && <>
+                  {flagState && <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />}
+                  {vesselName}
+                </>}
                 {!vesselName && 'NOUVEAU SIGNALEMENT INN'}
-                {vesselName ? `${vesselName}${flagState ? ` (${flagState})` : ''}` : ''}
-              </MapMenuDialog.Title>
+              </StyledTitle>
             </HeaderTitle>
             <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
           </Header>
           <SaveHeadBand>
-            Dernière modif. le 28/11/25 à 17h11
+            {lastUpdateDate && `Dernière modif. le ${customDayjs(lastUpdateDate).utc().format('DD/MM/YY [à] HH[h]mm')}`}
+            {!lastUpdateDate && 'Signalement non enregistré'}
+            <StyledAutoSaveTag isAutoSaveEnabled={!editedReporting?.isArchived}/>
           </SaveHeadBand>
           <Body>
             <StyledReportingForm
-              autoSave={!isReportingArchived}
-              editedReporting={undefined}
+              autoSave={!editedReporting?.isArchived}
+              editedReporting={editedReporting}
               hasWhiteBackground
               hideButtons
+              onAutoSaved={handleAutoSaved}
               onClose={onClose}
               onVesselStateChange={handleVesselStateChange}
               submitRef={submitRef}
@@ -68,7 +82,7 @@ export function ReportingMapForm() {
             <Button accent={Accent.TERTIARY} onClick={onClose} title="Fermer">
               Fermer
             </Button>
-            {isReportingArchived && <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
+            {!!editedReporting?.isArchived && <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
               Enregistrer et fermer
             </Button>}
           </StyledFooter>
@@ -77,6 +91,25 @@ export function ReportingMapForm() {
     </>
   )
 }
+
+const StyledTitle = styled(MapMenuDialog.Title)`
+  font-weight: 500;
+  align-items: center;
+  display: flex;
+`
+
+const Flag = styled.img<{
+  rel?: 'preload'
+}>`
+  height: 14px;
+  display: inline-block;
+  margin-right: 8px;
+`
+
+const StyledAutoSaveTag = styled(AutoSaveTag)`
+  margin-left: auto;
+  margin-right: 0;
+`
 
 const StyledReportingForm = styled(ReportingForm)`
   padding: 16px;
@@ -102,6 +135,7 @@ const SaveHeadBand = styled.div`
   padding: 9px 16px;
   height: 22px;
   box-shadow: 0 3px 4px #7077854d;
+  display: flex;
 `
 
 const HeaderTitle = styled.span`

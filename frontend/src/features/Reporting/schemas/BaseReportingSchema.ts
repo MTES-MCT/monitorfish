@@ -27,6 +27,7 @@ export const BaseReportingSchema = z.strictObject({
   underCharter: booleanOrUndefined,
   validationDate: stringOrUndefined,
   lastUpdateDate: z.string(),
+  reportingDate: z.string(),
   vesselId: numberOrUndefined,
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()]),
   vesselName: stringOrUndefined

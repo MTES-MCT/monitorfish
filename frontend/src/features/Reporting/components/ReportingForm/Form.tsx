@@ -12,8 +12,8 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import {
   Accent,
   Button,
-  Checkbox,
-  CheckTreePicker,
+  Checkbox, CheckPicker,
+  CheckTreePicker, FieldError,
   FormikCheckbox,
   FormikDatePicker,
   FormikMultiRadio,
@@ -40,17 +40,18 @@ import type { FormEditedReporting, InfractionSuspicion } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
+import {COUNTRIES_AS_ALPHA2_OPTIONS} from "@constants/index";
 
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
   hasWhiteBackground: boolean
   hideButtons?: boolean
-  onAutoSave?: (values: FormEditedReporting) => void
+  onAutoSave?: ((values: FormEditedReporting) => void) | undefined
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
-  submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
+  onVesselStateChange?: ((vesselName: string | undefined, flagState: string | undefined) => void) | undefined
+  submitRef?: (MutableRefObject<(() => Promise<void>) | undefined>) | undefined
   vesselIdentity?: Vessel.VesselIdentity | undefined
 }>
 
@@ -73,7 +74,6 @@ export function Form({
   const submitFormRef = submitRef
   const formRef = useRef<HTMLFormElement | null>(null)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
-  const dispatch = useMainAppDispatch()
   const { gearsAsOptions } = useGetGearsAsOptions()
   const debouncedAutoSave = useDebouncedCallback((currentValues: FormEditedReporting) => {
     onAutoSave?.(currentValues)
@@ -258,73 +258,88 @@ export function Form({
       {vesselIdentity === undefined && (
         <>
           <StyledHr />
-          {!isVesselAbsent && (
-            <VesselSection>
-              <VesselSearch
-                displayedErrorKey={displayedErrorKey}
-                onChange={handleVesselSelect}
-                onVesselLinkClick={vessel => dispatch(showVessel(vessel, false))}
-                shouldCloseOnClickOutside
-                value={selectedVessel}
-                withLastSearchResults
-              />
-              {!selectedVessel && (
-                <Checkbox
-                  checked={false}
-                  label="Navire absent de la base de données"
-                  name="isVesselAbsent"
-                  onChange={handleAbsentToggle}
-                />
-              )}
-              {selectedVessel && (
-                <VesselCard>
-                  <ReadOnlyField label="Nom">{values.vesselName ?? '-'}</ReadOnlyField>
-                  <ReadOnlyField label="Nationalité">{values.flagState ?? '-'}</ReadOnlyField>
-                  <TwoCol>
-                    <ReadOnlyField label="MMSI">{values.mmsi ?? '-'}</ReadOnlyField>
-                    <ReadOnlyField label="IMO">{values.imo ?? '-'}</ReadOnlyField>
-                  </TwoCol>
-                  <TwoCol>
-                    <ReadOnlyField label="IRCS (Call Sign)">{values.ircs ?? '-'}</ReadOnlyField>
-                    <ReadOnlyField label="Autre marquage coque">{values.externalMarker ?? '-'}</ReadOnlyField>
-                  </TwoCol>
-                  <TwoCol>
-                    <FormikSelect
-                      isLight={!hasWhiteBackground}
-                      label="Engin"
-                      name="gearCode"
-                      options={gearsAsOptions ?? []}
-                    />
-                    <FormikNumberInput isLight={!hasWhiteBackground} label="Longueur" name="length" />
-                  </TwoCol>
-                  <FormikCheckbox label="Navire en action de pêche" name="isFishing" />
-                </VesselCard>
-              )}
-            </VesselSection>
-          )}
-          {isVesselAbsent && (
-            <>
-              <Checkbox
-                checked
+          <VesselSection $hasError={!!errors?.isUnknownVessel}>
+            <VesselSearch
+              disabled={isVesselAbsent}
+              displayedErrorKey={displayedErrorKey}
+              onChange={handleVesselSelect}
+              shouldCloseOnClickOutside
+              value={selectedVessel}
+              withLastSearchResults
+            />
+            {!selectedVessel && (
+              <StyledCheckbox
+                checked={isVesselAbsent}
+                isLight
                 label="Navire absent de la base de données"
                 name="isVesselAbsent"
                 onChange={handleAbsentToggle}
               />
-              <FormikTextInput isLight={!hasWhiteBackground} label="Nom du navire" name="vesselName" />
-              <FormikTextInput isLight={!hasWhiteBackground} label="CFR" name="cfr" />
-              <FormikTextInput isLight={!hasWhiteBackground} label="Marquage extérieur" name="externalMarker" />
-              <FormikTextInput isLight={!hasWhiteBackground} label="IRCS" name="ircs" />
-              <FormikTextInput isLight={!hasWhiteBackground} label="Pavillon" name="flagState" />
-              <FormikSelect
-                isLight
-                label="Engin de pêche"
-                name="gearCode"
-                options={gearsAsOptions ?? []}
-              />
-              <FormikNumberInput isLight label="Longueur" name="length" />
-              <FormikCheckbox label="En pêche" name="isFishing" />
-            </>
-          )}
+            )}
+            {!isVesselAbsent && selectedVessel && (
+              <VesselCard>
+                <ReadOnlyField label="Nom">{values.vesselName ?? '-'}</ReadOnlyField>
+                <ReadOnlyField label="Nationalité">{values.flagState ?? '-'}</ReadOnlyField>
+                <TwoCol>
+                  <ReadOnlyField label="MMSI">{values.mmsi ?? '-'}</ReadOnlyField>
+                  <ReadOnlyField label="IMO">{values.imo ?? '-'}</ReadOnlyField>
+                </TwoCol>
+                <TwoCol>
+                  <ReadOnlyField label="IRCS (Call Sign)">{values.ircs ?? '-'}</ReadOnlyField>
+                  <ReadOnlyField label="Autre marquage coque">{values.externalMarker ?? '-'}</ReadOnlyField>
+                </TwoCol>
+                <TwoCol>
+                  <FormikSelect
+                    isLight
+                    label="Engin"
+                    name="gearCode"
+                    options={gearsAsOptions ?? []}
+                    searchable
+                    virtualized
+                  />
+                  <FormikNumberInput isLight label="Longueur" name="length" />
+                </TwoCol>
+                <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
+              </VesselCard>
+            )}
+            {isVesselAbsent && (
+              <VesselCard>
+                <FormikTextInput isLight label="Nom" name="vesselName" />
+                <FormikSelect
+                  isLight
+                  label="Nationalité"
+                  name="flagState"
+                  options={COUNTRIES_AS_ALPHA2_OPTIONS}
+                  searchable
+                  virtualized
+                />
+                <TwoCol>
+                  <FormikTextInput isLight label="MMSI" name="mmsi" />
+                  <FormikTextInput isLight label="IMO" name="imo" />
+                </TwoCol>
+                <TwoCol>
+                  <FormikTextInput isLight label="IRCS (Call Sign)" name="ircs" />
+                  <FormikTextInput isLight label="Marquage extérieur" name="externalMarker" />
+                </TwoCol>
+                <TwoCol>
+                  <FormikSelect
+                    isLight
+                    label="Engin"
+                    name="gearCode"
+                    options={gearsAsOptions ?? []}
+                    searchable
+                    virtualized
+                  />
+                  <FormikNumberInput isLight label="Longueur" name="length" />
+                </TwoCol>
+                <TwoCol>
+                  <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
+                  <FormikCheckbox isErrorMessageHidden isLight label="Navire non identifiable" name="isUnknownVessel" />
+                </TwoCol>
+              </VesselCard>
+            )}
+          </VesselSection>
+          {errors?.isUnknownVessel && <FieldError>{errors?.isUnknownVessel}</FieldError>}
         </>
       )}
       <StyledHr />
@@ -398,6 +413,15 @@ export function Form({
         name="expirationDate"
         withTime={false}
       />
+      <FormikDatePicker
+        baseContainer={formRef.current as unknown as HTMLDivElement}
+        isLight={!hasWhiteBackground}
+        isRequired
+        isStringDate
+        label="Date et heure de l'activité"
+        name="reportingDate"
+        withTime
+      />
       {!hideButtons && (
         <>
           <ValidateButton accent={Accent.PRIMARY} type="submit">
@@ -412,10 +436,15 @@ export function Form({
   )
 }
 
-const VesselSection = styled.div`
+const StyledCheckbox = styled(Checkbox)`
+  margin-top: 8px;
+`
+
+const VesselSection = styled.div<{ $hasError: boolean }>`
   background: ${p => p.theme.color.gainsboro};
   padding: 8px;
   z-index: 9999;
+  border: ${p => p.$hasError ? `1px solid ${p.theme.color.maximumRed}` : 'unset'};
 
   div:first-of-type {
     width: 100%;
@@ -439,9 +468,9 @@ const StyledHr = styled.hr`
 const VesselCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
-  padding: 12px;
+  gap: 16px;
+  margin-top: 16px;
+  padding-bottom: 8px;
 `
 
 const TwoCol = styled.div`
@@ -461,16 +490,14 @@ function ReadOnlyField({ children, label }: { children: ReactNode; label: string
 
 const ReadOnlyLabel = styled.p`
   color: ${p => p.theme.color.slateGray};
-  font-size: 11px;
-  font-weight: 700;
   margin: 0 0 2px;
-  text-transform: uppercase;
 `
 
 const ReadOnlyValue = styled.p`
   color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   margin: 0;
+  font-weight: 500;
 `
 
 const StyledForm = styled(FormikForm)<{

@@ -79,6 +79,8 @@ data class ReportingEntity(
     val longitude: Double? = null,
     @Column(name = "created_by")
     val createdBy: String,
+    @Column(name = "reporting_date", nullable = false)
+    val reportingDate: ZonedDateTime,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
         ReportingMapper.getReportingFromJSON(
@@ -111,6 +113,7 @@ data class ReportingEntity(
             latitude = alert.latitude,
             longitude = alert.longitude,
             createdBy = "SYSTEM",
+            reportingDate = ZonedDateTime.now(),
             mmsi = null,
             imo = null,
             length = null,
@@ -150,6 +153,7 @@ data class ReportingEntity(
             lastUpdateDate = reporting.lastUpdateDate,
             latitude = reporting.latitude,
             longitude = reporting.longitude,
+            reportingDate = reporting.reportingDate,
         )
     }
 }

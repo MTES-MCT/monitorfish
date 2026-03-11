@@ -30,6 +30,7 @@ class ReportingUpdateCommand(
     val otherSourceType: OtherSource? = null,
     val satelliteType: SatelliteSource? = null,
     val expirationDate: ZonedDateTime? = null,
+    val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
     val natinfCode: Int? = null,

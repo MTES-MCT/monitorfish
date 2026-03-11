@@ -9,7 +9,7 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { FormEditedReporting } from '@features/Reporting/types'
+import {type FormEditedReporting, type Reporting} from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
@@ -19,13 +19,14 @@ export const updateReporting =
     nextReportingFormData: FormEditedReporting,
     previousReportingType: ReportingType,
     windowContext: WindowContext
-  ): MainAppThunk<Promise<void>> =>
+  ): MainAppThunk<Promise<Reporting.Reporting | undefined>> =>
   async dispatch => {
     try {
-      await dispatch(
+      const { isUnknownVessel: _isUnknownVessel, ...reportingData } = nextReportingFormData
+      const updatedReporting = await dispatch(
         reportingApi.endpoints.updateReporting.initiate({
           id,
-          nextReportingFormData
+          nextReportingFormData: reportingData as FormEditedReporting
         })
       ).unwrap()
 
@@ -48,6 +49,8 @@ export const updateReporting =
 
         dispatch(renderVesselFeatures())
       }
+
+      return updatedReporting
     } catch (error) {
       dispatch(
         displayOrLogError(
@@ -60,5 +63,7 @@ export const updateReporting =
           windowContext
         )
       )
+
+      return undefined
     }
   }

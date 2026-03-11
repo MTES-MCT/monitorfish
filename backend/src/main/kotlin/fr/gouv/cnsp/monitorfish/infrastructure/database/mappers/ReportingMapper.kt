@@ -56,6 +56,7 @@ object ReportingMapper {
                         isFishing = entity.isFishing ?: false,
                         latitude = entity.latitude,
                         longitude = entity.longitude,
+                        reportingDate = entity.reportingDate,
                         createdBy = entity.createdBy,
                         // Alert-specific fields from JSON value
                         alertType = alertValue.type,
@@ -97,6 +98,7 @@ object ReportingMapper {
                         isFishing = entity.isFishing ?: false,
                         latitude = entity.latitude,
                         longitude = entity.longitude,
+                        reportingDate = entity.reportingDate,
                         createdBy = entity.createdBy.ifEmpty { infractionSuspicionValue.authorTrigram },
                         // InfractionSuspicion-specific fields from JSON value
                         reportingSource = infractionSuspicionValue.reportingSource,
@@ -141,6 +143,7 @@ object ReportingMapper {
                         isFishing = entity.isFishing ?: false,
                         latitude = entity.latitude,
                         longitude = entity.longitude,
+                        reportingDate = entity.reportingDate,
                         createdBy = entity.createdBy.ifEmpty { observationValue.authorTrigram },
                         // Observation-specific fields from JSON value
                         reportingSource = observationValue.reportingSource,

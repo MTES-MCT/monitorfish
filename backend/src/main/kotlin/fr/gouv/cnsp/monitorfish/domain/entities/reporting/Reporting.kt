@@ -32,6 +32,7 @@ sealed class Reporting {
     abstract val isFishing: Boolean
     abstract val latitude: Double?
     abstract val longitude: Double?
+    abstract val reportingDate: ZonedDateTime
     abstract val createdBy: String
 
     // Enriched in the use-case
@@ -83,6 +84,7 @@ sealed class Reporting {
         override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
+        override val reportingDate: ZonedDateTime = ZonedDateTime.now(),
         override val createdBy: String,
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
@@ -132,6 +134,7 @@ sealed class Reporting {
         override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
+        override val reportingDate: ZonedDateTime,
         override val createdBy: String,
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
@@ -197,6 +200,7 @@ sealed class Reporting {
                     title = command.title,
                     description = command.description,
                     expirationDate = updateExpirationDate(command.expirationDate),
+                    reportingDate = command.reportingDate,
                     natinfCode =
                         command.natinfCode
                             ?: error("NATINF code is required"),
@@ -228,6 +232,7 @@ sealed class Reporting {
                     isDeleted = isDeleted,
                     latitude = latitude,
                     longitude = longitude,
+                    reportingDate = command.reportingDate,
                     createdBy = createdBy,
                     reportingSource = command.reportingSource,
                     controlUnitId = command.controlUnitId,
@@ -270,6 +275,7 @@ sealed class Reporting {
         override val isIUU: Boolean = false,
         override val latitude: Double? = null,
         override val longitude: Double? = null,
+        override val reportingDate: ZonedDateTime,
         override val createdBy: String,
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
@@ -332,6 +338,7 @@ sealed class Reporting {
                     title = command.title,
                     description = command.description,
                     expirationDate = updateExpirationDate(command.expirationDate),
+                    reportingDate = command.reportingDate,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }
@@ -362,6 +369,7 @@ sealed class Reporting {
                     isDeleted = isDeleted,
                     latitude = latitude,
                     longitude = longitude,
+                    reportingDate = command.reportingDate,
                     createdBy = createdBy,
                     infraction = infraction,
                     underCharter = underCharter,

@@ -91,7 +91,7 @@ context('Side Window > Mission Form > Air Control', () => {
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
           logbookMatchesActivity: null,
-          longitude: -3.872,
+          longitude: -7.872,
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: 'Une autre observation.',

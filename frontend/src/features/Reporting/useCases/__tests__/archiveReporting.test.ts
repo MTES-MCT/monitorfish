@@ -7,26 +7,16 @@ import { mockedDispatch } from '@store/__tests__/utils'
 
 import { deleteReporting } from '../deleteReporting'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * We need to have
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-// @ts-ignore
 jest.mock('../../reportingApi', () => ({
   reportingApi: {
     endpoints: {
       archiveReporting: {
-        // @ts-ignore
         initiate: jest.fn()
       }
     }
   }
 }))
-// @ts-ignore
 jest.mock('../deleteReporting', () => ({ deleteReporting: jest.fn() }))
-// @ts-ignore
 jest.mock('../../../Vessel/useCases/rendering/renderVesselFeatures', () => ({ renderVesselFeatures: jest.fn() }))
 
 describe('archiveReporting()', () => {
@@ -45,7 +35,6 @@ describe('archiveReporting()', () => {
 
   afterAll(() => {
     // Reset module registry to clear the mock
-    // @ts-ignore
     jest.resetModules()
   })
 

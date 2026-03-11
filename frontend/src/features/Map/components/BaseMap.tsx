@@ -1,29 +1,20 @@
-import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
-import { hoverOnMapFeature } from '@features/Map/useCases/hoverOnMapFeature'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { platformModifierKeyOnly } from 'ol/events/condition'
 import OpenLayerMap from 'ol/Map'
-import { Children, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useThrottledCallback } from 'use-debounce'
 
 import { MapAttributionsBox } from './MapAttributionsBox'
 import { MapCoordinatesBox } from './MapCoordinatesBox'
+import { useMapAnimation } from '../hooks/useMapAnimation'
+import { useMapClick } from '../hooks/useMapClick'
+import { useMapMount } from '../hooks/useMapMount'
+import { useMapPointerMove } from '../hooks/useMapPointerMove'
 import { monitorfishMap } from '../monitorfishMap'
-import { resetAnimateToRegulatoryLayer } from '../slice'
-import { clickOnMapFeature } from '../useCases/clickOnMapFeature'
 
 import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import type { Coordinates } from '@mtes-mct/monitor-ui'
-import type { MainAppThunk } from '@store'
 import type { Feature, MapBrowserEvent } from 'ol'
-import type { FeatureLike } from 'ol/Feature'
-import type { AnimationOptions } from 'ol/View'
 import type { PropsWithChildren } from 'react'
-
-let lastEventForPointerMove
-let timeoutForPointerMove
 
 /**
  * BaseMap forwards map as props to children
@@ -36,6 +27,7 @@ type BaseMapProps = {
   showAttributions?: boolean
   showCoordinates?: boolean
 } & PropsWithChildren
+
 export function BaseMap({
   children,
   handleMovingAndZoom,
@@ -45,106 +37,10 @@ export function BaseMap({
   showAttributions,
   showCoordinates
 }: BaseMapProps) {
-  const isAnimating = useRef(false)
   const isInitRenderDone = useRef(false)
-  const mapElement = useRef()
-
-  const dispatch = useMainAppDispatch()
-  const animateToRegulatoryLayer = useMainAppSelector(state => state.map.animateToRegulatoryLayer)
+  const mapElement = useRef<HTMLElement | undefined>()
 
   const [cursorCoordinates, setCursorCoordinates] = useState<Coordinates | undefined>(undefined)
-
-  const handleMapClick = useCallback(
-    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
-      if (!event || !openLayerMap) {
-        return
-      }
-
-      const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(event.pixel, clickedFeature => clickedFeature, {
-        hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer => layer.get('isClickable') === true
-      })
-      const isCtrl = platformModifierKeyOnly(event)
-      const mapClick = { ctrlKeyPressed: isCtrl, feature }
-      dispatch(clickOnMapFeature(mapClick) as unknown as MainAppThunk)
-    },
-    [dispatch]
-  )
-
-  const handleBasePointerMove = useCallback(
-    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
-      if (!event) {
-        return
-      }
-
-      const pixel = openLayerMap.getEventPixel(event.originalEvent)
-      const feature = openLayerMap.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
-        hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer => layer.get('isHoverable') === true
-      })
-
-      if (handlePointerMove) {
-        handlePointerMove(event)
-      }
-
-      if (!feature?.getId()) {
-        if (setCurrentFeature) {
-          setCurrentFeature(undefined)
-        }
-        hoverOnMapFeature(undefined)
-        // eslint-disable-next-line no-param-reassign
-        ;(openLayerMap.getTarget() as HTMLElement).style.cursor = ''
-
-        return
-      }
-
-      if (setCurrentFeature) {
-        setCurrentFeature(feature as Feature | FeatureWithCodeAndEntityId | undefined)
-        hoverOnMapFeature(feature as Feature | FeatureWithCodeAndEntityId | undefined)
-      }
-      // eslint-disable-next-line no-param-reassign
-      ;(openLayerMap.getTarget() as HTMLElement).style.cursor = 'pointer'
-    },
-    [handlePointerMove, setCurrentFeature]
-  )
-
-  const throttleAndHandleMovingAndZoom = useThrottledCallback(
-    (openLayerMap: OpenLayerMap) => handleMovingAndZoom?.(openLayerMap),
-    100
-  )
-
-  const throttleAndHandlePointerMove = useCallback(
-    (event: MapBrowserEvent<any>, openLayerMap: OpenLayerMap) => {
-      if (event.dragging || timeoutForPointerMove) {
-        if (timeoutForPointerMove) {
-          lastEventForPointerMove = event
-        }
-
-        return
-      }
-
-      timeoutForPointerMove = setTimeout(() => {
-        timeoutForPointerMove = null
-        handleBasePointerMove(lastEventForPointerMove, openLayerMap)
-
-        if (showCoordinates) {
-          saveCoordinates(lastEventForPointerMove)
-        }
-      }, 50)
-    },
-    [handleBasePointerMove, showCoordinates]
-  )
-
-  useEffect(() => {
-    monitorfishMap.setTarget(mapElement.current)
-
-    monitorfishMap.on('click', event => handleMapClick(event, monitorfishMap))
-    monitorfishMap.on('pointermove', event => throttleAndHandlePointerMove(event, monitorfishMap))
-    monitorfishMap.on('movestart', () => throttleAndHandleMovingAndZoom(monitorfishMap))
-    monitorfishMap.on('moveend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
-    monitorfishMap.on('loadend', () => throttleAndHandleMovingAndZoom(monitorfishMap))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if (!isMainApp) {
@@ -159,44 +55,7 @@ export function BaseMap({
     }, 15000)
   }, [isMainApp])
 
-  const animateToLayer = useCallback(
-    _animateToRegulatoryLayer => {
-      if (_animateToRegulatoryLayer && !isAnimating.current && isInitRenderDone.current) {
-        if (_animateToRegulatoryLayer.extent) {
-          monitorfishMap.getView().fit(_animateToRegulatoryLayer.extent, {
-            callback: () => dispatch(resetAnimateToRegulatoryLayer()),
-            duration: 1000
-          })
-
-          return
-        }
-
-        if (_animateToRegulatoryLayer.center) {
-          const animateObject: AnimationOptions = {
-            center: [_animateToRegulatoryLayer.center[0], _animateToRegulatoryLayer.center[1]],
-            duration: 1000
-          }
-
-          const zoom = monitorfishMap.getView().getZoom()
-          if (zoom && zoom < 8) {
-            animateObject.zoom = 8
-          }
-          isAnimating.current = true
-          monitorfishMap.getView().animate(animateObject, () => {
-            isAnimating.current = false
-            dispatch(resetAnimateToRegulatoryLayer())
-          })
-        }
-      }
-    },
-    [dispatch]
-  )
-
-  useEffect(() => {
-    animateToLayer(animateToRegulatoryLayer)
-  }, [animateToRegulatoryLayer, animateToLayer])
-
-  function saveCoordinates(event) {
+  const saveCoordinates = useCallback((event: MapBrowserEvent<any>) => {
     if (event) {
       const clickedCoordinates = monitorfishMap.getCoordinateFromPixel(event.pixel) as Coordinates
       if (!clickedCoordinates) {
@@ -205,7 +64,33 @@ export function BaseMap({
 
       setCursorCoordinates(clickedCoordinates)
     }
-  }
+  }, [])
+
+  const throttleAndHandleMovingAndZoom = useThrottledCallback(
+    (openLayerMap: OpenLayerMap) => handleMovingAndZoom?.(openLayerMap),
+    100
+  )
+
+  useMapMount(monitorfishMap, mapElement)
+  useMapClick(monitorfishMap)
+  useMapPointerMove(monitorfishMap, handlePointerMove, setCurrentFeature, showCoordinates ? saveCoordinates : undefined)
+  useMapAnimation(isInitRenderDone)
+
+  useEffect(() => {
+    const onMoveStart = () => throttleAndHandleMovingAndZoom(monitorfishMap)
+    const onMoveEnd = () => throttleAndHandleMovingAndZoom(monitorfishMap)
+    const onLoadEnd = () => throttleAndHandleMovingAndZoom(monitorfishMap)
+
+    monitorfishMap.on('movestart', onMoveStart)
+    monitorfishMap.on('moveend', onMoveEnd)
+    monitorfishMap.on('loadend', onLoadEnd)
+
+    return () => {
+      monitorfishMap.un('movestart', onMoveStart)
+      monitorfishMap.un('moveend', onMoveEnd)
+      monitorfishMap.un('loadend', onLoadEnd)
+    }
+  }, [throttleAndHandleMovingAndZoom])
 
   return (
     <MapWrapper>
@@ -215,7 +100,7 @@ export function BaseMap({
       />
       {showCoordinates && <MapCoordinatesBox coordinates={cursorCoordinates} />}
       {showAttributions && <MapAttributionsBox />}
-      {Children.map(children, child => child)}
+      {children}
     </MapWrapper>
   )
 }

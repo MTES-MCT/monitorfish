@@ -23,6 +23,7 @@ type ReportingFormProps = {
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground?: boolean
   hideButtons?: boolean
+  onAutoSaved?: ((reporting: Reporting.Reporting) => void) | undefined
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
   onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
@@ -36,6 +37,7 @@ export function ReportingForm({
   editedReporting,
   hasWhiteBackground = false,
   hideButtons = false,
+  onAutoSaved,
   onClose,
   onIsDirty,
   onVesselStateChange,
@@ -73,9 +75,10 @@ export function ReportingForm({
 
       if (created) {
         autoSavedReportingRef.current = created
+        onAutoSaved?.(created)
       }
     },
-    [dispatch, editedReporting?.id, vesselIdentity, windowContext]
+    [dispatch, editedReporting?.id, onAutoSaved, vesselIdentity, windowContext]
   )
 
   const createOrEditReporting = useCallback(

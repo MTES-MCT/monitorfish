@@ -16,6 +16,7 @@ export function buildReportingCreation(
     creationDate: new Date().toISOString(),
     description: formValues.description,
     expirationDate: formValues.expirationDate,
+    reportingDate: formValues.reportingDate,
     externalMarker: vesselIdentity?.externalReferenceNumber ?? formValues.externalMarker,
     flagState: (vesselIdentity?.flagState ?? formValues.flagState ?? '').toUpperCase(),
     imo: formValues.imo,

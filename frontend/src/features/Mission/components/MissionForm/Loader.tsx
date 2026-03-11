@@ -56,7 +56,7 @@ export function Loader() {
         </Button>
 
         <RightButtonsContainer>
-          <AutoSaveTag />
+          <StyledAutoSaveTag />
           <Button accent={Accent.PRIMARY} disabled onClick={goToMissionList}>
             Fermer
           </Button>
@@ -65,6 +65,10 @@ export function Loader() {
     </Wrapper>
   )
 }
+
+const StyledAutoSaveTag = styled(AutoSaveTag)`
+  margin-left: 24px;
+`
 
 const ErrorFallback = styled.div`
   width: 250px;

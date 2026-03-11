@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { TAG_ROW_HEIGHT, OVERLAY_HEIGHT, margins } from './constants'
 import { ReportingDetails } from './ReportingDetails'
 import { reportingActions } from '../../slice'
+import { editReportingFromMap } from '../../useCases/editReportingFromMap'
 
 import type { Reporting } from '../../types'
 
@@ -73,6 +74,13 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
     }
   }
 
+  const handleEdit = () => {
+    const reportingId = reportingProperties?.id
+    if (reportingId !== undefined) {
+      dispatch(editReportingFromMap(reportingId))
+    }
+  }
+
   return (
     <WrapperToBeKeptForDOMManagement>
       <Overlay ref={overlayElementRef}>
@@ -83,6 +91,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
             hasTag={hasTag}
             isSelected={isSelected}
             onClose={handleClose}
+            onEdit={handleEdit}
             overlayPosition={overlayPosition}
             reporting={reportingProperties}
           />

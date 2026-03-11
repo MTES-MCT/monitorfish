@@ -60,6 +60,7 @@ type FormBaseEditedFields = Pick<
   | 'length'
   | 'longitude'
   | 'mmsi'
+  | 'reportingDate'
   | 'type'
   | 'vesselId'
   | 'vesselIdentifier'
@@ -69,10 +70,12 @@ type FormBaseEditedFields = Pick<
 export type FormEditedReporting =
   | (Partial<InfractionSuspicion> &
       FormBaseEditedFields & {
+        isUnknownVessel?: boolean
         type: ReportingType.INFRACTION_SUSPICION
       })
   | (Partial<Observation> &
       FormBaseEditedFields & {
+        isUnknownVessel?: boolean
         type: ReportingType.OBSERVATION
       })
 

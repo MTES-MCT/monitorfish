@@ -20,6 +20,7 @@ type ReportingDetailsProps = {
   hasTag: boolean
   isSelected: boolean
   onClose: () => void
+  onEdit: () => void
   overlayPosition?: OverlayPosition | undefined
   reporting: Reporting.ReportingFeature
 }
@@ -29,6 +30,7 @@ export function ReportingDetails({
   hasTag,
   isSelected,
   onClose,
+  onEdit,
   overlayPosition,
   reporting
 }: ReportingDetailsProps) {
@@ -83,7 +85,7 @@ export function ReportingDetails({
           )}
           {reporting.title && <Title $hasMarginTop={!reporting.threat}>{reporting.title}</Title>}
 
-          <EditButton accent={Accent.PRIMARY} disabled Icon={Icon.EditUnbordered} onClick={() => {}} size={Size.SMALL}>
+          <EditButton accent={Accent.PRIMARY} Icon={Icon.EditUnbordered} onClick={onEdit} size={Size.SMALL}>
             Modifier le signalement
           </EditButton>
         </Body>

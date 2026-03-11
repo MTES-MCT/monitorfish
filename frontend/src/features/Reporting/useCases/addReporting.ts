@@ -6,16 +6,16 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { addVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { ReportingCreation } from '@features/Reporting/types'
+import {type Reporting, type ReportingCreation} from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const addReporting =
-  (newReporting: ReportingCreation): MainAppThunk<Promise<void>> =>
+  (newReporting: ReportingCreation): MainAppThunk<Promise<Reporting.Reporting | undefined>> =>
   async (dispatch, getState) => {
     const { selectedVesselIdentity } = getState().vessel
 
     try {
-      await dispatch(reportingApi.endpoints.createReporting.initiate(newReporting)).unwrap()
+      const createdReporting = await dispatch(reportingApi.endpoints.createReporting.initiate(newReporting)).unwrap()
 
       dispatch(
         addVesselReporting({
@@ -25,6 +25,8 @@ export const addReporting =
       )
 
       dispatch(renderVesselFeatures())
+
+      return createdReporting
     } catch (error) {
       dispatch(
         displayOrLogError(
@@ -34,5 +36,7 @@ export const addReporting =
           DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
         )
       )
+
+      return undefined
     }
   }

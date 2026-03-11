@@ -30,8 +30,10 @@ import MissionActionType = MissionAction.MissionActionType
  * as we can't test two windows : the side window and the map window.
  */
 const IS_CYPRESS = isCypress()
-export const STUBBED_LATITUDE = 47.084
-export const STUBBED_LONGITUDE = -3.872
+export const STUBBED_OUTSIDE_EEZ_LATITUDE = 47.084
+export const STUBBED_OUTSIDE_EEZ_LONGITUDE = -7.872
+export const STUBBED_EEZ_LATITUDE = 47.084
+export const STUBBED_EEZ_LONGITUDE = -3.872
 
 export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
@@ -55,13 +57,20 @@ export function FormikCoordinatesPicker() {
     }
 
     if (IS_CYPRESS && !longitudeValue && !latitudeValue) {
-      latitudeHelpers.setValue(STUBBED_LATITUDE)
-      longitudeHelpers.setValue(STUBBED_LONGITUDE)
+      /**
+       * For test purpose in Cypress, we want to have a location outside the EEZ only for Air control
+       */
+      const latitude =
+        values.actionType === MissionActionType.AIR_CONTROL ? STUBBED_OUTSIDE_EEZ_LATITUDE : STUBBED_EEZ_LATITUDE
+      const longitude =
+        values.actionType === MissionActionType.AIR_CONTROL ? STUBBED_OUTSIDE_EEZ_LONGITUDE : STUBBED_EEZ_LONGITUDE
+      latitudeHelpers.setValue(latitude)
+      longitudeHelpers.setValue(longitude)
 
       const valuesWithLocation = {
         ...values,
-        latitude: STUBBED_LATITUDE,
-        longitude: STUBBED_LONGITUDE
+        latitude,
+        longitude
       }
       updateFAOAreasAndSegments(valuesWithLocation)
       updateMissionLocation(valuesWithLocation)

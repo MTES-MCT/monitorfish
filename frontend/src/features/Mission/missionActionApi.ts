@@ -24,7 +24,7 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       })
     }),
 
-    getIsInFrenchEez: builder.query<boolean, { latitude: number; longitude: number }>({
+    getIsInFrenchEez: builder.query<{ isInFrenchEez: boolean }, { latitude: number; longitude: number }>({
       query: ({ latitude, longitude }) => ({
         method: 'GET',
         params: {

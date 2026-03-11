@@ -81,7 +81,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('14 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -172,9 +172,6 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Autres observations
     cy.fill('Autres observations', 'Une autre observation.')
-
-    // INN
-    cy.fill('Contrôle INN', 'Non')
 
     // Qualité du contrôle
     cy.fill('Navire ciblé par le CNSP', 'Oui')

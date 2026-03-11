@@ -12,7 +12,7 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikINNRadio() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
-  const { data: isInFrenchEezQuery } = useGetIsInFrenchEezQuery(
+  const { data } = useGetIsInFrenchEezQuery(
     values.latitude && values.longitude
       ? {
           latitude: values.latitude,
@@ -22,14 +22,14 @@ export function FormikINNRadio() {
   )
 
   useEffect(() => {
-    if (isInFrenchEezQuery === true) {
+    if (data?.isInFrenchEez === true) {
       setFieldValue('isINNControl', false)
     }
-  }, [isInFrenchEezQuery, setFieldValue])
+  }, [data?.isInFrenchEez, setFieldValue])
 
-  const isNotInFrenchEez = isInFrenchEezQuery === undefined || isInFrenchEezQuery === true
+  const isInFrenchEez = data?.isInFrenchEez === undefined || data?.isInFrenchEez === true
 
-  if (isNotInFrenchEez) {
+  if (isInFrenchEez) {
     return null
   }
 

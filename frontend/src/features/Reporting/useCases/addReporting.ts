@@ -1,3 +1,4 @@
+import { type Reporting, type ReportingCreation } from '@features/Reporting/types'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -6,7 +7,6 @@ import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogE
 import { addVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import {type Reporting, type ReportingCreation} from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const addReporting =
@@ -17,12 +17,14 @@ export const addReporting =
     try {
       const createdReporting = await dispatch(reportingApi.endpoints.createReporting.initiate(newReporting)).unwrap()
 
-      dispatch(
-        addVesselReporting({
-          reportingType: newReporting?.type,
-          vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
-        })
-      )
+      if (selectedVesselIdentity) {
+        dispatch(
+          addVesselReporting({
+            reportingType: newReporting?.type,
+            vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
+          })
+        )
+      }
 
       dispatch(renderVesselFeatures())
 

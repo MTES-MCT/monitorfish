@@ -85,7 +85,18 @@ export function ReportingDetails({
           )}
           {reporting.title && <Title $hasMarginTop={!reporting.threat}>{reporting.title}</Title>}
 
-          <EditButton accent={Accent.PRIMARY} Icon={Icon.EditUnbordered} onClick={onEdit} size={Size.SMALL}>
+          <EditButton
+            accent={Accent.PRIMARY}
+            disabled={reporting.type === ReportingType.ALERT}
+            Icon={Icon.EditUnbordered}
+            onClick={onEdit}
+            size={Size.SMALL}
+            title={
+              reporting.type === ReportingType.ALERT
+                ? `Un signalement provenant d'une alerte n'est pas modifiable`
+                : undefined
+            }
+          >
             Modifier le signalement
           </EditButton>
         </Body>

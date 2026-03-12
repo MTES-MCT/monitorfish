@@ -4,8 +4,8 @@ enum class ReportingSource {
     OPS,
     SIP,
     UNIT,
-    DML,
+    DML, // Kept for backward compatibility, now in otherSourceType
     SATELLITE,
-    DIRM,
+    DIRM, // Kept for backward compatibility, now in otherSourceType
     OTHER,
 }

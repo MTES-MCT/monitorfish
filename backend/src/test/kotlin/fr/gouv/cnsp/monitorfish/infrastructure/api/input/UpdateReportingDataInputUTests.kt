@@ -19,6 +19,7 @@ class UpdateReportingDataInputUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -56,6 +57,7 @@ class UpdateReportingDataInputUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -93,6 +95,7 @@ class UpdateReportingDataInputUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
                 threatHierarchy =
                     ThreatHierarchyDataInput(
@@ -130,6 +133,7 @@ class UpdateReportingDataInputUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
                 threatHierarchy = null,
             )
@@ -152,6 +156,7 @@ class UpdateReportingDataInputUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.UNIT,
                 type = ReportingType.OBSERVATION,
+                reportingDate = ZonedDateTime.now(),
                 controlUnitId = 1234,
                 authorContact = "abc@example.com",
                 expirationDate = expirationDate,

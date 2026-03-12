@@ -8,8 +8,8 @@ type AutoSaveTagProps = Readonly<{
 export function AutoSaveTag({ className, isAutoSaveEnabled = false }: AutoSaveTagProps) {
   return (
     <Wrapper
-      className={className}
       backgroundColor={isAutoSaveEnabled ? THEME.color.mediumSeaGreen25 : THEME.color.gainsboro}
+      className={className}
       color={isAutoSaveEnabled ? THEME.color.mediumSeaGreen : THEME.color.slateGray}
     >
       {isAutoSaveEnabled ? 'Enregistrement auto. actif' : 'Enregistrement auto. inactif'}

@@ -1,4 +1,5 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
+import { OtherSourceType } from '@features/Reporting/types/OtherSourceType'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 
@@ -11,18 +12,21 @@ export const getReportingOrigin = (reporting: Reporting.Reporting, isHovering: b
     return 'Alerte auto.'
   }
 
-  switch (reporting.value.reportingActor) {
+  switch (reporting.value.reportingSource) {
     case ReportingOriginSource.UNIT:
       return `${reporting.value.controlUnit?.name ?? ''}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginSource.OPS:
       return `Pôle OPS (${reporting.createdBy})`
     case ReportingOriginSource.SIP:
       return `Pôle SIP (${reporting.createdBy})`
-    case ReportingOriginSource.DIRM:
-      return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
-    case ReportingOriginSource.DML:
-      return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
     case ReportingOriginSource.OTHER:
+      if (reporting.value.otherSourceType === OtherSourceType.DIRM) {
+        return `DIRM${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+      }
+      if (reporting.value.otherSourceType === OtherSourceType.DM) {
+        return `${reporting.value.dml}${isHovering ? `: ${reporting.value.authorContact}` : ''}`
+      }
+
       return reporting.value.authorContact ?? ''
     default:
       return ''

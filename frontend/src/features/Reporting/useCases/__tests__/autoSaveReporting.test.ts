@@ -10,7 +10,6 @@ import { reportingApi } from '../../reportingApi'
 import { updateReporting } from '../updateReporting'
 
 import type { FormEditedReporting, Reporting } from '@features/Reporting/types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
 
 /**
  * Warning: We could not add `jest` import as it makes the test to fail.
@@ -18,7 +17,6 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
  * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
  */
 
-// @ts-ignore
 jest.mock('../../reportingApi', () => ({
   reportingApi: {
     endpoints: {
@@ -26,9 +24,7 @@ jest.mock('../../reportingApi', () => ({
     }
   }
 }))
-// @ts-ignore
 jest.mock('../updateReporting', () => ({ updateReporting: jest.fn() }))
-// @ts-ignore
 jest.mock('../addReporting', () => ({ addReporting: jest.fn() }))
 
 const aValidFormReporting: FormEditedReporting = {
@@ -42,12 +38,14 @@ const aValidFormReporting: FormEditedReporting = {
   gearCode: undefined,
   imo: undefined,
   ircs: undefined,
+  isArchived: false,
   isFishing: undefined,
   isUnknownVessel: true,
   latitude: undefined,
   length: undefined,
   longitude: undefined,
   mmsi: undefined,
+  reportingDate: new Date().toISOString(),
   reportingSource: ReportingOriginSource.OPS,
   title: 'My reporting',
   type: ReportingType.OBSERVATION,
@@ -72,20 +70,6 @@ const aSavedReporting = {
   vesselName: 'AUTO SAVED'
 } as unknown as Reporting.Reporting
 
-const vesselIdentity: Vessel.VesselIdentity = {
-  beaconNumber: undefined,
-  districtCode: undefined,
-  externalReferenceNumber: undefined,
-  flagState: 'FR',
-  internalReferenceNumber: undefined,
-  ircs: undefined,
-  mmsi: undefined,
-  vesselId: 100,
-  vesselIdentifier: undefined,
-  vesselLength: undefined,
-  vesselName: 'TEST VESSEL'
-}
-
 describe('autoSaveReporting()', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -98,9 +82,8 @@ describe('autoSaveReporting()', () => {
       anInvalidFormReporting,
       undefined,
       undefined,
-      vesselIdentity,
       WindowContext.MainWindow
-    )(dispatch, jest.fn())
+    )(dispatch, jest.fn(), undefined)
 
     expect(reportingApi.endpoints.createReporting.initiate).not.toHaveBeenCalled()
     expect(updateReporting).not.toHaveBeenCalled()
@@ -114,13 +97,12 @@ describe('autoSaveReporting()', () => {
       aValidFormReporting,
       undefined,
       undefined,
-      vesselIdentity,
       WindowContext.MainWindow
-    )(dispatch, jest.fn())
+    )(dispatch, jest.fn(), undefined)
 
     expect(addReporting).toHaveBeenCalledWith(
       expect.objectContaining({
-        ...buildReportingCreation(aValidFormReporting, vesselIdentity),
+        ...buildReportingCreation(aValidFormReporting),
         creationDate: expect.any(String)
       })
     )
@@ -134,12 +116,10 @@ describe('autoSaveReporting()', () => {
       aValidFormReporting,
       aSavedReporting,
       undefined,
-      vesselIdentity,
       WindowContext.MainWindow
-    )(dispatch, jest.fn())
+    )(dispatch, jest.fn(), undefined)
 
     expect(updateReporting).toHaveBeenCalledWith(
-      expect.objectContaining({ vesselId: aSavedReporting.vesselId, vesselName: aSavedReporting.vesselName }),
       42,
       aValidFormReporting,
       aSavedReporting.type,
@@ -155,12 +135,10 @@ describe('autoSaveReporting()', () => {
       aValidFormReporting,
       undefined,
       99,
-      vesselIdentity,
       WindowContext.MainWindow
-    )(dispatch, jest.fn())
+    )(dispatch, jest.fn(), undefined)
 
     expect(updateReporting).toHaveBeenCalledWith(
-      vesselIdentity,
       99,
       aValidFormReporting,
       aValidFormReporting.type,

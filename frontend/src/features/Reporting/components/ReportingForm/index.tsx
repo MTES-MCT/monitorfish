@@ -3,7 +3,6 @@ import { CreateOrEditReportingSchema } from '@features/Reporting/components/Repo
 import { getFormFields } from '@features/Reporting/components/ReportingForm/utils'
 import { autoSaveReporting } from '@features/Reporting/useCases/autoSaveReporting'
 import { buildReportingCreation } from '@features/Reporting/useCases/utils'
-import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
@@ -15,7 +14,6 @@ import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
 import type { FormEditedReporting, Reporting } from '../../types'
-import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type ReportingFormProps = {
   autoSave?: boolean
@@ -23,12 +21,12 @@ type ReportingFormProps = {
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground?: boolean
   hideButtons?: boolean
+  hideVesselSection?: boolean
   onAutoSaved?: ((reporting: Reporting.Reporting) => void) | undefined
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
   onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
-  vesselIdentity?: Vessel.VesselIdentity | undefined
   windowContext: WindowContext
 }
 export function ReportingForm({
@@ -37,16 +35,18 @@ export function ReportingForm({
   editedReporting,
   hasWhiteBackground = false,
   hideButtons = false,
+  hideVesselSection = false,
   onAutoSaved,
   onClose,
   onIsDirty,
   onVesselStateChange,
   submitRef,
-  vesselIdentity,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
   const autoSavedReportingRef = useRef<Reporting.Reporting | undefined>(undefined)
+  const reportingId = editedReporting?.id ?? autoSavedReportingRef.current?.id
+  const reporting = editedReporting ?? autoSavedReportingRef.current
 
   const displayedErrorKey =
     windowContext === WindowContext.MainWindow
@@ -64,49 +64,33 @@ export function ReportingForm({
   const handleAutoSave = useCallback(
     async (nextReporting: FormEditedReporting) => {
       const created = await dispatch(
-        autoSaveReporting(
-          nextReporting,
-          autoSavedReportingRef.current,
-          editedReporting?.id,
-          vesselIdentity,
-          windowContext
-        )
+        autoSaveReporting(nextReporting, autoSavedReportingRef.current, editedReporting?.id, windowContext)
       )
 
       if (created) {
         autoSavedReportingRef.current = created
         onAutoSaved?.(created)
+        onIsDirty?.(false)
       }
     },
-    [dispatch, editedReporting?.id, onAutoSaved, vesselIdentity, windowContext]
+    [dispatch, editedReporting?.id, onIsDirty, onAutoSaved, windowContext]
   )
 
   const createOrEditReporting = useCallback(
     async (nextReporting: FormEditedReporting) => {
-      const effectiveId = editedReporting?.id ?? autoSavedReportingRef.current?.id
-      const effectiveSource = editedReporting ?? autoSavedReportingRef.current
-
-      if (effectiveId && effectiveSource) {
-        await dispatch(
-          updateReporting(
-            extractVesselIdentityProps(effectiveSource),
-            effectiveId,
-            nextReporting,
-            effectiveSource.type,
-            windowContext
-          )
-        )
+      if (reportingId && reporting) {
+        await dispatch(updateReporting(reportingId, nextReporting, reporting.type!, windowContext))
 
         handleClose()
 
         return
       }
 
-      dispatch(addReporting(buildReportingCreation(nextReporting, vesselIdentity)))
+      dispatch(addReporting(buildReportingCreation(nextReporting)))
 
       handleClose()
     },
-    [dispatch, editedReporting, handleClose, vesselIdentity, windowContext]
+    [dispatch, reporting, reportingId, handleClose, windowContext]
   )
 
   useEffect(
@@ -118,8 +102,13 @@ export function ReportingForm({
     [onIsDirty]
   )
 
+  useEffect(() => {
+    autoSavedReportingRef.current = undefined
+  }, [editedReporting?.id])
+
   return (
     <Formik
+      key={editedReporting?.id ?? 'new'}
       initialValues={getFormFields(editedReporting)}
       onSubmit={createOrEditReporting}
       validate={toFormikValidationSchema(CreateOrEditReportingSchema)}
@@ -129,12 +118,12 @@ export function ReportingForm({
         displayedErrorKey={displayedErrorKey}
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
+        hideVesselSection={hideVesselSection}
         onAutoSave={autoSave ? handleAutoSave : undefined}
         onClose={handleClose}
         onIsDirty={onIsDirty}
         onVesselStateChange={onVesselStateChange}
         submitRef={submitRef}
-        vesselIdentity={vesselIdentity}
       />
     </Formik>
   )

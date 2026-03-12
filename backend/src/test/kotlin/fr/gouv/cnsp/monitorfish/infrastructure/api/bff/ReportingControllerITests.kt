@@ -65,6 +65,9 @@ class ReportingControllerITests {
     @MockitoBean
     private lateinit var getReportings: GetReportings
 
+    @MockitoBean
+    private lateinit var getReporting: GetReporting
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -73,6 +76,45 @@ class ReportingControllerITests {
             .idToken { token ->
                 token.claim("email", "email@domain-name.com")
             }
+
+    @Test
+    fun `Should get a reporting by id`() {
+        // Given
+        val reporting =
+            Reporting.InfractionSuspicion(
+                id = 42,
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
+                ircs = "6554fEE",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
+                reportingSource = ReportingSource.OPS,
+                natinfCode = 123456,
+                title = "A title",
+                threat = "Obligations déclaratives",
+                threatCharacterization = "DEP",
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
+            )
+        given(getReporting.execute(42)).willReturn(reporting)
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/reportings/42")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
+    }
 
     @Test
     fun `Should archive a reporting`() {
@@ -178,6 +220,7 @@ class ReportingControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 creationDate = ZonedDateTime.now(),
+                                reportingDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingSource = ReportingSource.OPS,
                                 title = "A title",
@@ -206,7 +249,7 @@ class ReportingControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.createdBy", equalTo("test")))
@@ -257,6 +300,7 @@ class ReportingControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 creationDate = ZonedDateTime.now(),
+                                reportingDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingSource = ReportingSource.UNIT,
                                 controlUnitId = 1234,
@@ -286,7 +330,7 @@ class ReportingControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("UNIT")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnitId", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.id", equalTo(1234)))
@@ -333,7 +377,7 @@ class ReportingControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].cfr", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].underCharter", equalTo(true)))
@@ -375,6 +419,7 @@ class ReportingControllerITests {
                                 flagState = CountryCode.FR,
                                 reportingSource = ReportingSource.OPS,
                                 type = ReportingType.INFRACTION_SUSPICION,
+                                reportingDate = ZonedDateTime.now(),
                                 threatHierarchy =
                                     ThreatHierarchyDataInput(
                                         children =
@@ -445,6 +490,7 @@ class ReportingControllerITests {
                                 flagState = CountryCode.FR,
                                 ircs = "6554fEE",
                                 creationDate = ZonedDateTime.now(),
+                                reportingDate = ZonedDateTime.now(),
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingSource = ReportingSource.OPS,
                                 title = "A title",
@@ -473,7 +519,7 @@ class ReportingControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.internalReferenceNumber", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))

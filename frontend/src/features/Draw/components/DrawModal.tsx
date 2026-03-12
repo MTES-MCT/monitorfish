@@ -176,8 +176,7 @@ export function DrawLayerModal() {
       title={`Vous êtes en train d'ajouter ${listener && INTERACTION_LISTENER_TITLE_PLACEHOLDER[listener]}`}
       validateButtonText={`Valider ${listener && INTERACTION_LISTENER_BUTTON_LABEL[listener]}`}
     >
-      {(listener === InteractionListener.CONTROL_POINT ||
-        listener === InteractionListener.REPORTING_POINT) && (
+      {(listener === InteractionListener.CONTROL_POINT || listener === InteractionListener.REPORTING_POINT) && (
         <CoordinatesInputWrapper>
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}

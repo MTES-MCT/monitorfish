@@ -38,6 +38,7 @@ class ReportingMapperUTests {
         vesselIdentifier = null,
         flagState = CountryCode.FR,
         creationDate = ZonedDateTime.now(),
+        reportingDate = ZonedDateTime.now(),
         lastUpdateDate = ZonedDateTime.now(),
         validationDate = null,
         expirationDate = null,

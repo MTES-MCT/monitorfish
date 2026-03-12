@@ -3,7 +3,6 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-
 import { reportingApi } from '../reportingApi'
 import { reportingActions } from '../slice'
 

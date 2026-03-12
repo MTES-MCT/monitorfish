@@ -28,6 +28,7 @@ class ReportingController(
     private val getAllCurrentReportings: GetAllCurrentReportings,
     private val addReporting: AddReporting,
     private val getReportings: GetReportings,
+    private val getReporting: GetReporting,
 ) {
     @PostMapping(value = [""], consumes = ["application/json"])
     @Operation(summary = "Create a reporting")
@@ -44,6 +45,17 @@ class ReportingController(
             )
 
         return ReportingDataOutput.fromReporting(createdReporting, controlUnit)
+    }
+
+    @GetMapping(value = ["/{reportingId}"])
+    @Operation(summary = "Get a reporting by id")
+    fun getReporting(
+        @PathParam("Reporting id")
+        @PathVariable(name = "reportingId")
+        reportingId: Int,
+    ): ReportingDataOutput {
+        val reporting = getReporting.execute(reportingId)
+        return ReportingDataOutput.fromReporting(reporting, controlUnit = null, useThreatHierarchyForForm = true)
     }
 
     @GetMapping(value = ["/display"])

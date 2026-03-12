@@ -72,6 +72,7 @@ const Results = styled.div`
   border-bottom-right-radius: 2px;
   position: absolute;
   width: 100%;
+  z-index: 1;
 `
 
 const List = styled.ul`

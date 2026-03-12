@@ -15,18 +15,39 @@ import {
   ThreatSummarySchema,
   type VesselReportingsSchema
 } from '@features/Reporting/schemas/VesselReportingsSchema'
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
 
+import type { OtherSourceType } from './types/OtherSourceType'
 import type { ObservationSchema } from '@features/Reporting/schemas/ObservationSchema'
+import type { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
 import type Feature from 'ol/Feature'
 import type Point from 'ol/geom/Point'
 
 // TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {
   export type Reporting = z.infer<typeof ReportingSchema>
-  export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
+
+  export type VesselContext = Pick<
+    BaseReporting,
+    'cfr' | 'externalMarker' | 'flagState' | 'ircs' | 'length' | 'mmsi' | 'vesselId' | 'vesselIdentifier' | 'vesselName'
+  > & {
+    expirationDate?: undefined
+    gearCode?: undefined
+    id?: undefined
+    imo?: undefined
+    isArchived?: undefined
+    isFishing?: undefined
+    lastUpdateDate?: undefined
+    latitude?: undefined
+    longitude?: undefined
+    reportingDate?: undefined
+    type?: undefined
+    value?: undefined
+  }
+
+  export type EditableReporting = InfractionSuspicionReporting | ObservationReporting | VesselContext
 
   export type ReportingFeature = Feature<Point> &
     DisplayedReporting & {
@@ -44,15 +65,37 @@ export type PendingAlertReporting = z.infer<typeof PendingAlertReportingSchema>
 export type DisplayedReporting = z.infer<typeof DisplayedReportingSchema>
 export type ReportingCreation = z.infer<typeof ReportingCreationSchema>
 
-type FormBaseEditedFields = Pick<BaseReporting, 'expirationDate' | 'type'>
+type FormBaseEditedFields = Pick<
+  BaseReporting,
+  | 'cfr'
+  | 'expirationDate'
+  | 'isArchived'
+  | 'externalMarker'
+  | 'flagState'
+  | 'gearCode'
+  | 'imo'
+  | 'isFishing'
+  | 'ircs'
+  | 'latitude'
+  | 'length'
+  | 'longitude'
+  | 'mmsi'
+  | 'reportingDate'
+  | 'type'
+  | 'vesselId'
+  | 'vesselIdentifier'
+  | 'vesselName'
+>
 
 export type FormEditedReporting =
   | (Partial<InfractionSuspicion> &
       FormBaseEditedFields & {
+        isUnknownVessel?: boolean
         type: ReportingType.INFRACTION_SUSPICION
       })
   | (Partial<Observation> &
       FormBaseEditedFields & {
+        isUnknownVessel?: boolean
         type: ReportingType.OBSERVATION
       })
 
@@ -97,14 +140,29 @@ export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCh
  * We keep this order as it define the form option inputs order
  */
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export const ReportingOriginActorLabel: Record<ReportingOriginActor, string> = {
+export const ReportingOriginSourceLabel: Record<ReportingOriginSource, string> = {
   OPS: 'OPS',
   SIP: 'SIP',
   UNIT: 'Unité',
-  DML: 'DML',
-  DIRM: 'DIRM',
+  SATELLITE: 'Satellite',
   OTHER: 'Autre'
 }
+
+export const SatelliteSourceLabel: Record<SatelliteSource, string> = {
+  COPERNICUS: 'Copernicus',
+  UNSEENLABS: 'Unseelabs',
+  OTHER: 'Autre'
+}
+
+export const OtherSourceTypeLabel: Record<OtherSourceType, string> = {
+  DIRM: 'DIRM',
+  DM: 'DM',
+  FISHERMAN: 'Pêcheur',
+  NGO: 'ONG ou association',
+  BOATER: 'Plaisancier',
+  OTHER: 'Autre'
+}
+
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
 export type ApiSearchFilter = {

@@ -1,5 +1,6 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
+import { IUUReportingMapForm } from '@features/Reporting/components/ReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
@@ -73,6 +74,7 @@ export function MainWindow() {
         <VesselLoader />
         <APIWorker />
 
+        <IUUReportingMapForm />
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
         <VesselGroupMainWindowEdition />

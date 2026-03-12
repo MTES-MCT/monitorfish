@@ -67,7 +67,7 @@ export function ReportingCard({
       return reportingName
     }
 
-    return getReportingActorLabel(reporting.value.reportingActor, reporting.value.controlUnit)
+    return getReportingActorLabel(reporting.value.reportingSource, reporting.value.controlUnit)
   }, [reporting, reportingName])
 
   const expirationDateText = useMemo(() => {

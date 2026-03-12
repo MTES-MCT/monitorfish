@@ -28,7 +28,7 @@ export function MapSettings({ isOpened, onClose }) {
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
 
   return (
-    <Wrapper $isOpen={isOpened}>
+    <Wrapper isOpen={isOpened}>
       <Header>
         <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
         <StyledTitle>Gérer l&apos;affichage des dernières positions</StyledTitle>

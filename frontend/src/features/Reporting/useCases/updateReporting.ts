@@ -1,37 +1,41 @@
 import { WindowContext } from '@api/constants'
+import { type FormEditedReporting, type Reporting } from '@features/Reporting/types'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
-import { Vessel } from '@features/Vessel/Vessel.types'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
+import { omit } from 'lodash-es'
 
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { addVesselReporting, removeVesselReporting } from '../../Vessel/slice'
 import { reportingApi } from '../reportingApi'
 
-import type { FormEditedReporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
 export const updateReporting =
   (
-    vesselIdentity: Vessel.VesselIdentity,
     id: number,
     nextReportingFormData: FormEditedReporting,
     previousReportingType: ReportingType,
     windowContext: WindowContext
-  ): MainAppThunk<Promise<void>> =>
+  ): MainAppThunk<Promise<Reporting.Reporting | undefined>> =>
   async dispatch => {
     try {
-      await dispatch(
+      const reportingData = omit(nextReportingFormData, 'isUnknownVessel')
+      const updatedReporting = await dispatch(
         reportingApi.endpoints.updateReporting.initiate({
           id,
-          nextReportingFormData
+          nextReportingFormData: reportingData as FormEditedReporting
         })
       ).unwrap()
 
       // We update the reportings of the last positions vessels state
       if (previousReportingType !== nextReportingFormData.type) {
-        const vesselFeatureId = VesselFeature.getVesselFeatureId(vesselIdentity)
+        const vesselFeatureId = VesselFeature.getVesselFeatureId({
+          externalReferenceNumber: nextReportingFormData.externalMarker,
+          internalReferenceNumber: nextReportingFormData.cfr,
+          ircs: nextReportingFormData.ircs
+        })
 
         dispatch(
           removeVesselReporting({
@@ -48,11 +52,13 @@ export const updateReporting =
 
         dispatch(renderVesselFeatures())
       }
+
+      return updatedReporting
     } catch (error) {
       dispatch(
         displayOrLogError(
           error as Error,
-          () => updateReporting(vesselIdentity, id, nextReportingFormData, previousReportingType, windowContext),
+          () => updateReporting(id, nextReportingFormData, previousReportingType, windowContext),
           true,
           windowContext === WindowContext.MainWindow
             ? DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
@@ -60,5 +66,7 @@ export const updateReporting =
           windowContext
         )
       )
+
+      return undefined
     }
   }

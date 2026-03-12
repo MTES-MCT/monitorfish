@@ -3,11 +3,10 @@
  */
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-export enum ReportingOriginActor {
-  DIRM = 'DIRM',
-  DML = 'DML',
+export enum ReportingOriginSource {
   OPS = 'OPS',
   OTHER = 'OTHER',
+  SATELLITE = 'SATELLITE',
   SIP = 'SIP',
   UNIT = 'UNIT'
 }

@@ -18,9 +18,9 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
     cy.wait('@getVesselReportings')
 
     // When
-    cy.fill('Origine', 'Unité')
+    cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
+    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
     cy.fill('Type d’infraction et NATINF', ['27717'])
@@ -57,9 +57,9 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
         // When
         cy.clickButton('Éditer ce signalement')
 
-        cy.fill('Origine', 'Unité')
+        cy.fill('Source', 'Unité')
         cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-        cy.fill('Nom et contact (numéro, mail…) de l’émetteur', 'Jean Bon (0612365896)')
+        cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
         cy.fill('Titre', 'Sortie non autorisée')
         cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
         cy.fill('Type d’infraction et NATINF', ['27717'])

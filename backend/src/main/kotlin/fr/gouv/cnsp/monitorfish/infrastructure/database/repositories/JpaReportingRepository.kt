@@ -58,6 +58,7 @@ class JpaReportingRepository(
             value = valueJson,
             type = updatedReporting.type.toString(),
             expirationDate = updatedReporting.expirationDate?.toInstant(),
+            lastUpdateDate = ZonedDateTime.now().toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
@@ -270,7 +271,7 @@ class JpaReportingRepository(
         vesselInternalReferenceNumbers: List<String>,
         reportingEntity: Root<ReportingEntity>,
     ): Predicate =
-        reportingEntity.get<String>("internalReferenceNumber").`in`(
+        reportingEntity.get<String>("cfr").`in`(
             *vesselInternalReferenceNumbers.toTypedArray(),
         )
 

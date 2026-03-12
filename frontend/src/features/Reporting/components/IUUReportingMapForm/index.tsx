@@ -19,7 +19,7 @@ import { displayedComponentActions } from '../../../../domain/shared_slices/Disp
 
 import type { Reporting } from '@features/Reporting/types'
 
-export function ReportingMapForm() {
+export function IUUReportingMapForm() {
   const dispatch = useMainAppDispatch()
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
@@ -133,6 +133,7 @@ export function ReportingMapForm() {
                 editedReporting={editedReporting}
                 hasWhiteBackground
                 hideButtons
+                isIUU
                 onAutoSaved={handleAutoSaved}
                 onClose={onClose}
                 onIsDirty={handleDirty}

@@ -22,6 +22,7 @@ type ReportingFormProps = {
   hasWhiteBackground?: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
+  isIUU?: boolean
   onAutoSaved?: ((reporting: Reporting.Reporting) => void) | undefined
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
@@ -36,6 +37,7 @@ export function ReportingForm({
   hasWhiteBackground = false,
   hideButtons = false,
   hideVesselSection = false,
+  isIUU = false,
   onAutoSaved,
   onClose,
   onIsDirty,
@@ -64,7 +66,7 @@ export function ReportingForm({
   const handleAutoSave = useCallback(
     async (nextReporting: FormEditedReporting) => {
       const created = await dispatch(
-        autoSaveReporting(nextReporting, autoSavedReportingRef.current, editedReporting?.id, windowContext)
+        autoSaveReporting(nextReporting, autoSavedReportingRef.current, editedReporting?.id, windowContext, isIUU)
       )
 
       if (created) {
@@ -73,7 +75,7 @@ export function ReportingForm({
         onIsDirty?.(false)
       }
     },
-    [dispatch, editedReporting?.id, onIsDirty, onAutoSaved, windowContext]
+    [dispatch, editedReporting?.id, isIUU, onIsDirty, onAutoSaved, windowContext]
   )
 
   const createOrEditReporting = useCallback(
@@ -86,11 +88,11 @@ export function ReportingForm({
         return
       }
 
-      dispatch(addReporting(buildReportingCreation(nextReporting)))
+      dispatch(addReporting(buildReportingCreation(nextReporting, isIUU)))
 
       handleClose()
     },
-    [dispatch, reporting, reportingId, handleClose, windowContext]
+    [dispatch, isIUU, reporting, reportingId, handleClose, windowContext]
   )
 
   useEffect(

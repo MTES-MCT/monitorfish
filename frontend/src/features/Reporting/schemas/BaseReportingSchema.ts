@@ -19,6 +19,7 @@ export const BaseReportingSchema = z.strictObject({
   isArchived: z.boolean(),
   isDeleted: z.boolean(),
   isFishing: booleanOrUndefined,
+  isIUU: z.boolean(),
   lastUpdateDate: z.string(),
   latitude: numberOrUndefined,
   length: numberOrUndefined,

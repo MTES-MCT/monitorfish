@@ -14,9 +14,7 @@ export function RightMenuOnHoverArea() {
   const isControlUnitListDialogDisplayed = useMainAppSelector(
     state => state.displayedComponent.isControlUnitListDialogDisplayed
   )
-  const isReportingMapFormDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isReportingMapFormDisplayed
-  )
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
 
   const areaRef = useRef(null)
   const clickedOutsideComponent = useClickOutsideWhenOpened(areaRef, !!selectedVessel)

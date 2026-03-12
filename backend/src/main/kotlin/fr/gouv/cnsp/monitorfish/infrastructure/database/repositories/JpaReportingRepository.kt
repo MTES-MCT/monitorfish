@@ -58,6 +58,7 @@ class JpaReportingRepository(
             value = valueJson,
             type = updatedReporting.type.toString(),
             expirationDate = updatedReporting.expirationDate?.toInstant(),
+            lastUpdateDate = ZonedDateTime.now().toInstant(),
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)

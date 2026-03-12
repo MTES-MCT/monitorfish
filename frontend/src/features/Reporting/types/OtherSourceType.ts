@@ -1,8 +1,8 @@
 export enum OtherSourceType {
+  BOATER = 'BOATER',
+  DIRM = 'DIRM',
+  DM = 'DM',
   FISHERMAN = 'FISHERMAN',
   NGO = 'NGO',
-  BOATER = 'BOATER',
-  DM = 'DM',
-  DIRM = 'DIRM',
   OTHER = 'OTHER'
 }

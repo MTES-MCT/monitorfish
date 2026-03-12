@@ -1,5 +1,6 @@
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
+import { ReportingMapForm } from '@features/Reporting/components/ReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
@@ -19,7 +20,6 @@ import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadba
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
-import {ReportingMapForm} from "@features/Reporting/components/ReportingMapForm";
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -74,7 +74,7 @@ export function MainWindow() {
         <VesselLoader />
         <APIWorker />
 
-        <ReportingMapForm/>
+        <ReportingMapForm />
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}
         {isDrawLayerModalDisplayed && <DrawLayerModal />}
         <VesselGroupMainWindowEdition />

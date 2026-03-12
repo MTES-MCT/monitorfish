@@ -1,5 +1,5 @@
 export enum SatelliteSource {
   COPERNICUS = 'COPERNICUS',
-  UNSEENLABS = 'UNSEENLABS',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
+  UNSEENLABS = 'UNSEENLABS'
 }

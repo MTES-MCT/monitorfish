@@ -44,6 +44,7 @@ class LoggingFormatterUTests {
                     flagState = CountryCode.FR,
                     reportingSource = ReportingSource.OPS,
                     type = ReportingType.INFRACTION_SUSPICION,
+                    reportingDate = ZonedDateTime.now(),
                     threatHierarchy =
                         ThreatHierarchyDataInput(
                             children =
@@ -95,6 +96,7 @@ class LoggingFormatterUTests {
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     flagState = CountryCode.FR,
                     creationDate = dateTime,
+                    reportingDate = dateTime,
                     threatHierarchy =
                         ThreatHierarchyDataInput(
                             children =
@@ -141,6 +143,7 @@ class LoggingFormatterUTests {
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 threatHierarchy =
                     ThreatHierarchyDataInput(
                         children =

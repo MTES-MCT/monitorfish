@@ -75,9 +75,10 @@ export const extractVesselIdentityProps = (
 ): Vessel.VesselIdentity => ({
   beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : undefined,
   districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : undefined,
-  externalReferenceNumber: vessel.externalReferenceNumber ?? undefined,
+  externalReferenceNumber:
+    ('externalMarker' in vessel ? vessel.externalMarker : vessel.externalReferenceNumber) ?? undefined,
   flagState: vessel.flagState,
-  internalReferenceNumber: vessel.internalReferenceNumber ?? undefined,
+  internalReferenceNumber: ('cfr' in vessel ? vessel.cfr : vessel.internalReferenceNumber) ?? undefined,
   ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : undefined,
   mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : undefined,
   vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : undefined,

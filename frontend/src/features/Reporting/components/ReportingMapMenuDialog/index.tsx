@@ -90,9 +90,11 @@ export function ReportingMapMenuDialog() {
   }
   const toggleCreateReporting = () => {
     dispatch(setRightMapBoxDisplayed(undefined))
-    dispatch(displayedComponentActions.setDisplayedComponents({
-      isReportingMapFormDisplayed: true
-    }))
+    dispatch(
+      displayedComponentActions.setDisplayedComponents({
+        isReportingMapFormDisplayed: true
+      })
+    )
   }
   const toggleReportingList = () => {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
@@ -129,7 +131,7 @@ export function ReportingMapMenuDialog() {
 
   return (
     isRendered && (
-      <Wrapper isOpen={isOpened} data-cy="reporting-map-menu-box">
+      <Wrapper data-cy="reporting-map-menu-box" isOpen={isOpened}>
         <Header>
           <CloseButton Icon={Icon.Close} onClick={toggleMenu} title="Fermer" />
           <MapMenuDialog.Title>Signalements</MapMenuDialog.Title>

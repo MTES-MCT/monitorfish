@@ -121,6 +121,7 @@ class UpdateReportingUTests {
                             longitude = null,
                             reportingSource = ReportingSource.UNIT,
                             type = ReportingType.ALERT,
+                            reportingDate = ZonedDateTime.now(),
                             title = "A reporting",
                         ),
                     )

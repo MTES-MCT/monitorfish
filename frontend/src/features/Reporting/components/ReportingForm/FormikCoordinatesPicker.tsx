@@ -1,22 +1,22 @@
-import {InteractionListener, OpenLayersGeometryType} from '@features/Map/constants'
-import {fitToExtent} from '@features/Map/slice'
-import {getCoordinatesExtent} from '@features/Map/useCases/getCoordinatesExtent'
-import {convertToGeoJSONGeometryObject} from '@features/Map/utils'
-import {HIDDEN_ERROR} from '@features/Mission/components/MissionForm/constants'
-import {useListenForDrawedGeometry} from '@hooks/useListenForDrawing'
-import {useMainAppDispatch} from '@hooks/useMainAppDispatch'
-import {useMainAppSelector} from '@hooks/useMainAppSelector'
-import {getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION} from '@mtes-mct/monitor-ui'
-import {useField} from 'formik'
+import { InteractionListener, OpenLayersGeometryType } from '@features/Map/constants'
+import { fitToExtent } from '@features/Map/slice'
+import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExtent'
+import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { addOrEditReportingCoordinates } from '@features/Reporting/useCases/addOrEditReportingCoordinates'
+import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { useField } from 'formik'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import {transform} from 'ol/proj'
-import {useCallback, useEffect, useMemo} from 'react'
+import { transform } from 'ol/proj'
+import { useCallback, useEffect, useMemo } from 'react'
 
-import type {FormEditedReporting} from '../../types'
-import type {Point as GeoJSONPoint} from 'geojson'
-import type {Coordinate} from 'ol/coordinate'
-import {addOrEditReportingCoordinates} from "@features/Reporting/useCases/addOrEditReportingCoordinates";
+import type { FormEditedReporting } from '../../types'
+import type { Point as GeoJSONPoint } from 'geojson'
+import type { Coordinate } from 'ol/coordinate'
 
 type FormikCoordinatesPickerProps = {
   isLight: boolean
@@ -105,8 +105,8 @@ export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProp
       <MultiLocationEditor
         defaultValue={coordinates}
         error={error}
-        isLight={isLight}
         isErrorMessageHidden={error === HIDDEN_ERROR}
+        isLight={isLight}
         label="Localisation"
         labelPropName="name"
         onCenter={centeredCoordinates =>

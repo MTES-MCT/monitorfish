@@ -13,18 +13,19 @@ export function getFormFields(editedReporting: Reporting.EditableReporting | und
     controlUnitId: value?.controlUnitId,
     description: value?.description,
     expirationDate: editedReporting?.expirationDate,
-    reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
     externalMarker: editedReporting?.externalMarker,
     flagState: editedReporting?.flagState ?? '',
     gearCode: editedReporting?.gearCode,
     imo: editedReporting?.imo,
-    isFishing: editedReporting?.isFishing,
     ircs: editedReporting?.ircs,
+    isArchived: editedReporting?.isArchived ?? false,
+    isFishing: editedReporting?.isFishing,
     isUnknownVessel: false,
-    length: editedReporting?.length,
-    mmsi: editedReporting?.mmsi,
     latitude: editedReporting?.latitude,
+    length: editedReporting?.length,
     longitude: editedReporting?.longitude,
+    mmsi: editedReporting?.mmsi,
+    reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
     title: value?.title ?? '',
     vesselId: editedReporting?.vesselId,
@@ -47,44 +48,36 @@ export function getFormFields(editedReporting: Reporting.EditableReporting | und
 }
 
 export function updateReportingSource(
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<any> | Promise<void>
-) {
-  return nextReportingSource => {
-    setFieldValue('reportingSource', nextReportingSource)
+  nextReportingSource: ReportingOriginSource | undefined,
+  setFieldValue: (field: string, value: any) => void
+): void {
+  if (nextReportingSource === undefined) {
+    return
+  }
+  setFieldValue('reportingSource', nextReportingSource)
 
-    switch (nextReportingSource) {
-      case ReportingOriginSource.OPS: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorContact', undefined)
-        setFieldValue('satelliteSource', undefined)
-        setFieldValue('otherSourceType', undefined)
-        break
-      }
-      case ReportingOriginSource.SIP: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorContact', undefined)
-        setFieldValue('satelliteSource', undefined)
-        setFieldValue('otherSourceType', undefined)
-        break
-      }
-      case ReportingOriginSource.UNIT: {
-        setFieldValue('satelliteSource', undefined)
-        setFieldValue('otherSourceType', undefined)
-        break
-      }
-      case ReportingOriginSource.SATELLITE: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorContact', undefined)
-        setFieldValue('otherSourceType', undefined)
-        break
-      }
-      case ReportingOriginSource.OTHER: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('satelliteSource', undefined)
-        break
-      }
-      default:
-        break
-    }
+  switch (nextReportingSource) {
+    case ReportingOriginSource.OPS:
+    case ReportingOriginSource.SIP:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('authorContact', undefined)
+      setFieldValue('satelliteSource', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.UNIT:
+      setFieldValue('satelliteSource', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.SATELLITE:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('authorContact', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.OTHER:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('satelliteSource', undefined)
+      break
+    default:
+      break
   }
 }

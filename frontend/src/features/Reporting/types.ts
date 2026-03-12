@@ -1,9 +1,9 @@
 // TODO Wrap into a `Reporting` namespace.
 
-import {BaseReportingSchema} from '@features/Reporting/schemas/BaseReportingSchema'
-import {DisplayedReportingSchema} from '@features/Reporting/schemas/DisplayedReportingSchema'
-import {InfractionSuspicionSchema} from '@features/Reporting/schemas/InfractionSuspicionSchema'
-import {ReportingCreationSchema} from '@features/Reporting/schemas/ReportingCreationSchema'
+import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
+import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedReportingSchema'
+import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import {
   InfractionSuspicionReportingSchema,
   ObservationReportingSchema,
@@ -15,20 +15,39 @@ import {
   ThreatSummarySchema,
   type VesselReportingsSchema
 } from '@features/Reporting/schemas/VesselReportingsSchema'
-import {ReportingOriginSource} from '@features/Reporting/types/ReportingOriginSource'
-import {ReportingType} from '@features/Reporting/types/ReportingType'
-import {z} from 'zod'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { z } from 'zod'
 
-import type {ObservationSchema} from '@features/Reporting/schemas/ObservationSchema'
+import type { OtherSourceType } from './types/OtherSourceType'
+import type { ObservationSchema } from '@features/Reporting/schemas/ObservationSchema'
+import type { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
 import type Feature from 'ol/Feature'
 import type Point from 'ol/geom/Point'
-import type {SatelliteSource} from "@features/Reporting/types/SatelliteSource";
-import type { OtherSourceType } from "./types/OtherSourceType"
 
 // TODO Move other types into new `Reporting` namespace.
 export namespace Reporting {
   export type Reporting = z.infer<typeof ReportingSchema>
-  export type EditableReporting = InfractionSuspicionReporting | ObservationReporting
+
+  export type VesselContext = Pick<
+    BaseReporting,
+    'cfr' | 'externalMarker' | 'flagState' | 'ircs' | 'length' | 'mmsi' | 'vesselId' | 'vesselIdentifier' | 'vesselName'
+  > & {
+    expirationDate?: undefined
+    gearCode?: undefined
+    id?: undefined
+    imo?: undefined
+    isArchived?: undefined
+    isFishing?: undefined
+    lastUpdateDate?: undefined
+    latitude?: undefined
+    longitude?: undefined
+    reportingDate?: undefined
+    type?: undefined
+    value?: undefined
+  }
+
+  export type EditableReporting = InfractionSuspicionReporting | ObservationReporting | VesselContext
 
   export type ReportingFeature = Feature<Point> &
     DisplayedReporting & {
@@ -50,6 +69,7 @@ type FormBaseEditedFields = Pick<
   BaseReporting,
   | 'cfr'
   | 'expirationDate'
+  | 'isArchived'
   | 'externalMarker'
   | 'flagState'
   | 'gearCode'

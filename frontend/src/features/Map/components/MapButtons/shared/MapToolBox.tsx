@@ -1,7 +1,8 @@
 import { MapComponent } from '@features/commonStyles/MapComponent'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
-import type {ComponentPropsWithoutRef, ReactNode} from "react";
-import {useMainAppSelector} from "@hooks/useMainAppSelector";
+
+import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 type MapToolBoxProps = ComponentPropsWithoutRef<'div'> & {
   children?: ReactNode
@@ -12,8 +13,8 @@ type MapToolBoxProps = ComponentPropsWithoutRef<'div'> & {
   isTransparent?: boolean
 }
 export function MapToolBox({
-  className,
   children,
+  className,
   hideBoxShadow,
   isHidden,
   isLeftBox,
@@ -23,25 +24,28 @@ export function MapToolBox({
 }: MapToolBoxProps) {
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
-  return <StyledMapToolBox
-    className={className}
-    $isRightMenuShrinked={!rightMenuIsOpen}
-    $hideBoxShadow={hideBoxShadow}
-    $isLeftBox={isLeftBox}
-    $isOpen={isOpen}
-    $isTransparent={isTransparent}
-    isHidden={isHidden}
-    {...rest}
-  >
-    {children}
-  </StyledMapToolBox>
+  return (
+    <StyledMapToolBox
+      $hideBoxShadow={hideBoxShadow}
+      $isLeftBox={isLeftBox}
+      $isOpen={isOpen}
+      $isRightMenuShrinked={!rightMenuIsOpen}
+      $isTransparent={isTransparent}
+      className={className}
+      isHidden={isHidden}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...rest}
+    >
+      {children}
+    </StyledMapToolBox>
+  )
 }
 
 const StyledMapToolBox = styled(MapComponent)<{
   $hideBoxShadow?: boolean | undefined
-  $isRightMenuShrinked?: boolean | undefined
   $isLeftBox?: boolean | undefined
   $isOpen: boolean
+  $isRightMenuShrinked?: boolean | undefined
   $isTransparent?: boolean | undefined
   isHidden?: boolean | undefined
 }>`
@@ -53,6 +57,7 @@ const StyledMapToolBox = styled(MapComponent)<{
     }
 
     const margin = p.$isRightMenuShrinked ? 10 : 45
+
     return `margin-right: ${p.$isOpen ? `${margin}px` : '-420px'};`
   }}
 

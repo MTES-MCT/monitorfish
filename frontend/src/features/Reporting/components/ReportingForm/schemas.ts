@@ -8,12 +8,13 @@ export const CreateOrEditReportingSchema = z
     authorContact: z.string().optional(),
     controlUnitId: z.number().optional(),
     expirationDate: z.string().optional(),
-    reportingDate: z.string().min(1, 'Veuillez renseigner la date et heure du signalement.'),
     externalMarker: z.string().optional(),
     imo: z.string().optional(),
     ircs: z.string().optional(),
+    isArchived: z.boolean().optional(),
     isUnknownVessel: z.boolean().optional(),
     mmsi: z.string().optional(),
+    reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
     reportingSource: z.enum(ReportingOriginSource),
     threatHierarchy: z.any().optional(),
     title: z.string().min(1, 'Veuillez renseigner le titre du signalement.'),
@@ -42,14 +43,14 @@ export const CreateOrEditReportingSchema = z
         path: ['authorContact']
       })
     }
-    if (data.expirationDate && !customDayjs().isBefore(data.expirationDate)) {
+    if (data.expirationDate && !data.isArchived && !customDayjs().isBefore(data.expirationDate)) {
       ctx.addIssue({
         code: 'custom',
         message: 'La date de fin de validité doit être dans le futur.',
         path: ['expirationDate']
       })
     }
-    const hasVesselIdentifier = !!(data.vesselName || data.mmsi || data.imo || data.ircs || data.externalMarker)
+    const hasVesselIdentifier = !!(data.vesselName ?? data.mmsi ?? data.imo ?? data.ircs ?? data.externalMarker)
     if (!hasVesselIdentifier && !data.isUnknownVessel) {
       ctx.addIssue({
         code: 'custom',

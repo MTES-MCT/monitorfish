@@ -5,6 +5,7 @@ import { describe, expect, it } from '@jest/globals'
 import { CreateOrEditReportingSchema } from '../schemas'
 
 const baseValidData = {
+  reportingDate: '2024-01-01T00:00:00.000Z',
   reportingSource: ReportingOriginSource.OPS,
   title: 'Test',
   type: ReportingType.OBSERVATION,
@@ -44,6 +45,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
   it('passes when isUnknownVessel is true and no vessel fields are filled', () => {
     const result = CreateOrEditReportingSchema.safeParse({
       isUnknownVessel: true,
+      reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
       title: 'Test',
       type: ReportingType.OBSERVATION
@@ -53,6 +55,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
 
   it('fails when no vessel identifier and isUnknownVessel is absent', () => {
     const result = CreateOrEditReportingSchema.safeParse({
+      reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
       title: 'Test',
       type: ReportingType.OBSERVATION
@@ -70,6 +73,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
   it('fails when no vessel identifier and isUnknownVessel is explicitly false', () => {
     const result = CreateOrEditReportingSchema.safeParse({
       isUnknownVessel: false,
+      reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
       title: 'Test',
       type: ReportingType.OBSERVATION

@@ -56,10 +56,10 @@ export function FavoriteVessels() {
       />
       {isRendered && (
         <FavoriteVesselsBox
-          isLeftBox
-          isOpen={isOpened}
           data-cy="favorite-vessels-box"
           isHidden={!!previewFilteredVesselsMode}
+          isLeftBox
+          isOpen={isOpened}
         >
           <Header $isFirst>Mes navires suivis</Header>
           {favorites?.length ? (

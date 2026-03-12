@@ -15,6 +15,7 @@ export const ReportingCreationSchema = BaseReportingSchema.omit({
   infraction: true,
   isArchived: true,
   isDeleted: true,
+  lastUpdateDate: true,
   underCharter: true
 })
   .extend(InfractionSuspicionOrObservationCreation.shape)

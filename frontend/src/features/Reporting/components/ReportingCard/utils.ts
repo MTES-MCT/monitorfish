@@ -8,14 +8,18 @@ import { ReportingOriginSource } from '@features/Reporting/types/ReportingOrigin
 import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 
 export const getReportingActorLabel = (
-  reportingActor: ReportingOriginSource,
+  reportingSource: ReportingOriginSource | undefined,
   unit: LegacyControlUnit.LegacyControlUnit | undefined
 ) => {
-  if (reportingActor === ReportingOriginSource.UNIT) {
+  if (reportingSource === ReportingOriginSource.UNIT) {
     return unit?.name ?? 'Unité inconnue'
   }
 
-  return ReportingOriginSourceLabel[reportingActor]
+  if (!reportingSource) {
+    return ''
+  }
+
+  return ReportingOriginSourceLabel[reportingSource]
 }
 
 export function getFrenchOrdinal(index: number): string {

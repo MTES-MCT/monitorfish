@@ -1,15 +1,16 @@
-import {InteractionListener, InteractionType} from '@features/Map/constants'
-import {getCoordinatesExtent} from '@features/Map/useCases/getCoordinatesExtent'
-import {setInitialGeometry, setInteractionTypeAndListener} from '../../Draw/slice'
-import {fitToExtent} from '../../Map/slice'
+import { InteractionListener, InteractionType } from '@features/Map/constants'
+import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExtent'
 
-import type {MainAppThunk} from '@store'
-import type {Point} from 'geojson'
-import {setDisplayedComponents} from "../../../domain/shared_slices/DisplayedComponent";
+import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
+import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
+import { fitToExtent } from '../../Map/slice'
+
+import type { MainAppThunk } from '@store'
+import type { Point } from 'geojson'
 
 export const addOrEditReportingCoordinates =
   (geometry: Point | undefined): MainAppThunk<void> =>
-  (dispatch) => {
+  dispatch => {
     if (geometry) {
       dispatch(setInitialGeometry(geometry))
 

@@ -78,6 +78,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
     const reportingId = reportingProperties?.id
     if (reportingId !== undefined) {
       dispatch(editReportingFromMap(reportingId))
+      handleClose()
     }
   }
 

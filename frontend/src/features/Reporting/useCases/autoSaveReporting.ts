@@ -13,7 +13,8 @@ export const autoSaveReporting =
     nextReporting: FormEditedReporting,
     autoSavedReporting: Reporting.Reporting | undefined,
     editedReportingId: number | undefined,
-    windowContext: WindowContext
+    windowContext: WindowContext,
+    isIUU = false
   ): MainAppThunk<Promise<Reporting.Reporting | undefined>> =>
   async dispatch => {
     if (!CreateOrEditReportingSchema.safeParse(nextReporting).success) {
@@ -26,5 +27,5 @@ export const autoSaveReporting =
       return dispatch(updateReporting(reportingId, nextReporting, previousType, windowContext))
     }
 
-    return dispatch(addReporting(buildReportingCreation(nextReporting)))
+    return dispatch(addReporting(buildReportingCreation(nextReporting, isIUU)))
   }

@@ -3,7 +3,7 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 import type { FormEditedReporting, ReportingCreation } from '@features/Reporting/types'
 import type { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 
-export function buildReportingCreation(formValues: FormEditedReporting): ReportingCreation {
+export function buildReportingCreation(formValues: FormEditedReporting, isIUU = false): ReportingCreation {
   return {
     authorContact: formValues.authorContact,
     cfr: formValues.cfr,
@@ -18,6 +18,7 @@ export function buildReportingCreation(formValues: FormEditedReporting): Reporti
     imo: formValues.imo,
     ircs: formValues.ircs,
     isFishing: formValues.isFishing,
+    isIUU,
     latitude: formValues.latitude,
     length: formValues.length,
     longitude: formValues.longitude,

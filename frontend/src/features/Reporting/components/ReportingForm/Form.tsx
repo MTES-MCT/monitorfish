@@ -249,9 +249,8 @@ export function Form({
           placeholder="Ex: Yannick Attal (06 24 25 01 91)"
         />
       )}
-      <StyledHr />
+      {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikCoordinatesPicker isLight={isLight} />
-      <StyledHr />
       {!hideVesselSection && (
         <VesselSection $hasError={!!errors?.isUnknownVessel}>
           <VesselSearch
@@ -281,7 +280,7 @@ export function Form({
               </TwoCol>
               <TwoCol>
                 <ReadOnlyField label="IRCS (Call Sign)">{values.ircs ?? '-'}</ReadOnlyField>
-                <ReadOnlyField label="Autre marquage coque">{values.externalMarker ?? '-'}</ReadOnlyField>
+                <ReadOnlyField label="Marquage extérieur">{values.externalMarker ?? '-'}</ReadOnlyField>
               </TwoCol>
               <TwoCol>
                 <FormikSelect
@@ -292,7 +291,7 @@ export function Form({
                   searchable
                   virtualized
                 />
-                <FormikNumberInput isLight label="Longueur" name="length" />
+                <FormikNumberInput isLight label="Longueur du navire" name="length" />
               </TwoCol>
               <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
             </VesselCard>
@@ -336,7 +335,7 @@ export function Form({
         </VesselSection>
       )}
       {!hideVesselSection && errors?.isUnknownVessel && <FieldError>{errors?.isUnknownVessel}</FieldError>}
-      <StyledHr />
+      {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikMultiRadio
         isInline
         isLight={isLight}
@@ -436,6 +435,7 @@ const StyledCheckbox = styled(Checkbox)`
 const VesselSection = styled.div<{ $hasError: boolean }>`
   background: ${p => p.theme.color.gainsboro};
   padding: 8px;
+  margin-top: 24px;
   z-index: 9999;
   border: ${p => (p.$hasError ? `1px solid ${p.theme.color.maximumRed}` : 'unset')};
 
@@ -452,9 +452,9 @@ const CancelButton = styled(Button)`
   margin: 24px 0 0 0;
 `
 
-const StyledHr = styled.hr`
-  background: ${p => p.theme.color.slateGray};
-  height: 1px;
+const StyledHr = styled.hr<{ $isLight: boolean }>`
+  background: ${p => (!p.$isLight ? p.theme.color.lightGray : p.theme.color.white)};
+  height: 2px;
   margin: 24px 0 0;
 `
 

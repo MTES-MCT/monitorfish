@@ -3,6 +3,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
+import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { reportingApi } from '../reportingApi'
 import { reportingActions } from '../slice'
 
@@ -14,6 +15,7 @@ export const editReportingFromMap =
     try {
       const reporting = await dispatch(reportingApi.endpoints.getReportingById.initiate(reportingId)).unwrap()
 
+      dispatch(setRightMapBoxDisplayed(undefined))
       dispatch(reportingActions.setEditedReporting(reporting))
       dispatch(displayedComponentActions.setDisplayedComponents({ isReportingMapFormDisplayed: true }))
     } catch (error) {

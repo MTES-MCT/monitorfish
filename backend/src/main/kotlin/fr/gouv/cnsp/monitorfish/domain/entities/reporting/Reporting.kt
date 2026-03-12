@@ -206,6 +206,11 @@ sealed class Reporting {
                             ?: error("NATINF code is required"),
                     threat = command.threat ?: threat,
                     threatCharacterization = command.threatCharacterization ?: threatCharacterization,
+                    isFishing = command.isFishing ?: false,
+                    latitude = command.latitude,
+                    longitude = command.longitude,
+                    otherSourceType = command.otherSourceType,
+                    satelliteType = command.satelliteType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }
@@ -230,8 +235,9 @@ sealed class Reporting {
                     archivingDate = archivingDate,
                     isArchived = isArchived,
                     isDeleted = isDeleted,
-                    latitude = latitude,
-                    longitude = longitude,
+                    latitude = command.latitude ?: latitude,
+                    isFishing = command.isFishing ?: false,
+                    longitude = command.longitude ?: longitude,
                     reportingDate = command.reportingDate,
                     createdBy = createdBy,
                     reportingSource = command.reportingSource,
@@ -240,7 +246,8 @@ sealed class Reporting {
                     title = command.title,
                     description = command.description,
                     lastUpdateDate = lastUpdateDate,
-                    otherSourceType = otherSourceType,
+                    satelliteType = command.satelliteType,
+                    otherSourceType = command.otherSourceType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }
@@ -354,6 +361,11 @@ sealed class Reporting {
                     description = command.description,
                     expirationDate = updateExpirationDate(command.expirationDate),
                     reportingDate = command.reportingDate,
+                    isFishing = command.isFishing ?: false,
+                    latitude = command.latitude,
+                    longitude = command.longitude,
+                    otherSourceType = command.otherSourceType,
+                    satelliteType = command.satelliteType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }
@@ -382,8 +394,9 @@ sealed class Reporting {
                     archivingDate = archivingDate,
                     isArchived = isArchived,
                     isDeleted = isDeleted,
-                    latitude = latitude,
-                    longitude = longitude,
+                    latitude = command.latitude ?: latitude,
+                    longitude = command.longitude ?: longitude,
+                    isFishing = command.isFishing ?: false,
                     reportingDate = command.reportingDate,
                     createdBy = createdBy,
                     infraction = infraction,
@@ -397,7 +410,8 @@ sealed class Reporting {
                     threat = command.threat,
                     threatCharacterization = command.threatCharacterization,
                     lastUpdateDate = lastUpdateDate,
-                    otherSourceType = otherSourceType,
+                    satelliteType = command.satelliteType,
+                    otherSourceType = command.otherSourceType,
                 ).also {
                     it.checkReportingActorAndFieldsRequirements()
                 }

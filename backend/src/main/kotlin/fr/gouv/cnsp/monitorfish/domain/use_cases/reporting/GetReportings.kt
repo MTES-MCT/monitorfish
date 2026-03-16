@@ -48,13 +48,14 @@ class GetReportings(
             }
 
         val infractionSuspicions = listOf(ReportingType.INFRACTION_SUSPICION, ReportingType.ALERT)
-        val types = reportingType?.let {
-            if (infractionSuspicions.contains(it)) {
-                infractionSuspicions
-            } else {
-                listOf(it)
+        val types =
+            reportingType?.let {
+                if (infractionSuspicions.contains(it)) {
+                    infractionSuspicions
+                } else {
+                    listOf(it)
+                }
             }
-        }
 
         val filter =
             ReportingFilter(

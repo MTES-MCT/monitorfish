@@ -158,7 +158,7 @@ class ReportingUTests {
         val result = baseObservation.update(command) as Reporting.InfractionSuspicion
 
         assertThat(result.latitude).isEqualTo(baseObservation.latitude)
-        assertThat(result.longitude).isEqualTo(baseObservation.longitude)
+        assertThat(result.lorngitude).isEqualTo(baseObservation.longitude)
     }
 
     @Test

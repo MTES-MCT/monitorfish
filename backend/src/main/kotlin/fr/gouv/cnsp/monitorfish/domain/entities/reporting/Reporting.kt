@@ -297,19 +297,20 @@ sealed class Reporting {
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
-
         init {
-            otherSourceType = when (this.reportingSource) {
-                ReportingSource.DML -> OtherSource.DM
-                ReportingSource.DIRM -> OtherSource.DIRM
-                else -> this.otherSourceType
-            }
+            otherSourceType =
+                when (this.reportingSource) {
+                    ReportingSource.DML -> OtherSource.DM
+                    ReportingSource.DIRM -> OtherSource.DIRM
+                    else -> this.otherSourceType
+                }
 
-            reportingSource = when (this.reportingSource) {
-                ReportingSource.DML -> ReportingSource.OTHER
-                ReportingSource.DIRM -> ReportingSource.OTHER
-                else -> this.reportingSource
-            }
+            reportingSource =
+                when (this.reportingSource) {
+                    ReportingSource.DML -> ReportingSource.OTHER
+                    ReportingSource.DIRM -> ReportingSource.OTHER
+                    else -> this.reportingSource
+                }
         }
 
         fun checkReportingActorAndFieldsRequirements() =

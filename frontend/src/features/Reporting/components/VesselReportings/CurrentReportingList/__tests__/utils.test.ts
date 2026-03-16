@@ -32,6 +32,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
       isArchived: false,
       isDeleted: false,
       isFishing: undefined,
+      isIUU: false,
       lastUpdateDate: '2023-10-30T09:10:00Z',
       latitude: undefined,
       length: undefined,

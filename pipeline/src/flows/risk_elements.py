@@ -33,6 +33,60 @@ def extract_vms_vessels(from_datetime_utc: datetime) -> pd.DataFrame:
 
 
 @task
+def extract_trips_subject_to_pno(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/trips_subject_to_pno.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_rtps(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/rtps.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_logbook_pnos(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/logbook_pnos.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_manual_pnos(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/manual_pnos.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def compute_pno_mr_risk_elements(
+    trips_subject_to_pno: pd.DataFrame,
+    rtps: pd.DataFrame,
+    manual_pnos: pd.DataFrame,
+    logbook_pnos: pd.DataFrame,
+) -> pd.DataFrame:
+    breakpoint()
+
+
+@task
 def extract_occurrences(
     risk_element: RiskElement, from_datetime_utc: datetime
 ) -> pd.DataFrame:
@@ -164,6 +218,12 @@ def risk_elements_flow():
 
     total_trips = extract_total_trips(from_datetime_utc=from_datetime_utc)
     vms_vessels = extract_vms_vessels(from_datetime_utc=from_datetime_utc)
+    trips_subject_to_pno = extract_trips_subject_to_pno(
+        from_datetime_utc=from_datetime_utc
+    )
+    rtps = extract_rtps(from_datetime_utc=from_datetime_utc)
+    manual_pnos = extract_manual_pnos(from_datetime_utc=from_datetime_utc)
+    logbook_pnos = extract_logbook_pnos(from_datetime_utc=from_datetime_utc)
 
     mot_mr_compliant_trips = extract_compliant_trips(
         RiskElement.MOT_MR, from_datetime_utc=from_datetime_utc
@@ -185,8 +245,12 @@ def risk_elements_flow():
     vms_mr_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
         vms_vessels, targeted_vms_malfunction_occurrences, RiskElement.VMS_MR
     )
+    pno_mr_risk_elements = compute_pno_mr_risk_elements(
+        trips_subject_to_pno, rtps, manual_pnos, logbook_pnos
+    )
 
     # Load
     load_vessels_risk_elements(mot_mr_vessels_risk_elements)
     load_vessels_risk_elements(cla_cm_vessels_risk_elements)
     load_vessels_risk_elements(vms_mr_vessels_risk_elements)
+    load_vessels_risk_elements(pno_mr_risk_elements)

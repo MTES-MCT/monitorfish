@@ -67,7 +67,14 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
     "src.flows.risk_elements.get_utcnow", get_utcnow_mock_factory(datetime(2010, 1, 1))
 )
 def test_risk_elements_flow(
-    reset_test_data, add_catches, add_landings, add_vms, expected_vessels_risk_elements
+    reset_test_data,
+    add_catches,
+    add_pnos,
+    add_rtps,
+    add_pno_type_rules_unnested,
+    add_landings,
+    add_vms,
+    expected_vessels_risk_elements,
 ):
     vessels_risk_elements_query = (
         "SELECT * FROM vessels_risk_elements ORDER BY cfr, risk_element_code;"

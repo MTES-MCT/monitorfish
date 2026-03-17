@@ -201,6 +201,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             value = CAST(:value AS JSONB),
             type = CAST(:type AS reporting_type),
             expiration_date = :expirationDate,
+            latitude = :latitude,
+            longitude = :longitude,
             last_update_date_utc = :lastUpdateDate
         WHERE id = :id
     """,
@@ -210,6 +212,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         id: Int,
         value: String,
         type: String,
+        latitude: Double?,
+        longitude: Double?,
         expirationDate: Instant?,
         lastUpdateDate: Instant?,
     )

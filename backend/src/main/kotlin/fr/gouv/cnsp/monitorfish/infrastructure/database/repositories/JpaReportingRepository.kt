@@ -59,6 +59,8 @@ class JpaReportingRepository(
             type = updatedReporting.type.toString(),
             expirationDate = updatedReporting.expirationDate?.toInstant(),
             lastUpdateDate = ZonedDateTime.now().toInstant(),
+            latitude = updatedReporting.latitude,
+            longitude = updatedReporting.longitude,
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)

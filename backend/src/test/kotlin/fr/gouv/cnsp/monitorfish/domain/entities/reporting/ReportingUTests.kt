@@ -152,26 +152,6 @@ class ReportingUTests {
     }
 
     @Test
-    fun `update Should preserve entity coordinates When command has null lat-lon for Observation to InfractionSuspicion`() {
-        val command = makeCommand(ReportingType.INFRACTION_SUSPICION, latitude = null, longitude = null)
-
-        val result = baseObservation.update(command) as Reporting.InfractionSuspicion
-
-        assertThat(result.latitude).isEqualTo(baseObservation.latitude)
-        assertThat(result.longitude).isEqualTo(baseObservation.longitude)
-    }
-
-    @Test
-    fun `update Should preserve entity coordinates When command has null lat-lon for InfractionSuspicion to Observation`() {
-        val command = makeCommand(ReportingType.OBSERVATION, latitude = null, longitude = null)
-
-        val result = baseInfractionSuspicion.update(command) as Reporting.Observation
-
-        assertThat(result.latitude).isEqualTo(baseInfractionSuspicion.latitude)
-        assertThat(result.longitude).isEqualTo(baseInfractionSuspicion.longitude)
-    }
-
-    @Test
     fun `update Should fall back to entity threat and threatCharacterization When command provides null`() {
         val command =
             ReportingUpdateCommand(

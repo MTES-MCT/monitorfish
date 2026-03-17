@@ -399,6 +399,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
+                latitude = 47.26,
+                longitude = 1.26,
                 createdBy = "test@example.gouv.fr",
                 reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
@@ -424,6 +426,8 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting).latitude).isEqualTo(updatedReporting.latitude)
+        assertThat((reporting).longitude).isEqualTo(updatedReporting.longitude)
         assertThat((reporting).natinfCode).isEqualTo(updatedReporting.natinfCode)
         assertThat((reporting).seaFront).isEqualTo(updatedReporting.seaFront)
         assertThat((reporting).dml).isEqualTo(updatedReporting.dml)

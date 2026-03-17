@@ -1,7 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
 import { reportingActions } from '@features/Reporting/slice'
-import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -21,7 +20,6 @@ export function EditReporting() {
   )
 
   const baseUrl = window.location.origin
-  const vesselIdentity = editedReporting ? extractVesselIdentityProps(editedReporting) : undefined
 
   const closeForm = useCallback(() => {
     dispatch(reportingActions.unsetEditedReporting())
@@ -54,17 +52,16 @@ export function EditReporting() {
             {editedReporting?.vesselName ?? 'Aucun nom'}
           </VesselName>
           <InternalReferenceNumber data-cy="side-window-beacon-malfunctions-detail-cfr">
-            ({editedReporting?.internalReferenceNumber ?? 'Aucun CFR'})
+            ({editedReporting?.cfr ?? 'Aucun CFR'})
           </InternalReferenceNumber>
         </Row>
       </Header>
       <Line />
-      {editedReporting && vesselIdentity && (
+      {editedReporting && (
         <StyledReportingForm
           editedReporting={editedReporting}
           hasWhiteBackground
           onClose={closeForm}
-          vesselIdentity={vesselIdentity}
           windowContext={WindowContext.SideWindow}
         />
       )}

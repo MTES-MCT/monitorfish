@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
@@ -40,12 +40,13 @@ class AddReportingUTests {
             Reporting.Alert(
                 id = 1,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 alertType = AlertType.POSITION_ALERT,
                 seaFront = NAMO.toString(),
@@ -76,23 +77,25 @@ class AddReportingUTests {
     }
 
     @ParameterizedTest
-    @EnumSource(ReportingActor::class)
+    @EnumSource(ReportingSource::class)
     fun `execute Should throw an exception When fields of reporting actor are not rights`(
-        reportingActor: ReportingActor,
+        reportingSource: ReportingSource,
     ) {
         // Given
         val reportingToAdd =
             Reporting.Observation(
                 id = 1,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = reportingActor,
+                reportingSource = reportingSource,
                 title = "A title",
                 isArchived = false,
                 isDeleted = false,
@@ -120,13 +123,14 @@ class AddReportingUTests {
             }
 
         // Then
-        when (reportingActor) {
-            ReportingActor.OPS -> assertThat(throwable).isNull()
-            ReportingActor.SIP -> assertThat(throwable).isNull()
-            ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
-            ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
+        when (reportingSource) {
+            ReportingSource.OPS -> assertThat(throwable).isNull()
+            ReportingSource.SIP -> assertThat(throwable).isNull()
+            ReportingSource.SATELLITE -> assertThat(throwable).isNull()
+            ReportingSource.UNIT -> assertThat(throwable.message).contains("An unit must be set")
+            ReportingSource.DML -> assertThat(throwable.message).contains("An author contact must be set")
+            ReportingSource.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
+            ReportingSource.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
         }
     }
 
@@ -137,14 +141,16 @@ class AddReportingUTests {
             Reporting.InfractionSuspicion(
                 id = 1,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 natinfCode = 1235,
                 title = "Chalut en boeuf illégal",
                 threat = "Mesures techniques et de conservation",

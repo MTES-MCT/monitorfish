@@ -200,7 +200,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         SET
             value = CAST(:value AS JSONB),
             type = CAST(:type AS reporting_type),
-            expiration_date = :expirationDate
+            expiration_date = :expirationDate,
+            last_update_date_utc = :lastUpdateDate
         WHERE id = :id
     """,
         nativeQuery = true,
@@ -210,5 +211,6 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         value: String,
         type: String,
         expirationDate: Instant?,
+        lastUpdateDate: Instant?,
     )
 }

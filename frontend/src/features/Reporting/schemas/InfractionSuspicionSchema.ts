@@ -1,6 +1,8 @@
 import { Seafront } from '@constants/seafront'
 import { ThreatSchema } from '@features/Infraction/schemas/ThreatSchema'
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { OtherSourceType } from '@features/Reporting/types/OtherSourceType'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
 import z from 'zod'
 
 import { numberOrUndefined, stringOrUndefined } from '../../../types'
@@ -16,7 +18,9 @@ export const InfractionSuspicionSchema = z.strictObject({
   description: stringOrUndefined,
   dml: stringOrUndefined,
   natinfCode: z.number(),
-  reportingActor: z.enum(ReportingOriginActor),
+  otherSourceType: z.enum(OtherSourceType).or(z.undefined()),
+  reportingSource: z.enum(ReportingOriginSource).or(z.undefined()),
+  satelliteType: z.enum(SatelliteSource).or(z.undefined()),
   seaFront: z.union([z.enum(Seafront), z.undefined()]),
   threat: z.string(),
   threatCharacterization: z.string(),

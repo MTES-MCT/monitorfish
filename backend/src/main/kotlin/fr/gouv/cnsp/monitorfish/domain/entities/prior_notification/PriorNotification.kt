@@ -161,7 +161,7 @@ data class PriorNotification(
     ) {
         val currentReportings =
             internalReferenceNumber?.let { vesselInternalReferenceNumber ->
-                reportings.filter { it.internalReferenceNumber == vesselInternalReferenceNumber }
+                reportings.filter { it.cfr == vesselInternalReferenceNumber }
             }
 
         reportingCount = currentReportings?.count() ?: 0

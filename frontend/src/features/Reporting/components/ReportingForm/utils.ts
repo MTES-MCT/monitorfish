@@ -1,28 +1,42 @@
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 
-import type { FormEditedReporting, InfractionSuspicion, Observation } from '@features/Reporting/types'
+import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
-export function getFormFields(
-  editedOrSavedReporting: InfractionSuspicion | Observation | undefined,
-  type: ReportingType.OBSERVATION | ReportingType.INFRACTION_SUSPICION | undefined,
-  expirationDate: string | undefined
-): FormEditedReporting {
-  const reportingType = type ?? ReportingType.INFRACTION_SUSPICION
+export function getFormFields(editedReporting: Reporting.EditableReporting | undefined): FormEditedReporting {
+  const reportingType = editedReporting?.type ?? ReportingType.INFRACTION_SUSPICION
+  const value = editedReporting?.value
 
   const base = {
-    authorContact: editedOrSavedReporting?.authorContact ?? undefined,
-    controlUnitId: editedOrSavedReporting?.controlUnitId ?? undefined,
-    description: editedOrSavedReporting?.description,
-    expirationDate,
-    reportingActor: editedOrSavedReporting?.reportingActor ?? ReportingOriginActor.OPS,
-    title: editedOrSavedReporting?.title ?? ''
+    authorContact: value?.authorContact,
+    cfr: editedReporting?.cfr,
+    controlUnitId: value?.controlUnitId,
+    description: value?.description,
+    expirationDate: editedReporting?.expirationDate,
+    externalMarker: editedReporting?.externalMarker,
+    flagState: editedReporting?.flagState ?? '',
+    gearCode: editedReporting?.gearCode,
+    imo: editedReporting?.imo,
+    ircs: editedReporting?.ircs,
+    isArchived: editedReporting?.isArchived ?? false,
+    isFishing: editedReporting?.isFishing,
+    isUnknownVessel: false,
+    latitude: editedReporting?.latitude,
+    length: editedReporting?.length,
+    longitude: editedReporting?.longitude,
+    mmsi: editedReporting?.mmsi,
+    reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
+    reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
+    title: value?.title ?? '',
+    vesselId: editedReporting?.vesselId,
+    vesselIdentifier: editedReporting?.vesselIdentifier,
+    vesselName: editedReporting?.vesselName
   }
 
   if (reportingType === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...base,
-      threatHierarchy: (editedOrSavedReporting as InfractionSuspicion | undefined)?.threatHierarchy,
+      threatHierarchy: (value as InfractionSuspicion | undefined)?.threatHierarchy,
       type: ReportingType.INFRACTION_SUSPICION
     }
   }
@@ -33,40 +47,37 @@ export function getFormFields(
   }
 }
 
-export function updateReportingActor(
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => Promise<any> | Promise<void>
-) {
-  return nextReportingActor => {
-    setFieldValue('reportingActor', nextReportingActor)
+export function updateReportingSource(
+  nextReportingSource: ReportingOriginSource | undefined,
+  setFieldValue: (field: string, value: any) => void
+): void {
+  if (nextReportingSource === undefined) {
+    return
+  }
+  setFieldValue('reportingSource', nextReportingSource)
 
-    switch (nextReportingActor) {
-      case ReportingOriginActor.OPS: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorContact', undefined)
-        break
-      }
-      case ReportingOriginActor.SIP: {
-        setFieldValue('controlUnitId', undefined)
-        setFieldValue('authorContact', undefined)
-        break
-      }
-      case ReportingOriginActor.UNIT: {
-        break
-      }
-      case ReportingOriginActor.DML: {
-        setFieldValue('controlUnitId', undefined)
-        break
-      }
-      case ReportingOriginActor.DIRM: {
-        setFieldValue('controlUnitId', undefined)
-        break
-      }
-      case ReportingOriginActor.OTHER: {
-        setFieldValue('controlUnitId', undefined)
-        break
-      }
-      default:
-        throw Error('Should not happen')
-    }
+  switch (nextReportingSource) {
+    case ReportingOriginSource.OPS:
+    case ReportingOriginSource.SIP:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('authorContact', undefined)
+      setFieldValue('satelliteSource', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.UNIT:
+      setFieldValue('satelliteSource', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.SATELLITE:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('authorContact', undefined)
+      setFieldValue('otherSourceType', undefined)
+      break
+    case ReportingOriginSource.OTHER:
+      setFieldValue('controlUnitId', undefined)
+      setFieldValue('satelliteSource', undefined)
+      break
+    default:
+      break
   }
 }

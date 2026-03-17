@@ -45,12 +45,15 @@ describe('ReportingCard()', () => {
     const store = mockStore({})
 
     const reporting: PendingAlertReporting = {
+      cfr: 'FR04504564',
       createdBy: 'LTH',
       creationDate: '2023-10-30T09:10:00Z',
       expirationDate: undefined,
-      externalReferenceNumber: '',
+      externalMarker: '',
       flagState: 'ES',
+      gearCode: undefined,
       id: 12345,
+      imo: undefined,
       infraction: {
         infraction:
           'Pêche maritime non autorisée dans les eaux territoriales francaise par capitaine de navire communautaire',
@@ -58,10 +61,17 @@ describe('ReportingCard()', () => {
         natinfCode: 2610,
         regulation: 'ART.L.945-2 §I AL.1, ART.L.945-5 1°,2°,3°,4° C.RUR'
       },
-      internalReferenceNumber: 'FR04504564',
       ircs: '',
       isArchived: false,
       isDeleted: false,
+      isFishing: undefined,
+      isIUU: false,
+      lastUpdateDate: '2023-10-30T09:10:00Z',
+      latitude: undefined,
+      length: undefined,
+      longitude: undefined,
+      mmsi: undefined,
+      reportingDate: '2023-10-30T09:10:00Z',
       type: ReportingType.ALERT,
       underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',

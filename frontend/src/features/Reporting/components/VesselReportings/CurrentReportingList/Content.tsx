@@ -1,3 +1,4 @@
+import { buildVesselContext } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { vesselActions } from '@features/Vessel/slice'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
@@ -30,11 +31,11 @@ export function Content({
 }: ContentProps) {
   const dispatch = useMainAppDispatch()
 
-  const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>()
-  const [isNewReportingFormOpen, setIsNewReportingFormOpen] = useState(withOpenedNewReportingForm)
+  const [editedReporting, setEditedReporting] = useState<Reporting.EditableReporting | undefined>(
+    withOpenedNewReportingForm ? buildVesselContext(vesselIdentity) : undefined
+  )
 
   const closeForm = useCallback(() => {
-    setIsNewReportingFormOpen(false)
     setEditedReporting(undefined)
   }, [])
 
@@ -57,26 +58,19 @@ export function Content({
 
   return (
     <Wrapper className={className}>
-      {!vesselReportings.current.length && !isNewReportingFormOpen && (
+      {!vesselReportings.current.length && !editedReporting && (
         <NoReporting>Pas de signalement ouvert sur ce navire.</NoReporting>
       )}
-      {!isNewReportingFormOpen && !editedReporting && (
+      {!editedReporting && (
         <NewReportingButton
           accent={Accent.PRIMARY}
           data-cy="vessel-sidebar-open-reporting"
-          onClick={() => setIsNewReportingFormOpen(true)}
+          onClick={() => setEditedReporting(buildVesselContext(vesselIdentity))}
         >
           Ouvrir un signalement
         </NewReportingButton>
       )}
-      {(isNewReportingFormOpen || editedReporting) && (
-        <EditReporting
-          editedReporting={editedReporting}
-          onClose={closeForm}
-          onIsDirty={onIsDirty}
-          vesselIdentity={vesselIdentity}
-        />
-      )}
+      {editedReporting && <EditReporting editedReporting={editedReporting} onClose={closeForm} onIsDirty={onIsDirty} />}
       {reportingsWithoutEdited.map(reporting => (
         <ReportingCard
           key={reporting.reporting.id}

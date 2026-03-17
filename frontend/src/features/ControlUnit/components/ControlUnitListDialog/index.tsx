@@ -67,7 +67,7 @@ export function ControlUnitListDialog() {
 
   return (
     isRendered && (
-      <MapToolBox $isOpen={isOpened} $isTransparent>
+      <MapToolBox isOpen={isOpened} isTransparent>
         <MapMenuDialog.Container style={{ margin: '0' }}>
           <MissionsMenuHeader>
             <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />

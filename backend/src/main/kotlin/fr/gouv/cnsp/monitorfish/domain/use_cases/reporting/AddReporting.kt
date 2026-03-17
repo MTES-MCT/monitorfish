@@ -19,7 +19,7 @@ class AddReporting(
 
     fun execute(newReporting: Reporting): Pair<Reporting, LegacyControlUnit?> {
         logger.info(
-            "Adding reporting for vessel ${newReporting.internalReferenceNumber}/${newReporting.ircs}/${newReporting.externalReferenceNumber}",
+            "Adding reporting for vessel ${newReporting.cfr}/${newReporting.ircs}/${newReporting.externalMarker}",
         )
 
         require(newReporting.type != ReportingType.ALERT) {

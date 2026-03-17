@@ -101,7 +101,7 @@ export function CustomCircleRange({ isOpened }) {
   }
 
   return (
-    <Wrapper $isOpen={isOpened}>
+    <Wrapper isOpen={isOpened}>
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>

@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
@@ -836,8 +835,8 @@ class VesselControllerITests {
                 id = 1,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
@@ -866,8 +865,8 @@ class VesselControllerITests {
                 type = ReportingType.ALERT,
                 createdBy = "",
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
@@ -963,8 +962,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].threatCharacterization", equalTo("FAR")))
             .andExpect(jsonPath("$.summary[\"Obligations déclaratives\"][0].numberOfOccurrences", equalTo(2)))
             .andExpect(jsonPath("$.current[0].reporting.flagState", equalTo("FR")))
-            .andExpect(jsonPath("$.current[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
-            .andExpect(jsonPath("$.current[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.current[0].reporting.cfr", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.current[0].reporting.externalMarker", equalTo("1236514")))
             .andExpect(jsonPath("$.current[0].reporting.type", equalTo("ALERT")))
             .andExpect(jsonPath("$.current[0].reporting.isArchived", equalTo(false)))
             .andExpect(jsonPath("$.current[0].reporting.isDeleted", equalTo(false)))
@@ -972,8 +971,8 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.current[0].reporting.value.type", equalTo("POSITION_ALERT")))
             .andExpect(jsonPath("$.current[0].reporting.value.natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$.archived.2024[0].reporting.id", equalTo(666)))
-            .andExpect(jsonPath("$.archived.2024[0].reporting.internalReferenceNumber", equalTo("FR224226850")))
-            .andExpect(jsonPath("$.archived.2024[0].reporting.externalReferenceNumber", equalTo("1236514")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.cfr", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.archived.2024[0].reporting.externalMarker", equalTo("1236514")))
             .andExpect(jsonPath("$.archived.2024[0].reporting.type", equalTo("ALERT")))
             .andExpect(jsonPath("$.archived.2024[0].reporting.isArchived", equalTo(true)))
             .andExpect(jsonPath("$.archived.2024[0].reporting.isDeleted", equalTo(false)))

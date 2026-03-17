@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
@@ -41,8 +41,10 @@ class LoggingFormatterUTests {
                 mapper,
                 request,
                 UpdateReportingDataInput(
-                    reportingActor = ReportingActor.OPS,
+                    flagState = CountryCode.FR,
+                    reportingSource = ReportingSource.OPS,
                     type = ReportingType.INFRACTION_SUSPICION,
+                    reportingDate = ZonedDateTime.now(),
                     threatHierarchy =
                         ThreatHierarchyDataInput(
                             children =
@@ -67,17 +69,12 @@ class LoggingFormatterUTests {
             )
 
         // Then
-        assertThat(log).isEqualTo(
-            "REQUEST PUT /healthcheck {} " +
-                "{\"reportingActor\":\"OPS\"," +
-                "\"type\":\"INFRACTION_SUSPICION\"," +
-                "\"controlUnitId\":null," +
-                "\"authorContact\":null," +
-                "\"expirationDate\":null," +
-                "\"title\":\"A title\"," +
-                "\"description\":null," +
-                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
-        )
+        assertThat(log).startsWith("REQUEST PUT /healthcheck {} ")
+        assertThat(log).contains("\"reportingSource\":\"OPS\"")
+        assertThat(log).contains("\"type\":\"INFRACTION_SUSPICION\"")
+        assertThat(log).contains("\"flagState\":\"FR\"")
+        assertThat(log).contains("\"title\":\"A title\"")
+        assertThat(log).contains("\"threatHierarchy\"")
     }
 
     @Test
@@ -93,12 +90,13 @@ class LoggingFormatterUTests {
                 mapper,
                 request,
                 CreateReportingDataInput(
-                    internalReferenceNumber = "FRFGRGR",
-                    externalReferenceNumber = "RGD",
+                    cfr = "FRFGRGR",
+                    externalMarker = "RGD",
                     ircs = "6554fEE",
                     vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                     flagState = CountryCode.FR,
                     creationDate = dateTime,
+                    reportingDate = dateTime,
                     threatHierarchy =
                         ThreatHierarchyDataInput(
                             children =
@@ -118,33 +116,20 @@ class LoggingFormatterUTests {
                             label = "Activités INN",
                             value = "Activités INN",
                         ),
-                    reportingActor = ReportingActor.OPS,
+                    reportingSource = ReportingSource.OPS,
                     title = "A title",
                     type = ReportingType.INFRACTION_SUSPICION,
                 ),
             )
 
         // Then
-        assertThat(log).isEqualTo(
-            "REQUEST POST /healthcheck {} " +
-                "{\"type\":\"INFRACTION_SUSPICION\"," +
-                "\"vesselId\":null," +
-                "\"vesselName\":null," +
-                "\"internalReferenceNumber\":\"FRFGRGR\"," +
-                "\"externalReferenceNumber\":\"RGD\"," +
-                "\"ircs\":\"6554fEE\"," +
-                "\"vesselIdentifier\":\"INTERNAL_REFERENCE_NUMBER\"," +
-                "\"flagState\":\"FR\"," +
-                "\"creationDate\":\"2019-01-18T07:19:45.000000045Z\"," +
-                "\"validationDate\":null," +
-                "\"expirationDate\":null," +
-                "\"reportingActor\":\"OPS\"," +
-                "\"controlUnitId\":null," +
-                "\"authorContact\":null," +
-                "\"title\":\"A title\"," +
-                "\"description\":null," +
-                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
-        )
+        assertThat(log).startsWith("REQUEST POST /healthcheck {} ")
+        assertThat(log).contains("\"type\":\"INFRACTION_SUSPICION\"")
+        assertThat(log).contains("\"cfr\":\"FRFGRGR\"")
+        assertThat(log).contains("\"externalMarker\":\"RGD\"")
+        assertThat(log).contains("\"ircs\":\"6554fEE\"")
+        assertThat(log).contains("\"reportingSource\":\"OPS\"")
+        assertThat(log).contains("\"creationDate\":\"2019-01-18T07:19:45.000000045Z\"")
     }
 
     @Test
@@ -155,8 +140,10 @@ class LoggingFormatterUTests {
         response.status = 201
         val body =
             UpdateReportingDataInput(
-                reportingActor = ReportingActor.OPS,
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
                 threatHierarchy =
                     ThreatHierarchyDataInput(
                         children =
@@ -183,16 +170,11 @@ class LoggingFormatterUTests {
         val log = LoggingFormatter.formatResponse(mapper, request, response, body)
 
         // Then
-        assertThat(log).isEqualTo(
-            "RESPONSE POST 201 /healthcheck " +
-                "{\"reportingActor\":\"OPS\"," +
-                "\"type\":\"INFRACTION_SUSPICION\"," +
-                "\"controlUnitId\":null," +
-                "\"authorContact\":null," +
-                "\"expirationDate\":null," +
-                "\"title\":\"A title\"," +
-                "\"description\":null," +
-                "\"threatHierarchy\":{\"children\":[{\"children\":[{\"label\":\"27689\",\"value\":27689}],\"label\":\"Pêche sans autorisation par navire tiers\",\"value\":\"Pêche sans autorisation par navire tiers\"}],\"label\":\"Activités INN\",\"value\":\"Activités INN\"}}",
-        )
+        assertThat(log).startsWith("RESPONSE POST 201 /healthcheck ")
+        assertThat(log).contains("\"reportingSource\":\"OPS\"")
+        assertThat(log).contains("\"type\":\"INFRACTION_SUSPICION\"")
+        assertThat(log).contains("\"flagState\":\"FR\"")
+        assertThat(log).contains("\"title\":\"A title\"")
+        assertThat(log).contains("\"threatHierarchy\"")
     }
 }

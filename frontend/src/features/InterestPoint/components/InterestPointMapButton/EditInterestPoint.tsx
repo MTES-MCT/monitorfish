@@ -128,7 +128,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   }
 
   return (
-    <Wrapper $isOpen={isOpen} data-cy="edit-interest-point">
+    <Wrapper data-cy="edit-interest-point" isOpen={isOpen}>
       <Header>Créer un point d&apos;intérêt</Header>
       <Body>
         <p>Coordonnées</p>

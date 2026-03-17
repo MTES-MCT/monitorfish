@@ -19,16 +19,18 @@ export const deleteReporting =
     try {
       await dispatch(reportingApi.endpoints.deleteReporting.initiate(id)).unwrap()
 
-      dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
+      if (selectedVesselIdentity) {
+        dispatch(vesselApi.util.invalidateTags([RtkCacheTagType.Reportings]))
 
-      dispatch(
-        removeVesselReporting({
-          reportingType,
-          vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
-        })
-      )
+        dispatch(
+          removeVesselReporting({
+            reportingType,
+            vesselFeatureId: VesselFeature.getVesselFeatureId(selectedVesselIdentity)
+          })
+        )
 
-      dispatch(renderVesselFeatures())
+        dispatch(renderVesselFeatures())
+      }
     } catch (error) {
       dispatch(
         displayOrLogError(

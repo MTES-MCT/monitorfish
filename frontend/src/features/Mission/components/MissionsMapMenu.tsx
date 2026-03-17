@@ -60,7 +60,7 @@ export function MissionsMapMenu() {
         title="Missions et contrôles"
       />
       {isRendered && (
-        <MapToolBox $isLeftBox $isOpen={isOpened} data-cy="missions-menu-box">
+        <MapToolBox data-cy="missions-menu-box" isLeftBox isOpen={isOpened}>
           <MissionsMenuWrapper>
             <Header>
               <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} title="Fermer" />

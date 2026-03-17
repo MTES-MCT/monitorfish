@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
@@ -19,18 +19,20 @@ class InfractionSuspicionDataOutputUTests {
         // Given
         val infractionSuspicion =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 126,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -52,18 +54,20 @@ class InfractionSuspicionDataOutputUTests {
         // Given
         val infractionSuspicion =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 126,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -98,18 +102,20 @@ class InfractionSuspicionDataOutputUTests {
         // Given
         val infractionSuspicion =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 126,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "Test infraction",
                 natinfCode = 2608,
                 threat = "Activités INN",
@@ -133,18 +139,20 @@ class InfractionSuspicionDataOutputUTests {
         val controlUnit = LegacyControlUnit(1234, "DIRM", false, "Cross Etel", listOf())
         val infractionSuspicion =
             Reporting.InfractionSuspicion(
-                internalReferenceNumber = "FRFGRGR",
-                externalReferenceNumber = "RGD",
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
                 ircs = "6554fEE",
                 vesselId = 126,
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1234,
                 authorContact = "abc@example.com",
                 title = "Test title",
@@ -164,7 +172,7 @@ class InfractionSuspicionDataOutputUTests {
             )
 
         // Then
-        assertThat(output.reportingActor).isEqualTo(ReportingActor.UNIT)
+        assertThat(output.reportingSource).isEqualTo(ReportingSource.UNIT)
         assertThat(output.controlUnitId).isEqualTo(1234)
         assertThat(output.controlUnit).isEqualTo(controlUnit)
         assertThat(output.authorContact).isEqualTo("abc@example.com")

@@ -39,13 +39,7 @@ export function LayersSidebar() {
         title="Arbre des couches"
       />
       {isRegulationSearchRendered && (
-        <Sidebar
-          $hideBoxShadow
-          $isLeftBox
-          $isOpen={isRegulationSearchOpened}
-          $isTransparent
-          data-cy="layers-sidebar-box"
-        >
+        <Sidebar data-cy="layers-sidebar-box" hideBoxShadow isLeftBox isOpen={isRegulationSearchOpened} isTransparent>
           <RegulationSearch />
           <Layers $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
             <RegulatoryZones />
@@ -61,7 +55,7 @@ export function LayersSidebar() {
         </Sidebar>
       )}
       {!isRegulationSearchRendered && isMetadataPanelRendered && (
-        <Sidebar $hideBoxShadow $isLeftBox $isOpen={isMetadataPanelOpened} $isTransparent>
+        <Sidebar hideBoxShadow isLeftBox isOpen={isMetadataPanelOpened} isTransparent>
           <RegulatoryZoneMetadataShifter $isLeftMapBoxOpened={!!leftMapBoxOpened} $isOpen={isMetadataPanelOpened}>
             <RegulatoryZoneMetadata />
           </RegulatoryZoneMetadataShifter>

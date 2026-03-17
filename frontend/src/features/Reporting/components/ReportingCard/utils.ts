@@ -1,21 +1,25 @@
 import {
   type InfractionSuspicionReporting,
   type PendingAlertReporting,
-  ReportingOriginActorLabel
+  ReportingOriginSourceLabel
 } from '@features/Reporting/types'
-import { ReportingOriginActor } from '@features/Reporting/types/ReportingOriginActor'
+import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 
 import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 
 export const getReportingActorLabel = (
-  reportingActor: ReportingOriginActor,
+  reportingSource: ReportingOriginSource | undefined,
   unit: LegacyControlUnit.LegacyControlUnit | undefined
 ) => {
-  if (reportingActor === ReportingOriginActor.UNIT) {
+  if (reportingSource === ReportingOriginSource.UNIT) {
     return unit?.name ?? 'Unité inconnue'
   }
 
-  return ReportingOriginActorLabel[reportingActor]
+  if (!reportingSource) {
+    return ''
+  }
+
+  return ReportingOriginSourceLabel[reportingSource]
 }
 
 export function getFrenchOrdinal(index: number): string {

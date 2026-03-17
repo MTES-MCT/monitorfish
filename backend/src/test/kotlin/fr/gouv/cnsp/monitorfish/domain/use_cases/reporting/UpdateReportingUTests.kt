@@ -38,12 +38,13 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.ALERT,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 alertType = AlertType.POSITION_ALERT,
                 seaFront = NAMO.toString(),
@@ -65,8 +66,12 @@ class UpdateReportingUTests {
                     .execute(
                         1,
                         ReportingUpdateCommand(
-                            reportingActor = ReportingActor.UNIT,
+                            flagState = CountryCode.FR,
+                            latitude = null,
+                            longitude = null,
+                            reportingSource = ReportingSource.UNIT,
                             type = ReportingType.OBSERVATION,
+                            reportingDate = ZonedDateTime.now(),
                             title = "A reporting",
                         ),
                     )
@@ -84,14 +89,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -109,21 +116,25 @@ class UpdateReportingUTests {
                     .execute(
                         1,
                         ReportingUpdateCommand(
-                            reportingActor = ReportingActor.UNIT,
+                            flagState = CountryCode.FR,
+                            latitude = null,
+                            longitude = null,
+                            reportingSource = ReportingSource.UNIT,
                             type = ReportingType.ALERT,
+                            reportingDate = ZonedDateTime.now(),
                             title = "A reporting",
                         ),
                     )
             }
 
         // Then
-        assertThat(throwable.message).contains("Invalid target type")
+        assertThat(throwable).isInstanceOf(NotImplementedError::class.java)
     }
 
     @ParameterizedTest
-    @EnumSource(ReportingActor::class)
+    @EnumSource(ReportingSource::class)
     fun `execute Should throw an exception When fields of reporting actor are not rights`(
-        reportingActor: ReportingActor,
+        reportingSource: ReportingSource,
     ) {
         // Given
         val reporting =
@@ -131,14 +142,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -150,7 +163,7 @@ class UpdateReportingUTests {
         given(reportingRepository.findById(any())).willReturn(reporting)
         given(reportingRepository.update(any(), isA<Reporting>())).willReturn(reporting)
         given(getReportingWithDMLAndSeaFront.execute(any()))
-            .willReturn(reporting.copy(reportingActor = reportingActor))
+            .willReturn(reporting.copy(reportingSource = reportingSource))
 
         // When
         val throwable =
@@ -159,8 +172,12 @@ class UpdateReportingUTests {
                     .execute(
                         1,
                         ReportingUpdateCommand(
-                            reportingActor = reportingActor,
+                            flagState = CountryCode.FR,
+                            latitude = null,
+                            longitude = null,
+                            reportingSource = reportingSource,
                             type = ReportingType.INFRACTION_SUSPICION,
+                            reportingDate = ZonedDateTime.now(),
                             title = "A reporting",
                             natinfCode = 123456,
                             threat = "Obligations déclaratives",
@@ -170,13 +187,14 @@ class UpdateReportingUTests {
             }
 
         // Then
-        when (reportingActor) {
-            ReportingActor.OPS -> assertThat(throwable).isNull()
-            ReportingActor.SIP -> assertThat(throwable).isNull()
-            ReportingActor.UNIT -> assertThat(throwable.message).contains("An unit must be set")
-            ReportingActor.DML -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
-            ReportingActor.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
+        when (reportingSource) {
+            ReportingSource.OPS -> assertThat(throwable).isNull()
+            ReportingSource.SIP -> assertThat(throwable).isNull()
+            ReportingSource.SATELLITE -> assertThat(throwable).isNull()
+            ReportingSource.UNIT -> assertThat(throwable.message).contains("An unit must be set")
+            ReportingSource.DML -> assertThat(throwable.message).contains("An author contact must be set")
+            ReportingSource.DIRM -> assertThat(throwable.message).contains("An author contact must be set")
+            ReportingSource.OTHER -> assertThat(throwable.message).contains("An author contact must be set")
         }
     }
 
@@ -188,14 +206,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 title = "Test",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -216,8 +236,12 @@ class UpdateReportingUTests {
                 ).execute(
                     1,
                     ReportingUpdateCommand(
-                        reportingActor = ReportingActor.UNIT,
+                        flagState = CountryCode.FR,
+                        latitude = null,
+                        longitude = null,
+                        reportingSource = ReportingSource.UNIT,
                         type = ReportingType.INFRACTION_SUSPICION,
+                        reportingDate = ZonedDateTime.now(),
                         title = "A reporting",
                         threat = "Obligations déclaratives",
                         threatCharacterization = "DEP",
@@ -238,15 +262,17 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 expirationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 title = "A title",
                 description = "Before update",
@@ -268,10 +294,14 @@ class UpdateReportingUTests {
         ).execute(
             1,
             ReportingUpdateCommand(
-                reportingActor = ReportingActor.UNIT,
+                flagState = CountryCode.FR,
+                latitude = null,
+                longitude = null,
+                reportingSource = ReportingSource.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
                 expirationDate = expectedExpirationDate,
+                reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
@@ -296,14 +326,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 authorContact = "An actor",
                 title = "Test",
@@ -327,9 +359,13 @@ class UpdateReportingUTests {
         ).execute(
             1,
             ReportingUpdateCommand(
-                reportingActor = ReportingActor.UNIT,
+                flagState = CountryCode.FR,
+                latitude = null,
+                longitude = null,
+                reportingSource = ReportingSource.UNIT,
                 type = ReportingType.OBSERVATION,
                 controlUnitId = 1,
+                reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
                 description = "Test 2",
                 natinfCode = 1234,
@@ -355,15 +391,17 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.INFRACTION_SUSPICION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 controlUnitId = 1,
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 authorContact = "A contact",
                 title = "Test",
                 natinfCode = 1234,
@@ -390,9 +428,13 @@ class UpdateReportingUTests {
         ).execute(
             1,
             ReportingUpdateCommand(
-                reportingActor = ReportingActor.UNIT,
+                flagState = CountryCode.FR,
+                latitude = null,
+                longitude = null,
+                reportingSource = ReportingSource.UNIT,
                 type = ReportingType.INFRACTION_SUSPICION,
                 controlUnitId = 1,
+                reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
                 natinfCode = 1234,
                 threat = "Obligations déclaratives",
@@ -417,14 +459,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 title = "Test",
                 isArchived = false,
                 isDeleted = false,
@@ -445,9 +489,13 @@ class UpdateReportingUTests {
             ).execute(
                 1,
                 ReportingUpdateCommand(
-                    reportingActor = ReportingActor.UNIT,
+                    flagState = CountryCode.FR,
+                    latitude = null,
+                    longitude = null,
+                    reportingSource = ReportingSource.UNIT,
                     type = ReportingType.OBSERVATION,
                     controlUnitId = 1,
+                    reportingDate = ZonedDateTime.now(),
                     title = "A reporting",
                     natinfCode = 1234,
                     threat = "Obligations déclaratives",
@@ -470,14 +518,16 @@ class UpdateReportingUTests {
                 id = 1,
                 type = ReportingType.OBSERVATION,
                 vesselName = "BIDUBULE",
-                internalReferenceNumber = "FR224226850",
-                externalReferenceNumber = "1236514",
+                cfr = "FR224226850",
+                externalMarker = "1236514",
                 ircs = "IRCS",
                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
-                reportingActor = ReportingActor.UNIT,
+                reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 authorContact = "An actor",
                 title = "Test",
@@ -502,9 +552,13 @@ class UpdateReportingUTests {
             reportingId = 1,
             reportingUpdateCommand =
                 ReportingUpdateCommand(
-                    reportingActor = ReportingActor.UNIT,
+                    flagState = CountryCode.FR,
+                    latitude = null,
+                    longitude = null,
+                    reportingSource = ReportingSource.UNIT,
                     type = ReportingType.INFRACTION_SUSPICION,
                     controlUnitId = 1,
+                    reportingDate = ZonedDateTime.now(),
                     title = "A reporting",
                     natinfCode = 1234,
                     threat = "Obligations déclaratives",

@@ -496,7 +496,7 @@ export function MissionForm() {
           </MissionInfos>
 
           <RightButtonsContainer>
-            <AutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
+            <StyledAutoSaveTag isAutoSaveEnabled={isAutoSaveEnabled} />
             <Button
               accent={isAutoSaveEnabled ? Accent.PRIMARY : Accent.SECONDARY}
               disabled={isSaving}
@@ -541,6 +541,10 @@ export function MissionForm() {
     </>
   )
 }
+
+const StyledAutoSaveTag = styled(AutoSaveTag)`
+  margin-left: 24px;
+`
 
 const StyledBanner = styled(Banner)`
   left: unset;

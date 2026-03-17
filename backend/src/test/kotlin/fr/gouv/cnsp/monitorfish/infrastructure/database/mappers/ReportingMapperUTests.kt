@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingActor
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
@@ -32,12 +32,14 @@ class ReportingMapperUTests {
         id = 1,
         vesselId = 123,
         vesselName = "Test Vessel",
-        internalReferenceNumber = "FR123456",
-        externalReferenceNumber = "EXT123",
+        cfr = "FR123456",
+        externalMarker = "EXT123",
         ircs = "IRCS123",
         vesselIdentifier = null,
         flagState = CountryCode.FR,
         creationDate = ZonedDateTime.now(),
+        reportingDate = ZonedDateTime.now(),
+        lastUpdateDate = ZonedDateTime.now(),
         validationDate = null,
         expirationDate = null,
         isArchived = false,
@@ -127,7 +129,7 @@ class ReportingMapperUTests {
         val observation =
             "{" +
                 "\"type\": \"OBSERVATION\"," +
-                "\"reportingActor\": \"OPS\"," +
+                "\"reportingSource\": \"OPS\"," +
                 "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
                 "\"authorContact\": null," +
@@ -146,7 +148,7 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.Observation::class.java)
         parsedReporting as Reporting.Observation
-        Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        Assertions.assertThat(parsedReporting.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
@@ -159,7 +161,7 @@ class ReportingMapperUTests {
         val infraction =
             "{" +
                 "\"type\": \"INFRACTION_SUSPICION\"," +
-                "\"reportingActor\": \"OPS\"," +
+                "\"reportingSource\": \"OPS\"," +
                 "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
                 "\"authorContact\": null," +
@@ -181,7 +183,7 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
         parsedReporting as Reporting.InfractionSuspicion
-        Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        Assertions.assertThat(parsedReporting.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
@@ -196,7 +198,7 @@ class ReportingMapperUTests {
         val infraction =
             "{" +
                 "\"type\": \"INFRACTION_SUSPICION\"," +
-                "\"reportingActor\": \"OPS\"," +
+                "\"reportingSource\": \"OPS\"," +
                 "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
                 "\"authorContact\": null," +
@@ -217,7 +219,7 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
         parsedReporting as Reporting.InfractionSuspicion
-        Assertions.assertThat(parsedReporting.reportingActor).isEqualTo(ReportingActor.OPS)
+        Assertions.assertThat(parsedReporting.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(parsedReporting.controlUnitId).isNull()
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
@@ -234,6 +236,7 @@ class ReportingMapperUTests {
                 id = 1,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -267,10 +270,12 @@ class ReportingMapperUTests {
                 id = 1,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "A title !",
                 description = "A description !",
                 natinfCode = 1234,
@@ -285,7 +290,7 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(value).isInstanceOf(InfractionSuspicionDto::class.java)
         val infractionSuspicionValue = value as InfractionSuspicionDto
-        Assertions.assertThat(infractionSuspicionValue.reportingActor).isEqualTo(ReportingActor.OPS)
+        Assertions.assertThat(infractionSuspicionValue.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(infractionSuspicionValue.title).isEqualTo("A title !")
         Assertions.assertThat(infractionSuspicionValue.description).isEqualTo("A description !")
         Assertions.assertThat(infractionSuspicionValue.natinfCode).isEqualTo(1234)
@@ -300,10 +305,12 @@ class ReportingMapperUTests {
                 id = 1,
                 flagState = CountryCode.FR,
                 creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
-                reportingActor = ReportingActor.OPS,
+                reportingSource = ReportingSource.OPS,
                 title = "A title !",
                 description = "A description !",
             )
@@ -314,7 +321,7 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(value).isInstanceOf(ObservationDto::class.java)
         val observationValue = value as ObservationDto
-        Assertions.assertThat(observationValue.reportingActor).isEqualTo(ReportingActor.OPS)
+        Assertions.assertThat(observationValue.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(observationValue.title).isEqualTo("A title !")
         Assertions.assertThat(observationValue.description).isEqualTo("A description !")
     }

@@ -19,8 +19,8 @@ export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
   'value.natinfCode': 'NATINF',
   flagState: 'Pavillon',
   vesselName: 'Navire',
-  internalReferenceNumber: 'CFR',
-  externalReferenceNumber: 'Marquage ext.',
+  cfr: 'CFR',
+  externalMarker: 'Marquage ext.',
   ircs: 'C/S',
   underCharter: {
     label: 'Navire sous charte',

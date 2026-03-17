@@ -8,7 +8,11 @@ import { displayedComponentActions } from '../shared_slices/DisplayedComponent'
 export const setRightMapBoxDisplayed = (rightMapBoxOpened: MapBox | undefined) => (dispatch, getState) => {
   const previousRightMapBoxOpened = getState().global.rightMapBoxOpened
   const isVesselSidebarOpen = getState().vessel.vesselSidebarIsOpen
-  const { isControlUnitListDialogDisplayed } = getState().displayedComponent
+  const { isControlUnitListDialogDisplayed, isReportingMapFormDisplayed } = getState().displayedComponent
+
+  if (isReportingMapFormDisplayed) {
+    return
+  }
 
   if (isVesselSidebarOpen && !!rightMapBoxOpened) {
     dispatch(unselectVessel())

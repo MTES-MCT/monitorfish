@@ -74,7 +74,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Type de signalement', 'Observation')
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill("Identité de l'émetteur", 'Jean Bon (0612365896)')
+    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Observation: Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)

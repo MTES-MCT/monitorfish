@@ -389,7 +389,7 @@ export function Form({
             }
           }}
           options={threatCharacterizationOptions}
-          placement="top"
+          placement="autoVertical"
           searchable
           value={isInfractionSuspicion && values.threatHierarchy ? [values.threatHierarchy] : undefined}
         />

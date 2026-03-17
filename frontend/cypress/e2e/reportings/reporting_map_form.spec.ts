@@ -47,11 +47,13 @@ context('Reporting map form', () => {
     cy.clickButton('Modifier le signalement')
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
     cy.get('*[data-cy="map-reporting-form"]').contains('RENCONTRER VEILLER APPARTEMENT')
+    cy.getDataCy('reporting-overlay-close').click({ force: true })
 
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.wait('@updateReporting')
     cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
 
+    cy.wait(200)
     cy.clickButton('Fermer')
     cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 

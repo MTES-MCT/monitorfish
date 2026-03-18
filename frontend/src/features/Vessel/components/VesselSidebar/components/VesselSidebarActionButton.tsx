@@ -1,5 +1,5 @@
 import { MapButton } from '@features/Map/components/MapButtons/MapButton'
-import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 

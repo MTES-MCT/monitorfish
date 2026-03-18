@@ -2,6 +2,7 @@ import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AutoSaveTag } from '@features/Mission/components/MissionForm/shared/AutoSaveTag'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { ReportingForm } from '@features/Reporting/components/ReportingForm'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
@@ -18,8 +19,6 @@ import styled from 'styled-components'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 
 import type { Reporting } from '@features/Reporting/types'
-
-export const REPORTING_MAP_FORM_WIDTH = 480
 
 export function IUUReportingMapForm() {
   const dispatch = useMainAppDispatch()
@@ -118,7 +117,8 @@ export function IUUReportingMapForm() {
                       {vesselName}
                     </>
                   )}
-                  {!vesselName && 'NOUVEAU SIGNALEMENT INN'}
+                  {!vesselName && !lastUpdateDate && 'NOUVEAU SIGNALEMENT INN'}
+                  {!vesselName && !!lastUpdateDate && 'SIGNALEMENT INN (NAVIRE INCONNU)'}
                 </StyledTitle>
               </HeaderTitle>
               <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />

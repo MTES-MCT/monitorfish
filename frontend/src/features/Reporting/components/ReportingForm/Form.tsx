@@ -152,7 +152,7 @@ export function Form({
       ...values,
       cfr: vessel.internalReferenceNumber,
       externalMarker: vessel.externalReferenceNumber,
-      flagState: vessel.flagState ?? '',
+      flagState: vessel.flagState ?? 'UNDEFINED',
       ircs: vessel.ircs,
       length: vessel.vesselLength,
       mmsi: vessel.mmsi,

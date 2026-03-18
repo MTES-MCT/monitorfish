@@ -113,7 +113,9 @@ export function IUUReportingMapForm() {
                 <StyledTitle>
                   {vesselName && (
                     <>
-                      {flagState && <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />}
+                      {flagState && flagState !== 'UNDEFINED' && (
+                        <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
+                      )}
                       {vesselName}
                     </>
                   )}

@@ -7,7 +7,6 @@ export function buildReportingCreation(formValues: FormEditedReporting, isIUU = 
   return {
     authorContact: formValues.authorContact,
     cfr: formValues.cfr,
-    controlUnit: formValues.controlUnit,
     controlUnitId: formValues.controlUnitId,
     creationDate: new Date().toISOString(),
     description: formValues.description,

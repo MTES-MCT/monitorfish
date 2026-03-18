@@ -121,6 +121,7 @@ export function ReportingForm({
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}
+        isEdition={!!editedReporting?.id}
         isIUU={isIUU}
         onAutoSave={autoSave ? handleAutoSave : undefined}
         onClose={handleClose}

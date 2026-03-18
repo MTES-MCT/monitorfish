@@ -20,7 +20,7 @@ export const CreateOrEditReportingSchema = z
     otherSourceType: z.string().optional(),
     reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
     reportingSource: z.enum(ReportingOriginSource),
-    satelliteSource: z.string().optional(),
+    satelliteType: z.string().optional(),
     threatHierarchy: z.any().optional(),
     title: z.string().min(1, 'Veuillez renseigner le titre du signalement.'),
     type: z.enum(ReportingType),
@@ -60,11 +60,11 @@ export const CreateOrEditReportingSchema = z
       })
     }
 
-    if (data.reportingSource === ReportingOriginSource.SATELLITE && !data.satelliteSource) {
+    if (data.reportingSource === ReportingOriginSource.SATELLITE && !data.satelliteType) {
       ctx.addIssue({
         code: 'custom',
         message: 'Veuillez renseigner la source satellite.',
-        path: ['satelliteSource']
+        path: ['satelliteType']
       })
     }
 

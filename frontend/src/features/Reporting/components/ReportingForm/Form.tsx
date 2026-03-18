@@ -42,12 +42,15 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
 
+const DEBOUNCE_DELAY = 1000
+
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
+  isEdition?: boolean
   isIUU: boolean
   onAutoSave?: ((values: FormEditedReporting) => void) | undefined
   onClose: () => void
@@ -55,15 +58,13 @@ type FormProps = Readonly<{
   onVesselStateChange?: ((vesselName: string | undefined, flagState: string | undefined) => void) | undefined
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
 }>
-
-const DEBOUNCE_DELAY = 1000
-
 export function Form({
   className,
   displayedErrorKey,
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
+  isEdition = false,
   isIUU,
   onAutoSave,
   onClose,
@@ -71,7 +72,7 @@ export function Form({
   onVesselStateChange,
   submitRef
 }: FormProps) {
-  const { dirty, errors, initialValues, isValid, setFieldValue, setValues, submitForm, values } =
+  const { dirty, errors, isValid, setFieldValue, setValues, submitForm, values } =
     useFormikContext<FormEditedReporting>()
   const formRef = useRef<HTMLFormElement | null>(null)
   const controlUnitsQuery = useGetControlUnitsQuery(undefined)
@@ -109,7 +110,7 @@ export function Form({
     values.vesselIdentifier,
     values.length
   ])
-  const [isVesselAbsent, setIsVesselAbsent] = useState(!initialValues.vesselId && !!initialValues.vesselName)
+  const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
 
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
   const isLight = !hasWhiteBackground
@@ -234,7 +235,7 @@ export function Form({
           isLight={isLight}
           isRequired
           label="Type de cliché satellite"
-          name="satelliteSource"
+          name="satelliteType"
           options={getOptionsFromLabelledEnum(SatelliteSourceLabel)}
         />
       )}

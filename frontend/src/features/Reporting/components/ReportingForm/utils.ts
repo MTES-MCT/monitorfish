@@ -9,6 +9,13 @@ export function getFormFields(
 ): FormEditedReporting {
   const reportingType = editedReporting?.type ?? ReportingType.INFRACTION_SUSPICION
   const value = editedReporting?.value
+  const hasVesselIdentifier = !!(
+    editedReporting?.vesselName ??
+    editedReporting?.mmsi ??
+    editedReporting?.imo ??
+    editedReporting?.ircs ??
+    editedReporting?.externalMarker
+  )
 
   const base = {
     authorContact: value?.authorContact,
@@ -24,13 +31,15 @@ export function getFormFields(
     isArchived: editedReporting?.isArchived ?? false,
     isFishing: editedReporting?.isFishing,
     isIUU: editedReporting?.isIUU ?? isIUU,
-    isUnknownVessel: false,
+    isUnknownVessel: editedReporting?.id ? !hasVesselIdentifier : false,
     latitude: editedReporting?.latitude,
     length: editedReporting?.length,
     longitude: editedReporting?.longitude,
     mmsi: editedReporting?.mmsi,
+    otherSourceType: value?.otherSourceType,
     reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
+    satelliteType: value?.satelliteType,
     title: value?.title ?? '',
     vesselId: editedReporting?.vesselId,
     vesselIdentifier: editedReporting?.vesselIdentifier,
@@ -65,11 +74,11 @@ export function updateReportingSource(
     case ReportingOriginSource.SIP:
       setFieldValue('controlUnitId', undefined)
       setFieldValue('authorContact', undefined)
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       setFieldValue('otherSourceType', undefined)
       break
     case ReportingOriginSource.UNIT:
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       setFieldValue('otherSourceType', undefined)
       break
     case ReportingOriginSource.SATELLITE:
@@ -79,7 +88,7 @@ export function updateReportingSource(
       break
     case ReportingOriginSource.OTHER:
       setFieldValue('controlUnitId', undefined)
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       break
     default:
       break

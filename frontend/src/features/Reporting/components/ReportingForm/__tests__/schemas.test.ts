@@ -90,16 +90,16 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
 })
 
 describe('CreateOrEditReportingSchema reportingSource conditional fields validation', () => {
-  it('passes when reportingSource is SATELLITE and satelliteSource is provided', () => {
+  it('passes when reportingSource is SATELLITE and satelliteType is provided', () => {
     const result = CreateOrEditReportingSchema.safeParse({
       ...baseValidData,
       reportingSource: ReportingOriginSource.SATELLITE,
-      satelliteSource: 'SPIRE'
+      satelliteType: 'SPIRE'
     })
     expect(result.success).toBe(true)
   })
 
-  it('fails when reportingSource is SATELLITE and satelliteSource is missing', () => {
+  it('fails when reportingSource is SATELLITE and satelliteType is missing', () => {
     const result = CreateOrEditReportingSchema.safeParse({
       ...baseValidData,
       reportingSource: ReportingOriginSource.SATELLITE
@@ -107,7 +107,7 @@ describe('CreateOrEditReportingSchema reportingSource conditional fields validat
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)
-      expect(paths).toContainEqual(['satelliteSource'])
+      expect(paths).toContainEqual(['satelliteType'])
     }
   })
 

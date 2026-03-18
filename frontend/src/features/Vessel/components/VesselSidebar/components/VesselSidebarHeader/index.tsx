@@ -1,5 +1,5 @@
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
-import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'

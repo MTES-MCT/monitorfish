@@ -1,0 +1,1 @@
+export const REPORTING_MAP_FORM_WIDTH = 480

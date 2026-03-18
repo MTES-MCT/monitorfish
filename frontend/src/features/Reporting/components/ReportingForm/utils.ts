@@ -24,7 +24,7 @@ export function getFormFields(
     description: value?.description,
     expirationDate: editedReporting?.expirationDate,
     externalMarker: editedReporting?.externalMarker,
-    flagState: editedReporting?.flagState ?? '',
+    flagState: editedReporting?.flagState ?? 'UNDEFINED',
     gearCode: editedReporting?.gearCode,
     imo: editedReporting?.imo,
     ircs: editedReporting?.ircs,

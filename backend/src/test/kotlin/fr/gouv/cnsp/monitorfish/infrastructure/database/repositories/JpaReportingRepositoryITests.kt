@@ -418,7 +418,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(reportingId = 7, updatedReporting)
 
         // Then
-        assertThat(reporting.cfr).isEqualTo("ABC000042310")
+        assertThat(reporting.cfr).isEqualTo("FRFGRGR")
+        assertThat(reporting.vesselId).isEqualTo(523)
+        assertThat(reporting.externalMarker).isEqualTo("RGD")
+        assertThat(reporting.ircs).isEqualTo("6554fEE")
+        assertThat(reporting.flagState).isEqualTo(CountryCode.FR)
         assertThat(
             (reporting as Reporting.InfractionSuspicion).reportingSource,
         ).isEqualTo(updatedReporting.reportingSource)
@@ -464,7 +468,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(reportingId = 8, updatedReporting)
 
         // Then
-        assertThat(reporting.cfr).isEqualTo("ABC000597493")
+        assertThat(reporting.cfr).isEqualTo("FRFGRGR")
+        assertThat(reporting.vesselId).isEqualTo(523)
+        assertThat(reporting.externalMarker).isEqualTo("RGD")
+        assertThat(reporting.ircs).isEqualTo("6554fEE")
+        assertThat(reporting.flagState).isEqualTo(CountryCode.FR)
         assertThat((reporting as Reporting.Observation).reportingSource).isEqualTo(updatedReporting.reportingSource)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
@@ -502,7 +510,11 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reporting = jpaReportingRepository.update(7, updatedReporting)
 
         // Then
-        assertThat(reporting.cfr).isEqualTo("ABC000042310")
+        assertThat(reporting.cfr).isEqualTo("FRFGRGR")
+        assertThat(reporting.vesselId).isEqualTo(523)
+        assertThat(reporting.externalMarker).isEqualTo("RGD")
+        assertThat(reporting.ircs).isEqualTo("6554fEE")
+        assertThat(reporting.flagState).isEqualTo(CountryCode.FR)
         assertThat(reporting.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat((reporting as Reporting.Observation).reportingSource).isEqualTo(updatedReporting.reportingSource)
         assertThat((reporting).controlUnitId).isEqualTo(updatedReporting.controlUnitId)

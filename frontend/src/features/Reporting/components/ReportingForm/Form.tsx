@@ -25,6 +25,7 @@ import {
   MultiRadio
 } from '@mtes-mct/monitor-ui'
 import { Form as FormikForm, type FormikErrors, useFormikContext } from 'formik'
+import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
@@ -47,6 +48,7 @@ type FormProps = Readonly<{
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
+  isIUU: boolean
   onAutoSave?: ((values: FormEditedReporting) => void) | undefined
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
@@ -62,6 +64,7 @@ export function Form({
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
+  isIUU,
   onAutoSave,
   onClose,
   onIsDirty,
@@ -209,6 +212,7 @@ export function Form({
       <MultiRadio
         isInline
         isLight={isLight}
+        isRequired
         label="Source"
         name="reportingSource"
         onChange={source => updateReportingSource(source, setFieldValue)}
@@ -218,6 +222,7 @@ export function Form({
       {values.reportingSource === ReportingOriginSource.UNIT && (
         <FormikSelect
           isLight={isLight}
+          isRequired
           label="Choisir l'unité"
           name="controlUnitId"
           options={controlUnitsAsOptions}
@@ -227,6 +232,7 @@ export function Form({
       {values.reportingSource === ReportingOriginSource.SATELLITE && (
         <FormikSelect
           isLight={isLight}
+          isRequired
           label="Type de cliché satellite"
           name="satelliteSource"
           options={getOptionsFromLabelledEnum(SatelliteSourceLabel)}
@@ -235,6 +241,7 @@ export function Form({
       {values.reportingSource === ReportingOriginSource.OTHER && (
         <FormikSelect
           isLight={isLight}
+          isRequired
           label="Autres types de source"
           name="otherSourceType"
           options={getOptionsFromLabelledEnum(OtherSourceTypeLabel)}
@@ -244,13 +251,14 @@ export function Form({
         values.reportingSource === ReportingOriginSource.OTHER) && (
         <FormikTextInput
           isLight={isLight}
+          isRequired
           label="Identité de l’émetteur"
           name="authorContact"
           placeholder="Ex: Yannick Attal (06 24 25 01 91)"
         />
       )}
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
-      <FormikCoordinatesPicker isLight={isLight} />
+      <FormikCoordinatesPicker isLight={isLight} isRequired={isIUU} />
       {!hideVesselSection && (
         <VesselSection $hasError={!!errors?.isUnknownVessel}>
           <VesselSearch
@@ -273,7 +281,12 @@ export function Form({
           {!isVesselAbsent && selectedVessel && (
             <VesselCard>
               <ReadOnlyField label="Nom">{values.vesselName ?? '-'}</ReadOnlyField>
-              <ReadOnlyField label="Nationalité">{values.flagState ?? '-'}</ReadOnlyField>
+              <TwoCol>
+                <ReadOnlyField label="Nationalité">
+                  {values.flagState ? countries.getName(values.flagState.toLowerCase(), 'fr') : '-'}
+                </ReadOnlyField>
+                <ReadOnlyField label="Longueur du navire">{values.length ?? '-'}</ReadOnlyField>
+              </TwoCol>
               <TwoCol>
                 <ReadOnlyField label="MMSI">{values.mmsi ?? '-'}</ReadOnlyField>
                 <ReadOnlyField label="IMO">{values.imo ?? '-'}</ReadOnlyField>
@@ -282,59 +295,66 @@ export function Form({
                 <ReadOnlyField label="IRCS (Call Sign)">{values.ircs ?? '-'}</ReadOnlyField>
                 <ReadOnlyField label="Marquage extérieur">{values.externalMarker ?? '-'}</ReadOnlyField>
               </TwoCol>
-              <TwoCol>
-                <FormikSelect
-                  isLight
-                  label="Engin"
-                  name="gearCode"
-                  options={gearsAsOptions ?? []}
-                  searchable
-                  virtualized
-                />
-                <FormikNumberInput isLight label="Longueur du navire" name="length" />
-              </TwoCol>
+              <FormikSelect
+                isLight
+                label="Engin"
+                name="gearCode"
+                options={gearsAsOptions ?? []}
+                searchable
+                virtualized
+              />
               <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
             </VesselCard>
           )}
           {isVesselAbsent && (
             <VesselCard>
-              <FormikTextInput isLight label="Nom" name="vesselName" />
-              <FormikSelect
-                isLight
-                label="Nationalité"
-                name="flagState"
-                options={COUNTRIES_AS_ALPHA2_OPTIONS}
-                searchable
-                virtualized
-              />
-              <TwoCol>
-                <FormikTextInput isLight label="MMSI" name="mmsi" />
-                <FormikTextInput isLight label="IMO" name="imo" />
-              </TwoCol>
-              <TwoCol>
-                <FormikTextInput isLight label="IRCS (Call Sign)" name="ircs" />
-                <FormikTextInput isLight label="Marquage extérieur" name="externalMarker" />
-              </TwoCol>
+              <FormikTextInput isLight label="Nom" name="vesselName" readOnly={values.isUnknownVessel} />
               <TwoCol>
                 <FormikSelect
                   isLight
-                  label="Engin"
-                  name="gearCode"
-                  options={gearsAsOptions ?? []}
+                  label="Nationalité"
+                  name="flagState"
+                  options={COUNTRIES_AS_ALPHA2_OPTIONS}
+                  readOnly={!!values.isUnknownVessel}
                   searchable
                   virtualized
                 />
-                <FormikNumberInput isLight label="Longueur" name="length" />
+                <FormikNumberInput isLight label="Longueur" name="length" readOnly={values.isUnknownVessel} />
               </TwoCol>
               <TwoCol>
-                <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
-                <FormikCheckbox isErrorMessageHidden isLight label="Navire non identifiable" name="isUnknownVessel" />
+                <FormikTextInput isLight label="MMSI" name="mmsi" readOnly={values.isUnknownVessel} />
+                <FormikTextInput isLight label="IMO" name="imo" readOnly={values.isUnknownVessel} />
               </TwoCol>
+              <TwoCol>
+                <FormikTextInput isLight label="IRCS (Call Sign)" name="ircs" readOnly={values.isUnknownVessel} />
+                <FormikTextInput
+                  isLight
+                  label="Marquage extérieur"
+                  name="externalMarker"
+                  readOnly={values.isUnknownVessel}
+                />
+              </TwoCol>
+              <FormikCheckbox isErrorMessageHidden isLight label="Navire inconnu" name="isUnknownVessel" />
+              <FormikSelect
+                isLight
+                label="Engin"
+                name="gearCode"
+                options={gearsAsOptions ?? []}
+                searchable
+                virtualized
+              />
+              <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
             </VesselCard>
           )}
         </VesselSection>
       )}
-      {!hideVesselSection && errors?.isUnknownVessel && <FieldError>{errors?.isUnknownVessel}</FieldError>}
+      {!hideVesselSection && errors?.isUnknownVessel && (
+        <FieldError>
+          {isVesselAbsent
+            ? 'Veuillez renseigner au moins un identifiant (nom, MMSI, IMO ou marquage extérieur) ou cocher la case "navire inconnu"'
+            : 'Veuillez renseigner un navire ou cocher la case "navire absent de la base de données"'}
+        </FieldError>
+      )}
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikMultiRadio
         isInline
@@ -397,6 +417,7 @@ export function Form({
       <TwoCol>
         <FormikDatePicker
           baseContainer={formRef.current as unknown as HTMLDivElement}
+          isCalendarTop
           isLight={isLight}
           isRequired
           isStringDate
@@ -406,6 +427,7 @@ export function Form({
         />
         <FormikDatePicker
           baseContainer={formRef.current as unknown as HTMLDivElement}
+          isCalendarTop
           isLight={isLight}
           isStringDate
           label="Fin de validité"

@@ -111,7 +111,7 @@ export function ReportingForm({
   return (
     <Formik
       key={editedReporting?.id ?? 'new'}
-      initialValues={getFormFields(editedReporting)}
+      initialValues={getFormFields(editedReporting, isIUU)}
       onSubmit={createOrEditReporting}
       validate={toFormikValidationSchema(CreateOrEditReportingSchema)}
     >
@@ -121,6 +121,7 @@ export function ReportingForm({
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}
+        isIUU={isIUU}
         onAutoSave={autoSave ? handleAutoSave : undefined}
         onClose={handleClose}
         onIsDirty={onIsDirty}

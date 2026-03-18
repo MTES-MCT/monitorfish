@@ -10,14 +10,12 @@ import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inact
 
 export function HideNonSelectedVessels({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
 
   return (
     <VesselSidebarActionButton
       $backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
-      $isRightMenuOpen={rightMenuIsOpen}
       $isSidebarOpen={isSidebarOpen}
       $top={188}
       data-cy="trigger-hide-other-vessels-from-sidebar"

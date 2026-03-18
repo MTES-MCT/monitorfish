@@ -29,8 +29,8 @@ class AddReporting(
         val controlUnits = getAllLegacyControlUnits.execute()
 
         when (newReporting) {
-            is Reporting.InfractionSuspicion -> newReporting.checkReportingActorAndFieldsRequirements()
-            is Reporting.Observation -> newReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.InfractionSuspicion -> newReporting.verify()
+            is Reporting.Observation -> newReporting.verify()
             is Reporting.Alert -> {}
         }
 

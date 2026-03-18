@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
+import java.time.ZonedDateTime
 
 @DynamicUpdate
 interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
@@ -203,7 +205,20 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             expiration_date = :expirationDate,
             latitude = :latitude,
             longitude = :longitude,
-            last_update_date_utc = :lastUpdateDate
+            last_update_date_utc = :lastUpdateDate,
+            reporting_date = :reportingDate,
+            vessel_id = :vesselId,
+            vessel_name = :vesselName,
+            internal_reference_number = :cfr,
+            external_reference_number = :externalMarker,
+            ircs = :ircs,
+            mmsi = :mmsi,
+            imo = :imo,
+            length = :length,
+            gear_code = :gearCode,
+            vessel_identifier = CAST(:vesselIdentifier AS vessel_identifier),
+            flag_state = :flagState,
+            is_fishing = :isFishing
         WHERE id = :id
     """,
         nativeQuery = true,
@@ -216,5 +231,18 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         longitude: Double?,
         expirationDate: Instant?,
         lastUpdateDate: Instant?,
+        reportingDate: Instant,
+        vesselId: Int?,
+        vesselName: String?,
+        cfr: String?,
+        externalMarker: String?,
+        ircs: String?,
+        mmsi: String?,
+        imo: String?,
+        length: Double?,
+        gearCode: String?,
+        vesselIdentifier: String?,
+        flagState: String,
+        isFishing: Boolean?,
     )
 }

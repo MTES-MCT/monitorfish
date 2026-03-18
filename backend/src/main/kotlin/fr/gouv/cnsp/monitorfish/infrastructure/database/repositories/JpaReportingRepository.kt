@@ -53,6 +53,7 @@ class JpaReportingRepository(
         updatedReporting: Reporting,
     ): Reporting {
         val valueJson = mapper.writeValueAsString(ReportingMapper.getValueFromReporting(updatedReporting))
+
         dbReportingRepository.update(
             id = reportingId,
             value = valueJson,
@@ -61,6 +62,19 @@ class JpaReportingRepository(
             lastUpdateDate = ZonedDateTime.now().toInstant(),
             latitude = updatedReporting.latitude,
             longitude = updatedReporting.longitude,
+            reportingDate = updatedReporting.reportingDate.toInstant(),
+            vesselId = updatedReporting.vesselId,
+            vesselName = updatedReporting.vesselName,
+            cfr = updatedReporting.cfr,
+            externalMarker = updatedReporting.externalMarker,
+            ircs = updatedReporting.ircs,
+            mmsi = updatedReporting.mmsi,
+            imo = updatedReporting.imo,
+            length = updatedReporting.length,
+            gearCode = updatedReporting.gearCode,
+            vesselIdentifier = updatedReporting.vesselIdentifier?.name,
+            flagState = updatedReporting.flagState.name,
+            isFishing = updatedReporting.isFishing,
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)

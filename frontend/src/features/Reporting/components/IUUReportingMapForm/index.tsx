@@ -19,6 +19,8 @@ import { displayedComponentActions } from '../../../../domain/shared_slices/Disp
 
 import type { Reporting } from '@features/Reporting/types'
 
+export const REPORTING_MAP_FORM_WIDTH = 480
+
 export function IUUReportingMapForm() {
   const dispatch = useMainAppDispatch()
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
@@ -283,7 +285,7 @@ export const Wrapper = styled(MapToolBox)<{
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 480px;
+  width: ${REPORTING_MAP_FORM_WIDTH}px;
   height: ${p => `calc(100% - ${p.$top}px)`};
   z-index: 9999999999;
 `

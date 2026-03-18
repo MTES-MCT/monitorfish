@@ -1,3 +1,4 @@
+import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AnimateToTrack } from '@features/Vessel/components/VesselSidebar/components/AnimateToTrack'
 import { HideNonSelectedVessels } from '@features/Vessel/components/VesselSidebar/components/HideNonSelectedVessels'
 import { ShowFishingActivitiesOnMap } from '@features/Vessel/components/VesselSidebar/components/ShowFishingActivitiesOnMap'
@@ -10,15 +11,14 @@ import styled from 'styled-components'
 
 import { Body } from './Body'
 import { Tabs } from './Tabs'
-import { MapComponent } from '../../../../commonStyles/MapComponent'
 
 export function VesselSidebar() {
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const { trackPage } = useTracking()
 
-  const [isFirstLoad, setIsFirstLoad] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     if (selectedVessel) {
@@ -29,25 +29,25 @@ export function VesselSidebar() {
   // Used to propagate prop `isSidebarOpen` to children, for animation purpose
   useEffect(() => {
     const timeoutHandler = setTimeout(() => {
-      setIsFirstLoad(true)
+      setIsOpen(true)
     }, 0)
 
     return () => {
       clearTimeout(timeoutHandler)
-      setIsFirstLoad(false)
+      setIsOpen(false)
     }
   }, [])
 
   return (
     <>
-      <TrackRequest isSidebarOpen={isFirstLoad} />
-      <AnimateToTrack isSidebarOpen={isFirstLoad} />
-      <HideNonSelectedVessels isSidebarOpen={isFirstLoad} />
-      <ShowFishingActivitiesOnMap isSidebarOpen={isFirstLoad} />
-      <Wrapper $isRightMenuOpen={rightMenuIsOpen} $isSidebarOpen={isFirstLoad} data-cy="vessel-sidebar">
+      <TrackRequest isSidebarOpen={isOpen} />
+      <AnimateToTrack isSidebarOpen={isOpen} />
+      <HideNonSelectedVessels isSidebarOpen={isOpen} />
+      <ShowFishingActivitiesOnMap isSidebarOpen={isOpen} />
+      <Wrapper data-cy="vessel-sidebar" isOpen={isOpen} isReportingOpen={isReportingMapFormDisplayed}>
         <Tabs />
         <Body />
-        <GrayOverlay $isOverlayed={isFocusedOnVesselSearch && isFirstLoad} />
+        <GrayOverlay $isOverlayed={isFocusedOnVesselSearch && isOpen} />
       </Wrapper>
     </>
   )
@@ -83,18 +83,11 @@ const GrayOverlay = styled.div<{
   }
 `
 
-const Wrapper = styled(MapComponent)<{
-  $isRightMenuOpen: boolean
-  $isSidebarOpen: boolean
-}>`
+const Wrapper = styled(MapToolBox)`
   background: ${p => p.theme.color.gainsboro};
-  margin-right: ${p => (p.$isSidebarOpen ? 0 : -510)}px;
   max-height: 93vh;
-  opacity: ${p => (p.$isSidebarOpen ? 1 : 0)};
   overflow: hidden;
   padding: 0;
-  position: absolute;
-  right: ${p => (p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10)}px;
   top: 40px;
   transition:
     all 0.5s,

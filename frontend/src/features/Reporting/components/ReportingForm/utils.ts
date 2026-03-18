@@ -3,7 +3,10 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
-export function getFormFields(editedReporting: Reporting.EditableReporting | undefined): FormEditedReporting {
+export function getFormFields(
+  editedReporting: Reporting.EditableReporting | undefined,
+  isIUU: boolean = false
+): FormEditedReporting {
   const reportingType = editedReporting?.type ?? ReportingType.INFRACTION_SUSPICION
   const value = editedReporting?.value
 
@@ -20,6 +23,7 @@ export function getFormFields(editedReporting: Reporting.EditableReporting | und
     ircs: editedReporting?.ircs,
     isArchived: editedReporting?.isArchived ?? false,
     isFishing: editedReporting?.isFishing,
+    isIUU: editedReporting?.isIUU ?? isIUU,
     isUnknownVessel: false,
     latitude: editedReporting?.latitude,
     length: editedReporting?.length,

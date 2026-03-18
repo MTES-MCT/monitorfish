@@ -1,4 +1,5 @@
 import { MapComponent } from '@features/commonStyles/MapComponent'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
@@ -10,6 +11,7 @@ type MapToolBoxProps = ComponentPropsWithoutRef<'div'> & {
   isHidden?: boolean
   isLeftBox?: boolean
   isOpen: boolean
+  isReportingOpen?: boolean
   isTransparent?: boolean
 }
 export function MapToolBox({
@@ -19,6 +21,7 @@ export function MapToolBox({
   isHidden,
   isLeftBox,
   isOpen,
+  isReportingOpen = false,
   isTransparent,
   ...rest
 }: MapToolBoxProps) {
@@ -29,6 +32,7 @@ export function MapToolBox({
       $hideBoxShadow={hideBoxShadow}
       $isLeftBox={isLeftBox}
       $isOpen={isOpen}
+      $isReportingOpen={isReportingOpen}
       $isRightMenuShrinked={!rightMenuIsOpen}
       $isTransparent={isTransparent}
       className={className}
@@ -45,6 +49,7 @@ const StyledMapToolBox = styled(MapComponent)<{
   $hideBoxShadow?: boolean | undefined
   $isLeftBox?: boolean | undefined
   $isOpen: boolean
+  $isReportingOpen?: boolean | undefined
   $isRightMenuShrinked?: boolean | undefined
   $isTransparent?: boolean | undefined
   isHidden?: boolean | undefined
@@ -63,7 +68,15 @@ const StyledMapToolBox = styled(MapComponent)<{
 
   opacity: ${p => (p.$isOpen ? '1' : '0')};
 
-  ${p => (p.$isLeftBox ? 'left: 12px;' : 'right: 12px;')}
+  ${p => {
+    if (p.$isLeftBox) {
+      return 'left: 12px;'
+    }
+
+    const reportingOffset = p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0
+
+    return p.$isRightMenuShrinked ? `right: ${reportingOffset}px;` : `right: ${10 + reportingOffset}px;`
+  }}
 
   border-radius: 2px;
   position: absolute;

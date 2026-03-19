@@ -43,7 +43,6 @@ export function RegulationTables() {
   const regulationSaved = useBackofficeAppSelector(state => state.regulation.regulationSaved)
   const regulatoryZoneMetadata = useBackofficeAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const showedLayers = useBackofficeAppSelector(state => state.layer.showedLayers)
-  const simplifiedGeometries = useBackofficeAppSelector(state => state.regulation.simplifiedGeometries)
 
   const initBackoffice = useCallback(async () => {
     await dispatch(getAllSpecies<BackofficeAppPromiseThunk>())
@@ -156,7 +155,6 @@ export function RegulationTables() {
             mapMovingAndZoomEvent={mapMovingAndZoomEvent}
             regulatoryZoneMetadata={regulatoryZoneMetadata}
             showedLayers={showedLayers}
-            simplifiedGeometries={simplifiedGeometries}
           />
           <RegulatoryPreviewLayer regulatoryZonesToPreview={regulatoryZonesToPreview} />
         </BaseMap>

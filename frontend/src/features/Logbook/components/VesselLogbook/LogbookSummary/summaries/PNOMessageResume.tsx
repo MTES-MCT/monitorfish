@@ -1,6 +1,6 @@
 import { Logbook } from '@features/Logbook/Logbook.types'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
@@ -39,62 +39,43 @@ export function PNOMessageResume({
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
   const [chartHeight, setChartHeight] = useState(0)
-  const [boxHeight, setBoxHeight] = useState(0)
 
-  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState<SpeciesInsight[]>([])
-  const [speciesNotLandedArray, setSpeciesNotLandedArray] = useState<SpeciesInsight[]>([])
-  const [totalWeightNotLanded, setTotalWeightNotLanded] = useState(null)
-
-  useEffect(() => {
-    if (pnoMessage && speciesToWeightOfPNO && speciesToWeightOfFAR) {
-      const pnoSpeciesAndWeight = Object.keys(speciesToWeightOfPNO)
-        .map(speciesToWeightKey => speciesToWeightOfPNO[speciesToWeightKey] as SpeciesInsight)
-        .sort((a, b) => {
-          if (a.weight < b.weight) {
-            return 1
-          }
-
-          return -1
-        })
-      setSpeciesAndWeightArray(pnoSpeciesAndWeight)
-
-      const nextSpeciesNotLandedArray = Object.keys(speciesToWeightOfFAR)
-        .map(
-          speciesToWeightKey =>
-            speciesToWeightOfFAR[speciesToWeightKey] as {
-              species: string
-              speciesName: string
-              weight: number
-            }
-        )
-        .filter(
-          speciesToWeight =>
-            !pnoMessage.message.catchOnboard.some(landedSpecies => landedSpecies.species === speciesToWeight.species)
-        )
-        .sort((a, b) => {
-          if (a.weight < b.weight) {
-            return 1
-          }
-
-          return -1
-        })
-      setSpeciesNotLandedArray(nextSpeciesNotLandedArray)
-      setBoxHeight(nextSpeciesNotLandedArray.length ? nextSpeciesNotLandedArray.length * 18 : 0)
-
-      setTotalWeightNotLanded(getTotalFARNotLandedWeight(nextSpeciesNotLandedArray))
+  const speciesAndWeightArray = useMemo(() => {
+    if (!pnoMessage || !speciesToWeightOfPNO) {
+      return []
     }
-  }, [pnoMessage, speciesToWeightOfPNO, speciesToWeightOfFAR])
+
+    return Object.keys(speciesToWeightOfPNO)
+      .map(key => speciesToWeightOfPNO[key] as SpeciesInsight)
+      .sort((a, b) => (a.weight < b.weight ? 1 : -1))
+  }, [pnoMessage, speciesToWeightOfPNO])
+
+  const speciesNotLandedArray = useMemo(() => {
+    if (!pnoMessage || !speciesToWeightOfFAR) {
+      return []
+    }
+
+    return Object.keys(speciesToWeightOfFAR)
+      .map(
+        key =>
+          speciesToWeightOfFAR[key] as {
+            species: string
+            speciesName: string
+            weight: number
+          }
+      )
+      .filter(s => !pnoMessage.message.catchOnboard.some(l => l.species === s.species))
+      .sort((a, b) => (a.weight < b.weight ? 1 : -1))
+  }, [pnoMessage, speciesToWeightOfFAR])
+
+  const boxHeight = speciesNotLandedArray.length ? speciesNotLandedArray.length * 18 : 0
+  const totalWeightNotLanded = speciesNotLandedArray.reduce((acc, s) => acc + s.weight, 0)
 
   useEffect(() => {
     if (isOpen) {
       firstUpdate.current = false
     }
   }, [isOpen])
-
-  // TODO Move that to a utils file.
-  function getTotalFARNotLandedWeight(_speciesNotLandedArray) {
-    return _speciesNotLandedArray.reduce((subAccumulator, speciesCatch) => subAccumulator + speciesCatch.weight, 0)
-  }
 
   // TODO Move that to a utils file.
   const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) =>

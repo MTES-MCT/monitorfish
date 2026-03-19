@@ -84,7 +84,7 @@ export function BeaconMalfunctionDetails({
             <TimeAgo />
             {getMalfunctionStartDateText(beaconMalfunction)}
           </LastPosition>
-          <SendNotification beaconMalfunction={beaconMalfunction} />
+          <SendNotification key={beaconMalfunction?.id} beaconMalfunction={beaconMalfunction} />
         </FirstColumn>
         <SecondColumn>
           <ColumnTitle>AVARIES DE LA DERNIÈRE ANNÉE</ColumnTitle>

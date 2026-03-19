@@ -9,7 +9,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { sortBy } from 'lodash-es'
-import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
@@ -31,16 +30,6 @@ export function FavoriteVessels() {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const { isOpened, isRendered } = useDisplayMapBox(leftMapBoxOpened === MapBox.FAVORITE_VESSELS)
 
-  useEffect(() => {
-    if (isRendered) {
-      trackEvent({
-        action: `Ouverture de la vue "Mes navires suivis"`,
-        category: 'DISPLAY_FEATURE',
-        name: isSuperUser ? 'CNSP' : 'EXT'
-      })
-    }
-  }, [isRendered, isSuperUser])
-
   return (
     <>
       <MapToolButton
@@ -51,7 +40,16 @@ export function FavoriteVessels() {
         Icon={Icon.Favorite}
         isActive={isOpened}
         isShrinkable={false}
-        onClick={() => dispatch(setLeftMapBoxOpened(isOpened ? undefined : MapBox.FAVORITE_VESSELS))}
+        onClick={() => {
+          if (!isOpened) {
+            trackEvent({
+              action: `Ouverture de la vue "Mes navires suivis"`,
+              category: 'DISPLAY_FEATURE',
+              name: isSuperUser ? 'CNSP' : 'EXT'
+            })
+          }
+          dispatch(setLeftMapBoxOpened(isOpened ? undefined : MapBox.FAVORITE_VESSELS))
+        }}
         title="Mes navires suivis"
       />
       {isRendered && (

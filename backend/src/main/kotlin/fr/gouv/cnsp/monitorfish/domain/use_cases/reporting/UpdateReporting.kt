@@ -35,8 +35,8 @@ class UpdateReporting(
         val enrichedReporting = getReportingWithDMLAndSeaFront.execute(nextReporting)
 
         when (enrichedReporting) {
-            is Reporting.InfractionSuspicion -> enrichedReporting.checkReportingActorAndFieldsRequirements()
-            is Reporting.Observation -> enrichedReporting.checkReportingActorAndFieldsRequirements()
+            is Reporting.InfractionSuspicion -> enrichedReporting.verify()
+            is Reporting.Observation -> enrichedReporting.verify()
             is Reporting.Alert -> {}
         }
 

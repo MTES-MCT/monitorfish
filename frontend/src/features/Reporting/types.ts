@@ -39,6 +39,7 @@ export namespace Reporting {
     imo?: undefined
     isArchived?: undefined
     isFishing?: undefined
+    isIUU?: undefined
     lastUpdateDate?: undefined
     latitude?: undefined
     longitude?: undefined
@@ -76,6 +77,7 @@ type FormBaseEditedFields = Pick<
   | 'imo'
   | 'isFishing'
   | 'ircs'
+  | 'isIUU'
   | 'latitude'
   | 'length'
   | 'longitude'

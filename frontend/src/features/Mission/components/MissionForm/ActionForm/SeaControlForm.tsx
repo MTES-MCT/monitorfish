@@ -83,8 +83,6 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <ControlQualityField withLastHaul />
 
-            <ControlQualityField />
-
             <FormikOtherControlsCheckboxes />
 
             <FormikAuthor />

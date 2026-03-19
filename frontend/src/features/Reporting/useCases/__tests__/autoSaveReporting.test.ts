@@ -40,6 +40,7 @@ const aValidFormReporting: FormEditedReporting = {
   ircs: undefined,
   isArchived: false,
   isFishing: undefined,
+  isIUU: false,
   isUnknownVessel: true,
   latitude: undefined,
   length: undefined,

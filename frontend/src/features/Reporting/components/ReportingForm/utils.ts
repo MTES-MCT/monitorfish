@@ -3,9 +3,19 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
-export function getFormFields(editedReporting: Reporting.EditableReporting | undefined): FormEditedReporting {
+export function getFormFields(
+  editedReporting: Reporting.EditableReporting | undefined,
+  isIUU: boolean = false
+): FormEditedReporting {
   const reportingType = editedReporting?.type ?? ReportingType.INFRACTION_SUSPICION
   const value = editedReporting?.value
+  const hasVesselIdentifier = !!(
+    editedReporting?.vesselName ??
+    editedReporting?.mmsi ??
+    editedReporting?.imo ??
+    editedReporting?.ircs ??
+    editedReporting?.externalMarker
+  )
 
   const base = {
     authorContact: value?.authorContact,
@@ -14,19 +24,22 @@ export function getFormFields(editedReporting: Reporting.EditableReporting | und
     description: value?.description,
     expirationDate: editedReporting?.expirationDate,
     externalMarker: editedReporting?.externalMarker,
-    flagState: editedReporting?.flagState ?? '',
+    flagState: editedReporting?.flagState ?? 'UNDEFINED',
     gearCode: editedReporting?.gearCode,
     imo: editedReporting?.imo,
     ircs: editedReporting?.ircs,
     isArchived: editedReporting?.isArchived ?? false,
     isFishing: editedReporting?.isFishing,
-    isUnknownVessel: false,
+    isIUU: editedReporting?.isIUU ?? isIUU,
+    isUnknownVessel: editedReporting?.id ? !hasVesselIdentifier : false,
     latitude: editedReporting?.latitude,
     length: editedReporting?.length,
     longitude: editedReporting?.longitude,
     mmsi: editedReporting?.mmsi,
+    otherSourceType: value?.otherSourceType,
     reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
+    satelliteType: value?.satelliteType,
     title: value?.title ?? '',
     vesselId: editedReporting?.vesselId,
     vesselIdentifier: editedReporting?.vesselIdentifier,
@@ -61,11 +74,11 @@ export function updateReportingSource(
     case ReportingOriginSource.SIP:
       setFieldValue('controlUnitId', undefined)
       setFieldValue('authorContact', undefined)
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       setFieldValue('otherSourceType', undefined)
       break
     case ReportingOriginSource.UNIT:
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       setFieldValue('otherSourceType', undefined)
       break
     case ReportingOriginSource.SATELLITE:
@@ -75,7 +88,7 @@ export function updateReportingSource(
       break
     case ReportingOriginSource.OTHER:
       setFieldValue('controlUnitId', undefined)
-      setFieldValue('satelliteSource', undefined)
+      setFieldValue('satelliteType', undefined)
       break
     default:
       break

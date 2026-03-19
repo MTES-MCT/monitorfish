@@ -139,8 +139,8 @@ sealed class Reporting {
         override val infraction: Infraction? = null,
         override val underCharter: Boolean? = null,
         // InfractionSuspicion-specific fields
-        val reportingSource: ReportingSource,
-        val otherSourceType: OtherSource? = null,
+        var reportingSource: ReportingSource,
+        var otherSourceType: OtherSource? = null,
         val controlUnitId: Int? = null,
         val authorContact: String? = null,
         val satelliteType: SatelliteSource? = null,
@@ -152,31 +152,22 @@ sealed class Reporting {
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
-        fun checkReportingActorAndFieldsRequirements() =
-            when (reportingSource) {
-                ReportingSource.UNIT ->
-                    require(controlUnitId != null) {
-                        "An unit must be set"
-                    }
-                ReportingSource.DML ->
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
-                ReportingSource.DIRM ->
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
-                ReportingSource.OTHER -> {
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
+        init {
+            val (src, other) = normalizeReportingSource(reportingSource, otherSourceType)
+            reportingSource = src
+            otherSourceType = other
+        }
 
-                    require(otherSourceType != null) {
-                        "An actor type must be set"
-                    }
-                }
-                else -> {}
-            }
+        fun verify() =
+            checkReportingActorAndFieldsRequirements(
+                reportingSource = reportingSource,
+                controlUnitId = controlUnitId,
+                authorContact = authorContact,
+                otherSourceType = otherSourceType,
+                isIUU = isIUU,
+                latitude = latitude,
+                longitude = longitude,
+            )
     }
 
     private fun InfractionSuspicion.updateFromInfractionSuspicion(command: ReportingUpdateCommand): Reporting =
@@ -212,7 +203,7 @@ sealed class Reporting {
                     otherSourceType = command.otherSourceType,
                     satelliteType = command.satelliteType,
                 ).also {
-                    it.checkReportingActorAndFieldsRequirements()
+                    it.verify()
                 }
 
             ReportingType.OBSERVATION ->
@@ -235,9 +226,9 @@ sealed class Reporting {
                     archivingDate = archivingDate,
                     isArchived = isArchived,
                     isDeleted = isDeleted,
-                    latitude = command.latitude ?: latitude,
+                    latitude = command.latitude,
                     isFishing = command.isFishing ?: false,
-                    longitude = command.longitude ?: longitude,
+                    longitude = command.longitude,
                     reportingDate = command.reportingDate,
                     createdBy = createdBy,
                     reportingSource = command.reportingSource,
@@ -249,7 +240,7 @@ sealed class Reporting {
                     satelliteType = command.satelliteType,
                     otherSourceType = command.otherSourceType,
                 ).also {
-                    it.checkReportingActorAndFieldsRequirements()
+                    it.verify()
                 }
 
             ReportingType.ALERT -> TODO()
@@ -298,46 +289,21 @@ sealed class Reporting {
         override val dml: String? = null,
     ) : Reporting() {
         init {
-            otherSourceType =
-                when (this.reportingSource) {
-                    ReportingSource.DML -> OtherSource.DM
-                    ReportingSource.DIRM -> OtherSource.DIRM
-                    else -> this.otherSourceType
-                }
-
-            reportingSource =
-                when (this.reportingSource) {
-                    ReportingSource.DML -> ReportingSource.OTHER
-                    ReportingSource.DIRM -> ReportingSource.OTHER
-                    else -> this.reportingSource
-                }
+            val (src, other) = normalizeReportingSource(reportingSource, otherSourceType)
+            reportingSource = src
+            otherSourceType = other
         }
 
-        fun checkReportingActorAndFieldsRequirements() =
-            when (reportingSource) {
-                ReportingSource.UNIT ->
-                    require(controlUnitId != null) {
-                        "An unit must be set"
-                    }
-                ReportingSource.DML ->
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
-                ReportingSource.DIRM ->
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
-                ReportingSource.OTHER -> {
-                    require(!authorContact.isNullOrEmpty()) {
-                        "An author contact must be set"
-                    }
-
-                    require(otherSourceType != null) {
-                        "An actor type must be set"
-                    }
-                }
-                else -> {}
-            }
+        fun verify() =
+            checkReportingActorAndFieldsRequirements(
+                reportingSource = reportingSource,
+                controlUnitId = controlUnitId,
+                authorContact = authorContact,
+                otherSourceType = otherSourceType,
+                isIUU = isIUU,
+                latitude = latitude,
+                longitude = longitude,
+            )
     }
 
     private fun Observation.updateFromObservation(command: ReportingUpdateCommand): Reporting =
@@ -368,7 +334,7 @@ sealed class Reporting {
                     otherSourceType = command.otherSourceType,
                     satelliteType = command.satelliteType,
                 ).also {
-                    it.checkReportingActorAndFieldsRequirements()
+                    it.verify()
                 }
 
             ReportingType.INFRACTION_SUSPICION -> {
@@ -395,8 +361,8 @@ sealed class Reporting {
                     archivingDate = archivingDate,
                     isArchived = isArchived,
                     isDeleted = isDeleted,
-                    latitude = command.latitude ?: latitude,
-                    longitude = command.longitude ?: longitude,
+                    latitude = command.latitude,
+                    longitude = command.longitude,
                     isFishing = command.isFishing ?: false,
                     reportingDate = command.reportingDate,
                     createdBy = createdBy,
@@ -414,11 +380,48 @@ sealed class Reporting {
                     satelliteType = command.satelliteType,
                     otherSourceType = command.otherSourceType,
                 ).also {
-                    it.checkReportingActorAndFieldsRequirements()
+                    it.verify()
                 }
             }
 
             else ->
                 error("Invalid target type")
         }
+}
+
+private fun normalizeReportingSource(
+    reportingSource: ReportingSource,
+    otherSourceType: OtherSource?,
+): Pair<ReportingSource, OtherSource?> =
+    when (reportingSource) {
+        ReportingSource.DML -> ReportingSource.OTHER to OtherSource.DM
+        ReportingSource.DIRM -> ReportingSource.OTHER to OtherSource.DIRM
+        else -> reportingSource to otherSourceType
+    }
+
+private fun checkReportingActorAndFieldsRequirements(
+    reportingSource: ReportingSource,
+    controlUnitId: Int?,
+    authorContact: String?,
+    otherSourceType: OtherSource?,
+    isIUU: Boolean,
+    latitude: Double?,
+    longitude: Double?
+) {
+    if (isIUU) {
+        require(latitude != null) { "A latitude must be set" }
+        require(longitude != null) { "A longitude must be set" }
+    }
+
+    when (reportingSource) {
+        ReportingSource.UNIT -> require(controlUnitId != null) { "An unit must be set" }
+        ReportingSource.DML -> require(!authorContact.isNullOrEmpty()) { "An author contact must be set" }
+        ReportingSource.DIRM -> require(!authorContact.isNullOrEmpty()) { "An author contact must be set" }
+        ReportingSource.OTHER -> {
+            require(!authorContact.isNullOrEmpty()) { "An author contact must be set" }
+            require(otherSourceType != null) { "An actor type must be set" }
+        }
+
+        else -> {}
+    }
 }

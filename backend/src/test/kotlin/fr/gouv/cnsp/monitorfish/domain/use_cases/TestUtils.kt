@@ -1320,7 +1320,7 @@ object TestUtils {
         cpsCatch1.nbFish = 1.0
         cpsCatch1.sex = "M"
         cpsCatch1.healthState = HealthState.DEA
-        cpsCatch1.ring = 1234567
+        cpsCatch1.ring = "1234567"
         cpsCatch1.fate = Fate.DIS
         cpsCatch1.faoZone = "27.8.a"
         cpsCatch1.economicZone = "FRA"
@@ -1334,7 +1334,7 @@ object TestUtils {
         cpsCatch2.sex = "M"
         cpsCatch2.healthState = HealthState.DEA
         cpsCatch2.careMinutes = 40
-        cpsCatch2.ring = 1234568
+        cpsCatch2.ring = "1234568"
         cpsCatch2.fate = Fate.DIS
         cpsCatch2.comment = "A comment"
         cpsCatch2.faoZone = "27.8.a"

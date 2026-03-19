@@ -272,7 +272,7 @@ class ERSMapperUTests {
         assertThat(parsedCatch.sex).isEqualTo("M")
         assertThat(parsedCatch.healthState).isEqualTo(HealthState.DEA)
         assertThat(parsedCatch.careMinutes).isNull()
-        assertThat(parsedCatch.ring).isEqualTo(1234567)
+        assertThat(parsedCatch.ring).isEqualTo("1234567")
         assertThat(parsedCatch.comment).isNull()
         assertThat(parsedCatch.species).isEqualTo("DCO")
         assertThat(parsedCatch.weight).isEqualTo(60.0)

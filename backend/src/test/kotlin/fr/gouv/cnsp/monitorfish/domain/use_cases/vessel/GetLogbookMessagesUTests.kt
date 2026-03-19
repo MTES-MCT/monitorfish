@@ -737,6 +737,6 @@ class GetLogbookMessagesUTests {
         val cps = ersMessages[2].message as CPS
         assertThat(cps.catches).hasSize(2)
         assertThat(cps.catches[0].species).isEqualTo("DCO")
-        assertThat(cps.catches[0].ring).isEqualTo(1234567)
+        assertThat(cps.catches[0].ring).isEqualTo("1234567")
     }
 }

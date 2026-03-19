@@ -41,6 +41,7 @@ context('Reporting map form', () => {
     cy.fill('Type d\u2019infraction et NATINF', ['27717'])
 
     cy.wait('@createReporting')
+    cy.wait('@displayReportings')
     cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
 
     cy.clickButton('Fermer')
@@ -64,9 +65,10 @@ context('Reporting map form', () => {
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.fill('Navire en action de pêche', true)
     cy.wait('@updateReporting')
+    cy.wait('@displayReportings')
     cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
 
-    cy.wait(200)
+    cy.wait(1000)
     cy.clickButton('Fermer')
     cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 

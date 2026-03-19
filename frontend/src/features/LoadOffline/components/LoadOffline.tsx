@@ -34,14 +34,16 @@ export function LoadOffline() {
       getStorage()
     }, INTERVAL_REFRESH_MS)
 
-    navigator.serviceWorker.addEventListener('message', async event => {
+    const handleMessage = async event => {
       if (event.data.type === CACHED_REQUEST_SIZE) {
         setCachedRequestsLength(event.data.data)
       }
-    })
+    }
+    navigator.serviceWorker.addEventListener('message', handleMessage)
 
     return () => {
       clearInterval(intervalId)
+      navigator.serviceWorker.removeEventListener('message', handleMessage)
     }
   }, [])
 

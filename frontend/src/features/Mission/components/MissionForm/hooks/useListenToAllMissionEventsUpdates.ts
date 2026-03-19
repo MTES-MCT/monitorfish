@@ -33,13 +33,18 @@ export function useListenToAllMissionEventsUpdates() {
       eventSourceRef.current?.removeEventListener(MISSION_UPDATE_EVENT, listener.current)
       setMissionEvent(undefined)
 
-      return
+      return undefined
     }
 
     const nextEventListener = missionEventListener(mission => setMissionEvent(mission))
     listener.current = nextEventListener
     // @ts-ignore TODO Fix Type '(event: MessageEvent) => void' is not assignable to type 'EventListener'.
     eventSourceRef.current?.addEventListener(MISSION_UPDATE_EVENT, nextEventListener)
+
+    return () => {
+      // @ts-ignore TODO Fix Type '(event: MessageEvent) => void' is not assignable to type 'EventListener'.
+      eventSourceRef.current?.removeEventListener(MISSION_UPDATE_EVENT, listener.current)
+    }
   }, [isListeningToEvents])
 
   return missionEvent

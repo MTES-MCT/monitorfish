@@ -27,10 +27,14 @@ export function RiskFactorCursor({
 
   useEffect(() => {
     if (progress) {
-      setTimeout(() => {
+      const id = setTimeout(() => {
         setProgressWithDelay(progress)
       }, 100)
+
+      return () => clearTimeout(id)
     }
+
+    return undefined
   }, [progress])
 
   return (

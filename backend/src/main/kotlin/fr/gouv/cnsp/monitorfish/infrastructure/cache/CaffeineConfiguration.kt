@@ -16,7 +16,6 @@ class CaffeineConfiguration {
     // Beacons
     val findBeacon = "find_beacon"
     val searchBeacons = "search_beacons"
-    val activatedBeaconsVesselIds = "find_all_activated_beacon_status_vessel_ids"
 
     // Control Units
     val controlUnits = "control_units"
@@ -105,7 +104,6 @@ class CaffeineConfiguration {
         // Beacons
         val searchBeaconsCache = buildMinutesCache(searchBeacons, ticker, 1)
         val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
-        val activatedBeaconsVesselIdsCache = buildMinutesCache(activatedBeaconsVesselIds, ticker, oneDay)
 
         // Control Units
         val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneDay)
@@ -204,7 +202,6 @@ class CaffeineConfiguration {
                 faoAreasCache,
                 faoAreasSortedByUsageCache,
                 findBeaconCache,
-                activatedBeaconsVesselIdsCache,
                 allTripsCache,
                 gearCache,
                 gearCodeGroupCache,

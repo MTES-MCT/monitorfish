@@ -126,6 +126,7 @@ sealed class ActiveVesselBaseDataOutput(
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
                     landingPortLocode = enrichedActiveVessel.landingPort?.locode,
+                    emitsPositions = enrichedActiveVessel.emitsPositions,
                 )
             } ?: run {
                 val riskFactor =
@@ -226,6 +227,7 @@ data class ActiveVesselEmittingPositionDataOutput(
     val dateTime: ZonedDateTime,
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
+    val emitsPositions: Boolean,
     // Properties for WebGL
     val coordinates: List<Double>,
     val hasBeaconMalfunction: Boolean,

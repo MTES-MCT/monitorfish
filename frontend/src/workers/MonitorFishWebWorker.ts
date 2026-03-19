@@ -471,11 +471,19 @@ export class MonitorFishWebWorker {
         }
 
         if (emitsPositions !== undefined) {
-          if (emitsPositions === VesselEmitsPosition.YES && vessel.activityType !== ActivityType.POSITION_BASED) {
+          if (
+            emitsPositions === VesselEmitsPosition.YES &&
+            vessel.activityType === ActivityType.POSITION_BASED &&
+            !vessel.emitsPositions
+          ) {
             return false
           }
 
-          if (emitsPositions === VesselEmitsPosition.NO && vessel.activityType !== ActivityType.LOGBOOK_BASED) {
+          if (
+            emitsPositions === VesselEmitsPosition.NO &&
+            vessel.activityType === ActivityType.POSITION_BASED &&
+            vessel.emitsPositions
+          ) {
             return false
           }
         }

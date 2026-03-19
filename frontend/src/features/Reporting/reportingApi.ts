@@ -41,7 +41,6 @@ export const reportingApi = monitorfishApi.injectEndpoints({
     }),
 
     createReporting: builder.mutation<Reporting.Reporting, ReportingCreation>({
-      invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: newReportingFormData => {
         const formData = parseOrReturn<ReportingCreation>(newReportingFormData, ReportingCreationSchema, false)
 
@@ -114,7 +113,6 @@ export const reportingApi = monitorfishApi.injectEndpoints({
     }),
 
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({
-      invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: ({ id, nextReportingFormData }) => ({
         body: nextReportingFormData,
         method: 'PUT',

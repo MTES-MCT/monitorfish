@@ -1,3 +1,4 @@
+import { RtkCacheTagType } from '@api/constants'
 import { type Reporting, type ReportingCreation } from '@features/Reporting/types'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
@@ -16,6 +17,11 @@ export const addReporting =
 
     try {
       const createdReporting = await dispatch(reportingApi.endpoints.createReporting.initiate(newReporting)).unwrap()
+
+      // We wait for the transaction to be committed
+      setTimeout(() => {
+        dispatch(reportingApi.util.invalidateTags([{ type: RtkCacheTagType.Reportings }]))
+      }, 1000)
 
       if (selectedVesselIdentity) {
         dispatch(

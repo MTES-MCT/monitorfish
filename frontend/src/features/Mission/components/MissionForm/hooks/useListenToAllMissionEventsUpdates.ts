@@ -33,7 +33,7 @@ export function useListenToAllMissionEventsUpdates() {
       eventSourceRef.current?.removeEventListener(MISSION_UPDATE_EVENT, listener.current)
       setMissionEvent(undefined)
 
-      return
+      return undefined
     }
 
     const nextEventListener = missionEventListener(mission => setMissionEvent(mission))

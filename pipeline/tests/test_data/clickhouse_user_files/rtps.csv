@@ -1,0 +1,3 @@
+report_id,cfr,external_immatriculation,ircs,vessel_name,vessel_id,flag_state,trip_number,port_locode,port_name,port_latitude,port_longitude,operation_datetime_utc,report_datetime_utc,return_datetime_utc,reason_of_return
+report_rtp_1,ABC000306959,FR306959,IRCSSS,VESSEL WITH RTP,306959,FRA,Trip_6,FRPOV,Port-Vendres,42.518487,3.106592,2023-01-09T07:33:00,2023-01-09T07:33:00,2019-04-01T01:00:00,UNK
+report_rtp_2,OTH000999999,OT999999,,OTHER VESSEL,1227787,FRA,19040212,FRPOV,Port-Vendres,42.518487,3.106592,2023-01-09T07:33:00,2023-01-09T07:33:00,2019-04-02T01:00:00,UNK

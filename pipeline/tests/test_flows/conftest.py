@@ -159,6 +159,87 @@ def add_catches(add_monitorfish_database):
 
 
 @fixture
+def add_pno_type_rules_unnested(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.pno_type_rules_unnested table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_pno_type_rules_unnested.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.pno_type_rules_unnested table")
+    client.command(
+        """
+        INSERT INTO TABLE monitorfish.pno_type_rules_unnested
+        SELECT * FROM file('pno_type_rules_unnested.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.pno_type_rules_unnested table")
+    client.command("DROP TABLE monitorfish.pno_type_rules_unnested")
+
+
+@fixture
+def add_pnos(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.pnos table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_pnos_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.pnos table")
+    client.command(
+        """
+        INSERT INTO TABLE monitorfish.pnos
+        SELECT * FROM file('pnos.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.pnos table")
+    client.command("DROP TABLE monitorfish.pnos")
+
+
+@fixture
+def add_rtps(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.rtps table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_rtps_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.rtps table")
+    client.command(
+        """
+        INSERT INTO TABLE monitorfish.rtps
+        SELECT * FROM file('rtps.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.rtps table")
+    client.command("DROP TABLE monitorfish.rtps")
+
+
+@fixture
 def add_landings(add_monitorfish_database):
     client = create_datawarehouse_client()
     print("Creating monitorfish.landings table")
@@ -183,6 +264,55 @@ def add_landings(add_monitorfish_database):
     yield
     print("Dropping monitorfish.landings table")
     client.command("DROP TABLE monitorfish.landings")
+
+
+@fixture
+def add_vms(add_monitorfish_database):
+    client = create_datawarehouse_client()
+    print("Creating monitorfish.vms table")
+    with open(
+        TEST_DATA_LOCATION
+        / (
+            "external/data_warehouse/forklift/forklift/pipeline/"
+            "sql_scripts/ddl/monitorfish/create_vms_if_not_exists.sql"
+        ),
+        "r",
+    ) as f:
+        ddl = f.read()
+    client.command(ddl)
+
+    print("Inserting test data into monitorfish.vms table")
+    client.command(
+        """
+        INSERT INTO monitorfish.vms
+        SELECT
+            id,
+            cfr,
+            external_reference_number,
+            ircs,
+            vessel_name,
+            flag_state,
+            latitude,
+            longitude,
+            speed,
+            course,
+            date_time,
+            is_manual,
+            is_at_port,
+            meters_from_previous_position,
+            time_since_previous_position,
+            average_speed,
+            is_fishing,
+            time_emitting_at_sea,
+            network_type,
+            (longitude, latitude)::Point AS geometry,
+            geoToH3(longitude, latitude, 8) AS h3_8
+        FROM file('vms.csv')
+    """
+    )
+    yield
+    print("Dropping monitorfish.vms table")
+    client.command("DROP TABLE monitorfish.vms")
 
 
 @fixture

@@ -1,8 +1,7 @@
-import { useClickOutsideWhenOpened } from '@hooks/useClickOutsideWhenOpened'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { type Coordinates, MultiRadio } from '@mtes-mct/monitor-ui'
-import { useEffect, useRef, useState } from 'react'
+import { type Coordinates, MultiRadio, useClickOutsideEffect } from '@mtes-mct/monitor-ui'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { getCoordinates } from '../../../coordinates'
@@ -18,13 +17,8 @@ export function MapCoordinatesBox({ coordinates }: MapCoordinatesBoxProps) {
   const dispatch = useMainAppDispatch()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const [isCoordinatesSelectionOpen, setIsCoordinatesSelectionOpen] = useState(false)
-  const clickedOutsideComponent = useClickOutsideWhenOpened(wrapperRef, isCoordinatesSelectionOpen)
 
-  useEffect(() => {
-    if (clickedOutsideComponent) {
-      setIsCoordinatesSelectionOpen(false)
-    }
-  }, [clickedOutsideComponent])
+  useClickOutsideEffect(wrapperRef, () => setIsCoordinatesSelectionOpen(false))
 
   return (
     <div ref={wrapperRef}>

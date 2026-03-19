@@ -47,7 +47,6 @@ export function BeaconMalfunctionBoard() {
   const dispatch = useMainAppDispatch()
   const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
   const beaconMalfunctions = useMainAppSelector(state => getMemoizedBeaconMalfunctionsByStage(state))
-  const [filteredBeaconMalfunctions, setFilteredBeaconMalfunctions] = useState({})
   const [isDroppedId, setIsDroppedId] = useState<number | undefined>(undefined)
   const [searchedVessel, setSearchedVessel] = useState<string>('')
   const [activeBeaconMalfunction, setActiveBeaconMalfunction] = useState(null)
@@ -87,24 +86,15 @@ export function BeaconMalfunctionBoard() {
     }
   }, [isDroppedId])
 
-  useEffect(() => {
+  const filteredBeaconMalfunctions = useMemo(() => {
     if (!beaconMalfunctions) {
-      return
+      return {}
     }
-
     if ((!searchedVessel?.length || searchedVessel?.length <= 1) && !filteredVesselStatus) {
-      setFilteredBeaconMalfunctions(beaconMalfunctions)
-
-      return
+      return beaconMalfunctions
     }
 
-    const nextFilteredBeaconMalfunctions = searchInBeaconMalfunctions(
-      beaconMalfunctions,
-      searchedVessel,
-      filteredVesselStatus
-    )
-
-    setFilteredBeaconMalfunctions(nextFilteredBeaconMalfunctions)
+    return searchInBeaconMalfunctions(beaconMalfunctions, searchedVessel, filteredVesselStatus)
   }, [beaconMalfunctions, searchedVessel, filteredVesselStatus])
 
   const findStage = stageName => {

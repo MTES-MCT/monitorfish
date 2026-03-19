@@ -1,7 +1,7 @@
 import { LayerProperties } from '@features/Map/constants'
 import { RegulatoryTopicInput } from '@features/Regulation/components/RegulationTables/RegulatoryTopicInput'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { RegulatoryZone } from './RegulatoryZone'
@@ -64,7 +64,9 @@ function UnmemoizedRegulatoryTopic({
     return 0
   })
 
-  const [isOpen, setIsOpen] = useState(false)
+  const isOpen =
+    (!!regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
+    regulatoryTopicsOpened.includes(regulatoryTopic)
   const [isTopicInEdition, setIsTopicInEdition] = useState(false)
   const [isOver, setIsOver] = useState(false)
   const onMouseEnter = () => !isOver && setIsOver(true)
@@ -104,17 +106,6 @@ function UnmemoizedRegulatoryTopic({
       })
     )
   }
-
-  useEffect(() => {
-    if (
-      (!!regulatoryZoneMetadata && regulatoryZoneMetadata.topic === regulatoryTopic) ||
-      regulatoryTopicsOpened.includes(regulatoryTopic)
-    ) {
-      setIsOpen(true)
-    } else {
-      setIsOpen(false)
-    }
-  }, [regulatoryZoneMetadata, regulatoryTopic, regulatoryTopicsOpened, setIsOpen])
 
   const onEditTopicClick = () => {
     setIsTopicInEdition(true)

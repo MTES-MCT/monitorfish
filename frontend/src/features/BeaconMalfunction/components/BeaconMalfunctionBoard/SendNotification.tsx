@@ -11,7 +11,9 @@ export function SendNotification({ beaconMalfunction }) {
   const dispatch = useMainAppDispatch()
   const getForeignFmcsApiQuery = useGetForeignFmcsQuery()
   const selectMenuRef = useRef<HTMLDivElement>()
-  const [isSendingNotification, setIsSendingNotification] = useState<string | null>('')
+  const [isSendingNotification, setIsSendingNotification] = useState<string | null>(
+    beaconMalfunction?.notificationRequested ?? ''
+  )
   const [isShowingForeignFmcList, setIsShowingForeignFmcList] = useState<boolean>(false)
 
   const foreignFmcsAsOptions: Option[] = useMemo(() => {
@@ -24,10 +26,6 @@ export function SendNotification({ beaconMalfunction }) {
       value: fmc.countryCodeIso3
     }))
   }, [getForeignFmcsApiQuery.data])
-
-  useEffect(() => {
-    setIsSendingNotification(beaconMalfunction?.notificationRequested)
-  }, [beaconMalfunction])
 
   useEffect(() => {
     // Target the `select-picker` DOM component

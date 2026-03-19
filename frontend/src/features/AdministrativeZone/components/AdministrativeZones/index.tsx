@@ -28,7 +28,7 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
 
-  const [isOpened, setIsOpened] = useState(false)
+  const isOpened = !hideLayersListWhenSearching && layersSidebarOpenedLayerType === ADMINISTRATIVE_LAYER_TYPE
   const { isOpened: isListOpened, isRendered } = useDisplayMapBox(isOpened)
 
   const [zones, setZones] = useState<GroupedZonesAndZones>({ groupedZones: [], zones: [] })
@@ -42,16 +42,6 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
 
     fetch()
   }, [dispatch])
-
-  useEffect(() => {
-    setIsOpened(layersSidebarOpenedLayerType === ADMINISTRATIVE_LAYER_TYPE)
-  }, [layersSidebarOpenedLayerType, setIsOpened])
-
-  useEffect(() => {
-    if (hideLayersListWhenSearching) {
-      setIsOpened(false)
-    }
-  }, [hideLayersListWhenSearching])
 
   // TODO Simplify this callback with a direct call to the action rather than a function-wrapper.
   const showOrHideZone = useCallback(

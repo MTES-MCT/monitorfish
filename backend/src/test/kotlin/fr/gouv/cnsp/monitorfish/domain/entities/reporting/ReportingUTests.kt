@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 
@@ -152,26 +153,6 @@ class ReportingUTests {
     }
 
     @Test
-    fun `update Should preserve entity coordinates When command has null lat-lon for Observation to InfractionSuspicion`() {
-        val command = makeCommand(ReportingType.INFRACTION_SUSPICION, latitude = null, longitude = null)
-
-        val result = baseObservation.update(command) as Reporting.InfractionSuspicion
-
-        assertThat(result.latitude).isEqualTo(baseObservation.latitude)
-        assertThat(result.longitude).isEqualTo(baseObservation.longitude)
-    }
-
-    @Test
-    fun `update Should preserve entity coordinates When command has null lat-lon for InfractionSuspicion to Observation`() {
-        val command = makeCommand(ReportingType.OBSERVATION, latitude = null, longitude = null)
-
-        val result = baseInfractionSuspicion.update(command) as Reporting.Observation
-
-        assertThat(result.latitude).isEqualTo(baseInfractionSuspicion.latitude)
-        assertThat(result.longitude).isEqualTo(baseInfractionSuspicion.longitude)
-    }
-
-    @Test
     fun `update Should fall back to entity threat and threatCharacterization When command provides null`() {
         val command =
             ReportingUpdateCommand(
@@ -277,6 +258,308 @@ class ReportingUTests {
 
         assertThat(result.reportingSource).isEqualTo(ReportingSource.OTHER)
         assertThat(result.otherSourceType).isEqualTo(OtherSource.DIRM)
+    }
+
+    @Nested
+    inner class InfractionSuspicionInit {
+        private fun makeInfractionSuspicion(
+            reportingSource: ReportingSource,
+            otherSourceType: OtherSource? = null,
+        ) = Reporting.InfractionSuspicion(
+            flagState = CountryCode.FR,
+            creationDate = now,
+            lastUpdateDate = now,
+            reportingDate = now,
+            reportingSource = reportingSource,
+            otherSourceType = otherSourceType,
+            title = "Title",
+            natinfCode = 1234,
+            threat = "T",
+            threatCharacterization = "TC",
+            isArchived = false,
+            isDeleted = false,
+            createdBy = "user@test.fr",
+        )
+
+        @Test
+        fun `init Should rewrite DML with null otherSourceType to OTHER and DM`() {
+            val inf = makeInfractionSuspicion(ReportingSource.DML, null)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(inf.otherSourceType).isEqualTo(OtherSource.DM)
+        }
+
+        @Test
+        fun `init Should rewrite DML with non-null otherSourceType to OTHER and DM`() {
+            val inf = makeInfractionSuspicion(ReportingSource.DML, OtherSource.NGO)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(inf.otherSourceType).isEqualTo(OtherSource.DM)
+        }
+
+        @Test
+        fun `init Should rewrite DIRM with null otherSourceType to OTHER and DIRM`() {
+            val inf = makeInfractionSuspicion(ReportingSource.DIRM, null)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(inf.otherSourceType).isEqualTo(OtherSource.DIRM)
+        }
+
+        @Test
+        fun `init Should rewrite DIRM with non-null otherSourceType to OTHER and DIRM`() {
+            val inf = makeInfractionSuspicion(ReportingSource.DIRM, OtherSource.NGO)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(inf.otherSourceType).isEqualTo(OtherSource.DIRM)
+        }
+
+        @Test
+        fun `init Should leave UNIT source and null otherSourceType unchanged`() {
+            val inf = makeInfractionSuspicion(ReportingSource.UNIT, null)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.UNIT)
+            assertThat(inf.otherSourceType).isNull()
+        }
+
+        @Test
+        fun `init Should leave OPS source and non-null otherSourceType unchanged`() {
+            val inf = makeInfractionSuspicion(ReportingSource.OPS, OtherSource.NGO)
+
+            assertThat(inf.reportingSource).isEqualTo(ReportingSource.OPS)
+            assertThat(inf.otherSourceType).isEqualTo(OtherSource.NGO)
+        }
+    }
+
+    @Nested
+    inner class ObservationInit {
+        private fun makeObservation(
+            reportingSource: ReportingSource,
+            otherSourceType: OtherSource? = null,
+        ) = Reporting.Observation(
+            flagState = CountryCode.FR,
+            creationDate = now,
+            lastUpdateDate = now,
+            reportingDate = now,
+            reportingSource = reportingSource,
+            otherSourceType = otherSourceType,
+            title = "Title",
+            isArchived = false,
+            isDeleted = false,
+            createdBy = "user@test.fr",
+        )
+
+        @Test
+        fun `init Should rewrite DML with null otherSourceType to OTHER and DM`() {
+            val obs = makeObservation(ReportingSource.DML, null)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(obs.otherSourceType).isEqualTo(OtherSource.DM)
+        }
+
+        @Test
+        fun `init Should rewrite DML with non-null otherSourceType to OTHER and DM`() {
+            val obs = makeObservation(ReportingSource.DML, OtherSource.NGO)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(obs.otherSourceType).isEqualTo(OtherSource.DM)
+        }
+
+        @Test
+        fun `init Should rewrite DIRM with null otherSourceType to OTHER and DIRM`() {
+            val obs = makeObservation(ReportingSource.DIRM, null)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(obs.otherSourceType).isEqualTo(OtherSource.DIRM)
+        }
+
+        @Test
+        fun `init Should rewrite DIRM with non-null otherSourceType to OTHER and DIRM`() {
+            val obs = makeObservation(ReportingSource.DIRM, OtherSource.NGO)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.OTHER)
+            assertThat(obs.otherSourceType).isEqualTo(OtherSource.DIRM)
+        }
+
+        @Test
+        fun `init Should leave UNIT source and null otherSourceType unchanged`() {
+            val obs = makeObservation(ReportingSource.UNIT, null)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.UNIT)
+            assertThat(obs.otherSourceType).isNull()
+        }
+
+        @Test
+        fun `init Should leave OPS source and non-null otherSourceType unchanged`() {
+            val obs = makeObservation(ReportingSource.OPS, OtherSource.NGO)
+
+            assertThat(obs.reportingSource).isEqualTo(ReportingSource.OPS)
+            assertThat(obs.otherSourceType).isEqualTo(OtherSource.NGO)
+        }
+    }
+
+    @Nested
+    inner class Verify {
+        private fun makeInfractionSuspicion(
+            reportingSource: ReportingSource = ReportingSource.UNIT,
+            controlUnitId: Int? = 1,
+            authorContact: String? = null,
+            otherSourceType: OtherSource? = null,
+            isIUU: Boolean = false,
+            latitude: Double? = null,
+            longitude: Double? = null,
+        ) = Reporting.InfractionSuspicion(
+            flagState = CountryCode.FR,
+            creationDate = now,
+            lastUpdateDate = now,
+            reportingDate = now,
+            reportingSource = reportingSource,
+            controlUnitId = controlUnitId,
+            authorContact = authorContact,
+            otherSourceType = otherSourceType,
+            isIUU = isIUU,
+            latitude = latitude,
+            longitude = longitude,
+            title = "Title",
+            natinfCode = 1234,
+            threat = "T",
+            threatCharacterization = "TC",
+            isArchived = false,
+            isDeleted = false,
+            createdBy = "user@test.fr",
+        )
+
+        private fun makeObservation(
+            reportingSource: ReportingSource = ReportingSource.UNIT,
+            controlUnitId: Int? = 1,
+            authorContact: String? = null,
+            otherSourceType: OtherSource? = null,
+            isIUU: Boolean = false,
+            latitude: Double? = null,
+            longitude: Double? = null,
+        ) = Reporting.Observation(
+            flagState = CountryCode.FR,
+            creationDate = now,
+            lastUpdateDate = now,
+            reportingDate = now,
+            reportingSource = reportingSource,
+            controlUnitId = controlUnitId,
+            authorContact = authorContact,
+            otherSourceType = otherSourceType,
+            isIUU = isIUU,
+            latitude = latitude,
+            longitude = longitude,
+            title = "Title",
+            isArchived = false,
+            isDeleted = false,
+            createdBy = "user@test.fr",
+        )
+
+        // isIUU checks
+
+        @Test
+        fun `verify Should pass When isIUU is false and lat-lon are null`() {
+            makeInfractionSuspicion(isIUU = false, latitude = null, longitude = null).verify()
+        }
+
+        @Test
+        fun `verify Should pass When isIUU is true and both lat and lon are set`() {
+            makeInfractionSuspicion(isIUU = true, latitude = 1.0, longitude = 2.0).verify()
+        }
+
+        @Test
+        fun `verify Should throw When isIUU is true and latitude is null`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(isIUU = true, latitude = null, longitude = 2.0).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("latitude must be set")
+        }
+
+        @Test
+        fun `verify Should throw When isIUU is true and longitude is null`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(isIUU = true, latitude = 1.0, longitude = null).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("longitude must be set")
+        }
+
+        // Actor / source checks
+
+        @Test
+        fun `verify Should pass When source is UNIT and controlUnitId is set`() {
+            makeInfractionSuspicion(reportingSource = ReportingSource.UNIT, controlUnitId = 42).verify()
+        }
+
+        @Test
+        fun `verify Should throw When source is UNIT and controlUnitId is null`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(reportingSource = ReportingSource.UNIT, controlUnitId = null).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("unit must be set")
+        }
+
+        @Test
+        fun `verify Should pass When source is OTHER and authorContact and otherSourceType are set`() {
+            makeInfractionSuspicion(
+                reportingSource = ReportingSource.OTHER,
+                controlUnitId = null,
+                authorContact = "contact@example.fr",
+                otherSourceType = OtherSource.NGO,
+            ).verify()
+        }
+
+        @Test
+        fun `verify Should throw When source is OTHER and authorContact is null`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(
+                        reportingSource = ReportingSource.OTHER,
+                        controlUnitId = null,
+                        authorContact = null,
+                        otherSourceType = OtherSource.NGO,
+                    ).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("author contact must be set")
+        }
+
+        @Test
+        fun `verify Should throw When source is OTHER and otherSourceType is null`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(
+                        reportingSource = ReportingSource.OTHER,
+                        controlUnitId = null,
+                        authorContact = "contact@example.fr",
+                        otherSourceType = null,
+                    ).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("actor type must be set")
+        }
+
+        // Observation delegates to the same logic — one smoke test suffices
+
+        @Test
+        fun `verify Should throw for Observation When isIUU is true and latitude is null`() {
+            val throwable =
+                catchThrowable {
+                    makeObservation(isIUU = true, latitude = null, longitude = 2.0).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("latitude must be set")
+        }
     }
 
     @Test

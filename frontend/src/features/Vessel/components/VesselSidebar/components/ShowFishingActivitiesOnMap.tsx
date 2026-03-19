@@ -9,7 +9,6 @@ import { VesselSidebarActionButton } from './VesselSidebarActionButton'
 
 export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   const dispatch = useMainAppDispatch()
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const areFishingActivitiesShowedOnMap = useMainAppSelector(
     state => state.fishingActivities.areFishingActivitiesShowedOnMap
@@ -29,7 +28,6 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   return (
     <VesselSidebarActionButton
       $backgroundColor={areFishingActivitiesShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
-      $isRightMenuOpen={rightMenuIsOpen}
       $isSidebarOpen={isSidebarOpen}
       $top={223}
       data-cy="show-all-fishing-activities-on-map"

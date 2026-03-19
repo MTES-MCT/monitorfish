@@ -8,7 +8,7 @@ import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
-import { useField } from 'formik'
+import { useFormikContext } from 'formik'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
@@ -20,17 +20,16 @@ import type { Coordinate } from 'ol/coordinate'
 
 type FormikCoordinatesPickerProps = {
   isLight: boolean
+  isRequired: boolean
 }
-export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProps) {
+export function FormikCoordinatesPicker({ isLight, isRequired }: FormikCoordinatesPickerProps) {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
 
-  const [{ value: longitudeValue }, longitudeMeta, longitudeHelpers] =
-    useField<FormEditedReporting['longitude']>('longitude')
-  const [{ value: latitudeValue }, latitudeMeta, latitudeHelpers] =
-    useField<FormEditedReporting['latitude']>('latitude')
-
-  const error = longitudeMeta.error ?? latitudeMeta.error
+  const { errors, setValues, values } = useFormikContext<FormEditedReporting>()
+  const longitudeValue = values.longitude
+  const latitudeValue = values.latitude
+  const error = (errors.longitude ?? errors.latitude) as string | undefined
 
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.REPORTING_POINT)
@@ -57,8 +56,11 @@ export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProp
   useEffect(
     () => {
       if (drawedGeometry?.type === OpenLayersGeometryType.POINT) {
-        longitudeHelpers.setValue(drawedGeometry.coordinates[0])
-        latitudeHelpers.setValue(drawedGeometry.coordinates[1])
+        setValues(prev => ({
+          ...prev,
+          latitude: drawedGeometry.coordinates[1],
+          longitude: drawedGeometry.coordinates[0]
+        }))
       }
     },
 
@@ -92,8 +94,7 @@ export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProp
         return
       }
 
-      longitudeHelpers.setValue(undefined)
-      latitudeHelpers.setValue(undefined)
+      setValues(prev => ({ ...prev, latitude: undefined, longitude: undefined }))
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,6 +108,7 @@ export function FormikCoordinatesPicker({ isLight }: FormikCoordinatesPickerProp
         error={error}
         isErrorMessageHidden={error === HIDDEN_ERROR}
         isLight={isLight}
+        isRequired={isRequired}
         label="Localisation"
         labelPropName="name"
         onCenter={centeredCoordinates =>

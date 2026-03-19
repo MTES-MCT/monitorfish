@@ -2,6 +2,7 @@ import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AutoSaveTag } from '@features/Mission/components/MissionForm/shared/AutoSaveTag'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { ReportingForm } from '@features/Reporting/components/ReportingForm'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
@@ -112,11 +113,14 @@ export function IUUReportingMapForm() {
                 <StyledTitle>
                   {vesselName && (
                     <>
-                      {flagState && <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />}
+                      {flagState && flagState !== 'UNDEFINED' && (
+                        <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
+                      )}
                       {vesselName}
                     </>
                   )}
-                  {!vesselName && 'NOUVEAU SIGNALEMENT INN'}
+                  {!vesselName && !lastUpdateDate && 'NOUVEAU SIGNALEMENT INN'}
+                  {!vesselName && !!lastUpdateDate && 'SIGNALEMENT INN (NAVIRE INCONNU)'}
                 </StyledTitle>
               </HeaderTitle>
               <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
@@ -283,7 +287,7 @@ export const Wrapper = styled(MapToolBox)<{
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 480px;
+  width: ${REPORTING_MAP_FORM_WIDTH}px;
   height: ${p => `calc(100% - ${p.$top}px)`};
   z-index: 9999999999;
 `

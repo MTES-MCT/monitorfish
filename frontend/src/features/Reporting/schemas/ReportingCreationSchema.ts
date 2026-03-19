@@ -19,4 +19,4 @@ export const ReportingCreationSchema = BaseReportingSchema.omit({
   underCharter: true
 })
   .extend(InfractionSuspicionOrObservationCreation.shape)
-  .omit({ authorTrigram: true })
+  .omit({ authorTrigram: true, controlUnit: true })

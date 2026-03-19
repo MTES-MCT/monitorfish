@@ -1,4 +1,5 @@
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
@@ -24,9 +25,10 @@ export function VesselSidebarHeader() {
 
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
-  const isRightMenuShrinked = vesselSidebarIsOpen && !rightMenuIsOpen
+  const isRightMenuShrinked = !rightMenuIsOpen
 
   const handleVesselChange = useCallback(
     (vesselIdentity: Vessel.VesselIdentity | undefined) => {
@@ -52,6 +54,7 @@ export function VesselSidebarHeader() {
         title="Rechercher un navire"
       />
       <VesselNameOrInput
+        $isReportingOpen={isReportingMapFormDisplayed}
         $isRightMenuShrinked={isRightMenuShrinked}
         data-cy="vessel-name"
         isHidden={previewFilteredVesselsMode}
@@ -79,11 +82,12 @@ export function VesselSidebarHeader() {
 }
 
 const VesselNameOrInput = styled(MapComponent)<{
+  $isReportingOpen: boolean
   $isRightMenuShrinked: boolean
 }>`
   position: absolute;
   display: inline-block;
-  right: ${p => (p.$isRightMenuShrinked ? 10 : 55)}px;
+  right: ${p => (p.$isRightMenuShrinked ? 10 : 55) + (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0)}px;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
   border: none;
@@ -93,7 +97,9 @@ const VesselNameOrInput = styled(MapComponent)<{
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  transition: all 0.3s;
+  transition:
+    all 0.3s,
+    right 0.3s;
   z-index: 2;
 
   &:hover,

@@ -2,20 +2,18 @@ import { HALF_A_SECOND } from '@constants/index'
 import { LayerProperties } from '@features/Map/constants'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { getLayerNameNormalized } from '@features/Map/utils'
+import { METADATA_IS_SHOWED, SIMPLIFIED_FEATURE_ZOOM_LEVEL } from '@features/Regulation/layers/constants'
 import { useHybridAppDispatch } from '@hooks/useHybridAppDispatch'
 import { Feature } from 'ol'
 import { Geometry } from 'ol/geom'
-import { useEffect, useRef } from 'react'
+import { type MutableRefObject, useEffect, useRef } from 'react'
+import { useThrottledCallback } from 'use-debounce'
 
-import { regulationActions } from '../slice'
 import { getRegulatoryLayersToAdd } from '../useCases/getRegulatoryLayersToAdd'
 
 import type { RegulatoryZone } from '../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type VectorImageLayer from 'ol/layer/VectorImage'
-
-export const METADATA_IS_SHOWED = 'metadataIsShowed'
-const SIMPLIFIED_FEATURE_ZOOM_LEVEL = 9.5
 
 export type RegulatoryLayersProps = Readonly<{
   lastShowedFeatures: Record<string, any>[]
@@ -23,17 +21,14 @@ export type RegulatoryLayersProps = Readonly<{
   mapMovingAndZoomEvent?: any
   regulatoryZoneMetadata: RegulatoryZone | undefined
   showedLayers: MonitorFishMap.ShowedLayer[]
-  simplifiedGeometries: boolean
 }>
 export function RegulatoryLayers({
   lastShowedFeatures,
   layersToFeatures,
   mapMovingAndZoomEvent,
   regulatoryZoneMetadata,
-  showedLayers,
-  simplifiedGeometries
+  showedLayers
 }: RegulatoryLayersProps) {
-  const isThrottled = useRef(false)
   const previousMapZoom = useRef('')
 
   const dispatch = useHybridAppDispatch()
@@ -56,89 +51,88 @@ export function RegulatoryLayers({
     vectorLayersToAdd.forEach(vectorLayer => {
       olLayers.push(vectorLayer)
     })
-    removeRegulatoryLayersToMap(showedLayers, olLayers)
+    removeStaleRegulatoryLayers(showedLayers, olLayers)
   }, [dispatch, showedLayers])
 
   useEffect(() => {
-    function addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers() {
-      const regulatoryLayers = monitorfishMap
-        .getLayers()
-        .getArray()
-        .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
-
-      if (!regulatoryZoneMetadata) {
-        removeMetadataIsShowedProperty(regulatoryLayers)
-
-        return
-      }
-
-      const layerToAddProperty = regulatoryLayers.find(
-        layer =>
-          layer.get('code') ===
-          `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
-      )
-
-      if (layerToAddProperty) {
-        addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty)
-      }
-    }
-
-    addOrRemoveMetadataIsShowedPropertyToShowedRegulatoryLayers()
+    syncMetadataIsShowedProperty(regulatoryZoneMetadata, lastShowedFeatures)
   }, [lastShowedFeatures, regulatoryZoneMetadata])
 
+  const throttledApplyZoomBasedSimplification = useThrottledCallback(
+    () => applyZoomBasedSimplification(layersToFeatures, previousMapZoom),
+    HALF_A_SECOND,
+    { leading: false, trailing: true }
+  )
+
   useEffect(() => {
-    if (isThrottled.current || !layersToFeatures) {
+    if (!layersToFeatures) {
       return
     }
-
-    function showSimplifiedOrWholeFeatures() {
-      const currentZoom = monitorfishMap.getView().getZoom()?.toFixed(2)
-
-      if (currentZoom && currentZoom !== previousMapZoom.current) {
-        previousMapZoom.current = currentZoom
-
-        const showSimplifiedFeatures = getShowSimplifiedFeatures(currentZoom)
-        if (featuresAreAlreadyDrawWithTheSameTolerance(showSimplifiedFeatures, simplifiedGeometries)) {
-          return
-        }
-
-        const regulatoryLayers = monitorfishMap
-          .getLayers()
-          .getArray()
-          .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
-        regulatoryLayers.forEach(layer => {
-          const vectorSource = (layer as VectorImageLayer<Feature<Geometry>>).getSource()
-
-          if (vectorSource) {
-            const layerToFeatures = layersToFeatures?.find(layerToFeature => layerToFeature.name === layer.get('code'))
-            if (layerToFeatures) {
-              const features = showSimplifiedFeatures
-                ? layerToFeatures.simplifiedFeatures || layerToFeatures.features
-                : layerToFeatures.features
-
-              vectorSource.clear(true)
-              vectorSource.addFeatures(vectorSource.getFormat()?.readFeatures(features) as Feature<Geometry>[])
-            }
-          }
-        })
-
-        if (showSimplifiedFeatures) {
-          dispatch(regulationActions.showSimplifiedGeometries())
-        } else {
-          dispatch(regulationActions.showWholeGeometries())
-        }
-      }
-    }
-
-    isThrottled.current = true
-    setTimeout(() => {
-      showSimplifiedOrWholeFeatures()
-      isThrottled.current = false
-    }, HALF_A_SECOND)
+    throttledApplyZoomBasedSimplification()
     // The `mapMovingAndZoomEvent` prop is used to refresh this effect
-  }, [dispatch, layersToFeatures, mapMovingAndZoomEvent, simplifiedGeometries])
+  }, [layersToFeatures, mapMovingAndZoomEvent, throttledApplyZoomBasedSimplification])
 
   return <></>
+}
+
+function applyZoomBasedSimplification(
+  layersToFeatures: Record<string, any>[],
+  previousMapZoom: MutableRefObject<string>
+): void {
+  const currentZoom = monitorfishMap.getView().getZoom()?.toFixed(2)
+  if (!currentZoom || currentZoom === previousMapZoom.current) {
+    return
+  }
+  // eslint-disable-next-line no-param-reassign
+  previousMapZoom.current = currentZoom
+
+  const useSimplified = shouldUseSimplifiedFeatures(currentZoom)
+  monitorfishMap
+    .getLayers()
+    .getArray()
+    .filter(isRegulatoryLayer)
+    .forEach(layer => {
+      const vectorSource = (layer as VectorImageLayer<Feature<Geometry>>).getSource()
+      if (!vectorSource) {
+        return
+      }
+      const layerToFeatures = layersToFeatures.find(ltf => ltf.name === layer.get('code'))
+      if (!layerToFeatures) {
+        return
+      }
+      const features = useSimplified
+        ? (layerToFeatures.simplifiedFeatures ?? layerToFeatures.features)
+        : layerToFeatures.features
+
+      vectorSource.clear(true)
+      vectorSource.addFeatures(vectorSource.getFormat()?.readFeatures(features) as Feature<Geometry>[])
+    })
+}
+
+function syncMetadataIsShowedProperty(
+  regulatoryZoneMetadata: RegulatoryZone | undefined,
+  lastShowedFeatures: Record<string, any>[]
+): void {
+  const regulatoryLayers = monitorfishMap
+    .getLayers()
+    .getArray()
+    .filter(layer => (layer.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code))
+
+  if (!regulatoryZoneMetadata) {
+    removeMetadataIsShowedProperty(regulatoryLayers)
+
+    return
+  }
+
+  const layerToAddProperty = regulatoryLayers.find(
+    layer =>
+      layer.get('code') ===
+      `${LayerProperties.REGULATORY.code}:${regulatoryZoneMetadata.topic}:${regulatoryZoneMetadata.zone}`
+  )
+
+  if (layerToAddProperty) {
+    addMetadataIsShowedProperty(lastShowedFeatures, layerToAddProperty)
+  }
 }
 
 function sortRegulatoryLayersFromAreas(layersToFeatures, olLayers) {
@@ -153,30 +147,26 @@ function sortRegulatoryLayersFromAreas(layersToFeatures, olLayers) {
   })
 }
 
-function getShowSimplifiedFeatures(currentZoom) {
+function shouldUseSimplifiedFeatures(currentZoom) {
   return currentZoom < SIMPLIFIED_FEATURE_ZOOM_LEVEL
 }
 
-function featuresAreAlreadyDrawWithTheSameTolerance(showSimplifiedFeatures, simplifiedGeometries) {
-  return (!showSimplifiedFeatures && !simplifiedGeometries) || (showSimplifiedFeatures && simplifiedGeometries)
-}
-
-function removeRegulatoryLayersToMap(showedLayers, olLayers) {
+function removeStaleRegulatoryLayers(showedLayers, olLayers) {
   const layersToRemove = olLayers
     .getArray()
-    .filter(olLayer => layersOfTypeRegulatoryLayerInCurrentMap(olLayer))
-    .filter(olLayer => layersNotPresentInShowedLayers(showedLayers, olLayer))
+    .filter(olLayer => isRegulatoryLayer(olLayer))
+    .filter(olLayer => isLayerAbsentFromShowedLayers(showedLayers, olLayer))
 
   layersToRemove?.forEach(layerToRemove => {
     olLayers.remove(layerToRemove)
   })
 }
 
-function layersNotPresentInShowedLayers(showedLayers, olLayer) {
-  return !showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.get('code'))
+function isLayerAbsentFromShowedLayers(showedLayers, olLayer) {
+  return !showedLayers.some(showedLayer => getLayerNameNormalized(showedLayer) === olLayer.get('code'))
 }
 
-function layersOfTypeRegulatoryLayerInCurrentMap(olLayer) {
+function isRegulatoryLayer(olLayer) {
   return (olLayer?.get('code') as string | undefined)?.includes(LayerProperties.REGULATORY.code)
 }
 

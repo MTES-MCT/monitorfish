@@ -62,7 +62,6 @@ export function MainMap() {
   const regulatoryZonesToPreview = useMainAppSelector(state => state.regulation.regulatoryZonesToPreview)
   const regulatoryZoneMetadata = useMainAppSelector(state => state.regulation.regulatoryZoneMetadata)
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
-  const simplifiedGeometries = useMainAppSelector(state => state.regulation.simplifiedGeometries)
 
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
@@ -104,7 +103,6 @@ export function MainMap() {
         mapMovingAndZoomEvent={mapMovingAndZoomEvent}
         regulatoryZoneMetadata={regulatoryZoneMetadata}
         showedLayers={showedLayers}
-        simplifiedGeometries={simplifiedGeometries}
       />
       <AdministrativeLayers />
       <MapVesselClickAndAnimationHandler />

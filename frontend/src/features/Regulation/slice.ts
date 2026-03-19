@@ -83,7 +83,6 @@ export type RegulationState = {
   saveOrUpdateRegulation: boolean
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null
   selectedRegulatoryZoneId: string | undefined
-  simplifiedGeometries: boolean
   status: STATUS
 }
 const INITIAL_STATE: RegulationState = {
@@ -110,7 +109,6 @@ const INITIAL_STATE: RegulationState = {
   saveOrUpdateRegulation: false,
   selectedRegulatoryLayers: null,
   selectedRegulatoryZoneId: undefined,
-  simplifiedGeometries: true,
   status: STATUS.IDLE
 }
 
@@ -371,14 +369,6 @@ const regulationSlice = createSlice({
 
     setStatus(state, action) {
       state.status = action.payload
-    },
-
-    showSimplifiedGeometries(state) {
-      state.simplifiedGeometries = true
-    },
-
-    showWholeGeometries(state) {
-      state.simplifiedGeometries = false
     },
 
     updateProcessingRegulationByKey(state, action: PayloadAction<{ key: string; value: any }>) {

@@ -37,7 +37,6 @@ export function LANMessageResume({
 }: LANMessageResumeProps) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
-  const [chartHeight, setChartHeight] = useState(0)
 
   useEffect(() => {
     if (isOpen) {
@@ -80,13 +79,8 @@ export function LANMessageResume({
     return lanMessage.catchLanded.concat(speciesFromPno)
   })()
 
-  useEffect(() => {
-    if (catchLandedWithMissingCatchesFromPno) {
-      const count = catchLandedWithMissingCatchesFromPno.reduce(filterDuplicateSpecies(), [])
-      const height = count.length > 0 ? count.length * 49 : 0
-      setChartHeight(height)
-    }
-  }, [catchLandedWithMissingCatchesFromPno])
+  const uniqueSpecies = catchLandedWithMissingCatchesFromPno.reduce(filterDuplicateSpecies(), [])
+  const chartHeight = uniqueSpecies.length > 0 ? uniqueSpecies.length * 49 : 0
 
   return (
     <>

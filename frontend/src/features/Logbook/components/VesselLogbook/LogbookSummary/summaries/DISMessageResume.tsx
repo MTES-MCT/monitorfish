@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { SpeciesAndWeightChart } from './common/SpeciesAndWeightChart'
@@ -27,22 +27,16 @@ export function DISMessageResume({
 }: DISMessageResumeProps) {
   const [isOpen, setIsOpen] = useState(false)
   const firstUpdate = useRef(true)
-  const [speciesAndWeightArray, setSpeciesAndWeightArray] = useState<SpeciesInsight[]>([])
   const [chartHeight, setChartHeight] = useState(0)
 
-  useEffect(() => {
-    if (speciesToWeightOfDIS) {
-      const nextSpeciesAndWeightArray = Object.keys(speciesToWeightOfDIS)
-        .map(species => speciesToWeightOfDIS[species] as SpeciesInsight)
-        .sort((a, b) => {
-          if (a.weight < b.weight) {
-            return 1
-          }
-
-          return -1
-        })
-      setSpeciesAndWeightArray(nextSpeciesAndWeightArray)
+  const speciesAndWeightArray = useMemo(() => {
+    if (!speciesToWeightOfDIS) {
+      return []
     }
+
+    return Object.keys(speciesToWeightOfDIS)
+      .map(species => speciesToWeightOfDIS[species] as SpeciesInsight)
+      .sort((a, b) => (a.weight < b.weight ? 1 : -1))
   }, [speciesToWeightOfDIS])
 
   useEffect(() => {

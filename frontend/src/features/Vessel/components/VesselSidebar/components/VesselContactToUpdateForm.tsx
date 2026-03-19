@@ -10,7 +10,6 @@ import { Accent, Button, FormikCheckbox, FormikTextarea, Level } from '@mtes-mct
 import { skipToken } from '@reduxjs/toolkit/query'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
 import { Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
@@ -28,13 +27,6 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
   const [createVesselContactToUpdate] = useCreateVesselContactMethodMutation()
   const [updateVesselContactToUpdate] = useUpdateVesselContactMethodMutation()
   const { data: vesselContactToUpdate, isLoading, refetch } = useGetVesselContactToUpdateQuery(vesselId ?? skipToken)
-  const [formValue, setFormValue] = useState<Vessel.ContactMethod | undefined>()
-
-  useEffect(() => {
-    if (vesselContactToUpdate) {
-      setFormValue(vesselContactToUpdate)
-    }
-  }, [vesselContactToUpdate])
 
   if (!vesselId) {
     return null
@@ -68,7 +60,7 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
     <Formik
       enableReinitialize
       initialValues={
-        formValue ?? {
+        vesselContactToUpdate ?? {
           contactMethod: undefined,
           contactMethodShouldBeChecked: false,
           id: undefined,

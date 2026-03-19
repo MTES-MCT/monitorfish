@@ -7,6 +7,20 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-03-19',
+        description: `Il est désormais possible de créer un signalement INN directement depuis le formulaire sur la carte.
+
+Vous pouvez :
+- **saisir** un nouveau signalement INN depuis la carte,
+- **renseigner** les informations du signalement dans le formulaire dédié.
+
+⚠️  Ce formulaire est strictement réservé aux signalements INN, tout autre signalement doit être renseigné directement dans l'onglet "Signalement" de la fiche navire.
+`,
+        for: 'CNSP',
+        title: `Création d'un signalement INN depuis la carte`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-03-10',
         description: `Les signalements sont désormais affichés sur la carte.
 

@@ -133,14 +133,24 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     expect(result).toStrictEqual(['vessel2', 'vessel3'])
   })
 
-  it('should filters by emitsPositions (AFTER_ONE_MONTH_AGO)', () => {
+  it('should filter by emitsPositions (YES)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      emitsPositions: [VesselEmitsPosition.YES],
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
+    expect(result).toStrictEqual(['vessel3'])
+  })
+
+  it('should filter by emitsPositions (NO)', () => {
     const filters = {
       ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
       emitsPositions: [VesselEmitsPosition.NO],
       vesselsLocation: []
     }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
-    expect(result).toStrictEqual([])
+    expect(result).toStrictEqual(['vessel1', 'vessel2'])
   })
 
   it('should filters by producerOrganizations', () => {

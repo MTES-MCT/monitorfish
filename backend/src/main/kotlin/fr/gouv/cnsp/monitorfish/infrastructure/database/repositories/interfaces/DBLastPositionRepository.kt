@@ -48,17 +48,17 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
             lp,
             vp,
             v,
+            b,
             rf,
             po.organizationName)
             FROM VesselProfileEntity vp
             FULL JOIN LastPositionEntity lp ON lp.internalReferenceNumber = vp.cfr
             LEFT JOIN VesselEntity v ON v.internalReferenceNumber = vp.cfr
+            LEFT JOIN BeaconEntity b ON b.vesselId = lp.vesselId
             LEFT JOIN ProducerOrganizationMembershipEntity po ON
-                po.internalReferenceNumber = vp.cfr OR
-                po.internalReferenceNumber = lp.internalReferenceNumber
+                po.internalReferenceNumber = COALESCE(vp.cfr, lp.internalReferenceNumber)
             LEFT JOIN RiskFactorEntity rf ON
-                rf.cfr = vp.cfr OR
-                rf.cfr = lp.internalReferenceNumber
+                rf.cfr = COALESCE(vp.cfr, lp.internalReferenceNumber)
             WHERE vp IS NOT NULL
                OR lp.dateTime > :dateTime
         """,

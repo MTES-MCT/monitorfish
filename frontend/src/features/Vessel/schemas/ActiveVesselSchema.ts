@@ -77,6 +77,7 @@ export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend(
   course: numberOrUndefined,
   dateTime: z.string(),
   emissionPeriod: z.number().optional(),
+  emitsPositions: z.boolean(),
   estimatedCurrentLatitude: z.number().optional(),
   estimatedCurrentLongitude: z.number().optional(),
   hasAlert: z.boolean(),

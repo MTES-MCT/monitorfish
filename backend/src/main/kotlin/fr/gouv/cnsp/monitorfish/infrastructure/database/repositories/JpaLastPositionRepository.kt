@@ -7,10 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselEntity
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselProfileEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.*
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionRepository
 import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.Cacheable
@@ -54,6 +51,7 @@ class JpaLastPositionRepository(
                     lastPosition = it.lastPosition?.toLastPosition(mapper),
                     vesselProfile = it.vesselProfile?.toVesselProfile(),
                     vessel = it.vessel?.toVessel(),
+                    beacon = it.beacon?.toBeacon(),
                     /**
                      * To avoid Spring Data JPA's hydration of `ProducerOrganizationMembershipEntity` for performance reason, we select
                      * producerOrganizationName directly and build the class with dummy (unused) other fields.
@@ -102,6 +100,7 @@ data class EnrichedActiveVesselDTO(
     val lastPosition: LastPositionEntity?,
     val vesselProfile: VesselProfileEntity?,
     val vessel: VesselEntity?,
+    val beacon: BeaconEntity?,
     val riskFactor: RiskFactorEntity?,
     val producerOrganizationName: String?,
 )

@@ -318,7 +318,7 @@ export namespace Logbook {
     fate?: Fate
     healthState?: HealthState
     nbFish?: number
-    ring?: number
+    ring?: string
     sex?: string
     species: string
     speciesName?: string

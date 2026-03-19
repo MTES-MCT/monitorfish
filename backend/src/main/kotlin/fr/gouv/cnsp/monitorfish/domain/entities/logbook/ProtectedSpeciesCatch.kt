@@ -9,7 +9,7 @@ class ProtectedSpeciesCatch {
     var sex: String? = null
     var healthState: HealthState? = null
     var careMinutes: Int? = null
-    var ring: Int? = null
+    var ring: String? = null
     var fate: Fate? = null
     var comment: String? = null
     var weight: Double? = null

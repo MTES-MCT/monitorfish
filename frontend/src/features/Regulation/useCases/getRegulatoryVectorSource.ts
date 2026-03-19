@@ -1,5 +1,7 @@
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
+import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { SIMPLIFIED_FEATURE_ZOOM_LEVEL } from '@features/Regulation/layers/constants'
 import BaseEvent from 'ol/events/Event'
 import { getArea, getCenter } from 'ol/extent'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -28,8 +30,6 @@ class CustomBaseEvent extends BaseEvent {
 
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
-const setIrretrievableFeaturesEvent = (error: any) => new CustomBaseEvent(IRRETRIEVABLE_FEATURES_EVENT, error)
-
 export const getRegulatoryVectorSource =
   (regulatoryZoneProperties: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorSource<Feature<Geometry>>> =>
   (dispatch, getState) => {
@@ -49,51 +49,18 @@ export const getRegulatoryVectorSource =
           )
 
           if (!regulatoryZone.geometry) {
-            vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
+            vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
             vectorSource.removeLoadedExtent(extent)
 
             return
           }
 
-          let simplifiedRegulatoryZone: string | null = null
-          try {
-            simplifiedRegulatoryZone = simplify(regulatoryZone, 0.01)
-          } catch (e) {
-            console.error(e)
-          }
-
-          const feature = getState().regulation.simplifiedGeometries
-            ? (simplifiedRegulatoryZone ?? regulatoryZone)
-            : regulatoryZone
-          const format = vectorSource.getFormat()
-          if (format) {
-            // TODO Type this any.
-            vectorSource.addFeatures(format.readFeatures(feature) as any)
-          }
-          const center = getCenter(vectorSource.getExtent())
-          const centerHasValidCoordinates = center?.length && isNumeric(center[0]) && isNumeric(center[1])
-
-          dispatch(
-            layerActions.pushLayerToFeatures({
-              area: getArea(vectorSource.getExtent()),
-              center,
-              features: regulatoryZone,
-              name: zoneName,
-              simplifiedFeatures: simplifiedRegulatoryZone
-            })
-          )
-          dispatch(layerActions.setLastShowedFeatures(vectorSource.getFeatures()))
-
-          if (centerHasValidCoordinates) {
-            dispatch(
-              animateToRegulatoryLayer({
-                center,
-                name: zoneName
-              })
-            )
-          }
+          const simplifiedRegulatoryZone = trySimplifyRegulatoryZone(regulatoryZone)
+          const geoJsonToLoad = resolveGeoJsonForCurrentZoom(regulatoryZone, simplifiedRegulatoryZone)
+          loadFeaturesIntoSource(vectorSource, geoJsonToLoad)
+          dispatchLayerLoadedActions(dispatch, vectorSource, zoneName, regulatoryZone, simplifiedRegulatoryZone)
         } catch (err) {
-          vectorSource.dispatchEvent(setIrretrievableFeaturesEvent(err))
+          vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(err))
           vectorSource.removeLoadedExtent(extent)
         }
       },
@@ -106,3 +73,57 @@ export const getRegulatoryVectorSource =
 
     return vectorSource
   }
+
+const createIrretrievableFeaturesEvent = (error: any) => new CustomBaseEvent(IRRETRIEVABLE_FEATURES_EVENT, error)
+
+function isCenterValid(center: number[] | undefined): center is number[] {
+  return !!center?.length && isNumeric(center[0]) && isNumeric(center[1])
+}
+
+function trySimplifyRegulatoryZone(regulatoryZone: any): string | null {
+  try {
+    return simplify(regulatoryZone, 0.01)
+  } catch (e) {
+    console.error(e)
+
+    return null
+  }
+}
+
+function loadFeaturesIntoSource(vectorSource: VectorSource<Feature<Geometry>>, geoJson: any): void {
+  const format = vectorSource.getFormat()
+  if (format) {
+    // TODO Type this any.
+    vectorSource.addFeatures(format.readFeatures(geoJson) as any)
+  }
+}
+
+function dispatchLayerLoadedActions(
+  dispatch: any,
+  vectorSource: VectorSource<Feature<Geometry>>,
+  zoneName: string,
+  regulatoryZone: any,
+  simplifiedRegulatoryZone: string | null
+): void {
+  const center = getCenter(vectorSource.getExtent())
+  dispatch(
+    layerActions.pushLayerToFeatures({
+      area: getArea(vectorSource.getExtent()),
+      center,
+      features: regulatoryZone,
+      name: zoneName,
+      simplifiedFeatures: simplifiedRegulatoryZone
+    })
+  )
+  dispatch(layerActions.setLastShowedFeatures(vectorSource.getFeatures()))
+  if (isCenterValid(center)) {
+    dispatch(animateToRegulatoryLayer({ center, name: zoneName }))
+  }
+}
+
+function resolveGeoJsonForCurrentZoom(regulatoryZone: any, simplifiedRegulatoryZone: string | null): any {
+  const currentZoom = monitorfishMap.getView().getZoom() ?? Infinity
+  const shouldUseSimplifiedGeometry = currentZoom < SIMPLIFIED_FEATURE_ZOOM_LEVEL
+
+  return shouldUseSimplifiedGeometry ? (simplifiedRegulatoryZone ?? regulatoryZone) : regulatoryZone
+}

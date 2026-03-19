@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
@@ -171,6 +172,15 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
          */
         val vesselWithProducerOrganization = lastPositionsWithProfiles.first { it.lastPosition?.vesselId == 1 }
         assertThat(vesselWithProducerOrganization.producerOrganization?.organizationName).isEqualTo("SA THO AN")
+
+        /**
+         * The beacon is attached via LEFT JOIN on vessel_id.
+         * Vessel ID 1 has beacon 'FGEDX85' (ACTIVATED) in test data.
+         */
+        val vesselWithBeacon = lastPositionsWithProfiles.first { it.lastPosition?.vesselId == 1 }
+        assertThat(vesselWithBeacon.beacon?.beaconNumber).isEqualTo("FGEDX85")
+        assertThat(vesselWithBeacon.beacon?.vesselId).isEqualTo(1)
+        assertThat(vesselWithBeacon.beacon?.beaconStatus).isEqualTo(BeaconStatus.ACTIVATED)
 
         /**
          * A vessel with risk factor is attached to a last position even if there is no profile for this vessel

@@ -93,6 +93,7 @@ class GetActiveVessels(
                     producerOrganization = activeVessel.producerOrganization,
                     vesselGroups = foundVesselGroups,
                     riskFactor = activeVessel.riskFactor,
+                    beacon = activeVessel.beacon,
                     landingPort = landingPort,
                     reportingTypes = foundReportingTypes,
                 )

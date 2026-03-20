@@ -54,6 +54,46 @@ def test_cor_parser():
     assert len(catch_landed) == 20
 
 
+def test_coe_parser():
+    test_file = "OOE20200323034702.xml"
+    metadata, data_list = parse_file(test_file)
+
+    expected_metadata = {
+        "is_test_message": True,
+        "software": "TurboCatch (3.5-5)",
+        "operation_number": "OOE20200323034702",
+        "operation_country": "OOE",
+        "operation_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
+        "operation_type": "DAT",
+        "report_id": "OOE20200323034702",
+        "report_datetime_utc": datetime.datetime(2020, 3, 23, 6, 8),
+        "cfr": "un id",
+        "ircs": "CALLME",
+        "external_identification": "extmarking",
+        "vessel_name": "un navire",
+        "flag_state": "FRA",
+        "imo": None,
+        "trip_number": "20200032",
+    }
+
+    assert metadata == expected_metadata
+    assert len(data_list) == 1
+    data = data_list[0]
+    assert data["log_type"] == "COE"
+    value = data["value"]
+    expected_value = {
+        "effortZoneEntryDatetimeUtc": "2020-03-23T06:08:00Z",
+        "targetSpeciesOnEntry": None,
+        "faoZoneEntered": "27.8.c",
+        "economicZoneEntered": "ESP",
+        "statisticalRectangleEntered": "17E3",
+        "effortZoneEntered": None,
+        "latitudeEntered": 44.495,
+        "longitudeEntered": -6.768,
+    }
+    assert value == expected_value
+
+
 def test_cox_parser():
     test_file = "OOE20200323034701.xml"
     metadata, data_list = parse_file(test_file)
@@ -90,6 +130,36 @@ def test_cox_parser():
         "effortZoneExited": None,
         "latitudeExited": 44.495,
         "longitudeExited": -6.768,
+        "speciesOnboard": [
+            {
+                "species": "BSS",
+                "weight": 58.0,
+                "nbFish": None,
+                "faoZone": "27.8.a",
+                "economicZone": "FRA",
+                "statisticalRectangle": "23E7",
+                "effortZone": None,
+                "presentation": "WHL",
+                "packaging": "BUL",
+                "freshness": None,
+                "preservationState": "FRE",
+                "conversionFactor": 1.0,
+            },
+            {
+                "species": "COE",
+                "weight": 45.1,
+                "nbFish": None,
+                "faoZone": "27.8.a",
+                "economicZone": "FRA",
+                "statisticalRectangle": "23E7",
+                "effortZone": None,
+                "presentation": "GUT",
+                "packaging": "BUL",
+                "freshness": None,
+                "preservationState": "FRE",
+                "conversionFactor": 1.1,
+            },
+        ],
     }
     assert value == expected_value
 

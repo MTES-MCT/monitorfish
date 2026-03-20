@@ -176,6 +176,10 @@ def parse_coe(coe):
         value["latitudeEntered"] = try_float(lat)
         value["longitudeEntered"] = try_float(lon)
 
+    if "SPE" in children:
+        species_onboard = [parse_spe(spe) for spe in children["SPE"]]
+        value["speciesOnboard"] = species_onboard
+
     data = {
         "activity_datetime_utc": activity_datetime_utc,
         "log_type": "COE",
@@ -213,6 +217,10 @@ def parse_cox(cox):
         lat, lon = parse_pos(pos)
         value["latitudeExited"] = try_float(lat)
         value["longitudeExited"] = try_float(lon)
+
+    if "SPE" in children:
+        species_onboard = [parse_spe(spe) for spe in children["SPE"]]
+        value["speciesOnboard"] = species_onboard
 
     data = {
         "activity_datetime_utc": activity_datetime_utc,

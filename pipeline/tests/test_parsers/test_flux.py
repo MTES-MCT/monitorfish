@@ -45,7 +45,7 @@ def test_decode_flux_raises_flux_parsing_error():
 
 
 def test_batch_parse():
-    base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business_BASE64"
+    base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business"
     flux_file_list = []
     for filename in sorted(os.listdir(base64_encoded_xml_files_location)):
         with open(base64_encoded_xml_files_location / filename, "r") as f:
@@ -180,6 +180,9 @@ def test_batch_parse():
                     "effortZoneEntered": None,
                     "latitudeEntered": 42.794,
                     "longitudeEntered": -13.809,
+                    "speciesOnboard": [
+                        {"species": "COD", "weight": 500.0, "nbFish": None}
+                    ],
                 },
                 datetime.datetime(
                     year=2020,
@@ -531,6 +534,9 @@ def test_batch_parse():
                     "effortZoneExited": None,
                     "latitudeExited": 57.7258,
                     "longitudeExited": 0.5983,
+                    "speciesOnboard": [
+                        {"species": "COD", "weight": 1500.0, "nbFish": None}
+                    ],
                 },
                 datetime.datetime(
                     year=2020,
@@ -566,6 +572,9 @@ def test_batch_parse():
                     "effortZoneExited": "A",
                     "latitudeExited": 46.678,
                     "longitudeExited": -14.616,
+                    "speciesOnboard": [
+                        {"species": "COD", "weight": 52.65, "nbFish": None}
+                    ],
                 },
                 datetime.datetime(
                     year=2020,
@@ -764,9 +773,7 @@ def test_batch_parse():
                     "returnDatetimeUtc": "2020-05-06T11:41:20.712Z",
                     "port": "ESCAR",
                     "reasonOfReturn": "LAN",
-                    "gearOnboard": [
-                        {"gear": "PS", "mesh": 80.0, "dimensions": 200.0}
-                    ],
+                    "gearOnboard": [{"gear": "PS", "mesh": 80.0, "dimensions": 200.0}],
                 },
                 datetime.datetime(
                     year=2020,

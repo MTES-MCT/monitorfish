@@ -147,6 +147,10 @@ def parse_coe(coe):
         value["latitudeEntered"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitudeEntered"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
 
+    if "SpecifiedFACatch" in children:
+        catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        value["speciesOnboard"] = catches
+
     return value
 
 
@@ -174,6 +178,10 @@ def parse_cox(cox):
     if pos is not None:
         value["latitudeExited"] = try_float(get_text(pos, ".//ram:LatitudeMeasure"))
         value["longitudeExited"] = try_float(get_text(pos, ".//ram:LongitudeMeasure"))
+
+    if "SpecifiedFACatch" in children:
+        catches = [parse_spe(spe) for spe in children["SpecifiedFACatch"]]
+        value["speciesOnboard"] = catches
 
     return value
 

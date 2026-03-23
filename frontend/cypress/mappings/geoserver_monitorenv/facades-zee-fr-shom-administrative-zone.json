@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/geoserver/wfs",
+    "queryParameters": {
+      "typename": {
+        "matches": "monitorfish:facades_zee_fr_shom"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*"
+    },
+    "jsonBody": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "facades_zee_fr_shom.1",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [[[[-5.0, 47.0], [-5.0, 51.0], [2.0, 51.0], [2.0, 47.0], [-5.0, 47.0]]]]
+          },
+          "geometry_name": "geom",
+          "properties": {
+            "zone": "MEMN",
+            "type": null,
+            "typezone": null,
+            "nom_court": null
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "facades_zee_fr_shom.2",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [[[[-5.0, 43.0], [-5.0, 47.0], [2.0, 47.0], [2.0, 43.0], [-5.0, 43.0]]]]
+          },
+          "geometry_name": "geom",
+          "properties": {
+            "zone": "NAMO",
+            "type": null,
+            "typezone": null,
+            "nom_court": null
+          }
+        }
+      ],
+      "totalFeatures": 2,
+      "numberMatched": 2,
+      "numberReturned": 2
+    }
+  }
+}

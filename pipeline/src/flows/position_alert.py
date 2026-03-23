@@ -43,9 +43,9 @@ def to_admin_areas_table_metadata(
             filter_column="f_code",
         ),
         AdministrativeAreaType.EEZ_AREA: AreasTableMetadata(
-            table_name="eez_areas",
-            geometry_column="wkb_geometry",
-            filter_column="iso_sov1",
+            table_name="eez_areas_2026",
+            geometry_column="geom",
+            filter_column="ISO_SOV1",
         ),
         AdministrativeAreaType.NEAFC_AREA: AreasTableMetadata(
             table_name="neafc_regulatory_area",

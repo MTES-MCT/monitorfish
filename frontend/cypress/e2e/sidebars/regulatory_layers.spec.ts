@@ -326,13 +326,13 @@ context('Sidebars > Regulatory Layers', () => {
           const testLocalStorage = localStorages[LOCALSTORAGE_URL]
           const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
           expect(showedLayers).length(1)
-          expect(showedLayers[0].type).equal('eez_areas')
+          expect(showedLayers[0].type).equal('eez_areas_2026')
         })
       })
     cy.wait(500)
 
     // Then
-    cy.getFeaturesFromLayer('eez_areas').then(features => {
+    cy.getFeaturesFromLayer('eez_areas_2026').then(features => {
       expect(features.length).to.be.equal(7)
     })
 
@@ -346,7 +346,7 @@ context('Sidebars > Regulatory Layers', () => {
         const testLocalStorage = localStorages[LOCALSTORAGE_URL]
         const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
         expect(showedLayers).length(1)
-        expect(showedLayers[0].type).equal('eez_areas')
+        expect(showedLayers[0].type).equal('eez_areas_2026')
       })
     })
   })

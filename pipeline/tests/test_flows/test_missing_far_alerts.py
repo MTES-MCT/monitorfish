@@ -185,7 +185,7 @@ def test_make_positions_at_sea_query():
     )
 
     eez_areas_table = Table(
-        "eez_areas", meta, Column("wkb_geometry", Geometry), Column("iso_sov1", VARCHAR)
+        "eez_areas_2026", meta, Column("geom", Geometry), Column("ISO_SOV1", VARCHAR)
     )
 
     # Test with all arguments
@@ -221,8 +221,8 @@ def test_make_positions_at_sea_query():
         "ON ST_Intersects(positions.geometry, facades.geometry) "
         "JOIN vessels "
         "ON positions.internal_reference_number = vessels.cfr "
-        "JOIN eez_areas "
-        "ON ST_Intersects(positions.geometry, eez_areas.wkb_geometry) "
+        "JOIN eez_areas_2026 "
+        "ON ST_Intersects(positions.geometry, eez_areas_2026.geom) "
         "\nWHERE "
         "positions.date_time >= '2020-12-04 12:23:00' AND "
         "positions.date_time < '2020-12-05 12:23:00' AND "
@@ -232,7 +232,7 @@ def test_make_positions_at_sea_query():
         "positions.is_fishing AND "
         "positions.flag_state IN ('ES') AND "
         "(vessels.length >= 12.0 OR positions.flag_state != 'FR') AND "
-        "eez_areas.iso_sov1 IN ('FRA')"
+        "eez_areas_2026.\"ISO_SOV1\" IN ('FRA')"
     )
 
     assert query_string == expected_query_string

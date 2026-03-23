@@ -246,11 +246,18 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const AdminLayerProperties: Record<MonitorFishMap.AdminLayer, MonitorFishMap.AdminShowableLayer> = {
   [MonitorFishMap.AdminLayer.EEZ]: {
-    code: 'eez_areas',
+    code: 'eez_areas_2026',
     name: AdministrativeAreaTypeLabel.EEZ_AREA,
     hasSearchableZones: true,
-    zoneNamePropertyKey: 'union',
+    zoneNamePropertyKey: 'SOVEREIGN1',
     isIntersectable: true
+  },
+  [MonitorFishMap.AdminLayer.facades_zee_fr_shom]: {
+    code: 'facades_zee_fr_shom',
+    hasSearchableZones: false,
+    isIntersectable: false,
+    name: 'Zones ZEE FR SHOM / façades',
+    zoneNamePropertyKey: 'zone'
   },
   [MonitorFishMap.AdminLayer.FAO]: {
     code: 'fao_areas',

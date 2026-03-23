@@ -28,7 +28,7 @@ export enum AdministrativeAreaType {
 
 export const AdministrativeAreaTypeLabel: Record<AdministrativeAreaType, string> = {
   DISTANCE_TO_SHORE: 'Distances à la côte',
-  EEZ_AREA: 'Zones ZEE',
+  EEZ_AREA: 'Zones ZEE monde',
   FAO_AREA: 'Zones FAO',
   NEAFC_AREA: 'Zones NEAFC'
 }

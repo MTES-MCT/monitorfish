@@ -6,11 +6,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "eez_areas")
+@Table(name = "eez_areas_2026")
 data class EezAreaEntity(
     @Id
-    @Column(name = "ogc_fid")
+    @Column(name = "id")
     val id: Int,
-    @Column(name = "\"union\"")
-    val union: String?,
+    @Column(name = "\"SOVEREIGN1\"")
+    val sovereign1: String?,
 )

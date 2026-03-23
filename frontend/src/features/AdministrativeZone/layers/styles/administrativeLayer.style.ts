@@ -235,6 +235,24 @@ export function getAdministrativeLayerStyle(type: string) {
             }`
           })
         })
+    case AdminLayerProperties.facades_zee_fr_shom.code:
+      return (feature: Feature | undefined) =>
+        new Style({
+          stroke: new Stroke({
+            color: '#767AB2',
+            width: 1
+          }),
+          text: new Text({
+            fill: new Fill({ color: THEME.color.gunMetal }),
+            font: '12px Marianne',
+            stroke: new Stroke({ color: 'rgba(255,255,255,0.9)', width: 2 }),
+            text: `${
+              (AdminLayerProperties.facades_zee_fr_shom.zoneNamePropertyKey &&
+                feature?.get(AdminLayerProperties.facades_zee_fr_shom.zoneNamePropertyKey)) ||
+              ''
+            }`
+          })
+        })
     default:
       return () =>
         new Style({

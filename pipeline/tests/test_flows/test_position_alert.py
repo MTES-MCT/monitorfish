@@ -79,9 +79,9 @@ def admin_areas_table_metadata() -> List[AreasTableMetadata]:
             filter_column="f_code",
         ),
         AreasTableMetadata(
-            table_name="eez_areas",
-            geometry_column="wkb_geometry",
-            filter_column="iso_sov1",
+            table_name="eez_areas_2026",
+            geometry_column="geom",
+            filter_column="ISO_SOV1",
         ),
         AreasTableMetadata(
             table_name="n_miles_to_shore_areas_subdivided",
@@ -119,10 +119,10 @@ def admin_areas_tables() -> List[Table]:
             schema="public",
         ),
         Table(
-            "eez_areas",
+            "eez_areas_2026",
             MetaData(),
-            Column("wkb_geometry", Geometry),
-            Column("iso_sov1", VARCHAR),
+            Column("geom", Geometry),
+            Column("ISO_SOV1", VARCHAR),
             schema="public",
         ),
         Table(
@@ -594,8 +594,8 @@ def test_make_positions_in_alert_query(admin_areas_specs_with_tables):
         "ON ST_Intersects(positions.geometry, regulations.geometry) "
         "JOIN public.fao_areas "
         "ON ST_Intersects(positions.geometry, public.fao_areas.wkb_geometry) "
-        "JOIN public.eez_areas "
-        "ON ST_Intersects(positions.geometry, public.eez_areas.wkb_geometry) "
+        "JOIN public.eez_areas_2026 "
+        "ON ST_Intersects(positions.geometry, public.eez_areas_2026.geom) "
         "JOIN public.n_miles_to_shore_areas_subdivided "
         "ON ST_Intersects(positions.geometry, public.n_miles_to_shore_areas_subdivided.geometry) "
         "JOIN public.neafc_regulatory_area "
@@ -616,7 +616,7 @@ def test_make_positions_in_alert_query(admin_areas_specs_with_tables):
         "regulations.zone = 'zone_4'"
         ") AND "
         "public.fao_areas.f_code IN ('27.7', '27.8.a') AND "
-        "public.eez_areas.iso_sov1 IN ('FR', 'BE') AND "
+        "public.eez_areas_2026.\"ISO_SOV1\" IN ('FR', 'BE') AND "
         "public.n_miles_to_shore_areas_subdivided.miles_to_shore IN ('3-6', '0-3') AND "
         "public.neafc_regulatory_area.ogc_fid IN (1) AND "
         "("

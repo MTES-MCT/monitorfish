@@ -246,7 +246,7 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const AdminLayerProperties: Record<MonitorFishMap.AdminLayer, MonitorFishMap.AdminShowableLayer> = {
   [MonitorFishMap.AdminLayer.EEZ]: {
-    code: 'eez_areas_2026',
+    code: 'eez_areas',
     name: AdministrativeAreaTypeLabel.EEZ_AREA,
     hasSearchableZones: true,
     zoneNamePropertyKey: 'SOVEREIGN1',

@@ -38,16 +38,16 @@ TL,Toulon,83,Var,DML 83,MED
 YE,Ile D'Yeu,85,Vendée,DML 85,NAMO
 LS,Les Sables D'Olonne,85,Vendée,DML 85,NAMO
 NO,Noirmoutier,85,Vendée,DML 85,NAMO
-PP,Pointe A Pitre,971,Guadeloupe,DM 971,OUTREMEROA
-FF,Fort De France,972,Martinique,DM 972,OUTREMEROA
-CY,Cayenne,973,Guyane,DM 973,OUTREMEROA
-RU,Saint Denis De La Reunion,974,Réunion,DM SOI,OUTREMEROI
-SP,Saint Pierre Et Miquelon,975,Saint-Pierre-et-Miquelon,DM 975,OUTREMEROA
-DI,Dzaoudzi (Mayotte),976,Mayotte,DM SOI,OUTREMEROI
-MY,Mayotte ,976,Mayotte,DM SOI,OUTREMEROI
-BY,Saint Barthelemy,977,Saint-Barthélemy,DM 972,OUTREMEROA
-SW,Saint Martin,978,Saint-Martin,DM 972,OUTREMEROA
-FK,Port Aux Francais,984,Port Aux Français,DM SOI,OUTREMEROI
+PP,Pointe A Pitre,971,Guadeloupe,DM 971,Guadeloupe
+FF,Fort De France,972,Martinique,DM 972,Martinique
+CY,Cayenne,973,Guyane,DM 973,Guyane
+RU,Saint Denis De La Reunion,974,Réunion,DM SOI,La Réunion
+SP,Saint Pierre Et Miquelon,975,Saint-Pierre-et-Miquelon,DM 975,Saint-Pierre et Miquelon
+DI,Dzaoudzi (Mayotte),976,Mayotte,DM SOI,Mayotte
+MY,Mayotte ,976,Mayotte,DM SOI,Mayotte
+BY,Saint Barthelemy,977,Saint-Barthélemy,DM 972,Saint-Barthélemy
+SW,Saint Martin,978,Saint-Martin,DM 972,Saint-Martin
+FK,Port Aux Francais,984,Port Aux Français,DM SOI,TAAF
 MU,Mata Utu (Wallis),986,Wallis et Futuna,,
 PY,Papeete,987,Polynésie Française,,
 NC,Noumea,988,Nouvelle-Calédonie,DAM NC,

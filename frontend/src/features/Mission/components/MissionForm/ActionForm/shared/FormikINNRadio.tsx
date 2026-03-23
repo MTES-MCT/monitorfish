@@ -34,7 +34,7 @@ export function FormikINNRadio() {
   }
 
   return (
-    <StyledFieldsetGroup isLight legend="Contrôle INN *">
+    <StyledFieldsetGroup isLight isRequired legend="Contrôle INN">
       <FormikMultiRadio
         isErrorMessageHidden
         isInline

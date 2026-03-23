@@ -272,22 +272,6 @@ export const CustomGlobalStyle = createGlobalStyle`
     color: rgb(81, 81, 81);
   }
 
-  input:not([type]),
-  [type='text'],
-  [type='email'],
-  [type='number'],
-  [type='search'],
-  [type='password'],
-  [type='url'],
-  [type='tel'],
-  [type='checkbox'],
-  [type='radio'],
-  textarea,
-  select {
-    margin: 0;
-    padding: 0;
-  }
-
   .ol-scale-line {
     position: absolute;
     bottom: 10px;

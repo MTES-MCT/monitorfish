@@ -80,10 +80,6 @@ class JpaReportingRepository(
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)
     }
 
-    /**
-     * Forces a proper BEGIN → SELECT → COMMIT with a known-good connection state
-     */
-    @Transactional
     override fun findAll(filter: ReportingFilter?): List<Reporting> {
         val criteriaBuilder = entityManager.criteriaBuilder
         val criteriaQuery = criteriaBuilder.createQuery(ReportingEntity::class.java)

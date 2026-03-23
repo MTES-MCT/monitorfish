@@ -106,7 +106,7 @@ sealed class ActiveVesselBaseDataOutput(
                         transformCoordinatesToOpenlayersProjection(
                             longitude = lastPosition.longitude,
                             latitude = lastPosition.latitude,
-                        ).toList(),
+                        )?.toList(),
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasAlert = lastPosition.alerts?.isNotEmpty() ?: false,
                     hasBeaconMalfunction = lastPosition.beaconMalfunctionId != null,
@@ -227,7 +227,7 @@ data class ActiveVesselEmittingPositionDataOutput(
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
     // Properties for WebGL
-    val coordinates: List<Double>,
+    val coordinates: List<Double>?,
     val hasBeaconMalfunction: Boolean,
     val lastPositionSentAt: Long,
     val vesselGroups: List<LastPositionVesselGroupDataOutput>,

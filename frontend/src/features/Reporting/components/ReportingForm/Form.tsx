@@ -335,7 +335,16 @@ export function Form({
                   readOnly={values.isUnknownVessel}
                 />
               </TwoCol>
-              <FormikCheckbox isErrorMessageHidden isLight label="Navire inconnu" name="isUnknownVessel" />
+              <Checkbox
+                checked={values.isUnknownVessel}
+                isErrorMessageHidden
+                isLight
+                label="Navire inconnu"
+                name="isUnknownVessel"
+                onChange={isChecked => {
+                  setFieldValue('isUnknownVessel', isChecked)
+                }}
+              />
               <FormikSelect
                 isLight
                 label="Engin"

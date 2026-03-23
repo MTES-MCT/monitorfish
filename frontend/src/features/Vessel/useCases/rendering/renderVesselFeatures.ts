@@ -21,9 +21,9 @@ export const renderVesselFeatures = (): MainAppThunk => async (dispatch, getStat
       vesselGroupsIdsFiltered
     )
 
-  const features = vesselsWithPositionAndDisplayedVesselsGroups.map(([vessel, displayedGroups]) =>
-    buildFeature(vessel, displayedGroups)
-  )
+  const features = vesselsWithPositionAndDisplayedVesselsGroups
+    .map(([vessel, displayedGroups]) => buildFeature(vessel, displayedGroups))
+    .filter((feature): feature is NonNullable<typeof feature> => feature !== undefined)
 
   VESSELS_VECTOR_SOURCE.clear(true)
   VESSELS_VECTOR_SOURCE.addFeatures(features)

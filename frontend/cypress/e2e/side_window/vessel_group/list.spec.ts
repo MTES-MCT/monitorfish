@@ -67,6 +67,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 61)
     })
+    cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
 
     /**
      * Delete a vessel group

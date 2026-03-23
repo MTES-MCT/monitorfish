@@ -1,4 +1,6 @@
-CREATE TABLE eez_areas_2026 (
+DROP TABLE IF EXISTS eez_areas;
+
+CREATE TABLE eez_areas (
     id integer NOT NULL,
     geom public.geometry(MultiPolygon,4326),
     fid bigint,

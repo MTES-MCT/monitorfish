@@ -4,7 +4,7 @@
     "urlPath": "/geoserver/wfs",
     "queryParameters": {
       "typename": {
-        "matches": "monitorfish:eez_areas_2026"
+        "matches": "monitorfish:eez_areas"
       }
     }
   },

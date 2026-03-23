@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "eez_areas_2026")
+@Table(name = "eez_areas")
 data class EezAreaEntity(
     @Id
     @Column(name = "id")

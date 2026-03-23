@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Tuple
 
 import duckdb
 import pandas as pd
@@ -30,6 +31,130 @@ def extract_vms_vessels(from_datetime_utc: datetime) -> pd.DataFrame:
             "from_datetime_utc": from_datetime_utc,
         },
     )
+
+
+@task
+def extract_trips_subject_to_pno(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/trips_subject_to_pno.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_rtps(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/rtps.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_logbook_pnos(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/logbook_pnos.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def extract_manual_pnos(from_datetime_utc: datetime) -> pd.DataFrame:
+    return extract(
+        db_name="data_warehouse",
+        query_filepath="data_warehouse/manual_pnos.sql",
+        params={
+            "from_datetime_utc": from_datetime_utc,
+        },
+    )
+
+
+@task
+def evaluate_trips_pnos(
+    trips_subject_to_pno: pd.DataFrame,
+    rtps: pd.DataFrame,
+    manual_pnos: pd.DataFrame,
+    logbook_pnos: pd.DataFrame,
+) -> pd.DataFrame:
+    trips = duckdb.sql(
+        """
+        SELECT
+            t.cfr,
+            t.trip_number,
+            CASE
+                WHEN
+                    r.return_datetime > (
+                       lp.predicted_arrival_datetime_utc - INTERVAL '15 minutes'
+                    ) AND
+                    lp.predicted_arrival_datetime_utc >= (
+                       lp.report_datetime_utc +
+                       to_hours(minimum_notification_period::Int) -
+                       to_minutes(5)
+                    )
+                THEN true
+                WHEN
+                    r.return_datetime > (
+                       mp.predicted_arrival_datetime_utc - INTERVAL '15 minutes'
+                    ) AND
+                    r.return_datetime < (
+                       mp.predicted_arrival_datetime_utc + INTERVAL '4 hours'
+                    ) AND
+                    mp.predicted_arrival_datetime_utc >= (
+                       mp.report_datetime_utc +
+                       to_hours(minimum_notification_period::Int) -
+                       to_minutes(5))
+                THEN true
+                ELSE false
+            END AS is_valid
+        FROM trips_subject_to_pno t
+        LEFT JOIN rtps r
+        ON r.cfr = t.cfr AND r.trip_number = t.trip_number
+        LEFT JOIN logbook_pnos lp
+        ON lp.cfr = t.cfr AND lp.trip_number = t.trip_number
+        ASOF LEFT JOIN manual_pnos mp
+        ON mp.cfr = t.cfr AND mp.report_datetime_utc < r.return_datetime
+        ORDER BY t.trip_number
+    """
+    ).to_df()
+    return trips
+
+
+@task
+def compute_pno_mr_trips_per_vessel(
+    evaluated_trips_pnos: pd.DataFrame,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    total_trips = duckdb.sql(
+        """
+        SELECT
+            cfr,
+            COUNT(*) AS total_trips
+        FROM evaluated_trips_pnos
+        GROUP BY cfr
+        ORDER BY cfr
+    """
+    ).to_df()
+
+    compliant_trips = duckdb.sql(
+        """
+        SELECT
+            cfr,
+            COUNT(*) AS compliant_trips
+        FROM evaluated_trips_pnos
+        WHERE is_valid
+        GROUP BY cfr
+        ORDER BY cfr
+    """
+    ).to_df()
+
+    return (total_trips, compliant_trips)
 
 
 @task
@@ -164,6 +289,12 @@ def risk_elements_flow():
 
     total_trips = extract_total_trips(from_datetime_utc=from_datetime_utc)
     vms_vessels = extract_vms_vessels(from_datetime_utc=from_datetime_utc)
+    trips_subject_to_pno = extract_trips_subject_to_pno(
+        from_datetime_utc=from_datetime_utc
+    )
+    rtps = extract_rtps(from_datetime_utc=from_datetime_utc)
+    manual_pnos = extract_manual_pnos(from_datetime_utc=from_datetime_utc)
+    logbook_pnos = extract_logbook_pnos(from_datetime_utc=from_datetime_utc)
 
     mot_mr_compliant_trips = extract_compliant_trips(
         RiskElement.MOT_MR, from_datetime_utc=from_datetime_utc
@@ -185,8 +316,19 @@ def risk_elements_flow():
     vms_mr_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
         vms_vessels, targeted_vms_malfunction_occurrences, RiskElement.VMS_MR
     )
+    evaluated_trips_pno = evaluate_trips_pnos(
+        trips_subject_to_pno, rtps, manual_pnos, logbook_pnos
+    )
+
+    pno_total_trips, pno_mr_compliant_trips = compute_pno_mr_trips_per_vessel(
+        evaluated_trips_pno
+    )
+    pno_mr_risk_elements = compute_vessels_risk_elements(
+        pno_total_trips, pno_mr_compliant_trips, RiskElement.PNO_MR
+    )
 
     # Load
     load_vessels_risk_elements(mot_mr_vessels_risk_elements)
     load_vessels_risk_elements(cla_cm_vessels_risk_elements)
     load_vessels_risk_elements(vms_mr_vessels_risk_elements)
+    load_vessels_risk_elements(pno_mr_risk_elements)

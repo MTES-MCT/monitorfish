@@ -47,7 +47,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isMissionsMapButtonDisplayed: true,
   isNewFeaturesMapButtonDisplayed: true,
   isPriorNotificationMapButtonDisplayed: true,
-  isReportingLayerDisplayed: true,
+  isReportingLayerDisplayed: false,
   isReportingMapButtonDisplayed: true,
   isReportingMapFormDisplayed: false,
   isStationLayerDisplayed: false,

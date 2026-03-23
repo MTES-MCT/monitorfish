@@ -142,7 +142,7 @@ def load_eez_areas(
     logger = get_run_logger()
     load(
         eez_areas,
-        table_name="eez_areas_2026",
+        table_name="eez_areas",
         schema="public",
         db_name="monitorfish_remote",
         logger=logger,

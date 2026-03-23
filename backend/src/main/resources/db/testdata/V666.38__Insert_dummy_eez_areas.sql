@@ -1,4 +1,4 @@
-INSERT INTO eez_areas_2026 (id, "SOVEREIGN1", geom) VALUES
+INSERT INTO eez_areas (id, "SOVEREIGN1", geom) VALUES
 (1, 'France', ST_SetSRID(ST_GeomFromGeoJSON(
     '{"type":"MultiPolygon","coordinates":[[[[-5.0,43.0],[-5.0,48.0],[-1.0,48.0],[-1.0,43.0],[-5.0,43.0]]]]}'
 ), 4326)),

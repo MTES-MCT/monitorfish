@@ -10,7 +10,7 @@ interface DBEezAreasRepository : CrudRepository<EezAreaEntity, Int> {
         """
         SELECT EXISTS(
             SELECT 1
-            FROM eez_areas_2026
+            FROM eez_areas
             WHERE "SOVEREIGN1" = 'France'
             AND ST_Intersects(
                 geom,

@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:eez_areas&outputFormat=application/json&srsname=EPSG:4326&bbox=-502553.5102241071,6072304.450193035,54548.21022410715,6533042.629806965,EPSG:3857"
+    "url": "/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:eez_areas_2026&outputFormat=application/json&srsname=EPSG:4326&bbox=-502553.5102241071,6072304.450193035,54548.21022410715,6533042.629806965,EPSG:3857"
   },
   "response": {
     "status": 200,

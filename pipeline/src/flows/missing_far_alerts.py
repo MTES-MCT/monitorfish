@@ -86,7 +86,7 @@ def make_positions_at_sea_query(
         minimum_length (float, optional): If provided, only vessels longer than the
           given value will be queried (only applies to french vessels). Defaults to
           None.
-        eez_areas_table (Table, optional): `sqlalchemy.Table` representing `eez_areas`.
+        eez_areas_table (Table, optional): `sqlalchemy.Table` representing `eez_areas_2026`.
           Must be provided if `eez_to_monitor_iso3` is not `None`. Defaults to None.
         eez_to_monitor_iso3 (list, optional): If provided, only VMS emission in the
           designated EEZ areas will be considered. Defaults to None.
@@ -139,7 +139,7 @@ def make_positions_at_sea_query(
 
         from_table = from_table.join(
             eez_areas_table,
-            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.wkb_geometry),
+            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.geom),
         )
 
     q = (
@@ -190,7 +190,7 @@ def make_positions_at_sea_query(
         )
 
     if eez_to_monitor_iso3:
-        q = q.where(eez_areas_table.c.iso_sov1.in_(eez_to_monitor_iso3))
+        q = q.where(eez_areas_table.c["ISO_SOV1"].in_(eez_to_monitor_iso3))
 
     return q
 
@@ -428,7 +428,7 @@ def missing_far_alerts_flow(
     districts_table = get_table("districts")
     positions_table = get_table("positions")
     facade_areas_table = get_table("facade_areas_subdivided")
-    eez_areas_table = get_table("eez_areas")
+    eez_areas_table = get_table("eez_areas_2026")
     vessels_table = get_table("vessels")
 
     # Extract

@@ -1,4 +1,4 @@
-import { RtkCacheTagType, WindowContext } from '@api/constants'
+import { WindowContext } from '@api/constants'
 import { type FormEditedReporting, type Reporting } from '@features/Reporting/types'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -28,11 +28,6 @@ export const updateReporting =
           nextReportingFormData: reportingData as FormEditedReporting
         })
       ).unwrap()
-
-      // We wait for the transaction to be committed
-      setTimeout(() => {
-        dispatch(reportingApi.util.invalidateTags([{ type: RtkCacheTagType.Reportings }]))
-      }, 1000)
 
       // We update the reportings of the last positions vessels state
       if (previousReportingType !== nextReportingFormData.type) {

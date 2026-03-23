@@ -19,7 +19,11 @@ val transformFromWSG84ToOpenLayers: CoordinateTransform =
 fun transformCoordinatesToOpenlayersProjection(
     longitude: Double,
     latitude: Double,
-): Pair<Double, Double> {
+): Pair<Double, Double>? {
+    if (latitude < -90.0 || latitude > 90.0 || longitude < -180.0 || longitude > 180.0) {
+        return null
+    }
+
     val sourceCoordinates = ProjCoordinate(longitude, latitude)
     val targetCoordinates = ProjCoordinate()
 

@@ -10,7 +10,11 @@ import type { Reporting } from '@features/Reporting/types'
 export function buildFeature(
   vessel: Vessel.ActiveVesselEmittingPosition,
   vesselGroupDisplayed: VesselGroupDisplayInformation
-): Vessel.VesselLastPositionFeature {
+): Vessel.VesselLastPositionFeature | undefined {
+  if (!vessel.coordinates) {
+    return undefined
+  }
+
   /**
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */

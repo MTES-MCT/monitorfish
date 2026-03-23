@@ -73,7 +73,7 @@ export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend(
   activityType: z.literal('POSITION_BASED'),
   alerts: z.array(z.string()),
   beaconMalfunctionId: numberOrUndefined,
-  coordinates: z.array(z.number()), // OPENLAYERS_PROJECTION
+  coordinates: z.array(z.number()).nullable(), // OPENLAYERS_PROJECTION
   course: numberOrUndefined,
   dateTime: z.string(),
   emissionPeriod: z.number().optional(),

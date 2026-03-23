@@ -36,7 +36,7 @@ class DisplayedReportingDataOutput(
                         transformCoordinatesToOpenlayersProjection(
                             longitude = reporting.longitude!!,
                             latitude = reporting.latitude!!,
-                        ).toList()
+                        )?.toList() ?: listOf()
                     } else {
                         listOf()
                     },

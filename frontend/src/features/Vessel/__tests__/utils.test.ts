@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { getLastControlDateTime } from '../utils'
+import { ActivityOrigin, ActivityType, VesselIdentifier } from '../schemas/ActiveVesselSchema'
+import { buildFeature, getLastControlDateTime } from '../utils'
 
 describe('utils/getLastControlDateTime()', () => {
   it('should return undefined when both dates are undefined', () => {
@@ -71,5 +72,51 @@ describe('utils/getLastControlDateTime()', () => {
 
     expect(resultWithEmptyQuay).toBe(validDate)
     expect(resultWithEmptySea).toBe(validDate)
+  })
+})
+
+describe('utils/buildFeature()', () => {
+  const vesselGroupDisplayed = {
+    groupColor: [0, 0, 0] as [number, number, number],
+    groupsDisplayed: [],
+    numberOfGroupsHidden: 0
+  }
+
+  it('should return undefined when vessel has null coordinates', () => {
+    const vessel = {
+      activityOrigin: ActivityOrigin.FROM_LOGBOOK,
+      activityType: ActivityType.POSITION_BASED,
+      alerts: [],
+      beaconMalfunctionId: undefined,
+      coordinates: null,
+      course: undefined,
+      dateTime: '2024-01-01T00:00:00Z',
+      detectabilityRiskFactor: 0,
+      flagState: 'FR',
+      gearsArray: [],
+      hasAlert: false,
+      hasBeaconMalfunction: false,
+      hasInfractionSuspicion: false,
+      impactRiskFactor: 0,
+      isAtPort: false,
+      isFiltered: 0,
+      landingPortLocode: undefined,
+      lastPositionSentAt: 0,
+      latitude: -128.0521,
+      longitude: -256.0521,
+      positionType: 'VMS',
+      probabilityRiskFactor: 0,
+      riskFactor: 0,
+      segments: [],
+      speciesArray: [],
+      speciesOnboard: [],
+      vesselFeatureId: 'test-vessel',
+      vesselGroups: [],
+      vesselIdentifier: VesselIdentifier.IRCS
+    } as any
+
+    const result = buildFeature(vessel, vesselGroupDisplayed)
+
+    expect(result).toBeUndefined()
   })
 })

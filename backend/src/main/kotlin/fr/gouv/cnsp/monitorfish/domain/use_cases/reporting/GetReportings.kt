@@ -30,17 +30,17 @@ class GetReportings(
                 ReportingPeriod.TODAY ->
                     Pair(
                         now.toLocalDate().atStartOfDay(now.zone),
-                        now,
+                        now.plusMinutes(1),
                     )
 
-                ReportingPeriod.LAST_WEEK -> Pair(now.minusWeeks(1), now)
-                ReportingPeriod.LAST_MONTH -> Pair(now.minusMonths(1), now)
-                ReportingPeriod.LAST_3_MONTHS -> Pair(now.minusMonths(3), now)
-                ReportingPeriod.LAST_12_MONTHS -> Pair(now.minusMonths(12), now)
+                ReportingPeriod.LAST_WEEK -> Pair(now.minusWeeks(1), now.plusMinutes(1))
+                ReportingPeriod.LAST_MONTH -> Pair(now.minusMonths(1), now.plusMinutes(1))
+                ReportingPeriod.LAST_3_MONTHS -> Pair(now.minusMonths(3), now.plusMinutes(1))
+                ReportingPeriod.LAST_12_MONTHS -> Pair(now.minusMonths(12), now.plusMinutes(1))
                 ReportingPeriod.CURRENT_YEAR ->
                     Pair(
                         now.withDayOfYear(1).toLocalDate().atStartOfDay(now.zone),
-                        now,
+                        now.plusMinutes(1),
                     )
 
                 ReportingPeriod.CUSTOM -> Pair(startDate, endDate)

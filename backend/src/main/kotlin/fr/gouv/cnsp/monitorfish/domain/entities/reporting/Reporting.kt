@@ -406,7 +406,7 @@ private fun checkReportingActorAndFieldsRequirements(
     otherSourceType: OtherSource?,
     isIUU: Boolean,
     latitude: Double?,
-    longitude: Double?
+    longitude: Double?,
 ) {
     if (isIUU) {
         require(latitude != null) { "A latitude must be set" }

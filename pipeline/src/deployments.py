@@ -42,7 +42,9 @@ from src.flows.fao_areas import fao_areas_flow
 from src.flows.fishing_gear_codes import fishing_gear_codes_flow
 from src.flows.foreign_fmcs import foreign_fmcs_flow
 from src.flows.infractions import infractions_flow
-from src.flows.init_infraction_threat_characterization import init_infraction_threat_characterization_flow
+from src.flows.init_infraction_threat_characterization import (
+    init_infraction_threat_characterization_flow,
+)
 from src.flows.init_pno_types import init_pno_types_flow
 from src.flows.init_species_groups import init_species_groups_flow
 from src.flows.last_positions import last_positions_flow
@@ -60,6 +62,7 @@ from src.flows.refresh_materialized_view import refresh_materialized_view_flow
 from src.flows.regulations import regulations_flow
 from src.flows.regulations_checkup import regulations_checkup_flow
 from src.flows.regulations_open_data import regulations_open_data_flow
+from src.flows.risk_elements import risk_elements_flow
 from src.flows.risk_factors import risk_factors_flow
 from src.flows.scrape_legipeche import scrape_legipeche_flow
 from src.flows.species import species_flow
@@ -316,6 +319,10 @@ flows_to_deploy = [
     FlowAndSchedules(
         flow=regulations_flow,
         schedules=[Schedule(cron="2,32 * * * *")],
+    ),
+    FlowAndSchedules(
+        flow=risk_elements_flow,
+        schedules=[Schedule(cron="30 3 * * *")],
     ),
     FlowAndSchedules(
         flow=risk_factors_flow,

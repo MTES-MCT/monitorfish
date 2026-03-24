@@ -1,0 +1,5 @@
+pno_type_id,pno_type_name,minimum_notification_period,has_designated_ports,pno_type_rule_id,species,fao_area,gear,flag_state,minimum_quantity_kg
+1,Autres espèces soumises à préavis,4.0,false,1,BSS,27.7.a,,,0.0
+1,Autres espèces soumises à préavis,4.0,false,2,SCR,27.8.a,,,0.0
+2,Sardine plus de cent tonnes,4.0,false,3,PIL,27,,,100000.0
+3,Thon rouge,4.0,false,4,BFT,27,,,0.0

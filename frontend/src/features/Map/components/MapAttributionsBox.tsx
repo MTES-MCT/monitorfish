@@ -23,7 +23,7 @@ export function MapAttributionsBox() {
 
 const Wrapper = styled.div`
   bottom: 10px;
-  left: 0.5em;
+  left: 10px;
   max-width: calc(100% - 1.3em);
   background: none;
 `

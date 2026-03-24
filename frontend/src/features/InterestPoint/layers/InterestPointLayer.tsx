@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { POIStyle } from './interestPoint.style'
 import { InterestPointLine } from './interestPointLine'
+import { setLeftMapBoxDisplayed } from '../../../domain/use_cases/setLeftMapBoxDisplayed'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { MapBox, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../Map/constants'
 import { monitorfishMap } from '../../Map/monitorfishMap'
@@ -153,13 +154,13 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
     }
 
     dispatch(interestPointActions.interestPointEdited(id))
-    dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
+    dispatch(setLeftMapBoxDisplayed(MapBox.INTEREST_POINT))
   }
 
   const onDelete = (id: string) => {
     dispatch(deleteInterestPoint(id))
     if (id === interestPointIdEdited) {
-      dispatch(setRightMapBoxDisplayed(undefined))
+      dispatch(setLeftMapBoxDisplayed(undefined))
     }
   }
 

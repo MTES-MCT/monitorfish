@@ -75,45 +75,59 @@ export function MapButtons() {
     <>
       <RightMenuOnHoverArea />
       <LeftMenu $top={top}>
-        <MenuItem>
-          <LayersSidebar />
-        </MenuItem>
-        {isFavoriteVesselsMapButtonDisplayed && (
+        <TopSection>
           <MenuItem>
-            <FavoriteVessels />
+            <LayersSidebar />
           </MenuItem>
-        )}
-        <MenuItem>
-          <Group>
-            {isSuperUser && isMissionsMapButtonDisplayed && (
-              <MenuItem>
-                <MissionsMapMenu />
-              </MenuItem>
-            )}
-            {isSuperUser && isAlertsMapButtonDisplayed && (
-              <MenuItem>
-                <AlertsMapButton />
-              </MenuItem>
-            )}
-            {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
-              isPriorNotificationMapButtonDisplayed && (
+          {isFavoriteVesselsMapButtonDisplayed && (
+            <MenuItem>
+              <FavoriteVessels />
+            </MenuItem>
+          )}
+          <MenuItem>
+            <Group>
+              {isSuperUser && isMissionsMapButtonDisplayed && (
                 <MenuItem>
-                  <PriorNotificationListButton />
+                  <MissionsMapMenu />
                 </MenuItem>
               )}
-            {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && (
-              <MenuItem>
-                <BeaconMalfunctionsMapButton />
-              </MenuItem>
-            )}
-          </Group>
-        </MenuItem>
-
-        {isActivityVisualizationMapButtonDisplayed && (
-          <MenuItem>
-            <ActivityVisualizationMapButton />
+              {isSuperUser && isAlertsMapButtonDisplayed && (
+                <MenuItem>
+                  <AlertsMapButton />
+                </MenuItem>
+              )}
+              {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
+                isPriorNotificationMapButtonDisplayed && (
+                  <MenuItem>
+                    <PriorNotificationListButton />
+                  </MenuItem>
+                )}
+              {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && (
+                <MenuItem>
+                  <BeaconMalfunctionsMapButton />
+                </MenuItem>
+              )}
+            </Group>
           </MenuItem>
-        )}
+
+          {isActivityVisualizationMapButtonDisplayed && (
+            <MenuItem>
+              <ActivityVisualizationMapButton />
+            </MenuItem>
+          )}
+        </TopSection>
+        <BottomSection>
+          {isMeasurementMapButtonDisplayed && (
+            <MenuItem>
+              <MeasurementMapButton />
+            </MenuItem>
+          )}
+          {isInterestPointMapButtonDisplayed && (
+            <MenuItem>
+              <InterestPointMapButton />
+            </MenuItem>
+          )}
+        </BottomSection>
       </LeftMenu>
       <RightMenu $top={top}>
         <MenuItem>
@@ -145,25 +159,11 @@ export function MapButtons() {
           </Group>
         </MenuItem>
 
-        <MenuItem>
-          <Group>
-            {isVesselVisibilityMapButtonDisplayed && (
-              <MenuItem>
-                <MapSettingsButton />
-              </MenuItem>
-            )}
-            {isMeasurementMapButtonDisplayed && (
-              <MenuItem>
-                <MeasurementMapButton />
-              </MenuItem>
-            )}
-            {isInterestPointMapButtonDisplayed && (
-              <MenuItem>
-                <InterestPointMapButton />
-              </MenuItem>
-            )}
-          </Group>
-        </MenuItem>
+        {isVesselVisibilityMapButtonDisplayed && (
+          <MenuItem>
+            <MapSettingsButton />
+          </MenuItem>
+        )}
 
         <MenuItem>
           <Group>
@@ -193,7 +193,23 @@ const Menu = styled.menu<{ $top: number }>`
   z-index: 1;
 `
 const LeftMenu = styled(Menu)`
+  bottom: 110px;
+  height: calc(100vh - ${p => p.$top}px - 116px);
+  justify-content: space-between;
   left: 10px;
+  row-gap: 0;
+`
+
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+`
+
+const BottomSection = styled.ul`
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 `
 
 const RightMenu = styled(Menu)`

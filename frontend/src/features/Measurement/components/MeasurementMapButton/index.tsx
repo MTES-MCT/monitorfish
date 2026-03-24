@@ -7,7 +7,7 @@ import { useEscapeFromKeyboardAndExecute } from '@hooks/useEscapeFromKeyboardAnd
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
-import { setRightMapBoxDisplayed } from 'domain/use_cases/setRightMapBoxDisplayed'
+import { setLeftMapBoxDisplayed } from 'domain/use_cases/setLeftMapBoxDisplayed'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
@@ -18,27 +18,27 @@ import { setMeasurementTypeToAdd } from '../../slice'
 export function MeasurementMapButton() {
   const dispatch = useMainAppDispatch()
   const measurementTypeToAdd = useMainAppSelector(state => state.measurement.measurementTypeToAdd)
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
+  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const { isOpened: isMeasurementMenuOpen, isRendered: isMeasurementMenuRendered } = useDisplayMapBox(
-    rightMapBoxOpened === MapBox.MEASUREMENT_MENU
+    leftMapBoxOpened === MapBox.MEASUREMENT_MENU
   )
   const { isOpened: isMeasurementToolOpen, isRendered: isMeasurementToolRendered } = useDisplayMapBox(
-    rightMapBoxOpened === MapBox.MEASUREMENT && measurementTypeToAdd === MeasurementType.CIRCLE_RANGE
+    leftMapBoxOpened === MapBox.MEASUREMENT && measurementTypeToAdd === MeasurementType.CIRCLE_RANGE
   )
 
   const wrapperRef = useRef(null)
 
-  useClickOutsideWhenOpenedAndExecute(wrapperRef, rightMapBoxOpened === MapBox.MEASUREMENT_MENU, () => {
-    dispatch(setRightMapBoxDisplayed(undefined))
+  useClickOutsideWhenOpenedAndExecute(wrapperRef, leftMapBoxOpened === MapBox.MEASUREMENT_MENU, () => {
+    dispatch(setLeftMapBoxDisplayed(undefined))
   })
   useEscapeFromKeyboardAndExecute(() => {
     if (isMeasurementMenuOpen || isMeasurementToolOpen) {
-      dispatch(setRightMapBoxDisplayed(undefined))
+      dispatch(setLeftMapBoxDisplayed(undefined))
     }
   })
 
   const makeMeasurement = nextMeasurementTypeToAdd => {
-    dispatch(setRightMapBoxDisplayed(MapBox.MEASUREMENT))
+    dispatch(setLeftMapBoxDisplayed(MapBox.MEASUREMENT))
     dispatch(setMeasurementTypeToAdd(nextMeasurementTypeToAdd))
   }
 
@@ -55,12 +55,12 @@ export function MeasurementMapButton() {
 
   const openOrCloseMeasurementMenu = () => {
     if (isMeasurementMenuOpen) {
-      dispatch(setRightMapBoxDisplayed(undefined))
+      dispatch(setLeftMapBoxDisplayed(undefined))
 
       return
     }
 
-    dispatch(setRightMapBoxDisplayed(MapBox.MEASUREMENT_MENU))
+    dispatch(setLeftMapBoxDisplayed(MapBox.MEASUREMENT_MENU))
   }
 
   return (
@@ -91,6 +91,7 @@ export function MeasurementMapButton() {
         data-cy="measurement"
         Icon={measurementIcon}
         isActive={isMeasurementMenuOpen || !!measurementTypeToAdd}
+        isLeft
         onClick={openOrCloseMeasurementMenu}
         title="Mesurer une distance"
       />
@@ -118,6 +119,7 @@ const MeasurementItem = styled(TransparentButton)`
 
 const Wrapper = styled.div`
   display: flex;
+  position: relative;
 `
 
 const MeasurementOptions = styled(MapComponent)<{
@@ -127,9 +129,9 @@ const MeasurementOptions = styled(MapComponent)<{
   border-radius: 2px;
   display: flex;
   gap: 8px;
-  margin-right: ${p => (p.$isOpen ? '50px' : '-250px')};
+  left: 50px;
+  margin-left: ${p => (p.$isOpen ? '0' : '-200px')};
   opacity: ${p => (p.$isOpen ? '1' : '0')};
   position: absolute;
-  right: 10px;
   transition: all 0.3s;
 `

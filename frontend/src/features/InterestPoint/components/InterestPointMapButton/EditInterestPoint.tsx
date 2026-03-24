@@ -1,15 +1,19 @@
 import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
-import { Header } from '@features/Map/components/MapButtons/shared/styles'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import {
+  Accent,
+  Button,
   type Coordinates,
   coordinatesAreDistinct,
   CoordinatesInput,
-  Label,
+  Icon,
+  MapMenuDialog,
   MultiRadio,
+  Textarea,
+  TextInput,
   THEME
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
@@ -46,7 +50,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
     ? [interestPointEdited?.geometry?.coordinates[1] as number, interestPointEdited?.geometry?.coordinates[0] as number]
     : undefined
 
-  const updateName = name => {
+  const updateName = (name: string | undefined) => {
     assertNotNullish(interestPointEdited)
     dispatch(
       interestPointActions.interestPointUpdated({
@@ -59,7 +63,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
     )
   }
 
-  const updateObservations = (observations: string) => {
+  const updateObservations = (observations: string | undefined) => {
     assertNotNullish(interestPointEdited)
     dispatch(
       interestPointActions.interestPointUpdated({
@@ -128,16 +132,17 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   }
 
   return (
-    <Wrapper data-cy="edit-interest-point" isOpen={isOpen}>
-      <Header>Créer un point d&apos;intérêt</Header>
+    <Wrapper data-cy="edit-interest-point" isLeftBox isOpen={isOpen}>
+      <Header>
+        <CloseButton Icon={Icon.Close} onClick={onCancel} title="Fermer" />
+        <Title>Créer un point d&apos;intérêt</Title>
+      </Header>
       <Body>
-        <p>Coordonnées</p>
         {isOpen && (
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}
             defaultValue={coordinates}
-            isLabelHidden
-            label="Coordonnées du point d'intérêt"
+            label="Localisation"
             name="interest-point-coordinates"
             onChange={updateCoordinates}
           />
@@ -156,35 +161,64 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
             }
           />
         </RadioWrapper>
-        <Label htmlFor="label">Libellé du point</Label>
-        <Name
+        <StyledTextInput
           data-cy="interest-point-name-input"
-          id="label"
-          onChange={e => updateName(e.target.value)}
-          type="text"
+          label="Titre du point"
+          name="interest-point-name-input"
+          onChange={nextValue => updateName(nextValue)}
           value={interestPointEdited?.properties.name ?? ''}
         />
-        <Label htmlFor="observations">Observations</Label>
-        <textarea
+        <StyledTextarea
           data-cy="interest-point-observations-input"
-          id="observations"
-          onChange={e => updateObservations(e.target.value)}
+          label="Description du point"
+          name="interest-point-observations-input"
+          onChange={nextValue => updateObservations(nextValue)}
           value={interestPointEdited?.properties.observations ?? ''}
         />
-        <OkButton data-cy="interest-point-save" onClick={saveInterestPoint}>
-          OK
-        </OkButton>
-        <CancelButton disabled={isEdition} onClick={onCancel}>
-          Annuler
-        </CancelButton>
+        <ButtonsRow>
+          <StyledButton accent={Accent.SECONDARY} disabled={isEdition} onClick={onCancel}>
+            Annuler
+          </StyledButton>
+          <StyledButton data-cy="interest-point-save" onClick={saveInterestPoint}>
+            Valider
+          </StyledButton>
+        </ButtonsRow>
       </Body>
     </Wrapper>
   )
 }
 
-const Name = styled.input`
+const Header = styled(MapMenuDialog.Header)`
+  height: 22px;
+`
+
+const Title = styled(MapMenuDialog.Title)`
+  text-align: center;
   width: 100%;
-  margin-bottom: 16px;
+  margin-right: 37px;
+`
+
+const CloseButton = styled(MapMenuDialog.CloseButton)`
+  margin-top: 4px;
+`
+
+const StyledButton = styled(Button)`
+  width: 100%;
+`
+
+const ButtonsRow = styled.div`
+  display: flex;
+  margin-top: 32px;
+  gap: 8px;
+`
+
+const StyledTextInput = styled(TextInput)`
+  margin-top: 16px;
+`
+
+const StyledTextarea = styled(Textarea)`
+  margin-top: 16px;
+  width: 258px;
 `
 
 const RadioWrapper = styled.div`
@@ -192,82 +226,14 @@ const RadioWrapper = styled.div`
   margin-bottom: 12px;
 `
 
-const CancelButton = styled.button`
-  border: 1px solid ${THEME.color.lightGray};
-  color: ${THEME.color.gunMetal};
-  font-size: 13px;
-  margin: 15px 0 0 15px;
-  padding: 5px 12px;
-  width: 130px;
-
-  &:disabled {
-    border: 1px solid ${THEME.color.lightGray};
-    color: ${THEME.color.slateGray};
-  }
-`
-
-const OkButton = styled.button`
-  background: ${THEME.color.charcoal};
-  color: ${THEME.color.gainsboro};
-  font-size: 13px;
-  margin: 15px 0 0;
-  padding: 5px 12px;
-  width: 130px;
-
-  &:hover,
-  &:focus {
-    background: ${THEME.color.charcoal};
-  }
-`
-
 const Body = styled.div`
   color: ${THEME.color.slateGray};
   font-size: 13px;
   margin: 10px 15px;
   text-align: left;
-
-  p {
-    font-size: 13px;
-    margin: 0;
-  }
-
-  p:nth-of-type(2) {
-    font-size: 13px;
-    margin-top: 15px;
-  }
-
-  p:nth-of-type(3) {
-    font-size: 13px;
-    margin-top: 15px;
-  }
-
-  p:nth-of-type(4) {
-    font-size: 13px;
-    margin-top: 15px;
-  }
-
-  input {
-    background: ${THEME.color.gainsboro};
-    border: none;
-    color: ${THEME.color.gunMetal};
-    height: 27px;
-    margin-top: 7px;
-    padding-left: 8px;
-  }
-
-  textarea {
-    background: ${THEME.color.gainsboro};
-    border: none;
-    color: ${THEME.color.gunMetal};
-    margin-top: 7px;
-    min-height: 50px;
-    padding-left: 8px;
-    padding-top: 3px;
-    resize: vertical;
-    width: 100% !important;
-  }
 `
 
 const Wrapper = styled(MapToolBox)`
+  bottom: 0;
   width: 306px;
 `

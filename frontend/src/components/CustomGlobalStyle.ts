@@ -375,7 +375,7 @@ export const CustomGlobalStyle = createGlobalStyle`
 
   .ol-control.zoom {
     bottom: 38px;
-    left: .5em;
+    left: 10px;
     width: 25px;
     height: 53px;
   }

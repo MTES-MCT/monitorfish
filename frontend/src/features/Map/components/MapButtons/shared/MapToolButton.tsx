@@ -7,15 +7,22 @@ import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
 type MapToolButtonProps = {
   className?: string | undefined
   isActive: boolean
+  isLeft?: boolean
   isShrinkable?: boolean
   title: string
 } & IconButtonProps
-
-export function MapToolButton({ className, isActive, isShrinkable = true, title, ...props }: MapToolButtonProps) {
+export function MapToolButton({
+  className,
+  isActive,
+  isLeft = false,
+  isShrinkable = true,
+  title,
+  ...props
+}: MapToolButtonProps) {
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
-  const isRightMenuShrinked = !rightMenuIsOpen && isShrinkable
+  const isRightMenuShrinked = isLeft ? false : !rightMenuIsOpen && isShrinkable
 
   return (
     <StyledButton

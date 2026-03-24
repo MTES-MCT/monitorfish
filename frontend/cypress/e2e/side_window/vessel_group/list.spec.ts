@@ -1,5 +1,5 @@
 context('Side Window > Vessel Group List', () => {
-  it('Should display vessels groups, open and edit them', () => {
+  it.only('Should display vessels groups, open and edit them', () => {
     cy.cleanDownloadedFiles()
     cy.login('superuser')
 
@@ -56,7 +56,7 @@ context('Side Window > Vessel Group List', () => {
      * Open a dynamic vessel group and display vessels
      */
     cy.get('[title="Mission Thémis – chaluts de fonds"]').contains('152 navires')
-    cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
+    cy.contains('Mission Thémis – chaluts de fonds').click()
     cy.get('[title="Mission Thémis – chaluts de fonds"]').contains(
       'Ciblage pour la mission du Thémis (bordée A) du 08/01 au 17/01/25.'
     )
@@ -67,7 +67,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 61)
     })
-    cy.get('[title="Mission Thémis – chaluts de fonds"]').click()
+    cy.contains('Mission Thémis – chaluts de fonds').click()
 
     /**
      * Delete a vessel group
@@ -81,7 +81,7 @@ context('Side Window > Vessel Group List', () => {
      * Display vessels from fixed vessel groups and delete a vessel
      */
     cy.get('[title="Mission Thémis – semaine 04"]').contains('6 navires')
-    cy.get('[title="Mission Thémis – semaine 04"]').click()
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)
       cy.get('[title="MALOTRU"]').scrollIntoView().click({ force: true })
@@ -91,7 +91,7 @@ context('Side Window > Vessel Group List', () => {
       cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click()
     })
     cy.get('[title="Mission Thémis – semaine 04"]').contains('5 navires')
-    cy.get('[title="Mission Thémis – semaine 04"]').click()
+    cy.contains('Mission Thémis – semaine 04').click()
 
     /**
      * Add a vessel to a fixed vessel group
@@ -99,7 +99,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('input[placeholder="Rechercher un navire pour l\'ajouter au groupe"]').scrollIntoView().type('POINT')
     cy.contains('mark', 'POINT').click()
     cy.wait(500)
-    cy.get('[title="Mission Thémis – semaine 04"]').click()
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)
     })
@@ -127,7 +127,7 @@ context('Side Window > Vessel Group List', () => {
     /**
      * Modify a group
      */
-    cy.get('[title="Mission Thémis – semaine 04"]').click()
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('[title=\'Modifier le groupe "Mission Thémis – semaine 04"\']').click({ force: true })
 
     cy.get('.Component-Dialog').contains('Modifier un groupe de navires fixe')
@@ -136,7 +136,7 @@ context('Side Window > Vessel Group List', () => {
     cy.fill('Description du groupe', 'Nouvelle valeur.')
     cy.clickButton('Modifier le groupe')
     cy.wait(500)
-    cy.get('[title="Mission Thémis – semaine 04"]').click()
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('[title="Mission Thémis – semaine 04"]').contains('Nouvelle valeur.')
 
     /**

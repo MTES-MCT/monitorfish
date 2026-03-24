@@ -8,6 +8,7 @@ from sqlalchemy import text
 
 from config import (
     FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION,
+    PORT_COUNTRY_CODES_ISO2_WITHOUT_SYSTEMATIC_VERIFICATION,
     RISK_FACTOR_VERIFICATION_THRESHOLD,
     default_risk_factors,
     risk_factor_coefficients,
@@ -285,6 +286,7 @@ def compute_pno_types(
           - weight `float` `150.5`
           - flag_state `str` `'FRA'`
           - locode `str` `CCXXX`
+          - country_code_iso2 `'FR'`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :
@@ -335,6 +337,7 @@ def compute_pno_types(
             "logbook_reports_pno_id",
             "cfr",
             "locode",
+            "country_code_iso2",
             "flag_state",
             "predicted_arrival_datetime_utc",
         ]
@@ -478,6 +481,11 @@ def flag_pnos_to_verify_and_send(
         (pnos.risk_factor >= RISK_FACTOR_VERIFICATION_THRESHOLD)
         | (~pnos.flag_state.isin(FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION))
         | (pnos.cfr.isin(vessels_with_active_reportings))
+        | (
+            ~pnos.country_code_iso2.isin(
+                PORT_COUNTRY_CODES_ISO2_WITHOUT_SYSTEMATIC_VERIFICATION
+            )
+        )
     )
 
     pnos["is_verified"] = False

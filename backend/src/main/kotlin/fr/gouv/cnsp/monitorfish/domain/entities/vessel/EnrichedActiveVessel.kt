@@ -33,10 +33,12 @@ data class EnrichedActiveVessel(
         reportingTypes.any {
             listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION).contains(it)
         }
+    val emitsPositions: Boolean
 
     init {
         activityType = computeActivityTypeFrom(lastPosition)
         activityOrigin = computeActivityOriginFrom(lastPosition, riskFactor)
+        emitsPositions = activityType == ActivityType.POSITION_BASED && beacon?.vesselId != null
 
         segments =
             if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {

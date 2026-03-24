@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyLastPositions
@@ -48,6 +49,7 @@ class EnrichedActiveVesselUTests {
         assertThat(vessel.activityType).isEqualTo(ActivityType.LOGBOOK_BASED)
         assertThat(vessel.segments).isEqualTo(listOf("NWW05"))
         assertThat(vessel.gearsArray).isEqualTo(listOf("TBB"))
+        assertThat(vessel.emitsPositions).isFalse()
     }
 
     @Test
@@ -85,6 +87,24 @@ class EnrichedActiveVesselUTests {
         assertThat(vessel.activityType).isEqualTo(ActivityType.POSITION_BASED)
         assertThat(vessel.segments).isEqualTo(listOf("NWW03", "NWW06"))
         assertThat(vessel.gearsArray).isEqualTo(listOf("OTB"))
+        assertThat(vessel.emitsPositions).isFalse()
+    }
+
+    @Test
+    fun `Should compute emitsPositions as true When activity is POSITION_BASED and beacon has a vesselId`() {
+        val vessel =
+            EnrichedActiveVessel(
+                vessel = null,
+                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                producerOrganization = null,
+                vesselProfile = null,
+                vesselGroups = listOf(),
+                beacon = Beacon(beaconNumber = "ABC123", vesselId = 42),
+                lastPosition = getDummyLastPositions().first(),
+                landingPort = null,
+            )
+
+        assertThat(vessel.emitsPositions).isTrue()
     }
 
     @Test

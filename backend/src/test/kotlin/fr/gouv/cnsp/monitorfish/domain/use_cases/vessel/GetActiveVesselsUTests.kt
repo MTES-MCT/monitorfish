@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.mock
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
@@ -1738,6 +1739,37 @@ class GetActiveVesselsUTests {
             ReportingType.ALERT,
             ReportingType.OBSERVATION,
         )
+    }
+
+    @Test
+    fun `execute Should propagate beacon from repository result`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(email = "dummy@email.gouv.fr", isSuperUser = true, service = null),
+        )
+        val lastPosition = TestUtils.getDummyLastPositions().first()
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition = lastPosition,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(riskFactor = 2.3),
+                    beacon = Beacon(beaconNumber = "ABC123", vesselId = 42),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(listOf())
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].beacon?.beaconNumber).isEqualTo("ABC123")
+        assertThat(activeVessels[0].emitsPositions).isTrue()
     }
 
     @Test

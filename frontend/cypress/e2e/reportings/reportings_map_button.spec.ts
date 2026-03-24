@@ -19,8 +19,7 @@ context('Reportings Map Button', () => {
     cy.clickButton('Signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
 
-    // Hide the reporting layer
-    cy.clickButton('Masquer les signalements')
+    // Display the reporting layer
     cy.clickButton('Afficher les signalements')
 
     cy.fill('Statut', 'Archivé')

@@ -17,6 +17,7 @@ context('Reporting map form', () => {
     cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
 
     cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
     cy.clickButton('Créer un nouveau signalement INN')
 
@@ -118,6 +119,7 @@ context('Reporting map form', () => {
 
     // Apply the 'Archivé' filter in the map menu
     cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
     cy.fill('Statut', 'Archivé')
     cy.wait('@displayReportings')

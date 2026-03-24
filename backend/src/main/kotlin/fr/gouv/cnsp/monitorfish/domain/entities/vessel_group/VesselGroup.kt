@@ -120,8 +120,8 @@ data class DynamicVesselGroup(
         val emitsPositions = filters.emitsPositions.singleOrNull()
         val hasPositionsMatch =
             emitsPositions?.let {
-                (it == VesselEmitsPositions.YES && activeVessel.activityType == ActivityType.POSITION_BASED) ||
-                    (it == VesselEmitsPositions.NO && activeVessel.activityType != ActivityType.POSITION_BASED)
+                (it == VesselEmitsPositions.YES && activeVessel.emitsPositions) ||
+                    (it == VesselEmitsPositions.NO && !activeVessel.emitsPositions)
             } ?: true
 
         return hasRiskFactorAndProfileMatch &&

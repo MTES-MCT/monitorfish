@@ -86,7 +86,7 @@ def test_filter_failed_tasks():
     assert li == [0, 1, 2, 3, 4]
     assert len(funky_li) == 5
     assert filtered_li == [0, 4]
-    assert added_li.result() == [1, 5]
-    assert list_of_lists.result() == [[1, 2, 3], [5, 6, 7]]
+    assert [li.result() for li in added_li] == [1, 5]
+    assert [li.result() for li in list_of_lists] == [[1, 2, 3], [5, 6, 7]]
     assert flattened_li == [1, 2, 3, 5, 6, 7]
     assert reduced_li == 24

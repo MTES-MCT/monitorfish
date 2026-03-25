@@ -215,6 +215,17 @@ PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION = [
     "MU",
     "CI",
 ]
+PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG = (
+    get_key(
+        DOTENV_PATH, "PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG"
+    )
+    or "False"
+).lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
 
 # Missing DEP alerts configuration
 MISSING_DEP_TRACK_ANALYSIS_HOURS = 48

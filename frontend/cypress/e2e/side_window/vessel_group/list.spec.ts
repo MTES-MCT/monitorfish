@@ -91,6 +91,7 @@ context('Side Window > Vessel Group List', () => {
       cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click({ force: true })
     })
     cy.get('[title="Mission Thémis – semaine 04"]').contains('5 navires')
+    cy.contains('Mission Thémis – semaine 04').click()
 
     /**
      * Add a vessel to a fixed vessel group

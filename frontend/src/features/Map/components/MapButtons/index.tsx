@@ -75,15 +75,19 @@ export function MapButtons() {
     <>
       <RightMenuOnHoverArea />
       <LeftMenu $top={top}>
-        <MenuItem>
-          <LayersSidebar />
-        </MenuItem>
-        {isFavoriteVesselsMapButtonDisplayed && (
-          <MenuItem>
-            <FavoriteVessels />
-          </MenuItem>
-        )}
-        <MenuItem>
+        <TopSection>
+          <Group>
+            <MenuItem>
+              <LayersSidebar />
+            </MenuItem>
+          </Group>
+          {isFavoriteVesselsMapButtonDisplayed && (
+            <Group>
+              <MenuItem>
+                <FavoriteVessels />
+              </MenuItem>
+            </Group>
+          )}
           <Group>
             {isSuperUser && isMissionsMapButtonDisplayed && (
               <MenuItem>
@@ -107,51 +111,17 @@ export function MapButtons() {
               </MenuItem>
             )}
           </Group>
-        </MenuItem>
 
-        {isActivityVisualizationMapButtonDisplayed && (
-          <MenuItem>
-            <ActivityVisualizationMapButton />
-          </MenuItem>
-        )}
-      </LeftMenu>
-      <RightMenu $top={top}>
-        <MenuItem>
-          {isVesselSearchDisplayed && <VesselSidebarHeader />}
-          {isVesselSidebarOpen && <VesselSidebar />}
-        </MenuItem>
-        <MenuItem>
+          {isActivityVisualizationMapButtonDisplayed && (
+            <Group>
+              <MenuItem>
+                <ActivityVisualizationMapButton />
+              </MenuItem>
+            </Group>
+          )}
+        </TopSection>
+        <BottomSection>
           <Group>
-            {isVesselListMapButtonDisplayed && (
-              <MenuItem>
-                <VesselListMapButton />
-              </MenuItem>
-            )}
-            {isVesselGroupMapButtonDisplayed && (
-              <MenuItem>
-                <VesselGroupMapButton />
-              </MenuItem>
-            )}
-            {isSuperUser && isControlUnitListMapButtonDisplayed && (
-              <MenuItem>
-                <ControlUnitListMapButton />
-              </MenuItem>
-            )}
-            {isSuperUser && isReportingMapButtonDisplayed && (
-              <MenuItem>
-                <ReportingMapButton />
-              </MenuItem>
-            )}
-          </Group>
-        </MenuItem>
-
-        <MenuItem>
-          <Group>
-            {isVesselVisibilityMapButtonDisplayed && (
-              <MenuItem>
-                <MapSettingsButton />
-              </MenuItem>
-            )}
             {isMeasurementMapButtonDisplayed && (
               <MenuItem>
                 <MeasurementMapButton />
@@ -163,22 +133,58 @@ export function MapButtons() {
               </MenuItem>
             )}
           </Group>
-        </MenuItem>
+        </BottomSection>
+      </LeftMenu>
+      <RightMenu $top={top}>
+        <Group>
+          <MenuItem>
+            {isVesselSearchDisplayed && <VesselSidebarHeader />}
+            {isVesselSidebarOpen && <VesselSidebar />}
+          </MenuItem>
+        </Group>
+        <Group>
+          {isVesselListMapButtonDisplayed && (
+            <MenuItem>
+              <VesselListMapButton />
+            </MenuItem>
+          )}
+          {isVesselGroupMapButtonDisplayed && (
+            <MenuItem>
+              <VesselGroupMapButton />
+            </MenuItem>
+          )}
+          {isSuperUser && isControlUnitListMapButtonDisplayed && (
+            <MenuItem>
+              <ControlUnitListMapButton />
+            </MenuItem>
+          )}
+          {isSuperUser && isReportingMapButtonDisplayed && (
+            <MenuItem>
+              <ReportingMapButton />
+            </MenuItem>
+          )}
+        </Group>
 
-        <MenuItem>
+        {isVesselVisibilityMapButtonDisplayed && (
           <Group>
-            {isAccountMapButtonDisplayed && (
-              <MenuItem>
-                <Account />
-              </MenuItem>
-            )}
-            {isNewFeaturesMapButtonDisplayed && (
-              <MenuItem>
-                <NewFeatures />
-              </MenuItem>
-            )}
+            <MenuItem>
+              <MapSettingsButton />
+            </MenuItem>
           </Group>
-        </MenuItem>
+        )}
+
+        <Group>
+          {isAccountMapButtonDisplayed && (
+            <MenuItem>
+              <Account />
+            </MenuItem>
+          )}
+          {isNewFeaturesMapButtonDisplayed && (
+            <MenuItem>
+              <NewFeatures />
+            </MenuItem>
+          )}
+        </Group>
       </RightMenu>
     </>
   )
@@ -192,9 +198,22 @@ const Menu = styled.menu<{ $top: number }>`
   top: calc(${p => p.$top}px + 10px);
   z-index: 1;
 `
+
 const LeftMenu = styled(Menu)`
+  bottom: 110px;
+  height: calc(100vh - ${p => p.$top}px - 116px);
+  justify-content: space-between;
   left: 10px;
+  row-gap: 0;
 `
+
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+`
+
+const BottomSection = styled.div``
 
 const RightMenu = styled(Menu)`
   right: 10px;

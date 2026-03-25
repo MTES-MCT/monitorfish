@@ -278,7 +278,7 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
     cy.contains('Créer le préavis').should('be.enabled')
   })
 
-  it.only('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
+  it('Should calculate and display manual prior notification fleet segments, risk factor & types', () => {
     // -------------------------------------------------------------------------
     // Add
 

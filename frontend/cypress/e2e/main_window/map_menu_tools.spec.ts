@@ -12,25 +12,27 @@ context('Map menu tools', () => {
     openVesselBySearch('Pheno')
     cy.get('#root').click(880, 760, { timeout: 10000 })
 
-    // Measurement should close the vessel sidebar
-    cy.get('*[data-cy="measurement"]').should('have.css', 'width', '5px')
+    // Measurement should not close the vessel sidebar
     cy.clickButton("Mesurer une distance", { withoutScroll: true })
     cy.get('*[data-cy="measurement"]').should('have.css', 'width', '40px')
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').should('be.visible')
-    cy.getDataCy('vessel-sidebar').should('not.exist')
+    cy.getDataCy('vessel-sidebar').should('exist')
 
-    // Interest point
+    // Interest point should not close the vessel sidebar
     cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-radius-input"]').should('not.exist')
     cy.get('*[data-cy="interest-point-name-input"]').should('be.visible')
-
-    // Vessel visibility
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
+    cy.get('[title="Fermer le point d\'intérêt"]').click()
     cy.get('*[data-cy="interest-point-name-input"]').should('not.exist')
+
+    // Vessel visibility should close the vessel sidebar
+    cy.get('*[data-cy="vessel-visibility"]').should('have.css', 'width', '5px')
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.get('*[data-cy="map-property-trigger"]', { timeout: 10000 })
       .filter(':contains("étiquettes des navires")')
       .should('be.visible')
+    cy.getDataCy('vessel-sidebar').should('not.exist')
     cy.get('body').contains('Afficher depuis').should('be.visible')
 
     // Vessel groups

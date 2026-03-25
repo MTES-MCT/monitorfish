@@ -76,109 +76,115 @@ export function MapButtons() {
       <RightMenuOnHoverArea />
       <LeftMenu $top={top}>
         <TopSection>
-          <MenuItem>
-            <LayersSidebar />
-          </MenuItem>
-          {isFavoriteVesselsMapButtonDisplayed && (
+          <Group>
             <MenuItem>
-              <FavoriteVessels />
+              <LayersSidebar />
             </MenuItem>
-          )}
-          <MenuItem>
+          </Group>
+          {isFavoriteVesselsMapButtonDisplayed && (
             <Group>
-              {isSuperUser && isMissionsMapButtonDisplayed && (
-                <MenuItem>
-                  <MissionsMapMenu />
-                </MenuItem>
-              )}
-              {isSuperUser && isAlertsMapButtonDisplayed && (
-                <MenuItem>
-                  <AlertsMapButton />
-                </MenuItem>
-              )}
-              {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
-                isPriorNotificationMapButtonDisplayed && (
-                  <MenuItem>
-                    <PriorNotificationListButton />
-                  </MenuItem>
-                )}
-              {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && (
-                <MenuItem>
-                  <BeaconMalfunctionsMapButton />
-                </MenuItem>
-              )}
+              <MenuItem>
+                <FavoriteVessels />
+              </MenuItem>
             </Group>
-          </MenuItem>
+          )}
+          <Group>
+            {isSuperUser && isMissionsMapButtonDisplayed && (
+              <MenuItem>
+                <MissionsMapMenu />
+              </MenuItem>
+            )}
+            {isSuperUser && isAlertsMapButtonDisplayed && (
+              <MenuItem>
+                <AlertsMapButton />
+              </MenuItem>
+            )}
+            {(isSuperUser || import.meta.env.FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED === 'true') &&
+              isPriorNotificationMapButtonDisplayed && (
+                <MenuItem>
+                  <PriorNotificationListButton />
+                </MenuItem>
+              )}
+            {isSuperUser && isBeaconMalfunctionsMapButtonDisplayed && (
+              <MenuItem>
+                <BeaconMalfunctionsMapButton />
+              </MenuItem>
+            )}
+          </Group>
 
           {isActivityVisualizationMapButtonDisplayed && (
-            <MenuItem>
-              <ActivityVisualizationMapButton />
-            </MenuItem>
+            <Group>
+              <MenuItem>
+                <ActivityVisualizationMapButton />
+              </MenuItem>
+            </Group>
           )}
         </TopSection>
         <BottomSection>
-          {isMeasurementMapButtonDisplayed && (
-            <MenuItem>
-              <MeasurementMapButton />
-            </MenuItem>
-          )}
-          {isInterestPointMapButtonDisplayed && (
-            <MenuItem>
-              <InterestPointMapButton />
-            </MenuItem>
-          )}
+          <Group>
+            {isMeasurementMapButtonDisplayed && (
+              <MenuItem>
+                <MeasurementMapButton />
+              </MenuItem>
+            )}
+            {isInterestPointMapButtonDisplayed && (
+              <MenuItem>
+                <InterestPointMapButton />
+              </MenuItem>
+            )}
+          </Group>
         </BottomSection>
       </LeftMenu>
       <RightMenu $top={top}>
-        <MenuItem>
-          {isVesselSearchDisplayed && <VesselSidebarHeader />}
-          {isVesselSidebarOpen && <VesselSidebar />}
-        </MenuItem>
-        <MenuItem>
-          <Group>
-            {isVesselListMapButtonDisplayed && (
-              <MenuItem>
-                <VesselListMapButton />
-              </MenuItem>
-            )}
-            {isVesselGroupMapButtonDisplayed && (
-              <MenuItem>
-                <VesselGroupMapButton />
-              </MenuItem>
-            )}
-            {isSuperUser && isControlUnitListMapButtonDisplayed && (
-              <MenuItem>
-                <ControlUnitListMapButton />
-              </MenuItem>
-            )}
-            {isSuperUser && isReportingMapButtonDisplayed && (
-              <MenuItem>
-                <ReportingMapButton />
-              </MenuItem>
-            )}
-          </Group>
-        </MenuItem>
+        <Group>
+          <MenuItem>
+            {isVesselSearchDisplayed && <VesselSidebarHeader />}
+            {isVesselSidebarOpen && <VesselSidebar />}
+          </MenuItem>
+        </Group>
+        <Group>
+          {isVesselListMapButtonDisplayed && (
+            <MenuItem>
+              <VesselListMapButton />
+            </MenuItem>
+          )}
+          {isVesselGroupMapButtonDisplayed && (
+            <MenuItem>
+              <VesselGroupMapButton />
+            </MenuItem>
+          )}
+          {isSuperUser && isControlUnitListMapButtonDisplayed && (
+            <MenuItem>
+              <ControlUnitListMapButton />
+            </MenuItem>
+          )}
+          {isSuperUser && isReportingMapButtonDisplayed && (
+            <MenuItem>
+              <ReportingMapButton />
+            </MenuItem>
+          )}
+        </Group>
 
         {isVesselVisibilityMapButtonDisplayed && (
-          <MenuItem>
-            <MapSettingsButton />
-          </MenuItem>
+          <Group>
+            <MenuItem>
+              <MapSettingsButton />
+            </MenuItem>
+          </Group>
         )}
 
-        <MenuItem>
-          <Group>
-            {isAccountMapButtonDisplayed && (
-              <MenuItem>
-                <Account />
-              </MenuItem>
-            )}
-            {isNewFeaturesMapButtonDisplayed && (
-              <MenuItem>
-                <NewFeatures />
-              </MenuItem>
-            )}
-          </Group>
-        </MenuItem>
+        <Group>
+          {isAccountMapButtonDisplayed && (
+            <MenuItem>
+              <Account />
+            </MenuItem>
+          )}
+          {isNewFeaturesMapButtonDisplayed && (
+            <MenuItem>
+              <NewFeatures />
+            </MenuItem>
+          )}
+        </Group>
       </RightMenu>
     </>
   )
@@ -192,6 +198,7 @@ const Menu = styled.menu<{ $top: number }>`
   top: calc(${p => p.$top}px + 10px);
   z-index: 1;
 `
+
 const LeftMenu = styled(Menu)`
   bottom: 110px;
   height: calc(100vh - ${p => p.$top}px - 116px);
@@ -206,11 +213,7 @@ const TopSection = styled.div`
   row-gap: 32px;
 `
 
-const BottomSection = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-`
+const BottomSection = styled.div``
 
 const RightMenu = styled(Menu)`
   right: 10px;

@@ -5,6 +5,7 @@ import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSe
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
+import { vesselGroupListActions } from '@features/VesselGroup/components/VesselGroupList/slice'
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
 import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
@@ -12,11 +13,12 @@ import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessel
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Icon, IconButton, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
@@ -36,7 +38,10 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
 
-  const [isOpen, setIsOpen] = useState<boolean>(isOpened)
+  const isOpenInStore = useMainAppSelector(state =>
+    state.vesselGroupList.openedVesselGroupIds.includes(vesselGroupWithVessels.group.id)
+  )
+  const isOpen = isOpened || isOpenInStore
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isEditDynamicVesselGroupOpened, setIsEditDynamicVesselGroupOpened] = useState(false)
   const [isEditFixedVesselGroupOpened, setIsEditFixedVesselGroupOpened] = useState(false)
@@ -58,10 +63,6 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
         break
     }
   }
-
-  useEffect(() => {
-    setIsOpen(isOpened)
-  }, [isOpened])
 
   const togglePinGroup = async event => {
     event.stopPropagation()
@@ -129,7 +130,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   return (
     <>
       <Wrapper title={vesselGroupWithVessels.group.name}>
-        <Row onClick={() => setIsOpen(!isOpen)}>
+        <Row onClick={() => dispatch(vesselGroupListActions.vesselGroupIdToggled(vesselGroupWithVessels.group.id))}>
           <IconButton
             accent={Accent.TERTIARY}
             aria-label="Sélectionner"

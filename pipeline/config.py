@@ -205,6 +205,27 @@ BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT = 60
 # Prior notification verification configuration
 RISK_FACTOR_VERIFICATION_THRESHOLD = 2.3
 FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION = ["FRA"]
+PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION = [
+    "GB",
+    "MG",
+    "NO",
+    "FO",
+    "SC",
+    "GH",
+    "MU",
+    "CI",
+]
+PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG = (
+    get_key(
+        DOTENV_PATH, "PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG"
+    )
+    or "False"
+).lower() in (
+    "true",
+    "t",
+    "yes",
+    "y",
+)
 
 # Missing DEP alerts configuration
 MISSING_DEP_TRACK_ANALYSIS_HOURS = 48

@@ -134,7 +134,7 @@ export function EditInterestPoint({ isOpen, onClose }: EditInterestPointProps) {
   return (
     <Wrapper data-cy="edit-interest-point" isLeftBox isOpen={isOpen}>
       <Header>
-        <CloseButton Icon={Icon.Close} onClick={onCancel} title="Fermer" />
+        <CloseButton Icon={Icon.Close} onClick={onCancel} title="Fermer le point d'intérêt" />
         <Title>Créer un point d&apos;intérêt</Title>
       </Header>
       <Body>

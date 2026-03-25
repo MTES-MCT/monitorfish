@@ -9,6 +9,7 @@ from sqlalchemy import text
 from config import (
     FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION,
     PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION,
+    PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG,
     RISK_FACTOR_VERIFICATION_THRESHOLD,
     default_risk_factors,
     risk_factor_coefficients,
@@ -481,12 +482,13 @@ def flag_pnos_to_verify_and_send(
         (pnos.risk_factor >= RISK_FACTOR_VERIFICATION_THRESHOLD)
         | (~pnos.flag_state.isin(FLAG_STATES_WITHOUT_SYSTEMATIC_VERIFICATION))
         | (pnos.cfr.isin(vessels_with_active_reportings))
-        | (
+    )
+    if PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION_FEATURE_FLAG:
+        pnos["is_in_verification_scope"] = pnos["is_in_verification_scope"] | (
             pnos.country_code_iso2.isin(
                 PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION
             )
         )
-    )
 
     pnos["is_verified"] = False
     pnos["is_sent"] = False

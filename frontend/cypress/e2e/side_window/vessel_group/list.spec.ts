@@ -91,14 +91,15 @@ context('Side Window > Vessel Group List', () => {
       cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click({ force: true })
     })
     cy.get('[title="Mission Thémis – semaine 04"]').contains('5 navires')
-    cy.contains('Mission Thémis – semaine 04').click()
 
     /**
      * Add a vessel to a fixed vessel group
      */
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('input[placeholder="Rechercher un navire pour l\'ajouter au groupe"]').scrollIntoView().type('POINT')
     cy.contains('mark', 'POINT').click()
     cy.wait(500)
+    cy.contains('Mission Thémis – semaine 04').click()
     cy.get('[title="Mission Thémis – semaine 04"]').within(() => {
       cy.get('.Table-SimpleTable tr').should('have.length', 7)
     })

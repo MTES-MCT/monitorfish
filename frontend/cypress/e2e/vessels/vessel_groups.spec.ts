@@ -206,8 +206,7 @@ context('Vessel groups', () => {
     cy.fill('Description du groupe', 'Lorem ipsum dolor sit amet.')
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dynamique" a bien été créé.').should('be.visible')
-
-    cy.clickButton('Groupes de navires')
+    
     cy.get('[title="Lorem ipsum dynamique"]').click()
 
     cy.get('[title=\'Supprimer le groupe "Lorem ipsum dynamique"\']').click()

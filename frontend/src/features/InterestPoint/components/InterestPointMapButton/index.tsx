@@ -14,7 +14,7 @@ import { Point } from 'ol/geom'
 import { v4 as uuidv4 } from 'uuid'
 
 import { EditInterestPoint } from './EditInterestPoint'
-import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
+import { setLeftMapBoxDisplayed } from '../../../../domain/use_cases/setLeftMapBoxDisplayed'
 import { interestPointActions } from '../../slice'
 
 import type { InterestPoint } from '@features/InterestPoint/types'
@@ -22,12 +22,12 @@ import type { Coordinate } from 'ol/coordinate'
 
 export function InterestPointMapButton() {
   const dispatch = useMainAppDispatch()
-  const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.INTEREST_POINT)
+  const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
+  const { isOpened, isRendered } = useDisplayMapBox(leftMapBoxOpened === MapBox.INTEREST_POINT)
   const interestPointIdEdited = useMainAppSelector(state => state.interestPoint.interestPointIdEdited)
 
   const onClose = () => {
-    dispatch(setRightMapBoxDisplayed(undefined))
+    dispatch(setLeftMapBoxDisplayed(undefined))
   }
 
   useEscapeFromKeyboardAndExecute(() => {
@@ -49,7 +49,7 @@ export function InterestPointMapButton() {
       feature.setId(uuidv4())
       dispatch(interestPointActions.interestPointCreation(getGeoJSONFromFeature(feature) as InterestPoint))
 
-      dispatch(setRightMapBoxDisplayed(MapBox.INTEREST_POINT))
+      dispatch(setLeftMapBoxDisplayed(MapBox.INTEREST_POINT))
 
       return
     }
@@ -63,6 +63,7 @@ export function InterestPointMapButton() {
         data-cy="interest-point"
         Icon={Icon.Landmark}
         isActive={isOpened}
+        isLeft
         onClick={openOrCloseInterestPoint}
         title="Créer un point d'intérêt"
       />

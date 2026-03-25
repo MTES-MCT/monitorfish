@@ -8,7 +8,7 @@ import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
-import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
+import { setLeftMapBoxDisplayed } from '../../../../domain/use_cases/setLeftMapBoxDisplayed'
 import {
   resetCircleMeasurementInDrawing,
   setCircleMeasurementInDrawing,
@@ -97,11 +97,11 @@ export function CustomCircleRange({ isOpened }) {
   const cancelAddCircleRange = () => {
     dispatch(setMeasurementTypeToAdd(null))
     dispatch(resetCircleMeasurementInDrawing())
-    dispatch(setRightMapBoxDisplayed(undefined))
+    dispatch(setLeftMapBoxDisplayed(undefined))
   }
 
   return (
-    <Wrapper isOpen={isOpened}>
+    <Wrapper isLeftBox isOpen={isOpened}>
       <Header>Définir une valeur</Header>
       <Body>
         <p>Coordonnées</p>
@@ -204,5 +204,6 @@ const Header = styled.div`
 `
 
 const Wrapper = styled(MapToolBox)`
+  bottom: 0;
   width: 306px;
 `

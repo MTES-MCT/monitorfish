@@ -143,5 +143,5 @@ const injectAndRunRGAACheck = (disableLabelRule = false) => {
       type: 'tag',
       values: ['wcag2a', 'wcag2aa']
     }
-  })
+  }, result => cy.log(JSON.stringify(result)))
 }

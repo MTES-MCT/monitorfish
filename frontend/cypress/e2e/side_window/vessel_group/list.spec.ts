@@ -88,7 +88,7 @@ context('Side Window > Vessel Group List', () => {
       cy.wait(200)
       // Then close the row
       cy.get('[title="MALOTRU"]').click({ force: true })
-      cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click()
+      cy.get('[title=\'Supprimer le navire "MALOTRU" du groupe\']').scrollIntoView().click({ force: true })
     })
     cy.get('[title="Mission Thémis – semaine 04"]').contains('5 navires')
     cy.contains('Mission Thémis – semaine 04').click()

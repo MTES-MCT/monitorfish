@@ -1,6 +1,7 @@
 from datetime import datetime
 from logging import Logger
 
+import numpy as np
 import pandas as pd
 import pytest
 import pytz
@@ -274,6 +275,7 @@ def sample_pno_catches() -> pd.DataFrame:
                 "Guadeloupe",
                 "Guadeloupe",
             ],
+            "country_code_iso2": ["GB"] + ["FR"] * 11,
             "vessel_type": ["Navire polyvalent"] * 12,
             "scip_species_type": [None] * 12,
         }
@@ -321,6 +323,7 @@ def expected_pno_catches() -> pd.DataFrame:
             "flag_state": ["CYP", "CYP"],
             "locode": ["GBPHD", "NOFAC"],
             "facade": ["MEMN", "Hors façade"],
+            "country_code_iso2": ["FR", "NO"],
             "vessel_type": [None, None],
             "scip_species_type": ["DEMERSAL", None],
         }
@@ -397,6 +400,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                 "FRDPE",
                 "FRLEH",
             ],
+            "country_code_iso2": ["GB", "FR", "FR", "FR", "FR", "FR", "FR", "FR"],
             "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
             "predicted_arrival_datetime_utc": [
                 datetime(2021, 5, 2),
@@ -472,8 +476,8 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "hasDesignatedPorts": True,
                     },
                 ],
-                None,
-                None,
+                np.nan,
+                np.nan,
                 [
                     {
                         "pnoTypeName": "Préavis par engin",
@@ -492,9 +496,9 @@ def expected_computed_pno_segments() -> pd.DataFrame:
         {
             "logbook_reports_pno_id": [1, 2, 3, 4, 5, 6, 7, 8],
             "trip_segments": [
-                None,
-                None,
-                None,
+                pd._libs.missing.NAType(),
+                pd._libs.missing.NAType(),
+                pd._libs.missing.NAType(),
                 [
                     {
                         "segment": "SxTB8910",
@@ -719,6 +723,7 @@ def merged_pnos() -> pd.DataFrame:
                 "FRDPE",
                 "FRLEH",
             ],
+            "country_code_iso2": ["GB", "FR", "FR", "FR", "FR", "FR", "FR", "FR"],
             "flag_state": ["FRA", "FRA", "GBR", "FRA", "FRA", "FRA", "FRA", "FRA"],
             "predicted_arrival_datetime_utc": [
                 datetime(2021, 5, 2),
@@ -794,8 +799,8 @@ def merged_pnos() -> pd.DataFrame:
                         "hasDesignatedPorts": True,
                     },
                 ],
-                None,
-                None,
+                np.nan,
+                np.nan,
                 [
                     {
                         "pnoTypeName": "Préavis par engin",
@@ -805,9 +810,9 @@ def merged_pnos() -> pd.DataFrame:
                 ],
             ],
             "trip_segments": [
-                None,
-                None,
-                None,
+                pd._libs.missing.NAType(),
+                pd._libs.missing.NAType(),
+                pd._libs.missing.NAType(),
                 [
                     {
                         "segment": "SxTB8910",
@@ -866,7 +871,7 @@ def pnos_with_risk_factors(merged_pnos) -> pd.DataFrame:
 @pytest.fixture
 def flagged_pnos(pnos_with_risk_factors) -> pd.DataFrame:
     return pnos_with_risk_factors.assign(
-        is_in_verification_scope=[False, True, True, True, True, True, False, True],
+        is_in_verification_scope=[True, True, True, True, True, True, False, True],
         is_verified=[False, False, False, False, False, False, False, False],
         is_sent=[False, False, False, False, False, False, False, False],
         is_being_sent=[False, False, False, False, False, False, True, False],

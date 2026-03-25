@@ -1,5 +1,5 @@
 context('Side Window > Vessel Group List', () => {
-  it.only('Should display vessels groups, open and edit them', () => {
+  it('Should display vessels groups, open and edit them', () => {
     cy.cleanDownloadedFiles()
     cy.login('superuser')
 

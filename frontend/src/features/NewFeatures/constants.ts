@@ -7,6 +7,24 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-03-23',
+        description: `
+La couche de la ZEE France (version SHOM) est désormais disponible dans les zones administratives sous le nom "Zones ZEE FR SHOM / façades".
+
+Vous trouverez également un découpage des façades.
+`,
+        for: 'ALL',
+        title: 'Ajout de la couche Zones ZEE FR SHOM / façades',
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-03-23',
+        description: `La couche des ZEEs a été mise à jour vers la version 2026.`,
+        for: 'ALL',
+        title: 'Mise à jour de la couche Zones ZEE monde',
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-03-19',
         description: `Il est désormais possible de créer un signalement INN directement depuis le formulaire sur la carte.
 

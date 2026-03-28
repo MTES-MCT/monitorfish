@@ -139,7 +139,7 @@ def make_positions_at_sea_query(
 
         from_table = from_table.join(
             eez_areas_table,
-            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.wkb_geometry),
+            ST_Intersects(positions_table.c.geometry, eez_areas_table.c.geom),
         )
 
     q = (
@@ -190,7 +190,7 @@ def make_positions_at_sea_query(
         )
 
     if eez_to_monitor_iso3:
-        q = q.where(eez_areas_table.c.iso_sov1.in_(eez_to_monitor_iso3))
+        q = q.where(eez_areas_table.c["ISO_SOV1"].in_(eez_to_monitor_iso3))
 
     return q
 

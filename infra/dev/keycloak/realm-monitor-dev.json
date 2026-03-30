@@ -1,6 +1,7 @@
 {
   "realm": "monitor",
   "enabled": true,
+  "sslRequired": "none",
   "clients": [
     {
       "clientId": "monitorfish",

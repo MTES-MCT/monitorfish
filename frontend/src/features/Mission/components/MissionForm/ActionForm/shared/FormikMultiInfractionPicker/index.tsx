@@ -182,6 +182,9 @@ const Wrapper = styled(FieldsetGroup)`
     > .Element-Fieldset:not(:first-child) {
       margin-top: 16px;
     }
+    > button:not(:first-child) {
+      margin-top: 0; // Nécessaire pour empêcher une marge blanche au dessus du bouton "Ajouter une infraction"
+    }
   }
 `
 

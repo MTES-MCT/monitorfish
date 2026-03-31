@@ -38,6 +38,8 @@ interface LogbookReportRepository {
 
     fun findAllCfrWithVisioCaptures(): List<String>
 
+    fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime>
+
     // Only used in tests
     fun save(message: LogbookMessage)
 

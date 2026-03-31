@@ -35,6 +35,9 @@ class GetActiveVessels(
         val currentReportingsByCfr = currentReportings.groupBy { it.internalReferenceNumber }
         val currentReportingsByVesselIds = currentReportings.groupBy { it.vesselId }
 
+        val cfrsWithReportings = currentReportings.mapNotNull { it.internalReferenceNumber }.distinct()
+        val lastDepDatetimePerCfr = logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(cfrsWithReportings)
+
         val lastPositionsWithProfileAndVessel =
             lastPositionRepository.findActiveVesselWithReferentialData(
                 now.minusMonths(1),
@@ -65,13 +68,21 @@ class GetActiveVessels(
                     activeVessel.vesselProfile?.cfr ?: activeVessel.lastPosition?.internalReferenceNumber
                 val vesselId = activeVessel.lastPosition?.vesselId
 
-                val foundReportingTypes =
-                    getReportingTypes(
+                val foundReportings =
+                    getMatchedReportings(
                         vesselId = vesselId,
                         currentReportingsByVesselIds = currentReportingsByVesselIds,
                         internalReferenceNumber = internalReferenceNumber,
                         currentReportingsByCfr = currentReportingsByCfr,
                     )
+                val foundReportingTypes = foundReportings.map { it.type }
+
+                val lastDep = internalReferenceNumber?.let { lastDepDatetimePerCfr[it] }
+                val hasCurrentTripInfractionSuspicion =
+                    lastDep != null &&
+                        foundReportings.any {
+                            it.type == ReportingType.INFRACTION_SUSPICION && it.creationDate.isAfter(lastDep)
+                        }
 
                 val landingPort =
                     internalReferenceNumber?.let {
@@ -96,6 +107,7 @@ class GetActiveVessels(
                     beacon = activeVessel.beacon,
                     landingPort = landingPort,
                     reportingTypes = foundReportingTypes,
+                    hasCurrentTripInfractionSuspicion = hasCurrentTripInfractionSuspicion,
                 )
             }
     }
@@ -105,12 +117,12 @@ class GetActiveVessels(
      * - VesselProfile: `cfr`
      * - LastPosition: `vesselId` and `cfr`
      */
-    private fun getReportingTypes(
+    private fun getMatchedReportings(
         vesselId: Int?,
         currentReportingsByVesselIds: Map<Int?, List<CurrentReporting>>,
         internalReferenceNumber: String?,
         currentReportingsByCfr: Map<String?, List<CurrentReporting>>,
-    ): List<ReportingType> {
+    ): List<CurrentReporting> {
         val reportingsWithVesselIdIdentifier =
             vesselId?.let {
                 currentReportingsByVesselIds.get(it)
@@ -121,11 +133,6 @@ class GetActiveVessels(
                 currentReportingsByCfr.get(it)
             } ?: emptyList()
 
-        val foundReportingTypes =
-            (reportingsWithVesselIdIdentifier + reportingsWithCfrIdentifier)
-                .distinctBy { it.id }
-                .map { it.type }
-
-        return foundReportingTypes
+        return (reportingsWithVesselIdIdentifier + reportingsWithCfrIdentifier).distinctBy { it.id }
     }
 }

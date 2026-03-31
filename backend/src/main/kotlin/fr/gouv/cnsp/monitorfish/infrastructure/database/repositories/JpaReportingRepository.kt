@@ -19,6 +19,8 @@ import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
+import java.time.Instant
+import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
 @Repository
@@ -34,6 +36,7 @@ class JpaReportingRepository(
                 type = ReportingType.valueOf(row[1] as String),
                 vesselId = row[2] as Int?,
                 internalReferenceNumber = row[3] as String?,
+                creationDate = (row[4] as Instant).atZone(UTC),
             )
         }
 

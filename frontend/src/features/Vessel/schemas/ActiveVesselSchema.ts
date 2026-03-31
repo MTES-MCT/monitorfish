@@ -41,6 +41,7 @@ const ActiveVesselBaseSchema = z.strictObject({
   externalReferenceNumber: z.string().optional(),
   flagState: z.string(),
   gearsArray: z.array(z.string()),
+  hasCurrentTripInfractionSuspicion: z.boolean(),
   hasInfractionSuspicion: z.boolean(),
   id: z.number().optional(),
   impactRiskFactor: z.number(),

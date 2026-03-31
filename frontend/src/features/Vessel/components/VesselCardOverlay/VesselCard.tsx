@@ -31,6 +31,7 @@ export function VesselCard({ feature, overlayPosition, yOffset }) {
     'emissionPeriod',
     'flagState',
     'hasInfractionSuspicion',
+    'hasCurrentTripInfractionSuspicion',
     'lastLogbookMessageDateTime',
     'segments',
     'speed',
@@ -75,7 +76,7 @@ export function VesselCard({ feature, overlayPosition, yOffset }) {
       {isSuperUser && vesselProperties.hasInfractionSuspicion && (
         <VesselCardInfractionSuspicion>
           <AlertIcon size={17} />
-          Suspicion d&apos;infraction
+          Suspicion d&apos;infraction {vesselProperties.hasCurrentTripInfractionSuspicion && 'en cours'}
         </VesselCardInfractionSuspicion>
       )}
       {isSuperUser && !!vesselProperties.beaconMalfunctionId && (

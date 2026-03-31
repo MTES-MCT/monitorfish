@@ -203,6 +203,17 @@ class JpaLogbookReportRepository(
     @Cacheable(value = ["all_visiocaptures_vessels"])
     override fun findAllCfrWithVisioCaptures(): List<String> = dbLogbookReportRepository.findAllCfrWithVisioCaptures()
 
+    @Cacheable(value = ["last_dep_current_trips_by_cfr"])
+    override fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime> {
+        if (cfrs.isEmpty()) {
+            return emptyMap()
+        }
+
+        return dbLogbookReportRepository.getActiveTrips(cfrs.joinToString(",")).associate { row ->
+            (row[0] as String) to (row[1] as Timestamp).toInstant().atZone(UTC)
+        }
+    }
+
     // For test purpose
     @Modifying
     @Transactional

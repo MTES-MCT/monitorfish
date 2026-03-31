@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import java.time.ZonedDateTime
 

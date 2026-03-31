@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.security.InvalidParameterException
 import java.time.ZonedDateTime
 
 @UseCase
@@ -30,7 +31,7 @@ class CreateOrUpdateManualPriorNotification(
         author: String?,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
-        expectedLandingDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime?,
         fishingCatches: List<LogbookFishingCatch>,
         /**
          * Single FAO area shared by all fishing catches.
@@ -57,6 +58,25 @@ class CreateOrUpdateManualPriorNotification(
                 ?.logbookMessage
                 ?.message as PNO?
 
+        var year: Int
+        if (purpose == LogbookMessagePurpose.LAN) {
+            if (expectedLandingDate == null) {
+                throw InvalidParameterException("landing date required for landing purpose")
+            }
+            year = expectedLandingDate.year
+        } else {
+            if (expectedLandingDate != null) {
+                throw InvalidParameterException("landing date should be null when purpose is not landing")
+            }
+            if (globalFaoArea != null) {
+                throw InvalidParameterException("global fao area should be null when purpose is not landing")
+            }
+            if (fishingCatches.isNotEmpty()) {
+                throw InvalidParameterException("no fishing catches should be set when purpose is not landing")
+            }
+            year = expectedArrivalDate.year
+        }
+
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues =
@@ -66,7 +86,7 @@ class CreateOrUpdateManualPriorNotification(
                 portLocode = portLocode,
                 tripGearCodes = tripGearCodes,
                 vesselId = vesselId,
-                year = expectedLandingDate.year,
+                year = year,
             )
 
         val isPartOfControlUnitSubscriptions =
@@ -178,7 +198,7 @@ class CreateOrUpdateManualPriorNotification(
         existingMessageValue: PNO?,
         purpose: LogbookMessagePurpose,
         expectedArrivalDate: ZonedDateTime,
-        expectedLandingDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime?,
         fishingCatches: List<LogbookFishingCatch>,
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,

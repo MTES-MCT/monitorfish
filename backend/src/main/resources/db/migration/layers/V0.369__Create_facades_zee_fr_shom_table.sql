@@ -7,3 +7,5 @@ CREATE TABLE facades_zee_fr_shom (
     typezone character varying(41),
     nom_court character varying
 );
+
+CREATE INDEX ON public.facades_zee_fr_shom USING GIST (geom);

@@ -103,6 +103,7 @@ export namespace MonitorFishMap {
     eaux_occidentales_septentrionales = 'eaux_occidentales_septentrionales',
     eaux_union_dans_oi_et_atl_ouest = 'eaux_union_dans_oi_et_atl_ouest',
     effort_zones_areas = 'effort_zones_areas',
+    facades_zee_fr_shom = 'facades_zee_fr_shom',
     mer_baltique = 'mer_baltique',
     mer_celtique = 'mer_celtique',
     mer_du_nord = 'mer_du_nord',

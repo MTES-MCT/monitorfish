@@ -249,8 +249,15 @@ export const AdminLayerProperties: Record<MonitorFishMap.AdminLayer, MonitorFish
     code: 'eez_areas',
     name: AdministrativeAreaTypeLabel.EEZ_AREA,
     hasSearchableZones: true,
-    zoneNamePropertyKey: 'union',
+    zoneNamePropertyKey: 'SOVEREIGN1',
     isIntersectable: true
+  },
+  [MonitorFishMap.AdminLayer.facades_zee_fr_shom]: {
+    code: 'facades_zee_fr_shom',
+    hasSearchableZones: false,
+    isIntersectable: false,
+    name: 'Zones ZEE FR SHOM / façades',
+    zoneNamePropertyKey: 'zone'
   },
   [MonitorFishMap.AdminLayer.FAO]: {
     code: 'fao_areas',

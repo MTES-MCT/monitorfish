@@ -11,9 +11,9 @@ interface DBEezAreasRepository : CrudRepository<EezAreaEntity, Int> {
         SELECT EXISTS(
             SELECT 1
             FROM eez_areas
-            WHERE "union" = 'France'
+            WHERE "SOVEREIGN1" = 'France'
             AND ST_Intersects(
-                wkb_geometry,
+                geom,
                 ST_SetSRID(
                     :point,
                     4326

@@ -319,7 +319,7 @@ context('Sidebars > Regulatory Layers', () => {
     cy.get('[title="Arbre des couches"]').click()
     cy.wait(500)
     cy.clickButton('Zones administratives')
-    cy.get('[title="Zones ZEE"]')
+    cy.get('[title="Zones ZEE monde"]')
       .click()
       .then(() => {
         cy.getAllLocalStorage().then(localStorages => {

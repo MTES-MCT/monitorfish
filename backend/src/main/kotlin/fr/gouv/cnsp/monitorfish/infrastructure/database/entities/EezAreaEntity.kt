@@ -9,8 +9,8 @@ import jakarta.persistence.Table
 @Table(name = "eez_areas")
 data class EezAreaEntity(
     @Id
-    @Column(name = "ogc_fid")
+    @Column(name = "id")
     val id: Int,
-    @Column(name = "\"union\"")
-    val union: String?,
+    @Column(name = "\"SOVEREIGN1\"")
+    val sovereign1: String?,
 )

@@ -91,7 +91,8 @@ def add_activity_dates_table(add_monitorfish_proxy_database):
             log_type,
             trip_number,
             trip_number_was_computed,
-            report_id
+            report_id,
+            'ACCEPTED' AS status
         FROM monitorfish_proxy.logbook_reports
         WHERE
             log_type IS NOT NULL

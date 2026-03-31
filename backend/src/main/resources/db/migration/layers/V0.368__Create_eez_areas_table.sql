@@ -36,3 +36,5 @@ CREATE TABLE eez_areas (
     "UN_TER2" bigint,
     "UN_TER3" bigint
 );
+
+CREATE INDEX ON public.eez_areas USING GIST (geom);

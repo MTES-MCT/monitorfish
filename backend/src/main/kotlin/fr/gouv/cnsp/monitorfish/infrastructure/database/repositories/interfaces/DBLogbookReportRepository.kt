@@ -190,4 +190,12 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun findAllCfrWithVisioCaptures(): List<String>
+
+    @Query(
+        value = """
+            SELECT * FROM get_active_trips(string_to_array(:cfrsAsString, ','))
+        """,
+        nativeQuery = true,
+    )
+    fun getActiveTrips(cfrsAsString: String): List<Array<Any>>
 }

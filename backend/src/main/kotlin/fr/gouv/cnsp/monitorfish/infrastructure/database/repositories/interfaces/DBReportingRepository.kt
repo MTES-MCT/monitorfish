@@ -84,7 +84,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             id,
             type,
             vessel_id,
-            internal_reference_number
+            internal_reference_number,
+            creation_date
         FROM reportings
         WHERE archived = false AND deleted = false
         """,

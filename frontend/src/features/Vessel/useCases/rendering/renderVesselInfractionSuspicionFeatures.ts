@@ -47,7 +47,7 @@ export const renderVesselInfractionSuspicionFeatures = (): MainAppThunk => async
     .filter(
       feature =>
         feature.get('isFiltered') &&
-        feature.get('hasInfractionSuspicion') &&
+        feature.get('hasCurrentTripInfractionSuspicion') &&
         (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
         VesselFeature.getVesselOpacityWithTimestamp(
           feature.get('dateTime'),

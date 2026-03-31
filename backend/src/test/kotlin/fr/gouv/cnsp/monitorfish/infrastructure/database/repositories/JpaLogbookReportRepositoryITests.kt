@@ -951,4 +951,79 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         val updatedCorReport = jpaLogbookReportRepository.findById(2109)
         assertThat((updatedCorReport.message as PNO).isInvalidated).isEqualTo(true)
     }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should return empty map When given an empty list`() {
+        // When
+        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(emptyList())
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should return the trip start datetime When the vessel has no recent RTP`() {
+        // Given: FR263454484 has trip SRC-TRP-TTT20200506194051795 starting CURRENT_DATE-2days with no RTP in logbook_reports
+
+        // When
+        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("FR263454484"))
+
+        // Then
+        assertThat(result).hasSize(1)
+        assertThat(result["FR263454484"]).isAfter(ZonedDateTime.now().minusDays(3))
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When RTP was received within the last 6 months`() {
+        // Given: RTPTCFR01 has an RTP 3 days ago for its last trip (caught by trip_rtp CTE)
+
+        // When
+        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("RTPTCFR01"))
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When RTP was received within the last 24 hours`() {
+        // Given: RTPTCFR02 has an RTP 2 hours ago for its last trip (caught by latest_trips CTE)
+
+        // When
+        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("RTPTCFR02"))
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When CFR is not present in trips_snapshot`() {
+        // When
+        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("UNKNOWN_CFR_X"))
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should only return vessels with active trips When given multiple CFRs`() {
+        // Given: FR263454484 is active, RTPTCFR01 and RTPTCFR02 have recent RTPs
+
+        // When
+        val result =
+            jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(
+                listOf("FR263454484", "RTPTCFR01", "RTPTCFR02"),
+            )
+
+        // Then
+        assertThat(result).hasSize(1)
+        assertThat(result).containsKey("FR263454484")
+        assertThat(result).doesNotContainKey("RTPTCFR01")
+        assertThat(result).doesNotContainKey("RTPTCFR02")
+    }
 }

@@ -21,6 +21,7 @@ data class EnrichedActiveVessel(
     val riskFactor: VesselRiskFactor,
     val landingPort: Port?,
     val reportingTypes: List<ReportingType> = emptyList(),
+    val hasCurrentTripInfractionSuspicion: Boolean = false,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(EnrichedActiveVessel::class.java)
 

@@ -45,6 +45,7 @@ class CaffeineConfiguration {
     val pnoToVerify = "pno_to_verify"
     val manualPnoToVerify = "manual_pno_to_verify"
     val allVisioCapturesVessels = "all_visiocaptures_vessels"
+    val lastDepByCfr = "last_dep_current_trips_by_cfr"
 
     // Missions
     val missionControlUnits = "mission_control_units"
@@ -134,6 +135,7 @@ class CaffeineConfiguration {
         val pnoTypesCache = buildMinutesCache(pnoTypes, ticker, 123)
         val logbookPnoTypesCache = buildMinutesCache(logbookPnoTypes, ticker, oneDay)
         val allVisioCapturesVesselsCache = buildMinutesCache(allVisioCapturesVessels, ticker, oneWeek)
+        val lastDepByCfrCache = buildMinutesCache(lastDepByCfr, ticker, 5)
 
         // Missions
         val missionControlUnitsCache = buildMinutesCache(missionControlUnits, ticker, 120)
@@ -217,6 +219,7 @@ class CaffeineConfiguration {
                 pnoTypesCache,
                 logbookPnoTypesCache,
                 allVisioCapturesVesselsCache,
+                lastDepByCfrCache,
                 pnoToVerifyCache,
                 manualPnoToVerifyCache,
                 portCache,

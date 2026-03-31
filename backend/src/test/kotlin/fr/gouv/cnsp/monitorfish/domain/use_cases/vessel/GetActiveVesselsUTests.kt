@@ -1563,6 +1563,7 @@ class GetActiveVesselsUTests {
                     type = ReportingType.ALERT,
                     vesselId = 1,
                     internalReferenceNumber = null,
+                    creationDate = ZonedDateTime.now(),
                 ),
             ),
         )
@@ -1614,6 +1615,7 @@ class GetActiveVesselsUTests {
                     type = ReportingType.OBSERVATION,
                     vesselId = null,
                     internalReferenceNumber = "FR123",
+                    creationDate = ZonedDateTime.now(),
                 ),
             ),
         )
@@ -1666,6 +1668,7 @@ class GetActiveVesselsUTests {
                     type = ReportingType.INFRACTION_SUSPICION,
                     vesselId = 1,
                     internalReferenceNumber = "FR123",
+                    creationDate = ZonedDateTime.now(),
                 ),
             ),
         )
@@ -1719,12 +1722,14 @@ class GetActiveVesselsUTests {
                     type = ReportingType.ALERT,
                     vesselId = 1,
                     internalReferenceNumber = null,
+                    creationDate = ZonedDateTime.now(),
                 ),
                 CurrentReporting(
                     id = 2,
                     type = ReportingType.OBSERVATION,
                     vesselId = null,
                     internalReferenceNumber = "FR123",
+                    creationDate = ZonedDateTime.now(),
                 ),
             ),
         )
@@ -1813,5 +1818,230 @@ class GetActiveVesselsUTests {
         // Then
         assertThat(activeVessels).hasSize(1)
         assertThat(activeVessels[0].reportingTypes).isEmpty()
+    }
+
+    @Test
+    fun `execute Should return hasCurrentTripInfractionSuspicion=true When INFRACTION_SUSPICION reporting was created after last DEP`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        val lastDep = ZonedDateTime.now().minusDays(1)
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    vesselId = 1,
+                    internalReferenceNumber = "FR123",
+                    creationDate = lastDep.plusHours(2),
+                ),
+            ),
+        )
+        given(logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(any())).willReturn(
+            mapOf("FR123" to lastDep),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].hasCurrentTripInfractionSuspicion).isTrue()
+    }
+
+    @Test
+    fun `execute Should return hasCurrentTripInfractionSuspicion=false When INFRACTION_SUSPICION reporting was created before last DEP`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        val lastDep = ZonedDateTime.now().minusDays(1)
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    vesselId = 1,
+                    internalReferenceNumber = "FR123",
+                    creationDate = lastDep.minusHours(2),
+                ),
+            ),
+        )
+        given(logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(any())).willReturn(
+            mapOf("FR123" to lastDep),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].hasCurrentTripInfractionSuspicion).isFalse()
+    }
+
+    @Test
+    fun `execute Should return hasCurrentTripInfractionSuspicion=false When no last DEP date found for vessel`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    vesselId = 1,
+                    internalReferenceNumber = "FR123",
+                    creationDate = ZonedDateTime.now(),
+                ),
+            ),
+        )
+        given(logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(any())).willReturn(emptyMap())
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].hasCurrentTripInfractionSuspicion).isFalse()
+    }
+
+    @Test
+    fun `execute Should return hasCurrentTripInfractionSuspicion=false When reporting type is not INFRACTION_SUSPICION`() {
+        // Given
+        given(getAuthorizedUser.execute(any())).willReturn(
+            AuthorizedUser(
+                email = "dummy@email.gouv.fr",
+                isSuperUser = true,
+                service = null,
+            ),
+        )
+        val lastDep = ZonedDateTime.now().minusDays(1)
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition =
+                        LastPosition(
+                            vesselId = 1,
+                            internalReferenceNumber = "FR123",
+                            flagState = CountryCode.FR,
+                            positionType = PositionType.AIS,
+                            latitude = 16.445,
+                            longitude = 48.2525,
+                            dateTime = ZonedDateTime.now(),
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    landingPort = null,
+                ),
+            ),
+        )
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(reportingRepository.findAllCurrent()).willReturn(
+            listOf(
+                CurrentReporting(
+                    id = 1,
+                    type = ReportingType.ALERT,
+                    vesselId = 1,
+                    internalReferenceNumber = "FR123",
+                    creationDate = lastDep.plusHours(2),
+                ),
+            ),
+        )
+        given(logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(any())).willReturn(
+            mapOf("FR123" to lastDep),
+        )
+
+        // When
+        val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
+
+        // Then
+        assertThat(activeVessels).hasSize(1)
+        assertThat(activeVessels[0].hasCurrentTripInfractionSuspicion).isFalse()
     }
 }

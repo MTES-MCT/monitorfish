@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Union
 
 
@@ -57,22 +57,18 @@ def tagged_children(el):
     return res
 
 
-def make_datetime(date: str, time: Union[str, None] = None):
+def make_datetime(date: str, time: Union[str, None] = None) -> datetime:
     """Takes date a "2020-12-24" string and, optionnally, a time "16:49" or "16:49:10"
     string. Returns a datetime object"""
     datetime_string = date
-    datetime_format = "%Y-%m-%d"
 
     if date:
         if time:
-            if len(time) == 8:
-                # Drop seconds
-                time = time[:5]
-            datetime_string += f" {time}"
-            datetime_format += " %H:%M"
-
+            datetime_string += f"T{time}"
         try:
-            res = datetime.strptime(datetime_string, datetime_format)
+            res = datetime.fromisoformat(datetime_string)
+            if res.tzinfo is not None:
+                res = res.astimezone(timezone.utc).replace(tzinfo=None)
         except ValueError:
             logging.warning("ERS datetime could not be parsed")
             res = None

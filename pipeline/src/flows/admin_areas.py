@@ -771,6 +771,25 @@ def load_land_areas(land_areas: pd.DataFrame):
     )
 
 
+@task()
+def extract_facades_zee_fr_shom() -> pd.DataFrame:
+    return extract("monitorfish_local", "cross/facades_zee_fr_shom.sql")
+
+
+@task()
+def load_facades_zee_fr_shom(facades_zee_fr_shom: pd.DataFrame):
+    logger = get_run_logger()
+    load(
+        facades_zee_fr_shom,
+        table_name="facades_zee_fr_shom",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=logger,
+        how="replace",
+        replace_with_truncate=True,
+    )
+
+
 @flow(name="Monitorfish - Administrative areas")
 def admin_areas_flow():
     cgpm_areas = extract_cgpm_areas()
@@ -897,3 +916,6 @@ def admin_areas_flow():
 
     land_areas = extract_land_areas()
     load_land_areas(land_areas)
+
+    facades_zee_fr_shom = extract_facades_zee_fr_shom()
+    load_facades_zee_fr_shom(facades_zee_fr_shom)

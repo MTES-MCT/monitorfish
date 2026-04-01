@@ -113,7 +113,7 @@
     "@types/react-highlight-words": "0.20.1",
     "@types/styled-components": "5.1.36",
     "@typescript-eslint/eslint-plugin": "6.2.1",
-    "@typescript-eslint/parser": "6.2.1",
+    "@typescript-eslint/parser": "7.18.0",
     "@vitejs/plugin-react": "4.6.0",
     "assert": "2.1.0",
     "codecov": "3.8.3",

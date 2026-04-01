@@ -148,6 +148,24 @@ def load_eez_areas(
         logger=logger,
         how="replace",
         replace_with_truncate=True,
+        nullable_integer_columns=[
+            "fid",
+            "MRGID",
+            "MRGID_TER1",
+            "MRGID_SOV1",
+            "MRGID_TER2",
+            "MRGID_SOV2",
+            "MRGID_TER3",
+            "MRGID_SOV3",
+            "MRGID_EEZ",
+            "AREA_KM2",
+            "UN_SOV1",
+            "UN_SOV2",
+            "UN_SOV3",
+            "UN_TER1",
+            "UN_TER2",
+            "UN_TER3",
+        ],
     )
 
 

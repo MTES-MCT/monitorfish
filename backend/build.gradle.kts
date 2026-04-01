@@ -123,7 +123,7 @@ dependencies {
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.8")
     testImplementation("org.springframework.security:spring-security-test:6.5.6")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:4.0.0")
 }
 
 tasks.withType<JavaCompile> {

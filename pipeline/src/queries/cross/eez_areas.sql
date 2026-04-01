@@ -1,6 +1,6 @@
 SELECT
     id,
-    ST_SimplifyPreserveTopology(geom, 0.005),
+    ST_MakeValid(ST_SimplifyPreserveTopology(geom, 0.005)) AS geom,
     fid,
     "MRGID",
     "GEONAME",

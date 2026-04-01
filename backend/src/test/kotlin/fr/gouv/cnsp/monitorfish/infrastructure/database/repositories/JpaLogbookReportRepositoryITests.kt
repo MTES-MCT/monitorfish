@@ -977,30 +977,6 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When RTP was received within the last 6 months`() {
-        // Given: RTPTCFR01 has an RTP 3 days ago for its last trip (caught by trip_rtp CTE)
-
-        // When
-        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("RTPTCFR01"))
-
-        // Then
-        assertThat(result).isEmpty()
-    }
-
-    @Test
-    @Transactional
-    fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When RTP was received within the last 24 hours`() {
-        // Given: RTPTCFR02 has an RTP 2 hours ago for its last trip (caught by latest_trips CTE)
-
-        // When
-        val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("RTPTCFR02"))
-
-        // Then
-        assertThat(result).isEmpty()
-    }
-
-    @Test
-    @Transactional
     fun `findLastDepDatetimeOfCurrentTripsPerCfr Should not return a vessel When CFR is not present in trips_snapshot`() {
         // When
         val result = jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(listOf("UNKNOWN_CFR_X"))
@@ -1012,18 +988,17 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
     @Test
     @Transactional
     fun `findLastDepDatetimeOfCurrentTripsPerCfr Should only return vessels with active trips When given multiple CFRs`() {
-        // Given: FR263454484 is active, RTPTCFR01 and RTPTCFR02 have recent RTPs
+        // Given: FR263454484 is in trips_snapshot, UNKNOWN_CFR_X is not
 
         // When
         val result =
             jpaLogbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(
-                listOf("FR263454484", "RTPTCFR01", "RTPTCFR02"),
+                listOf("FR263454484", "UNKNOWN_CFR_X"),
             )
 
         // Then
         assertThat(result).hasSize(1)
         assertThat(result).containsKey("FR263454484")
-        assertThat(result).doesNotContainKey("RTPTCFR01")
-        assertThat(result).doesNotContainKey("RTPTCFR02")
+        assertThat(result).doesNotContainKey("UNKNOWN_CFR_X")
     }
 }

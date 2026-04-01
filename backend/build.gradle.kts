@@ -106,7 +106,7 @@ dependencies {
     api("com.github.ben-manes.caffeine:caffeine:3.2.3")
     api("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")
     api("org.locationtech.jts:jts-core:1.20.0")
-    implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
+    implementation("org.n52.jackson:jackson-datatype-jts:3.0.1")
     implementation("org.locationtech.proj4j:proj4j:1.4.1")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.1")
     api("org.hibernate:hibernate-spatial:7.2.6.Final")

@@ -4,7 +4,12 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from src.flows.risk_elements import evaluate_trips_pnos, risk_elements_flow
+from src.entities.risk_elements import RiskElement
+from src.flows.risk_elements import (
+    compute_vessels_risk_elements,
+    evaluate_trips_pnos,
+    risk_elements_flow,
+)
 from src.read_query import read_query
 from tests.mocks import get_utcnow_mock_factory
 
@@ -177,6 +182,59 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
     )
 
 
+@pytest.fixture
+def total_trips() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_tt_only"],
+            "total_trips": [100, 100, 100, 100],
+        }
+    )
+
+
+@pytest.fixture
+def compliant_trips() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_ct_only"],
+            "compliant_trips": [95, 83, 110, 100],
+        }
+    )
+
+
+@pytest.fixture
+def expected_computed_vessels_risk_elements() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "risk_element_code": ["MOT_MR", "MOT_MR", "MOT_MR", "MOT_MR"],
+            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_tt_only"],
+            "metrics": [
+                {
+                    "total_trips": 100,
+                    "compliant_trips": 95,
+                    "share_of_non_compliant_trips": 0.05,
+                },
+                {
+                    "total_trips": 100,
+                    "compliant_trips": 83,
+                    "share_of_non_compliant_trips": 0.17,
+                },
+                {
+                    "total_trips": 100,
+                    "compliant_trips": 110,
+                    "share_of_non_compliant_trips": 0.0,
+                },
+                {
+                    "total_trips": 100,
+                    "compliant_trips": 0,
+                    "share_of_non_compliant_trips": 1.0,
+                },
+            ],
+            "risk_level": [1, 3, 1, 4],
+        }
+    )
+
+
 def test_evaluate_trips_pnos(
     trips_subject_to_pno, rtps, logbook_pnos, manual_pnos, expected_evaluated_trips
 ):
@@ -185,6 +243,17 @@ def test_evaluate_trips_pnos(
     )
 
     pd.testing.assert_frame_equal(evaluated_trips, expected_evaluated_trips)
+
+
+def test_compute_vessels_risk_elements(
+    total_trips, compliant_trips, expected_computed_vessels_risk_elements
+):
+    computed_vessels_risk_elements = compute_vessels_risk_elements(
+        total_trips, compliant_trips, RiskElement.MOT_MR
+    )
+    pd.testing.assert_frame_equal(
+        computed_vessels_risk_elements, expected_computed_vessels_risk_elements
+    )
 
 
 @patch(

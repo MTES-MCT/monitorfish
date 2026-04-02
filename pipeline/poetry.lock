@@ -127,6 +127,18 @@ typing-extensions = ">=4.12"
 tz = ["tzdata"]
 
 [[package]]
+name = "amplitude-analytics"
+version = "1.2.3"
+description = "The official Amplitude backend Python SDK for server-side instrumentation."
+optional = false
+python-versions = "<4,>=3.6"
+groups = ["main"]
+files = [
+    {file = "amplitude_analytics-1.2.3-py3-none-any.whl", hash = "sha256:ba2092c1d37ce8a2e3f69d023da145f4e322d02429e20436a5227178b1e594e9"},
+    {file = "amplitude_analytics-1.2.3.tar.gz", hash = "sha256:4c9525847c391c19675d6e026f4601c27204ffeec71cb92252770d84d4538404"},
+]
+
+[[package]]
 name = "annotated-doc"
 version = "0.0.4"
 description = "Document parameters, class attributes, return types, and variables inline, with Annotated."
@@ -1380,7 +1392,7 @@ version = "46.0.6"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
 optional = false
 python-versions = "!=3.9.0,!=3.9.1,>=3.8"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
     {file = "cryptography-46.0.6-cp311-abi3-macosx_10_9_universal2.whl", hash = "sha256:64235194bad039a10bb6d2d930ab3323baaec67e2ce36215fd0952fad0930ca8"},
     {file = "cryptography-46.0.6-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:26031f1e5ca62fcb9d1fcb34b2b60b390d1aacaa15dc8b895a9ed00968b97b30"},
@@ -1448,27 +1460,27 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "css-inline"
-version = "0.20.0"
+version = "0.20.1"
 description = "High-performance library for inlining CSS into HTML 'style' attributes"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "css_inline-0.20.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:443ff39befe2b0b09057cf4435e3f1b571d4ca24f0177a864c5f3632465a15db"},
-    {file = "css_inline-0.20.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:75068ad2d6cf35ca1d1eaa4a2949a4bc319af27370a5ab5f88a6ba7014225863"},
-    {file = "css_inline-0.20.0-cp39-abi3-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:729d2fe6c6df7ba8f9d92fd20cbb359f6ba3a08edfc6253bd63bf33c9ea085bd"},
-    {file = "css_inline-0.20.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:85f374306c002d73e7615b3e926d488ed9955f966bb61efa66ac8091e89f2e49"},
-    {file = "css_inline-0.20.0-cp39-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:c2b320cd22c4c53ffc8f255dc9374fcc7135f54d6b66348f4b321386bb031999"},
-    {file = "css_inline-0.20.0-cp39-abi3-manylinux_2_24_armv7l.whl", hash = "sha256:7eb7a7202ce09a14bafbb9713e10710d944ca4f1b61d40681563036d27f211e0"},
-    {file = "css_inline-0.20.0-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:6153ce79d3a20c5d0b99e469137072fab78d2046dcc23c0bd7148acbc08630f2"},
-    {file = "css_inline-0.20.0-cp39-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:dfbb243bdde36ae5b0d0816f7af6cce0eadd2b8e0975f3b6981843bcdb70d299"},
-    {file = "css_inline-0.20.0-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:a06da4a139bbe868a83df6b05659d26b2fec8e3b4f9ce3e95c78dfcbf5ae3af6"},
-    {file = "css_inline-0.20.0-cp39-abi3-win32.whl", hash = "sha256:714bfc10af6f7e4e81955bd1947296329b94aef3d64fcb93bd8c46d82a664468"},
-    {file = "css_inline-0.20.0-cp39-abi3-win_amd64.whl", hash = "sha256:a1f7bacfb8ad70582b1e92a9102c33badee3e955e7a164716bec393644c29acd"},
-    {file = "css_inline-0.20.0-pp311-pypy311_pp73-macosx_10_12_x86_64.whl", hash = "sha256:3d8512abd9f3de1c55cc07e0218bd29e6bf30ceb42f164b274f53eff1985cb29"},
-    {file = "css_inline-0.20.0-pp311-pypy311_pp73-manylinux_2_24_aarch64.whl", hash = "sha256:b00afdb5c2e89b27892ad9ea27583b4cffc17f8219ae9a7164e865098e1c93ab"},
-    {file = "css_inline-0.20.0-pp311-pypy311_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:10703e65e68e1ad1c42870bf3add67b4fe4566186ebf8e93daebfba4072e5303"},
-    {file = "css_inline-0.20.0.tar.gz", hash = "sha256:9ae6e9bbbe0b355025332cddd10e06c8aaf63882387b77ffb88555f00f57e69e"},
+    {file = "css_inline-0.20.1-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:9f5a3f60656bcc4eeb06bdc9d088753f5594f16f6440f7c9633862212fc82a4d"},
+    {file = "css_inline-0.20.1-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:02b40a24944de39774c1f35f84ce80ceffca3c1d8d0ff78f7a968d14eb4be9a1"},
+    {file = "css_inline-0.20.1-cp39-abi3-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:5e38b76fdc78f0f194413f017a0689cba1736814febe8df58470d7e625b6a986"},
+    {file = "css_inline-0.20.1-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a4e9160617765e020b4dd421e1216fead1fc612de026f1274b5087c5c66ea298"},
+    {file = "css_inline-0.20.1-cp39-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:047e855d02ec0422625f346cad2d4bdec1126b48ac256f42ad4814f926f91acb"},
+    {file = "css_inline-0.20.1-cp39-abi3-manylinux_2_24_armv7l.whl", hash = "sha256:8492179e53009e49a046c8cee5af5817deb0934fb0f99ee8d20fb10dc9a78f18"},
+    {file = "css_inline-0.20.1-cp39-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:39d122c53dc66ff05b65ca5087b18b5e7a62ed42bcab905d0669c6c2218905c0"},
+    {file = "css_inline-0.20.1-cp39-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:fb7ef298dd131e9b942bd3f5353bc56d7a79e23403044d9a154ab69a8a336b20"},
+    {file = "css_inline-0.20.1-cp39-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:689e68f1a3c5eadc5f38c00b36f3bb142009063c7c951edcf00f128f6b09a053"},
+    {file = "css_inline-0.20.1-cp39-abi3-win32.whl", hash = "sha256:778b2e194cf62d7b9ffd157a35576ae52a93d84cceda4ad4d8ea9feaa95e31fc"},
+    {file = "css_inline-0.20.1-cp39-abi3-win_amd64.whl", hash = "sha256:786c0899eed5dc5331f918fe969bfa7e80140cec1b2d3553765c514d06e9b0d5"},
+    {file = "css_inline-0.20.1-pp311-pypy311_pp73-macosx_10_12_x86_64.whl", hash = "sha256:5fb5ca1e6a562f5cf25414e08118b695f170013c21db54b38adf43d16d315192"},
+    {file = "css_inline-0.20.1-pp311-pypy311_pp73-manylinux_2_24_aarch64.whl", hash = "sha256:e70b9d5e73893c1b784949964f820793ecb786f29e13bbf71a2777d1d7fa209c"},
+    {file = "css_inline-0.20.1-pp311-pypy311_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:e8913194b620c5adaafc4f4906b70ca2ed0eb67b526611475c3e7848e270c71a"},
+    {file = "css_inline-0.20.1.tar.gz", hash = "sha256:31feb709e515bf1e432d21856d3ed78d99282bd8249cc13bb9e2d3f52e0229d6"},
 ]
 
 [[package]]
@@ -1518,6 +1530,33 @@ files = [
 [package.extras]
 docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
+
+[[package]]
+name = "cyclopts"
+version = "4.10.1"
+description = "Intuitive, easy CLIs based on type hints."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "cyclopts-4.10.1-py3-none-any.whl", hash = "sha256:35f37257139380a386d9fe4475e1e7c87ca7795765ef4f31abba579fcfcb6ecd"},
+    {file = "cyclopts-4.10.1.tar.gz", hash = "sha256:ad4e4bb90576412d32276b14a76f55d43353753d16217f2c3cd5bdceba7f15a0"},
+]
+
+[package.dependencies]
+attrs = ">=23.1.0"
+docstring-parser = ">=0.15,<4.0"
+rich = ">=13.6.0"
+rich-rst = ">=1.3.1,<2.0.0"
+
+[package.extras]
+debug = ["ipdb (>=0.13.9)", "line-profiler (>=3.5.1)"]
+dev = ["coverage[toml] (>=5.1)", "mkdocs (>=1.4.0)", "pre-commit (>=2.16.0)", "pydantic (>=2.11.2,<3.0.0)", "pytest (>=8.2.0)", "pytest-cov (>=3.0.0)", "pytest-mock (>=3.7.0)", "pyyaml (>=6.0.1)", "syrupy (>=4.0.0)", "toml (>=0.10.2,<1.0.0)", "trio (>=0.10.0)"]
+docs = ["gitpython (>=3.1.31)", "myst-parser[linkify] (>=3.0.1,<5.0.0)", "sphinx (>=7.4.7,<8.2.0)", "sphinx-autodoc-typehints (>=1.25.2,<4.0.0)", "sphinx-copybutton (>=0.5,<1.0)", "sphinx-rtd-dark-mode (>=1.3.0,<2.0.0)", "sphinx-rtd-theme (>=3.0.0,<4.0.0)"]
+mkdocs = ["markdown (>=3.3)", "mkdocs (>=1.4.0)", "pymdown-extensions (>=10.0)"]
+toml = ["tomli (>=2.0.0) ; python_version < \"3.11\""]
+trio = ["trio (>=0.10.0)"]
+yaml = ["pyyaml (>=6.0.1)"]
 
 [[package]]
 name = "dateparser"
@@ -1661,12 +1700,29 @@ files = [
 ]
 
 [[package]]
+name = "docstring-parser"
+version = "0.17.0"
+description = "Parse Python docstrings in reST, Google and Numpydoc format"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "docstring_parser-0.17.0-py3-none-any.whl", hash = "sha256:cf2569abd23dce8099b300f9b4fa8191e9582dda731fd533daf54c4551658708"},
+    {file = "docstring_parser-0.17.0.tar.gz", hash = "sha256:583de4a309722b3315439bb31d64ba3eebada841f2e2cee23b99df001434c912"},
+]
+
+[package.extras]
+dev = ["pre-commit (>=2.16.0) ; python_version >= \"3.9\"", "pydoctor (>=25.4.0)", "pytest"]
+docs = ["pydoctor (>=25.4.0)"]
+test = ["pytest"]
+
+[[package]]
 name = "docutils"
 version = "0.21.2"
 description = "Docutils -- Python Documentation Utilities"
 optional = false
 python-versions = ">=3.9"
-groups = ["dev"]
+groups = ["main", "dev"]
 files = [
     {file = "docutils-0.21.2-py3-none-any.whl", hash = "sha256:dafca5b9e384f0e419294eb4d2ff9fa826435bf15f15b7bd45723e8ad76811b2"},
     {file = "docutils-0.21.2.tar.gz", hash = "sha256:3a6b18732edf182daa3cd12775bbb338cf5691468f91eeeb109deff6ebfa986f"},
@@ -4748,35 +4804,37 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prefect"
-version = "3.6.9"
+version = "3.6.24"
 description = "Workflow orchestration and management."
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["main"]
 files = [
-    {file = "prefect-3.6.9-py3-none-any.whl", hash = "sha256:7d83b3244b53fe23ac934d7bba16428573439e078443bbd3b79d9daf7fb739bc"},
-    {file = "prefect-3.6.9.tar.gz", hash = "sha256:bcb08bb3a402910a6cc40018943d9d229a2c6b47fe15d6c7580fdd9fb7d478bb"},
+    {file = "prefect-3.6.24-py3-none-any.whl", hash = "sha256:5ac830a325f8775e8ddfdc27a5962bafccc6f26527f44361c2b1da703363650b"},
+    {file = "prefect-3.6.24.tar.gz", hash = "sha256:cef1ebdbdd78daaf6fea156aac795674e94995fed0b9ea839c5ebf041e0a50ae"},
 ]
 
 [package.dependencies]
 aiosqlite = ">=0.17.0,<1.0.0"
 alembic = ">=1.7.5,<2.0.0"
+amplitude-analytics = ">=1.2.1,<2.0.0"
 anyio = ">=4.4.0,<5.0.0"
 apprise = ">=1.1.0,<2.0.0"
 asgi-lifespan = ">=1.0,<3.0"
 asyncpg = ">=0.23,<1.0.0"
-cachetools = ">=5.3,<7.0"
+cachetools = ">=5.3,<8.0"
 click = ">=8.0,<9"
 cloudpickle = ">=2.0,<4.0"
-coolname = ">=1.0.4,<3.0.0"
+coolname = ">=1.0.4,<5.0.0"
 cryptography = ">=36.0.1"
+cyclopts = ">=4.8.0"
 dateparser = ">=1.1.1,<2.0.0"
 docker = ">=4.0,<8.0"
 exceptiongroup = ">=1.0.0"
 fastapi = ">=0.111.0,<1.0.0"
 fsspec = ">=2022.5.0"
 graphviz = ">=0.20.1"
-griffe = ">=0.49.0,<2.0.0"
+griffe = ">=0.49.0,<3.0.0"
 httpcore = ">=1.0.5,<2.0.0"
 httpx = {version = ">=0.23,<0.23.2 || >0.23.2", extras = ["http2"]}
 humanize = ">=4.9.0,<5.0.0"
@@ -4786,7 +4844,7 @@ jsonpatch = ">=1.32,<2.0"
 jsonschema = ">=4.18.0,<5.0.0"
 opentelemetry-api = ">=1.27.0,<2.0.0"
 orjson = ">=3.7,<4.0"
-packaging = ">=21.3,<25.1"
+packaging = ">=21.3,<26.1"
 pathspec = ">=0.8.0"
 pluggy = ">=1.6.0"
 prefect-docker = {version = ">=0.6.0", optional = true, markers = "extra == \"docker\""}
@@ -4795,10 +4853,10 @@ pydantic = ">=2.10.1,<2.11.0 || >2.11.0,<2.11.1 || >2.11.1,<2.11.2 || >2.11.2,<2
 pydantic-core = ">=2.12.0,<3.0.0"
 pydantic-extra-types = ">=2.8.2,<3.0.0"
 pydantic-settings = ">2.2.1,<2.9.0 || >2.9.0,<3.0.0"
-pydocket = ">=0.16.2"
+pydocket = ">=0.17.7"
 python-dateutil = ">=2.8.2,<3.0.0"
 python-slugify = ">=5.0,<9.0"
-pytz = ">=2021.1,<2026"
+pytz = ">=2021.1,<2027"
 pyyaml = ">=5.4.1,<7.0.0"
 readchar = ">=4.0.0,<5.0.0"
 rfc3339-validator = ">=0.1.4,<0.2.0"
@@ -4809,16 +4867,16 @@ semver = ">=3.0.4"
 sniffio = ">=1.3.0,<2.0.0"
 sqlalchemy = {version = ">=2.0,<3.0.0", extras = ["asyncio"]}
 toml = ">=0.10.0"
-typer = ">=0.16.0,<0.21.0"
 typing-extensions = ">=4.10.0,<5.0.0"
 uvicorn = ">=0.14.0,<0.29.0 || >0.29.0"
-websockets = ">=15.0.1,<16.0"
+websockets = ">=15.0.1,<17.0"
 whenever = {version = ">=0.7.3,<0.10.0", markers = "python_version >= \"3.13\""}
 
 [package.extras]
 aws = ["prefect-aws (>=0.5.8)"]
 azure = ["prefect-azure (>=0.4.0)"]
 bitbucket = ["prefect-bitbucket (>=0.3.0)"]
+buildx = ["python-on-whales (>=0.81)"]
 bundles = ["uv (>=0.6.0)"]
 dask = ["prefect-dask (>=0.3.0)"]
 databricks = ["prefect-databricks (>=0.3.0)"]
@@ -4829,7 +4887,7 @@ gcp = ["prefect-gcp (>=0.6.0)"]
 github = ["prefect-github (>=0.3.0)"]
 gitlab = ["prefect-gitlab (>=0.3.0)"]
 kubernetes = ["prefect-kubernetes (>=0.4.0)"]
-otel = ["opentelemetry-distro (>=0.48b0,<1.0.0)", "opentelemetry-exporter-otlp (>=1.27.0,<2.0.0)", "opentelemetry-instrumentation (>=0.48b0,<1.0.0)", "opentelemetry-instrumentation-logging (>=0.48b0,<1.0.0)", "opentelemetry-test-utils (>=0.48b0,<1.0.0)"]
+otel = ["opentelemetry-distro (>=0.48b0,<1.0.0)", "opentelemetry-exporter-otlp (>=1.27.0,<2.0.0)", "opentelemetry-instrumentation (>=0.48b0,<1.0.0)", "opentelemetry-instrumentation-logging (>=0.48b0,<1.0.0)", "opentelemetry-instrumentation-system-metrics (>=0.48b0,<1.0.0)", "opentelemetry-test-utils (>=0.48b0,<1.0.0)"]
 ray = ["prefect-ray (>=0.4.0)"]
 redis = ["prefect-redis (>=0.2.0)"]
 shell = ["prefect-shell (>=0.3.0)"]
@@ -6230,6 +6288,25 @@ pygments = ">=2.13.0,<3.0.0"
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
+name = "rich-rst"
+version = "1.3.2"
+description = "A beautiful reStructuredText renderer for rich"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "rich_rst-1.3.2-py3-none-any.whl", hash = "sha256:a99b4907cbe118cf9d18b0b44de272efa61f15117c61e39ebdc431baf5df722a"},
+    {file = "rich_rst-1.3.2.tar.gz", hash = "sha256:a1196fdddf1e364b02ec68a05e8ff8f6914fee10fbca2e6b6735f166bb0da8d4"},
+]
+
+[package.dependencies]
+docutils = "*"
+rich = ">=12.0.0"
+
+[package.extras]
+docs = ["sphinx"]
 
 [[package]]
 name = "roman-numerals"
@@ -8298,4 +8375,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "3.13.5"
-content-hash = "86846e356c725cae4b731bb774d485d93e8a3c54abafec469237a44c973b8889"
+content-hash = "d8177d0efea461233b27a3b4bff19e10b7eee0e0c767d8b31f45e2146584c001"

@@ -3,6 +3,7 @@ updates:
   - package-ecosystem: "github-actions"
     assignees:
       - "louptheron"
+    directory: "/"
     schedule:
       interval: "monthly"
       time: "03:00"

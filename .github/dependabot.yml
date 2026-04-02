@@ -1,12 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directory: "/"
-    cooldown:
-      default-days: 30
-      semver-patch-days: 3
-      semver-minor-days: 7
-      semver-major-days: 30
     assignees:
       - "louptheron"
     schedule:

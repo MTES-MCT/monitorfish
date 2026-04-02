@@ -241,7 +241,7 @@ def compute_vessels_risk_elements(
             tt.cfr,
             total_trips,
             COALESCE(compliant_trips, 0) AS compliant_trips,
-            (total_trips - COALESCE(compliant_trips, 0)) / total_trips AS share_of_non_compliant_trips,
+            GREATEST(total_trips - COALESCE(compliant_trips, 0), 0) / total_trips AS share_of_non_compliant_trips
         FROM total_trips tt
         LEFT JOIN compliant_trips ct
         ON ct.cfr = tt.cfr

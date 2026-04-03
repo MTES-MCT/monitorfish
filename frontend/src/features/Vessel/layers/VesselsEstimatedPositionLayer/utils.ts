@@ -1,8 +1,7 @@
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { VesselFeature } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { OPENLAYERS_PROJECTION, THEME, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { customDayjs, OPENLAYERS_PROJECTION, THEME, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 import Point from 'ol/geom/Point'
@@ -12,8 +11,7 @@ export const getEstimatedPositionFeatures = (
   vessel: Vessel.ActiveVesselEmittingPosition,
   options: {
     isLight: boolean
-    vesselIsHiddenTimeThreshold: number
-    vesselIsOpacityReducedTimeThreshold: number
+    isOpacityReducedEpochMilli: number
   }
 ): [Vessel.VesselEstimatedPositionFeature, Vessel.VesselEstimatedPositionFeature] | undefined => {
   const { dateTime, estimatedCurrentLatitude, estimatedCurrentLongitude, latitude, longitude } = vessel
@@ -39,16 +37,13 @@ export const getEstimatedPositionFeatures = (
   const lineColor = options.isLight ? 'rgba(202, 204, 224, 0.2)' : THEME.color.charcoalShadow
   const vesselColor = options.isLight ? 'rgb(202, 204, 224)' : THEME.color.charcoal
 
-  const opacity = VesselFeature.getVesselOpacityWithTimestamp(
-    dateTime,
-    options.vesselIsHiddenTimeThreshold,
-    options.vesselIsOpacityReducedTimeThreshold
-  )
+  if (customDayjs(dateTime).valueOf() < options.isOpacityReducedEpochMilli) {
+    return undefined
+  }
 
   const lineFeature = new Feature({
     color: lineColor,
-    geometry: new LineString([currentCoordinates, estimatedCoordinates]),
-    opacity
+    geometry: new LineString([currentCoordinates, estimatedCoordinates])
   }) as Vessel.VesselEstimatedPositionFeature
   lineFeature.estimatedPosition = estimatedPositionData
   lineFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:${vesselCompositeIdentifier}`)
@@ -56,8 +51,7 @@ export const getEstimatedPositionFeatures = (
   const circleFeature = new Feature({
     color: vesselColor,
     geometry: new Point(estimatedCoordinates),
-    isCircle: true,
-    opacity
+    isCircle: true
   }) as Vessel.VesselEstimatedPositionFeature
   circleFeature.estimatedPosition = estimatedPositionData
   circleFeature.setId(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle:${vesselCompositeIdentifier}`)

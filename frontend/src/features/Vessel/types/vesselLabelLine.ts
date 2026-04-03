@@ -13,10 +13,9 @@ export class VesselLabelLine {
    * @param {string} featureId - The feature identifier
    * @param {number} opacity - The opacity
    */
-  static getFeature(fromCoordinates, toCoordinates, featureId, opacity) {
+  static getFeature(fromCoordinates, toCoordinates, featureId) {
     const labelLineFeature = new Feature({
-      geometry: new LineString([fromCoordinates, toCoordinates]),
-      opacity
+      geometry: new LineString([fromCoordinates, toCoordinates])
     })
     labelLineFeature.setId(featureId)
 

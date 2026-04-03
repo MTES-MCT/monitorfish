@@ -22,32 +22,6 @@ export class VesselFeature {
     return `${MonitorFishMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
   }
 
-  static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
-    const vesselDate = new Date(dateTime)
-
-    let opacity = 1
-    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
-      opacity = 0
-    } else if (vesselDate.getTime() < vesselIsOpacityReduced.getTime()) {
-      opacity = 0.2
-    }
-
-    return opacity
-  }
-
-  static getVesselOpacityWithTimestamp(dateTime, vesselIsHiddenTimeThreshold, vesselIsOpacityReducedTimeThreshold) {
-    const vesselDate = new Date(dateTime)
-
-    let opacity = 1
-    if (vesselDate.getTime() < vesselIsHiddenTimeThreshold) {
-      opacity = 0
-    } else if (vesselDate.getTime() < vesselIsOpacityReducedTimeThreshold) {
-      opacity = 0.2
-    }
-
-    return opacity
-  }
-
   /**
    * Add text label to vessel feature
    * @return The label object
@@ -79,7 +53,6 @@ export class VesselFeature {
       isRiskFactorShowed: boolean
       vesselLabel: VesselLabel
       vesselLabelsShowedOnMap: boolean
-      vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
     groupsDisplayed: Vessel.VesselGroupOfActiveVessel[]
@@ -93,7 +66,7 @@ export class VesselFeature {
         }
       | undefined
   } {
-    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap, vesselsLastPositionVisibility } = options
+    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap } = options
     const vesselDate = new Date(feature.dateTime)
     const vesselIsHidden = new Date()
     const lastControlDateTime = getLastControlDateTime(
@@ -103,7 +76,6 @@ export class VesselFeature {
     const hasBeenControlledLastFiveYears = lastControlDateTime
       ? new Date(lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
       : false
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     // TODO Properly type this const.
     const label: {

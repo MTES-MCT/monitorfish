@@ -15,11 +15,6 @@ export namespace MonitorFishMap {
     feature: FeatureLike | FeatureWithCodeAndEntityId | undefined
   }
 
-  export type LastPositionVisibility = {
-    hidden: number
-    opacityReduced: number
-  }
-
   export type InteractionTypeAndListener = {
     listener: InteractionListener
     type: InteractionType

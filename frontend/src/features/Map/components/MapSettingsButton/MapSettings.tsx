@@ -4,10 +4,9 @@ import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/c
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, MapMenuDialog, MultiRadio, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, MapMenuDialog, MultiRadio } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { LastPositionsVisibilitySlider } from './LastPositionsVisibilitySlider'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { MapPropertyTrigger } from '../../../commonComponents/MapPropertyTrigger'
 import EstimatedPositionSVG from '../../../icons/Positions_estimees.svg?react'
@@ -31,19 +30,6 @@ export function MapSettings({ isOpened, onClose }) {
     <Wrapper isOpen={isOpened}>
       <Header>
         <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />
-        <StyledTitle>Gérer l&apos;affichage des dernières positions</StyledTitle>
-      </Header>
-      <MapMenuDialog.Body>
-        <LastPositionInfo>
-          <VesselHidden /> navires masqués <VesselAlmostHidden /> navires estompés <VesselShowed /> navires normaux
-        </LastPositionInfo>
-        <LastPositionsVisibilitySlider />
-        <LastPositionLegend>
-          Ces seuils permettent de régler l&apos;affichage, l&apos;estompage et le masquage des dernières positions des
-          navires.
-        </LastPositionLegend>
-      </MapMenuDialog.Body>
-      <Header $isCentered>
         <StyledTitle>Paramétrer la longueur par défaut des pistes</StyledTitle>
       </Header>
       <StyledMapMenuDialogBody>
@@ -127,53 +113,6 @@ const CloseButton = styled(MapMenuDialog.CloseButton)`
 
 const EstimatedPosition = styled(EstimatedPositionSVG)`
   width: 10px;
-`
-
-const LastPositionLegend = styled.div`
-  color: ${THEME.color.slateGray};
-  margin: 0 12px 12px 12px;
-  text-align: left;
-`
-
-const VesselHidden = styled.span`
-  background: ${THEME.color.lightGray};
-  display: inline-block;
-  border-radius: 50%;
-  height: 8px;
-  margin-bottom: 1px;
-  margin-right: 2px;
-  width: 8px;
-  vertical-align: middle;
-`
-
-const VesselAlmostHidden = styled.span`
-  background: #9095a2;
-  border-radius: 50%;
-  height: 8px;
-  display: inline-block;
-  margin-bottom: 1px;
-  margin-left: 30px;
-  margin-right: 2px;
-  width: 8px;
-  vertical-align: middle;
-`
-
-const VesselShowed = styled.span`
-  background: ${THEME.color.charcoal};
-  border-radius: 50%;
-  height: 8px;
-  display: inline-block;
-  margin-bottom: 1px;
-  margin-left: 30px;
-  margin-right: 2px;
-  width: 8px;
-  vertical-align: middle;
-`
-
-const LastPositionInfo = styled.div`
-  color: ${THEME.color.gunMetal};
-  font-size: 10px;
-  margin: 8px 16px 16px 16px;
 `
 
 const Wrapper = styled(MapToolBox)`

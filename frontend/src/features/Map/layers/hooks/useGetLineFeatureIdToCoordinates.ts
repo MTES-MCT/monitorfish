@@ -7,14 +7,14 @@ export function useGetLineFeatureIdToCoordinates(vectorSource) {
   const [featureIdToCoordinates, setFeatureIdToCoordinates] = useState(new Map())
 
   const moveVesselLabelLine = useCallback(
-    (featureId, fromCoordinates, toCoordinates, offset, opacity) => {
+    (featureId, fromCoordinates, toCoordinates, offset) => {
       if (featureIdToCoordinates.has(featureId)) {
         const existingLabelLineFeature = vectorSource.getFeatureById(featureId)
         if (existingLabelLineFeature) {
           existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
         }
       } else {
-        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId, opacity)
+        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId)
 
         vectorSource.addFeature(labelLineFeature)
       }

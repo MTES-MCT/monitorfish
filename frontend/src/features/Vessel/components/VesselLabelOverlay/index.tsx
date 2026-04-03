@@ -102,7 +102,7 @@ export function VesselLabelOverlay({
 
       const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
-      moveLine(featureId, coordinates, nextCoordinates, nextOffset, opacity)
+      moveLine(featureId, coordinates, nextCoordinates, nextOffset)
 
       isThrottled.current = false
     }, delay)

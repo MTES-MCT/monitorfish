@@ -39,6 +39,7 @@ describe('utils/parseOrReturn()', () => {
       gearsArray: [],
       hasAlert: false,
       hasBeaconMalfunction: false,
+      hasCurrentTripInfractionSuspicion: false,
       hasInfractionSuspicion: false,
       impactRiskFactor: 0,
       isAtPort: false,

@@ -1,6 +1,6 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
-import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderLayersDependingOnVesselLayer } from '@features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -14,7 +14,6 @@ function UnmemoizedVesselsLayer() {
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
-  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
@@ -24,16 +23,12 @@ function UnmemoizedVesselsLayer() {
   useEffect(() => {
     // styles derived from state
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
-    const { vesselIsHidden, vesselIsOpacityReduced } =
-      getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
     const initStyles = {
       areVesselsNotInVesselGroupsHidden,
       hideNonSelectedVessels: false,
       isLight,
       previewFilteredVesselsMode,
-      vesselGroupsIdsDisplayed,
-      vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
-      vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
+      vesselGroupsIdsDisplayed
     }
     const styleVariables = getWebGLVesselStyleVariables(initStyles)
     VESSELS_VECTOR_LAYER.updateStyleVariables(styleVariables)
@@ -83,15 +78,6 @@ function UnmemoizedVesselsLayer() {
     dispatch(renderLayersDependingOnVesselLayer())
   }, [dispatch, selectedBaseLayer])
 
-  useEffect(() => {
-    const { vesselIsHidden, vesselIsOpacityReduced } =
-      getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
-    VESSELS_VECTOR_LAYER.updateStyleVariables({
-      vesselIsHiddenTimeThreshold: vesselIsHidden.getTime(),
-      vesselIsOpacityReducedTimeThreshold: vesselIsOpacityReduced.getTime()
-    })
-    dispatch(renderLayersDependingOnVesselLayer())
-  }, [dispatch, vesselsLastPositionVisibility])
   // end styles
 
   return null

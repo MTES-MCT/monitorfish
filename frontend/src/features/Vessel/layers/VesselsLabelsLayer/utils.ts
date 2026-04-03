@@ -5,7 +5,6 @@ import { VesselFeature } from '@features/Vessel/types/vessel'
 import { VesselLabelLine } from '@features/Vessel/types/vesselLabelLine'
 import { extractVesselPropertiesFromFeature, getVesselCompositeIdentifier } from '@features/Vessel/utils'
 
-import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { ShowedVesselTrack } from '@features/Vessel/types/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
@@ -16,12 +15,9 @@ export function getLabelFromFeatures(
     isSuperUser: boolean
     riskFactorShowedOnMap: boolean
     selectedVessel: Vessel.SelectedVessel | undefined
-    vesselIsHidden: Date
-    vesselIsOpacityReduced: Date
     vesselLabel: VesselLabel
     vesselLabelsShowedOnMap: boolean
     vesselToCoordinates: Map<string, any>
-    vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     vesselsTracksShowed: Record<string, ShowedVesselTrack>
   }
 ) {
@@ -58,8 +54,7 @@ export function getLabelFromFeatures(
       areVesselsNotInVesselGroupsHidden: options.areVesselsNotInVesselGroupsHidden,
       isRiskFactorShowed: options.isSuperUser && options.riskFactorShowedOnMap,
       vesselLabel: options.vesselLabel,
-      vesselLabelsShowedOnMap: options.vesselLabelsShowedOnMap,
-      vesselsLastPositionVisibility: options.vesselsLastPositionVisibility
+      vesselLabelsShowedOnMap: options.vesselLabelsShowedOnMap
     })
     const identity = {
       externalReferenceNumber: feature.get('externalReferenceNumber'),
@@ -67,17 +62,11 @@ export function getLabelFromFeatures(
       ircs: feature.get('ircs')
     }
     const labelLineFeatureId = VesselLabelLine.getFeatureId(identity)
-    const opacity = VesselFeature.getVesselOpacity(
-      vesselProperties.dateTime,
-      options.vesselIsHidden,
-      options.vesselIsOpacityReduced
-    )
     const offset = drawMovedLabelLineIfFoundAndReturnOffset(
       VESSELS_LABEL_VECTOR_SOURCE,
       options.vesselToCoordinates,
       labelLineFeatureId,
-      feature,
-      opacity
+      feature
     )
     const trackIsShown = showedTracksVesselsIdentities.includes(getVesselCompositeIdentifier(vesselProperties))
 
@@ -96,7 +85,6 @@ export function getLabelFromFeatures(
       },
       label,
       offset,
-      opacity,
       trackIsShown
     }
   })

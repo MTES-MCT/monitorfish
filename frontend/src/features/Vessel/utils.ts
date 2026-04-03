@@ -37,6 +37,7 @@ export function buildFeature(
     groupsDisplayed: vesselGroupDisplayed.groupsDisplayed,
     hasAlert: vessel.hasAlert,
     hasBeaconMalfunction: vessel.hasBeaconMalfunction,
+    hasCurrentTripInfractionSuspicion: vessel.hasCurrentTripInfractionSuspicion,
     hasInfractionSuspicion: vessel.hasInfractionSuspicion,
     impactRiskFactor: vessel.impactRiskFactor,
     internalReferenceNumber: vessel.internalReferenceNumber,

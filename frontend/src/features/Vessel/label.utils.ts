@@ -8,8 +8,7 @@ export function drawMovedLabelLineIfFoundAndReturnOffset(
   vectorSource,
   featureIdToCoordinates,
   labelLineFeatureId,
-  feature,
-  opacity
+  feature
 ) {
   let offset = null
 
@@ -26,8 +25,7 @@ export function drawMovedLabelLineIfFoundAndReturnOffset(
       const labelLineFeature = VesselLabelLine.getFeature(
         feature.getGeometry().getCoordinates(),
         coordinatesAndOffset.coordinates,
-        labelLineFeatureId,
-        opacity
+        labelLineFeatureId
       )
       labelLineFeature.setId(labelLineFeatureId)
       vectorSource.addFeature(labelLineFeature)

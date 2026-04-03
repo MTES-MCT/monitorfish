@@ -1,8 +1,9 @@
-import { VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
+import { VESSELS_VECTOR_LAYER, VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
 import { vesselSelectors } from '@features/Vessel/slice'
 import { renderLayersDependingOnVesselLayer } from '@features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer'
 import { buildFeature } from '@features/Vessel/utils'
 import { selectVesselGroupsIdsFiltered } from '@features/VesselGroup/slice'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 
@@ -27,5 +28,10 @@ export const renderVesselFeatures = (): MainAppThunk => async (dispatch, getStat
 
   VESSELS_VECTOR_SOURCE.clear(true)
   VESSELS_VECTOR_SOURCE.addFeatures(features)
+
+  const isOpacityReducedEpochMilli = customDayjs().subtract(3, 'hour').valueOf()
+  VESSELS_VECTOR_LAYER.updateStyleVariables({
+    isOpacityReducedEpochMilli
+  })
   dispatch(renderLayersDependingOnVesselLayer())
 }

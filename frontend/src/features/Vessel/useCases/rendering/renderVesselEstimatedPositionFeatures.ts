@@ -38,8 +38,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
   const {
     areVesselsNotInVesselGroupsHidden,
     hideNonSelectedVessels,
-    vesselIsHiddenTimeThreshold,
-    vesselIsOpacityReducedTimeThreshold
+    isOpacityReducedEpochMilli
     // @ts-ignore there is no other way to access the style variables
   } = VESSELS_VECTOR_LAYER.styleVariables_
   /* eslint-enable no-underscore-dangle */
@@ -49,12 +48,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
       feature =>
         showingVesselsEstimatedPositions &&
         feature.get('isFiltered') &&
-        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
-        VesselFeature.getVesselOpacityWithTimestamp(
-          feature.get('dateTime'),
-          vesselIsHiddenTimeThreshold,
-          vesselIsOpacityReducedTimeThreshold
-        ) !== 0
+        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
     )
     .filter(filterNonSelectedVessels(vesselsTracksShowed, !!hideNonSelectedVessels, selectedVesselIdentity))
     .map(feature => {
@@ -62,8 +56,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
 
       return getEstimatedPositionFeatures(properties as Vessel.ActiveVesselEmittingPosition, {
         isLight,
-        vesselIsHiddenTimeThreshold,
-        vesselIsOpacityReducedTimeThreshold
+        isOpacityReducedEpochMilli
       })
     })
     .flat()

@@ -9,7 +9,6 @@ import {
 import { VESSEL_ALERT_VECTOR_SOURCE } from '@features/Vessel/layers/VesselAlertLayer/constants'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { vesselSelectors } from '@features/Vessel/slice'
-import { VesselFeature } from '@features/Vessel/types/vessel'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
@@ -36,9 +35,7 @@ export const renderVesselAlertFeatures = (): MainAppThunk => async (_, getState)
   /* eslint-disable no-underscore-dangle */
   const {
     areVesselsNotInVesselGroupsHidden,
-    hideNonSelectedVessels,
-    vesselIsHiddenTimeThreshold,
-    vesselIsOpacityReducedTimeThreshold
+    hideNonSelectedVessels
     // @ts-ignore there is no other way to access the style variables
   } = VESSELS_VECTOR_LAYER.styleVariables_
   /* eslint-enable no-underscore-dangle */
@@ -49,12 +46,7 @@ export const renderVesselAlertFeatures = (): MainAppThunk => async (_, getState)
         feature.get('isFiltered') &&
         feature.get('hasAlert') &&
         !feature.get('hasBeaconMalfunction') &&
-        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
-        VesselFeature.getVesselOpacityWithTimestamp(
-          feature.get('dateTime'),
-          vesselIsHiddenTimeThreshold,
-          vesselIsOpacityReducedTimeThreshold
-        ) !== 0
+        (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
     )
     .filter(filterNonSelectedVessels(vesselsTracksShowed, !!hideNonSelectedVessels, selectedVesselIdentity))
     .map(feature => {

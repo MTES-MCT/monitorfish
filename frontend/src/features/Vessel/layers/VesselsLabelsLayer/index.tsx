@@ -10,7 +10,6 @@ import {
   VESSELS_LABEL_VECTOR_SOURCE
 } from '@features/Vessel/layers/VesselsLabelsLayer/constants'
 import { getLabelFromFeatures } from '@features/Vessel/layers/VesselsLabelsLayer/utils'
-import { getVesselLastPositionVisibilityDates, VesselFeature } from '@features/Vessel/types/vessel'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
@@ -44,8 +43,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
-  const vesselsLastPositionVisibility = useMainAppSelector(state => state.map.vesselsLastPositionVisibility)
-  const { vesselIsHidden, vesselIsOpacityReduced } = getVesselLastPositionVisibilityDates(vesselsLastPositionVisibility)
 
   const [featuresAndLabels, setFeaturesAndLabels] = useState<
     {
@@ -67,14 +64,14 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   useMapLayer(VESSELS_LABEL_VECTOR_LAYER)
 
   const moveVesselLabelLine = useCallback(
-    (featureId, fromCoordinates, toCoordinates, offset, opacity) => {
+    (featureId, fromCoordinates, toCoordinates, offset) => {
       if (vesselToCoordinates.has(featureId)) {
         const existingLabelLineFeature = VESSELS_LABEL_VECTOR_SOURCE.getFeatureById(featureId)
         if (existingLabelLineFeature) {
           existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
         }
       } else {
-        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId, opacity)
+        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId)
 
         VESSELS_LABEL_VECTOR_SOURCE.addFeature(labelLineFeature)
       }
@@ -175,9 +172,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       const featuresInExtent = getVesselFeaturesInExtent()
         .filter(
           feature =>
-            feature.get('isFiltered') &&
-            (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true) &&
-            VesselFeature.getVesselOpacity(feature.get('dateTime'), vesselIsHidden, vesselIsOpacityReduced) !== 0
+            feature.get('isFiltered') && (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
         )
         .filter(filterNonSelectedVessels(vesselsTracksShowed, hideNonSelectedVessels, selectedVesselIdentity))
 
@@ -188,11 +183,8 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           isSuperUser,
           riskFactorShowedOnMap,
           selectedVessel,
-          vesselIsHidden,
-          vesselIsOpacityReduced,
           vesselLabel,
           vesselLabelsShowedOnMap,
-          vesselsLastPositionVisibility,
           vesselsTracksShowed,
           vesselToCoordinates
         })
@@ -217,7 +209,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     numberOfVessels,
     selectedVessel,
     selectedVesselIdentity,
-    vesselsLastPositionVisibility,
     mapMovingAndZoomEvent,
     vesselLabelsShowedOnMap,
     riskFactorShowedOnMap,

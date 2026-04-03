@@ -92,6 +92,13 @@ context('Reporting map form', () => {
     cy.wait('@displayReportings')
     cy.wait(3000)
 
+    // Open the dialog
+    cy.clickButton('Signalements')
+    cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
+
+    // Display the reporting layer
+    cy.clickButton('Afficher les signalements')
+
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 
     hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)

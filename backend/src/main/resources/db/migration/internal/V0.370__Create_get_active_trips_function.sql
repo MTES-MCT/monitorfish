@@ -6,52 +6,55 @@ RETURNS TABLE (
 LANGUAGE sql
 STABLE
 AS $$
-WITH snapshot_trips AS (
-    SELECT
-        cfr,
-        trip_number,
-        start_datetime_utc,
-        end_datetime_utc,
-        first_operation_datetime_utc,
-        last_operation_datetime_utc
-    FROM trips_snapshot
-    WHERE cfr = ANY(cfrs)
-),
-
-last_snapshot_trips AS (
+WITH last_snapshot_trips AS (
     SELECT DISTINCT ON (cfr)
         cfr,
         trip_number,
         start_datetime_utc
-    FROM snapshot_trips
+    FROM trips_snapshot
+    WHERE cfr = ANY(cfrs)
     ORDER BY cfr, start_datetime_utc DESC
 ),
 
-latest_trips AS (
+recent_trips AS (
     SELECT
         cfr,
-       COALESCE(
+        trip_number,
+        COALESCE(
             MIN(
                 CASE WHEN ABS(EXTRACT(epoch FROM activity_datetime_utc - operation_datetime_utc)) / 3600 / 24 / 365 < 5
                 THEN activity_datetime_utc
             END),
             MIN(operation_datetime_utc)
-       ) AS start_datetime_utc,
-        trip_number
+        ) AS start_datetime_utc
     FROM logbook_reports
     WHERE
         operation_datetime_utc >= NOW() AT TIME ZONE 'UTC' - INTERVAL '24 hours'
         AND operation_datetime_utc < NOW() AT TIME ZONE 'UTC' + INTERVAL '24 hours'
-        AND cfr = ANY(cfrs)
         AND trip_number IS NOT NULL
+        AND cfr = ANY(cfrs)
     GROUP BY cfr, trip_number
+),
+
+last_recent_trips AS (
+    SELECT DISTINCT ON (cfr) *
+    FROM recent_trips
+    ORDER BY cfr, start_datetime_utc DESC
+),
+
+merged_trips AS (
+    SELECT
+        COALESCE(lst.cfr, lrt.cfr) AS cfr,
+        COALESCE(lrt.trip_number, lst.trip_number) AS trip_number,
+        LEAST(lrt.start_datetime_utc, lst.start_datetime_utc) AS start_datetime_utc
+    FROM last_snapshot_trips lst
+    FULL OUTER JOIN last_recent_trips lrt
+    ON
+        lrt.cfr = lst.cfr
+        AND lrt.trip_number = lst.trip_number
 )
 
-SELECT
-    lst.cfr,
-    LEAST(lst.start_datetime_utc, lt.start_datetime_utc) AS start_datetime_utc
-FROM last_snapshot_trips lst
-     LEFT JOIN latest_trips lt
-               ON lt.cfr = lst.cfr
-                   AND lt.trip_number = lst.trip_number
+SELECT DISTINCT ON (cfr) cfr, start_datetime_utc
+FROM merged_trips
+ORDER BY cfr, start_datetime_utc DESC
 $$;

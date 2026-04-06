@@ -327,6 +327,7 @@ def pre_render_pno(
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         source=pno.source,
+        is_zero=is_prior_notification_zero(pno)
     )
 
 
@@ -517,6 +518,7 @@ def render_pno(
         ),
         port_name=pno.port_name,
         note=pno.note,
+        is_zero=pno.is_zero,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(
@@ -1134,3 +1136,15 @@ def distribute_pnos_flow(
                 execute_statement(update_manual_pnos_statement)
 
     return pnos_to_generate, pnos_to_distribute
+
+def is_prior_notification_zero(pno: PnoToRender) -> bool | None:
+    # ported from `isPriorNotificationZero` in /frontend/src/features/PriorNotification/utils.ts
+
+    if not pno.catch_onboard:
+        return None
+
+    for c in pno.catch_onboard:
+        if c.get("weight") != 0:
+            return False
+        
+    return True

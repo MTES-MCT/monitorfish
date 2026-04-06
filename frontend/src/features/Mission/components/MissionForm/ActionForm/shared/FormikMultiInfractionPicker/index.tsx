@@ -150,9 +150,9 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
         {!isNewInfractionFormOpen && (
           <>
             {infractions.length > 0 && <StyledFieldsetGroupSeparator />}
-            <Button accent={Accent.SECONDARY} Icon={Icon.Plus} isFullWidth onClick={openNewInfractionForm}>
+            <AddInfractionButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={openNewInfractionForm}>
               {addButtonLabel}
-            </Button>
+            </AddInfractionButton>
           </>
         )}
 
@@ -182,10 +182,11 @@ const Wrapper = styled(FieldsetGroup)`
     > .Element-Fieldset:not(:first-child) {
       margin-top: 16px;
     }
-    > button:not(:first-child) {
-      margin-top: 0; // Nécessaire pour empêcher une marge blanche au dessus du bouton "Ajouter une infraction"
-    }
   }
+`
+
+const AddInfractionButton = styled(Button)`
+  margin: 16px; // Ensure the margin is not only at the top of the button
 `
 
 const StyledFieldsetGroupSeparator = styled(FieldsetGroupSeparator)`

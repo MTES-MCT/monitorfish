@@ -62,6 +62,7 @@ class PnoToRender:
     is_verified: bool
     is_being_sent: bool
     source: PnoSource
+    operation_type: str
 
     def __post_init__(self):
         datetime_attrs = [
@@ -129,6 +130,7 @@ class PreRenderedPno:
     is_being_sent: bool
     source: PnoSource
     is_zero: bool | None
+    is_correction: bool
 
     @staticmethod
     def assert_equal(left: object, right: object):

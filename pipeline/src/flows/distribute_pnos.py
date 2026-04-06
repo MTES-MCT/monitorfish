@@ -327,7 +327,8 @@ def pre_render_pno(
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         source=pno.source,
-        is_zero=is_prior_notification_zero(pno)
+        is_zero=is_prior_notification_zero(pno),
+        is_correction=(pno.operation_type == "COR"),
     )
 
 
@@ -480,6 +481,7 @@ def render_pno(
             and (pno.last_control_infractions == [])
         ),
         is_zero=pno.is_zero,
+        is_correction=pno.is_correction,
     )
 
     html_email_body = email_body_template.render(
@@ -502,6 +504,7 @@ def render_pno(
         port_locode=pno.port_locode,
         pno_types=", ".join(pno.pno_types),
         note=pno.note,
+        is_correction=pno.is_correction,
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"
@@ -520,6 +523,7 @@ def render_pno(
         port_name=pno.port_name,
         note=pno.note,
         is_zero=pno.is_zero,
+        is_correction=pno.is_correction,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(

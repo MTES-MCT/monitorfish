@@ -479,6 +479,7 @@ def render_pno(
             isinstance(pno.last_control_datetime_utc, datetime)
             and (pno.last_control_infractions == [])
         ),
+        is_zero=pno.is_zero,
     )
 
     html_email_body = email_body_template.render(
@@ -740,7 +741,7 @@ def create_email(
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis de débarquement - {pno.vessel_name}",
+            subject=f"Préavis de débarquement - {pno.vessel_name}{" - préavis zéro" if pno.is_zero else ""}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[

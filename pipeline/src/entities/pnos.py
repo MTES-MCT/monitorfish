@@ -221,6 +221,7 @@ class RenderedPno:
     sms_content: str | None = None
     control_units: List[ControlUnit] | None = None
     additional_addressees: List[PnoAddressee] = None
+    is_zero: bool | None = None
 
     def get_addressees(
         self, communication_means: CommunicationMeans

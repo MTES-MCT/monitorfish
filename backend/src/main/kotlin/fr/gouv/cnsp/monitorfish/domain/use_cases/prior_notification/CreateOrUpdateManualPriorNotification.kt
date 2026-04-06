@@ -30,7 +30,7 @@ class CreateOrUpdateManualPriorNotification(
         author: String?,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
-        expectedLandingDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime?,
         fishingCatches: List<LogbookFishingCatch>,
         /**
          * Single FAO area shared by all fishing catches.
@@ -57,6 +57,32 @@ class CreateOrUpdateManualPriorNotification(
                 ?.logbookMessage
                 ?.message as PNO?
 
+        val year =
+            when (purpose) {
+                LogbookMessagePurpose.LAN -> {
+                    val landingDate =
+                        requireNotNull(expectedLandingDate) {
+                            "landing date required for landing purpose"
+                        }
+
+                    landingDate.year
+                }
+
+                else -> {
+                    require(expectedLandingDate == null) {
+                        "landing date should be null when purpose is not landing"
+                    }
+                    require(globalFaoArea == null) {
+                        "global fao area should be null when purpose is not landing"
+                    }
+                    require(fishingCatches.isEmpty()) {
+                        "no fishing catches should be set when purpose is not landing"
+                    }
+
+                    expectedArrivalDate.year
+                }
+            }
+
         // /!\ Backend computed vessel risk factor is only used as a real time Frontend indicator.
         // The Backend should NEVER update `risk_factors` DB table, only the pipeline is allowed to update it.
         val computedValues =
@@ -66,7 +92,7 @@ class CreateOrUpdateManualPriorNotification(
                 portLocode = portLocode,
                 tripGearCodes = tripGearCodes,
                 vesselId = vesselId,
-                year = expectedLandingDate.year,
+                year = year,
             )
 
         val isPartOfControlUnitSubscriptions =
@@ -178,7 +204,7 @@ class CreateOrUpdateManualPriorNotification(
         existingMessageValue: PNO?,
         purpose: LogbookMessagePurpose,
         expectedArrivalDate: ZonedDateTime,
-        expectedLandingDate: ZonedDateTime,
+        expectedLandingDate: ZonedDateTime?,
         fishingCatches: List<LogbookFishingCatch>,
         hasPortEntranceAuthorization: Boolean,
         hasPortLandingAuthorization: Boolean,

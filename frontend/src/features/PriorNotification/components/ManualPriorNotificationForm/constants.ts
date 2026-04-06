@@ -21,20 +21,30 @@ const VESSEL_IDENTITY_VALIDATION_SCHEMA: ObjectSchema<any> = object<any>({}) as 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
   didNotFishAfterZeroNotice: boolean().required(),
   expectedArrivalDate: string().required("Veuillez indiquer la date d'arrivée estimée."),
-  expectedLandingDate: string().when('$isExpectedLandingDateSameAsExpectedArrivalDate', {
-    is: false,
+  expectedLandingDate: string().when(['$isExpectedLandingDateSameAsExpectedArrivalDate', '$purpose'], {
+    is: (isExpectedLandingDateSameAsExpectedArrivalDate: boolean, purpose: PriorNotification.PurposeCode) =>
+      purpose === PriorNotification.PurposeCode.LAN && isExpectedLandingDateSameAsExpectedArrivalDate === false,
     then: schema => schema.required('Veuillez indiquer la date de débarquement prévue.')
   }),
   fishingCatches: array()
     .of(FISHING_CATCH_VALIDATION_SCHEMA.required())
     .ensure()
     .required()
-    .min(1, 'Veuillez sélectionner au moins une espèce.'),
-  globalFaoArea: string().when('$hasGlobalFaoArea', {
-    is: true,
+    .when('$purpose', {
+      is: PriorNotification.PurposeCode.LAN,
+      then: schema => schema.min(1, 'Veuillez sélectionner au moins une espèce.')
+    }),
+  globalFaoArea: string().when(['$hasGlobalFaoArea', '$purpose'], {
+    is: (hasGlobalFaoArea: boolean, purpose: PriorNotification.PurposeCode) =>
+      purpose === PriorNotification.PurposeCode.LAN && hasGlobalFaoArea === true,
     then: schema => schema.required('Veuillez indiquer la zone FAO.')
   }),
-  hasGlobalFaoArea: boolean().required(),
+  hasGlobalFaoArea: boolean()
+    .default(false) // doubt about this
+    .when('$purpose', {
+      is: PriorNotification.PurposeCode.LAN,
+      then: schema => schema.required()
+    }),
   hasPortEntranceAuthorization: boolean().nonNullable().required(),
   hasPortLandingAuthorization: boolean().nonNullable().required(),
   isExpectedLandingDateSameAsExpectedArrivalDate: boolean().required(),

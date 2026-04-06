@@ -11,7 +11,7 @@ data class ManualPriorNotificationFormDataOutput(
     val reportId: String,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String,
-    val expectedLandingDate: String,
+    val expectedLandingDate: String?,
     val fishingCatches: List<ManualPriorNotificationFishingCatchDataOutput>,
     val globalFaoArea: String?,
     val hasPortEntranceAuthorization: Boolean,
@@ -37,12 +37,13 @@ data class ManualPriorNotificationFormDataOutput(
                         },
                     ).toString()
             val expectedLandingDate =
-                CustomZonedDateTime
-                    .fromZonedDateTime(
-                        requireNotNull(pnoValue.predictedLandingDatetimeUtc) {
-                            "`message.predictedLandingDatetimeUtc` is null."
-                        },
-                    ).toString()
+                pnoValue.predictedLandingDatetimeUtc?.let {
+                    CustomZonedDateTime
+                        .fromZonedDateTime(
+                            it,
+                        ).toString()
+                }
+
             val portLocode = requireNotNull(pnoValue.port) { "`pnoValue.port` is null." }
             val purpose = requireNotNull(pnoValue.purpose) { "`pnoValue.purpose` is null." }
             val reportId = requireNotNull(priorNotification.reportId) { "`priorNotification.reportId` is null." }

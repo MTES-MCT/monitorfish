@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Préavis de débarquement - {{ vessel_name }}</title>
+        <title>Préavis de débarquement - {{ vessel_name }}{{ " - préavis zéro" if is_zero else "" }}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body style='font-size: 10pt; font-family: Verdana,Geneva,sans-serif'>

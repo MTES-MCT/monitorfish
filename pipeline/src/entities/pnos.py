@@ -128,6 +128,7 @@ class PreRenderedPno:
     is_verified: bool
     is_being_sent: bool
     source: PnoSource
+    is_zero: bool | None
 
     @staticmethod
     def assert_equal(left: object, right: object):

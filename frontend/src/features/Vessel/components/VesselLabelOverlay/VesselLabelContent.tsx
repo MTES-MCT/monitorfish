@@ -17,7 +17,6 @@ export function VesselLabelContent({
   featureId,
   identity,
   label,
-  opacity,
   overlayIsPanning,
   overlayRef,
   previewFilteredVesselsMode,
@@ -44,7 +43,7 @@ export function VesselLabelContent({
     }
   }, [showRiskFactorDetails, overlayRef])
 
-  if (!showed || (!labelText && !riskFactor) || !opacity) {
+  if (!showed || (!labelText && !riskFactor)) {
     return null
   }
 

@@ -12,7 +12,6 @@ import type { Coordinate } from 'ol/coordinate'
 import type { Extent } from 'ol/extent'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
-const vesselsLastPositionVisibilityLocalStorageKey = 'vesselsLastPositionVisibility'
 export const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
 const vesselLabelLocalStorageKey = 'vesselLabel'
 const savedMapViewLocalStorageKey = 'mapView'
@@ -42,8 +41,6 @@ export type MapState = {
   showingVesselsEstimatedPositions: boolean
   vesselLabel: VesselLabel
   vesselLabelsShowedOnMap: boolean
-  /** Vessels map properties */
-  vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
   view: {
     center: null
     zoom: null
@@ -63,13 +60,6 @@ const INITIAL_STATE: MapState = {
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
   vesselLabel: getLocalStorageState(VesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
   vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
-  vesselsLastPositionVisibility: getLocalStorageState(
-    {
-      hidden: 48,
-      opacityReduced: 6
-    },
-    vesselsLastPositionVisibilityLocalStorageKey
-  ),
   view: getLocalStorageState(
     {
       center: null,
@@ -179,11 +169,6 @@ const mapSlice = createSlice({
     setVesselLabelsShowedOnMap(state, action) {
       window.localStorage.setItem(vesselLabelsShowedOnMapLocalStorageKey, JSON.stringify(action.payload))
       state.vesselLabelsShowedOnMap = action.payload
-    },
-
-    setVesselsLastPositionVisibility(state, action) {
-      window.localStorage.setItem(vesselsLastPositionVisibilityLocalStorageKey, JSON.stringify(action.payload))
-      state.vesselsLastPositionVisibility = action.payload
     }
   }
 })
@@ -206,6 +191,5 @@ export const {
   setDefaultVesselTrackDepth,
   setRiskFactorShowedOnMap,
   setVesselLabel,
-  setVesselLabelsShowedOnMap,
-  setVesselsLastPositionVisibility
+  setVesselLabelsShowedOnMap
 } = mapActions

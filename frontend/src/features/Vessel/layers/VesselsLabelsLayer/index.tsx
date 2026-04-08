@@ -50,7 +50,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       identity: Record<string, any>
       label: Record<string, any>
       offset: number[] | null
-      opacity: number
       trackIsShown: boolean
     }[]
   >([])
@@ -111,7 +110,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
         }
       })
 
-      const labels = featuresAndLabels.map(({ featureId, identity, label, offset, opacity, trackIsShown }) => (
+      const labels = featuresAndLabels.map(({ featureId, identity, label, offset, trackIsShown }) => (
         <VesselLabelOverlay
           key={identity.key}
           coordinates={identity.coordinates}
@@ -120,7 +119,6 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
           label={label}
           moveLine={moveVesselLabelLine}
           offset={offset}
-          opacity={opacity}
           previewFilteredVesselsMode={previewFilteredVesselsMode}
           riskFactorDetailsShowed={vesselToRiskFactorDetailsShowed.get(featureId)}
           trackIsShown={trackIsShown}

@@ -34,6 +34,11 @@ context('Side Window > Vessel List > Table', () => {
     cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 3)
     cy.getDataCy('vessel-list-reset-filters').click()
+    cy.get('.Component-SingleTag')
+      .last()
+      .within(() => {
+        cy.get('button').click()
+      })
 
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('3149 navires')

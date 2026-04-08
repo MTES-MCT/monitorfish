@@ -22,7 +22,6 @@ export function VesselLabelOverlay({
   label,
   moveLine,
   offset,
-  opacity,
   previewFilteredVesselsMode,
   riskFactorDetailsShowed,
   trackIsShown,
@@ -123,7 +122,6 @@ export function VesselLabelOverlay({
           featureId={featureId}
           identity={identity}
           label={label}
-          opacity={opacity}
           overlayIsPanning={overlayIsPanning}
           overlayRef={overlayElementRef}
           previewFilteredVesselsMode={previewFilteredVesselsMode}

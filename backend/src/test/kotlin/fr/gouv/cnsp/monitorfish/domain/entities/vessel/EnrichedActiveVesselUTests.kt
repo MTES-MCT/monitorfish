@@ -77,7 +77,7 @@ class EnrichedActiveVesselUTests {
                     ),
                 vesselProfile = DUMMY_VESSEL_PROFILE,
                 vesselGroups = getDynamicVesselGroups(),
-                beacon = null,
+                beacon = Beacon("FE456", 123),
                 lastPosition = getDummyLastPositions().first(),
                 landingPort = null,
             )
@@ -87,7 +87,41 @@ class EnrichedActiveVesselUTests {
         assertThat(vessel.activityType).isEqualTo(ActivityType.POSITION_BASED)
         assertThat(vessel.segments).isEqualTo(listOf("NWW03", "NWW06"))
         assertThat(vessel.gearsArray).isEqualTo(listOf("OTB"))
-        assertThat(vessel.emitsPositions).isFalse()
+        assertThat(vessel.emitsPositions).isTrue()
+    }
+
+    @Test
+    fun `Should emits position When there is a non-French vessels with last position`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.DE,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                producerOrganization =
+                    ProducerOrganizationMembership(
+                        internalReferenceNumber = "FR224226850",
+                        "01/10/2024",
+                        "OP",
+                    ),
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vesselGroups = getDynamicVesselGroups(),
+                beacon = null,
+                lastPosition = getDummyLastPositions().first().copy(flagState = CountryCode.DE),
+                landingPort = null,
+            )
+
+        // Then
+        assertThat(vessel.emitsPositions).isTrue()
     }
 
     @Test

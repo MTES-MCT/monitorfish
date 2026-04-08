@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
@@ -39,7 +40,13 @@ data class EnrichedActiveVessel(
     init {
         activityType = computeActivityTypeFrom(lastPosition)
         activityOrigin = computeActivityOriginFrom(lastPosition, riskFactor)
-        emitsPositions = activityType == ActivityType.POSITION_BASED && beacon?.vesselId != null
+        emitsPositions =
+            if (activityType == ActivityType.POSITION_BASED) {
+                // A non-French vessel is taken into account and French vessels must have a registered beacon
+                lastPosition?.flagState != CountryCode.FR || beacon?.vesselId != null
+            } else {
+                false
+            }
 
         segments =
             if (activityOrigin == ActivityOrigin.FROM_LOGBOOK) {

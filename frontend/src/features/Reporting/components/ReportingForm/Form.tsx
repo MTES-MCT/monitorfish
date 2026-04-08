@@ -1,6 +1,7 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
 import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
+import { OBSERVATION_TITLES, OTHER_OBSERVATION_TITLE } from '@features/Reporting/components/ReportingForm/constants'
 import { FormikCoordinatesPicker } from '@features/Reporting/components/ReportingForm/FormikCoordinatesPicker'
 import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
@@ -22,8 +23,10 @@ import {
   FormikTextarea,
   FormikTextInput,
   getOptionsFromLabelledEnum,
-  MultiRadio
+  MultiRadio,
+  Select
 } from '@mtes-mct/monitor-ui'
+import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
 import { Form as FormikForm, type FormikErrors, useFormikContext } from 'formik'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
@@ -111,8 +114,28 @@ export function Form({
     values.length
   ])
   const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
-
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
+  const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
+  const [isTitleDisplayed, setIsTitleDisplayed] = useState(() =>
+    getInitialTitleVisibility(isInfractionSuspicion, values.title, isStandardizedTitle)
+  )
+
+  function getInitialTitleVisibility(
+    isInfraction: boolean,
+    title: string | undefined,
+    isStandardized: boolean
+  ): boolean {
+    if (isInfraction) {
+      return true
+    }
+
+    if (!title) {
+      return false
+    }
+
+    return !isStandardized
+  }
+
   const isLight = !hasWhiteBackground
 
   const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
@@ -171,6 +194,25 @@ export function Form({
     }
   }
 
+  const handleObservationTypeSelect = (observationTitle: string | undefined) => {
+    if (!observationTitle) {
+      setFieldValue('title', undefined)
+      setIsTitleDisplayed(false)
+
+      return
+    }
+
+    if (observationTitle === OTHER_OBSERVATION_TITLE) {
+      setFieldValue('title', '')
+      setIsTitleDisplayed(true)
+
+      return
+    }
+
+    setFieldValue('title', observationTitle)
+    setIsTitleDisplayed(false)
+  }
+
   useEffect(() => {
     if (onIsDirty) {
       onIsDirty(dirty)
@@ -202,6 +244,19 @@ export function Form({
     },
     [debouncedAutoSave]
   )
+
+  const isObservation = values.type === ReportingType.OBSERVATION
+  const observationTypeValue = (() => {
+    if (!values.title) {
+      return undefined
+    }
+
+    if (!isStandardizedTitle) {
+      return OTHER_OBSERVATION_TITLE
+    }
+
+    return values.title
+  })()
 
   return (
     <StyledForm
@@ -382,23 +437,35 @@ export function Form({
           }
         ]}
       />
-      <FormikTextInput
-        isLight={isLight}
-        isRequired
-        label="Titre"
-        name="title"
-        placeholder={
-          values.type === ReportingTypeCharacteristics.OBSERVATION.code
-            ? 'Ex: Dérogation temporaire licence'
-            : 'Ex: Infraction maille cul de chalut'
-        }
-      />
+      {isObservation && (
+        <Select
+          error={errors.title}
+          isCleanable={false}
+          isLight={isLight}
+          isRequired
+          label="Type"
+          name="observationType"
+          onChange={handleObservationTypeSelect}
+          options={getOptionsFromStrings(OBSERVATION_TITLES)}
+          value={observationTypeValue}
+        />
+      )}
+      {isTitleDisplayed && (
+        <FormikTextInput
+          isLight={isLight}
+          isRequired
+          label="Titre"
+          name="title"
+          placeholder={isObservation ? 'Ex: Dérogation temporaire licence' : 'Ex: Infraction maille cul de chalut'}
+        />
+      )}
+
       <FormikTextarea
         isLight={isLight}
         label="Description"
         name="description"
         placeholder={
-          values.type === ReportingTypeCharacteristics.OBSERVATION.code
+          isObservation
             ? "Ex: Licence en cours de renouvellement, dérogation accordée par la DML jusqu'au 01/08/2022."
             : 'Ex: Infraction constatée sur la taille de la maille en cul de chalut'
         }

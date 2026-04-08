@@ -75,7 +75,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
-    cy.fill('Titre', 'Observation: Sortie non autorisée')
+    cy.fill('Type', 'Prélèvements')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)
 
@@ -194,6 +194,46 @@ context('Vessel sidebar reporting tab', () => {
     // Then
     cy.wait('@getVesselReportings')
     cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 5)
+  })
+
+  it('Observation reporting should be created with a custom "Autres" observationType title', () => {
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+    cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
+
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.wait(50)
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-reporting"]', { timeout: 10000 }).should('be.visible')
+    cy.wait('@getVesselReportings')
+    cy.wait(100)
+
+    cy.clickButton('Ouvrir un signalement')
+    cy.fill('Type de signalement', 'Observation')
+
+    // Selecting "Autres" should reveal the free-text Titre input
+    cy.fill('Type', 'Autres')
+    cy.get('input[name="title"]').should('be.visible')
+    cy.fill('Titre', 'Dérogation temporaire licence')
+
+    cy.fill('Source', 'Unité')
+    cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
+    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.clickButton('Valider')
+
+    cy.wait('@createReporting').then(createInterception => {
+      if (!createInterception.response) {
+        assert.fail('`createInterception.response` is undefined.')
+      }
+      cy.get('*[data-cy="reporting-card"]').first().contains('Dérogation temporaire licence')
+
+      cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
+      cy.clickButton('Supprimer')
+      cy.wait('@deleteReporting')
+    })
   })
 
   it('Reporting Should be deleted', () => {

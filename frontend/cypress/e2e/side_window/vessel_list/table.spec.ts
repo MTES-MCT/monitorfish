@@ -8,6 +8,13 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
+    // Remove VMS filter
+    cy.get('.Component-SingleTag')
+      .last()
+      .within(() => {
+        cy.get('button').click()
+      })
+
     cy.fill('Rechercher un navire', 'AIGLE BLEU')
     cy.getDataCy('vessel-list-length').contains('2 navires')
     cy.get('.Table-SimpleTable tr').should('have.length', 3)
@@ -100,6 +107,12 @@ context('Side Window > Vessel List > Table', () => {
     cy.wait(250)
     cy.getDataCy('side-window-menu-vessel-list').click()
 
+    // Remove VMS filter
+    cy.get('.Component-SingleTag')
+      .last()
+      .within(() => {
+        cy.get('button').click()
+      })
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 2)

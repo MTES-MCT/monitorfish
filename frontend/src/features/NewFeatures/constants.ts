@@ -7,6 +7,15 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-04-03',
+        description: `Les navires dont la dernière position remonte à plus de **3 heures** sont désormais affichés avec une opacité réduite sur la carte.
+
+De plus, l'affichage des navires en fonction de la dernière position VMS se fait maintenant directement depuis la Liste des navires, avec une valeur par défaut de **3 dernières heures**.`,
+        for: 'ALL',
+        title: `Réglage de l'affichage des positions des navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-03-23',
         description: `
 La couche de la ZEE France (version SHOM) est désormais disponible dans les zones administratives sous le nom "Zones ZEE FR SHOM / façades".

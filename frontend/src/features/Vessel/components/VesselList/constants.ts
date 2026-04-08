@@ -102,7 +102,7 @@ export const DEFAULT_VESSEL_LIST_FILTER_VALUES: VesselListFilter = {
   lastControlAtQuayPeriod: undefined,
   lastControlAtSeaPeriod: undefined,
   landingPortLocodes: [],
-  lastPositionHoursAgo: undefined,
+  lastPositionHoursAgo: 3,
   producerOrganizations: [],
   hasLogbook: undefined,
   specyCodes: [],

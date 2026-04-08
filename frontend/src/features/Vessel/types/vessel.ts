@@ -3,6 +3,7 @@ import { MonitorFishMap } from '@features/Map/Map.types'
 import { VesselLabel } from '@features/Vessel/label.types'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { getLastControlDateTime, getVesselCompositeIdentifier } from '@features/Vessel/utils'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 
 import type { PartialExcept } from '../../../types'
@@ -20,32 +21,6 @@ export class VesselFeature {
 
   static getVesselFeatureId(vessel) {
     return `${MonitorFishMap.MonitorFishLayer.VESSELS}:${getVesselCompositeIdentifier(vessel)}`
-  }
-
-  static getVesselOpacity(dateTime, vesselIsHidden, vesselIsOpacityReduced) {
-    const vesselDate = new Date(dateTime)
-
-    let opacity = 1
-    if (vesselDate.getTime() < vesselIsHidden.getTime()) {
-      opacity = 0
-    } else if (vesselDate.getTime() < vesselIsOpacityReduced.getTime()) {
-      opacity = 0.2
-    }
-
-    return opacity
-  }
-
-  static getVesselOpacityWithTimestamp(dateTime, vesselIsHiddenTimeThreshold, vesselIsOpacityReducedTimeThreshold) {
-    const vesselDate = new Date(dateTime)
-
-    let opacity = 1
-    if (vesselDate.getTime() < vesselIsHiddenTimeThreshold) {
-      opacity = 0
-    } else if (vesselDate.getTime() < vesselIsOpacityReducedTimeThreshold) {
-      opacity = 0.2
-    }
-
-    return opacity
   }
 
   /**
@@ -79,7 +54,6 @@ export class VesselFeature {
       isRiskFactorShowed: boolean
       vesselLabel: VesselLabel
       vesselLabelsShowedOnMap: boolean
-      vesselsLastPositionVisibility: MonitorFishMap.LastPositionVisibility
     }
   ): {
     groupsDisplayed: Vessel.VesselGroupOfActiveVessel[]
@@ -93,17 +67,14 @@ export class VesselFeature {
         }
       | undefined
   } {
-    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap, vesselsLastPositionVisibility } = options
-    const vesselDate = new Date(feature.dateTime)
-    const vesselIsHidden = new Date()
+    const { isRiskFactorShowed, vesselLabel, vesselLabelsShowedOnMap } = options
     const lastControlDateTime = getLastControlDateTime(
       feature.lastControlAtSeaDateTime,
       feature.lastControlAtQuayDateTime
     )
     const hasBeenControlledLastFiveYears = lastControlDateTime
-      ? new Date(lastControlDateTime).getTime() > new Date(vesselIsHidden.getUTCFullYear() - 5, 0, 1).getTime()
+      ? customDayjs(lastControlDateTime).unix() > customDayjs().subtract(5, 'year').unix()
       : false
-    vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
 
     // TODO Properly type this const.
     const label: {
@@ -120,10 +91,6 @@ export class VesselFeature {
       riskFactor: undefined,
       underCharter: feature.underCharter,
       vesselLabel: options.vesselLabel
-    }
-
-    if (vesselDate.getTime() < vesselIsHidden.getTime() && !feature.beaconMalfunctionId) {
-      return label
     }
 
     if (options.areVesselsNotInVesselGroupsHidden && !feature.groupsDisplayed.length) {

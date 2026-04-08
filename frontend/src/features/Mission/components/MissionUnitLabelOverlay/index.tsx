@@ -18,7 +18,7 @@ type MissionLabelOverlayProps = {
   coordinates: [number, number]
   featureId: string
   isDoneAndIncomplete: boolean
-  moveLine: (featureId: any, fromCoordinates: any, toCoordinates: any, offset: any, opacity: any) => void
+  moveLine: (featureId: any, fromCoordinates: any, toCoordinates: any, offset: any) => void
   offset: number[] | null
   text: string
   zoomHasChanged: any
@@ -99,7 +99,7 @@ export function MissionLabelOverlay({
 
       const nextCoordinates = monitorfishMap.getCoordinateFromPixel([nextXPixelCenter, nextYPixelCenter])
       currentCoordinates.current = nextCoordinates
-      moveLine(featureId, coordinates, nextCoordinates, nextOffset, 1)
+      moveLine(featureId, coordinates, nextCoordinates, nextOffset)
 
       isThrottled.current = false
     }, delay)

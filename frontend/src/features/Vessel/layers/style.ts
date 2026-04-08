@@ -13,14 +13,6 @@ const hideNonSelectedVesselsCondition = [
   // selectedVessel is in a dedicated layer
 ]
 
-const hideDeprecatedPositionsCondition = [
-  'case',
-  // if lastPosition is older than threshold, hide vessel
-  ['<=', ['var', 'vesselIsHiddenTimeThreshold'], ['get', 'lastPositionSentAt']],
-  true,
-  false
-]
-
 export const getWebGLVesselStyle = (): WebGLStyle => {
   const groupColor = [
     'color',
@@ -42,13 +34,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
   ]
 
   const defaultVesselColor = ['case', stateIs('isLight'), THEME.color.lightGray, THEME.color.charcoal]
-  const booleanFilter = [
-    'all',
-    hideNonSelectedVesselsCondition,
-    hideDeprecatedPositionsCondition,
-    featureHas('isFiltered'),
-    vesselsGroupsCondition
-  ]
+  const booleanFilter = ['all', hideNonSelectedVesselsCondition, featureHas('isFiltered'), vesselsGroupsCondition]
 
   return {
     filter: booleanFilter,
@@ -61,12 +47,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
       defaultVesselColor
     ],
     'icon-offset': ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 0], [25, 0]],
-    'icon-opacity': [
-      'case',
-      ['<', ['get', 'lastPositionSentAt'], ['var', 'vesselIsOpacityReducedTimeThreshold']],
-      0.2,
-      1
-    ],
+    'icon-opacity': ['case', ['<', ['get', 'lastPositionSentAt'], ['var', 'isOpacityReducedEpochMilli']], 0.2, 1],
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': 0.8,
     'icon-size': [25, 25],
@@ -80,18 +61,14 @@ export const getWebGLVesselStyleVariables = ({
   hideNonSelectedVessels,
   isLight,
   previewFilteredVesselsMode,
-  vesselGroupsIdsDisplayed,
-  vesselIsHiddenTimeThreshold,
-  vesselIsOpacityReducedTimeThreshold
+  vesselGroupsIdsDisplayed
 }) => ({
   areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
   isFiltered: 0,
   isLight: booleanToInt(isLight),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
-  vesselGroupsIdsDisplayed,
-  vesselIsHiddenTimeThreshold,
-  vesselIsOpacityReducedTimeThreshold
+  vesselGroupsIdsDisplayed
 })
 
 export function degreesToRadian(course) {

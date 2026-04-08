@@ -90,7 +90,7 @@ export function NewFeatures() {
 }
 
 const StyledMapToolBox = styled(MapToolBox)`
-  margin-top: -48px;
+  margin-top: -120px;
 `
 
 const StyledContainer = styled(MapMenuDialog.Container)`

@@ -1,3 +1,4 @@
+
 context('Vessel groups', () => {
   it('A dynamic vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
@@ -8,6 +9,12 @@ context('Vessel groups', () => {
      * Add filters
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
+    // Remove VMS filter
+    cy.get('.Component-SingleTag')
+      .last()
+      .within(() => {
+        cy.get('button').click()
+      })
     cy.fill('Nationalités', ['Espagne', 'France'])
     cy.getDataCy('vessel-list-length').contains('3149 navires')
     cy.fill('Ports de débarque', ['Nice', 'Brest'])
@@ -197,6 +204,14 @@ context('Vessel groups', () => {
     cy.clickButton('Créer un nouveau groupe')
     cy.clickButton('Créer un groupe dynamique')
 
+    // Deletion of the last filter
+    cy.get('.Component-Dialog').within(() => {
+      cy.get('.Component-SingleTag')
+        .last()
+        .within(() => {
+          cy.get('button').click()
+        })
+    })
     cy.get('.Component-Dialog').contains('Actuellement, 3150 navires correspondent aux filtres sélectionnés.')
     cy.fill('Segments de flotte', ['NWW03', 'SWW06'])
     cy.get('.Component-Dialog').contains('Actuellement, 4 navires correspondent aux filtres sélectionnés.')
@@ -206,7 +221,7 @@ context('Vessel groups', () => {
     cy.fill('Description du groupe', 'Lorem ipsum dolor sit amet.')
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires dynamique "Lorem ipsum dynamique" a bien été créé.').should('be.visible')
-    
+
     cy.get('[title="Lorem ipsum dynamique"]').click()
 
     cy.get('[title=\'Supprimer le groupe "Lorem ipsum dynamique"\']').click()
@@ -222,6 +237,9 @@ context('Vessel groups', () => {
      * Select vessels
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
+    cy.get('.Component-SingleTag').first().within(() => {
+      cy.get('button').click()
+    })
     cy.get('.Component-SingleTag').within(() => {
       cy.get('button').click()
     })

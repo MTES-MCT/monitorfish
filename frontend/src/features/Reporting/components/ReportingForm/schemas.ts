@@ -22,7 +22,9 @@ export const CreateOrEditReportingSchema = z
     reportingSource: z.enum(ReportingOriginSource),
     satelliteType: z.string().optional(),
     threatHierarchy: z.any().optional(),
-    title: z.string().min(1, 'Veuillez renseigner le titre du signalement.'),
+    title: z
+      .string('Veuillez renseigner le titre du signalement.')
+      .min(1, 'Veuillez renseigner le titre du signalement.'),
     type: z.enum(ReportingType),
     vesselName: z.string().optional()
   })

@@ -1,3 +1,4 @@
+import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
@@ -5,7 +6,7 @@ import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Checkbox, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Checkbox, FormikSelect, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -126,7 +127,17 @@ export function VesselField() {
           />
         </Field>
         {values.vesselId === UNKNOWN_VESSEL.vesselId && (
-          <StyledFormikTextInput isErrorMessageHidden isLight label="Nom du navire" name="vesselName" />
+          <Columns>
+            <FormikTextInput isErrorMessageHidden isLight label="Nom du navire" name="vesselName" />
+            <FormikSelect
+              isLight
+              label="Nationalité"
+              name="flagState"
+              options={COUNTRIES_AS_ALPHA2_OPTIONS}
+              searchable
+              virtualized
+            />
+          </Columns>
         )}
         {values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId && (
           <VesselIdentityBar>
@@ -159,8 +170,14 @@ export function VesselField() {
   )
 }
 
-const StyledFormikTextInput = styled(FormikTextInput)`
+const Columns = styled.div`
   margin-top: 8px;
+  display: flex;
+  gap: 8px;
+
+  > div {
+    flex: 1 1 0;
+  }
 `
 
 const ErrorMessage = styled.p`

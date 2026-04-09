@@ -37,6 +37,7 @@ context('Reporting map form', () => {
     cy.clickButton('Valider le point de signalement')
     cy.fill('Navire absent de la base de données', true)
     cy.fill('Navire inconnu', true)
+    cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')
     cy.fill('Type d\u2019infraction et NATINF', ['27717'])

@@ -169,6 +169,22 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findExpiredReportings(): List<Int>
 
+    @Query(
+        value = """
+        SELECT
+            id
+        FROM
+            reportings
+        WHERE
+            archived is false AND
+            deleted is false AND
+            is_iuu is true AND
+            (NOW() + INTERVAL '1 day') > creation_date
+    """,
+        nativeQuery = true,
+    )
+    fun findExpiredIUUReportings(): List<Int>
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         value = """

@@ -256,6 +256,8 @@ class JpaReportingRepository(
 
     override fun findExpiredReportings(): List<Int> = dbReportingRepository.findExpiredReportings()
 
+    override fun findExpiredIUUReportings(): List<Int> = dbReportingRepository.findExpiredIUUReportings()
+
     override fun archiveReportings(ids: List<Int>): Int = dbReportingRepository.archiveReportings(ids)
 
     @Transactional

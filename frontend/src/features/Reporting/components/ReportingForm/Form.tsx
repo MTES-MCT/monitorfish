@@ -371,7 +371,6 @@ export function Form({
                   label="Nationalité"
                   name="flagState"
                   options={COUNTRIES_AS_ALPHA2_OPTIONS}
-                  readOnly={!!values.isUnknownVessel}
                   searchable
                   virtualized
                 />

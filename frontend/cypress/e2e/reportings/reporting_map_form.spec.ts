@@ -37,6 +37,7 @@ context('Reporting map form', () => {
     cy.clickButton('Valider le point de signalement')
     cy.fill('Navire absent de la base de données', true)
     cy.fill('Navire inconnu', true)
+    cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')
     cy.fill('Type d\u2019infraction et NATINF', ['27717'])
@@ -55,14 +56,20 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
-    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction')
+    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction (BSL Lorient)')
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
+    cy.getDataCy('reporting-overlay').contains('Pêche thon rouge sans VMS détecté ni JPE')
 
     cy.clickButton('Modifier le signalement')
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
     cy.get('*[data-cy="map-reporting-form"]').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay-close').click({ force: true })
 
+    cy.clickButton('Modifier cette zone')
+    cy.getDataCy("dms-coordinates-input")
+      .should('have.prop', 'value')
+      .contains('47.400000, -5.200000')
+    cy.clickButton('Valider le point de signalement')
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.fill('Navire en action de pêche', true)
     cy.wait('@updateReporting')
@@ -135,6 +142,7 @@ context('Reporting map form', () => {
     hoverOrClickVesselByName('AMAZONIA QUEEN', 'REPORTING', 'hover', 12)
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('AMAZONIA QUEEN')
+    cy.getDataCy('reporting-overlay').contains('infraction (OPS)')
     cy.getDataCy('reporting-overlay').contains('Archivé')
 
     // Open the edit form

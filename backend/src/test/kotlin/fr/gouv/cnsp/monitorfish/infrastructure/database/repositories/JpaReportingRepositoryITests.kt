@@ -548,6 +548,18 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findExpiredIUUReportings Should return expired IUU reportings, hence archive candidates`() {
+        // When
+        val reportings = jpaReportingRepository.findExpiredIUUReportings()
+
+        // Then
+        assertThat(reportings).hasSize(172)
+        assertThat(reportings).contains(1)
+        assertThat(reportings).doesNotContain(2, 3, 16) // archived or deleted IUU reportings
+    }
+
+    @Test
+    @Transactional
     fun `archiveReportings Should archive reportings`() {
         // When
         val archivedReportings = jpaReportingRepository.archiveReportings(listOf(1))

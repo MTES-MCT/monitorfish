@@ -64,6 +64,11 @@ context('Reporting map form', () => {
     cy.get('*[data-cy="map-reporting-form"]').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay-close').click({ force: true })
 
+    cy.clickButton('Modifier cette zone')
+    cy.getDataCy("dms-coordinates-input")
+      .should('have.prop', 'value')
+      .contains('47.400000, -5.200000')
+    cy.clickButton('Valider le point de signalement')
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.fill('Navire en action de pêche', true)
     cy.wait('@updateReporting')

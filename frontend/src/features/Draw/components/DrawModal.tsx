@@ -42,6 +42,8 @@ const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, str
   [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: 'la zone de groupe'
 }
 
+const pointListeners = [InteractionListener.CONTROL_POINT, InteractionListener.REPORTING_POINT]
+
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
   const { drawedGeometry, initialGeometry, interactionType, listener } = useMainAppSelector(state => state.draw)
@@ -61,8 +63,10 @@ export function DrawLayerModal() {
     }).readFeature(currentGeometry)
   }, [initialGeometry, drawedGeometry])
 
-  const controlPointCoordinates = useMemo(() => {
-    if (listener !== InteractionListener.CONTROL_POINT) {
+  const isPointListener = !!listener && pointListeners.includes(listener)
+
+  const pointCoordinates = useMemo(() => {
+    if (!isPointListener) {
       return undefined
     }
 
@@ -79,7 +83,7 @@ export function DrawLayerModal() {
     }
 
     return undefined
-  }, [listener, initialGeometry, drawedGeometry])
+  }, [isPointListener, initialGeometry, drawedGeometry])
 
   useEffect(() => {
     if (initialFeatureNumberRef.current !== undefined) {
@@ -176,11 +180,11 @@ export function DrawLayerModal() {
       title={`Vous êtes en train d'ajouter ${listener && INTERACTION_LISTENER_TITLE_PLACEHOLDER[listener]}`}
       validateButtonText={`Valider ${listener && INTERACTION_LISTENER_BUTTON_LABEL[listener]}`}
     >
-      {(listener === InteractionListener.CONTROL_POINT || listener === InteractionListener.REPORTING_POINT) && (
+      {isPointListener && (
         <CoordinatesInputWrapper>
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}
-            defaultValue={controlPointCoordinates}
+            defaultValue={pointCoordinates}
             isLabelHidden
             label="Coordonnées"
             name="coordinates"

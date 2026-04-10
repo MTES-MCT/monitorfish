@@ -56,8 +56,9 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
-    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction')
+    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction (BSL Lorient)')
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
+    cy.getDataCy('reporting-overlay').contains('Pêche thon rouge sans VMS détecté ni JPE')
 
     cy.clickButton('Modifier le signalement')
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
@@ -141,6 +142,7 @@ context('Reporting map form', () => {
     hoverOrClickVesselByName('AMAZONIA QUEEN', 'REPORTING', 'hover', 12)
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('AMAZONIA QUEEN')
+    cy.getDataCy('reporting-overlay').contains('infraction (OPS)')
     cy.getDataCy('reporting-overlay').contains('Archivé')
 
     // Open the edit form

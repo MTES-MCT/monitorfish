@@ -75,6 +75,8 @@ updates:
     schedule:
       interval: "weekly"
       time: "04:00"
+    ignore:
+      - dependency-name: "prefect"
     commit-message:
       prefix: "[Tech] Python - "
     labels: ["tech. enhancement", "dependencies"]

@@ -327,6 +327,7 @@ def pre_render_pno(
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         source=pno.source,
+        is_zero=is_prior_notification_zero(pno)
     )
 
 
@@ -478,6 +479,7 @@ def render_pno(
             isinstance(pno.last_control_datetime_utc, datetime)
             and (pno.last_control_infractions == [])
         ),
+        is_zero=pno.is_zero,
     )
 
     html_email_body = email_body_template.render(
@@ -517,6 +519,7 @@ def render_pno(
         ),
         port_name=pno.port_name,
         note=pno.note,
+        is_zero=pno.is_zero,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(
@@ -738,7 +741,7 @@ def create_email(
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis de débarquement - {pno.vessel_name}",
+            subject=f"Préavis de débarquement - {pno.vessel_name}{" - préavis zéro" if pno.is_zero else ""}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[
@@ -1134,3 +1137,15 @@ def distribute_pnos_flow(
                 execute_statement(update_manual_pnos_statement)
 
     return pnos_to_generate, pnos_to_distribute
+
+def is_prior_notification_zero(pno: PnoToRender) -> bool | None:
+    # ported from `isPriorNotificationZero` in /frontend/src/features/PriorNotification/utils.ts
+
+    if not pno.catch_onboard:
+        return None
+
+    for c in pno.catch_onboard:
+        if c.get("weight") != 0:
+            return False
+        
+    return True

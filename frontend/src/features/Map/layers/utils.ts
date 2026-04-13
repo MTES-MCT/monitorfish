@@ -22,7 +22,7 @@ export function getFeaturesFromRegulatoryZones(geojsonFeatures: Partial<Regulato
 
       const feature = new GeoJSONOLFormat({
         featureProjection: OPENLAYERS_PROJECTION
-      }).readFeature(regulatoryZone.geometry)
+      }).readFeature(regulatoryZone.geometry) as Feature<Geometry>
       feature.setProperties(properties)
 
       return feature

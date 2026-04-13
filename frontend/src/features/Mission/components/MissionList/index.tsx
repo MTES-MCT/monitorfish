@@ -24,6 +24,7 @@ import { addMission } from '../../useCases/addMission'
 import { editMission } from '../../useCases/editMission'
 
 import type { MultiPolygon } from 'geojson'
+import type { Feature } from 'ol'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
@@ -81,7 +82,7 @@ export function MissionList() {
 
     const feature = new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(geometry)
+    }).readFeature(geometry) as Feature
 
     const extent = feature?.getGeometry()?.getExtent()
     if (!extent) {

@@ -7,9 +7,10 @@ import {
   layersNotInShowedLayers
 } from '@features/Map/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import WebGLVectorLayer from 'ol/layer/WebGLVector'
 import React, { useEffect } from 'react'
 
-import { getVectorOLLayer } from './utils'
+import { getAdministrativeLabelLayer, getVectorOLLayer } from './utils'
 
 function UnmemoizedAdministrativeLayers() {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
@@ -30,8 +31,10 @@ function UnmemoizedAdministrativeLayers() {
           return
         }
 
-        const VectorLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, false)
-        olLayers.push(VectorLayer)
+        const webglLayer = getVectorOLLayer(layerToInsert.type, layerToInsert.zone, false)
+        const labelLayer = getAdministrativeLabelLayer(layerToInsert.type, layerToInsert.zone, webglLayer)
+        olLayers.push(webglLayer)
+        olLayers.push(labelLayer)
       })
     }
 
@@ -43,6 +46,13 @@ function UnmemoizedAdministrativeLayers() {
         .filter(olLayer => layersNotInShowedLayers(showedLayers, olLayer))
 
       layersToRemove.forEach(layerToRemove => {
+        if (layerToRemove instanceof WebGLVectorLayer) {
+          try {
+            layerToRemove.dispose()
+          } catch {
+            // WebGL context not yet initialized (layer removed before first render)
+          }
+        }
         layers.remove(layerToRemove)
       })
     }

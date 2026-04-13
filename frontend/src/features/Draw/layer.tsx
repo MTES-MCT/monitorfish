@@ -42,7 +42,7 @@ function UnmemoizedDrawLayer() {
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(currentGeometry)
+    }).readFeature(currentGeometry) as Feature<Geometry>
   }, [drawedGeometry, initialGeometry])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
@@ -69,7 +69,7 @@ function UnmemoizedDrawLayer() {
     return drawVectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<Feature>>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<VectorSource<Feature<Geometry>>>>
 
   useEffect(() => {
     function getVectorLayer() {

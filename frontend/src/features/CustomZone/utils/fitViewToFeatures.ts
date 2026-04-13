@@ -9,7 +9,10 @@ export function fitViewToFeatures(features: Feature<Geometry>[]) {
     features: features as Feature<Geometry>[]
   })
 
-  monitorfishMap.getView().fit(vectorSource.getExtent(), {
-    padding: [30, 30, 30, 30]
-  })
+  const extent = vectorSource.getExtent()
+  if (extent) {
+    monitorfishMap.getView().fit(extent, {
+      padding: [30, 30, 30, 30]
+    })
+  }
 }

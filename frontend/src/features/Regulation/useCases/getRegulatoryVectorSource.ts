@@ -105,18 +105,19 @@ function dispatchLayerLoadedActions(
   regulatoryZone: any,
   simplifiedRegulatoryZone: string | null
 ): void {
-  const center = getCenter(vectorSource.getExtent())
+  const extent = vectorSource.getExtent()
+  const center = extent ? getCenter(extent) : undefined
   dispatch(
     layerActions.pushLayerToFeatures({
-      area: getArea(vectorSource.getExtent()),
-      center,
+      area: extent ? getArea(extent) : 0,
+      center: center ?? [],
       features: regulatoryZone,
       name: zoneName,
       simplifiedFeatures: simplifiedRegulatoryZone
     })
   )
   dispatch(layerActions.setLastShowedFeatures(vectorSource.getFeatures()))
-  if (isCenterValid(center)) {
+  if (center && isCenterValid(center)) {
     dispatch(animateToRegulatoryLayer({ center, name: zoneName }))
   }
 }

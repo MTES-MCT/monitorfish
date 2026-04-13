@@ -77,7 +77,9 @@ export function layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers,
 }
 
 export function layersNotInShowedLayers(_showedLayers, olLayer) {
-  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === olLayer.get('code'))
+  const code = (olLayer.get('code') as string | undefined)?.replace(/:labels$/, '')
+
+  return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === code)
 }
 
 export function getOLLayerByCode(code: string): BaseLayer | undefined {

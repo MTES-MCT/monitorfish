@@ -141,7 +141,7 @@ function getAdministrativeZoneURL(
 ): string {
   let extentFilter = ''
   if (extent) {
-    extentFilter = `&bbox=${extent.join(',')},${OPENLAYERS_PROJECTION}`
+    extentFilter = `&bbox=${extent.join(',')},${WSG84_PROJECTION}`
   }
 
   let subZoneFilter = ''

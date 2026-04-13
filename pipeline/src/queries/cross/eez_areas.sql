@@ -1,6 +1,14 @@
 SELECT
     id,
-    ST_MakeValid(ST_SimplifyPreserveTopology(geom, 0.005)) AS geom,
+    ST_MakeValid(
+        ST_SimplifyPreserveTopology(
+            geom,
+            CASE 
+                WHEN "SOVEREIGN1" <> 'France' THEN 0.05
+                ELSE 0.005
+            END
+        )
+    ) AS geom,
     fid,
     "MRGID",
     "GEONAME",

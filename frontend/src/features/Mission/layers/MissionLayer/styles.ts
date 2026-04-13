@@ -3,7 +3,7 @@ import { featureHas } from '@features/Map/layers/styles/utils/webgl'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Fill, Stroke, Style } from 'ol/style'
 
-import type { WebGLStyle } from 'ol/style/webgl'
+import type { FlatStyle } from 'ol/style/flat'
 
 export const missionZoneStyle = new Style({
   fill: new Fill({
@@ -17,7 +17,7 @@ export const missionZoneStyle = new Style({
   })
 })
 
-export const missionPointWebGLStyle: WebGLStyle = {
+export const missionPointWebGLStyle: FlatStyle = {
   'icon-displacement': [0, 19.5],
   'icon-height': 312,
   'icon-offset': [

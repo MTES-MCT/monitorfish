@@ -4,7 +4,7 @@ import { THEME } from '@mtes-mct/monitor-ui'
 
 import { booleanToInt } from '../../../utils'
 
-import type { WebGLStyle } from 'ol/style/webgl'
+import type { Rule } from 'ol/style/flat'
 
 const hideNonSelectedVesselsCondition = [
   '!',
@@ -13,31 +13,30 @@ const hideNonSelectedVesselsCondition = [
   // selectedVessel is in a dedicated layer
 ]
 
-export const getWebGLVesselStyle = (): WebGLStyle => {
-  const groupColor = [
-    'color',
-    ['get', 'groupColorRed', 'number'],
-    ['get', 'groupColorGreen', 'number'],
-    ['get', 'groupColorBlue', 'number']
-  ]
-  const hasGroupColor = [
-    'any',
-    featurePropertyIsNotEmpty('groupColorRed'),
-    featurePropertyIsNotEmpty('groupColorGreen'),
-    featurePropertyIsNotEmpty('groupColorBlue')
-  ]
-  const vesselsGroupsCondition = [
-    'case',
-    stateIs('areVesselsNotInVesselGroupsHidden'),
-    ['case', hasGroupColor, true, false],
-    true
-  ]
+const groupColor = [
+  'color',
+  ['get', 'groupColorRed', 'number'],
+  ['get', 'groupColorGreen', 'number'],
+  ['get', 'groupColorBlue', 'number']
+]
+const hasGroupColor = [
+  'any',
+  featurePropertyIsNotEmpty('groupColorRed'),
+  featurePropertyIsNotEmpty('groupColorGreen'),
+  featurePropertyIsNotEmpty('groupColorBlue')
+]
+const vesselsGroupsCondition = [
+  'case',
+  stateIs('areVesselsNotInVesselGroupsHidden'),
+  ['case', hasGroupColor, true, false],
+  true
+]
+const defaultVesselColor = ['case', stateIs('isLight'), THEME.color.lightGray, THEME.color.charcoal]
+export const booleanFilter = ['all', hideNonSelectedVesselsCondition, featureHas('isFiltered'), vesselsGroupsCondition]
 
-  const defaultVesselColor = ['case', stateIs('isLight'), THEME.color.lightGray, THEME.color.charcoal]
-  const booleanFilter = ['all', hideNonSelectedVesselsCondition, featureHas('isFiltered'), vesselsGroupsCondition]
-
-  return {
-    filter: booleanFilter,
+export const webGLVesselRule: Rule = {
+  filter: booleanFilter,
+  style: {
     'icon-color': [
       'case',
       stateIs('previewFilteredVesselsMode'),
@@ -51,8 +50,7 @@ export const getWebGLVesselStyle = (): WebGLStyle => {
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': 0.8,
     'icon-size': [25, 25],
-    'icon-src': 'map-icons/boat_icons.png',
-    variables: {}
+    'icon-src': 'map-icons/boat_icons.png'
   }
 }
 
@@ -65,7 +63,6 @@ export const getWebGLVesselStyleVariables = ({
 }) => ({
   areVesselsNotInVesselGroupsHidden: booleanToInt(areVesselsNotInVesselGroupsHidden),
   hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels),
-  isFiltered: 0,
   isLight: booleanToInt(isLight),
   previewFilteredVesselsMode: booleanToInt(previewFilteredVesselsMode),
   vesselGroupsIdsDisplayed

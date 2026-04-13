@@ -22,7 +22,7 @@ type RegulatoryPreviewLayerProps = Readonly<{
 }>
 function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelected }: RegulatoryPreviewLayerProps) {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource>
-  const layerRef = useRef() as MutableRefObject<Vector<Feature<Geometry>>>
+  const layerRef = useRef() as MutableRefObject<Vector<VectorSource<Feature<Geometry>>>>
 
   const dispatch = useHybridAppDispatch()
 

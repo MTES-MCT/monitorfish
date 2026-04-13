@@ -15,6 +15,7 @@ import { margins } from './constants'
 import { MissionDetails } from './MissionDetails'
 
 import type { Mission } from '../../mission.types'
+import type { Feature } from 'ol'
 
 const overlayHeight = 200
 const INITIAL_OFFSET_VALUE = [0, 0]
@@ -37,7 +38,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(selectedMissionGeoJSON)
+    }).readFeature(selectedMissionGeoJSON) as Feature
   }, [selectedMissionGeoJSON])
 
   const overlayCallback = useCallback(

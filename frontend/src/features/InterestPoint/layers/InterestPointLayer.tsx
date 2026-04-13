@@ -48,11 +48,12 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
   useEffect(() => {
     function drawExistingFeaturesOnMap() {
       if (interestPoints) {
-        const features = interestPoints.map(interestPoint =>
-          new GeoJSON({
-            dataProjection: WSG84_PROJECTION,
-            featureProjection: OPENLAYERS_PROJECTION
-          }).readFeature(interestPoint)
+        const features = interestPoints.map(
+          interestPoint =>
+            new GeoJSON({
+              dataProjection: WSG84_PROJECTION,
+              featureProjection: OPENLAYERS_PROJECTION
+            }).readFeature(interestPoint) as Feature<Point>
         )
 
         const featuresToRemove = INTEREST_POINT_VECTOR_SOURCE.getFeatures().filter(

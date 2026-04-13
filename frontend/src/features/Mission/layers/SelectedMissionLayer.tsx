@@ -10,6 +10,8 @@ import { SELECTED_MISSION_VECTOR_LAYER, SELECTED_MISSION_VECTOR_SOURCE } from '.
 import { useGetFilteredMissionsQuery } from '../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionFeatureZone } from '../features'
 
+import type { Feature } from 'ol'
+
 export function UnmemoizedSelectedMissionLayer() {
   const { missions } = useGetFilteredMissionsQuery()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
@@ -23,7 +25,7 @@ export function UnmemoizedSelectedMissionLayer() {
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(selectedMissionGeoJSON)
+    }).readFeature(selectedMissionGeoJSON) as Feature
   }, [selectedMissionGeoJSON])
 
   useMapLayer(SELECTED_MISSION_VECTOR_LAYER)

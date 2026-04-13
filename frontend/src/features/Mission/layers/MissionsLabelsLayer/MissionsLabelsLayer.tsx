@@ -7,7 +7,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { Vector } from 'ol/layer'
 import VectorSource from 'ol/source/Vector'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type MutableRefObject } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { clearPreviousLineFeatures, getLabelsOfFeaturesInExtent } from './utils'
@@ -29,7 +29,7 @@ export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const currentZoom = Number(monitorfishMap.getView()?.getZoom()?.toFixed(2))
 
   const vectorSourceRef = useRef<VectorSource>()
-  const layerRef = useRef<Vector<Feature<Geometry>>>()
+  const layerRef = useRef() as MutableRefObject<Vector<VectorSource<Feature<Geometry>>>>
 
   const getVectorSource = useCallback(() => {
     if (!vectorSourceRef.current) {

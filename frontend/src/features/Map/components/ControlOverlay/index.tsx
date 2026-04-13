@@ -14,6 +14,7 @@ import { monitorfishMap } from '../../monitorfishMap'
 import { getOverlayPosition, getTopLeftMargin } from '../Overlay/utils'
 
 import type { Mission } from '../../../Mission/mission.types'
+import type { Feature } from 'ol'
 
 const overlayHeight = 130
 const INITIAL_OFFSET_VALUE = [0, 0]
@@ -35,7 +36,7 @@ export function ControlOverlay({ feature, isSelected = false }) {
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(selectedMissionActionGeoJSON)
+    }).readFeature(selectedMissionActionGeoJSON) as Feature
   }, [selectedMissionActionGeoJSON])
 
   const overlayCallback = useCallback(

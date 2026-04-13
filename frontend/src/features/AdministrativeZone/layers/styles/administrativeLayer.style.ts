@@ -9,6 +9,74 @@ import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
 
 import type Feature from 'ol/Feature'
+import type { FlatStyleLike } from 'ol/style/flat'
+
+function makeTextStyle(propertyKey: string, textStrokeColor: string, overflow = false) {
+  return (feature: Feature | undefined) =>
+    new Style({
+      text: new Text({
+        fill: new Fill({ color: THEME.color.gunMetal }),
+        font: '12px Marianne',
+        overflow,
+        stroke: new Stroke({ color: textStrokeColor, width: 2 }),
+        text: `${feature?.get(propertyKey) || ''}`
+      })
+    })
+}
+
+export function getAdministrativeLabelStyle(type: string) {
+  const adminLayer = Object.values(AdminLayerProperties).find(p => p.code === type)
+  if (!adminLayer?.zoneNamePropertyKey) {
+    return () => new Style({})
+  }
+
+  const textStrokeColor = STRONG_TEXT_STROKE_ZONES.has(type) ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)'
+  const overflow = type === AdminLayerProperties.FAO.code
+
+  return makeTextStyle(adminLayer.zoneNamePropertyKey, textStrokeColor, overflow)
+}
+
+const MILES_ZONES = new Set(['3_miles_areas', '6_miles_areas', '12_miles_areas'])
+const STRONG_TEXT_STROKE_ZONES = new Set(['eez_areas', 'facades_zee_fr_shom'])
+
+function getZoneStrokeColor(type: string): string {
+  if (MILES_ZONES.has(type)) {
+    return 'rgba(5, 5, 94, 0.5)'
+  }
+
+  return '#767AB2'
+}
+
+function getZoneStrokeWidth(type: string): number {
+  if (type === 'situs_areas' || MILES_ZONES.has(type)) {
+    return 2
+  }
+  if (type === 'saltwater_limit_areas' || type === 'transversal_sea_limit_areas') {
+    return 3
+  }
+
+  return 1
+}
+
+export function getAdministrativeWebGLStyle(type: string): FlatStyleLike {
+  const adminLayer = Object.values(AdminLayerProperties).find(p => p.code === type)
+
+  if (!adminLayer) {
+    return {
+      'stroke-color': 'rgba(123, 159, 204, 0.6)',
+      'stroke-width': 2
+    }
+  }
+
+  const strokeColor = getZoneStrokeColor(type)
+  const strokeWidth = getZoneStrokeWidth(type)
+  const baseStyle = {
+    'stroke-color': strokeColor,
+    'stroke-width': strokeWidth
+  }
+
+  return baseStyle
+}
 
 export function getAdministrativeLayerStyle(type: string) {
   switch (type) {

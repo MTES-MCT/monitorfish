@@ -7,7 +7,6 @@ import VectorLayer from 'ol/layer/Vector'
 import WebGLVectorLayer from 'ol/layer/WebGLVector'
 import { bbox } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
-import simplify from 'simplify-geojson'
 
 import { getAdministrativeLabelStyle, getAdministrativeWebGLStyle } from './styles/administrativeLayer.style'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
@@ -30,7 +29,7 @@ export const getVectorOLLayer = (
   const labelSource = new VectorSource<Feature<Point>>()
 
   getAdministrativeZoneFromAPI(type, [-180, -55, 180, 62], zone, isBackoffice).then(data => {
-    const features = vectorSource.getFormat()?.readFeatures(simplify(data, 0.05)) as Feature<Geometry>[] | undefined
+    const features = vectorSource.getFormat()?.readFeatures(data) as Feature<Geometry>[] | undefined
     if (!features) {
       return
     }

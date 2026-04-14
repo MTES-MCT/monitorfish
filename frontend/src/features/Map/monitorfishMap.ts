@@ -40,6 +40,7 @@ if (isCypress()) {
       // @ts-ignore
       return layer?.values_?.source?.getFeatures() ?? []
     },
+    getMapSize: () => monitorfishMap.getSize(),
     getPixelFromCoordinate: (coordinate: number[]) => monitorfishMap.getPixelFromCoordinate(coordinate),
     getViewCenter: () => monitorfishMap.getView().getCenter(),
     monitorfishMap

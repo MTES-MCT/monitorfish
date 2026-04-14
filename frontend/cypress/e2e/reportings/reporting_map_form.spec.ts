@@ -67,8 +67,7 @@ context('Reporting map form', () => {
 
     cy.clickButton('Modifier cette zone')
     cy.getDataCy("dms-coordinates-input")
-      .should('have.prop', 'value')
-      .contains('47.400000, -5.200000')
+      .should('have.value', '48° 06′ 00″ N 004° 54′ 00″ W')
     cy.clickButton('Valider le point de signalement')
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.fill('Navire en action de pêche', true)

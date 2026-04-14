@@ -553,7 +553,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         val reportings = jpaReportingRepository.findExpiredIUUReportings()
 
         // Then
-        assertThat(reportings).hasSize(172)
+        assertThat(reportings).hasSize(171)
         assertThat(reportings).contains(1)
         assertThat(reportings).doesNotContain(2, 3, 16) // archived or deleted IUU reportings
     }

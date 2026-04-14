@@ -179,7 +179,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             archived is false AND
             deleted is false AND
             is_iuu is true AND
-            (NOW() + INTERVAL '1 day') > creation_date
+            (creation_date + INTERVAL '1 day') < NOW()
     """,
         nativeQuery = true,
     )

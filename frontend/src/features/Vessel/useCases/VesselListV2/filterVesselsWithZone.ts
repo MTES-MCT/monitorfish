@@ -23,7 +23,6 @@ export const filterVesselsWithZone =
       return []
     }
 
-    const { isBackoffice } = getState().global
     const previousZonesFilter: ZoneFilter[] = previousZones ?? getState().vessel.listFilterValues.zones ?? []
     const previousZoneCodes = previousZonesFilter.map(zone => zone.value)
 
@@ -52,7 +51,7 @@ export const filterVesselsWithZone =
       }
 
       const administrativeZoneCode = zoneAdded.split('.')?.[0] ?? ''
-      const result = await getAdministrativeZoneFromAPI(administrativeZoneCode, undefined, zoneAdded, isBackoffice)
+      const result = await getAdministrativeZoneFromAPI(administrativeZoneCode, undefined, zoneAdded)
       if (result.numberReturned !== 1) {
         // eslint-disable-next-line no-console
         console.error(

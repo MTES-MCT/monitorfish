@@ -12,11 +12,10 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 
 type AdministrativeZonesGroupType = {
   group: MonitorFishMap.CodeAndName
-  showOrHideZone: (zone: MonitorFishMap.AdminShowableLayer) => (isShown: boolean) => void
   zones: MonitorFishMap.AdminShowableLayer[]
 }
 
-export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: AdministrativeZonesGroupType) {
+export function AdministrativeZonesGroup({ group, zones }: AdministrativeZonesGroupType) {
   const showedLayers = useMainAppSelector(state => state.layer.showedLayers)
 
   const [isOpen, setIsOpen] = useState(false)
@@ -42,7 +41,6 @@ export function AdministrativeZonesGroup({ group, showOrHideZone, zones }: Admin
 
               return showedZone.type === zone.code
             })}
-            showOrHideZone={showOrHideZone(zone)}
             zone={zone}
           />
         ))}

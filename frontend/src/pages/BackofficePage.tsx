@@ -1,6 +1,8 @@
 import { BackofficeMode } from '@api/BackofficeMode'
+import { EnvironmentBox, getEnvironmentBorderStyle } from '@components/EnvironmentBox'
 import { BackOfficeMenu } from '@features/BackOffice/components/BackofficeMenu'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
+import { getEnvironmentData } from '@utils/getEnvironmentData'
 import countries from 'i18n-iso-countries'
 import COUNTRIES_FR from 'i18n-iso-countries/langs/fr.json'
 import { Provider } from 'react-redux'
@@ -12,6 +14,8 @@ import { backofficeStore, backofficeStorePersistor } from '../store'
 
 countries.registerLocale(COUNTRIES_FR)
 
+const { isEnvironmentBoxVisible } = getEnvironmentData()
+
 export function BackofficePage() {
   return (
     <Provider store={backofficeStore}>
@@ -19,7 +23,8 @@ export function BackofficePage() {
       <PersistGate loading={null} persistor={backofficeStorePersistor}>
         <BackofficeMode isBackoffice />
 
-        <Wrapper>
+        <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible}>
+          <EnvironmentBox />
           <BannerStack />
           <BackOfficeMenu />
 
@@ -30,7 +35,11 @@ export function BackofficePage() {
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $isEnvironmentBoxVisible: boolean
+}>`
+  ${p => getEnvironmentBorderStyle(p.$isEnvironmentBoxVisible)}
   display: flex;
-  height: 100%;
+  height: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 10px)' : '100%')};
+  position: relative;
 `

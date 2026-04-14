@@ -1,3 +1,4 @@
+import { EnvironmentBox, getEnvironmentBorderStyle } from '@components/EnvironmentBox'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAlerts'
 import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
@@ -12,6 +13,7 @@ import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGr
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { NewWindowContext, type NewWindowContextValue, THEME } from '@mtes-mct/monitor-ui'
+import { getEnvironmentData } from '@utils/getEnvironmentData'
 import {
   type CSSProperties,
   Fragment,
@@ -44,9 +46,12 @@ import { PriorNotificationList } from '../PriorNotification/components/PriorNoti
 
 import type { MainAppAsyncThunk } from '@store'
 
+const { isEnvironmentBoxVisible } = getEnvironmentData()
+
 export type SideWindowProps = HTMLAttributes<HTMLDivElement> & {
   isFromURL: boolean
 }
+
 export function SideWindow({ isFromURL }: SideWindowProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
@@ -144,11 +149,11 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
 
   return (
     <StyleSheetManager target={wrapperRef.current ?? undefined}>
-      <Wrapper ref={wrapperRef}>
+      <Wrapper ref={wrapperRef} $isEnvironmentBoxVisible={isEnvironmentBoxVisible}>
         {!isFirstRender && (
           <NewWindowContext.Provider value={newWindowContextProviderValue}>
             <GlobalStyle $isFromURL={isFromURL} />
-
+            <EnvironmentBox />
             <BannerStack />
 
             <Menu selectedMenu={selectedPath.menu} />
@@ -256,10 +261,12 @@ const GlobalStyle = createGlobalStyle<{
 `
 
 // All containers within this SideWindow root wrapper should now only use flexboxes
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $isEnvironmentBoxVisible: boolean }>`
+  ${p => getEnvironmentBorderStyle(p.$isEnvironmentBoxVisible)}
   background: ${p => p.theme.color.white};
   display: flex;
-  height: 100%;
+  height: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 10px)' : '100%')};
+  width: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 8px)' : '100%')};
   min-height: 0;
   min-width: 0;
 

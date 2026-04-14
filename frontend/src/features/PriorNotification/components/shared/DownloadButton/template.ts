@@ -33,10 +33,10 @@ export const generateHTML = (data: TemplateData) => `
           <tr>
             <td class="data-label">Arrivée estimée</td>
             <td><strong>${data.predictedArrivalDatetimeUtc}</strong></td>
-          </tr>
-          ${
+          </tr>${
             data.isLanding
-              ? `<tr>
+              ? `
+          <tr>
             <td class="data-label">Débarque prévue</td>
             <td><strong>${data.predictedLandingDatetimeUtc}</strong></td>
           </tr>`
@@ -53,15 +53,19 @@ export const generateHTML = (data: TemplateData) => `
           <tr>
             <td class="data-label">Décision CNSP</td>
             <td>
-            ${data.portEntranceAuthorization}
-            ${data.isLanding ? data.portLandingAuthorization : ''}
+            ${data.portEntranceAuthorization}${
+              data.isLanding
+                ? `
+            ${data.portLandingAuthorization}`
+                : ''
+            }
             </td>
           </tr>
         </table>
-      </section>
-      ${
+      </section>${
         data.isLanding
-          ? `<section>
+          ? `
+      <section>
         <h2>ACTIVITÉ DU NAVIRE</h2>
         <hr/>
         <table>

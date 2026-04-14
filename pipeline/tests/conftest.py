@@ -166,9 +166,10 @@ def start_remote_database_container(set_environment_variables, create_docker_cli
     while healthcheck_exit_code != 0 and elapsed_time < timeout:
         print(f"Waiting for database container to start ({elapsed_time}/{timeout})")
         sleep(stop_time)
+        # The `-h 127.0.0.1` is required due to this issue https://github.com/docker-library/postgres/issues/146
         healthcheck_exit_code = remote_database_container.exec_run(
             (
-                f"pg_isready -U {os.environ['MONITORFISH_REMOTE_DB_USER']} -d "
+                f"pg_isready -h 127.0.0.1 -U {os.environ['MONITORFISH_REMOTE_DB_USER']} -d "
                 f"{os.environ['MONITORFISH_REMOTE_DB_NAME']}"
             )
         ).exit_code

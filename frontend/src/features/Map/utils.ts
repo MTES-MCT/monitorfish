@@ -8,7 +8,6 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
-import type BaseLayer from 'ol/layer/Base'
 
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
 
@@ -77,16 +76,9 @@ export function layerOfTypeAdministrativeLayerInCurrentMap(administrativeLayers,
 }
 
 export function layersNotInShowedLayers(_showedLayers, olLayer) {
-  const code = (olLayer.get('code') as string | undefined)?.replace(/:labels$/, '')
+  const code = olLayer.get('code') as string | undefined
 
   return !_showedLayers.some(layer_ => getLayerNameNormalized(layer_) === code)
-}
-
-export function getOLLayerByCode(code: string): BaseLayer | undefined {
-  return monitorfishMap
-    .getLayers()
-    .getArray()
-    .find(l => l.get('code') === code)
 }
 
 export const administrativeLayers = Object.values(AdminLayerProperties)

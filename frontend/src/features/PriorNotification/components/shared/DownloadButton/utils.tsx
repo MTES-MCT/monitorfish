@@ -3,7 +3,7 @@ import { buildCatchArray } from '@features/Logbook/utils'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { HTML_TEMPLATE } from './template'
+import { generateHTML } from './template'
 
 import type { TemplateData } from './types'
 import type { Logbook } from '@features/Logbook/Logbook.types'
@@ -54,6 +54,7 @@ export function getHtmlContent(
     imo: pno.imo ?? 'Aucun',
     internalReferenceNumber: pno.internalReferenceNumber ?? 'Aucun',
     ircs: pno.ircs ?? 'Aucun',
+    isLanding: pno.message.purpose === PriorNotification.PurposeCode.LAN,
     port: pno.message.port,
     portEntranceAuthorization: pno.message.hasPortEntranceAuthorization
       ? `<strong class="authorized">Autorisation donnée d'entrer au port<br/></strong>`
@@ -71,13 +72,9 @@ export function getHtmlContent(
     purpose: pno.message.purpose ? PriorNotification.PURPOSE_LABEL[pno.message.purpose] : '',
     reportDateTime: customDayjs(pno.reportDateTime).utc().format('le DD/MM/YYYY à HH[h]mm UTC'),
     vesselName: pno.vesselName
-  }
+  } satisfies TemplateData
 
-  return fillTemplate(HTML_TEMPLATE, data)
-}
-
-function fillTemplate(html: string, data: TemplateData): string {
-  return html.replace(/{(.*?)}/g, (_, key) => (data[key] !== null && data[key] !== undefined ? String(data[key]) : ''))
+  return generateHTML(data)
 }
 
 // FK = Port-aux-Français

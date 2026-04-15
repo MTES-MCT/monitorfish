@@ -6,7 +6,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import { Feature } from 'ol'
 import Point from 'ol/geom/Point'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { TAG_ROW_HEIGHT, OVERLAY_HEIGHT, margins } from './constants'
@@ -47,15 +47,21 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
   const hasTag =
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     (reportingProperties?.isIUU || !!reportingProperties?.expirationDate || reportingProperties?.isArchived) ?? false
+
+  const [descriptionOffset, setDescriptionOffset] = useState(0)
+  const handleDescriptionHeightChange = useCallback((height: number) => {
+    setDescriptionOffset(height)
+  }, [])
+
   const tagOffset = hasTag ? TAG_ROW_HEIGHT : 0
-  const overlayHeight = OVERLAY_HEIGHT + tagOffset
+  const overlayHeight = OVERLAY_HEIGHT + tagOffset + descriptionOffset
   const dynamicMargins = useMemo(
     () => ({
       ...margins,
-      yBottom: margins.yBottom - tagOffset,
-      yMiddle: margins.yMiddle - Math.round(tagOffset / 2)
+      yBottom: margins.yBottom - tagOffset - descriptionOffset,
+      yMiddle: margins.yMiddle - Math.round(tagOffset / 2) - Math.round(descriptionOffset / 2)
     }),
-    [tagOffset]
+    [tagOffset, descriptionOffset]
   )
 
   const { overlayElementRef, overlayPosition } = useMapOverlay({
@@ -93,6 +99,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
             hasTag={hasTag}
             isSelected={isSelected}
             onClose={handleClose}
+            onDescriptionHeightChange={handleDescriptionHeightChange}
             onEdit={handleEdit}
             overlayPosition={overlayPosition}
             reporting={reportingProperties}

@@ -110,7 +110,7 @@ export function IUUReportingMapForm() {
             <Header>
               <HeaderTitle>
                 <Icon.Report color={THEME.color.white} />
-                <StyledTitle>
+                <StyledTitle title={!vesselName && !!lastUpdateDate ? 'NAVIRE INCONNU' : vesselName}>
                   {vesselName && (
                     <>
                       {flagState && flagState !== 'UNDEFINED' && (
@@ -120,7 +120,14 @@ export function IUUReportingMapForm() {
                     </>
                   )}
                   {!vesselName && !lastUpdateDate && 'NOUVEAU SIGNALEMENT INN'}
-                  {!vesselName && !!lastUpdateDate && 'SIGNALEMENT INN (NAVIRE INCONNU)'}
+                  {!vesselName && !!lastUpdateDate && (
+                    <>
+                      {flagState && flagState !== 'UNDEFINED' && (
+                        <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
+                      )}
+                      NAVIRE INCONNU
+                    </>
+                  )}
                 </StyledTitle>
               </HeaderTitle>
               <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />

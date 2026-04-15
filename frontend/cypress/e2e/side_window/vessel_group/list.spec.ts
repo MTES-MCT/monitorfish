@@ -65,7 +65,7 @@ context('Side Window > Vessel Group List', () => {
         'blanchiment bar en 7.d.'
     )
     cy.get('[title="Mission Thémis – chaluts de fonds"]').within(() => {
-      cy.get('.Table-SimpleTable tr').should('have.length', 61)
+      cy.get('.Table-SimpleTable tr').should('have.length', 21)
     })
     cy.contains('Mission Thémis – chaluts de fonds').click()
 

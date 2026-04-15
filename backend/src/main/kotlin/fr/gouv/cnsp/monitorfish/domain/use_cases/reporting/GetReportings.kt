@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -13,6 +15,7 @@ import java.time.ZonedDateTime
 @UseCase
 class GetReportings(
     private val reportingRepository: ReportingRepository,
+    private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetReportings::class.java)
 
@@ -23,7 +26,7 @@ class GetReportings(
         reportingPeriod: ReportingPeriod,
         startDate: ZonedDateTime?,
         endDate: ZonedDateTime?,
-    ): List<Reporting> {
+    ): List<Pair<Reporting, LegacyControlUnit?>> {
         val now = ZonedDateTime.now()
         val (afterCreationDate, beforeCreationDate) =
             when (reportingPeriod) {
@@ -68,6 +71,17 @@ class GetReportings(
                 hasPosition = true,
             )
 
-        return reportingRepository.findAll(filter)
+        val reportings = reportingRepository.findAll(filter)
+        val controlUnits = getAllLegacyControlUnits.execute()
+
+        return reportings.map { reporting ->
+            val controlUnitId =
+                when (reporting) {
+                    is Reporting.InfractionSuspicion -> reporting.controlUnitId
+                    is Reporting.Observation -> reporting.controlUnitId
+                    is Reporting.Alert -> null
+                }
+            Pair(reporting, controlUnits.find { it.id == controlUnitId })
+        }
     }
 }

@@ -22,25 +22,26 @@ import { setInteractionType } from '../slice'
 import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature'
 import { closeDraw } from '../useCases/closeDraw'
 import { eraseDrawedGeometries } from '../useCases/eraseDrawedGeometries'
+import { isEchoFromMapClick, swapToLatLon } from '../utils'
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { Point as GeoJSONPoint } from 'geojson'
 import type { MultiPolygon } from 'ol/geom'
 
-const INTERACTION_LISTENER_TITLE_PLACEHOLDER: Partial<Record<InteractionListener, string>> = {
-  [InteractionListener.REPORTING_POINT]: 'un point de signalement',
-  [InteractionListener.CONTROL_POINT]: 'un point de contrôle',
-  [InteractionListener.MISSION_ZONE]: 'une zone de mission',
-  [InteractionListener.VESSELS_LIST]: 'une zone de filtre',
-  [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: 'une zone de groupe'
+const INTERACTION_LISTENER_LABELS: Partial<Record<InteractionListener, { button: string; title: string }>> = {
+  [InteractionListener.REPORTING_POINT]: { button: 'le point de signalement', title: 'un point de signalement' },
+  [InteractionListener.CONTROL_POINT]: { button: 'le point de contrôle', title: 'un point de contrôle' },
+  [InteractionListener.MISSION_ZONE]: { button: 'la zone de mission', title: 'une zone de mission' },
+  [InteractionListener.VESSELS_LIST]: { button: 'la zone de filtre', title: 'une zone de filtre' },
+  [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: { button: 'la zone de groupe', title: 'une zone de groupe' }
 }
-const INTERACTION_LISTENER_BUTTON_LABEL: Partial<Record<InteractionListener, string>> = {
-  [InteractionListener.REPORTING_POINT]: 'le point de signalement',
-  [InteractionListener.CONTROL_POINT]: 'le point de contrôle',
-  [InteractionListener.MISSION_ZONE]: 'la zone de mission',
-  [InteractionListener.VESSELS_LIST]: 'la zone de filtre',
-  [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: 'la zone de groupe'
-}
+
+const pointListeners = [InteractionListener.CONTROL_POINT, InteractionListener.REPORTING_POINT]
+const polygonListeners = [
+  InteractionListener.MISSION_ZONE,
+  InteractionListener.VESSELS_LIST,
+  InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG
+]
 
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
@@ -49,6 +50,10 @@ export function DrawLayerModal() {
   const previousSideWindowStatus = usePrevious(sideWindowStatus)
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
+
+  // Updated synchronously during render so handleWriteCoordinates can read the current value from effects.
+  const drawedGeometryRef = useRef(drawedGeometry)
+  drawedGeometryRef.current = drawedGeometry
 
   const feature = useMemo(() => {
     const currentGeometry = drawedGeometry ?? initialGeometry
@@ -61,25 +66,18 @@ export function DrawLayerModal() {
     }).readFeature(currentGeometry)
   }, [initialGeometry, drawedGeometry])
 
-  const controlPointCoordinates = useMemo(() => {
-    if (listener !== InteractionListener.CONTROL_POINT) {
+  const isPointListener = !!listener && pointListeners.includes(listener)
+  const isPolygonListener = !!listener && polygonListeners.includes(listener)
+
+  const pointCoordinates = useMemo(() => {
+    if (!isPointListener) {
       return undefined
     }
 
-    if (drawedGeometry) {
-      const drawedCoordinates = (drawedGeometry as GeoJSONPoint).coordinates
+    const geometry = (drawedGeometry ?? initialGeometry) as GeoJSONPoint | undefined
 
-      return [drawedCoordinates[1], drawedCoordinates[0]]
-    }
-
-    if (initialGeometry) {
-      const initialCoordinates = (initialGeometry as GeoJSONPoint)?.coordinates
-
-      return [initialCoordinates[1], initialCoordinates[0]]
-    }
-
-    return undefined
-  }, [listener, initialGeometry, drawedGeometry])
+    return geometry ? swapToLatLon(geometry) : undefined
+  }, [isPointListener, initialGeometry, drawedGeometry])
 
   useEffect(() => {
     if (initialFeatureNumberRef.current !== undefined) {
@@ -130,6 +128,10 @@ export function DrawLayerModal() {
         return
       }
 
+      if (isEchoFromMapClick(drawedGeometryRef.current as GeoJSONPoint | null | undefined, latitude, longitude)) {
+        return
+      }
+
       const nextTransformedCoordinates = transform([longitude, latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION)
       const nextFeature = new Feature({
         geometry: new Point(nextTransformedCoordinates)
@@ -146,41 +148,41 @@ export function DrawLayerModal() {
     [dispatch]
   )
 
+  const labels = listener ? INTERACTION_LISTENER_LABELS[listener] : undefined
+
+  const polygonTools = isPolygonListener && (
+    <IconGroup>
+      <IconButton
+        className={interactionType === InteractionType.POLYGON ? '_active' : undefined}
+        Icon={Icon.SelectPolygon}
+        onClick={handleSelectInteraction(InteractionType.POLYGON)}
+      />
+      <IconButton
+        className={interactionType === InteractionType.SQUARE ? '_active' : undefined}
+        Icon={Icon.SelectRectangle}
+        onClick={handleSelectInteraction(InteractionType.SQUARE)}
+      />
+      <IconButton
+        className={interactionType === InteractionType.CIRCLE ? '_active' : undefined}
+        Icon={Icon.SelectCircle}
+        onClick={handleSelectInteraction(InteractionType.CIRCLE)}
+      />
+    </IconGroup>
+  )
+
   return (
     <MapInteraction
-      customTools={
-        (listener === InteractionListener.MISSION_ZONE ||
-          listener === InteractionListener.VESSELS_LIST ||
-          listener === InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG) && (
-          <IconGroup>
-            <IconButton
-              className={interactionType === InteractionType.POLYGON ? '_active' : undefined}
-              Icon={Icon.SelectPolygon}
-              onClick={handleSelectInteraction(InteractionType.POLYGON)}
-            />
-            <IconButton
-              className={interactionType === InteractionType.SQUARE ? '_active' : undefined}
-              Icon={Icon.SelectRectangle}
-              onClick={handleSelectInteraction(InteractionType.SQUARE)}
-            />
-            <IconButton
-              className={interactionType === InteractionType.CIRCLE ? '_active' : undefined}
-              Icon={Icon.SelectCircle}
-              onClick={handleSelectInteraction(InteractionType.CIRCLE)}
-            />
-          </IconGroup>
-        )
-      }
+      customTools={polygonTools || undefined}
       onReset={handleReset}
       onValidate={handleValidate}
-      title={`Vous êtes en train d'ajouter ${listener && INTERACTION_LISTENER_TITLE_PLACEHOLDER[listener]}`}
-      validateButtonText={`Valider ${listener && INTERACTION_LISTENER_BUTTON_LABEL[listener]}`}
+      title={`Vous êtes en train d'ajouter ${labels?.title}`}
+      validateButtonText={`Valider ${labels?.button}`}
     >
-      {(listener === InteractionListener.CONTROL_POINT || listener === InteractionListener.REPORTING_POINT) && (
+      {isPointListener && (
         <CoordinatesInputWrapper>
           <CoordinatesInput
             coordinatesFormat={coordinatesFormat}
-            defaultValue={controlPointCoordinates}
+            defaultValue={pointCoordinates}
             isLabelHidden
             label="Coordonnées"
             name="coordinates"

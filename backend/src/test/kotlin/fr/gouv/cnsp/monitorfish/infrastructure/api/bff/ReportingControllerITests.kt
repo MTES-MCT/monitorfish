@@ -562,7 +562,7 @@ class ReportingControllerITests {
                 startDate = anyOrNull(),
                 endDate = anyOrNull(),
             ),
-        ).willReturn(listOf(reporting))
+        ).willReturn(listOf(Pair(reporting, null)))
 
         // When
         api

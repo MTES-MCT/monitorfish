@@ -120,7 +120,7 @@ type ReportingTypeCharacteristic = {
 export const ReportingTypeCharacteristics: Record<ReportingType, ReportingTypeCharacteristic> = {
   ALERT: {
     code: ReportingType.ALERT,
-    displayName: "Suspicion d'infraction (alerte)",
+    displayName: "Suspicion d'infraction",
     isInfractionSuspicion: true,
     name: 'ALERTE'
   },

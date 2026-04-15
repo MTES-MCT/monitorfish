@@ -21,6 +21,7 @@ class ArchiveOutdatedReportings(
     fun execute() {
         val reportingCandidatesToArchive = reportingRepository.findUnarchivedReportingsAfterNewVoyage()
         val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
+        val expiredIUUReportingsToArchive = reportingRepository.findExpiredIUUReportings()
 
         val alertSpecificationsToArchive =
             alertSpecificationRepository
@@ -29,7 +30,7 @@ class ArchiveOutdatedReportings(
                 .mapNotNull { it.id }
         val extraAlertsToArchive =
             AlertType.entries
-                .filter { it.name !== AlertType.POSITION_ALERT.name && it.specification?.hasAutomaticArchiving == true }
+                .filter { it.name != AlertType.POSITION_ALERT.name && it.specification?.hasAutomaticArchiving == true }
 
         val filteredReportingIdsToArchive =
             reportingCandidatesToArchive
@@ -39,9 +40,10 @@ class ArchiveOutdatedReportings(
 
         logger.info("Found ${filteredReportingIdsToArchive.size} reportings alerts to archive.")
         logger.info("Found ${expiredReportingsToArchive.size} expired reportings to archive.")
+        logger.info("Found ${expiredIUUReportingsToArchive.size} expired IUU reportings to archive.")
         val numberOfArchivedReportings =
             reportingRepository.archiveReportings(
-                filteredReportingIdsToArchive + expiredReportingsToArchive,
+                filteredReportingIdsToArchive + expiredReportingsToArchive + expiredIUUReportingsToArchive,
             )
 
         logger.info("Archived $numberOfArchivedReportings reportings")

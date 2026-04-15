@@ -59,11 +59,14 @@ class ArchiveOutdatedReportingsUTests {
         given(reportingRepository.findExpiredReportings()).willReturn(
             listOf(4, 5),
         )
+        given(reportingRepository.findExpiredIUUReportings()).willReturn(
+            listOf(6),
+        )
 
         // When
         ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
 
         // Then
-        verify(reportingRepository).archiveReportings(eq(listOf(1, 3, 4, 5)))
+        verify(reportingRepository).archiveReportings(eq(listOf(1, 3, 4, 5, 6)))
     }
 }

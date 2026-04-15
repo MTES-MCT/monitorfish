@@ -34,7 +34,7 @@ export function EditReporting() {
   }
 
   return (
-    <EditReportingWrapper $isEditedInSideWindow={!!editedReporting} data-cy="side-window-beacon-malfunctions-detail">
+    <EditReportingWrapper $isEditedInSideWindow={!!editedReporting}>
       <Header>
         <Row $topMargin={0}>
           <AlertsIcon />
@@ -45,15 +45,10 @@ export function EditReporting() {
           {editedReporting && editedReporting.flagState && (
             <Flag rel="preload" src={`${baseUrl}/flags/${editedReporting.flagState.toLowerCase()}.svg`} />
           )}
-          <VesselName
-            data-cy="side-window-beacon-malfunctions-detail-vessel-name"
-            title={editedReporting?.vesselName ?? 'Aucun nom'}
-          >
+          <VesselName title={editedReporting?.vesselName ?? 'Aucun nom'}>
             {editedReporting?.vesselName ?? 'Aucun nom'}
           </VesselName>
-          <InternalReferenceNumber data-cy="side-window-beacon-malfunctions-detail-cfr">
-            ({editedReporting?.cfr ?? 'Aucun CFR'})
-          </InternalReferenceNumber>
+          <InternalReferenceNumber>({editedReporting?.cfr ?? 'Aucun CFR'})</InternalReferenceNumber>
         </Row>
       </Header>
       <Line />
@@ -81,6 +76,7 @@ const EditReportingWrapper = styled.div<{
   transition: margin-right 0.5s;
   width: 490px;
   z-index: 999;
+  overflow: auto;
 `
 
 const StyledReportingForm = styled(ReportingForm)`

@@ -100,7 +100,7 @@ export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vessel
   })
 
   const { rows } = table.getRowModel()
-  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan: 50, ref: tableContainerRef, rows })
+  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan: 10, ref: tableContainerRef, rows })
   const measureElement = useCallback(
     (node: HTMLTableRowElement | null) => rowVirtualizer?.measureElement(node),
     [rowVirtualizer]

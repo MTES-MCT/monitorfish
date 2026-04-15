@@ -110,7 +110,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
 
   const { rows } = table.getRowModel()
 
-  const overscan = useMemo(() => (reportings.length > 500 ? 500 : 50), [reportings])
+  const overscan = 10
   const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
   const virtualRows = rowVirtualizer.getVirtualItems()
   const [paddingBeforeRows, paddingAfterRows] =

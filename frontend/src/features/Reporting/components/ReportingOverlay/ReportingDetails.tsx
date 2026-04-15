@@ -1,6 +1,7 @@
 import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { Accent, Button, Dot, Icon, IconButton, Size, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
@@ -20,6 +21,7 @@ type ReportingDetailsProps = {
   hasTag: boolean
   isSelected: boolean
   onClose: () => void
+  onDescriptionHeightChange: (height: number) => void
   onEdit: () => void
   overlayPosition?: OverlayPosition | undefined
   reporting: Reporting.ReportingFeature
@@ -30,10 +32,28 @@ export function ReportingDetails({
   hasTag,
   isSelected,
   onClose,
+  onDescriptionHeightChange,
   onEdit,
   overlayPosition,
   reporting
 }: ReportingDetailsProps) {
+  const descriptionRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const el = descriptionRef.current
+    if (!el) {
+      onDescriptionHeightChange(0)
+
+      return undefined
+    }
+
+    const observer = new ResizeObserver(() => {
+      onDescriptionHeightChange(el.clientHeight + 4)
+    })
+    observer.observe(el)
+
+    return () => observer.disconnect()
+  }, [reporting.description, onDescriptionHeightChange])
   const typeName = Object.values(ReportingTypeCharacteristics).find(c => c.code === reporting.type)?.displayName
   const color = reporting.type === ReportingType.OBSERVATION ? THEME.color.blueGray : THEME.color.maximumRed
 
@@ -60,9 +80,9 @@ export function ReportingDetails({
         <Body>
           <Type>
             <Dot $backgroundColor={color} $borderColor={color} $size={0} />
-            {typeName}
+            {typeName} ({reporting.from})
           </Type>
-          <DateText>{getDateTime(reporting.validationDate ?? reporting.creationDate, true)}</DateText>
+          <DateText>{getDateTime(reporting.reportingDate, true)}</DateText>
           {hasTag && (
             <Tags>
               {reporting.isIUU && <Tag accent={Accent.PRIMARY}>INN</Tag>}
@@ -71,19 +91,18 @@ export function ReportingDetails({
                   Archivé
                 </Tag>
               )}
-              {reporting.expirationDate && (
+              {!reporting.isArchived && reporting.expirationDate && (
                 <Tag accent={Accent.PRIMARY} Icon={Icon.Clock} iconColor={THEME.color.slateGray} withCircleIcon>
                   Fin {timeago.format(reporting.expirationDate, 'fr')}
                 </Tag>
               )}
             </Tags>
           )}
-          {reporting.threat && (
-            <Threat>
-              {reporting.threat} / {reporting.threatCharacterization}
-            </Threat>
-          )}
-          {reporting.title && <Title $hasMarginTop={!reporting.threat}>{reporting.title}</Title>}
+          <ThreatAndTitle>
+            {reporting.threat && `${reporting.threat} / ${reporting.threatCharacterization} - `}
+            {reporting.title}
+          </ThreatAndTitle>
+          {reporting.description && <Description ref={descriptionRef}>{reporting.description}</Description>}
 
           <EditButton
             accent={Accent.PRIMARY}
@@ -160,9 +179,12 @@ const VesselName = styled.div`
   white-space: nowrap;
 `
 
-const Title = styled.div<{ $hasMarginTop: boolean }>`
-  margin-top: ${p => (p.$hasMarginTop ? 14 : 0)}px;
+const Description = styled.div`
   color: ${p => p.theme.color.gunMetal};
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 `
 
 const Type = styled.div`
@@ -172,7 +194,7 @@ const Type = styled.div`
   gap: 4px;
 `
 
-const Threat = styled.div`
+const ThreatAndTitle = styled.div`
   margin-top: 12px;
   font-weight: 700;
   color: ${p => p.theme.color.gunMetal};

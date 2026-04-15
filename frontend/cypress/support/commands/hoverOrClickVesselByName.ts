@@ -10,11 +10,26 @@ export function hoverOrClickVesselByName(
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       const features = win.olTestUtils.getFeaturesFromLayer(layerName)
 
-      // Find the vessel by name
-      const vessel = features.find((f: any) => f.get('vesselName') === vesselName)
+      // Find the first feature with a matching name that is visible in the current map viewport
+      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+      const [mapWidth, mapHeight] = win.olTestUtils.getMapSize() ?? [1280, 1024]
+
+      const vessel = features.find((feature: any) => {
+        if (feature.get('vesselName') !== vesselName) {
+          return false
+        }
+        const coords = feature.getGeometry().getCoordinates()
+        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+        const px = win.olTestUtils.getPixelFromCoordinate(coords)
+        if (!px) {
+          return false
+        }
+
+        return px[0] >= 0 && px[0] <= mapWidth && px[1] >= 0 && px[1] <= mapHeight
+      })
 
       if (!vessel) {
-        throw new Error(`Vessel with name "${vesselName}" not found in ${layerName} layer`)
+        throw new Error(`Vessel with name "${vesselName}" not found (visible) in ${layerName} layer`)
       }
 
       // Get the vessel's coordinates
@@ -65,6 +80,27 @@ export function hoverOrClickVesselByName(
         cy.get(`.${layerName}`).trigger('pointermove', {
           clientX,
           clientY: clientY + 1,
+          force: true,
+          pointerId: 1
+        })
+        cy.wait(20)
+        cy.get(`.${layerName}`).trigger('pointermove', {
+          clientX,
+          clientY: clientY - 1,
+          force: true,
+          pointerId: 1
+        })
+        cy.wait(20)
+        cy.get(`.${layerName}`).trigger('pointermove', {
+          clientX: clientX + 1,
+          clientY: clientY + 1,
+          force: true,
+          pointerId: 1
+        })
+        cy.wait(20)
+        cy.get(`.${layerName}`).trigger('pointermove', {
+          clientX: clientX - 1,
+          clientY: clientY - 1,
           force: true,
           pointerId: 1
         })

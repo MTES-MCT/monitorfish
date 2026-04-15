@@ -39,6 +39,7 @@ export const DEFAULT_EDITED_ALERT_SPECIFICATION: AlertSpecification = {
   hasAutomaticArchiving: false,
   id: undefined,
   isActivated: false,
+  isDeletedAfterValidityPeriod: false,
   isInError: false,
   isUserDefined: true,
   minDepth: undefined,

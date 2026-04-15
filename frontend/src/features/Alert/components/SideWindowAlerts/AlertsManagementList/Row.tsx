@@ -45,6 +45,9 @@ export function Row({ row }: RowProps) {
                 </ExpandedRowValue>
               </p>
             )}
+            {alertSpecification.isDeletedAfterValidityPeriod && (
+              <AlertWillBeDeleted>L’alerte sera supprimée à la fin de sa période de validité</AlertWillBeDeleted>
+            )}
           </ExpandedRowCell>
           <AlertCriteriaCell alertSpecification={alertSpecification} />
           <ExpandedRowCell>
@@ -99,6 +102,12 @@ const ExpandedRow = styled(TableWithSelectableRows.BodyTr)`
       background-color: ${p => p.theme.color.cultured};
     }
   }
+`
+
+const AlertWillBeDeleted = styled.div`
+  margin-top: 16px;
+  color: ${p => p.theme.color.maximumRed};
+  font-weight: 400;
 `
 
 const ExpandedRowCell = styled(TableWithSelectableRows.Td).attrs(() => ({

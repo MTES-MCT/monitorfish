@@ -377,11 +377,11 @@ describe('hasCriterias', () => {
       hasAutomaticArchiving: false,
       id: undefined,
       isActivated: false,
+      isDeletedAfterValidityPeriod: false,
       isInError: false,
       isUserDefined: false,
       minDepth: undefined,
       name: '',
-
       natinf: 0,
       onlyFishingPositions: false,
       producerOrganizations: [],

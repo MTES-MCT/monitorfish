@@ -30,6 +30,8 @@ data class PositionAlertSpecificationEntity(
     val threatCharacterization: String,
     @Column(name = "is_activated", nullable = false)
     val isActivated: Boolean = true,
+    @Column(name = "is_deleted_after_validity_period", nullable = false)
+    val isDeletedAfterValidityPeriod: Boolean,
     @Column(name = "is_in_error", nullable = false)
     val isInError: Boolean = false,
     @Column(name = "has_automatic_archiving", nullable = false)
@@ -87,6 +89,7 @@ data class PositionAlertSpecificationEntity(
             threat = threat,
             threatCharacterization = threatCharacterization,
             isActivated = isActivated,
+            isDeletedAfterValidityPeriod = isDeletedAfterValidityPeriod,
             isInError = isInError,
             isDeleted = isDeleted,
             hasAutomaticArchiving = hasAutomaticArchiving,
@@ -132,6 +135,7 @@ data class PositionAlertSpecificationEntity(
                 threat = alertSpecification.threat,
                 threatCharacterization = alertSpecification.threatCharacterization,
                 isActivated = alertSpecification.isActivated,
+                isDeletedAfterValidityPeriod = alertSpecification.isDeletedAfterValidityPeriod,
                 isInError = alertSpecification.isInError,
                 isDeleted = alertSpecification.isDeleted,
                 hasAutomaticArchiving = alertSpecification.hasAutomaticArchiving,

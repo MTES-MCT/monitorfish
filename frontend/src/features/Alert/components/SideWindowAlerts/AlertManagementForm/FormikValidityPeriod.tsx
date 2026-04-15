@@ -104,7 +104,16 @@ export function FormikValidityPeriod() {
             onChange={handleDateRangePickerChange}
             withFullDayDefaults
           />
-          <StyledFormikCheckbox label="Récurrence annuelle" name="repeatEachYear" />
+          <StyledFormikCheckbox
+            disabled={values.isDeletedAfterValidityPeriod}
+            label="Récurrence annuelle"
+            name="repeatEachYear"
+          />
+          <StyledFormikCheckbox
+            disabled={values.repeatEachYear}
+            label="Supprimer l’alerte à la fin de sa période de validité"
+            name="isDeletedAfterValidityPeriod"
+          />
         </>
       )}
     </Wrapper>

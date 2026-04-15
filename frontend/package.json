@@ -142,7 +142,7 @@
     "jest-environment-jsdom": "29.7.0",
     "lint-staged": "14.0.1",
     "madge": "8.0.0",
-    "ora": "8.2.0",
+    "ora": "9.3.0",
     "postgres": "3.4.8",
     "prettier": "3.8.1",
     "puppeteer": "22.15.0",

@@ -297,7 +297,9 @@ def to_pgarr(
 
     Examples:
         >>> to_pgarr([1, 2, "a ", "b", "", " "])
-        "{1,2,'a','b'}"
+        "{1,2,a,b}"
+        >>> to_pgarr(["a,b", "c"])
+        '{"a,b",c}'
         >>> to_pgarr(None)
         ValueError
         >>> to_pgarr(None, handle_errors=True, value_on_error="{}")
@@ -313,9 +315,16 @@ def to_pgarr(
         else:
             raise ValueError(f"Unexpected type for x: {type(x)}.")
 
-    return (
-        "{" + ",".join(filter(lambda x: len(x) > 0, map(str.strip, map(str, x)))) + "}"
-    )
+    def _quote(s: str) -> str:
+        # Elements containing PostgreSQL array special characters must be double-quoted.
+        if any(c in s for c in (',', '"', '\\', '{', '}', ' ', '\t', '\n', '\r', '\x00')):
+            return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
+        return s
+
+    elements = [
+        _quote(e) for e in filter(lambda e: len(e) > 0, map(str.strip, map(str, x)))
+    ]
+    return "{" + ",".join(elements) + "}"
 
 
 def df_values_to_psql_arrays(

@@ -36,11 +36,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { RegulationTags } from './identification/RegulationTags'
 import { Footer, FooterButton, OtherRemark, Section, Title } from '../../../commonStyles/Backoffice.style'
 import { CancelButton, ValidateButton } from '../../../commonStyles/Buttons.style'
 import ChevronIconSVG from '../../../icons/Chevron_simple_gris.svg?react'
 import { STATUS } from '../RegulationTables/constants'
-import { RegulationTags } from './identification/RegulationTags'
 
 import type { BackofficeAppPromiseThunk } from '@store'
 import type { Polygon } from 'geojson'
@@ -354,7 +354,7 @@ const CreateRegulationWrapper = styled.div`
   flex-direction: column;
   padding: 11px 27px 11px 27px;
   background-color: ${p => p.theme.color.white};
-  height: 100vh;
+  height: 100%;
 `
 
 const LinkSpan = styled.span`

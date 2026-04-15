@@ -2,11 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="/favicon-32.ico" />
+    <link id="favicon" rel="icon" href="/favicon-32.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="MonitorFish" />
     <title>MonitorFish</title>
+    <script type="module">
+      // Set favicon based on environment
+      const env = import.meta.env.FRONTEND_SENTRY_ENV;
+      const faviconUrl = env === 'production' ? '/favicon.ico' : '/faviconBW.ico';
+      const description = env === 'production' ? 'MonitorFish' : `MonitorFish - ${env}`;
+      document.getElementById('favicon').href = faviconUrl;
+      document.getElementsByTagName('title')[0].textContent = description;
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

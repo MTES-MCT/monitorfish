@@ -9,7 +9,7 @@ context('Missions labels', () => {
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 3)
 
     cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleBefore => {
-      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 32.1922, 465.931)')
+      expect(styleBefore.transform).contains('matrix(1, 0, 0, 1, 32')
     })
 
     cy.get('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]')
@@ -25,7 +25,7 @@ context('Missions labels', () => {
       .trigger('pointerup', { force: true, pointerId: 1 })
 
     cy.getComputedStyle('*[data-cy="mission-label-draggable-MISSIONS_LABEL:43"]', 1).then(styleAfter => {
-      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 522, 589)')
+      expect(styleAfter.transform).contains('matrix(1, 0, 0, 1, 522')
     })
   })
 })

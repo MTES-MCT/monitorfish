@@ -8,6 +8,7 @@ import type { Geometry } from 'ol/geom'
 import type VectorLayer from 'ol/layer/Vector'
 import type VectorImageLayer from 'ol/layer/VectorImage'
 import type WebGLPointsLayer from 'ol/layer/WebGLPoints'
+import type VectorSource from 'ol/source/Vector'
 
 export namespace MonitorFishMap {
   export type MapClick = {
@@ -35,10 +36,10 @@ export namespace MonitorFishMap {
   }
 
   /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
-  export type VectorLayerWithName = VectorLayer<Feature<Geometry>>
+  export type VectorLayerWithName = VectorLayer<VectorSource<Feature<Geometry>>>
 
   /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
-  export type VectorImageLayerWithName = VectorImageLayer<Feature<Geometry>>
+  export type VectorImageLayerWithName = VectorImageLayer<VectorSource<Feature<Geometry>>>
 
   /** @deprecated Use `layer.get('code')` instead of `layer.name`. */
   export type WebGLPointsLayerWithName = WebGLPointsLayer<any>

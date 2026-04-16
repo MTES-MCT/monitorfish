@@ -64,7 +64,7 @@ export function DrawLayerModal() {
 
     return new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(currentGeometry)
+    }).readFeature(currentGeometry) as Feature
   }, [initialGeometry, drawedGeometry])
 
   const isPointListener = !!listener && pointListeners.includes(listener)

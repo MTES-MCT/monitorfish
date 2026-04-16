@@ -8,9 +8,10 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { HybridAppThunk } from '@store/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
+import type VectorSource from 'ol/source/Vector'
 
 export const getVectorOLLayer =
-  (nextVisibleLayer: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorImageLayer<Feature<Geometry>>> =>
+  (nextVisibleLayer: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorImageLayer<VectorSource<Feature<Geometry>>>> =>
   dispatch => {
     const name = `${LayerProperties.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
     const source = dispatch(getRegulatoryVectorSource(nextVisibleLayer))

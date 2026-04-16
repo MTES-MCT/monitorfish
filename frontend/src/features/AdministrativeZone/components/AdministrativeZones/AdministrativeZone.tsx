@@ -1,8 +1,10 @@
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { HideIcon } from '../../../commonStyles/icons/HideIcon.style'
 import { ShowIcon } from '../../../commonStyles/icons/ShowIcon.style'
+import { showOrHideAdministrativeLayer } from '../../useCases/showOrHideAdministrativeLayer'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
 
@@ -10,16 +12,17 @@ type AdministrativeZoneType = Readonly<{
   isFirst?: boolean
   isGrouped?: boolean
   isShown: boolean
-  showOrHideZone: (isShown: boolean) => void
   zone: MonitorFishMap.AdminShowableLayer
 }>
-export function AdministrativeZone({ isFirst, isGrouped, isShown, showOrHideZone, zone }: AdministrativeZoneType) {
+export function AdministrativeZone({ isFirst, isGrouped, isShown, zone }: AdministrativeZoneType) {
+  const dispatch = useMainAppDispatch()
+
   return (
     <Row
       $isFirst={isFirst}
       $isGrouped={isGrouped}
       data-cy="administrative-layer-toggle"
-      onClick={() => showOrHideZone(isShown)}
+      onClick={() => dispatch(showOrHideAdministrativeLayer(zone, isShown))}
     >
       <LayerName title={zone.name}>{zone.name}</LayerName>
       <ShowOrHideWrapper>{isShown ? <ShowIcon /> : <HideIcon />}</ShowOrHideWrapper>

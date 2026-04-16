@@ -14,6 +14,7 @@ import { getRegulatoryLayersToAdd } from '../useCases/getRegulatoryLayersToAdd'
 import type { RegulatoryZone } from '../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
 import type VectorImageLayer from 'ol/layer/VectorImage'
+import type VectorSource from 'ol/source/Vector'
 
 export type RegulatoryLayersProps = Readonly<{
   lastShowedFeatures: Record<string, any>[]
@@ -44,7 +45,7 @@ export function RegulatoryLayers({
 
     const olLayers = monitorfishMap.getLayers()
     // @ts-ignore
-    const vectorLayersToAdd: Array<VectorImageLayer<Feature<Geometry>>> = dispatch(
+    const vectorLayersToAdd: Array<VectorImageLayer<VectorSource<Feature<Geometry>>>> = dispatch(
       // @ts-ignore
       getRegulatoryLayersToAdd(olLayers.getArray(), showedLayers)
     )
@@ -92,7 +93,7 @@ function applyZoomBasedSimplification(
     .getArray()
     .filter(isRegulatoryLayer)
     .forEach(layer => {
-      const vectorSource = (layer as VectorImageLayer<Feature<Geometry>>).getSource()
+      const vectorSource = (layer as VectorImageLayer<VectorSource<Feature<Geometry>>>).getSource()
       if (!vectorSource) {
         return
       }

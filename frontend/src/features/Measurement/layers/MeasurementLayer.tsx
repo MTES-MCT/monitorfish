@@ -61,7 +61,7 @@ function UnmemoizedMeasurementLayer() {
     return vectorSourceRef.current
   }, [])
 
-  const layerRef = useRef<VectorLayer<Feature>>()
+  const layerRef = useRef() as MutableRefObject<VectorLayer<VectorSource<Feature<Geometry>>>>
   const getLayer = useCallback(() => {
     if (layerRef.current === undefined) {
       layerRef.current = new VectorLayer({
@@ -92,7 +92,7 @@ function UnmemoizedMeasurementLayer() {
       const features = measurementsDrawed.map(measurement => {
         const feature = new GeoJSON({
           featureProjection: OPENLAYERS_PROJECTION
-        }).readFeature(measurement.geometry)
+        }).readFeature(measurement.geometry) as Feature<Geometry>
 
         feature.setId(measurement.id)
 

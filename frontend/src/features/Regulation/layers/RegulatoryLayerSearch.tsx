@@ -29,7 +29,7 @@ export function RegulatoryLayerSearch() {
     return vectorSourceRef.current
   }, [])
 
-  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<Feature<Geometry>>>
+  const vectorLayerRef = useRef() as MutableRefObject<VectorLayer<VectorSource<Feature<Geometry>>>>
 
   useEffect(() => {
     function getVectorLayer() {

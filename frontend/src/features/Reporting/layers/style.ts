@@ -3,9 +3,9 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
 
-import type { WebGLStyle } from 'ol/style/webgl'
+import type { FlatStyle } from 'ol/style/flat'
 
-export const reportingWebGLStyle: WebGLStyle = {
+export const reportingWebGLStyle: FlatStyle = {
   'icon-displacement': [5, 12],
   'icon-height': 184,
   'icon-offset': [
@@ -37,8 +37,7 @@ export const reportingWebGLStyle: WebGLStyle = {
 
   'icon-src': 'map-icons/icon_reporting_sprite.png',
 
-  'icon-width': 248,
-  variables: {}
+  'icon-width': 248
 }
 
 export const reportingLineStyle = new Style({

@@ -1,7 +1,7 @@
 import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { AdministrativeZone } from './AdministrativeZone'
@@ -10,12 +10,10 @@ import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIconButton } from '../../../commonStyles/icons/ChevronIconButton'
-import { hideLayer } from '../../../LayersSidebar/useCases/hideLayer'
 import { closeRegulatoryZoneMetadata } from '../../../Regulation/useCases/closeRegulatoryZoneMetadata'
 import { getAdministrativeZones } from '../../useCases/getAdministrativeZones'
 
 import type { GroupedZonesAndZones } from '../../useCases/getAdministrativeZones'
-import type { MonitorFishMap } from '@features/Map/Map.types'
 
 const ADMINISTRATIVE_LAYER_TYPE = 'ADMINISTRATIVE'
 
@@ -43,32 +41,6 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
     fetch()
   }, [dispatch])
 
-  // TODO Simplify this callback with a direct call to the action rather than a function-wrapper.
-  const showOrHideZone = useCallback(
-    (zone: MonitorFishMap.AdminShowableLayer) => (isShown: boolean) => {
-      if (isShown) {
-        dispatch(
-          hideLayer({
-            id: undefined,
-            topic: undefined,
-            type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-            zone: zone.hasFetchableZones ? zone.code : undefined
-          })
-        )
-
-        return
-      }
-
-      dispatch(
-        layerActions.addShowedLayer({
-          type: zone.hasFetchableZones ? zone.group?.code!! : zone.code,
-          zone: zone.hasFetchableZones ? zone.code : undefined
-        })
-      )
-    },
-    [dispatch]
-  )
-
   const onSectionTitleClicked = () => {
     if (isOpened) {
       dispatch(layerActions.setLayersSideBarOpenedLayerType(undefined))
@@ -90,18 +62,13 @@ export function AdministrativeZones({ hideLayersListWhenSearching = false }: Adm
             <Row key={zone.code}>
               <AdministrativeZone
                 isShown={showedLayers.some(showedZone => showedZone.type === zone.code)}
-                showOrHideZone={showOrHideZone(zone)}
                 zone={zone}
               />
             </Row>
           ))}
           {zones.groupedZones.map(groupedZones => (
             <Row key={groupedZones.group.code}>
-              <AdministrativeZonesGroup
-                group={groupedZones.group}
-                showOrHideZone={showOrHideZone}
-                zones={groupedZones.zones}
-              />
+              <AdministrativeZonesGroup group={groupedZones.group} zones={groupedZones.zones} />
             </Row>
           ))}
         </List>

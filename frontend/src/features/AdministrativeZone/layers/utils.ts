@@ -12,13 +12,12 @@ import type Geometry from 'ol/geom/Geometry'
 
 export const getVectorOLLayer = (
   type: string,
-  zone: string | undefined,
-  isBackoffice: boolean
-): VectorImageLayer<Feature<Geometry>> => {
+  zone: string | undefined
+): VectorImageLayer<VectorSource<Feature<Geometry>>> => {
   const layer = new VectorImageLayer({
     className: 'administrative',
     declutter: true,
-    source: getVectorSource(type, zone, isBackoffice),
+    source: getVectorSource(type, zone),
     style: feature => [getAdministrativeLayerStyle(type)(feature as Feature)]
   })
 
@@ -27,19 +26,15 @@ export const getVectorOLLayer = (
   return layer
 }
 
-const getVectorSource = (type: string, zone: string | undefined, isBackoffice: boolean): VectorSource => {
+const getVectorSource = (type: string, zone: string | undefined): VectorSource => {
   if (zone) {
-    return buildWholeVectorSource(type, zone, isBackoffice)
+    return buildWholeVectorSource(type, zone)
   }
 
-  return buildBBOXVectorSource(type, zone, isBackoffice)
+  return buildBBOXVectorSource(type, zone)
 }
 
-function buildWholeVectorSource(
-  type: string,
-  zone: string | undefined,
-  isBackoffice: boolean
-): VectorSource<Feature<Geometry>> {
+function buildWholeVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
@@ -48,7 +43,7 @@ function buildWholeVectorSource(
     strategy: all
   })
 
-  getAdministrativeZoneFromAPI(type, undefined, zone, isBackoffice).then(administrativeZoneFeature => {
+  getAdministrativeZoneFromAPI(type, undefined, zone).then(administrativeZoneFeature => {
     const features = vectorSource.getFormat()?.readFeatures(administrativeZoneFeature)
     if (!features) {
       return
@@ -60,18 +55,14 @@ function buildWholeVectorSource(
   return vectorSource
 }
 
-function buildBBOXVectorSource(
-  type: string,
-  zone: string | undefined,
-  isBackoffice: boolean
-): VectorSource<Feature<Geometry>> {
+function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource({
     format: new GeoJSON({
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }),
     loader: extent => {
-      getAdministrativeZoneFromAPI(type, extent, zone, isBackoffice)
+      getAdministrativeZoneFromAPI(type, extent, zone)
         .then(administrativeZone => {
           vectorSource.clear(true)
           const features = vectorSource.getFormat()?.readFeatures(administrativeZone)

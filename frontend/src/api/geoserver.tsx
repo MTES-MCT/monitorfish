@@ -104,12 +104,9 @@ function getAllGeometryWithoutProperty(fromBackoffice): Promise<FeatureCollectio
 export async function getAdministrativeZoneFromAPI(
   administrativeZone: string,
   extent: Extent | undefined,
-  subZone: string | undefined,
-  fromBackoffice: boolean
+  subZone: string | undefined
 ): Promise<WFSGetFeature<Polygon>> {
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
-
-  return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, geoserverURL))
+  return fetch(getAdministrativeZoneURL(administrativeZone, extent, subZone, GEOSERVER_URL))
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
         return response

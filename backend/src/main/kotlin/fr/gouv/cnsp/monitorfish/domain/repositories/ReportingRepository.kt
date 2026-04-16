@@ -51,8 +51,6 @@ interface ReportingRepository {
 
     fun findExpiredReportings(): List<Int>
 
-    fun findExpiredIUUReportings(): List<Int>
-
     fun archive(id: Int)
 
     fun archiveReportings(ids: List<Int>): Int

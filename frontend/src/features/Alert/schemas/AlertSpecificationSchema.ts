@@ -39,6 +39,7 @@ export const AlertSpecificationSchema = z.strictObject({
   hasAutomaticArchiving: z.boolean(),
   id: numberOrUndefined,
   isActivated: z.boolean(),
+  isDeletedAfterValidityPeriod: z.boolean(),
   isInError: z.boolean(),
   isUserDefined: z.boolean(),
   minDepth: numberOrUndefined,

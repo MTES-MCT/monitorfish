@@ -175,6 +175,7 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.validityStartDatetimeUtc).to.equal('2024-01-15T00:00:00.000Z')
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
       expect(interception.request.body.repeatEachYear).to.be.true
+      expect(interception.request.body.isDeletedAfterValidityPeriod).to.be.false
       expect(interception.request.body.onlyFishingPositions).to.be.false
       expect(interception.request.body.flagStatesIso2).to.deep.equal(['GB'])
       expect(interception.request.body.districtCodes).to.deep.equal(['LS'])

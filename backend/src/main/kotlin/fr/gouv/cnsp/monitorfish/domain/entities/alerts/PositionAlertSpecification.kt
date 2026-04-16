@@ -14,6 +14,7 @@ data class PositionAlertSpecification(
     val threat: String,
     val threatCharacterization: String,
     val isActivated: Boolean = false,
+    val isDeletedAfterValidityPeriod: Boolean = false,
     val isInError: Boolean = false,
     val isDeleted: Boolean = false,
     val hasAutomaticArchiving: Boolean = false,

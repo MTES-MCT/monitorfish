@@ -2,7 +2,7 @@ import { isCypress } from '@utils/isCypress'
 import ScaleLine from 'ol/control/ScaleLine'
 import Zoom from 'ol/control/Zoom'
 import OpenLayerMap from 'ol/Map'
-import { transform } from 'ol/proj'
+import { transform, transformExtent } from 'ol/proj'
 import View from 'ol/View'
 
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from './constants'
@@ -20,6 +20,7 @@ export const monitorfishMap = new OpenLayerMap({
   layers: [],
   view: new View({
     center: transform(centeredOnFrance, WSG84_PROJECTION, OPENLAYERS_PROJECTION),
+    extent: transformExtent([-180, -85.06, 180, 85.06], WSG84_PROJECTION, OPENLAYERS_PROJECTION),
     minZoom: 3,
     projection: OPENLAYERS_PROJECTION,
     zoom: 6

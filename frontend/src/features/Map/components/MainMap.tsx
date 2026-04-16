@@ -54,7 +54,6 @@ export function MainMap() {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
-  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
   const isStationLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isStationLayerDisplayed)
   const zoneSelected = useMainAppSelector(state => state.regulatoryLayerSearch.zoneSelected)
   const lastShowedFeatures = useMainAppSelector(state => state.layer.lastShowedFeatures)
@@ -118,7 +117,7 @@ export function MainMap() {
       <DrawLayer />
 
       {/** <></> can't be used to group condition as BaseMap needs the layers to be direct children * */}
-      {isSuperUser && isMissionsLayerDisplayed && <MissionLayer />}
+      {isSuperUser && <MissionLayer />}
       {isSuperUser && <MissionsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />}
       {isSuperUser && <SelectedMissionLayer />}
       {isSuperUser && <MissionHoveredLayer feature={hoveredFeature} />}

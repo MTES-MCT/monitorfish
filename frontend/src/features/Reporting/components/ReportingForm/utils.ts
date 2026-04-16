@@ -1,6 +1,8 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 
+import { customDayjs } from '../../../../../cypress/e2e/utils/customDayjs'
+
 import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
 export function getFormFields(
@@ -16,13 +18,14 @@ export function getFormFields(
     editedReporting?.ircs ??
     editedReporting?.externalMarker
   )
+  const defaultExpirationDate = isIUU ? customDayjs().utc().add(1, 'day').toISOString() : undefined
 
   const base = {
     authorContact: value?.authorContact,
     cfr: editedReporting?.cfr,
     controlUnitId: value?.controlUnitId,
     description: value?.description,
-    expirationDate: editedReporting?.expirationDate,
+    expirationDate: editedReporting?.expirationDate ?? defaultExpirationDate,
     externalMarker: editedReporting?.externalMarker,
     flagState: editedReporting?.flagState ?? 'UNDEFINED',
     gearCode: editedReporting?.gearCode,
@@ -37,7 +40,7 @@ export function getFormFields(
     longitude: editedReporting?.longitude,
     mmsi: editedReporting?.mmsi,
     otherSourceType: value?.otherSourceType,
-    reportingDate: editedReporting?.reportingDate ?? new Date().toISOString(),
+    reportingDate: editedReporting?.reportingDate ?? customDayjs().utc().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
     satelliteType: value?.satelliteType,
     title: value?.title ?? '',

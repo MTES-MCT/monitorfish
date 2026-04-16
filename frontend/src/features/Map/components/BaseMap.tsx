@@ -231,6 +231,7 @@ const MapWrapper = styled.div`
 `
 
 const MapContainer = styled.div`
+  background-color: #d4dadc;
   height: 100vh;
   width: 100%;
   overflow-y: hidden;

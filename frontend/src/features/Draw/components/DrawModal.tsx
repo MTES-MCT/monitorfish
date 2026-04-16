@@ -52,8 +52,9 @@ export function DrawLayerModal() {
   const initialFeatureNumberRef = useRef<number | undefined>(undefined)
 
   // Updated synchronously during render so handleWriteCoordinates can read the current value from effects.
-  const drawedGeometryRef = useRef(drawedGeometry)
-  drawedGeometryRef.current = drawedGeometry
+  // Uses the same fallback as pointCoordinates so echoes from initialGeometry are also caught.
+  const drawedGeometryRef = useRef(drawedGeometry ?? initialGeometry)
+  drawedGeometryRef.current = drawedGeometry ?? initialGeometry
 
   const feature = useMemo(() => {
     const currentGeometry = drawedGeometry ?? initialGeometry

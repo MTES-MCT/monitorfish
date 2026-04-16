@@ -1,5 +1,6 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
+import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import {
   REPORTINGS_LINE_VECTOR_LAYER,
   REPORTINGS_VECTOR_LAYER,
@@ -33,6 +34,8 @@ function UnmemoizedReportingLayer() {
 
   useMapLayer(REPORTINGS_VECTOR_LAYER)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
+  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed)
+  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed)
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
     if (selectedReportingFeatureIdsRef.current.length > 0) {
@@ -47,7 +50,11 @@ function UnmemoizedReportingLayer() {
       return
     }
 
-    const features = data.map(reporting => buildReportingFeature(reporting))
+    const features = data
+      // If the coordinates is a a valid WGS84, the backend return an empty list,
+      // we need to filter them as we can't display them on map
+      .filter(reporting => reporting.coordinates?.length === 2)
+      .map(reporting => buildReportingFeature(reporting))
     REPORTINGS_VECTOR_SOURCE.clear(true)
     REPORTINGS_VECTOR_SOURCE.addFeatures(features)
 
@@ -69,19 +76,6 @@ function UnmemoizedReportingLayer() {
       })
     )
   }, [dispatch, error])
-
-  useEffect(() => {
-    if (!isReportingLayerDisplayed) {
-      // We can't use BaseLayer.setVisible() as it makes the drawing to crash
-      REPORTINGS_VECTOR_LAYER.setOpacity(0)
-      REPORTINGS_LINE_VECTOR_LAYER.setOpacity(0)
-
-      return
-    }
-
-    REPORTINGS_VECTOR_LAYER.setOpacity(1)
-    REPORTINGS_LINE_VECTOR_LAYER.setOpacity(1)
-  }, [isReportingLayerDisplayed])
 
   return null
 }

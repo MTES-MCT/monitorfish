@@ -50,7 +50,11 @@ function UnmemoizedReportingLayer() {
       return
     }
 
-    const features = data.map(reporting => buildReportingFeature(reporting))
+    const features = data
+      // If the coordinates is a a valid WGS84, the backend return an empty list,
+      // we need to filter them as we can't display them on map
+      .filter(reporting => reporting.coordinates?.length === 2)
+      .map(reporting => buildReportingFeature(reporting))
     REPORTINGS_VECTOR_SOURCE.clear(true)
     REPORTINGS_VECTOR_SOURCE.addFeatures(features)
 

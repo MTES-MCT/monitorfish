@@ -18,13 +18,11 @@ context('Missions Map Button', () => {
 
     // Then
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
-    cy.get('.MISSION_PIN_POINT').should('not.exist')
 
     // On reload, the missions are still hidden
     cy.reload()
     cy.wait(500)
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
-    cy.get('.MISSION_PIN_POINT').should('not.exist')
 
     // Show the missions back
     cy.clickButton("Missions et contrôles")

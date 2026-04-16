@@ -1,3 +1,4 @@
+import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { VesselFeature } from '@features/Vessel/types/vessel'
@@ -21,7 +22,6 @@ function UnmemoizedVesselsLayer() {
   )
 
   useEffect(() => {
-    // styles derived from state
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
     const initStyles = {
       areVesselsNotInVesselGroupsHidden,
@@ -30,37 +30,18 @@ function UnmemoizedVesselsLayer() {
       previewFilteredVesselsMode,
       vesselGroupsIdsDisplayed
     }
-    const styleVariables = getWebGLVesselStyleVariables(initStyles)
-    VESSELS_VECTOR_LAYER.updateStyleVariables(styleVariables)
+    VESSELS_VECTOR_LAYER.updateStyleVariables(getWebGLVesselStyleVariables(initStyles))
 
     monitorfishMap.getLayers().push(VESSELS_VECTOR_LAYER)
-
-    window.addEventListener('beforeunload', () => {
-      // @ts-ignore
-      monitorfishMap.removeLayer(VESSELS_VECTOR_LAYER)
-      VESSELS_VECTOR_LAYER.dispose()
-    })
 
     return () => {
       // @ts-ignore
       monitorfishMap.removeLayer(VESSELS_VECTOR_LAYER)
-      VESSELS_VECTOR_LAYER.dispose()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (!areVesselsDisplayed) {
-      // We can't use BaseLayer.setVisible() as it makes the drawing to crash
-      VESSELS_VECTOR_LAYER.setOpacity(0)
-
-      return
-    }
-
-    VESSELS_VECTOR_LAYER.setOpacity(1)
-  }, [areVesselsDisplayed])
-
-  // styles
+  useWebGLLayerVisibility(VESSELS_VECTOR_LAYER, areVesselsDisplayed)
 
   useEffect(() => {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels) })
@@ -77,8 +58,6 @@ function UnmemoizedVesselsLayer() {
     VESSELS_VECTOR_LAYER.updateStyleVariables({ isLight: booleanToInt(isLight) })
     dispatch(renderLayersDependingOnVesselLayer())
   }, [dispatch, selectedBaseLayer])
-
-  // end styles
 
   return null
 }

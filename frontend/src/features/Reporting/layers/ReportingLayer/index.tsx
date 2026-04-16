@@ -1,5 +1,6 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
+import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import {
   REPORTINGS_LINE_VECTOR_LAYER,
   REPORTINGS_VECTOR_LAYER,
@@ -33,6 +34,8 @@ function UnmemoizedReportingLayer() {
 
   useMapLayer(REPORTINGS_VECTOR_LAYER)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
+  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed)
+  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed)
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
     if (selectedReportingFeatureIdsRef.current.length > 0) {
@@ -69,19 +72,6 @@ function UnmemoizedReportingLayer() {
       })
     )
   }, [dispatch, error])
-
-  useEffect(() => {
-    if (!isReportingLayerDisplayed) {
-      // We can't use BaseLayer.setVisible() as it makes the drawing to crash
-      REPORTINGS_VECTOR_LAYER.setOpacity(0)
-      REPORTINGS_LINE_VECTOR_LAYER.setOpacity(0)
-
-      return
-    }
-
-    REPORTINGS_VECTOR_LAYER.setOpacity(1)
-    REPORTINGS_LINE_VECTOR_LAYER.setOpacity(1)
-  }, [isReportingLayerDisplayed])
 
   return null
 }

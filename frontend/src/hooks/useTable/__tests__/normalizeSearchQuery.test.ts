@@ -2,8 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { expect } from '@jest/globals'
-
 import { normalizeSearchQuery } from '../utils'
 
 describe('hooks/useTable/utils.normalizeSearchQuery()', () => {

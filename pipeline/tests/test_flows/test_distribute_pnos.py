@@ -1734,6 +1734,16 @@ def test_render_pno_1(
     assert pno.source == PnoSource.LOGBOOK
     assert pno.sms_content == expected_sms_content
 
+@patch(
+    "src.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
+    Path("/email/fonts/location"),
+)
+@patch("src.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
+@patch("src.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
+    Path("/state/flags/icons/location"),
+)
 def test_render_pno_zero_1(
     html_for_pdf_template, pre_rendered_pno_zero_1, email_body_template, sms_template
 ):

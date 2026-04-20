@@ -1,7 +1,6 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { expect } from '@jest/globals'
 
-// @ts-ignore
 jest.mock('store/index', () => ({
   mainStore: {
     getState: () => ({

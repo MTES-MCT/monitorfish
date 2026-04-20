@@ -1,5 +1,4 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-
 import { expect } from '@jest/globals'
 
 import { encodeUriObject } from '../encodeUriObject'

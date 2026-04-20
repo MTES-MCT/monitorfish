@@ -2109,8 +2109,8 @@ def test_execute_prior_notification_attachments_query_when_result_is_empty(
 
 
 @pytest.mark.parametrize(
-    "test_mode,pno_has_uploaded_attachments",
-    [(False, False), (False, True), (True, False), (True, True)],
+    "test_mode,pno_has_uploaded_attachments,is_zero",
+    [(False, False, False), (False, True, False), (True, False, False), (True, True, False), (False, False, True)],
 )
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
@@ -2121,7 +2121,11 @@ def test_create_email(
     facade_email_addresses,
     test_mode,
     pno_has_uploaded_attachments,
+    is_zero,
 ):
+    if is_zero:
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned.is_zero = True
+
     pno_to_send = create_email(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
         uploaded_attachments=prior_notification_attachments
@@ -2150,8 +2154,10 @@ def test_create_email(
     assert pno_to_send.message["From"] == "monitorfish@test.email"
     assert pno_to_send.message["Bcc"] is None
     assert pno_to_send.message["Reply-To"] == "cnsp.france@test.email"
+
+    expected_title_suffix = " - préavis zéro" if is_zero else ""
     assert (
-        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"
+        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"+expected_title_suffix
     )
 
     attachments = list(pno_to_send.message.iter_attachments())

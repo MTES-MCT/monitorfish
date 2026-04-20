@@ -502,6 +502,7 @@ def render_pno(
         port_locode=pno.port_locode,
         pno_types=", ".join(pno.pno_types),
         note=pno.note,
+        is_zero=pno.is_zero
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"

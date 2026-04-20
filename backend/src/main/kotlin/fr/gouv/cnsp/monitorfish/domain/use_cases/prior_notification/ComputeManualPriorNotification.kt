@@ -51,8 +51,14 @@ class ComputeManualPriorNotification(
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
         val isInVerificationScope =
-            ManualPriorNotificationComputedValues
-                .isInVerificationScope(vesselFlagCountryCode, vesselRiskFactor, infractionSuspicions)
+            PriorNotification
+                .isInVerificationScope(
+                    isManual = true,
+                    port = null,
+                    vesselFlagCountryCode = vesselFlagCountryCode,
+                    vesselRiskFactor = vesselRiskFactor,
+                    infractionSuspicions = infractionSuspicions,
+                )
         val isPartOfControlUnitSubscriptions =
             pnoPortSubscriptionRepository.has(portLocode) ||
                 pnoVesselSubscriptionRepository.has(vesselId) ||
@@ -60,12 +66,12 @@ class ComputeManualPriorNotification(
         val nextState = PriorNotification.getNextState(isInVerificationScope, isPartOfControlUnitSubscriptions)
 
         return ManualPriorNotificationComputedValues(
+            isInVerificationScope = isInVerificationScope,
             isVesselUnderCharter = vessel.underCharter,
             nextState = nextState,
             tripSegments = tripSegments,
             types = types,
             vesselRiskFactor = vesselRiskFactor,
-            isInVerificationScope = isInVerificationScope,
         )
     }
 }

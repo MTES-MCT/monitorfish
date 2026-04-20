@@ -742,7 +742,7 @@ def create_email(
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis de débarquement - {pno.vessel_name}{" - préavis zéro" if pno.is_zero else ""}",
+            subject=f"Préavis de débarquement - {pno.vessel_name}{' - préavis zéro' if pno.is_zero else ''}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[

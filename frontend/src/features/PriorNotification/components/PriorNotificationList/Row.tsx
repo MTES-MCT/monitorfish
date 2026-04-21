@@ -1,3 +1,4 @@
+import { PnoVerificationScopeReasonLabel } from '@features/PriorNotification/constants'
 import { openPriorNotificationCard } from '@features/PriorNotification/useCases/openPriorNotificationCard'
 import { openPriorNotificationReportingList } from '@features/PriorNotification/useCases/openPriorNotificationReportingList'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
@@ -195,9 +196,12 @@ export function Row({ row }: RowProps) {
                   borderColor={getColorsFromState(priorNotification.state).borderColor}
                   color={getColorsFromState(priorNotification.state).color}
                   style={{ marginBottom: 16 }}
-                  title={PriorNotification.STATE_LABEL[priorNotification.state]}
+                  title={`${PriorNotification.STATE_LABEL[priorNotification.state]} ${priorNotification.verificationReason ? PnoVerificationScopeReasonLabel[priorNotification.verificationReason] : ''}`}
                 >
-                  {PriorNotification.STATE_LABEL[priorNotification.state]}
+                  {PriorNotification.STATE_LABEL[priorNotification.state]}{' '}
+                  {priorNotification.verificationReason
+                    ? PnoVerificationScopeReasonLabel[priorNotification.verificationReason]
+                    : ''}
                 </FixedTag>
               )}
 

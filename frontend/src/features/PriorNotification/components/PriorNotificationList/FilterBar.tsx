@@ -42,8 +42,8 @@ export function FilterBar() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const { newWindowContainerRef } = useNewWindow()
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
   const listFilterValues = useMainAppSelector(store => store.priorNotification.listFilterValues)
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(listFilterValues.searchQuery)
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()

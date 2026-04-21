@@ -1,3 +1,4 @@
+import { PnoVerificationScopeReasonLabel } from '@features/PriorNotification/constants'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
 
@@ -7,8 +8,9 @@ import { getColorsFromState } from '../utils'
 type SendButtonCellProps = Readonly<{
   isInvalidated: boolean | undefined
   state: PriorNotification.State | undefined
+  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
 }>
-export function StateCell({ isInvalidated, state }: SendButtonCellProps) {
+export function StateCell({ isInvalidated, state, verificationReason }: SendButtonCellProps) {
   if (isInvalidated) {
     return (
       <Wrapper title="Préavis invalidé">
@@ -22,7 +24,10 @@ export function StateCell({ isInvalidated, state }: SendButtonCellProps) {
   }
 
   return (
-    <Wrapper $state={state} title={PriorNotification.STATE_LABEL[state]}>
+    <Wrapper
+      $state={state}
+      title={`${PriorNotification.STATE_LABEL[state]} ${verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}`}
+    >
       {!!state && [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(state) ? (
         <SpinnerWrapper>
           <Icon.Send />
@@ -45,7 +50,7 @@ const Wrapper = styled.span<{
   display: inline-flex;
   height: 26px;
   justify-content: center;
-  padding: 0px;
+  padding: 0;
   vertical-align: bottom;
   width: 26px;
 `

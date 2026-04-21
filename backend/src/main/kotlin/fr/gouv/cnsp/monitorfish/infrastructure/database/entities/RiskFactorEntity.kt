@@ -102,6 +102,7 @@ data class RiskFactorEntity(
             detectabilityRiskFactor = detectabilityRiskFactor,
             riskFactor = riskFactor,
             internalReferenceNumber = cfr,
+            vesselId = vesselId,
             gearOnboard = deserializeJSONList(mapper, gearOnboard, Gear::class.java),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, Species::class.java),
             segments = segments,

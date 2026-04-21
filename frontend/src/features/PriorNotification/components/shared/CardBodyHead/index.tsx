@@ -1,3 +1,4 @@
+import { PnoVerificationScopeReasonLongLabel } from '@features/PriorNotification/constants'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { useForceUpdate } from '@hooks/useForceUpdate'
 import { LinkButton, type Undefine } from '@mtes-mct/monitor-ui'
@@ -20,6 +21,7 @@ type CardBodyHeadProps = Readonly<{
   riskFactor: number | undefined
   tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
+  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
 }>
 export function CardBodyHead({
   applicableState,
@@ -31,7 +33,8 @@ export function CardBodyHead({
   isVesselUnderCharter,
   riskFactor,
   tripSegments,
-  types
+  types,
+  verificationReason
 }: CardBodyHeadProps) {
   const [isSentMessageListExpanded, setIsSentMessageListExpanded] = useState(false)
   const { forceUpdate } = useForceUpdate()
@@ -59,6 +62,7 @@ export function CardBodyHead({
         state={applicableState}
         tripSegments={tripSegments}
         types={types}
+        verificationReason={verificationReason}
       />
 
       {isNewPriorNotification && !editedPriorNotificationComputedValues && (
@@ -68,7 +72,10 @@ export function CardBodyHead({
         </Intro>
       )}
       {!isNewPriorNotification && isPendingVerification && (
-        <Intro>Le préavis doit être vérifié par le CNSP avant sa diffusion.</Intro>
+        <Intro>
+          Le préavis doit être vérifié par le CNSP avant sa diffusion{' '}
+          {verificationReason && PnoVerificationScopeReasonLongLabel[verificationReason]}.
+        </Intro>
       )}
       {(!!editedPriorNotificationComputedValues || !!detail) && (
         <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>

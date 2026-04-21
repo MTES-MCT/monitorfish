@@ -215,7 +215,12 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Type de signalement', 'Observation')
 
     // Selecting "Autre" should reveal the free-text Titre input
-    cy.fill('Type', 'Autre')
+    // Instead of: cy.fill('Type', 'Autre'), to prevent "Autres activités hors pêche" to be selected
+    cy.contains('label', /^Type$/)
+      .next()
+      .click()
+    cy.get('.rs-picker-popup').find('[role="option"]').contains(/^Autre$/).click({ force: true })
+
     cy.get('input[name="title"]').should('be.visible')
     cy.fill('Titre', 'Dérogation temporaire licence')
 

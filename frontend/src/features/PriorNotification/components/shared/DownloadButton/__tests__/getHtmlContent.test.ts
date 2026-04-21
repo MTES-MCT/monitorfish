@@ -480,6 +480,13 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
           </tr>
         </table>
       </section>
+      <section>
+        <h2>ACTIVITÉ DU NAVIRE</h2>
+        <hr/>
+        <table>
+          <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>Chaluts de fond (non spécifiés) (TB) - Maillage 100 mm, Chaluts de fond à crevettes (TBS) - Maillage 120.5 mm</strong></td></tr>
+        </table>
+      </section>
     </main>
     <footer>
       <hr/>

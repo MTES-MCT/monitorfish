@@ -1,14 +1,18 @@
-export const OTHER_OBSERVATION_TITLE = 'Autres'
+export const OTHER_OBSERVATION_TITLE = 'Autre'
 
 export const OBSERVATION_TITLES = [
   'Suspensions administratives',
-  'Prélèvements',
+  "Cessation d'activité",
+  'Suivi sanitaire / campagne scientifique',
+  'Eolien - activité de chien de garde ',
+  'Autres activités hors pêche ',
+  "Conflits d'usage / tensions",
+  'SITREP MAS – navire assisté/remorqué',
+  'SITREP SAR – navire impliqué dans une opération de sauvetage',
   'Dérogations particulières',
-  'Conflits d’usage / tensions',
+  'Caméra et dispositifs de dissuasion',
+  'Essais techniques en mer ',
+  'Arrêts techniques / Arrêts temporaires FEAMPA',
   'Navire à ne pas contrôler',
-  'Essais en mer',
-  'Avarie/Remorquage',
-  'DEP manquant',
-  'Arrêt activité',
   OTHER_OBSERVATION_TITLE
 ]

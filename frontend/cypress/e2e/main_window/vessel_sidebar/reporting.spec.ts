@@ -75,7 +75,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
-    cy.fill('Type', 'Prélèvements')
+    cy.fill('Type', 'Suspensions administratives')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)
 
@@ -215,7 +215,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Type de signalement', 'Observation')
 
     // Selecting "Autres" should reveal the free-text Titre input
-    cy.fill('Type', 'Autres')
+    cy.fill('Type', 'Autre')
     cy.get('input[name="title"]').should('be.visible')
     cy.fill('Titre', 'Dérogation temporaire licence')
 

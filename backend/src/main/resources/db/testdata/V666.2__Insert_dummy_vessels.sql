@@ -35,7 +35,7 @@ INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immat
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (103, 'CFR103', 'MMSI103', 'IRCS103', '{}', 'EXTIMM103', 'L''OM DU POISSON', 'FR', 11.99, true);
 
-INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (104, 'CFR104', 'MMSI104', 'IRCS104', '{}', 'EXTIMM104', 'DES BARS', NULL, 15, false);
+INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (104, 'CFR104', 'MMSI104', 'IRCS104', '{}', 'EXTIMM104', 'DES BARS', 'FR', 15, false);
 
 INSERT INTO vessels (id, cfr, mmsi, ircs, declared_fishing_gears, external_immatriculation, vessel_name, flag_state, length, under_charter) VALUES (105, 'CFR105', 'MMSI105', 'IRCS105', '{}', 'EXTIMM105', 'CALAMARO', 'FR', 16, false);
 

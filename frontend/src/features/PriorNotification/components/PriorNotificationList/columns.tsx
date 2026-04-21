@@ -132,7 +132,11 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
     {
       accessorFn: row => row.state,
       cell: (info: CellContext<PriorNotification.PriorNotification, PriorNotification.State>) => (
-        <StateCell isInvalidated={info.row.original.isInvalidated} state={info.getValue()} />
+        <StateCell
+          isInvalidated={info.row.original.isInvalidated}
+          state={info.getValue()}
+          verificationReason={info.row.original.verificationReason}
+        />
       ),
       enableSorting: false,
       header: () => '',

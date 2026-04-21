@@ -29,6 +29,7 @@ export namespace PriorNotification {
     tripGears: Logbook.Gear[]
     tripSegments: Logbook.Segment[]
     types: Type[]
+    verificationReason: PnoVerificationScopeReason | undefined
     vesselExternalReferenceNumber: string | undefined
     vesselFlagCountryCode: string | undefined
     vesselId: number
@@ -38,6 +39,14 @@ export namespace PriorNotification {
     vesselLength: number | undefined
     vesselMmsi: string | undefined
     vesselName: string | undefined
+  }
+
+  export enum PnoVerificationScopeReason {
+    FOREIGN_FLAG_COUNTRY = 'FOREIGN_FLAG_COUNTRY',
+    FOREIGN_PORT = 'FOREIGN_PORT',
+    HIGH_RISK_FACTOR = 'HIGH_RISK_FACTOR',
+    MISSING_DATA = 'MISSING_DATA',
+    OPEN_REPORTING = 'OPEN_REPORTING'
   }
 
   export type Identifier = {
@@ -58,6 +67,7 @@ export namespace PriorNotification {
     riskFactor: number | undefined
     state: State | undefined
     updatedAt: string
+    verificationReason: PnoVerificationScopeReason | undefined
     vesselId: number
     vesselIdentity: Vessel.VesselIdentity
   } & (
@@ -115,7 +125,7 @@ export namespace PriorNotification {
   /** Real-time computed values displayed within a manual prior notification form. */
   export type ManualComputedValues = Pick<
     PriorNotification,
-    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor'
+    'isVesselUnderCharter' | 'tripSegments' | 'types' | 'riskFactor' | 'verificationReason'
   > & {
     /** Next initial state of the prior notification once it will be created or updated. */
     nextState: State

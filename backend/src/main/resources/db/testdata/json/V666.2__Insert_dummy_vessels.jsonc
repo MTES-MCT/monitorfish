@@ -490,7 +490,7 @@
             },
 
             // - Vessel: DES BARS
-            // - Flag state: Unknown
+            // - Flag state: France
             {
                 "id": 104,
                 "cfr": "CFR104",
@@ -499,7 +499,7 @@
                 "declared_fishing_gears": [],
                 "external_immatriculation": "EXTIMM104",
                 "vessel_name": "DES BARS",
-                "flag_state": null,
+                "flag_state": "FR",
                 "length": 15,
                 "under_charter": false
             },

@@ -81,17 +81,19 @@
                     <p id="note">{{ note }}</p>
                 {% endif %}
             </section>
+            {% endif %}
 
             <section>
-                <h2>ACTIVITÉ DE PÊCHE</h2>
+                <h2>ACTIVITÉ DU NAVIRE</h2>
                 <hr/>
                 <table>
                     <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>{{ trip_gears or "-" }}</strong></td></tr>
                 </table>
+                {% if is_landing %}
                 <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
                 {{ catch_onboard or "<strong>-</strong>" }}
+                {% endif %}
             </section>
-            {% endif %}
 
         </main>
 

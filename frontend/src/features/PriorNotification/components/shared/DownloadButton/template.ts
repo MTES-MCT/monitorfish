@@ -47,7 +47,7 @@ export const generateHTML = (data: TemplateData) => `
             <td></td>
           </tr>
           <tr>
-            <td class="data-label">Port de débarque</td>
+            <td class="data-label">Port ${data.isLanding ? 'de débarque' : "d'arrivée"}</td>
             <td><strong>${data.portName} (${data.port})</strong></td>
           </tr>
           <tr>

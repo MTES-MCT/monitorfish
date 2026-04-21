@@ -469,7 +469,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
             <td></td>
           </tr>
           <tr>
-            <td class="data-label">Port de débarque</td>
+            <td class="data-label">Port d'arrivée</td>
             <td><strong>Vannes (FRVNE)</strong></td>
           </tr>
           <tr>

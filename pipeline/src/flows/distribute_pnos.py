@@ -298,8 +298,8 @@ def pre_render_pno(
     ]
 
     # The next line assumes that all H are silent in french, which is wrong in some cases.
-    joinLink = unicodedata.normalize('NFD', purpose[0].lower())[0] in 'aeiouyh'
-    purpose_suffix = f'{"d'" if joinLink else "de "}{purpose}'
+    link = 'd\'' if unicodedata.normalize('NFD', purpose[0].lower())[0] in 'aeiouyh' else 'de '
+    purpose_suffix = f"{link}{purpose}"
 
     return PreRenderedPno(
         id=pno.id,

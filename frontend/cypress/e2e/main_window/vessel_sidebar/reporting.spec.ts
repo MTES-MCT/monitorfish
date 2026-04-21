@@ -196,7 +196,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 5)
   })
 
-  it('Observation reporting should be created with a custom "Autres" observationType title', () => {
+  it('Observation reporting should be created with a custom "Autre" observationType title', () => {
     cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 
@@ -214,7 +214,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.clickButton('Ouvrir un signalement')
     cy.fill('Type de signalement', 'Observation')
 
-    // Selecting "Autres" should reveal the free-text Titre input
+    // Selecting "Autre" should reveal the free-text Titre input
     cy.fill('Type', 'Autre')
     cy.get('input[name="title"]').should('be.visible')
     cy.fill('Titre', 'Dérogation temporaire licence')

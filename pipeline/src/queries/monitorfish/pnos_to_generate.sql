@@ -68,6 +68,7 @@ last_controls AS (
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'LOGBOOK' AS source
+    r.operation_type
 FROM logbook_reports r
 LEFT JOIN vessels v
 ON v.cfr = r.cfr
@@ -134,6 +135,7 @@ UNION ALL
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
     'MANUAL' AS source
+    'MANUAL' AS operation_type
 FROM manual_prior_notifications r
 LEFT JOIN vessels v
 ON v.id = r.vessel_id

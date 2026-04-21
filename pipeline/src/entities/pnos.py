@@ -129,6 +129,7 @@ class PreRenderedPno:
     is_being_sent: bool
     is_landing: bool
     source: PnoSource
+    purpose_suffix: str
 
     @staticmethod
     def assert_equal(left: object, right: object):
@@ -214,6 +215,7 @@ class RenderedPno:
     port_locode: str
     facade: str
     source: PnoSource
+    purpose_suffix: str
     html_for_pdf: str | None = None
     pdf_document: bytes | None = None
     generation_datetime_utc: datetime | None = None

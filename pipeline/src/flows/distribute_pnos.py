@@ -3,6 +3,7 @@ from datetime import datetime
 from email.policy import EmailPolicy
 from pathlib import Path
 from typing import List, Tuple
+import unicodedata
 
 import numpy as np
 import pandas as pd
@@ -296,6 +297,10 @@ def pre_render_pno(
         for inf in pno.last_control_infractions
     ]
 
+    # The next line assumes that all H are silent in french, which is wrong in some cases.
+    joinLink = unicodedata.normalize('NFD', purpose[0].lower())[0] in 'aeiouyh'
+    purpose_suffix = f"{'d\'' if joinLink else 'de '}{purpose}"
+
     return PreRenderedPno(
         id=pno.id,
         operation_datetime_utc=pno.operation_datetime_utc,
@@ -328,6 +333,7 @@ def pre_render_pno(
         is_being_sent=pno.is_being_sent,
         source=pno.source,
         is_landing=pno.purpose == "LAN",
+        purpose_suffix=purpose_suffix,
     )
 
 
@@ -480,6 +486,7 @@ def render_pno(
             and (pno.last_control_infractions == [])
         ),
         is_landing=pno.is_landing,
+        purpose_suffix=pno.purpose_suffix,
     )
 
     html_email_body = email_body_template.render(
@@ -544,6 +551,7 @@ def render_pno(
         generation_datetime_utc=datetime.utcnow(),
         html_email_body=html_email_body,
         sms_content=sms_content,
+        purpose_suffix=pno.purpose_suffix,
     )
 
 
@@ -741,7 +749,7 @@ def create_email(
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis de débarquement - {pno.vessel_name}",
+            subject=f"Préavis{pno.purpose_suffix} - {pno.vessel_name}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[

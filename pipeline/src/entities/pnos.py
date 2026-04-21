@@ -127,6 +127,7 @@ class PreRenderedPno:
     last_control_infractions: List[Infraction]
     is_verified: bool
     is_being_sent: bool
+    is_landing: bool
     source: PnoSource
 
     @staticmethod

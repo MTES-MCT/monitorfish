@@ -30,6 +30,13 @@ class JpaRiskFactorRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(result.size).isGreaterThan(0)
+
+        // CFR122 (FILET DOUX) has vessel_id = 122 in test data
+        // This lookup mirrors what PriorNotification.enrich() does for manual PNOs
+        val riskFactor = result.find { it.vesselId == 122 }
+
+        assertThat(riskFactor).isNotNull
+        assertThat(riskFactor?.riskFactor).isEqualTo(2.6)
     }
 
     @Test

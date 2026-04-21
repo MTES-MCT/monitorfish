@@ -90,7 +90,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.MISSING_DATA)
+        assertThat(result).isEqualTo(PnoVerificationReason.MISSING_DATA)
     }
 
     @Test
@@ -104,7 +104,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.MISSING_DATA)
+        assertThat(result).isEqualTo(PnoVerificationReason.MISSING_DATA)
     }
 
     @Test
@@ -118,7 +118,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 2,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.OPEN_REPORTING)
+        assertThat(result).isEqualTo(PnoVerificationReason.OPEN_REPORTING)
     }
 
     @Test
@@ -132,7 +132,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.HIGH_RISK_FACTOR)
+        assertThat(result).isEqualTo(PnoVerificationReason.HIGH_RISK_FACTOR)
     }
 
     @Test
@@ -146,7 +146,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.FOREIGN_FLAG_COUNTRY)
+        assertThat(result).isEqualTo(PnoVerificationReason.FOREIGN_FLAG_COUNTRY)
     }
 
     @Test
@@ -160,7 +160,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationScopeReason.FOREIGN_PORT)
+        assertThat(result).isEqualTo(PnoVerificationReason.FOREIGN_PORT)
     }
 
     @Test

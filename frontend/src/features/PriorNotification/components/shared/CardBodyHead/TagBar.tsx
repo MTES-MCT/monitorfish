@@ -1,3 +1,4 @@
+import { PnoVerificationScopeReasonLabel } from '@features/PriorNotification/constants'
 import { VesselRiskFactor } from '@features/RiskFactor/components/VesselRiskFactor'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -17,6 +18,7 @@ type TagBarProps = Readonly<{
   state: PriorNotification.State | undefined
   tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
+  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
 }>
 export function TagBar({
   hasBeenComputed = true,
@@ -26,7 +28,8 @@ export function TagBar({
   riskFactor,
   state,
   tripSegments,
-  types
+  types,
+  verificationReason
 }: TagBarProps) {
   return (
     <Wrapper className="Wrapper" data-cy="PriorNotificationCard-TagBar">
@@ -62,9 +65,10 @@ export function TagBar({
             backgroundColor={getColorsFromState(state).backgroundColor}
             borderColor={getColorsFromState(state).borderColor}
             color={getColorsFromState(state).color}
-            title={PriorNotification.STATE_LABEL[state]}
+            title={`${PriorNotification.STATE_LABEL[state]} ${verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}`}
           >
-            {PriorNotification.STATE_LABEL[state]}
+            {PriorNotification.STATE_LABEL[state]}{' '}
+            {verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}
           </FixedTag>
         )}
 

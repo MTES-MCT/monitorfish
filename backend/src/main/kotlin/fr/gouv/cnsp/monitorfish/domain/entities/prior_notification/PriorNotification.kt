@@ -40,15 +40,6 @@ data class PriorNotification(
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
 
-    val verificationReason: PnoVerificationScopeReason?
-        get() = getVerificationReason(
-            isManual = isManuallyCreated,
-            port = port,
-            vesselFlagCountryCode = vessel?.flagState,
-            vesselRiskFactor = vesselRiskFactor,
-            infractionSuspicionsCount = reportingCount ?: 0,
-        )
-
     /** Is it a "Préavis Zéro"? */
     val isPriorNotificationZero: Boolean
         get() =
@@ -92,6 +83,23 @@ data class PriorNotification(
                 }
             }
 
+    val verificationReason: PnoVerificationReason?
+        get() {
+            if (state == PriorNotificationState.PENDING_VERIFICATION ||
+                state == PriorNotificationState.VERIFIED_AND_SENT
+            ) {
+                return getVerificationReason(
+                    isManual = isManuallyCreated,
+                    port = port,
+                    vesselFlagCountryCode = vessel?.flagState,
+                    vesselRiskFactor = vesselRiskFactor,
+                    infractionSuspicionsCount = reportingCount ?: 0,
+                )
+            }
+
+            return null
+        }
+
     fun enrich(
         allRiskFactors: List<VesselRiskFactor>,
         allPorts: List<Port>,
@@ -116,7 +124,6 @@ data class PriorNotification(
                 logbookMessage.internalReferenceNumber?.let { vesselInternalReferenceNumber ->
                     allRiskFactors
                         .find { it.internalReferenceNumber == vesselInternalReferenceNumber }
-
                 }
             }
 
@@ -234,16 +241,17 @@ data class PriorNotification(
 
         val VESSEL_FLAG_COUNTRY_CODES_WITHOUT_SYSTEMATIC_VERIFICATION: List<CountryCode> = listOf(CountryCode.FR)
         const val VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD: Double = 2.3
-        val PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION: List<CountryCode> = listOf(
-            CountryCode.GB,
-            CountryCode.MG,
-            CountryCode.NO,
-            CountryCode.FO,
-            CountryCode.SC,
-            CountryCode.GH,
-            CountryCode.MU,
-            CountryCode.CI,
-        )
+        val PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION: List<CountryCode> =
+            listOf(
+                CountryCode.GB,
+                CountryCode.MG,
+                CountryCode.NO,
+                CountryCode.FO,
+                CountryCode.SC,
+                CountryCode.GH,
+                CountryCode.MU,
+                CountryCode.CI,
+            )
 
         fun getVerificationReason(
             isManual: Boolean,
@@ -251,28 +259,34 @@ data class PriorNotification(
             vesselFlagCountryCode: CountryCode?,
             vesselRiskFactor: Double?,
             infractionSuspicionsCount: Int,
-        ): PnoVerificationScopeReason? {
+        ): PnoVerificationReason? {
             if (vesselFlagCountryCode == null || vesselRiskFactor == null) {
-                return PnoVerificationScopeReason.MISSING_DATA
+                return PnoVerificationReason.MISSING_DATA
             }
 
             if (infractionSuspicionsCount > 0) {
-                return PnoVerificationScopeReason.OPEN_REPORTING
+                return PnoVerificationReason.OPEN_REPORTING
             }
 
             if (vesselRiskFactor >= VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD) {
-                return PnoVerificationScopeReason.HIGH_RISK_FACTOR
+                return PnoVerificationReason.HIGH_RISK_FACTOR
             }
 
             if (vesselFlagCountryCode !in VESSEL_FLAG_COUNTRY_CODES_WITHOUT_SYSTEMATIC_VERIFICATION) {
-                return PnoVerificationScopeReason.FOREIGN_FLAG_COUNTRY
+                return PnoVerificationReason.FOREIGN_FLAG_COUNTRY
             }
 
             if (!isManual &&
-                port?.countryCode?.let { CountryCode.valueOf(it) in PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION } == true
+                port?.countryCode?.let {
+                    CountryCode.valueOf(
+                        it,
+                    ) in PORT_COUNTRY_CODES_ISO2_WITH_SYSTEMATIC_VERIFICATION
+                } ==
+                true
             ) {
-                return PnoVerificationScopeReason.FOREIGN_PORT
+                return PnoVerificationReason.FOREIGN_PORT
             }
+
             return null
         }
 
@@ -282,13 +296,14 @@ data class PriorNotification(
             vesselFlagCountryCode: CountryCode?,
             vesselRiskFactor: Double?,
             infractionSuspicions: List<Reporting>,
-        ): Boolean = getVerificationReason(
-            isManual = isManual,
-            port = port,
-            vesselFlagCountryCode = vesselFlagCountryCode,
-            vesselRiskFactor = vesselRiskFactor,
-            infractionSuspicionsCount = infractionSuspicions.size
-        ) != null
+        ): Boolean =
+            getVerificationReason(
+                isManual = isManual,
+                port = port,
+                vesselFlagCountryCode = vesselFlagCountryCode,
+                vesselRiskFactor = vesselRiskFactor,
+                infractionSuspicionsCount = infractionSuspicions.size,
+            ) != null
 
         /**
          * Next initial state of the prior notification once it will be created or updated.

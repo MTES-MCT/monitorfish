@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoVerificationReason
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import org.slf4j.Logger
@@ -35,6 +36,7 @@ data class PriorNotificationListItemDataOutput(
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
+    val verificationReason: PnoVerificationReason?,
     val vesselId: Int?,
     val vesselExternalReferenceNumber: String?,
     val vesselFlagCountryCode: CountryCode,
@@ -106,6 +108,7 @@ data class PriorNotificationListItemDataOutput(
                 vesselMmsi = vessel.mmsi,
                 vesselName = vessel.vesselName,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
+                verificationReason = priorNotification.verificationReason,
             )
         }
     }

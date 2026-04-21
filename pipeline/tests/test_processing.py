@@ -235,6 +235,35 @@ def test_to_pgarr():
     assert res_e is None
 
 
+def test_to_pgarr_special_characters():
+    # Regression: before the fix, to_pgarr(["Pêche dans les 12 milles sans droits
+    # historiques (BE, NL)"]) produced
+    # '{Pêche dans les 12 milles sans droits historiques (BE, NL)}'
+    # which PostgreSQL parses as TWO elements because of the unquoted comma:
+    #   [1] 'Pêche dans les 12 milles sans droits historiques (BE'
+    #   [2] 'NL)'
+    # Elements containing a comma must be double-quoted in the PostgreSQL array literal.
+    assert to_pgarr(["a,b"]) == '{"a,b"}'
+    assert to_pgarr(["Pêche dans les 12 milles sans droits historiques (BE, NL)"]) == (
+        '{"Pêche dans les 12 milles sans droits historiques (BE, NL)"}'
+    )
+
+    # Multiple elements: only the one with a comma gets quoted
+    assert to_pgarr(["normal", "has,comma"]) == '{normal,"has,comma"}'
+
+    # Double-quote inside a value must be escaped
+    assert to_pgarr(['say "hello"']) == '{"say \\"hello\\""}'
+
+    # Backslash inside a value must be escaped
+    assert to_pgarr(["back\\slash"]) == '{"back\\\\slash"}'
+
+    # Whitespace triggers quoting
+    assert to_pgarr(["with space"]) == '{"with space"}'
+
+    # Curly brace triggers quoting (no extra escaping needed inside double-quotes)
+    assert to_pgarr(["{nested}"]) == '{"{nested}"}'
+
+
 def test_to_json():
     # Test basic dicts and lists serialization
     a = [1, 2, 3]

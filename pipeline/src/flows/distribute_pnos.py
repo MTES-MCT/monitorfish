@@ -1139,11 +1139,11 @@ def distribute_pnos_flow(
 
     return pnos_to_generate, pnos_to_distribute
 
-def is_prior_notification_zero(pno: PnoToRender) -> bool | None:
+def is_prior_notification_zero(pno: PnoToRender) -> bool:
     # ported from `isPriorNotificationZero` in /frontend/src/features/PriorNotification/utils.ts
 
     if not pno.catch_onboard:
-        return None
+        return False
 
     for c in pno.catch_onboard:
         if c.get("weight") != 0:

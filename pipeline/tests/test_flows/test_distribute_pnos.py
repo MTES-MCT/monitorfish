@@ -1036,7 +1036,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         is_verified=True,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
-        is_zero=None
+        is_zero=False
     )
 
 

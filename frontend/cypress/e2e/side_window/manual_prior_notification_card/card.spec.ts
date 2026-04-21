@@ -21,7 +21,7 @@ context('Side Window > Manual Prior Notification Card > Card', () => {
     openSideWindowPriorNotificationCardAsUser('FILET DOUX', '00000000-0000-4000-0000-000000000007')
 
     cy.contains('FILET DOUX (CFR122)').should('be.visible')
-    cy.contains('À vérifier (CNSP) - note  ≥ 2,3').should('be.visible')
+    cy.contains('À vérifier (CNSP) - note ≥ 2,3').should('be.visible')
     cy.contains('Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).').should('be.visible')
   })
 

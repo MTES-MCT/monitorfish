@@ -120,7 +120,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     ])
     cy.wait('@getPriorNotificationsStatuses')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
-    cy.get('[title="À vérifier (CNSP) - note  ≥ 2,3"]').should('exist')
+    cy.get('[title="À vérifier (CNSP) - note ≥ 2,3"]').should('exist')
     cy.getDataCy('prior-notification-reset-filters').click()
 
     /**

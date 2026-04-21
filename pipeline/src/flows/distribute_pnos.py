@@ -327,6 +327,7 @@ def pre_render_pno(
         is_verified=pno.is_verified,
         is_being_sent=pno.is_being_sent,
         source=pno.source,
+        is_landing=pno.purpose == "LAN",
     )
 
 
@@ -478,6 +479,7 @@ def render_pno(
             isinstance(pno.last_control_datetime_utc, datetime)
             and (pno.last_control_infractions == [])
         ),
+        is_landing=pno.is_landing,
     )
 
     html_email_body = email_body_template.render(
@@ -500,6 +502,7 @@ def render_pno(
         port_locode=pno.port_locode,
         pno_types=", ".join(pno.pno_types),
         note=pno.note,
+        is_landing=pno.is_landing,
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"

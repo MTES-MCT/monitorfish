@@ -75,7 +75,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
-    cy.fill('Type', 'Prélèvements')
+    cy.fill('Type', 'Suspensions administratives')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)
 
@@ -196,7 +196,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.get('*[data-cy="vessel-sidebar-reporting-archive-year"]').should('have.length', 5)
   })
 
-  it('Observation reporting should be created with a custom "Autres" observationType title', () => {
+  it('Observation reporting should be created with a custom "Autre" observationType title', () => {
     cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 
@@ -214,8 +214,13 @@ context('Vessel sidebar reporting tab', () => {
     cy.clickButton('Ouvrir un signalement')
     cy.fill('Type de signalement', 'Observation')
 
-    // Selecting "Autres" should reveal the free-text Titre input
-    cy.fill('Type', 'Autres')
+    // Selecting "Autre" should reveal the free-text Titre input
+    // Instead of: cy.fill('Type', 'Autre'), to prevent "Autres activités hors pêche" to be selected
+    cy.contains('label', /^Type$/)
+      .next()
+      .click()
+    cy.get('.rs-picker-popup').find('[role="option"]').contains(/^Autre$/).click({ force: true })
+
     cy.get('input[name="title"]').should('be.visible')
     cy.fill('Titre', 'Dérogation temporaire licence')
 

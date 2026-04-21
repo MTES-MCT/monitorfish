@@ -17,7 +17,6 @@ import {
   FieldError,
   FormikCheckbox,
   FormikDatePicker,
-  FormikMultiRadio,
   FormikNumberInput,
   FormikSelect,
   FormikTextarea,
@@ -213,6 +212,14 @@ export function Form({
     setIsTitleDisplayed(false)
   }
 
+  const handleReportingTypeRadio = (reportingType: string | undefined) => {
+    setFieldValue('type', reportingType)
+
+    if (reportingType === ReportingType.OBSERVATION) {
+      setIsTitleDisplayed(false)
+    }
+  }
+
   useEffect(() => {
     if (onIsDirty) {
       onIsDirty(dirty)
@@ -247,15 +254,11 @@ export function Form({
 
   const isObservation = values.type === ReportingType.OBSERVATION
   const observationTypeValue = (() => {
-    if (!values.title) {
-      return undefined
-    }
-
-    if (!isStandardizedTitle) {
+    if (isTitleDisplayed) {
       return OTHER_OBSERVATION_TITLE
     }
 
-    return values.title
+    return values.title ?? undefined
   })()
 
   return (
@@ -420,11 +423,12 @@ export function Form({
         </FieldError>
       )}
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
-      <FormikMultiRadio
+      <MultiRadio
         isInline
         isLight={isLight}
         label="Type de signalement"
         name="type"
+        onChange={handleReportingTypeRadio}
         options={[
           {
             label: ReportingTypeCharacteristics.INFRACTION_SUSPICION.displayName,
@@ -435,6 +439,7 @@ export function Form({
             value: ReportingTypeCharacteristics.OBSERVATION.code
           }
         ]}
+        value={values.type}
       />
       {isObservation && (
         <Select
@@ -451,6 +456,7 @@ export function Form({
       )}
       {isTitleDisplayed && (
         <FormikTextInput
+          isErrorMessageHidden
           isLight={isLight}
           isRequired
           label="Titre"

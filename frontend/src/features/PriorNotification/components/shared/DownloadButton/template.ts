@@ -62,15 +62,15 @@ export const generateHTML = (data: TemplateData) => `
             </td>
           </tr>
         </table>
-      </section>${
-        data.isLanding
-          ? `
+      </section>
       <section>
         <h2>ACTIVITÉ DU NAVIRE</h2>
         <hr/>
         <table>
           <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>${data.gearDetails}</strong></td></tr>
-        </table>
+        </table>${
+          data.isLanding
+            ? `
         <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
         <table border="1" class="dataframe">
           <thead>
@@ -82,10 +82,10 @@ export const generateHTML = (data: TemplateData) => `
             </tr>
           </thead>
           <tbody>${data.catchDetails}</tbody>
-        </table>
-      </section>`
-          : ''
-      }
+        </table>`
+            : ''
+        }
+      </section>
     </main>
     <footer>
       <hr/>

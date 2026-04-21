@@ -41,7 +41,7 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
     cy.contains(`25 kg`).should('be.visible')
 
     // Verification reason labels
-    cy.contains('À vérifier (CNSP) - note  ≥ 2,3').should('be.visible')
+    cy.contains('À vérifier (CNSP) - note ≥ 2,3').should('be.visible')
     cy.contains('Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).').should('be.visible')
   })
 

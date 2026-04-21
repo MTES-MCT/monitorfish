@@ -299,7 +299,7 @@ def pre_render_pno(
 
     # The next line assumes that all H are silent in french, which is wrong in some cases.
     link = 'd\'' if unicodedata.normalize('NFD', purpose[0].lower())[0] in 'aeiouyh' else 'de '
-    purpose_suffix = f"{link}{purpose}"
+    purpose_suffix = f"{link}{purpose.lower()}"
 
     return PreRenderedPno(
         id=pno.id,
@@ -749,7 +749,7 @@ def create_email(
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis{pno.purpose_suffix} - {pno.vessel_name}",
+            subject=f"Préavis {pno.purpose_suffix} - {pno.vessel_name}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[

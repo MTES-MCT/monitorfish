@@ -510,6 +510,7 @@ def render_pno(
         pno_types=", ".join(pno.pno_types),
         note=pno.note,
         is_landing=pno.is_landing,
+        purpose_suffix=pno.purpose_suffix,
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"

@@ -22,7 +22,7 @@
                 {% if is_landing %}
                 <li>Débarque prévue : <strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></li>
                 {% endif %}
-                <li>Port de débarquement : <strong>{{ port_name }} ({{ port_locode }})</strong></li>
+                <li>Port {{ "de débarquement" if is_landing else "d'arrivée" }} : <strong>{{ port_name }} ({{ port_locode }})</strong></li>
                 {% if is_landing %}
                 <li>Type(s) de préavis : <strong>{{ pno_types or "-" }}</strong></li>
                 {% endif %}

@@ -37,7 +37,7 @@
                 <table>
                     <tr><td class="data-label">Préavis envoyé</td><td><strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc else "-" }}</strong></td></tr>
                     <tr><td class="data-label">Arrivée estimée</td><td><strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "-" }}</strong></td></tr>
-                    <tr><td class="data-label">But</td><td><strong>{{ purpose }}</strong></td></tr>
+                    <tr><td class="data-label">Raison du préavis</td><td><strong>{{ purpose }}</strong></td></tr>
                     {% if is_landing %}
                     <tr id="predicted-landing-date"><td class="data-label">Débarque prévue</td><td><strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></td></tr>
                     {% endif %}

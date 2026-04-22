@@ -98,7 +98,7 @@ export namespace PriorNotification {
   export type ManualForm = {
     didNotFishAfterZeroNotice: boolean
     expectedArrivalDate: string
-    expectedLandingDate: string
+    expectedLandingDate: string | undefined
     fishingCatches: FormDataFishingCatch[]
     globalFaoArea: string | undefined
     hasPortEntranceAuthorization: boolean

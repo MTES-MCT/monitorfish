@@ -826,6 +826,8 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         is_verified=False,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
+        purpose_suffix="de débarquement",
+        is_landing=True,
     )
 
 
@@ -897,6 +899,8 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         is_verified=True,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
+        purpose_suffix="d'accès aux services",
+        is_landing=False,
     )
 
 
@@ -921,6 +925,7 @@ def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno
         pdf_document=b"PDF Document",
         sms_content="Message SMS préavis 123-abc",
         html_email_body="<html>Ce navire va débarquer</html>",
+        purpose_suffix="de débarquement",
     )
 
 
@@ -985,6 +990,7 @@ def pno_pdf_document_to_distribute_receive_all_pnos_from_port() -> RenderedPno:
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
+        purpose_suffix="de débarquement",
     )
 
 
@@ -1023,6 +1029,7 @@ def pno_pdf_document_to_distribute_without_addressees() -> RenderedPno:
         source=PnoSource.MANUAL,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
+        purpose_suffix="de débarquement",
     )
 
 
@@ -1053,6 +1060,7 @@ def pno_pdf_document_to_distribute_verified() -> RenderedPno:
         source=PnoSource.LOGBOOK,
         generation_datetime_utc=datetime(2023, 6, 6, 23, 50, 0),
         pdf_document=b"PDF Document",
+        purpose_suffix="de débarquement",
     )
 
 
@@ -1162,6 +1170,7 @@ def logbook_rendered_pno():
                 phone_numbers=["00000000000"],
             ),
         ],
+        purpose_suffix="de débarquement",
     )
 
 
@@ -1196,6 +1205,7 @@ def manual_rendered_pno():
                 phone_numbers=["11111111111"],
             )
         ],
+        purpose_suffix="de débarquement",
     )
 
 
@@ -1731,6 +1741,7 @@ def test_load_pno_pdf_documents(reset_test_data):
                 source=PnoSource.LOGBOOK,
                 generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
                 pdf_document=pdf,
+                purpose_suffix="de débarquement"
             )
         )
 

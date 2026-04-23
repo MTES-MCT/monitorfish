@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionSuspicionThreatDataOutput
 import java.time.ZonedDateTime
 
 class UpdateReportingDataInput(
@@ -39,16 +40,16 @@ class UpdateReportingDataInput(
 ) {
     fun toUpdatedReportingValues(): ReportingUpdateCommand {
         val infractions =
-            threatHierarchies.map { h ->
+            threatHierarchies.map { threatHierarchy ->
                 InfractionSuspicionThreat(
                     natinfCode =
-                        h.children
+                        threatHierarchy.children
                             .single()
                             .children
                             .single()
                             .value,
-                    threat = h.value,
-                    threatCharacterization = h.children.single().value,
+                    threat = threatHierarchy.value,
+                    threatCharacterization = threatHierarchy.children.single().value,
                 )
             }
 

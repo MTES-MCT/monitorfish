@@ -4,6 +4,7 @@ import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedR
 import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import { ReportingSchema } from '@features/Reporting/schemas/ReportingSchema'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { toReportingPayload } from '@features/Reporting/useCases/utils'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
@@ -116,7 +117,7 @@ export const reportingApi = monitorfishApi.injectEndpoints({
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({
       invalidatesTags: [{ type: RtkCacheTagType.Reportings }],
       query: ({ id, nextReportingFormData }) => ({
-        body: nextReportingFormData,
+        body: toReportingPayload(nextReportingFormData),
         method: 'PUT',
         url: `/reportings/${id}`
       }),

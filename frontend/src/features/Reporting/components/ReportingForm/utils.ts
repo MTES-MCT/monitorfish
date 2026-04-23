@@ -52,7 +52,7 @@ export function getFormFields(
   if (reportingType === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...base,
-      infractions: (value as InfractionSuspicion | undefined)?.infractions ?? [],
+      infractions: (value as InfractionSuspicion | undefined)?.infractions ?? ([{}] as any),
       type: ReportingType.INFRACTION_SUSPICION
     }
   }

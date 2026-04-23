@@ -22,11 +22,13 @@ import {
   FormikTextarea,
   FormikTextInput,
   getOptionsFromLabelledEnum,
+  Icon,
   MultiRadio,
-  Select
+  Select,
+  THEME
 } from '@mtes-mct/monitor-ui'
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
-import { Form as FormikForm, useFormikContext } from 'formik'
+import { Form as FormikForm, useFormikContext, type FormikErrors } from 'formik'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import styled from 'styled-components'
@@ -39,12 +41,15 @@ import {
   SatelliteSourceLabel
 } from '../../types'
 
-import type { FormEditedReporting } from '../../types'
+import type { FormEditedReporting, InfractionSuspicion } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
+
+type InfractionSuspicionFormValues = Extract<FormEditedReporting, { type: ReportingType.INFRACTION_SUSPICION }>
+type InfractionSuspicionFormErrors = FormikErrors<InfractionSuspicionFormValues>
 
 type FormProps = Readonly<{
   className: string | undefined
@@ -114,6 +119,8 @@ export function Form({
   ])
   const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
+  const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
+  const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
   const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
   const [isTitleDisplayed, setIsTitleDisplayed] = useState(() =>
     getInitialTitleVisibility(isInfractionSuspicion, values.title, isStandardizedTitle)
@@ -213,6 +220,10 @@ export function Form({
 
     if (reportingType === ReportingType.OBSERVATION) {
       setIsTitleDisplayed(false)
+    } else if (reportingType === ReportingType.INFRACTION_SUSPICION) {
+      if (!infractions.length) {
+        setFieldValue('infractions', [{}])
+      }
     }
   }
 
@@ -473,30 +484,27 @@ export function Form({
       />
       {isInfractionSuspicion && (
         <InfractionListWrapper>
-          {((values as any).infractions ?? []).map((infraction: any, index: number) => (
+          {infractions.map((_, index) => (
             <InfractionRow
-              key={`${infraction.threat}-${infraction.natinfCode}`}
-              errors={errors}
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              errors={infractionErrors}
               index={index}
               isFirst={index === 0}
               isLight={isLight}
               onRemove={() => {
-                const current = (values as any).infractions ?? []
                 setFieldValue(
                   'infractions',
-                  current.filter((_: any, i: number) => i !== index)
+                  infractions.filter((__, i) => i !== index)
                 )
               }}
             />
           ))}
-          {(errors as any).infractions && typeof (errors as any).infractions === 'string' && (
-            <FieldError>{(errors as any).infractions}</FieldError>
-          )}
+          {typeof infractionErrors?.infractions === 'string' && <FieldError>{infractionErrors.infractions}</FieldError>}
           <Button
             accent={Accent.SECONDARY}
             onClick={() => {
-              const current = (values as any).infractions ?? []
-              setFieldValue('infractions', [...current, {}])
+              setFieldValue('infractions', [...infractions, {}])
             }}
             type="button"
           >
@@ -547,28 +555,31 @@ function InfractionRow({
   isLight,
   onRemove
 }: {
-  errors: any
+  errors: InfractionSuspicionFormErrors | undefined
   index: number
   isFirst: boolean
   isLight: boolean
   onRemove: () => void
 }) {
-  const { setFieldValue, values } = useFormikContext<FormEditedReporting>()
-  const infractions = (values as any).infractions ?? []
+  const { setFieldValue, values } = useFormikContext<InfractionSuspicionFormValues>()
+  const infractions = values.infractions ?? []
   const infractionValue = infractions[index]
-  const rowError = errors?.infractions?.[index]?.threatHierarchy
+  const infractionItemErrors = Array.isArray(errors?.infractions)
+    ? (errors.infractions as FormikErrors<InfractionSuspicion['infractions'][number]>[])
+    : []
+  const rowError = infractionItemErrors[index]?.threatHierarchy as string | undefined
   const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
     infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined
   )
 
   return (
-    <InfractionRowWrapper>
+    <InfractionRowWrapper $isFirst={isFirst}>
       <CheckTreePicker
         error={rowError as string | undefined}
         isLight={isLight}
         isRequired={isFirst}
         isSelect
-        label={`Type d'infraction et NATINF ${index + 1}`}
+        label={`Type d’infraction et NATINF ${index + 1}`}
         name={`infractions[${index}].threatHierarchy`}
         onChange={nextThreats => {
           if (nextThreats && nextThreats.length > 0) {
@@ -583,9 +594,14 @@ function InfractionRow({
         value={infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined}
       />
       {!isFirst && (
-        <RemoveInfractionButton accent={Accent.TERTIARY} onClick={onRemove} type="button">
-          Supprimer
-        </RemoveInfractionButton>
+        <RemoveInfractionButton
+          accent={Accent.TERTIARY}
+          color={THEME.color.maximumRed}
+          Icon={Icon.Delete}
+          onClick={onRemove}
+          title="Supprimer"
+          type="button"
+        />
       )}
     </InfractionRowWrapper>
   )
@@ -598,14 +614,28 @@ const InfractionListWrapper = styled.div`
   margin-top: 16px;
 `
 
-const InfractionRowWrapper = styled.div`
+const InfractionRowWrapper = styled.div<{ $isFirst: boolean }>`
   display: flex;
-  align-items: flex-end;
   gap: 8px;
+
+  .Element-Button {
+    height: 29px;
+    margin-top: 22px;
+  }
+
+  .Field-CheckTreePicker {
+    width: ${p => (p.$isFirst ? '100%' : 'calc(100% - 46px - 8px)')};
+  }
 `
 
 const RemoveInfractionButton = styled(Button)`
   flex-shrink: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+
+  span {
+    margin-right: unset !important;
+  }
 `
 
 const StyledCheckbox = styled(Checkbox)`

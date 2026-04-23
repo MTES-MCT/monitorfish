@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.district.District
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.FacadeArea
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -194,10 +195,15 @@ class GetReportingWithDMLAndSeaFrontUTests {
         isDeleted = false,
         createdBy = "test@example.gouv.fr",
         reportingSource = ReportingSource.OPS,
-        natinfCode = 1235,
+        infractions =
+            listOf(
+                InfractionSuspicionThreat(
+                    natinfCode = 1235,
+                    threat = "Obligations déclaratives",
+                    threatCharacterization = "DEP",
+                ),
+            ),
         title = "Chalut en boeuf illégal",
-        threat = "Obligations déclaratives",
-        threatCharacterization = "DEP",
         latitude = latitude,
         longitude = longitude,
     )

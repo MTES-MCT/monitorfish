@@ -51,20 +51,14 @@ class GetAllCurrentReportings(
                         reporting = reporting,
                     )
 
-                val infraction =
-                    when (reporting) {
-                        is Reporting.Alert -> getInfraction(reporting)
-                        is Reporting.InfractionSuspicion -> getInfraction(reporting)
-                        is Reporting.Observation -> null
-                    }
-
                 when (reporting) {
-                    is Reporting.Alert -> reporting.copy(infraction = infraction, underCharter = underCharter)
-                    is Reporting.InfractionSuspicion ->
+                    is Reporting.Alert ->
                         reporting.copy(
-                            infraction = infraction,
+                            infraction = getInfraction(reporting),
                             underCharter = underCharter,
                         )
+                    is Reporting.InfractionSuspicion ->
+                        enrichInfractions(reporting).copy(underCharter = underCharter)
                     is Reporting.Observation -> reporting.copy(underCharter = underCharter)
                 }
             }
@@ -84,16 +78,20 @@ class GetAllCurrentReportings(
         }
     }
 
-    private fun getInfraction(reporting: Reporting.InfractionSuspicion): Infraction? =
-        reporting.natinfCode.let { natinfCode ->
-            try {
-                infractionRepository.findInfractionByNatinfCode(natinfCode)
-            } catch (e: NatinfCodeNotFoundException) {
-                logger.warn(e.message)
-
-                null
+    private fun enrichInfractions(reporting: Reporting.InfractionSuspicion): Reporting.InfractionSuspicion {
+        val enriched =
+            reporting.infractions.map { item ->
+                val detail =
+                    try {
+                        infractionRepository.findInfractionByNatinfCode(item.natinfCode)
+                    } catch (e: NatinfCodeNotFoundException) {
+                        logger.warn(e.message)
+                        null
+                    }
+                item.copy(infraction = detail)
             }
-        }
+        return reporting.copy(infractions = enriched)
+    }
 
     private fun getInfraction(reporting: Reporting.Alert): Infraction? =
         reporting.natinfCode.let { natinfCode ->

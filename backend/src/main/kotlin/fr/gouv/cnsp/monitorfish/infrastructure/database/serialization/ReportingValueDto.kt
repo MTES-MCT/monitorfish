@@ -6,6 +6,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 
+data class InfractionSuspicionThreatDto(
+    val natinfCode: Int,
+    val threat: String,
+    val threatCharacterization: String,
+)
+
 /**
  * Data class for JSON serialization/deserialization of InfractionSuspicion reporting value.
  * This is used for the JSONB `value` column in the database.
@@ -21,11 +27,14 @@ data class InfractionSuspicionDto(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
-    val natinfCode: Int,
+    // Legacy single-infraction fields (kept nullable for backward compat when reading old rows)
+    val natinfCode: Int? = null,
     val seaFront: String? = null,
     val dml: String? = null,
     val threat: String? = null,
     val threatCharacterization: String? = null,
+    // New list format
+    val infractions: List<InfractionSuspicionThreatDto>? = null,
     @JsonProperty("type")
     val reportingTypeMapping: ReportingTypeMapping = ReportingTypeMapping.INFRACTION_SUSPICION,
 )

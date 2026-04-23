@@ -26,7 +26,7 @@ import {
   Select
 } from '@mtes-mct/monitor-ui'
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
-import { Form as FormikForm, type FormikErrors, useFormikContext } from 'formik'
+import { Form as FormikForm, useFormikContext } from 'formik'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import styled from 'styled-components'
@@ -39,7 +39,7 @@ import {
   SatelliteSourceLabel
 } from '../../types'
 
-import type { FormEditedReporting, InfractionSuspicion } from '../../types'
+import type { FormEditedReporting } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -136,10 +136,6 @@ export function Form({
   }
 
   const isLight = !hasWhiteBackground
-
-  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
-    isInfractionSuspicion && values.threatHierarchy ? [values.threatHierarchy] : undefined
-  )
 
   const controlUnitsAsOptions = useMemo((): Option<number>[] => {
     if (!controlUnitsQuery.data) {
@@ -476,25 +472,37 @@ export function Form({
         }
       />
       {isInfractionSuspicion && (
-        <CheckTreePicker
-          error={(errors as FormikErrors<Partial<InfractionSuspicion>>).threatHierarchy as string | undefined}
-          isLight={isLight}
-          isRequired
-          isSelect
-          label="Type d’infraction et NATINF"
-          name="threatHierarchy"
-          onChange={nextThreats => {
-            if (!!nextThreats && nextThreats.length > 0) {
-              setFieldValue('threatHierarchy', nextThreats[0])
-            } else {
-              setFieldValue('threatHierarchy', undefined)
-            }
-          }}
-          options={threatCharacterizationOptions}
-          placement="autoVertical"
-          searchable
-          value={isInfractionSuspicion && values.threatHierarchy ? [values.threatHierarchy] : undefined}
-        />
+        <InfractionListWrapper>
+          {((values as any).infractions ?? []).map((infraction: any, index: number) => (
+            <InfractionRow
+              key={`${infraction.threat}-${infraction.natinfCode}`}
+              errors={errors}
+              index={index}
+              isFirst={index === 0}
+              isLight={isLight}
+              onRemove={() => {
+                const current = (values as any).infractions ?? []
+                setFieldValue(
+                  'infractions',
+                  current.filter((_: any, i: number) => i !== index)
+                )
+              }}
+            />
+          ))}
+          {(errors as any).infractions && typeof (errors as any).infractions === 'string' && (
+            <FieldError>{(errors as any).infractions}</FieldError>
+          )}
+          <Button
+            accent={Accent.SECONDARY}
+            onClick={() => {
+              const current = (values as any).infractions ?? []
+              setFieldValue('infractions', [...current, {}])
+            }}
+            type="button"
+          >
+            + Ajouter une infraction
+          </Button>
+        </InfractionListWrapper>
       )}
       <TwoCol>
         <FormikDatePicker
@@ -531,6 +539,74 @@ export function Form({
     </StyledForm>
   )
 }
+
+function InfractionRow({
+  errors,
+  index,
+  isFirst,
+  isLight,
+  onRemove
+}: {
+  errors: any
+  index: number
+  isFirst: boolean
+  isLight: boolean
+  onRemove: () => void
+}) {
+  const { setFieldValue, values } = useFormikContext<FormEditedReporting>()
+  const infractions = (values as any).infractions ?? []
+  const infractionValue = infractions[index]
+  const rowError = errors?.infractions?.[index]?.threatHierarchy
+  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
+    infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined
+  )
+
+  return (
+    <InfractionRowWrapper>
+      <CheckTreePicker
+        error={rowError as string | undefined}
+        isLight={isLight}
+        isRequired={isFirst}
+        isSelect
+        label={`Type d'infraction et NATINF ${index + 1}`}
+        name={`infractions[${index}].threatHierarchy`}
+        onChange={nextThreats => {
+          if (nextThreats && nextThreats.length > 0) {
+            setFieldValue(`infractions[${index}].threatHierarchy`, nextThreats[0])
+          } else {
+            setFieldValue(`infractions[${index}].threatHierarchy`, undefined)
+          }
+        }}
+        options={threatCharacterizationOptions}
+        placement="autoVertical"
+        searchable
+        value={infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined}
+      />
+      {!isFirst && (
+        <RemoveInfractionButton accent={Accent.TERTIARY} onClick={onRemove} type="button">
+          Supprimer
+        </RemoveInfractionButton>
+      )}
+    </InfractionRowWrapper>
+  )
+}
+
+const InfractionListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+`
+
+const InfractionRowWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+`
+
+const RemoveInfractionButton = styled(Button)`
+  flex-shrink: 0;
+`
 
 const StyledCheckbox = styled(Checkbox)`
   margin-top: 8px;

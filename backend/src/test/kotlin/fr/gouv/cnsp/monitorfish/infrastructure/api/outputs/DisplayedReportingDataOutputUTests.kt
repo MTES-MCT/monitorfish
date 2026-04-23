@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
@@ -46,9 +47,14 @@ class DisplayedReportingDataOutputUTests {
         otherSourceType = otherSourceType,
         authorContact = authorContact,
         title = "Test",
-        natinfCode = 2608,
-        threat = "Activités INN",
-        threatCharacterization = "Pêche sans autorisation",
+        infractions =
+            listOf(
+                InfractionSuspicionThreat(
+                    natinfCode = 2608,
+                    threat = "Activités INN",
+                    threatCharacterization = "Pêche sans autorisation",
+                ),
+            ),
     )
 
     private fun makeObservation(

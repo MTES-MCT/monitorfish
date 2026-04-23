@@ -123,20 +123,40 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       }
     },
     {
-      accessorFn: row =>
-        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.natinfCode : '',
+      accessorFn: row => {
+        if (row.type === ReportingType.INFRACTION_SUSPICION) {
+          return row.value.infractions.map((i: any) => i.natinfCode).join(', ')
+        }
+        if (row.type === ReportingType.ALERT) {
+          return row.value.natinfCode
+        }
+
+        return ''
+      },
       cell: ({ row }: CellContext<Reporting.Reporting, string>) => {
         const reporting = row.original
 
-        if (reporting.type !== ReportingType.INFRACTION_SUSPICION && reporting.type !== ReportingType.ALERT) {
-          return undefined
+        if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
+          return (
+            <Ellipsised title={getInfractionTitle(reporting)}>
+              {reporting.value.infractions.map((i: any) => (
+                <div key={i.natinfCode}>
+                  {i.threatCharacterization} / NATINF {i.natinfCode}
+                </div>
+              ))}
+            </Ellipsised>
+          )
         }
 
-        return (
-          <Ellipsised title={getInfractionTitle(reporting)}>
-            {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
-          </Ellipsised>
-        )
+        if (reporting.type === ReportingType.ALERT) {
+          return (
+            <Ellipsised title={getInfractionTitle(reporting)}>
+              {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
+            </Ellipsised>
+          )
+        }
+
+        return undefined
       },
       enableSorting: true,
       header: () => 'Type d’infraction',

@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
@@ -132,9 +133,14 @@ class GetReportingsUTests {
                 controlUnitId = 42,
                 authorContact = null,
                 title = "Test",
-                natinfCode = 2608,
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 2608,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation",
+                        ),
+                    ),
             )
         BDDMockito.given(reportingRepository.findAll(any())).willReturn(listOf(reporting))
         BDDMockito.given(getAllLegacyControlUnits.execute()).willReturn(listOf(controlUnit))
@@ -167,9 +173,14 @@ class GetReportingsUTests {
                 controlUnitId = 99,
                 authorContact = null,
                 title = "Test",
-                natinfCode = 2608,
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 2608,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation",
+                        ),
+                    ),
             )
         BDDMockito.given(reportingRepository.findAll(any())).willReturn(listOf(reporting))
         BDDMockito.given(getAllLegacyControlUnits.execute()).willReturn(listOf())
@@ -199,9 +210,14 @@ class GetReportingsUTests {
                 createdBy = "test@example.gouv.fr",
                 reportingSource = ReportingSource.OPS,
                 title = "Test",
-                natinfCode = 2608,
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 2608,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation",
+                        ),
+                    ),
             )
         val unrelatedUnit = LegacyControlUnit(1, "DIRM", false, "Cross Etel", listOf())
         BDDMockito.given(reportingRepository.findAll(any())).willReturn(listOf(reporting))

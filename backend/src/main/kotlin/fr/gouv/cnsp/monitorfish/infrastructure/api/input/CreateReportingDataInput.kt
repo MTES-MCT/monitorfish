@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
@@ -37,30 +38,24 @@ class CreateReportingDataInput(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
-    val threatHierarchy: ThreatHierarchyDataInput? = null,
+    val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
 ) {
     fun toReporting(createdBy: String): Reporting {
-        val threat = threatHierarchy?.value
-        val threatCharacterization = threatHierarchy?.children?.single()?.value
-        val natinf =
-            threatHierarchy
-                ?.children
-                ?.single()
-                ?.children
-                ?.single()
-                ?.value
+        val infractions =
+            threatHierarchies.map { h ->
+                InfractionSuspicionThreat(
+                    natinfCode =
+                        h.children
+                            .single()
+                            .children
+                            .single()
+                            .value,
+                    threat = h.value,
+                    threatCharacterization = h.children.single().value,
+                )
+            }
 
         return if (type == ReportingType.INFRACTION_SUSPICION) {
-            requireNotNull(natinf) {
-                "NATINF should be not null"
-            }
-            requireNotNull(threat) {
-                "threat should be not null"
-            }
-            requireNotNull(threatCharacterization) {
-                "threatCharacterization should be not null"
-            }
-
             Reporting.InfractionSuspicion(
                 vesselId = vesselId,
                 vesselName = vesselName,
@@ -89,9 +84,7 @@ class CreateReportingDataInput(
                 satelliteType = satelliteType,
                 title = title,
                 description = description,
-                natinfCode = natinf,
-                threat = threat,
-                threatCharacterization = threatCharacterization,
+                infractions = infractions,
                 isIUU = isIUU,
                 latitude = latitude,
                 longitude = longitude,

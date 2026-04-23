@@ -94,29 +94,42 @@ class GetVesselReportings(
         )
     }
 
+    private data class InfractionItem(
+        val threat: String,
+        val natinfCode: Int,
+        val threatCharacterization: String,
+    )
+
     private fun getThreatSummary(reportings: List<Reporting>): Map<Threat, List<ThreatSummary>> {
-        return reportings
-            .filter {
-                return@filter when (it) {
-                    is Reporting.Alert -> true
-                    is Reporting.InfractionSuspicion -> true
-                    is Reporting.Observation -> false
-                }
-            }.groupBy {
-                return@groupBy when (it) {
-                    is Reporting.Alert -> it.threat
-                    is Reporting.InfractionSuspicion -> it.threat
-                    is Reporting.Observation -> throw IllegalArgumentException("Should not happen")
-                }
-            }.mapValues { (_, values) ->
-                return@mapValues values
-                    .groupBy {
-                        return@groupBy when (it) {
-                            is Reporting.Alert -> Pair(it.natinfCode, it.threatCharacterization)
-                            is Reporting.InfractionSuspicion -> Pair(it.natinfCode, it.threatCharacterization)
-                            is Reporting.Observation -> throw IllegalArgumentException("Should not happen")
+        val items =
+            reportings.flatMap { reporting ->
+                when (reporting) {
+                    is Reporting.Alert ->
+                        listOf(
+                            InfractionItem(
+                                threat = reporting.threat,
+                                natinfCode = reporting.natinfCode,
+                                threatCharacterization = reporting.threatCharacterization,
+                            ),
+                        )
+                    is Reporting.InfractionSuspicion ->
+                        reporting.infractions.map { inf ->
+                            InfractionItem(
+                                threat = inf.threat,
+                                natinfCode = inf.natinfCode,
+                                threatCharacterization = inf.threatCharacterization,
+                            )
                         }
-                    }.map { (key, value) ->
+                    is Reporting.Observation -> emptyList()
+                }
+            }
+
+        return items
+            .groupBy { it.threat }
+            .mapValues { (_, grouped) ->
+                grouped
+                    .groupBy { Pair(it.natinfCode, it.threatCharacterization) }
+                    .map { (key, value) ->
                         val natinfCode = key.first
                         val threatCharacterization = key.second
                         val infraction =
@@ -124,11 +137,10 @@ class GetVesselReportings(
                                 infractionRepository.findInfractionByNatinfCode(natinfCode)
                             } catch (e: NatinfCodeNotFoundException) {
                                 logger.warn(e.message)
-
                                 null
                             }
 
-                        return@map ThreatSummary(
+                        ThreatSummary(
                             natinfCode = natinfCode,
                             natinf = infraction?.infraction ?: "",
                             threatCharacterization = threatCharacterization,
@@ -163,9 +175,7 @@ class GetVesselReportings(
                         infraction = getInfraction(reporting),
                     )
                 is Reporting.InfractionSuspicion ->
-                    reporting.copy(
-                        infraction = getInfraction(reporting),
-                    )
+                    enrichInfractions(reporting)
                 is Reporting.Observation ->
                     reporting
             }
@@ -190,16 +200,20 @@ class GetVesselReportings(
         return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
     }
 
-    private fun getInfraction(reporting: Reporting.InfractionSuspicion): Infraction? =
-        reporting.natinfCode.let { natinfCode ->
-            try {
-                infractionRepository.findInfractionByNatinfCode(natinfCode)
-            } catch (e: NatinfCodeNotFoundException) {
-                logger.warn(e.message)
-
-                null
+    private fun enrichInfractions(reporting: Reporting.InfractionSuspicion): Reporting.InfractionSuspicion {
+        val enriched =
+            reporting.infractions.map { item ->
+                val detail =
+                    try {
+                        infractionRepository.findInfractionByNatinfCode(item.natinfCode)
+                    } catch (e: NatinfCodeNotFoundException) {
+                        logger.warn(e.message)
+                        null
+                    }
+                item.copy(infraction = detail)
             }
-        }
+        return reporting.copy(infractions = enriched)
+    }
 
     private fun getInfraction(reporting: Reporting.Alert): Infraction? =
         reporting.natinfCode.let { natinfCode ->

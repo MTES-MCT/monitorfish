@@ -73,13 +73,13 @@ class DisplayedReportingDataOutput(
                     },
                 threat =
                     when (reporting) {
-                        is Reporting.InfractionSuspicion -> reporting.threat
+                        is Reporting.InfractionSuspicion -> reporting.infractions.firstOrNull()?.threat
                         is Reporting.Observation -> null
                         is Reporting.Alert -> reporting.threat
                     },
                 threatCharacterization =
                     when (reporting) {
-                        is Reporting.InfractionSuspicion -> reporting.threatCharacterization
+                        is Reporting.InfractionSuspicion -> reporting.infractions.firstOrNull()?.threatCharacterization
                         is Reporting.Observation -> null
                         is Reporting.Alert -> reporting.threatCharacterization
                     },

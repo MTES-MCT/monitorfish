@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -92,10 +93,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -112,7 +118,7 @@ class ReportingControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.infractions[0].natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -194,10 +200,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -224,24 +235,26 @@ class ReportingControllerITests {
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingSource = ReportingSource.OPS,
                                 title = "A title",
-                                threatHierarchy =
-                                    ThreatHierarchyDataInput(
-                                        value = "Obligations déclaratives",
-                                        label = "Obligations déclaratives",
-                                        children =
-                                            listOf(
-                                                ThreatCharacterizationDataInput(
-                                                    value = "DEP",
-                                                    label = "DEP",
-                                                    children =
-                                                        listOf(
-                                                            NatinfDataInput(
-                                                                value = 123456,
-                                                                label = "123456",
+                                threatHierarchies =
+                                    listOf(
+                                        ThreatHierarchyDataInput(
+                                            value = "Obligations déclaratives",
+                                            label = "Obligations déclaratives",
+                                            children =
+                                                listOf(
+                                                    ThreatCharacterizationDataInput(
+                                                        value = "DEP",
+                                                        label = "DEP",
+                                                        children =
+                                                            listOf(
+                                                                NatinfDataInput(
+                                                                    value = 123456,
+                                                                    label = "123456",
+                                                                ),
                                                             ),
-                                                        ),
+                                                    ),
                                                 ),
-                                            ),
+                                        ),
                                     ),
                             ),
                         ),
@@ -253,7 +266,7 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.flagState", equalTo("FR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.createdBy", equalTo("test")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.infractions[0].natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -271,11 +284,16 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.UNIT,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 controlUnitId = 1234,
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -305,24 +323,26 @@ class ReportingControllerITests {
                                 reportingSource = ReportingSource.UNIT,
                                 controlUnitId = 1234,
                                 title = "A title",
-                                threatHierarchy =
-                                    ThreatHierarchyDataInput(
-                                        value = "Obligations déclaratives",
-                                        label = "Obligations déclaratives",
-                                        children =
-                                            listOf(
-                                                ThreatCharacterizationDataInput(
-                                                    value = "DEP",
-                                                    label = "DEP",
-                                                    children =
-                                                        listOf(
-                                                            NatinfDataInput(
-                                                                value = 123456,
-                                                                label = "123456",
+                                threatHierarchies =
+                                    listOf(
+                                        ThreatHierarchyDataInput(
+                                            value = "Obligations déclaratives",
+                                            label = "Obligations déclaratives",
+                                            children =
+                                                listOf(
+                                                    ThreatCharacterizationDataInput(
+                                                        value = "DEP",
+                                                        label = "DEP",
+                                                        children =
+                                                            listOf(
+                                                                NatinfDataInput(
+                                                                    value = 123456,
+                                                                    label = "123456",
+                                                                ),
                                                             ),
-                                                        ),
+                                                    ),
                                                 ),
-                                            ),
+                                        ),
                                     ),
                             ),
                         ),
@@ -335,7 +355,7 @@ class ReportingControllerITests {
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnitId", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.id", equalTo(1234)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.controlUnit.name", equalTo("Cross Etel")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.infractions[0].natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -353,10 +373,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -397,10 +422,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -420,24 +450,26 @@ class ReportingControllerITests {
                                 reportingSource = ReportingSource.OPS,
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingDate = ZonedDateTime.now(),
-                                threatHierarchy =
-                                    ThreatHierarchyDataInput(
-                                        children =
-                                            listOf(
-                                                ThreatCharacterizationDataInput(
-                                                    children =
-                                                        listOf(
-                                                            NatinfDataInput(
-                                                                label = "27689",
-                                                                value = 27689,
+                                threatHierarchies =
+                                    listOf(
+                                        ThreatHierarchyDataInput(
+                                            children =
+                                                listOf(
+                                                    ThreatCharacterizationDataInput(
+                                                        children =
+                                                            listOf(
+                                                                NatinfDataInput(
+                                                                    label = "27689",
+                                                                    value = 27689,
+                                                                ),
                                                             ),
-                                                        ),
-                                                    label = "Pêche sans autorisation par navire tiers",
-                                                    value = "Pêche sans autorisation par navire tiers",
+                                                        label = "Pêche sans autorisation par navire tiers",
+                                                        value = "Pêche sans autorisation par navire tiers",
+                                                    ),
                                                 ),
-                                            ),
-                                        label = "Activités INN",
-                                        value = "Activités INN",
+                                            label = "Activités INN",
+                                            value = "Activités INN",
+                                        ),
                                     ),
                                 title = "A title",
                             ),
@@ -465,10 +497,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -494,24 +531,26 @@ class ReportingControllerITests {
                                 type = ReportingType.INFRACTION_SUSPICION,
                                 reportingSource = ReportingSource.OPS,
                                 title = "A title",
-                                threatHierarchy =
-                                    ThreatHierarchyDataInput(
-                                        value = "Obligations déclaratives",
-                                        label = "Obligations déclaratives",
-                                        children =
-                                            listOf(
-                                                ThreatCharacterizationDataInput(
-                                                    value = "DEP",
-                                                    label = "DEP",
-                                                    children =
-                                                        listOf(
-                                                            NatinfDataInput(
-                                                                value = 123456,
-                                                                label = "123456",
+                                threatHierarchies =
+                                    listOf(
+                                        ThreatHierarchyDataInput(
+                                            value = "Obligations déclaratives",
+                                            label = "Obligations déclaratives",
+                                            children =
+                                                listOf(
+                                                    ThreatCharacterizationDataInput(
+                                                        value = "DEP",
+                                                        label = "DEP",
+                                                        children =
+                                                            listOf(
+                                                                NatinfDataInput(
+                                                                    value = 123456,
+                                                                    label = "123456",
+                                                                ),
                                                             ),
-                                                        ),
+                                                    ),
                                                 ),
-                                            ),
+                                        ),
                                     ),
                             ),
                         ),
@@ -521,7 +560,7 @@ class ReportingControllerITests {
             .andExpect(status().isCreated)
             .andExpect(MockMvcResultMatchers.jsonPath("$.cfr", equalTo("FRFGRGR")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.reportingSource", equalTo("OPS")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.value.natinfCode", equalTo(123456)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.value.infractions[0].natinfCode", equalTo(123456)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.value.title", equalTo("A title")))
     }
 
@@ -541,10 +580,15 @@ class ReportingControllerITests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 27689,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 27689,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation par navire tiers",
+                        ),
+                    ),
                 title = "Pêche IUU - Zone exclusive",
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation par navire tiers",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,

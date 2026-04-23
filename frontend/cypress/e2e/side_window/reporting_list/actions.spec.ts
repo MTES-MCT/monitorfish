@@ -91,8 +91,8 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait('@updateReporting').then(({ request, response }) => {
       expect(request.body.title).contains('Suspicion de chalutage dans les 3 km')
       expect(response && response.statusCode).equal(200)
-      expect(response?.body?.value?.natinfCode).equal(27717)
-      expect(response?.body?.value?.threatCharacterization).equal('Transbordement')
+      expect(response?.body?.value?.infractions?.[0]?.natinfCode).equal(27717)
+      expect(response?.body?.value?.infractions?.[0]?.threatCharacterization).equal('Transbordement')
     })
     cy.wait(200)
 

@@ -42,16 +42,16 @@ class CreateReportingDataInput(
 ) {
     fun toReporting(createdBy: String): Reporting {
         val infractions =
-            threatHierarchies.map { h ->
+            threatHierarchies.map { threatHierarchy ->
                 InfractionSuspicionThreat(
                     natinfCode =
-                        h.children
+                        threatHierarchy.children
                             .single()
                             .children
                             .single()
                             .value,
-                    threat = h.value,
-                    threatCharacterization = h.children.single().value,
+                    threat = threatHierarchy.value,
+                    threatCharacterization = threatHierarchy.children.single().value,
                 )
             }
 

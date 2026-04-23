@@ -145,6 +145,24 @@ context('Side Window > Reporting List > Actions', () => {
         expect(response?.body?.value?.infractions?.[1]?.natinfCode).equal(27689)
       })
     })
+
+    /**
+     * Part 4: remove one infraction
+     */
+    cy.getDataCy('ReportingTable-reporting').then(() => {
+      cy.clickButton('Editer le signalement', {
+        withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
+      })
+
+      cy.clickButton('Supprimer')
+      cy.clickButton('Valider')
+
+      cy.wait('@updateReporting').then(({ response }) => {
+        expect(response && response.statusCode).equal(200)
+        expect(response?.body?.value?.infractions).to.have.length(1)
+        expect(response?.body?.value?.infractions?.[0]?.natinfCode).equal(27717)
+      })
+    })
   })
 
   it('A reporting Should be downloaded', () => {

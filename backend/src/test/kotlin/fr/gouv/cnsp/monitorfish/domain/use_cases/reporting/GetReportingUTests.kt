@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -30,10 +31,15 @@ class GetReportingUTests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,

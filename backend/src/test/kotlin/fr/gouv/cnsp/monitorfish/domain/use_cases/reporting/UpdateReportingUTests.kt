@@ -100,9 +100,14 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.UNIT,
                 title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -153,9 +158,14 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.UNIT,
                 title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -179,9 +189,14 @@ class UpdateReportingUTests {
                             type = ReportingType.INFRACTION_SUSPICION,
                             reportingDate = ZonedDateTime.now(),
                             title = "A reporting",
-                            natinfCode = 123456,
-                            threat = "Obligations déclaratives",
-                            threatCharacterization = "DEP",
+                            infractions =
+                                listOf(
+                                    InfractionSuspicionThreat(
+                                        natinfCode = 123456,
+                                        threat = "Obligations déclaratives",
+                                        threatCharacterization = "DEP",
+                                    ),
+                                ),
                         ),
                     )
             }
@@ -199,7 +214,7 @@ class UpdateReportingUTests {
     }
 
     @Test
-    fun `execute Should throw an exception When NATINF code is not set`() {
+    fun `execute Should throw an exception When no infractions are set`() {
         // Given
         given(reportingRepository.findById(any())).willReturn(
             Reporting.InfractionSuspicion(
@@ -217,9 +232,14 @@ class UpdateReportingUTests {
                 validationDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.UNIT,
                 title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -243,14 +263,13 @@ class UpdateReportingUTests {
                         type = ReportingType.INFRACTION_SUSPICION,
                         reportingDate = ZonedDateTime.now(),
                         title = "A reporting",
-                        threat = "Obligations déclaratives",
-                        threatCharacterization = "DEP",
+                        infractions = emptyList(),
                     ),
                 )
             }
 
         // Then
-        assertThat(throwable.message).contains("NATINF code is required")
+        assertThat(throwable.message).contains("At least one infraction is required")
     }
 
     @Test
@@ -304,9 +323,6 @@ class UpdateReportingUTests {
                 reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
             ),
         )
 
@@ -339,9 +355,14 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 authorContact = "An actor",
                 title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -368,9 +389,6 @@ class UpdateReportingUTests {
                 reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
                 description = "Test 2",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
             ),
         )
 
@@ -404,9 +422,14 @@ class UpdateReportingUTests {
                 reportingSource = ReportingSource.UNIT,
                 authorContact = "A contact",
                 title = "Test",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",
@@ -436,9 +459,14 @@ class UpdateReportingUTests {
                 controlUnitId = 1,
                 reportingDate = ZonedDateTime.now(),
                 title = "A reporting",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
             ),
         )
 
@@ -497,9 +525,6 @@ class UpdateReportingUTests {
                     controlUnitId = 1,
                     reportingDate = ZonedDateTime.now(),
                     title = "A reporting",
-                    natinfCode = 1234,
-                    threat = "Obligations déclaratives",
-                    threatCharacterization = "DEP",
                 ),
             )
 
@@ -560,9 +585,14 @@ class UpdateReportingUTests {
                     controlUnitId = 1,
                     reportingDate = ZonedDateTime.now(),
                     title = "A reporting",
-                    natinfCode = 1234,
-                    threat = "Obligations déclaratives",
-                    threatCharacterization = "DEP",
+                    infractions =
+                        listOf(
+                            InfractionSuspicionThreat(
+                                natinfCode = 1234,
+                                threat = "Obligations déclaratives",
+                                threatCharacterization = "DEP",
+                            ),
+                        ),
                 ),
         )
 

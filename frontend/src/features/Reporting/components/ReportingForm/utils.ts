@@ -52,7 +52,7 @@ export function getFormFields(
   if (reportingType === ReportingType.INFRACTION_SUSPICION) {
     return {
       ...base,
-      threatHierarchy: (value as InfractionSuspicion | undefined)?.threatHierarchy,
+      infractions: (value as InfractionSuspicion | undefined)?.infractions ?? [],
       type: ReportingType.INFRACTION_SUSPICION
     }
   }

@@ -5,6 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -156,8 +157,8 @@ class ReportingMapperUTests {
     }
 
     @Test
-    fun `getReportingFromJSON Should deserialize an INFRACTION_SUSPICION When a legacy flagState property is found`() {
-        // Given
+    fun `getReportingFromJSON Should deserialize a legacy INFRACTION_SUSPICION with single natinfCode field`() {
+        // Given - old single-infraction JSON format (no 'infractions' key)
         val infraction =
             "{" +
                 "\"type\": \"INFRACTION_SUSPICION\"," +
@@ -169,6 +170,8 @@ class ReportingMapperUTests {
                 "\"flagState\": \"FR\"," +
                 "\"description\": \"A description !\"," +
                 "\"natinfCode\": 1234," +
+                "\"threat\": \"Obligations déclaratives\"," +
+                "\"threatCharacterization\": \"DEP\"," +
                 "\"dml\": \"DML 56\"" +
                 "}"
 
@@ -180,7 +183,7 @@ class ReportingMapperUTests {
                 getDefaultEntity(type = ReportingType.INFRACTION_SUSPICION, value = infraction),
             )
 
-        // Then
+        // Then - legacy format is wrapped in a 1-item list
         Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
         parsedReporting as Reporting.InfractionSuspicion
         Assertions.assertThat(parsedReporting.reportingSource).isEqualTo(ReportingSource.OPS)
@@ -188,24 +191,29 @@ class ReportingMapperUTests {
         Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.description).isEqualTo("A description !")
-        Assertions.assertThat(parsedReporting.natinfCode).isEqualTo(1234)
         Assertions.assertThat(parsedReporting.dml).isEqualTo("DML 56")
+        Assertions.assertThat(parsedReporting.infractions).hasSize(1)
+        Assertions.assertThat(parsedReporting.infractions[0].natinfCode).isEqualTo(1234)
+        Assertions.assertThat(parsedReporting.infractions[0].threat).isEqualTo("Obligations déclaratives")
+        Assertions.assertThat(parsedReporting.infractions[0].threatCharacterization).isEqualTo("DEP")
     }
 
     @Test
-    fun `readValue Should deserialize an INFRACTION_SUSPICION`() {
-        // Given
+    fun `getReportingFromJSON Should deserialize an INFRACTION_SUSPICION with infractions list`() {
+        // Given - new multi-infraction JSON format
         val infraction =
             "{" +
                 "\"type\": \"INFRACTION_SUSPICION\"," +
                 "\"reportingSource\": \"OPS\"," +
-                "\"unit\": null, " +
                 "\"authorTrigram\": \"LTH\"," +
                 "\"authorContact\": null," +
                 "\"title\": \"A title !\"," +
                 "\"description\": \"A description !\"," +
-                "\"natinfCode\": 1234," +
-                "\"dml\": \"DML 56\"" +
+                "\"dml\": \"DML 56\"," +
+                "\"infractions\": [" +
+                "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans autorisation par navire tiers\"}," +
+                "{\"natinfCode\": 7059, \"threat\": \"Mesures techniques\", \"threatCharacterization\": \"Engin\"}" +
+                "]" +
                 "}"
 
         val parsedReporting =
@@ -219,13 +227,13 @@ class ReportingMapperUTests {
         // Then
         Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
         parsedReporting as Reporting.InfractionSuspicion
-        Assertions.assertThat(parsedReporting.reportingSource).isEqualTo(ReportingSource.OPS)
-        Assertions.assertThat(parsedReporting.controlUnitId).isNull()
-        Assertions.assertThat(parsedReporting.authorContact).isNull()
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
-        Assertions.assertThat(parsedReporting.description).isEqualTo("A description !")
-        Assertions.assertThat(parsedReporting.natinfCode).isEqualTo(1234)
         Assertions.assertThat(parsedReporting.dml).isEqualTo("DML 56")
+        Assertions.assertThat(parsedReporting.infractions).hasSize(2)
+        Assertions.assertThat(parsedReporting.infractions[0].natinfCode).isEqualTo(2608)
+        Assertions.assertThat(parsedReporting.infractions[0].threat).isEqualTo("Activités INN")
+        Assertions.assertThat(parsedReporting.infractions[1].natinfCode).isEqualTo(7059)
+        Assertions.assertThat(parsedReporting.infractions[1].threat).isEqualTo("Mesures techniques")
     }
 
     @Test
@@ -278,9 +286,14 @@ class ReportingMapperUTests {
                 reportingSource = ReportingSource.OPS,
                 title = "A title !",
                 description = "A description !",
-                natinfCode = 1234,
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1234,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 dml = "DML 56",
             )
 
@@ -293,7 +306,10 @@ class ReportingMapperUTests {
         Assertions.assertThat(infractionSuspicionValue.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(infractionSuspicionValue.title).isEqualTo("A title !")
         Assertions.assertThat(infractionSuspicionValue.description).isEqualTo("A description !")
-        Assertions.assertThat(infractionSuspicionValue.natinfCode).isEqualTo(1234)
+        Assertions.assertThat(infractionSuspicionValue.infractions).hasSize(1)
+        Assertions.assertThat(infractionSuspicionValue.infractions!![0].natinfCode).isEqualTo(1234)
+        Assertions.assertThat(infractionSuspicionValue.infractions!![0].threat).isEqualTo("Obligations déclaratives")
+        Assertions.assertThat(infractionSuspicionValue.infractions!![0].threatCharacterization).isEqualTo("DEP")
         Assertions.assertThat(infractionSuspicionValue.dml).isEqualTo("DML 56")
     }
 

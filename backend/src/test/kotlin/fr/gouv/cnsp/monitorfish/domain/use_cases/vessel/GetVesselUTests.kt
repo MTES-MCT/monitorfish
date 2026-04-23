@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.mock
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -451,9 +452,14 @@ class GetVesselUTests {
                 isDeleted = false,
                 reportingSource = ReportingSource.OPS,
                 title = "Infraction suspicion",
-                natinfCode = 123,
-                threat = "threat",
-                threatCharacterization = "threat characterization",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123,
+                            threat = "threat",
+                            threatCharacterization = "threat characterization",
+                        ),
+                    ),
                 createdBy = "test@example.gouv.fr",
             )
         // Duplicate reporting returned by both queries

@@ -26,7 +26,10 @@ export function buildReportingCreation(formValues: FormEditedReporting, isIUU = 
     reportingDate: formValues.reportingDate,
     reportingSource: formValues.reportingSource as ReportingOriginSource,
     satelliteType: formValues.satelliteType,
-    threatHierarchy: formValues.type === ReportingType.INFRACTION_SUSPICION ? formValues.threatHierarchy : undefined,
+    threatHierarchies:
+      formValues.type === ReportingType.INFRACTION_SUSPICION
+        ? (formValues.infractions ?? []).map((i: any) => i.threatHierarchy).filter(Boolean)
+        : [],
     title: formValues.title as string,
     type: formValues.type,
     validationDate: undefined,

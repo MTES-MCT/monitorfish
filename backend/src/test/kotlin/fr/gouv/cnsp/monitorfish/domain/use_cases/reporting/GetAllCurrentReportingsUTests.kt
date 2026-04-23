@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -50,10 +51,15 @@ class GetAllCurrentReportingsUTests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 27689,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 27689,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation par navire tiers",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation par navire tiers",
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",
@@ -87,7 +93,7 @@ class GetAllCurrentReportingsUTests {
         val (reporting, _) = reportings.first()
         assertThat(reporting.cfr).isEqualTo("FRFGRGR")
         assertThat(reporting.underCharter).isTrue
-        assertThat(reporting.infraction).isNotNull
+        assertThat((reporting as Reporting.InfractionSuspicion).infractions.first().infraction).isNotNull
     }
 
     @Test
@@ -104,10 +110,15 @@ class GetAllCurrentReportingsUTests {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation par navire tiers",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Activités INN",
-                threatCharacterization = "Pêche sans autorisation par navire tiers",
                 isDeleted = false,
                 isArchived = false,
                 createdBy = "test@example.gouv.fr",

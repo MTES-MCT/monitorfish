@@ -1,13 +1,14 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
 import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { CustomSearch } from '@mtes-mct/monitor-ui'
 import { useMemo } from 'react'
 
-import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
+import type { InfractionSuspicionReporting, Reporting } from '@features/Reporting/types'
 
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
@@ -43,11 +44,29 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
             name: 'value.title'
           },
           {
-            getFn: reporting => (!isObservation(reporting) ? reporting.value.threatCharacterization : ''),
+            getFn: reporting => {
+              if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
+                return reporting.value.infractions.map((i: any) => i.threatCharacterization).join(' ')
+              }
+              if (reporting.type === ReportingType.ALERT) {
+                return reporting.value.threatCharacterization
+              }
+
+              return ''
+            },
             name: 'value.threatCharacterization'
           },
           {
-            getFn: reporting => (!isObservation(reporting) ? reporting.value.threat : ''),
+            getFn: reporting => {
+              if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
+                return reporting.value.infractions.map((i: any) => i.threat).join(' ')
+              }
+              if (reporting.type === ReportingType.ALERT) {
+                return reporting.value.threat
+              }
+
+              return ''
+            },
             name: 'value.threat'
           },
           'value.name'
@@ -74,8 +93,4 @@ export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGro
 
 function isInfractionSuspicion(reporting: Reporting.Reporting): reporting is InfractionSuspicionReporting {
   return (<InfractionSuspicionReporting>reporting).value.title !== undefined
-}
-
-function isObservation(reporting: Reporting.Reporting): reporting is ObservationReporting {
-  return (<InfractionSuspicionReporting>reporting).value.threat === undefined
 }

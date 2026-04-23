@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -145,10 +146,15 @@ object TestUtils {
                     flagState = CountryCode.FR,
                     createdBy = "test@example.gouv.fr",
                     reportingSource = ReportingSource.OPS,
-                    natinfCode = natinfCode ?: 123456,
+                    infractions =
+                        listOf(
+                            InfractionSuspicionThreat(
+                                natinfCode = natinfCode ?: 123456,
+                                threat = "Obligations déclaratives",
+                                threatCharacterization = "DEP",
+                            ),
+                        ),
                     title = "A title",
-                    threat = "Obligations déclaratives",
-                    threatCharacterization = "DEP",
                 )
         }
     }

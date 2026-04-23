@@ -10,6 +10,7 @@ export const CreateOrEditReportingSchema = z
     expirationDate: z.string().optional(),
     externalMarker: z.string().optional(),
     imo: z.string().optional(),
+    infractions: z.array(z.any()).optional(),
     ircs: z.string().optional(),
     isArchived: z.boolean().optional(),
     isIUU: z.boolean().optional(),
@@ -21,7 +22,6 @@ export const CreateOrEditReportingSchema = z
     reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
     reportingSource: z.enum(ReportingOriginSource),
     satelliteType: z.string().optional(),
-    threatHierarchy: z.any().optional(),
     title: z
       .string('Veuillez renseigner le titre du signalement.')
       .min(1, 'Veuillez renseigner le titre du signalement.'),
@@ -46,12 +46,24 @@ export const CreateOrEditReportingSchema = z
       }
     }
 
-    if (data.type === ReportingType.INFRACTION_SUSPICION && !data.threatHierarchy) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Veuillez renseigner le NATINF.',
-        path: ['threatHierarchy']
-      })
+    if (data.type === ReportingType.INFRACTION_SUSPICION) {
+      if (!data.infractions || data.infractions.length === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Veuillez renseigner au moins une infraction.',
+          path: ['infractions']
+        })
+      } else {
+        data.infractions.forEach((infraction: any, index: number) => {
+          if (!infraction.threatHierarchy) {
+            ctx.addIssue({
+              code: 'custom',
+              message: 'Veuillez renseigner le NATINF.',
+              path: ['infractions', index, 'threatHierarchy']
+            })
+          }
+        })
+      }
     }
 
     if (data.reportingSource === ReportingOriginSource.UNIT && !data.controlUnitId) {

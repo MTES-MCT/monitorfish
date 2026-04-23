@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -34,18 +35,22 @@ class UpdateReportingDataInput(
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
-    val threatHierarchy: ThreatHierarchyDataInput? = null,
+    val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
 ) {
     fun toUpdatedReportingValues(): ReportingUpdateCommand {
-        val threat = threatHierarchy?.value
-        val threatCharacterization = threatHierarchy?.children?.single()?.value
-        val natinf =
-            threatHierarchy
-                ?.children
-                ?.single()
-                ?.children
-                ?.single()
-                ?.value
+        val infractions =
+            threatHierarchies.map { h ->
+                InfractionSuspicionThreat(
+                    natinfCode =
+                        h.children
+                            .single()
+                            .children
+                            .single()
+                            .value,
+                    threat = h.value,
+                    threatCharacterization = h.children.single().value,
+                )
+            }
 
         return ReportingUpdateCommand(
             vesselId = this.vesselId,
@@ -65,9 +70,7 @@ class UpdateReportingDataInput(
             reportingDate = this.reportingDate,
             title = this.title,
             description = this.description,
-            threat = threat,
-            threatCharacterization = threatCharacterization,
-            natinfCode = natinf,
+            infractions = infractions,
             gearCode = this.gearCode,
             vesselIdentifier = this.vesselIdentifier,
             flagState = this.flagState,

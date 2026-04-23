@@ -2,7 +2,7 @@ import { WindowContext } from '@api/constants'
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import { getFormFields } from '@features/Reporting/components/ReportingForm/utils'
 import { autoSaveReporting } from '@features/Reporting/useCases/autoSaveReporting'
-import { buildReportingCreation } from '@features/Reporting/useCases/utils'
+import { toReportingPayload } from '@features/Reporting/useCases/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
@@ -88,7 +88,7 @@ export function ReportingForm({
         return
       }
 
-      dispatch(addReporting(buildReportingCreation(nextReporting, isIUU)))
+      dispatch(addReporting(toReportingPayload(nextReporting, isIUU)))
 
       handleClose()
     },

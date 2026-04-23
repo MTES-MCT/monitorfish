@@ -40,7 +40,7 @@ context('Reporting map form', () => {
     cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')
-    cy.fill('Type d\u2019infraction et NATINF', ['27717'])
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
 
     cy.wait('@createReporting')
     cy.wait('@displayReportings')

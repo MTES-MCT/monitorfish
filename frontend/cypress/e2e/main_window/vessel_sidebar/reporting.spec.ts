@@ -93,7 +93,7 @@ context('Vessel sidebar reporting tab', () => {
 
       cy.get('*[data-cy^="edit-reporting-card"]').first().scrollIntoView().click({ timeout: 10000 })
       cy.fill('Type de signalement', 'Suspicion d\'infraction')
-      cy.fill('Type d’infraction et NATINF', ['27717'])
+      cy.fill('Type d’infraction et NATINF 1', ['27717'])
       const nextDate = getUtcDateInMultipleFormats('2200-06-08T13:54')
       cy.fill('Fin de validité', nextDate.utcDateTuple)
       cy.clickButton('Valider')

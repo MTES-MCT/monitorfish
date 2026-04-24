@@ -38,7 +38,7 @@ export const getInfractionTitle = (reporting: InfractionSuspicionReporting | Pen
         i =>
           `${i.threat} - ${i.threatCharacterization}\n${i.natinfCode}${i.infraction ? ` - ${i.infraction.infraction}` : ''}`
       )
-      .join('\n')
+      .join('\n\n')
   }
 
   return `${reporting.value.threat} - ${reporting.value.threatCharacterization}\n${reporting.value.natinfCode} - ${reporting.infraction?.infraction}`

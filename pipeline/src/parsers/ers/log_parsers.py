@@ -354,6 +354,127 @@ def parse_eof(eof):
     return data
 
 
+def parse_src(src):
+    return {
+        "landingDate": src.get("DL"),
+        "landingPort": src.get("PO"),
+    }
+
+
+def parse_css(css):
+    children = tagged_children(css)
+
+    data = {
+        "fishPrice": try_float(css.get("FP")),
+        "totalPrice": try_float(css.get("TP")),
+        "currency": css.get("CR"),
+        "fishSize": css.get("SF"),
+        "productDestination": css.get("PP"),
+        "withdrawn": css.get("WD"),
+        "producerOrganizationUse": css.get("OP"),
+    }
+
+    if "SPE" in children:
+        assert len(children["SPE"]) == 1
+        data["species"] = parse_spe(children["SPE"][0])
+
+    return data
+
+
+def parse_cst(cst):
+    children = tagged_children(cst)
+
+    data = {
+        "fishSize": cst.get("SF"),
+    }
+
+    if "SPE" in children:
+        assert len(children["SPE"]) == 1
+        data["species"] = parse_spe(children["SPE"][0])
+
+    return data
+
+
+def parse_sli(sli):
+    children = tagged_children(sli)
+
+    data = {
+        "saleDate": sli.get("DA"),
+        "saleCountry": sli.get("SC"),
+        "saleLocation": sli.get("SL"),
+        "sellerName": sli.get("NS"),
+        "buyerName": sli.get("NB"),
+        "buyerIdentificationNumber": sli.get("VN"),
+        "salesContractReference": sli.get("CN"),
+        "bcdNumber": sli.get("BC"),
+    }
+
+    if "SRC" in children:
+        assert len(children["SRC"]) == 1
+        data = {**data, **parse_src(children["SRC"][0])}
+
+    if "CSS" in children:
+        data["consignments"] = [parse_css(css) for css in children["CSS"]]
+
+    return data
+
+
+def parse_tli(tli):
+    children = tagged_children(tli)
+
+    data = {
+        "takeoverDate": tli.get("DA"),
+        "takeoverCountry": tli.get("SC"),
+        "takeoverLocation": tli.get("SL"),
+        "takeoverOrganizationName": tli.get("NT"),
+        "storageFacilityName": tli.get("NF"),
+        "storageFacilityAddress": tli.get("AF"),
+        "transportDocumentReference": tli.get("TR"),
+    }
+
+    if "SRC" in children:
+        assert len(children["SRC"]) == 1
+        data = {**data, **parse_src(children["SRC"][0])}
+
+    if "CST" in children:
+        data["consignments"] = [parse_cst(cst) for cst in children["CST"]]
+
+    return data
+
+
+def parse_sal(sal):
+    children = tagged_children(sal)
+
+    value = {
+        "salesNoteNumber": sal.get("NR"),
+        "salesNoteDate": sal.get("ND"),
+        "takeoverContractReference": sal.get("CN"),
+        "transportDocumentReference": sal.get("TR"),
+    }
+
+    if "SLI" in children:
+        value["salesLines"] = [parse_sli(sli) for sli in children["SLI"]]
+
+    if "TLI" in children:
+        value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
+
+    metadata = {
+        "cfr": sal.get("IR"),
+        "ircs": sal.get("RC"),
+        "external_identification": sal.get("XR"),
+        "vessel_name": sal.get("NA"),
+        "flag_state": sal.get("FS"),
+        "imo": None,
+    }
+
+    data = {
+        "log_type": "SAL",
+        "value": value,
+    }
+
+    return metadata, None, None, data
+
+
 def parse_rtp(rtp):
     date = rtp.get("DA")
     time = rtp.get("TI")

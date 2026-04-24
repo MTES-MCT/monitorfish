@@ -405,6 +405,73 @@ def test_rtp_parser():
     assert value == expected_value
 
 
+def test_sal_parser():
+    test_file = "FRA20260410509840.xml"
+    metadata, data_list = parse_file(test_file)
+
+    expected_metadata = {
+        "is_test_message": False,
+        "software": None,
+        "operation_number": "FRA20260410509840",
+        "operation_country": "FRA",
+        "operation_datetime_utc": datetime.datetime(2026, 4, 10, 8, 46),
+        "operation_type": "DAT",
+        "report_id": "FRA20260410510457",
+        "report_datetime_utc": datetime.datetime(2026, 4, 10, 7, 5),
+        "cfr": "RYX346578713",
+        "ircs": "HC5098",
+        "external_identification": "3-SH-01-03",
+        "vessel_name": "CBKCQHIV PGREXSSPH ZPZN",
+        "flag_state": "ESP",
+        "imo": None,
+    }
+
+    assert metadata == expected_metadata
+    assert len(data_list) == 1
+
+    data = data_list[0]
+    assert data["log_type"] == "SAL"
+
+    value = data["value"]
+    assert value["salesNoteNumber"] == "320242"
+    assert value["salesNoteDate"] == "2026-03-23"
+    assert value["takeoverContractReference"] is None
+    assert value["transportDocumentReference"] is None
+
+    sales_lines = value["salesLines"]
+    assert len(sales_lines) == 1
+
+    sli = sales_lines[0]
+    assert sli["saleDate"] == "2026-03-23"
+    assert sli["saleCountry"] == "FRA"
+    assert sli["saleLocation"] == "FRLRH"
+    assert sli["sellerName"] == "VENDEUR DE POISSON"
+    assert sli["buyerName"] == "UDAXIHHEXDVX RC SNBACG"
+    assert sli["buyerIdentificationNumber"] == "HQ90838637940"
+    assert sli["landingDate"] == "2026-03-18"
+    assert sli["landingPort"] == "ESGAR"
+
+    consignments = sli["consignments"]
+    assert len(consignments) == 1
+
+    css = consignments[0]
+    assert css["fishPrice"] == 4.17
+    assert css["totalPrice"] == 0.0
+    assert css["currency"] == "EUR"
+    assert css["productDestination"] == "HCN"
+    assert css["withdrawn"] == "N"
+    assert css["fishSize"] is None
+    assert css["producerOrganizationUse"] is None
+
+    species = css["species"]
+    assert species["species"] == "LTA"
+    assert species["weight"] == 9.7
+    assert species["faoZone"] == "37.1.1"
+    assert species["presentation"] == "WHL"
+    assert species["preservationState"] == "FRE"
+    assert species["freshness"] == "A"
+
+
 def test_parse_empty_message():
     test_file = "empty_message.xml"
     with pytest.raises(ERSParsingError):

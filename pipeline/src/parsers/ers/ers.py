@@ -21,6 +21,7 @@ from src.parsers.ers.log_parsers import (
     parse_lan,
     parse_pno,
     parse_rtp,
+    parse_sal,
 )
 from src.parsers.utils import (
     get_first_child,
@@ -145,6 +146,7 @@ parsers = {
     "OPS": parse_ops,
     "ERS": parse_ers,
     "LOG": parse_log,
+    "SAL": parse_sal,
     "DEP": parse_dep,
     "FAR": parse_far,
     "ECPS": parse_ecps,

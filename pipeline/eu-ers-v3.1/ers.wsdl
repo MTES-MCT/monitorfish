@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions name="ers"
+                  targetNamespace="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3">
+ <wsdl:documentation>Version: 3.1</wsdl:documentation>
+ <wsdl:types>
+  <xsd:schema>
+   <xsd:import namespace="http://ec.europa.eu/fisheries/schema/ers/v3"
+               schemaLocation="ers-operations-3.xsd"/>
+  </xsd:schema>
+ </wsdl:types>
+ 
+ <wsdl:message name="setERSRequest">
+  <wsdl:part name="parameter" element="ers:OPS"/>
+ </wsdl:message>
+ 
+ <wsdl:portType name="ERSPortType">
+  <wsdl:operation name="setERS">
+   <wsdl:input message="tns:setERSRequest"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name="ERSSOAP11Binding" type="tns:ERSPortType">
+  <soap:binding style="document"
+                transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="setERS">
+   <soap:operation soapAction="http://ec.europa.eu/fisheries/schema/ers/wsdl/v3/setERS"/>
+   <wsdl:input>
+    <soap:body use="literal"/>
+   </wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+ <wsdl:service name="ERSService">
+  <wsdl:port binding="tns:ERSSOAP11Binding" name="ERSSOAP11Port">
+   <soap:address location="http://REPLACE_ME/ers/v3"/>
+  </wsdl:port>
+ </wsdl:service>
+</wsdl:definitions>

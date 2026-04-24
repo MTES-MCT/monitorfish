@@ -1,8 +1,12 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
-import { useGetThreatCharacterizationAsTreeOptions } from '@features/Infraction/hooks/useGetThreatCharacterizationAsTreeOptions'
 import { OBSERVATION_TITLES, OTHER_OBSERVATION_TITLE } from '@features/Reporting/components/ReportingForm/constants'
 import { FormikCoordinatesPicker } from '@features/Reporting/components/ReportingForm/FormikCoordinatesPicker'
+import {
+  InfractionRow,
+  type InfractionSuspicionFormErrors,
+  type InfractionSuspicionFormValues
+} from '@features/Reporting/components/ReportingForm/InfractionRow'
 import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
@@ -13,7 +17,6 @@ import {
   Accent,
   Button,
   Checkbox,
-  CheckTreePicker,
   FieldError,
   FormikCheckbox,
   FormikDatePicker,
@@ -24,11 +27,10 @@ import {
   getOptionsFromLabelledEnum,
   Icon,
   MultiRadio,
-  Select,
-  THEME
+  Select
 } from '@mtes-mct/monitor-ui'
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
-import { Form as FormikForm, useFormikContext, type FormikErrors } from 'formik'
+import { Form as FormikForm, useFormikContext } from 'formik'
 import countries from 'i18n-iso-countries'
 import { useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import styled from 'styled-components'
@@ -41,15 +43,12 @@ import {
   SatelliteSourceLabel
 } from '../../types'
 
-import type { FormEditedReporting, InfractionSuspicion } from '../../types'
+import type { FormEditedReporting } from '../../types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
-
-type InfractionSuspicionFormValues = Extract<FormEditedReporting, { type: ReportingType.INFRACTION_SUSPICION }>
-type InfractionSuspicionFormErrors = FormikErrors<InfractionSuspicionFormValues>
 
 type FormProps = Readonly<{
   className: string | undefined
@@ -500,16 +499,15 @@ export function Form({
               }}
             />
           ))}
-          {typeof infractionErrors?.infractions === 'string' && <FieldError>{infractionErrors.infractions}</FieldError>}
-          <Button
+          <AddInfractionButton
             accent={Accent.SECONDARY}
+            Icon={Icon.Plus}
             onClick={() => {
               setFieldValue('infractions', [...infractions, {}])
             }}
-            type="button"
           >
-            + Ajouter une infraction
-          </Button>
+            Ajouter une infraction
+          </AddInfractionButton>
         </InfractionListWrapper>
       )}
       <TwoCol>
@@ -548,94 +546,15 @@ export function Form({
   )
 }
 
-function InfractionRow({
-  errors,
-  index,
-  isFirst,
-  isLight,
-  onRemove
-}: {
-  errors: InfractionSuspicionFormErrors | undefined
-  index: number
-  isFirst: boolean
-  isLight: boolean
-  onRemove: () => void
-}) {
-  const { setFieldValue, values } = useFormikContext<InfractionSuspicionFormValues>()
-  const infractions = values.infractions ?? []
-  const infractionValue = infractions[index]
-  const infractionItemErrors = Array.isArray(errors?.infractions)
-    ? (errors.infractions as FormikErrors<InfractionSuspicion['infractions'][number]>[])
-    : []
-  const rowError = infractionItemErrors[index]?.threatHierarchy as string | undefined
-  const threatCharacterizationOptions = useGetThreatCharacterizationAsTreeOptions(
-    infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined
-  )
-
-  return (
-    <InfractionRowWrapper $isFirst={isFirst}>
-      <CheckTreePicker
-        error={rowError as string | undefined}
-        isLight={isLight}
-        isRequired={isFirst}
-        isSelect
-        label={`Type d’infraction et NATINF ${index + 1}`}
-        name={`infractions[${index}].threatHierarchy`}
-        onChange={nextThreats => {
-          if (nextThreats && nextThreats.length > 0) {
-            setFieldValue(`infractions[${index}].threatHierarchy`, nextThreats[0])
-          } else {
-            setFieldValue(`infractions[${index}].threatHierarchy`, undefined)
-          }
-        }}
-        options={threatCharacterizationOptions}
-        placement="autoVertical"
-        searchable
-        value={infractionValue?.threatHierarchy ? [infractionValue.threatHierarchy] : undefined}
-      />
-      {!isFirst && (
-        <RemoveInfractionButton
-          accent={Accent.TERTIARY}
-          color={THEME.color.maximumRed}
-          Icon={Icon.Delete}
-          onClick={onRemove}
-          title="Supprimer"
-          type="button"
-        />
-      )}
-    </InfractionRowWrapper>
-  )
-}
+const AddInfractionButton = styled(Button)`
+  margin-top: 10px;
+`
 
 const InfractionListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 16px;
-`
-
-const InfractionRowWrapper = styled.div<{ $isFirst: boolean }>`
-  display: flex;
-  gap: 8px;
-
-  .Element-Button {
-    height: 29px;
-    margin-top: 22px;
-  }
-
-  .Field-CheckTreePicker {
-    width: ${p => (p.$isFirst ? '100%' : 'calc(100% - 46px - 8px)')};
-  }
-`
-
-const RemoveInfractionButton = styled(Button)`
-  flex-shrink: 0;
-  padding-top: 4px;
-  padding-bottom: 4px;
-
-  span {
-    margin-right: unset !important;
-  }
 `
 
 const StyledCheckbox = styled(Checkbox)`

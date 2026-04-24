@@ -139,11 +139,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
         if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
           return (
             <Ellipsised title={getInfractionTitle(reporting)}>
-              {reporting.value.infractions.map((i: any) => (
-                <div key={i.natinfCode}>
-                  {i.threatCharacterization} / NATINF {i.natinfCode}
-                </div>
-              ))}
+              {reporting.value.infractions.length === 1
+                ? `${reporting.value.infractions[0]?.threatCharacterization} / NATINF ${reporting.value.infractions[0]?.natinfCode}`
+                : `${reporting.value.infractions.length} infractions`}
             </Ellipsised>
           )
         }

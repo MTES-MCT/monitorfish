@@ -128,6 +128,7 @@ class PreRenderedPno:
     is_verified: bool
     is_being_sent: bool
     source: PnoSource
+    is_zero: bool
 
     @staticmethod
     def assert_equal(left: object, right: object):
@@ -220,6 +221,7 @@ class RenderedPno:
     sms_content: str | None = None
     control_units: List[ControlUnit] | None = None
     additional_addressees: List[PnoAddressee] = None
+    is_zero: bool = False
 
     def get_addressees(
         self, communication_means: CommunicationMeans

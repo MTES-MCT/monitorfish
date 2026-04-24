@@ -1,12 +1,11 @@
+import { ThreatSchema } from '@features/Infraction/schemas/ThreatSchema'
 import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
 import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import { z } from 'zod'
 
 const InfractionSuspicionOrObservationCreation = InfractionSuspicionSchema.omit({
   dml: true,
-  natinfCode: true,
-  seaFront: true,
-  threat: true,
-  threatCharacterization: true
+  seaFront: true
 })
 
 export const ReportingCreationSchema = BaseReportingSchema.omit({
@@ -19,4 +18,5 @@ export const ReportingCreationSchema = BaseReportingSchema.omit({
   underCharter: true
 })
   .extend(InfractionSuspicionOrObservationCreation.shape)
-  .omit({ authorTrigram: true, controlUnit: true })
+  .omit({ authorTrigram: true, controlUnit: true, infractions: true })
+  .extend({ threatHierarchies: z.array(ThreatSchema) })

@@ -1,6 +1,6 @@
 import { CreateOrEditReportingSchema } from '@features/Reporting/components/ReportingForm/schemas'
 import { addReporting } from '@features/Reporting/useCases/addReporting'
-import { buildReportingCreation } from '@features/Reporting/useCases/utils'
+import { toReportingPayload } from '@features/Reporting/useCases/utils'
 
 import { updateReporting } from './updateReporting'
 
@@ -27,5 +27,5 @@ export const autoSaveReporting =
       return dispatch(updateReporting(reportingId, nextReporting, previousType, windowContext))
     }
 
-    return dispatch(addReporting(buildReportingCreation(nextReporting, isIUU)))
+    return dispatch(addReporting(toReportingPayload(nextReporting, isIUU)))
   }

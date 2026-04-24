@@ -45,19 +45,7 @@ sealed class Reporting {
     abstract val seaFront: String?
     abstract val dml: String?
 
-    fun update(command: ReportingUpdateCommand): Reporting =
-        when (this) {
-            is Alert ->
-                throw IllegalArgumentException(
-                    "Alerts cannot be updated",
-                )
-
-            is Observation -> updateFromObservation(command)
-
-            is InfractionSuspicion -> updateFromInfractionSuspicion(command)
-        }
-
-    protected fun updateExpirationDate(newDate: ZonedDateTime?) = newDate ?: expirationDate
+    abstract fun update(command: ReportingUpdateCommand): Reporting
 
     data class Alert(
         override val id: Int? = null,
@@ -107,6 +95,9 @@ sealed class Reporting {
                 }
             }
         }
+
+        override fun update(command: ReportingUpdateCommand): Reporting =
+            throw IllegalArgumentException("Alerts cannot be updated")
     }
 
     data class InfractionSuspicion(
@@ -146,13 +137,12 @@ sealed class Reporting {
         val satelliteType: SatelliteSource? = null,
         val title: String,
         val description: String? = null,
-        val natinfCode: Int,
-        val threat: String,
-        val threatCharacterization: String,
+        val infractions: List<InfractionSuspicionThreat>,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
         init {
+            require(infractions.isNotEmpty()) { "At least one infraction is required" }
             val (src, other) = normalizeReportingSource(reportingSource, otherSourceType)
             reportingSource = src
             otherSourceType = other
@@ -168,85 +158,74 @@ sealed class Reporting {
                 latitude = latitude,
                 longitude = longitude,
             )
+
+        override fun update(command: ReportingUpdateCommand): Reporting =
+            when (command.type) {
+                ReportingType.INFRACTION_SUSPICION ->
+                    copy(
+                        vesselId = command.vesselId,
+                        vesselName = command.vesselName,
+                        cfr = command.cfr,
+                        externalMarker = command.externalMarker,
+                        ircs = command.ircs,
+                        mmsi = command.mmsi,
+                        imo = command.imo,
+                        length = command.length,
+                        gearCode = command.gearCode,
+                        vesselIdentifier = command.vesselIdentifier,
+                        flagState = command.flagState,
+                        reportingSource = command.reportingSource,
+                        controlUnitId = command.controlUnitId,
+                        authorContact = command.authorContact,
+                        title = command.title,
+                        description = command.description,
+                        expirationDate = command.expirationDate ?: this.expirationDate,
+                        reportingDate = command.reportingDate,
+                        infractions = command.infractions,
+                        isFishing = command.isFishing ?: false,
+                        latitude = command.latitude,
+                        longitude = command.longitude,
+                        otherSourceType = command.otherSourceType,
+                        satelliteType = command.satelliteType,
+                    )
+                ReportingType.OBSERVATION ->
+                    Observation(
+                        id = this.id,
+                        vesselId = command.vesselId,
+                        vesselName = command.vesselName,
+                        cfr = command.cfr,
+                        externalMarker = command.externalMarker,
+                        ircs = command.ircs,
+                        mmsi = command.mmsi,
+                        imo = command.imo,
+                        length = command.length,
+                        gearCode = command.gearCode,
+                        vesselIdentifier = command.vesselIdentifier,
+                        flagState = command.flagState,
+                        creationDate = this.creationDate,
+                        lastUpdateDate = this.lastUpdateDate,
+                        validationDate = this.validationDate,
+                        expirationDate = command.expirationDate ?: this.expirationDate,
+                        archivingDate = this.archivingDate,
+                        isArchived = this.isArchived,
+                        isDeleted = this.isDeleted,
+                        latitude = command.latitude,
+                        isFishing = command.isFishing ?: false,
+                        longitude = command.longitude,
+                        reportingDate = command.reportingDate,
+                        createdBy = this.createdBy,
+                        reportingSource = command.reportingSource,
+                        controlUnitId = command.controlUnitId,
+                        authorContact = command.authorContact,
+                        title = command.title,
+                        description = command.description,
+                        satelliteType = command.satelliteType,
+                        otherSourceType = command.otherSourceType,
+                    )
+                ReportingType.ALERT -> throw NotImplementedError()
+                else -> error("Invalid target type: ${command.type}")
+            }
     }
-
-    private fun InfractionSuspicion.updateFromInfractionSuspicion(command: ReportingUpdateCommand): Reporting =
-        when (command.type) {
-            ReportingType.INFRACTION_SUSPICION ->
-                copy(
-                    vesselId = command.vesselId,
-                    vesselName = command.vesselName,
-                    cfr = command.cfr,
-                    externalMarker = command.externalMarker,
-                    ircs = command.ircs,
-                    mmsi = command.mmsi,
-                    imo = command.imo,
-                    length = command.length,
-                    gearCode = command.gearCode,
-                    vesselIdentifier = command.vesselIdentifier,
-                    flagState = command.flagState,
-                    reportingSource = command.reportingSource,
-                    controlUnitId = command.controlUnitId,
-                    authorContact = command.authorContact,
-                    title = command.title,
-                    description = command.description,
-                    expirationDate = updateExpirationDate(command.expirationDate),
-                    reportingDate = command.reportingDate,
-                    natinfCode =
-                        command.natinfCode
-                            ?: error("NATINF code is required"),
-                    threat = command.threat ?: threat,
-                    threatCharacterization = command.threatCharacterization ?: threatCharacterization,
-                    isFishing = command.isFishing ?: false,
-                    latitude = command.latitude,
-                    longitude = command.longitude,
-                    otherSourceType = command.otherSourceType,
-                    satelliteType = command.satelliteType,
-                ).also {
-                    it.verify()
-                }
-
-            ReportingType.OBSERVATION ->
-                Observation(
-                    id = id,
-                    vesselId = command.vesselId,
-                    vesselName = command.vesselName,
-                    cfr = command.cfr,
-                    externalMarker = command.externalMarker,
-                    ircs = command.ircs,
-                    mmsi = command.mmsi,
-                    imo = command.imo,
-                    length = command.length,
-                    gearCode = command.gearCode,
-                    vesselIdentifier = command.vesselIdentifier,
-                    flagState = command.flagState,
-                    creationDate = creationDate,
-                    validationDate = validationDate,
-                    expirationDate = updateExpirationDate(command.expirationDate),
-                    archivingDate = archivingDate,
-                    isArchived = isArchived,
-                    isDeleted = isDeleted,
-                    latitude = command.latitude,
-                    isFishing = command.isFishing ?: false,
-                    longitude = command.longitude,
-                    reportingDate = command.reportingDate,
-                    createdBy = createdBy,
-                    reportingSource = command.reportingSource,
-                    controlUnitId = command.controlUnitId,
-                    authorContact = command.authorContact,
-                    title = command.title,
-                    description = command.description,
-                    lastUpdateDate = lastUpdateDate,
-                    satelliteType = command.satelliteType,
-                    otherSourceType = command.otherSourceType,
-                ).also {
-                    it.verify()
-                }
-
-            ReportingType.ALERT -> TODO()
-            else ->
-                error("Invalid target type")
-        }
 
     data class Observation(
         override val id: Int? = null,
@@ -304,89 +283,75 @@ sealed class Reporting {
                 latitude = latitude,
                 longitude = longitude,
             )
-    }
 
-    private fun Observation.updateFromObservation(command: ReportingUpdateCommand): Reporting =
-        when (command.type) {
-            ReportingType.OBSERVATION ->
-                copy(
-                    vesselId = command.vesselId,
-                    vesselName = command.vesselName,
-                    cfr = command.cfr,
-                    externalMarker = command.externalMarker,
-                    ircs = command.ircs,
-                    mmsi = command.mmsi,
-                    imo = command.imo,
-                    length = command.length,
-                    gearCode = command.gearCode,
-                    vesselIdentifier = command.vesselIdentifier,
-                    flagState = command.flagState,
-                    reportingSource = command.reportingSource,
-                    controlUnitId = command.controlUnitId,
-                    authorContact = command.authorContact,
-                    title = command.title,
-                    description = command.description,
-                    expirationDate = updateExpirationDate(command.expirationDate),
-                    reportingDate = command.reportingDate,
-                    isFishing = command.isFishing ?: false,
-                    latitude = command.latitude,
-                    longitude = command.longitude,
-                    otherSourceType = command.otherSourceType,
-                    satelliteType = command.satelliteType,
-                ).also {
-                    it.verify()
-                }
-
-            ReportingType.INFRACTION_SUSPICION -> {
-                requireNotNull(command.natinfCode)
-                requireNotNull(command.threat)
-                requireNotNull(command.threatCharacterization)
-
-                InfractionSuspicion(
-                    id = id,
-                    vesselId = command.vesselId,
-                    vesselName = command.vesselName,
-                    cfr = command.cfr,
-                    externalMarker = command.externalMarker,
-                    ircs = command.ircs,
-                    mmsi = command.mmsi,
-                    imo = command.imo,
-                    length = command.length,
-                    gearCode = command.gearCode,
-                    vesselIdentifier = command.vesselIdentifier,
-                    flagState = command.flagState,
-                    creationDate = creationDate,
-                    validationDate = validationDate,
-                    expirationDate = updateExpirationDate(command.expirationDate),
-                    archivingDate = archivingDate,
-                    isArchived = isArchived,
-                    isDeleted = isDeleted,
-                    latitude = command.latitude,
-                    longitude = command.longitude,
-                    isFishing = command.isFishing ?: false,
-                    reportingDate = command.reportingDate,
-                    createdBy = createdBy,
-                    infraction = infraction,
-                    underCharter = underCharter,
-                    reportingSource = command.reportingSource,
-                    controlUnitId = command.controlUnitId,
-                    authorContact = command.authorContact,
-                    title = command.title,
-                    description = command.description,
-                    natinfCode = command.natinfCode,
-                    threat = command.threat,
-                    threatCharacterization = command.threatCharacterization,
-                    lastUpdateDate = lastUpdateDate,
-                    satelliteType = command.satelliteType,
-                    otherSourceType = command.otherSourceType,
-                ).also {
-                    it.verify()
-                }
+        override fun update(command: ReportingUpdateCommand): Reporting =
+            when (command.type) {
+                ReportingType.OBSERVATION ->
+                    copy(
+                        vesselId = command.vesselId,
+                        vesselName = command.vesselName,
+                        cfr = command.cfr,
+                        externalMarker = command.externalMarker,
+                        ircs = command.ircs,
+                        mmsi = command.mmsi,
+                        imo = command.imo,
+                        length = command.length,
+                        gearCode = command.gearCode,
+                        vesselIdentifier = command.vesselIdentifier,
+                        flagState = command.flagState,
+                        reportingSource = command.reportingSource,
+                        controlUnitId = command.controlUnitId,
+                        authorContact = command.authorContact,
+                        title = command.title,
+                        description = command.description,
+                        expirationDate = command.expirationDate ?: this.expirationDate,
+                        reportingDate = command.reportingDate,
+                        isFishing = command.isFishing ?: false,
+                        latitude = command.latitude,
+                        longitude = command.longitude,
+                        otherSourceType = command.otherSourceType,
+                        satelliteType = command.satelliteType,
+                    )
+                ReportingType.INFRACTION_SUSPICION ->
+                    InfractionSuspicion(
+                        id = this.id,
+                        vesselId = command.vesselId,
+                        vesselName = command.vesselName,
+                        cfr = command.cfr,
+                        externalMarker = command.externalMarker,
+                        ircs = command.ircs,
+                        mmsi = command.mmsi,
+                        imo = command.imo,
+                        length = command.length,
+                        gearCode = command.gearCode,
+                        vesselIdentifier = command.vesselIdentifier,
+                        flagState = command.flagState,
+                        creationDate = this.creationDate,
+                        lastUpdateDate = this.lastUpdateDate,
+                        validationDate = this.validationDate,
+                        expirationDate = command.expirationDate ?: this.expirationDate,
+                        archivingDate = this.archivingDate,
+                        isArchived = this.isArchived,
+                        isDeleted = this.isDeleted,
+                        latitude = command.latitude,
+                        longitude = command.longitude,
+                        isFishing = command.isFishing ?: false,
+                        reportingDate = command.reportingDate,
+                        createdBy = this.createdBy,
+                        underCharter = this.underCharter,
+                        reportingSource = command.reportingSource,
+                        controlUnitId = command.controlUnitId,
+                        authorContact = command.authorContact,
+                        title = command.title,
+                        description = command.description,
+                        infractions = command.infractions,
+                        satelliteType = command.satelliteType,
+                        otherSourceType = command.otherSourceType,
+                    )
+                ReportingType.ALERT -> throw NotImplementedError()
+                else -> error("Invalid target type: ${command.type}")
             }
-
-            else ->
-                error("Invalid target type")
-        }
+    }
 }
 
 private fun normalizeReportingSource(

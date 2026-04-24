@@ -84,15 +84,15 @@ context('Side Window > Reporting List > Actions', () => {
       withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
-    cy.fill('Type d’infraction et NATINF', ['27717'])
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
     cy.clickButton('Valider')
 
     // Then
     cy.wait('@updateReporting').then(({ request, response }) => {
       expect(request.body.title).contains('Suspicion de chalutage dans les 3 km')
       expect(response && response.statusCode).equal(200)
-      expect(response?.body?.value?.natinfCode).equal(27717)
-      expect(response?.body?.value?.threatCharacterization).equal('Transbordement')
+      expect(response?.body?.value?.infractions?.[0]?.natinfCode).equal(27717)
+      expect(response?.body?.value?.infractions?.[0]?.threatCharacterization).equal('Transbordement')
     })
     cy.wait(200)
 
@@ -121,6 +121,46 @@ context('Side Window > Reporting List > Actions', () => {
         expect(response && response.statusCode).equal(200)
 
         cy.getDataCy('ReportingTable-reporting').should('have.length', numberOfReportings)
+      })
+    })
+
+    /**
+     * Part 3: two infractions
+     */
+    cy.getDataCy('ReportingTable-reporting').then(() => {
+      cy.clickButton('Editer le signalement', {
+        withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
+      })
+
+      cy.fill('Type de signalement', "Suspicion d'infraction")
+      cy.fill('Type d’infraction et NATINF 1', ['27717'])
+      cy.clickButton('+ Ajouter une infraction')
+      cy.fill('Type d’infraction et NATINF 2', ['27689'])
+      cy.clickButton('Valider')
+
+      cy.wait('@updateReporting').then(({ response }) => {
+        expect(response && response.statusCode).equal(200)
+        expect(response?.body?.value?.infractions).to.have.length(2)
+        expect(response?.body?.value?.infractions?.[0]?.natinfCode).equal(27717)
+        expect(response?.body?.value?.infractions?.[1]?.natinfCode).equal(27689)
+      })
+    })
+
+    /**
+     * Part 4: remove one infraction
+     */
+    cy.getDataCy('ReportingTable-reporting').then(() => {
+      cy.clickButton('Editer le signalement', {
+        withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
+      })
+
+      cy.clickButton('Supprimer')
+      cy.clickButton('Valider')
+
+      cy.wait('@updateReporting').then(({ response }) => {
+        expect(response && response.statusCode).equal(200)
+        expect(response?.body?.value?.infractions).to.have.length(1)
+        expect(response?.body?.value?.infractions?.[0]?.natinfCode).equal(27717)
       })
     })
   })

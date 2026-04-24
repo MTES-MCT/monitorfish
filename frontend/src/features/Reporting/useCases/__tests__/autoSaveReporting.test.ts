@@ -3,7 +3,7 @@ import { ReportingOriginSource } from '@features/Reporting/types/ReportingOrigin
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { addReporting } from '@features/Reporting/useCases/addReporting'
 import { autoSaveReporting } from '@features/Reporting/useCases/autoSaveReporting'
-import { buildReportingCreation } from '@features/Reporting/useCases/utils'
+import { toReportingPayload } from '@features/Reporting/useCases/utils'
 import { describe, expect, it, beforeEach } from '@jest/globals'
 
 import { reportingApi } from '../../reportingApi'
@@ -103,7 +103,7 @@ describe('autoSaveReporting()', () => {
 
     expect(addReporting).toHaveBeenCalledWith(
       expect.objectContaining({
-        ...buildReportingCreation(aValidFormReporting),
+        ...toReportingPayload(aValidFormReporting),
         creationDate: expect.any(String)
       })
     )

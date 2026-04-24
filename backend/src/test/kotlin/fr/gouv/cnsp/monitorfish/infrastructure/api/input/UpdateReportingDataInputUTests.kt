@@ -11,9 +11,31 @@ import java.time.ZonedDateTime
 
 @ExtendWith(SpringExtension::class)
 class UpdateReportingDataInputUTests {
+    private fun makeThreatHierarchy(
+        threat: String = "Activités INN",
+        threatCharacterization: String = "Pêche sans autorisation par navire tiers",
+        natinfCode: Int = 2608,
+    ) = ThreatHierarchyDataInput(
+        value = threat,
+        label = threat,
+        children =
+            listOf(
+                ThreatCharacterizationDataInput(
+                    value = threatCharacterization,
+                    label = threatCharacterization,
+                    children =
+                        listOf(
+                            NatinfDataInput(
+                                value = natinfCode,
+                                label = natinfCode.toString(),
+                            ),
+                        ),
+                ),
+            ),
+    )
+
     @Test
-    fun `toUpdatedReportingValues Should extract threat from threatHierarchy value`() {
-        // Given
+    fun `toUpdatedReportingValues Should extract threat from threatHierarchies`() {
         val input =
             UpdateReportingDataInput(
                 flagState = CountryCode.FR,
@@ -21,37 +43,17 @@ class UpdateReportingDataInputUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
-                threatHierarchy =
-                    ThreatHierarchyDataInput(
-                        value = "Activités INN",
-                        label = "Activités INN",
-                        children =
-                            listOf(
-                                ThreatCharacterizationDataInput(
-                                    value = "Pêche sans autorisation par navire tiers",
-                                    label = "Pêche sans autorisation par navire tiers",
-                                    children =
-                                        listOf(
-                                            NatinfDataInput(
-                                                value = 2608,
-                                                label = "2608",
-                                            ),
-                                        ),
-                                ),
-                            ),
-                    ),
+                threatHierarchies = listOf(makeThreatHierarchy()),
             )
 
-        // When
         val result = input.toUpdatedReportingValues()
 
-        // Then
-        assertThat(result.threat).isEqualTo("Activités INN")
+        assertThat(result.infractions).hasSize(1)
+        assertThat(result.infractions[0].threat).isEqualTo("Activités INN")
     }
 
     @Test
     fun `toUpdatedReportingValues Should extract threatCharacterization from nested children`() {
-        // Given
         val input =
             UpdateReportingDataInput(
                 flagState = CountryCode.FR,
@@ -59,37 +61,16 @@ class UpdateReportingDataInputUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
-                threatHierarchy =
-                    ThreatHierarchyDataInput(
-                        value = "Activités INN",
-                        label = "Activités INN",
-                        children =
-                            listOf(
-                                ThreatCharacterizationDataInput(
-                                    value = "Pêche sans autorisation par navire tiers",
-                                    label = "Pêche sans autorisation par navire tiers",
-                                    children =
-                                        listOf(
-                                            NatinfDataInput(
-                                                value = 2608,
-                                                label = "2608",
-                                            ),
-                                        ),
-                                ),
-                            ),
-                    ),
+                threatHierarchies = listOf(makeThreatHierarchy()),
             )
 
-        // When
         val result = input.toUpdatedReportingValues()
 
-        // Then
-        assertThat(result.threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
+        assertThat(result.infractions[0].threatCharacterization).isEqualTo("Pêche sans autorisation par navire tiers")
     }
 
     @Test
     fun `toUpdatedReportingValues Should extract natinfCode from deeply nested children`() {
-        // Given
         val input =
             UpdateReportingDataInput(
                 flagState = CountryCode.FR,
@@ -97,37 +78,16 @@ class UpdateReportingDataInputUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
-                threatHierarchy =
-                    ThreatHierarchyDataInput(
-                        value = "Activités INN",
-                        label = "Activités INN",
-                        children =
-                            listOf(
-                                ThreatCharacterizationDataInput(
-                                    value = "Pêche sans autorisation par navire tiers",
-                                    label = "Pêche sans autorisation par navire tiers",
-                                    children =
-                                        listOf(
-                                            NatinfDataInput(
-                                                value = 2608,
-                                                label = "2608",
-                                            ),
-                                        ),
-                                ),
-                            ),
-                    ),
+                threatHierarchies = listOf(makeThreatHierarchy()),
             )
 
-        // When
         val result = input.toUpdatedReportingValues()
 
-        // Then
-        assertThat(result.natinfCode).isEqualTo(2608)
+        assertThat(result.infractions[0].natinfCode).isEqualTo(2608)
     }
 
     @Test
-    fun `toUpdatedReportingValues Should handle null threatHierarchy`() {
-        // Given
+    fun `toUpdatedReportingValues Should handle empty threatHierarchies`() {
         val input =
             UpdateReportingDataInput(
                 flagState = CountryCode.FR,
@@ -135,21 +95,47 @@ class UpdateReportingDataInputUTests {
                 type = ReportingType.INFRACTION_SUSPICION,
                 reportingDate = ZonedDateTime.now(),
                 title = "Test reporting",
-                threatHierarchy = null,
+                threatHierarchies = emptyList(),
             )
 
-        // When
         val result = input.toUpdatedReportingValues()
 
-        // Then
-        assertThat(result.threat).isNull()
-        assertThat(result.threatCharacterization).isNull()
-        assertThat(result.natinfCode).isNull()
+        assertThat(result.infractions).isEmpty()
+    }
+
+    @Test
+    fun `toUpdatedReportingValues Should handle multiple threatHierarchies`() {
+        val input =
+            UpdateReportingDataInput(
+                flagState = CountryCode.FR,
+                reportingSource = ReportingSource.OPS,
+                type = ReportingType.INFRACTION_SUSPICION,
+                reportingDate = ZonedDateTime.now(),
+                title = "Test reporting",
+                threatHierarchies =
+                    listOf(
+                        makeThreatHierarchy(
+                            threat = "Activités INN",
+                            threatCharacterization = "Pêche sans autorisation par navire tiers",
+                            natinfCode = 2608,
+                        ),
+                        makeThreatHierarchy(
+                            threat = "Entrave au contrôle",
+                            threatCharacterization = "Dissimulation",
+                            natinfCode = 12922,
+                        ),
+                    ),
+            )
+
+        val result = input.toUpdatedReportingValues()
+
+        assertThat(result.infractions).hasSize(2)
+        assertThat(result.infractions[0].natinfCode).isEqualTo(2608)
+        assertThat(result.infractions[1].natinfCode).isEqualTo(12922)
     }
 
     @Test
     fun `toUpdatedReportingValues Should map all other fields correctly`() {
-        // Given
         val expirationDate = ZonedDateTime.now().plusDays(30)
         val input =
             UpdateReportingDataInput(
@@ -162,31 +148,18 @@ class UpdateReportingDataInputUTests {
                 expirationDate = expirationDate,
                 title = "Test title",
                 description = "Test description",
-                threatHierarchy =
-                    ThreatHierarchyDataInput(
-                        value = "Entrave au contrôle",
-                        label = "Entrave au contrôle",
-                        children =
-                            listOf(
-                                ThreatCharacterizationDataInput(
-                                    value = "Dissimulation",
-                                    label = "Dissimulation",
-                                    children =
-                                        listOf(
-                                            NatinfDataInput(
-                                                value = 12922,
-                                                label = "12922",
-                                            ),
-                                        ),
-                                ),
-                            ),
+                threatHierarchies =
+                    listOf(
+                        makeThreatHierarchy(
+                            threat = "Entrave au contrôle",
+                            threatCharacterization = "Dissimulation",
+                            natinfCode = 12922,
+                        ),
                     ),
             )
 
-        // When
         val result = input.toUpdatedReportingValues()
 
-        // Then
         assertThat(result.reportingSource).isEqualTo(ReportingSource.UNIT)
         assertThat(result.type).isEqualTo(ReportingType.OBSERVATION)
         assertThat(result.controlUnitId).isEqualTo(1234)
@@ -194,8 +167,8 @@ class UpdateReportingDataInputUTests {
         assertThat(result.expirationDate).isEqualTo(expirationDate)
         assertThat(result.title).isEqualTo("Test title")
         assertThat(result.description).isEqualTo("Test description")
-        assertThat(result.threat).isEqualTo("Entrave au contrôle")
-        assertThat(result.threatCharacterization).isEqualTo("Dissimulation")
-        assertThat(result.natinfCode).isEqualTo(12922)
+        assertThat(result.infractions[0].threat).isEqualTo("Entrave au contrôle")
+        assertThat(result.infractions[0].threatCharacterization).isEqualTo("Dissimulation")
+        assertThat(result.infractions[0].natinfCode).isEqualTo(12922)
     }
 }

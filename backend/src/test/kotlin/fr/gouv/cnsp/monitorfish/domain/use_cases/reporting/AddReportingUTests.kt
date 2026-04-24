@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -151,10 +152,15 @@ class AddReportingUTests {
                 lastUpdateDate = ZonedDateTime.now(),
                 validationDate = ZonedDateTime.now(),
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 1235,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1235,
+                            threat = "Mesures techniques et de conservation",
+                            threatCharacterization = "Engin",
+                        ),
+                    ),
                 title = "Chalut en boeuf illégal",
-                threat = "Mesures techniques et de conservation",
-                threatCharacterization = "Engin",
                 isArchived = false,
                 isDeleted = false,
                 createdBy = "test@example.gouv.fr",

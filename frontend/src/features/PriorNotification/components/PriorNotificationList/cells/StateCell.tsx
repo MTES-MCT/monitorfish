@@ -26,7 +26,7 @@ export function StateCell({ isInvalidated, state, verificationReason }: SendButt
   return (
     <Wrapper
       $state={state}
-      title={`${PriorNotification.STATE_LABEL[state]} ${verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}`}
+      title={`${PriorNotification.STATE_LABEL[state]}${verificationReason ? ` ${PnoVerificationScopeReasonLabel[verificationReason]}` : ''}`}
     >
       {!!state && [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(state) ? (
         <SpinnerWrapper>

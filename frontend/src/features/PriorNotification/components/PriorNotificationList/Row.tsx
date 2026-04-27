@@ -196,7 +196,7 @@ export function Row({ row }: RowProps) {
                   borderColor={getColorsFromState(priorNotification.state).borderColor}
                   color={getColorsFromState(priorNotification.state).color}
                   style={{ marginBottom: 16 }}
-                  title={`${PriorNotification.STATE_LABEL[priorNotification.state]} ${priorNotification.verificationReason ? PnoVerificationScopeReasonLabel[priorNotification.verificationReason] : ''}`}
+                  title={`${PriorNotification.STATE_LABEL[priorNotification.state]}${priorNotification.verificationReason ? ` ${PnoVerificationScopeReasonLabel[priorNotification.verificationReason]}` : ''}`}
                 >
                   {PriorNotification.STATE_LABEL[priorNotification.state]}{' '}
                   {priorNotification.verificationReason

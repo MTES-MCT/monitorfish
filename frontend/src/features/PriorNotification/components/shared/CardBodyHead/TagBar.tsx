@@ -65,7 +65,7 @@ export function TagBar({
             backgroundColor={getColorsFromState(state).backgroundColor}
             borderColor={getColorsFromState(state).borderColor}
             color={getColorsFromState(state).color}
-            title={`${PriorNotification.STATE_LABEL[state]} ${verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}`}
+            title={`${PriorNotification.STATE_LABEL[state]}${verificationReason ? ` ${PnoVerificationScopeReasonLabel[verificationReason]}` : ''}`}
           >
             {PriorNotification.STATE_LABEL[state]}{' '}
             {verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}

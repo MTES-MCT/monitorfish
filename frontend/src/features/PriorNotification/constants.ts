@@ -16,7 +16,7 @@ export enum OpenedPriorNotificationType {
 export const PnoVerificationScopeReasonLabel: Record<PriorNotification.PnoVerificationScopeReason, string> = {
   FOREIGN_FLAG_COUNTRY: '- navire tiers',
   FOREIGN_PORT: '- port tiers',
-  HIGH_RISK_FACTOR: '- note  ≥ 2,3',
+  HIGH_RISK_FACTOR: '- note ≥ 2,3',
   MISSING_DATA: '- données manquantes',
   OPEN_REPORTING: '- susp. d’inf.'
 }

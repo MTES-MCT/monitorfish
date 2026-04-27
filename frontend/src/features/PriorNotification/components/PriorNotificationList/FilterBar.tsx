@@ -267,7 +267,7 @@ export function FilterBar() {
           searchable
           value={listFilterValues.portLocodes}
         />
-        <CheckPicker
+        <TypeCheckPicker
           disabled={!priorNotificationTypesAsOptions}
           isLabelHidden
           isTransparent
@@ -283,7 +283,7 @@ export function FilterBar() {
           searchable
           value={listFilterValues.priorNotificationTypes}
         />
-        <StatusCheckPicker
+        <CheckPicker<FilterStatus>
           isLabelHidden
           isTransparent
           label="Statuts de diffusion"
@@ -358,7 +358,7 @@ const Row = styled.div`
   }
 `
 
-const StatusCheckPicker = styled(CheckPicker<FilterStatus>)`
+const TypeCheckPicker = styled(CheckPicker)`
   [role='listbox'] {
     > [role='option']:last-child {
       border-top: 2px solid ${({ theme }) => theme.color.lightGray};

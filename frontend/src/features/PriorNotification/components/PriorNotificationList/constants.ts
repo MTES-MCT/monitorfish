@@ -92,6 +92,5 @@ export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
   { label: IS_INVALIDATED_LABEL, value: IS_INVALIDATED },
   { label: 'Envoi auto. demandé', value: PriorNotification.State.AUTO_SEND_REQUESTED },
   { label: 'Envoi auto. fait', value: PriorNotification.State.AUTO_SEND_DONE },
-  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND },
-  { label: IS_PRIOR_NOTIFICATION_ZERO_LABEL, value: IS_PRIOR_NOTIFICATION_ZERO }
+  { label: 'Échec de diffusion', value: PriorNotification.State.FAILED_SEND }
 ]

@@ -240,13 +240,22 @@ function getStatesFromFilterStatuses(statuses: FilterStatus[] | undefined): Prio
     return undefined
   }
 
-  const states = statuses.filter(status => status !== IS_INVALIDATED && status !== IS_PRIOR_NOTIFICATION_ZERO)
+  const states = statuses.filter(status => status !== IS_INVALIDATED)
 
   return [
     ...states,
     ...(states.includes(PriorNotification.State.VERIFIED_AND_SENT) ? [PriorNotification.State.PENDING_SEND] : []),
     ...(states.includes(PriorNotification.State.AUTO_SEND_DONE) ? [PriorNotification.State.PENDING_AUTO_SEND] : [])
   ]
+}
+
+function getTypesFromFilterTypes(priorNotificationTypes: string[] | undefined): string[] | undefined {
+  const withoutZero = priorNotificationTypes?.filter(val => val !== IS_PRIOR_NOTIFICATION_ZERO)
+  if (!withoutZero?.length) {
+    return undefined
+  }
+
+  return withoutZero
 }
 
 export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logbook.ApiFilter {
@@ -257,9 +266,9 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
     isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED) ? true : undefined,
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
     // We don't want to send `false` when it's unchecked because it would exclude "Préavis Zéro" prior notifications
-    isPriorNotificationZero: listFilter.statuses?.includes(IS_PRIOR_NOTIFICATION_ZERO) ? true : undefined,
+    isPriorNotificationZero: listFilter.priorNotificationTypes?.includes(IS_PRIOR_NOTIFICATION_ZERO) ? true : undefined,
     portLocodes: listFilter.portLocodes,
-    priorNotificationTypes: listFilter.priorNotificationTypes,
+    priorNotificationTypes: getTypesFromFilterTypes(listFilter.priorNotificationTypes),
     seafrontGroup: listFilter.seafrontGroup,
     searchQuery: listFilter.searchQuery,
     specyCodes: listFilter.specyCodes,
@@ -275,9 +284,6 @@ export function getStatusTagLabel(status: FilterStatus): string {
   switch (status) {
     case IS_INVALIDATED:
       return IS_INVALIDATED_LABEL
-
-    case IS_PRIOR_NOTIFICATION_ZERO:
-      return 'Préavis Zéro'
 
     default:
       return PriorNotification.STATE_LABEL[status]

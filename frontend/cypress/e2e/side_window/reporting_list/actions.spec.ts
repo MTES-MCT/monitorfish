@@ -121,6 +121,8 @@ context('Side Window > Reporting List > Actions', () => {
         expect(response?.body?.value?.infractions?.[1]?.natinfCode).equal(27689)
       })
       cy.wait(200)
+
+      cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('2 infractions')
     })
 
     /**

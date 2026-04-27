@@ -27,6 +27,7 @@ import {
   getOptionsFromLabelledEnum,
   Icon,
   MultiRadio,
+  NumberInput,
   Select
 } from '@mtes-mct/monitor-ui'
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
@@ -153,7 +154,7 @@ export function Form({
     return mapControlUnitsToUniqueSortedIdsAsOptions(controlUnitsQuery.data)
   }, [controlUnitsQuery.data])
 
-  function clearVesselValues() {
+  function clearVesselValues(override?: Partial<FormEditedReporting>) {
     setValues({
       ...values,
       cfr: undefined,
@@ -164,7 +165,8 @@ export function Form({
       mmsi: undefined,
       vesselId: undefined,
       vesselIdentifier: undefined,
-      vesselName: undefined
+      vesselName: undefined,
+      ...override
     })
   }
 
@@ -195,6 +197,17 @@ export function Form({
     } else {
       setIsVesselAbsent(false)
     }
+  }
+
+  const handleNumberOfVesselsChange = (nextValue: number | undefined) => {
+    if (!isIUU || (nextValue ?? 1) <= 1) {
+      setFieldValue('numberOfVessels', nextValue)
+
+      return
+    }
+
+    setIsVesselAbsent(true)
+    clearVesselValues({ isUnknownVessel: true, numberOfVessels: nextValue })
   }
 
   const handleObservationTypeSelect = (observationTitle: string | undefined) => {
@@ -244,19 +257,6 @@ export function Form({
   useEffect(() => {
     onVesselStateChange?.(values.vesselName, values.flagState)
   }, [onVesselStateChange, values.flagState, values.vesselName])
-
-  useEffect(() => {
-    if (!isIUU) {
-      return
-    }
-
-    if ((numberOfVessels ?? 1) > 1) {
-      setIsVesselAbsent(true)
-      clearVesselValues()
-      setFieldValue('isUnknownVessel', true)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numberOfVessels])
 
   useEffect(() => {
     if (!onAutoSave || !isValid || !dirty) {
@@ -340,7 +340,15 @@ export function Form({
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikCoordinatesPicker isLight={isLight} isRequired={isIUU} />
       {isIUU && (
-        <FormikNumberInput isLight={isLight} isRequired label="Nombre de navires" min={1} name="numberOfVessels" />
+        <NumberInput
+          isLight={isLight}
+          isRequired
+          label="Nombre de navires"
+          min={1}
+          name="numberOfVessels"
+          onChange={handleNumberOfVesselsChange}
+          value={(values as InfractionSuspicionFormValues).numberOfVessels}
+        />
       )}
       {!hideVesselSection && (
         <VesselSection $hasError={!!errors?.isUnknownVessel}>

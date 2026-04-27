@@ -73,7 +73,7 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
       {({ dirty, resetForm }) => (
         <ContactForm>
           <StyledFormikTextarea
-            label="Modalité de contact avec le navire"
+            label="Modalités de contact avec le navire"
             name="contactMethod"
             readOnly={!isSuperUser}
           />
@@ -98,7 +98,11 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
   )
 }
 
-const StyledFormikTextarea = styled(FormikTextarea)``
+const StyledFormikTextarea = styled(FormikTextarea)`
+  > textarea {
+    box-sizing: border-box; // ensures the textarea width matches the parent div
+  }
+`
 
 const ContactForm = styled(Form)`
   background-color: ${p => p.theme.color.white};

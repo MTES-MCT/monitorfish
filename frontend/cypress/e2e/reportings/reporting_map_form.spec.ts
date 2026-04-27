@@ -56,6 +56,7 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
+    cy.getDataCy('reporting-overlay').contains('Type inconnu / NATINF 27689')
     cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction (BSL Lorient)')
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
     cy.getDataCy('reporting-overlay').contains('Pêche thon rouge sans VMS détecté ni JPE')

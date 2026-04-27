@@ -53,15 +53,24 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
     setDescriptionOffset(height)
   }, [])
 
+  const [infractionTagsOffset, setInfractionTagsOffset] = useState(0)
+  const handleInfractionTagsHeightChange = useCallback((height: number) => {
+    setInfractionTagsOffset(height)
+  }, [])
+
   const tagOffset = hasTag ? TAG_ROW_HEIGHT : 0
-  const overlayHeight = OVERLAY_HEIGHT + tagOffset + descriptionOffset
+  const overlayHeight = OVERLAY_HEIGHT + tagOffset + descriptionOffset + infractionTagsOffset
   const dynamicMargins = useMemo(
     () => ({
       ...margins,
-      yBottom: margins.yBottom - tagOffset - descriptionOffset,
-      yMiddle: margins.yMiddle - Math.round(tagOffset / 2) - Math.round(descriptionOffset / 2)
+      yBottom: margins.yBottom - tagOffset - descriptionOffset - infractionTagsOffset,
+      yMiddle:
+        margins.yMiddle -
+        Math.round(tagOffset / 2) -
+        Math.round(descriptionOffset / 2) -
+        Math.round(infractionTagsOffset / 2)
     }),
-    [tagOffset, descriptionOffset]
+    [tagOffset, descriptionOffset, infractionTagsOffset]
   )
 
   const { overlayElementRef, overlayPosition } = useMapOverlay({
@@ -101,6 +110,7 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
             onClose={handleClose}
             onDescriptionHeightChange={handleDescriptionHeightChange}
             onEdit={handleEdit}
+            onInfractionTagsHeightChange={handleInfractionTagsHeightChange}
             overlayPosition={overlayPosition}
             reporting={reportingProperties}
           />

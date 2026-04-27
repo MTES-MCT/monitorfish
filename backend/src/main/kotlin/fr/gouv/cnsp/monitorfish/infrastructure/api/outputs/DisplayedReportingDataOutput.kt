@@ -16,8 +16,7 @@ class DisplayedReportingDataOutput(
     val vesselName: String? = null,
     val title: String,
     val description: String,
-    val threat: String? = null,
-    val threatCharacterization: String? = null,
+    val infractions: List<Infraction> = listOf(),
     val flagState: CountryCode,
     val reportingDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
@@ -30,6 +29,12 @@ class DisplayedReportingDataOutput(
     val featureId: String,
     val from: String,
 ) {
+    data class Infraction(
+        val natinfCode: Int,
+        val threat: String,
+        val threatCharacterization: String,
+    )
+
     companion object {
         const val THREE_LINES_CHARACTERS = 160
 
@@ -71,17 +76,25 @@ class DisplayedReportingDataOutput(
                         is Reporting.Observation -> reporting.description?.take(THREE_LINES_CHARACTERS) ?: ""
                         is Reporting.Alert -> ""
                     },
-                threat =
+                infractions =
                     when (reporting) {
-                        is Reporting.InfractionSuspicion -> reporting.infractions.firstOrNull()?.threat
-                        is Reporting.Observation -> null
-                        is Reporting.Alert -> reporting.threat
-                    },
-                threatCharacterization =
-                    when (reporting) {
-                        is Reporting.InfractionSuspicion -> reporting.infractions.firstOrNull()?.threatCharacterization
-                        is Reporting.Observation -> null
-                        is Reporting.Alert -> reporting.threatCharacterization
+                        is Reporting.InfractionSuspicion ->
+                            reporting.infractions.map {
+                                Infraction(
+                                    natinfCode = it.natinfCode,
+                                    threat = it.threat,
+                                    threatCharacterization = it.threatCharacterization,
+                                )
+                            }
+                        is Reporting.Observation -> emptyList()
+                        is Reporting.Alert ->
+                            listOf(
+                                Infraction(
+                                    natinfCode = reporting.natinfCode,
+                                    threat = reporting.threat,
+                                    threatCharacterization = reporting.threatCharacterization,
+                                ),
+                            )
                     },
                 isInfractionSuspicion =
                     when (reporting) {

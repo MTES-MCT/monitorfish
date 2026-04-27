@@ -19,14 +19,14 @@ export function useGetPriorNotificationTypesAsOptions() {
       return undefined
     }
 
-    const opts = types.map(type => ({
+    const options = types.map(type => ({
       label: type,
       value: type
     }))
 
-    opts.push({ label: IS_PRIOR_NOTIFICATION_ZERO_LABEL, value: IS_PRIOR_NOTIFICATION_ZERO })
+    options.push({ label: IS_PRIOR_NOTIFICATION_ZERO_LABEL, value: IS_PRIOR_NOTIFICATION_ZERO })
 
-    return opts
+    return options
   }, [types])
 
   return {

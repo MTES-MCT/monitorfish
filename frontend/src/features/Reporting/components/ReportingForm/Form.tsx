@@ -119,8 +119,7 @@ export function Form({
   ])
   const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
-  const numberOfVessels = isInfractionSuspicion ? (values as InfractionSuspicionFormValues).numberOfVessels : undefined
-  const isPlural = isIUU && (numberOfVessels ?? 1) > 1
+  const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
   const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
   const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
@@ -348,7 +347,7 @@ export function Form({
           min={1}
           name="numberOfVessels"
           onChange={handleNumberOfVesselsChange}
-          value={(values as InfractionSuspicionFormValues).numberOfVessels}
+          value={values.numberOfVessels}
         />
       )}
       {!hideVesselSection && (

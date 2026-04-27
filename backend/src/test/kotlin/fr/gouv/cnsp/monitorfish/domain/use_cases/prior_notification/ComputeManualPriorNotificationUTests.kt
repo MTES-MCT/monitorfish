@@ -33,7 +33,7 @@ class ComputeManualPriorNotificationUTests {
     private val computeRiskFactor: ComputeRiskFactor = mock()
 
     @Test
-    fun `execute should return isInVerificationScope as true When flag state is GBR`() {
+    fun `execute should return PENDING_VERIFICATION state When vessel flag state is GBR`() {
         // Given
         val vesselId = 1
         val vessel =
@@ -98,12 +98,11 @@ class ComputeManualPriorNotificationUTests {
         assertThat(result.vesselRiskFactor).isEqualTo(riskFactor)
         assertThat(result.tripSegments).isEqualTo(segments)
         assertThat(result.types).isEqualTo(types)
-        assertThat(result.isInVerificationScope).isTrue()
         assertThat(result.nextState).isEqualTo(PriorNotificationState.PENDING_VERIFICATION)
     }
 
     @Test
-    fun `execute should return isInVerificationScope as true When vessel has active reportings`() {
+    fun `execute should return PENDING_VERIFICATION state When vessel has active reportings`() {
         // Given
         val vesselId = 1
         val vessel =
@@ -169,12 +168,11 @@ class ComputeManualPriorNotificationUTests {
         assertThat(result.vesselRiskFactor).isEqualTo(riskFactor)
         assertThat(result.tripSegments).isEqualTo(segments)
         assertThat(result.types).isEqualTo(types)
-        assertThat(result.isInVerificationScope).isTrue()
         assertThat(result.nextState).isEqualTo(PriorNotificationState.PENDING_VERIFICATION)
     }
 
     @Test
-    fun `execute should return isInVerificationScope as false When vessel has no active reportings`() {
+    fun `execute should return AUTO_SEND_REQUESTED state When vessel has no active reportings`() {
         // Given
         val vesselId = 1
         val vessel =
@@ -239,7 +237,6 @@ class ComputeManualPriorNotificationUTests {
         assertThat(result.vesselRiskFactor).isEqualTo(riskFactor)
         assertThat(result.tripSegments).isEqualTo(segments)
         assertThat(result.types).isEqualTo(types)
-        assertThat(result.isInVerificationScope).isFalse()
         assertThat(result.nextState).isEqualTo(PriorNotificationState.AUTO_SEND_REQUESTED)
     }
 }

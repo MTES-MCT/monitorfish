@@ -9,6 +9,7 @@ import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notific
 import type { OrUndefinedToOrNull } from '../../types'
 import type { BackendApi } from '@api/BackendApi.types'
 import type { Reporting } from '@features/Reporting/types'
+import PnoVerificationReason = PriorNotification.PnoVerificationScopeReason;
 
 /**
  * For both logbook and manual prior notifications.
@@ -123,7 +124,8 @@ export function getPriorNotificationsFakeResponse({
         vesselLastControlDateTime: null,
         vesselLength: 7.7,
         vesselMmsi: 'MMSI121',
-        vesselName: 'MARE ET BASS'
+        vesselName: 'MARE ET BASS',
+        verificationReason: PnoVerificationReason.FOREIGN_FLAG_COUNTRY,
       }
     ],
     extraData: {
@@ -260,6 +262,7 @@ export function getPriorNotificationFakeResponse({
     state,
     updatedAt,
     vesselId: 121,
+    verificationReason: PnoVerificationReason.FOREIGN_FLAG_COUNTRY,
     vesselIdentity: {
       beaconNumber: null,
       districtCode: null,

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoVerificationReason
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import java.time.ZonedDateTime
@@ -20,6 +21,7 @@ class PriorNotificationDataOutput(
     val operationDate: ZonedDateTime,
     val state: PriorNotificationState?,
     val riskFactor: Double?,
+    val verificationReason: PnoVerificationReason?,
     val updatedAt: ZonedDateTime,
     val vesselId: Int,
     val vesselIdentity: VesselIdentityDataOutput,
@@ -85,6 +87,7 @@ class PriorNotificationDataOutput(
                 operationDate = logbookMessage.operationDateTime,
                 state = priorNotification.state,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
+                verificationReason = priorNotification.verificationReason,
                 updatedAt = updatedAt,
                 vesselId = vesselId,
                 vesselIdentity = vesselIdentity,

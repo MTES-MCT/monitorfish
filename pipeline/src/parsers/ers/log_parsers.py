@@ -14,6 +14,7 @@ from src.parsers.utils import (
     tagged_children,
     try_float,
 )
+from src.processing import remove_nones_from_dict
 
 
 def default_log_parser(el: xml.etree.ElementTree.Element):
@@ -365,7 +366,7 @@ def parse_css(css):
     children = tagged_children(css)
 
     data = {
-        "fishPrice": try_float(css.get("FP")),
+        "unitPrice": try_float(css.get("FP")),
         "totalPrice": try_float(css.get("TP")),
         "currency": css.get("CR"),
         "fishSize": css.get("SF"),
@@ -374,9 +375,10 @@ def parse_css(css):
         "producerOrganizationUse": css.get("OP"),
     }
 
-    if "SPE" in children:
-        assert len(children["SPE"]) == 1
-        data["species"] = parse_spe(children["SPE"][0])
+    assert "SPE" in children
+    assert len(children["SPE"]) == 1
+    data = {**data, **parse_spe(children["SPE"][0])}
+    data = remove_nones_from_dict(data)
 
     return data
 
@@ -409,12 +411,12 @@ def parse_sli(sli):
         "bcdNumber": sli.get("BC"),
     }
 
-    if "SRC" in children:
-        assert len(children["SRC"]) == 1
-        data = {**data, **parse_src(children["SRC"][0])}
+    assert "SRC" in children
+    assert len(children["SRC"]) == 1
+    data = {**data, **parse_src(children["SRC"][0])}
 
-    if "CSS" in children:
-        data["consignments"] = [parse_css(css) for css in children["CSS"]]
+    assert "CSS" in children
+    data["products"] = [parse_css(css) for css in children["CSS"]]
 
     return data
 
@@ -455,8 +457,8 @@ def parse_sal(sal):
     if "SLI" in children:
         value["salesLines"] = [parse_sli(sli) for sli in children["SLI"]]
 
-    if "TLI" in children:
-        value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
+    # if "TLI" in children:
+    #     value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
 
     metadata = {
         "cfr": sal.get("IR"),

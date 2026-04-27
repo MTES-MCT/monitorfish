@@ -1,0 +1,3347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 63055 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UN/CEFACT
+Schema version: 8.17
+Schema date:    27MAY14
+
+Code list name:     Agency Identification Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (AY14). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, 
+and derivative works that comment on or otherwise explain it or assist 
+in its implementation may be prepared, copied, published and distributed, 
+in whole or in part, without restriction of any kind, provided that the 
+above copyright notice and this paragraph are included on all such copies 
+and derivative works. However, this document itself may not be modified in 
+any way, such as by removing the copyright notice or references to 
+UN/CEFACT, except as needed for the purpose of developing UN/CEFACT 
+specifications, in which case the procedures for copyrights defined in the 
+UN/CEFACT Intellectual Property Rights document must be followed, or as 
+required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked 
+by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS"
+basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING 
+BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL 
+NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR 
+FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm63055="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:AgencyIdentificationCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="8.17">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AgencyIdentificationCode" type="clm63055:AgencyIdentificationCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AgencyIdentificationCodeContentType   ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="AgencyIdentificationCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCC (Customs Co-operation Council)</ccts:Name>
+            <ccts:Description>Customs Co-operation Council (now World Customs Organization).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEC (Commission of the European Communities)</ccts:Name>
+            <ccts:Description>Generic: see also 140, 141, 142, 162.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IATA (International Air Transport Association)</ccts:Name>
+            <ccts:Description>The airline industry's international organisation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ICC (International Chamber of Commerce)</ccts:Name>
+            <ccts:Description>International Chamber of Commerce.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO (International Organization for Standardization)</ccts:Name>
+            <ccts:Description>International Organization of Standardization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UN/ECE (United Nations - Economic Commission for Europe)</ccts:Name>
+            <ccts:Description>United Nations Economic Commission for Europe.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEFIC (Conseil Europeen des Federations de l'Industrie Chimique)</ccts:Name>
+            <ccts:Description>EDI project for chemical industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EDIFICE</ccts:Name>
+            <ccts:Description>Standardised electronic commerce forum for companies with interests in computing, electronics and telecommunications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1</ccts:Name>
+            <ccts:Description>GS1 (formerly EAN International), an organisation of GS1 Member Organisations, which manages the GS1 System.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ODETTE</ccts:Name>
+            <ccts:Description>Organization for Data Exchange through Tele-Transmission in Europe (European automotive industry project).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lloyd's register of shipping</ccts:Name>
+            <ccts:Description>A register of ocean going vessels maintained by Lloyd's of London.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UIC (International union of railways)</ccts:Name>
+            <ccts:Description>International Union of Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ICAO (International Civil Aviation Organization)</ccts:Name>
+            <ccts:Description>International Civil Aviation Organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ICS (International Chamber of Shipping)</ccts:Name>
+            <ccts:Description>International Chamber of Shipping.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RINET (Reinsurance and Insurance Network)</ccts:Name>
+            <ccts:Description>Reinsurance and Insurance Network.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, D&amp;B (Dun &amp; Bradstreet Corporation)</ccts:Name>
+            <ccts:Description>Identifies the Dun &amp; Bradstreet Corporation, United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>S.W.I.F.T.</ccts:Name>
+            <ccts:Description>Society for Worldwide Interbank Financial Telecommunications s.c.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Conventions on SAD and transit (EC and EFTA)</ccts:Name>
+            <ccts:Description>SAD = Single Administrative Document.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FRRC (Federal Reserve Routing Code)</ccts:Name>
+            <ccts:Description>Federal Reserve Routing Code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BIC (Bureau International des Containeurs)</ccts:Name>
+            <ccts:Description>The container industry's international organisation responsible for the issuance of container-related codes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by transport company</ccts:Name>
+            <ccts:Description>Codes assigned by a transport company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ISA (Information Systems Agreement)</ccts:Name>
+            <ccts:Description>Codes assigned by the ISA for use by its members.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, EDITRANSPORT</ccts:Name>
+            <ccts:Description>French association developing EDI in transport logistics.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, ROA (Railways of Australia)</ccts:Name>
+            <ccts:Description>Maintains code lists which are accepted by Australian government railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EDITEX (Europe)</ccts:Name>
+            <ccts:Description>EDI group for the textile and clothing industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Foundation Uniform Transport Code</ccts:Name>
+            <ccts:Description>Foundation Uniform Transport Code is the EDI organisation for shippers, carriers and other logistic service providers in the Netherlands.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, FDA (Food and Drug Administration)</ccts:Name>
+            <ccts:Description>U.S. food and drug administration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EDITEUR (European book sector electronic data interchange group)</ccts:Name>
+            <ccts:Description>Code identifying the pan European user group for the book industry as an organisation responsible for code values in the book industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, FLEETNET</ccts:Name>
+            <ccts:Description>Association of fleet vehicle hiring and leasing companies in the UK.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, ABTA (Association of British Travel Agencies)</ccts:Name>
+            <ccts:Description>ABTA, Association of British Travel Agencies.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FI, Finish State Railway</ccts:Name>
+            <ccts:Description>Finish State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PL, Polish State Railway</ccts:Name>
+            <ccts:Description>Polish State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BG, Bulgaria State Railway</ccts:Name>
+            <ccts:Description>Bulgaria State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RO, Rumanian State Railway</ccts:Name>
+            <ccts:Description>Rumanian State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CZ, Tchechian State Railway</ccts:Name>
+            <ccts:Description>Tchechian State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HU, Hungarian State Railway</ccts:Name>
+            <ccts:Description>Hungarian State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, British Railways</ccts:Name>
+            <ccts:Description>British Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES, Spanish National Railway</ccts:Name>
+            <ccts:Description>Spanish National Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, Swedish State Railway</ccts:Name>
+            <ccts:Description>Swedish State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, Norwegian State Railway</ccts:Name>
+            <ccts:Description>Norwegian State Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, German Railway</ccts:Name>
+            <ccts:Description>German Railway.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AT, Austrian Federal Railways</ccts:Name>
+            <ccts:Description>Austrian Federal Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LU, Luxembourg National Railway Company</ccts:Name>
+            <ccts:Description>Luxembourg National Railway Company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, Italian State Railways</ccts:Name>
+            <ccts:Description>Italian State Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Netherlands Railways</ccts:Name>
+            <ccts:Description>Netherlands Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Swiss Federal Railways</ccts:Name>
+            <ccts:Description>Swiss Federal Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Danish State Railways</ccts:Name>
+            <ccts:Description>Danish State Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, French National Railway Company</ccts:Name>
+            <ccts:Description>French National Railway Company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, Belgian National Railway Company</ccts:Name>
+            <ccts:Description>Belgian National Railway Company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT, Portuguese Railways</ccts:Name>
+            <ccts:Description>Portuguese Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SK, Slovakian State Railways</ccts:Name>
+            <ccts:Description>Slovakian State Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IE, Irish Transport Company</ccts:Name>
+            <ccts:Description>Irish Transport Company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FIATA (International Federation of Freight Forwarders Associations)</ccts:Name>
+            <ccts:Description>International Federation of Freight Forwarders Associations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IMO (International Maritime Organisation)</ccts:Name>
+            <ccts:Description>International Maritime Organisation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DOT (United States Department of Transportation)</ccts:Name>
+            <ccts:Description>United States Department of Transportation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>TW, Trade-van</ccts:Name>
+            <ccts:Description>Trade-van is an EDI/VAN service centre for customs, transport, and insurance in national and international trade.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>TW, Chinese Taipei Customs</ccts:Name>
+            <ccts:Description>Customs authorities of Chinese Taipei responsible for collecting import duties and preventing smuggling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EUROFER</ccts:Name>
+            <ccts:Description>European steel organisation - EDI project for the European steel industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, EDIBAU</ccts:Name>
+            <ccts:Description>National body responsible for the German codification in the construction area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by national trade agency</ccts:Name>
+            <ccts:Description>The code list is from a national agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Association Europeenne des Constructeurs de Materiel Aerospatial (AECMA)</ccts:Name>
+            <ccts:Description>A code to identify the Association Europeenne des Constructeurs de Materiel Aeropsatial (European Association of Aerospace Products Manufacturers) as an authorizing agency for code lists.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DIstilled Spirits Council of the United States (DISCUS)</ccts:Name>
+            <ccts:Description>United States DIstilled Spirits Council of the United States (DISCUS).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>North Atlantic Treaty Organization (NATO)</ccts:Name>
+            <ccts:Description>A code to identify the North Atlantic Treaty Organization (NATO) as an authorizing agency for code lists.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, CLEEP</ccts:Name>
+            <ccts:Description>French association responsible for standardization, coordination and promotion of EDI and Data Exchange applications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 France</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in France.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MY, Malaysian Customs and Excise</ccts:Name>
+            <ccts:Description>Malaysia Royal Customs and Excise.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MY, Malaysia Central Bank</ccts:Name>
+            <ccts:Description>Malaysia Central Bank is a regulatory body set up by the government to charge with promoting economic monetary and credit condition favourable to commercial and industrial activity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Italy</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Italy.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, National Alcohol Beverage Control Association (NABCA)</ccts:Name>
+            <ccts:Description>United States National Alcohol Beverage Control Association (NABCA).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MY, Dagang.Net</ccts:Name>
+            <ccts:Description>Malaysia, Dagang.Net is a national clearing house which provide EDI/VAN service for customs, transport, retail and financial and other industries in the national and international trade.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, FCC (Federal Communications Commission)</ccts:Name>
+            <ccts:Description>A code representing the United States Federal Communication Commission (FCC).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, MARAD (Maritime Administration)</ccts:Name>
+            <ccts:Description>A code representing the United States Maritime Administration (MARAD) under the Department of Transportation (DOT).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DSAA (Defense Security Assistance Agency)</ccts:Name>
+            <ccts:Description>A code representing the United States Defense Security Assistance Agency (DSAA) under the Department of Defense (DOD).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, NRC (Nuclear Regulatory Commission)</ccts:Name>
+            <ccts:Description>A code representing the United States Nuclear Regulatory Commission (NRC).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ODTC (Office of Defense Trade Controls)</ccts:Name>
+            <ccts:Description>A code representing the United States Office of Defense Trade Controls (ODTC) under the Department of State.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ATF (Bureau of Alcohol, Tobacco and Firearms)</ccts:Name>
+            <ccts:Description>A code representing the United States Bureau of Alcohol, Tobacco and Firearms, Department of Treasury (ATF).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, BXA (Bureau of Export Administration)</ccts:Name>
+            <ccts:Description>A code representing the United States Bureau of Export Administration (BXA) under the Department of Commerce (DOC) .</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, FWS (Fish and Wildlife Service)</ccts:Name>
+            <ccts:Description>A code depicting the United States Fish and Wildlife Service (FWS).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="79">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, OFAC (Office of Foreign Assets Control)</ccts:Name>
+            <ccts:Description>A code representing the United States Office of Foreign Assets Controls (OFAC).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="80">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BRMA/RAA - LIMNET - RINET Joint Venture</ccts:Name>
+            <ccts:Description>Joint venture between BRMA (Brokers &amp; Reinsurance Markets Association) / RAA (Reinsurance Association of America) - LIMNET (London Insurance Market Network) - RINET (Reinsurance and Insurance Network).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="81">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RU, (SFT) Society for Financial Telecommunications</ccts:Name>
+            <ccts:Description>Russian company representing the users of the Global Financial Telecommunication Network (GFTN).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="82">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, Enhetsregisteret ved Bronnoysundregisterne</ccts:Name>
+            <ccts:Description>The co-ordinating register for companies and business units of companies at the Bronnoysund register centre.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="83">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, National Retail Federation</ccts:Name>
+            <ccts:Description>The National Retail Federation is the trade association for the general merchandise retailing industry. In addition to providing support and education services, they also maintain and publish standard colour and size codes for the retail industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="84">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BRD (Gesetzgeber der Bundesrepublik Deutschland)</ccts:Name>
+            <ccts:Description>German legislature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="85">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>North America, Telecommunications Industry Forum</ccts:Name>
+            <ccts:Description>Trade association representing telecommunications service providers, equipment manufacturers, suppliers to the industry and customers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="86">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by party originating the message</ccts:Name>
+            <ccts:Description>Codes assigned by the party originating the message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="87">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by carrier</ccts:Name>
+            <ccts:Description>Codes assigned by the carrier.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="88">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by owner of operation</ccts:Name>
+            <ccts:Description>Assigned by owner of operation (e.g. used in construction).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="89">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by distributor</ccts:Name>
+            <ccts:Description>Codes assigned by a distributor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by manufacturer</ccts:Name>
+            <ccts:Description>Codes assigned by a manufacturer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="91">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by seller or seller's agent</ccts:Name>
+            <ccts:Description>Codes assigned by a seller or seller's agent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="92">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by buyer or buyer's agent</ccts:Name>
+            <ccts:Description>Codes assigned by a buyer or buyer's agent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="93">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AT, Austrian Customs</ccts:Name>
+            <ccts:Description>Austrian customs organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="94">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AT, Austrian PTT</ccts:Name>
+            <ccts:Description>The Austrian organization responsible for assigning telephone (voice/data) + telex numbers, postcodes, and postal account numbers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="95">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, Australian Customs Service</ccts:Name>
+            <ccts:Description>Australian Customs Service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="96">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CA, Revenue Canada, Customs and Excise</ccts:Name>
+            <ccts:Description>Canada Customs and Revenue Agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="97">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Administration federale des contributions</ccts:Name>
+            <ccts:Description>Indirect taxation (e.g. turn-over/sales taxes).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="98">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Direction generale des douanes</ccts:Name>
+            <ccts:Description>Customs (incl. ISO alpha 2 country code).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="99">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Division des importations et exportations, OFAEE</ccts:Name>
+            <ccts:Description>Import and export licences.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Entreprise des PTT</ccts:Name>
+            <ccts:Description>Telephone (voice/data) + telex numbers, postcodes, postal account numbers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Carbura</ccts:Name>
+            <ccts:Description>Centrale suisse pour l'importation de carburants et combustibles liquides (Oil products).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Centrale suisse pour l'importation du charbon</ccts:Name>
+            <ccts:Description>Coal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Office fiduciaire des importateurs de denrees alimentaires</ccts:Name>
+            <ccts:Description>Foodstuff.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Association suisse code des articles</ccts:Name>
+            <ccts:Description>Swiss article numbering association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Ministry of taxation, Central Customs and Tax Administration</ccts:Name>
+            <ccts:Description>Danish Customs administration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, Direction generale des douanes et droits indirects</ccts:Name>
+            <ccts:Description>French Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, INSEE</ccts:Name>
+            <ccts:Description>Institut National de la Statistique et des Etudes Economiques.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, Banque de France</ccts:Name>
+            <ccts:Description>Banque de France.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, H.M. Customs &amp; Excise</ccts:Name>
+            <ccts:Description>United Kingdom H.M. Customs and Excise.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IE, Revenue Commissioners, Customs AEP project</ccts:Name>
+            <ccts:Description>Ireland Revenue Commissioners Customs Automated Entry Processing project.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, U.S. Customs Service</ccts:Name>
+            <ccts:Description>United States Customs Service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, U.S. Census Bureau</ccts:Name>
+            <ccts:Description>The Bureau of the Census of the U.S. Dept. of Commerce.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="113">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 US</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in the USA.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="114">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ABA (American Bankers Association)</ccts:Name>
+            <ccts:Description>United States American Bankers Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="116">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ANSI ASC X12</ccts:Name>
+            <ccts:Description>American National Standards Institute ASC X12.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="117">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AT, Geldausgabeautomaten-Service Gesellschaft m.b.H.</ccts:Name>
+            <ccts:Description>Austrian Geldausgabeautomaten-Service Gesellschaft m.b.H.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="118">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, Svenska Bankfoereningen</ccts:Name>
+            <ccts:Description>Swedish bankers association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="119">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, Associazione Bancaria Italiana</ccts:Name>
+            <ccts:Description>Italian Associazione Bancaria Italiana.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, Socieata' Interbancaria per l'Automazione</ccts:Name>
+            <ccts:Description>Italian Socieata' Interbancaria per l'Automazione.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="121">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Telekurs AG</ccts:Name>
+            <ccts:Description>Swiss Telekurs AG.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="122">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Swiss Securities Clearing Corporation</ccts:Name>
+            <ccts:Description>Swiss Securities Clearing Corporation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="123">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, Norwegian Interbank Research Organization</ccts:Name>
+            <ccts:Description>Norwegian Interbank Research Organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="124">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, Norwegian Bankers' Association</ccts:Name>
+            <ccts:Description>Norwegian Bankers' Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="125">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FI, The Finnish Bankers' Association</ccts:Name>
+            <ccts:Description>Finnish Bankers' Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="126">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, NCCMA (Account Analysis Codes)</ccts:Name>
+            <ccts:Description>The United States organization responsible for issuing account analysis codes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="127">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, ARE (AbRechnungs Einheit)</ccts:Name>
+            <ccts:Description>A German code for subsidiary unit number.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="128">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, Belgian Bankers' Association</ccts:Name>
+            <ccts:Description>Belgian Bankers' Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="129">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, Belgian Ministry of Finance</ccts:Name>
+            <ccts:Description>VAT numbers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="130">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Danish Bankers Association</ccts:Name>
+            <ccts:Description>Code identifying the organisation responsible for the issuance of bank related codes in Denmark.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="131">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, German Bankers Association</ccts:Name>
+            <ccts:Description>German Bankers' Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="132">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, BACS Limited</ccts:Name>
+            <ccts:Description>An organization that operates the United Kingdom's electronic fund transfer service on behalf of the major Banks and Building Societies.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="133">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, Association for Payment Clearing Services</ccts:Name>
+            <ccts:Description>British Association for Payment Clearing Services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="134">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, APACS (Association of payment clearing services)</ccts:Name>
+            <ccts:Description>The association which manages the United Kingdom payment clearing system, and among other thing manages the UK bank sort code numbering system.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="135">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, The Clearing House</ccts:Name>
+            <ccts:Description>British financial transaction clearing house.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="136">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 UK</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in the United Kingdom.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="137">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AT, Verband oesterreichischer Banken und Bankiers</ccts:Name>
+            <ccts:Description>Austrian bankers association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="138">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, CFONB (Comite francais d'organ. et de normalisation bancaires)</ccts:Name>
+            <ccts:Description>National body responsible for the French codification in banking activity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="139">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Universal Postal Union (UPU)</ccts:Name>
+            <ccts:Description>The Universal Postal Union (UPU) is an international organization that coordinates postal policies between member nations, and hence the world-wide postal system.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="140">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEC (Commission of the European Communities), DG/XXI-01</ccts:Name>
+            <ccts:Description>Responsible for computerization within Customs area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="141">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEC (Commission of the European Communities), DG/XXI-B-1</ccts:Name>
+            <ccts:Description>International Commission of the European Communities.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="142">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEC (Commission of the European Communities), DG/XXXIV</ccts:Name>
+            <ccts:Description>Statistical Office of the European Communities: e.g. Geonomenclature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="143">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NZ, New Zealand Customs</ccts:Name>
+            <ccts:Description>New Zealand Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="144">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Netherlands Customs</ccts:Name>
+            <ccts:Description>Netherlands Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="145">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, Swedish Customs</ccts:Name>
+            <ccts:Description>Swedish Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="146">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, German Customs</ccts:Name>
+            <ccts:Description>German Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="147">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, Belgian Customs</ccts:Name>
+            <ccts:Description>Belgian Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="148">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES, Spanish Customs</ccts:Name>
+            <ccts:Description>Spanish Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="149">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IL, Israel Customs</ccts:Name>
+            <ccts:Description>Israeli Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HK, Hong Kong Customs</ccts:Name>
+            <ccts:Description>Hong Kong Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="151">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, Japan Customs</ccts:Name>
+            <ccts:Description>Japan Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="152">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SA, Saudi Arabia Customs</ccts:Name>
+            <ccts:Description>Saudi Arabia Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="153">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, Italian Customs</ccts:Name>
+            <ccts:Description>Italian Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="154">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GR, Greek Customs</ccts:Name>
+            <ccts:Description>Greek Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="155">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT, Portuguese Customs</ccts:Name>
+            <ccts:Description>Portuguese Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="156">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LU, Luxembourg Customs</ccts:Name>
+            <ccts:Description>Luxembourg Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="157">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, Norwegian Customs</ccts:Name>
+            <ccts:Description>Norwegian Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="158">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FI, Finnish Customs</ccts:Name>
+            <ccts:Description>Finnish Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="159">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IS, Iceland Customs</ccts:Name>
+            <ccts:Description>Iceland Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="160">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LI, Liechtenstein authority</ccts:Name>
+            <ccts:Description>Identification of relevant responsible agency for e.g. banking/financial matters still pending. For e.g. Customs, currency, post/telephone: see relevant CH entry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="161">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UNCTAD (United Nations - Conference on Trade And Development)</ccts:Name>
+            <ccts:Description>United Nations - Conference on Trade And Development.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="162">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CEC (Commission of the European Communities), DG/XIII-D-5</ccts:Name>
+            <ccts:Description>Responsible for TEDIS - incl. CEBIS -, INSIS and CADDIA projects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="163">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, FMC (Federal Maritime Commission)</ccts:Name>
+            <ccts:Description>United States Federal Maritime Commission.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="164">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DEA (Drug Enforcement Agency)</ccts:Name>
+            <ccts:Description>United States Drug Enforcement Agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="165">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DCI (Distribution Codes, INC.)</ccts:Name>
+            <ccts:Description>United States Distribution Codes, Inc. organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="166">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, National Motor Freight Classification Association</ccts:Name>
+            <ccts:Description>The organisation in the USA which is responsible for code maintenance in the trucking industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="167">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, AIAG (Automotive Industry Action Group)</ccts:Name>
+            <ccts:Description>United States Automotive Industry Action Group.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="168">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, FIPS (Federal Information Publishing Standard)</ccts:Name>
+            <ccts:Description>A code issued by the United States National Institute for Science and Technology (NIST) to identify a Federal Information Publishing Standard.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="169">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CA, SCC (Standards Council of Canada)</ccts:Name>
+            <ccts:Description>Standards Council of Canada.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="170">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CA, CPA (Canadian Payment Association)</ccts:Name>
+            <ccts:Description>Canadian Payment Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="171">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Interpay Girale Services</ccts:Name>
+            <ccts:Description>Interpay Girale Services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="172">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Interpay Debit Card Services</ccts:Name>
+            <ccts:Description>Interpay Debit Card Services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="173">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NO, NORPRO</ccts:Name>
+            <ccts:Description>Norwegian electronic data interchange standards organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="174">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, DIN (Deutsches Institut fuer Normung)</ccts:Name>
+            <ccts:Description>German standardization institute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="175">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FCI (Factors Chain International)</ccts:Name>
+            <ccts:Description>Factors Chain International.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="176">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BR, Banco Central do Brazil</ccts:Name>
+            <ccts:Description>Brazilian central bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="177">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, LIFA (Life Insurance Federation of Australia)</ccts:Name>
+            <ccts:Description>Life Insurance Federation of Australia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="178">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, SAA (Standards Association of Australia)</ccts:Name>
+            <ccts:Description>Standards Association of Australia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="179">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Air transport association of America</ccts:Name>
+            <ccts:Description>U.S. -based trade association representing the major North American scheduled airlines.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BIA (Berufsgenossenschaftliches Institut fuer Arbeitssicherheit)</ccts:Name>
+            <ccts:Description>German institute of the workmen's compensation board.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="181">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Edibuild</ccts:Name>
+            <ccts:Description>EDI organization for companies in the construction industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="182">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Standard Carrier Alpha Code (Motor)</ccts:Name>
+            <ccts:Description>Organisation maintaining the SCAC lists and transportation operating in North America.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="183">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, American Petroleum Institute</ccts:Name>
+            <ccts:Description>US-based trade association representing oil and natural gas producers, shippers, refineries, marketers, and major suppliers to the industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="184">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, ACOS (Australian Chamber of Shipping)</ccts:Name>
+            <ccts:Description>The national organisation for the maritime industry in Australia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="185">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BDI (Bundesverband der Deutschen Industrie e.V.)</ccts:Name>
+            <ccts:Description>German industry association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="186">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, GSA (General Services Administration)</ccts:Name>
+            <ccts:Description>The US General Services Administration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="187">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DLMSO (Defense Logistics Management Standards Office)</ccts:Name>
+            <ccts:Description>The Defense Logistics Management Standards Office.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="188">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, NIST (National Institute of Standards and Technology)</ccts:Name>
+            <ccts:Description>The US National Institute of Standards and Technology.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="189">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DoD (Department of Defense)</ccts:Name>
+            <ccts:Description>The US Department of Defense.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="190">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, VA (Department of Veterans Affairs)</ccts:Name>
+            <ccts:Description>The Department of Veterans Affairs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="191">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IAPSO (United Nations Inter-Agency Procurement Services Office)</ccts:Name>
+            <ccts:Description>United Nations organization responsible for maintaining the United Nations Common Coding System (UNCCS) which is used extensively by UN agencies in procurement and statistical analysis.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="192">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shipper's association</ccts:Name>
+            <ccts:Description>Code assigned by a shipper's association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="193">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EU, European Telecommunications Informatics Services (ETIS)</ccts:Name>
+            <ccts:Description>European Telecommunications Informatics Services is a non-profit cooperative organisation owned by European public network operators, working in the field of information technology.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="194">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, AQIS (Australian Quarantine and Inspection Service)</ccts:Name>
+            <ccts:Description>Australian Quarantine and Inspection Service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="195">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)</ccts:Name>
+            <ccts:Description>The Colombian customs organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="196">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, COPAS (Council of Petroleum Accounting Society)</ccts:Name>
+            <ccts:Description>Organization supplying codes of oil field equipment and tubular goods used by joint operators in the petroleum industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="197">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DISA (Data Interchange Standards Association)</ccts:Name>
+            <ccts:Description>The organization maintaining code lists under the administration of the data interchange standards association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="198">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CO, Superintendencia Bancaria De Colombia</ccts:Name>
+            <ccts:Description>The organization which assigns identification numbers to financial institutions conducting business in Colombia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="199">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, Direction de la Comptabilite Publique</ccts:Name>
+            <ccts:Description>The French public accounting office.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="200">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Netherlands</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in The Netherlands.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="201">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, WSSA(Wine and Spirits Shippers Association)</ccts:Name>
+            <ccts:Description>United States based Wine and Spirits Shippers association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="202">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT, Banco de Portugal</ccts:Name>
+            <ccts:Description>Portuguese Central Bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="203">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, GALIA (Groupement pour l'Amelioration des Liaisons dans l'Industrie Automobile)</ccts:Name>
+            <ccts:Description>The national organisation representing France in ODETTE (Organisation for Data Exchanges through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="204">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, VDA (Verband der Automobilindustrie E.V.)</ccts:Name>
+            <ccts:Description>The national organisation representing Germany in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="205">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, ODETTE Italy</ccts:Name>
+            <ccts:Description>The national organisation representing Italy in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="206">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, ODETTE Netherlands</ccts:Name>
+            <ccts:Description>The national organisation representing Netherlands in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="207">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES, ODETTE Spain</ccts:Name>
+            <ccts:Description>The national organisation representing Spain in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="208">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, ODETTE Sweden</ccts:Name>
+            <ccts:Description>The national organisation representing Scandinavian countries in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="209">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, ODETTE United Kingdom</ccts:Name>
+            <ccts:Description>The national organisation representing UK in ODETTE (Organisation for Data Exchange through Tele-Transmission in Europe).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EU, EDI for financial, informational, cost, accounting, auditing and social areas (EDIFICAS) - Europe</ccts:Name>
+            <ccts:Description>European association dealing with accounting and auditing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="211">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, EDI for financial, informational, cost, accounting, auditing and social areas (EDIFICAS) - France</ccts:Name>
+            <ccts:Description>French association dealing with accounting and auditing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="212">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Deutsch Telekom AG</ccts:Name>
+            <ccts:Description>German telecommunication services agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="213">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, NACCS Center (Nippon Automated Cargo And Port Consolidated System, Inc.)</ccts:Name>
+            <ccts:Description>NACCS (Nippon Automated Cargo And Port Consolidated System) Center is the operations organization of the automated cargo and port consolidated system in Japan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="214">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, AISI (American Iron and Steel Institute)</ccts:Name>
+            <ccts:Description>American iron and steel institute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="215">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, APCA (Australian Payments Clearing Association)</ccts:Name>
+            <ccts:Description>Australian association responsible for the management of payment clearing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="216">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Department of Labor</ccts:Name>
+            <ccts:Description>To identify the United States department of labour.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="217">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, N.A.I.C. (National Association of Insurance Commissioners)</ccts:Name>
+            <ccts:Description>To identify the United States, National Association of Insurance Commissioners.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="218">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, The Association of British Insurers</ccts:Name>
+            <ccts:Description>An association that administers code lists on behalf of the UK insurance community.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="219">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, d'ArvA</ccts:Name>
+            <ccts:Description>Value added network administering insurance code lists on behalf of the French insurance community.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="220">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FI, Finnish tax board</ccts:Name>
+            <ccts:Description>Finnish tax board.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="221">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, CNAMTS (Caisse Nationale de l'Assurance Maladie des Travailleurs Salaries)</ccts:Name>
+            <ccts:Description>The French public institution funding health-care for salaried workers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="222">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Danish National Board of Health</ccts:Name>
+            <ccts:Description>The national authority responsible for the supervision of health activities in Denmark.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="223">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Danish Ministry of Home Affairs</ccts:Name>
+            <ccts:Description>The ministry responsible for all interior affairs concerning the Danish people.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="224">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Aluminum Association</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the aluminum industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="225">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, CIDX (Chemical Industry Data Exchange)</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the chemical Industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="226">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Carbide Manufacturers</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the iron and carbide manufacturing industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="227">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, NWDA (National Wholesale Druggist Association)</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the wholesale drug industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="228">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, EIA (Electronic Industry Association)</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the electronic industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="229">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, American Paper Institute</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the American paper industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="230">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, VICS (Voluntary Inter-Industry Commerce Standards)</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the retail industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="231">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Copper and Brass Fabricators Council</ccts:Name>
+            <ccts:Description>Organization that assigns identification numbers for the copper and brass fabricators industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="232">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, Inland Revenue</ccts:Name>
+            <ccts:Description>Code identifying the government department responsible for assessing and collecting revenue consisting of taxes and inland duties in Great Britain.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="233">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, OMB (Office of Management and Budget)</ccts:Name>
+            <ccts:Description>Codes are assigned by the United States Office of Management and Budget.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="234">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Siemens AG</ccts:Name>
+            <ccts:Description>Siemens AG, Germany.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="235">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, Tradegate (Electronic Commerce Australia)</ccts:Name>
+            <ccts:Description>Australian industry body coordinating codes for use in local and international commerce and trade.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="236">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, United States Postal Service (USPS)</ccts:Name>
+            <ccts:Description>Code specifying the official postal service of the United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="237">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, United States health industry</ccts:Name>
+            <ccts:Description>Code assigned by the United States health industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="238">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, TDCC (Transportation Data Coordinating Committee)</ccts:Name>
+            <ccts:Description>United States Transportation Data Coordinating Committee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="239">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, HL7 (Health Level 7)</ccts:Name>
+            <ccts:Description>United States, electronic data interchange standards-making organization, Health Level 7.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, CHIPS (Clearing House Interbank Payment Systems)</ccts:Name>
+            <ccts:Description>United States financial clearing house.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="241">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT, SIBS (Sociedade Interbancaria de Servicos)</ccts:Name>
+            <ccts:Description>Portuguese automated clearing house.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="244">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Department of Health and Human Services</ccts:Name>
+            <ccts:Description>United States Department of Health and Human Services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="245">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Denmark</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Denmark.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="246">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Germany</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Germany.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="247">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, HBICC (Health Industry Business Communication Council)</ccts:Name>
+            <ccts:Description>Code identifying the United States HIBCC (Health Industry Business Communication Council).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="248">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, ASTM (American Society of Testing and Materials)</ccts:Name>
+            <ccts:Description>A not-for-profit organization that provides a forum for producers, users, ultimate consumers, and those having a general interest (representatives of government and academia) to meet on common ground and write standards for materials, products, systems, and services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="249">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IP (Institute of Petroleum)</ccts:Name>
+            <ccts:Description>An independent European centre for the advancement and dissemination of technical, economic and professional knowledge relating to the international oil and gas industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="250">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, UOP (Universal Oil Products)</ccts:Name>
+            <ccts:Description>An United States based organization that provides products, services and technology primarily in the areas of petroleum refining, olefins, aromatics, and gas processing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="251">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, HIC (Health Insurance Commission)</ccts:Name>
+            <ccts:Description>Australian agency responsible for administering the Health Insurance Act.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="252">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, AIHW (Australian Institute of Health and Welfare)</ccts:Name>
+            <ccts:Description>Australian statutory authority responsible for the national collection of health related statistics and health related data definitions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="253">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, NCCH (National Centre for Classification in Health)</ccts:Name>
+            <ccts:Description>Australian national authority responsible for healthcare classifications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="254">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, DOH (Australian Department of Health)</ccts:Name>
+            <ccts:Description>Australian government department responsible for administration of health policy.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="255">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, ADA (Australian Dental Association)</ccts:Name>
+            <ccts:Description>Industry association responsible for the classification of dental services in Australia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="256">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, AAR (Association of American Railroads)</ccts:Name>
+            <ccts:Description>The official United States organization of the railroads in North America.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="257">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ECCMA (Electronic Commerce Code Management Association)</ccts:Name>
+            <ccts:Description>The Electronic Commerce Code Management Association, a not for profit membership organization, which manages codes used in electronic commerce.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="258">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, Japanese Ministry of Transport</ccts:Name>
+            <ccts:Description>Japanese Ministry of Transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="259">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, Japanese Maritime Safety Agency</ccts:Name>
+            <ccts:Description>Japanese Maritime Safety Agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="260">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ebIX (European forum for energy Business Information eXchange)</ccts:Name>
+            <ccts:Description>A code to identify European forum for energy Business Information eXchange, which is an organization standardizing the use of EDI between the participants in the European energy market.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="261">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EEG7, European Expert Group 7 (Insurance)</ccts:Name>
+            <ccts:Description>European Expert Group 7 for Insurance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="262">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, GDV (Gesamtverband der Deutschen Versicherungswirtschaft e.V.)</ccts:Name>
+            <ccts:Description>Gesamtverband der Deutschen Versicherungswirtschaft e.V. (German Insurance Association).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="263">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CA, CSIO (Centre for Study of Insurance Operations)</ccts:Name>
+            <ccts:Description>The Centre for Study of Insurance Operations (CSIO) in Canada.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="264">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, AGF (Assurances Generales de France)</ccts:Name>
+            <ccts:Description>Code lists are administered by Assurances Generales de France (AGF).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="265">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, Central bank</ccts:Name>
+            <ccts:Description>Swedish central bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="266">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, DoA (Department of Agriculture)</ccts:Name>
+            <ccts:Description>Department of Agriculture, United States federal agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="267">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RU, Central Bank of Russia</ccts:Name>
+            <ccts:Description>Central bank of Russia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="268">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, DGI (Direction Generale des Impots)</ccts:Name>
+            <ccts:Description>French taxation authority.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="269">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GRE (Reference Group of Experts)</ccts:Name>
+            <ccts:Description>An international association that administers code lists on behalf of business credit information users and providers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Concord EDI group</ccts:Name>
+            <ccts:Description>An organisation of international transport equipment leasing companies and transport equipment repair providers responsible for promoting the use of EDI standards and standard business terms.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="271">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>InterContainer InterFrigo</ccts:Name>
+            <ccts:Description>European railway associated organisation involved in the transport of containers by rail.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="272">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Joint Automotive Industry agency</ccts:Name>
+            <ccts:Description>The Joint Automotive Industry (JAI) agency is in charge of code lists that are common to automotive industry groups.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="273">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, SCC (Swiss Chambers of Commerce)</ccts:Name>
+            <ccts:Description>Swiss Chambers of Commerce.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="274">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ITIGG (International Transport Implementation Guidelines Group)</ccts:Name>
+            <ccts:Description>ITIGG is the UN/EDIFACT transport message development group's organisation responsible for the issuance of globally harmonised transport-related codes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="275">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES, Banco de Espaï¿½a</ccts:Name>
+            <ccts:Description>The Spanish central bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="276">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by Port Community</ccts:Name>
+            <ccts:Description>Codes assigned by the Port Community.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="277">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BIGNet (Business Information Group Network)</ccts:Name>
+            <ccts:Description>Identifies the Business Information Group Network, an international trade alliance that administers code lists on behalf of business information users and providers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="278">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Eurogate</ccts:Name>
+            <ccts:Description>An international trade alliance that administers code lists on behalf of business information users and providers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="279">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NL, Graydon</ccts:Name>
+            <ccts:Description>Identifies the Graydon Corporation in the Netherlands.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="280">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, Euler</ccts:Name>
+            <ccts:Description>A company in France responsible for assigning codes in the credit insurance industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="281">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Belgium and Luxembourg</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Belgium and Luxembourg.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="282">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Creditreform International e.V.</ccts:Name>
+            <ccts:Description>Identifies the Creditreform International e.V. in Germany (e.V.: eingetragener Verein).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="283">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Hermes Kreditversicherungs AG</ccts:Name>
+            <ccts:Description>Identifies the Hermes Kreditversicherungs AG in Germany (AG: Aktiengesellschaft).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="284">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>TW, Taiwanese Bankers' Association</ccts:Name>
+            <ccts:Description>Code identifying the organization responsible for the issuance of bank related codes in Taiwan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="285">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES, Asociaciï¿½n Espaï¿½ola de Banca</ccts:Name>
+            <ccts:Description>Code identifying the organization responsible for the issuance of bank related codes in Spain.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="286">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, TCO (Tjï¿½nstemï¿½nnes Central Organisation)</ccts:Name>
+            <ccts:Description>The Swedish Confederation of Professional Employees.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="287">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, FORTRAS (Forschungs- und Entwicklungsgesellschaft fï¿½r Transportwesen GMBH)</ccts:Name>
+            <ccts:Description>German research and development institute for transport matters.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="288">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>OSJD (Organizacija Sotrudnichestva Zeleznih Dorog)</ccts:Name>
+            <ccts:Description>Code identifying OSJD, Organisation for Co-operation of Railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="289">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP.JIPDEC</ccts:Name>
+            <ccts:Description>JIPDEC is a nonprofit foundation promoting electronic commerce, and is the registration agency of the standard company code in Japan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="290">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, JAMA</ccts:Name>
+            <ccts:Description>Japan Automobile Manufacturers Association, Inc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="291">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, JAPIA</ccts:Name>
+            <ccts:Description>Japan Auto Parts Industries Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="292">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FI, TIEKE The Information Technology Development Centre of Finland</ccts:Name>
+            <ccts:Description>The national organization representing Finland in electronic data interchange for trade and industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="293">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BDEW (Bundesverband der Energie- und Wasserwirtschaft e.V.)</ccts:Name>
+            <ccts:Description>The Federal Association of Energy and Water (BDEW) is the trade association of the German industries for natural gas, electricity supply, long-distance heating and water supply.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="294">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Austria</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Austria.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="295">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AU, Australian Therapeutic Goods Administration</ccts:Name>
+            <ccts:Description>Austrialian administration responsible for the regulation of therapeutic goods in Australia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="296">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ITU (International Telecommunication Union)</ccts:Name>
+            <ccts:Description>International Telecommunication Union.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="297">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT, Ufficio IVA</ccts:Name>
+            <ccts:Description>Ufficio responsabile gestione partite IVA is the Italian Institute issuing VAT registration numbers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="298">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Spain</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 System in Spain.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="299">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, Seagha</ccts:Name>
+            <ccts:Description>Organisation responsible for assigning maritime related identification numbers in Belgian ports.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SE, Swedish International Freight Association</ccts:Name>
+            <ccts:Description>Swedish International Freight Association (SIFA).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="301">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BauDatenbank GmbH</ccts:Name>
+            <ccts:Description>The organisation responsible for issuing and maintaining commodity codes for use in the German construction industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="302">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Bundesverband des Deutschen Textileinzelhandels e.V.</ccts:Name>
+            <ccts:Description>The organisation responsible for issuing and maintaining commodity codes for use in the German textile industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="303">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB, Trade Service Information Ltd (TSI)</ccts:Name>
+            <ccts:Description>A United Kingdom authority responsible for the allocation of identification codes to products in the building sector.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="304">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, Bundesverband Deutscher Heimwerker-, Bau- und Gartenfachmaerkte e.V.</ccts:Name>
+            <ccts:Description>The organisation responsible for issuing and maintaining commodity codes for use in German stores for do-it-yourself, construction and garden articles.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="305">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ETSO (European Transmission System Operator)</ccts:Name>
+            <ccts:Description>The European organisation representing the electrical industry transmission system operators.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="306">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SMDG (Ship-planning Message Design Group)</ccts:Name>
+            <ccts:Description>User Group for Shipping Lines and Container Terminals.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="307">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, Ministry of Justice</ccts:Name>
+            <ccts:Description>Japanese Ministry of Justice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="309">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, JASTPRO (Japan Association for Simplification of International Trade Procedures)</ccts:Name>
+            <ccts:Description>JASTPRO is a nonprofit organization for simplifying international trade procedures and is the responsible agency for the registration of the "Japan Exporters and Importers Standard Code".</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="310">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, SAP AG (Systeme, Anwendungen und Produkte)</ccts:Name>
+            <ccts:Description>Systeme, Anwendungen und Produkte (German software company).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="311">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, TDB (Teikoku Databank, Ltd.)</ccts:Name>
+            <ccts:Description>TDB (Teikoku Databank, Ltd.) conducts corporate credit research and maintains company codes based on research activities for supporting business transactions in Japan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="312">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, AGRO EDI EUROPE</ccts:Name>
+            <ccts:Description>French association developing EDI in the agricultural and food processing sectors.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="313">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, Groupement National Interprofessionnel des Semences et Plants</ccts:Name>
+            <ccts:Description>French organization of seed and plant professionals responsible for assigning codes in the botanical seed sectors.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="314">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>OAGi (Open Applications Group, Incorporated)</ccts:Name>
+            <ccts:Description>Open Applications Group, Incorporated.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="315">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, STAR (Standards for Technology in Automotive Retail)</ccts:Name>
+            <ccts:Description>Standards for Technology in Automotive Retail.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="316">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Finland</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Finland.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="317">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Brazil</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Brazil.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="318">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IETF (Internet Engineering Task Force)</ccts:Name>
+            <ccts:Description>IETF - Internet Engineering Task Force.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="319">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, GTF</ccts:Name>
+            <ccts:Description>Group of Terrestrial Freight Forwarders.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="320">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DK, Danish National IT and Telcom Agency (ITA)</ccts:Name>
+            <ccts:Description>Code specifying the Danish National IT and Telcom Agency as codelist responsible Agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="321">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EASEE-Gas (European Association for the Streamlining of Energy Exchange for gas)</ccts:Name>
+            <ccts:Description>The European organization whose working group Edig@s is responsible for the management of gas related codes and messages.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="322">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IS, ICEPRO</ccts:Name>
+            <ccts:Description>Icelandic committee of e-commerce and trade procedures.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="323">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PROTECT</ccts:Name>
+            <ccts:Description>A group of European ports, national competent authorities and port community systems exchanging information about dangerous goods and vessel movements.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="324">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Ireland</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Ireland.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="325">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Russia</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Russia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="326">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Poland</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Poland.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="327">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GS1 Estonia</ccts:Name>
+            <ccts:Description>Organisation responsible for the GS1 system in Estonia.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="328">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by ultimate recipient of the message</ccts:Name>
+            <ccts:Description>A code assigned by the party who is the ultimate recipient of the message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="329">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by loading dock operator</ccts:Name>
+            <ccts:Description>The code is assigned by the operator of a loading dock.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nordic Ediel Group</ccts:Name>
+            <ccts:Description>A code to identify the Nordic Ediel Group, which is an organization standardizing the use of EDI between the participants in the Nordic energy market.
+
+Notes:
+1. In D13.A this code value was inadvertantly reassigned to EXIS. Now EXIS is under code 399 in DE 3055. This note will be deleted as of D14.A directory.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="331">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Agricultural Marketing Service (AMS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Agriculture. AMS inspects and grades agricultural products and gathers import and export statistics for farm products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="332">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, DVGW Service &amp; Consult GmbH</ccts:Name>
+            <ccts:Description>Subsidiary of DVGW German Technical and Scientific Association for Gas and Water. As a technical standardization organization, the DVGW promotes technical standards for the production, transportation, distribution and use of gas and drinking water in the Federal Republic of Germany.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="333">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Animal and Plant Health Inspection Service (APHIS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Agriculture. APHIS regulates the import and export of plants, animals and their products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="334">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Bureau of Labor Statistics (BLS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Labor. BLS is the principal fact-finding agency for the Federal Government in the broad field of labor economics and statistics.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="335">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Bureau of Transportation Statistics (BTS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Transportation. BTS administers data collection, analysis, and reporting and to ensure the most cost-effective use of transportation-monitoring resources.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="336">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Customs and Border Protection (CBP)</ccts:Name>
+            <ccts:Description>A division of US Department of Homeland Security.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="337">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Center for Disease Control (CDC)</ccts:Name>
+            <ccts:Description>A division of the US Department of Health and Human Services. CDC promotes health and quality of life by preventing and controlling disease, injury, and disability.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="338">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Consumer Product Safety Commission (CPSC)</ccts:Name>
+            <ccts:Description>An independent commission within the US federal government. CPSC works to protect consumers from products that pose a fire, electrical, chemical, or mechanical hazard or can injure children.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="339">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Directorate of Defense Trade Controls (DDTC)</ccts:Name>
+            <ccts:Description>A division of the US Department of State. DDTC is charged with controlling the export and temporary import of defense articles and defense services covered by the United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="340">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Environmental Protection Agency (EPA)</ccts:Name>
+            <ccts:Description>An independent agency within the US federal government. EPA registers and controls imports of pesticides, Ozone Depleting Substances, and bulk chemicals; controls conformity of vehicles and engines to the Clean Air Act, and tracks hazardous wastes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="341">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Federal Aviation Administration (FAA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Transportation. FAA is responsible for the safety of hazardous materials shipments when flown into and from US air space.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="342">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Foreign Agriculture Service (FAS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Agriculture. FAS works to improve foreign market access for US products, build new markets, improve the competitive position of US agriculture in the global marketplace, and provide food aid and technical assistance to foreign countries.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="343">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Federal Motor Carrier Safety Administration (FMCSA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Transportation. FMCSA is focused on reducing crashes, injuries, and fatalities involving large trucks and buses.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="344">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Food Safety Inspection Service (FSIS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Agriculture. FSIS is responsible for ensuring that the nation's commercial supply of meat, poultry, and egg products is safe, wholesome, and correctly labeled and packaged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="345">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Foreign Trade Zones Board (FTZB)</ccts:Name>
+            <ccts:Description>FTZB licenses, regulates, and monitors the activity of foreign-trade zones (FTZ) in the United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="346">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, The Grain Inspection, Packers and Stockyards Administration (GIPSA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Agriculture. GIPSA facilitates the marketing of livestock, poultry, meat, cereals, oilseeds, and related agricultural products, and promotes fair and competitive trading practices for the overall benefit of consumers and American agriculture.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="347">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Import Administration (IA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Commerce. IA enforces the US unfair trade laws (i.e., the anti-dumping and countervailing duty laws) and develops and implements other policies and programs aimed at countering foreign unfair trade practices.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="348">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Internal Revenue Service (IRS)</ccts:Name>
+            <ccts:Description>A division of the US Department of the Treasury. IRS collects excise taxes on imports and on conveyances involved in international traffic.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="349">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, International Trade Commission (ITC)</ccts:Name>
+            <ccts:Description>An independent commission. ITC investigates the effects of dumped and subsidized imports on domestic industries and conducts global safeguard investigations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="350">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, National Highway Traffic Safety Administration (NHTSA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Transportation. NHTSA monitors the importation of motor vehicles and motor vehicle equipment to ensure compliance with applicable Federal motor vehicle safety standards.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="351">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, National Marine Fisheries Service (NMFS)</ccts:Name>
+            <ccts:Description>A division of the US Department of Commerce. NMFS issues permits to support their effort to regulate commercial and recreational international transactions involving resources such as such as swordfish, tooth fish, and tuna while overseeing the management, conservation and protection of living marine resources within the areas of ocean surrounding the United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="352">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Office of Fossil Energy (OFE)</ccts:Name>
+            <ccts:Description>A division of the US Department of Energy.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="353">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Office of Foreign Missions (OFM)</ccts:Name>
+            <ccts:Description>A division of the US Department of State. OFM provides the legal foundation to facilitate secure and efficient operations of US missions abroad, and of foreign missions and international organizations in the United States.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="354">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Bureau of Oceans and International Environmental and Scientific Affairs (OES)</ccts:Name>
+            <ccts:Description>A division of the US Department of State. OES works with issues surrounding foreign policy formulation and implementation in global environment, science, and technology.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="355">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Office of Naval Intelligence (ONI)</ccts:Name>
+            <ccts:Description>A division of the US Department of Defense (Navy).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="356">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Pipeline and Hazardous Materials Safety Administration (PHMSA)</ccts:Name>
+            <ccts:Description>A division of the US Department of Transportation. PHMSA works to protect the American public and the environment by ensuring the safe and secure movement of hazardous materials to industry and consumers by all transportation modes, including the nation's pipelines.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="357">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Alcohol and Tobacco Tax and Trade Bureau (TTB)</ccts:Name>
+            <ccts:Description>A division of the US Department of the Treasury. TTB collects alcohol, tobacco, firearms, and ammunition excise taxes; to ensure that these products are labeled, advertised, and marketed in accordance with the law; and administers the laws and regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="358">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Army Corp of Engineers (USACE)</ccts:Name>
+            <ccts:Description>A division of the US Department of Defense (Army). USACE protects the US aquatic resources, while allowing reasonable development through fair, flexible and balanced permit decisions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="359">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Agency for International Development (USAID)</ccts:Name>
+            <ccts:Description>USAID is an independent US federal government agency. USAID supports long-term and equitable economic growth and advances US foreign policy objectives.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Coast Guard (USCG)</ccts:Name>
+            <ccts:Description>A division of US Department of Homeland Security. USCG is a military branch of the United States involved in maritime law, mariner assistance, and search and rescue.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="361">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Office of the United States Trade Representative (USTR)</ccts:Name>
+            <ccts:Description>An office within the US Executive Branch, Office of the President. USTR negotiates directly with foreign governments to create trade agreements; resolves disputes and participates in global trade policy organizations; meets with governments, business groups, legislators and public interest groups to gather input on trade issues; and explains the presidentï¿½s trade policy positions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="362">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>International Commission for the Conservation of Atlantic Tunas (ICCAT)</ccts:Name>
+            <ccts:Description>An inter-governmental fishery organization responsible for the conservation of tunas and tuna-like species in the Atlantic Ocean and its adjacent seas.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="363">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inter-American Tropical Tuna Commission (IATTC)</ccts:Name>
+            <ccts:Description>An organization responsible for the conservation and management of fisheries for tunas and other species taken by tuna-fishing vessels in the eastern Pacific Ocean.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="364">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Commission for the Conservation of Southern Bluefin Tuna (CCSBT)</ccts:Name>
+            <ccts:Description>An organization which oversees the management and conservation of southern blue fin tuna.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="365">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Indian Ocean Tuna Commission (IOTC)</ccts:Name>
+            <ccts:Description>An intergovernmental organization mandated to manage tuna and tuna-like species in the Indian Ocean and adjacent seas.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="366">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>International Botanical Congress</ccts:Name>
+            <ccts:Description>International organization responsible for the international identification of botanical species.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="367">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>International Commission on Zoological Nomenclature</ccts:Name>
+            <ccts:Description>International organization responsible for the International Code of Zoological Nomenclature (ICZN).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="368">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>International Society for Horticulture Science</ccts:Name>
+            <ccts:Description>International organization responsible for the International Code of Nomenclature for Cultivated Plants (ICNCP).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="369">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical Abstract Service (CAS)</ccts:Name>
+            <ccts:Description>Chemical Abstract Service (CAS) is a division of the American Chemical Society (ACS) responsible for the CAS registry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="370">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Social Security Administration (SSA)</ccts:Name>
+            <ccts:Description>The Social Security Administration (SSA) is an independent agency of the US government. SSA issues Social Security Numbers (SSN) used to identify parties/entities in a trade transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="371">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>INMARSAT</ccts:Name>
+            <ccts:Description>Satellite communications organization that provides vessel call sign used by ships as an identifier.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="372">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Agent of ship at the intended port of arrival</ccts:Name>
+            <ccts:Description>Name and contact details of the agent of the ship at the intended port of arrival.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="373">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US Air Force</ccts:Name>
+            <ccts:Description>The aerial warfare division of the U.S. Department of Defense.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="374">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, Bureau of Explosives</ccts:Name>
+            <ccts:Description>A self-policing agency to promote the safe transportation of explosives and other hazardous materials on roads and railways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="375">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basel Convention Secretariat</ccts:Name>
+            <ccts:Description>Agency which maintains the list and specifications of goods for control of transboundary movements of hazardous wastes and their disposal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="376">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PANTONE</ccts:Name>
+            <ccts:Description>Color code controlling organisation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="377">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IS, National Registry of Iceland</ccts:Name>
+            <ccts:Description>The national registry of Iceland, responsible for legal registration ID for persons.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="378">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IS, Internal Revenue Directorate of Iceland</ccts:Name>
+            <ccts:Description>Tax authorities of Iceland, responsible for VAT codes and registration ID for legal entities.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="379">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IANA (Internet Assigned Numbers Authority)</ccts:Name>
+            <ccts:Description>The Internet Assigned Numbers Authority (IANA) is responsible for the global coordination of the DNS Root, IP addressing, and other Internet protocol resources.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="380">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Korea Customs Service</ccts:Name>
+            <ccts:Description>The customs services department of the Government of the Republic of Korea.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="381">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Israel Tax Authority</ccts:Name>
+            <ccts:Description>The customs and taxation services department of the State of Israel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="382">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Israeli Ministry of Interior</ccts:Name>
+            <ccts:Description>The Ministry of the State of Israel that is responsible for interior affairs including the issue of passports / travel documents.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="383">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, LUMD (Logistique Urbaine Mutualisï¿½e Durable)</ccts:Name>
+            <ccts:Description>Logistique Urbaine Mutualisï¿½e Durable, French organisation in charge of Urban Logistics.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="384">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, BiPRO (Brancheninitiative Prozessoptimierung)</ccts:Name>
+            <ccts:Description>BiPRO is the German association of Insurance Companies, Brokers and Software Suppliers responsible for the development of standards for use by the insurance industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="385">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Ministry of Agriculture</ccts:Name>
+            <ccts:Description>The Authority for agriculture in the Hashemite Kingdom of Jordan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="386">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Customs</ccts:Name>
+            <ccts:Description>The Customs Authority of the Hashemite Kingdom of Jordan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="387">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Food &amp; Drug Administration</ccts:Name>
+            <ccts:Description>The Food &amp; Drug Administration of the Hashemite Kingdom of Jordan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="388">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Institution for Standards and Metrology</ccts:Name>
+            <ccts:Description>The Institution for Standards and Metrology of the Hashemite Kingdom of Jordan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="389">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Telecommunication Regulatory Commission</ccts:Name>
+            <ccts:Description>The national authority of the Hashemite Kingdom of Jordan concerned with the regulation of telecommunications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="390">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Nuclear Regulatory Commission</ccts:Name>
+            <ccts:Description>The Nuclear Regulatory Commission of the Hashemite Kingdom of Jordan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="391">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JO, Jordan Ministry of Environment</ccts:Name>
+            <ccts:Description>The government department of the Hashemite Kingdom of Jordan responsible for the protection of the environment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="392">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hazardous waste collector</ccts:Name>
+            <ccts:Description>Party collecting hazardous waste.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="393">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hazardous waste generator</ccts:Name>
+            <ccts:Description>Party generating hazardous waste.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="394">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marketing agent</ccts:Name>
+            <ccts:Description>Party authorized to market a product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="395">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, TELEBIB Centre</ccts:Name>
+            <ccts:Description>The TELEBIB Centre is the Belgian association of Insurance Companies, Brokers and Software Suppliers responsible for the development of standards for use by the insurance industry.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="396">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, BNB</ccts:Name>
+            <ccts:Description>The Belgian National Bank, which delivers identifiers for, amongst others, Insurers and Re-insurers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="397">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BE, FSMA</ccts:Name>
+            <ccts:Description>The Belgian Financial Services Market Authority, which delivers identifiers for, amongst others, Intermediaries in insurance business.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="398">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FR, PHAST</ccts:Name>
+            <ccts:Description>French association responsible for standardization, coordination and promotion of EDI and Data Exchange applications in Health and Hospital sector.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="399">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EXIS (Exis Technologies Ltd.)</ccts:Name>
+            <ccts:Description>Exis Technologies Ltd. is the system developer of the electronic International Maritime Dangerous Goods Code (IMDG Code) for the International Maritime Organization.
+
+Notes:
+1. In D13.A EXIS was erroneously allocated code 330. Now this has been corrected. This note will be deleted as of D14.A directory.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="400">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FAO (Food and Agriculture Organisation)</ccts:Name>
+            <ccts:Description>Food and Agriculture Organisation of the United Nations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="401">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CH, Spedlogswiss</ccts:Name>
+            <ccts:Description>Swiss Freight Forwarding and Logistics Association.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="402">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, National Tax Agency</ccts:Name>
+            <ccts:Description>National Tax Agency Japan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="403">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Comite Europï¿½en de Normalisation</ccts:Name>
+            <ccts:Description>Comite Europï¿½en de Normalisation (CEN), European committee for standardization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="404">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by logistics service provider</ccts:Name>
+            <ccts:Description>Codes assigned by a logistics service provider.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="405">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned by transport ministry</ccts:Name>
+            <ccts:Description>The code is assigned by a ministry of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="406">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>AR, Customs Administration of Argentina</ccts:Name>
+            <ccts:Description>Administraciï¿½n Federal de Ingresos Pï¿½blicos.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="407">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BO, Customs Administration of Bolivia</ccts:Name>
+            <ccts:Description>Aduana Nacional.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="408">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BR, Customs Administration of Brazil</ccts:Name>
+            <ccts:Description>Receita Federal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="409">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PY, Customs Administration of Paraguay</ccts:Name>
+            <ccts:Description>Direcciï¿½n Nacional de Aduanas.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="410">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UY, Customs Administration of Uruguay</ccts:Name>
+            <ccts:Description>Direcciï¿½n Nacional de Aduanas.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="411">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>VE, Customs Administration of Venezuela</ccts:Name>
+            <ccts:Description>Servicio Nacional Integrado de Administraciï¿½n Aduanera y Tributaria.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="412">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IN, Customs Administration of India</ccts:Name>
+            <ccts:Description>India Customs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="413">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, JEC (UN/CEFACT Japan Committee)</ccts:Name>
+            <ccts:Description>JEC is the liaison association of Japan for UN/CEFACT, promoting UN/CEFACT standards and coordinating standards development in Japan.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="414">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UAE, NAIC (National Advance Information Center)</ccts:Name>
+            <ccts:Description>National Advance Information Center.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>A code assigned within a code list to be used on an interim basis and as defined among trading partners until a precise code can be assigned to the code list.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

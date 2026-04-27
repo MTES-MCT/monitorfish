@@ -1,0 +1,2628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== IANA Character Set Code - Code List Schema Module          ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UN/CEFACT
+Schema version: 4.4
+Schema date:    28 January 2013
+
+Code list name:     Character Set Code
+Code list agency:   IANA
+Code list version:  2013-01-23
+
+The terms and definitions in this schema are taken from the IANA Character Set 
+list as published by the Internet Assigned Numbers Authority, IANA. This list 
+can be obtained from the IANA Web site at the following address: 
+www.iana.org/assignments/character-sets. 
+
+Schema Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, 
+and derivative works that comment on or otherwise explain it or assist 
+in its implementation may be prepared, copied, published and distributed, 
+in whole or in part, without restriction of any kind, provided that the 
+above copyright notice and this paragraph are included on all such copies 
+and derivative works. However, this document itself may not be modified in 
+any way, such as by removing the copyright notice or references to 
+UN/CEFACT, except as needed for the purpose of developing UN/CEFACT 
+specifications, in which case the procedures for copyrights defined in the 
+UN/CEFACT Intellectual Property Rights document must be followed, or as 
+required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked 
+by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS"
+basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING 
+BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL 
+NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR 
+FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clmIANACharacterSetCode="urn:un:unece:uncefact:codelist:standard:IANA:CharacterSetCode:2013-01-23" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:IANA:CharacterSetCode:2013-01-23" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.4">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="CharacterSetCode" type="clmIANACharacterSetCode:CharacterSetCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: CharacterSetCodeContentType           ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="CharacterSetCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US-ASCII</ccts:Name>
+            <ccts:Description>Source: ANSI X3.4-1986
+Reference: [RFC2046]
+Aliases: iso-ir-6; ANSI_X3.4-1968; ANSI_X3.4-1986; ISO_646.irv:1991; ISO646-US; US-ASCII; us; IBM367; cp367; csASCII</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-1:1987</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-100; ISO_8859-1; ISO-8859-1; latin1; l1; IBM819; CP819; csISOLatin1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-2:1987</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-101; ISO_8859-2; ISO-8859-2; latin2; l2; csISOLatin2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-3:1988</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-109; ISO_8859-3; ISO-8859-3; latin3; l3; csISOLatin3</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-4:1988</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-110; ISO_8859-4; ISO-8859-4; latin4; l4; csISOLatin4</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-5:1988</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-144; ISO_8859-5; ISO-8859-5; cyrillic; csISOLatinCyrillic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-6:1987</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-127; ISO_8859-6; ISO-8859-6; ECMA-114; ASMO-708; arabic; csISOLatinArabic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-7:1987</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1947][RFC1345][Keld_Simonsen]
+Aliases: iso-ir-126; ISO_8859-7; ISO-8859-7; ELOT_928; ECMA-118; greek; greek8; csISOLatinGreek</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-8:1988</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-138; ISO_8859-8; ISO-8859-8; hebrew; csISOLatinHebrew</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-9:1989</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-148; ISO_8859-9; ISO-8859-9; latin5; l5; csISOLatin5</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-10</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-157; l6; ISO_8859-10:1992; csISOLatin6; latin6</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_6937-2-add</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences] and ISO 6937-2:1983; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-142; csISOTextComm</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_X0201</ccts:Name>
+            <ccts:Description>Source: JIS X 0201-1976. One byte only, this is equivalent to JIS/Roman (similar to ASCII) plus eight-bit half-width Katakana
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: X0201; csHalfWidthKatakana</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_Encoding</ccts:Name>
+            <ccts:Description>Source: JIS X 0202-1991. Uses ISO 2022 escape sequences to shift code sets as documented in JIS X 0202-1991.
+Reference:
+Aliases: csJISEncoding</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shift_JIS</ccts:Name>
+            <ccts:Description>Source: This charset is an extension of csHalfWidthKatakana by adding graphic characters in JIS X 0208. The CCS's are JIS X0201:1997 and JIS X0208:1997. The complete definition is shown in Appendix 1 of JIS X0208:1997. This charset can be used for the top-level media type "text".
+Reference:
+Aliases: MS_Kanji; csShiftJIS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extended_UNIX_Code_Packed_Format_for_Japanese</ccts:Name>
+            <ccts:Description>Source: Standardized by OSF, UNIX International, and UNIX Systems Laboratories Pacific. Uses ISO 2022 rules to select code set 0: US-ASCII (a single 7-bit byte set) code set 1: JIS X0208-1990 (a double 8-bit byte set) restricted to A0-FF in both bytes code set 2: Half Width Katakana (a single 7-bit byte set) requiring SS2 as the character prefix code set 3: JIS X0212-1990 (a double 7-bit byte set) restricted to A0-FF in both bytes requiring SS3 as the character prefix
+Reference:
+Aliases: csEUCPkdFmtJapanese; EUC-JP</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extended_UNIX_Code_Fixed_Width_for_Japanese</ccts:Name>
+            <ccts:Description>Source: Used in Japan. Each character is 2 octets. code set 0: US-ASCII (a single 7-bit byte set) 1st byte = 00 2nd byte = 20-7E code set 1: JIS X0208-1990 (a double 7-bit byte set) restricted to A0-FF in both bytes code set 2: Half Width Katakana (a single 7-bit byte set) 1st byte = 00 2nd byte = A0-FF code set 3: JIS X0212-1990 (a double 7-bit byte set) restricted to A0-FF in the first byte and 21-7E in the second byte
+Reference:
+Aliases: csEUCFixWidJapanese</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BS_4730</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-4; ISO646-GB; gb; uk; csISO4UnitedKingdom</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SEN_850200_C</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-11; ISO646-SE2; se2; csISO11SwedishForNames</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IT</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-15; ISO646-IT; csISO15Italian</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-17; ISO646-ES; csISO17Spanish</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DIN_66003</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-21; de; ISO646-DE; csISO21German</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NS_4551-1</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-60; ISO646-NO; no; csISO60DanishNorwegian; csISO60Norwegian1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NF_Z_62-010</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-69; ISO646-FR; fr; csISO69French</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-UTF-1</ccts:Name>
+            <ccts:Description>Source: Universal Transfer Format (1), this is the multibyte encoding, that subsets ASCII-7. It does not have byte ordering issues.
+Reference:
+Aliases: csISO10646UTF1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_646.basic:1983</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: ref; csISO646basic1983</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>INVARIANT</ccts:Name>
+            <ccts:Description>Source:
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csINVARIANT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_646.irv:1983</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-2; irv; csISO2IntlRefVersion</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NATS-SEFI</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-8-1; csNATSSEFI</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NATS-SEFI-ADD</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-8-2; csNATSSEFIADD</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NATS-DANO</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-9-1; csNATSDANO</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NATS-DANO-ADD</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-9-2; csNATSDANOADD</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SEN_850200_B</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-10; FI; ISO646-FI; ISO646-SE; se; csISO10Swedish</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KS_C_5601-1987</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-149; KS_C_5601-1989; KSC_5601; korean; csKSC56011987</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-2022-KR</ccts:Name>
+            <ccts:Description>Source: [RFC1557] (see also KS_C_5601-1987)
+Reference: [RFC1557][Woohyong_Choi]
+Aliases: csISO2022KR</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EUC-KR</ccts:Name>
+            <ccts:Description>Source: [RFC1557] (see also KS_C_5861-1992)
+Reference: [RFC1557][Woohyong_Choi]
+Aliases: csEUCKR</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-2022-JP</ccts:Name>
+            <ccts:Description>Source: [RFC1468] (see also [RFC2237])
+Reference: [RFC1468][Jun_Murai]
+Aliases: csISO2022JP</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-2022-JP-2</ccts:Name>
+            <ccts:Description>Source: [RFC1554]
+Reference: [RFC1554][Masataka_Ohta]
+Aliases: csISO2022JP2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6220-1969-jp</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: JIS_C6220-1969; iso-ir-13; katakana; x0201-7; csISO13JISC6220jp</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6220-1969-ro</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-14; jp; ISO646-JP; csISO14JISC6220ro</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-16; ISO646-PT; csISO16Portuguese</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>greek7-old</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-18; csISO18Greek7Old</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>latin-greek</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-19; csISO19LatinGreek</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NF_Z_62-010_(1973)</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-25; ISO646-FR1; csISO25French</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Latin-greek-1</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-27; csISO27LatinGreek1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_5427</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-37; csISO5427Cyrillic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6226-1978</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-42; csISO42JISC62261978</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BS_viewdata</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-47; csISO47BSViewdata</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>INIS</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-49; csISO49INIS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>INIS-8</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-50; csISO50INIS8</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>INIS-cyrillic</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-51; csISO51INISCyrillic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_5427:1981</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-54; ISO5427Cyrillic1981; csISO54271981</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_5428:1980</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-55; csISO5428Greek</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB_1988-80</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-57; cn; ISO646-CN; csISO57GB1988</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB_2312-80</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-58; chinese; csISO58GB231280</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NS_4551-2</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: ISO646-NO2; iso-ir-61; no2; csISO61Norwegian2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>videotex-suppl</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-70; csISO70VideotexSupp1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PT2</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-84; ISO646-PT2; csISO84Portuguese2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ES2</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-85; ISO646-ES2; csISO85Spanish2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MSZ_7795.3</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-86; ISO646-HU; hu; csISO86Hungarian</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6226-1983</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-87; x0208; JIS_X0208-1983; csISO87JISX0208</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>greek7</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-88; csISO88Greek7</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ASMO_449</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: ISO_9036; arabic7; iso-ir-89; csISO89ASMO449</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>iso-ir-90</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csISO90</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-a</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-91; jp-ocr-a; csISO91JISC62291984a</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-b</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-92; ISO646-JP-OCR-B; jp-ocr-b; csISO92JISC62991984b</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-b-add</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-93; jp-ocr-b-add; csISO93JIS62291984badd</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-hand</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-94; jp-ocr-hand; csISO94JIS62291984hand</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-hand-add</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-95; jp-ocr-hand-add; csISO95JIS62291984handadd</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_C6229-1984-kana</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-96; csISO96JISC62291984kana</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_2033-1983</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-98; e13b; csISO2033</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ANSI_X3.110-1983</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-99; CSA_T500-1983; NAPLPS; csISO99NAPLPS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>T.61-7bit</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-102; csISO102T617bit</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>T.61-8bit</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: T.61; iso-ir-103; csISO103T618bit</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ECMA-cyrillic</ccts:Name>
+            <ccts:Description>Source: [ISO registry] (formerly [ECMA registry])
+Reference:
+Aliases: iso-ir-111; KOI8-E; csISO111ECMACyrillic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CSA_Z243.4-1985-1</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-121; ISO646-CA; csa7-1; csa71; ca; csISO121Canadian1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="79">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CSA_Z243.4-1985-2</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-122; ISO646-CA2; csa7-2; csa72; csISO122Canadian2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="80">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CSA_Z243.4-1985-gr</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-123; csISO123CSAZ24341985gr</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="81">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-6-E</ccts:Name>
+            <ccts:Description>Source: [RFC1556]
+Reference: [RFC1556][IANA]
+Aliases: csISO88596E; ISO-8859-6-E</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="82">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-6-I</ccts:Name>
+            <ccts:Description>Source: [RFC1556]
+Reference: [RFC1556][IANA]
+Aliases: csISO88596I; ISO-8859-6-I</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="83">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>T.101-G2</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-128; csISO128T101G2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="84">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-8-E</ccts:Name>
+            <ccts:Description>Source: [RFC1556]
+Reference: [RFC1556][Hank_Nussbacher]
+Aliases: csISO88598E; ISO-8859-8-E</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="85">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-8-I</ccts:Name>
+            <ccts:Description>Source: [RFC1556]
+Reference: [RFC1556][Hank_Nussbacher]
+Aliases: csISO88598I; ISO-8859-8-I</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="86">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CSN_369103</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-139; csISO139CSN369103</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="87">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JUS_I.B1.002</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-141; ISO646-YU; js; yu; csISO141JUSIB1002</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="88">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IEC_P27-1</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-143; csISO143IECP271</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="89">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JUS_I.B1.003-serb</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-146; serbian; csISO146Serbian</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JUS_I.B1.003-mac</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: macedonian; iso-ir-147; csISO147Macedonian</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="91">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>greek-ccitt</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-150; csISO150; csISO150GreekCCITT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="92">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NC_NC00-10:81</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cuba; iso-ir-151; ISO646-CU; csISO151Cuba</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="93">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_6937-2-25</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-152; csISO6937Add</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="94">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GOST_19768-74</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: ST_SEV_358-88; iso-ir-153; csISO153GOST1976874</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="95">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_8859-supp</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-154; latin1-2-5; csISO8859Supp</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="96">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO_10367-box</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: iso-ir-155; csISO10367Box</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="97">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>latin-lap</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: lap; iso-ir-158; csISO158Lap</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="98">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JIS_X0212-1990</ccts:Name>
+            <ccts:Description>Source: [ISO-IR: International Register of Escape Sequences]; Note: The current registration authority is IPSJ/ITSCJ, Japan.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: x0212; iso-ir-159; csISO159JISX02121990</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="99">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DS_2089</ccts:Name>
+            <ccts:Description>Source: Danish Standard, DS 2089, February 1974
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: DS2089; ISO646-DK; dk; csISO646Danish</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>us-dk</ccts:Name>
+            <ccts:Description>Source:
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csUSDK</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>dk-us</ccts:Name>
+            <ccts:Description>Source:
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csDKUS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KSC5636</ccts:Name>
+            <ccts:Description>Source:
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: ISO646-KR; csKSC5636</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UNICODE-1-1-UTF-7</ccts:Name>
+            <ccts:Description>Source: [RFC1642]
+Reference: [RFC1642]
+Aliases: csUnicode11UTF7</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-2022-CN</ccts:Name>
+            <ccts:Description>Source: [RFC1922]
+Reference: [RFC1922]
+Aliases: csISO2022CN</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-2022-CN-EXT</ccts:Name>
+            <ccts:Description>Source: [RFC1922]
+Reference: [RFC1922]
+Aliases: csISO2022CNEXT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-8</ccts:Name>
+            <ccts:Description>Source: [RFC3629]
+Reference: [RFC3629]
+Aliases: csUTF8</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-13</ccts:Name>
+            <ccts:Description>Source: ISO See [http://www.iana.org/assignments/charset-reg/ISO-8859-13][Vladas_Tumasonis]
+Reference:
+Aliases: csISO885913</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-14</ccts:Name>
+            <ccts:Description>Source: ISO See [http://www.iana.org/assignments/charset-reg/ISO-8859-14] [Keld_Simonsen_2]
+Reference:
+Aliases: iso-ir-199; ISO_8859-14:1998; ISO_8859-14; latin8; iso-celtic; l8; csISO885914</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-15</ccts:Name>
+            <ccts:Description>Source: ISO Please see: [http://www.iana.org/assignments/charset-reg/ISO-8859-15]
+Reference:
+Aliases: ISO_8859-15; Latin-9; csISO885915</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-16</ccts:Name>
+            <ccts:Description>Source: ISO
+Reference:
+Aliases: iso-ir-226; ISO_8859-16:2001; ISO_8859-16; latin10; l10; csISO885916</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="113">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GBK</ccts:Name>
+            <ccts:Description>Source: Chinese IT Standardization Technical Committee Please see: [http://www.iana.org/assignments/charset-reg/GBK]
+Reference:
+Aliases: CP936; MS936; windows-936; csGBK</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="114">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB18030</ccts:Name>
+            <ccts:Description>Source: Chinese IT Standardization Technical Committee Please see: [http://www.iana.org/assignments/charset-reg/GB18030]
+Reference:
+Aliases: csGB18030</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="115">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>OSD_EBCDIC_DF04_15</ccts:Name>
+            <ccts:Description>Source: Fujitsu-Siemens standard mainframe EBCDIC encoding Please see: [http://www.iana.org/assignments/charset-reg/OSD-EBCDIC-DF04-15]
+Reference:
+Aliases: csOSDEBCDICDF0415</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="116">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>OSD_EBCDIC_DF03_IRV</ccts:Name>
+            <ccts:Description>Source: Fujitsu-Siemens standard mainframe EBCDIC encoding Please see: [http://www.iana.org/assignments/charset-reg/OSD-EBCDIC-DF03-IRV]
+Reference:
+Aliases: csOSDEBCDICDF03IRV</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="117">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>OSD_EBCDIC_DF04_1</ccts:Name>
+            <ccts:Description>Source: Fujitsu-Siemens standard mainframe EBCDIC encoding Please see: [http://www.iana.org/assignments/charset-reg/OSD-EBCDIC-DF04-1]
+Reference:
+Aliases: csOSDEBCDICDF041</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="118">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-11548-1</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/ISO-11548-1] [Samuel_Thibault]
+Reference:
+Aliases: ISO_11548-1; ISO_TR_11548-1; csISO115481</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="119">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KZ-1048</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/KZ-1048] [Sairan_M_Kikkarin][Alexei_Veremeev]
+Reference:
+Aliases: STRK1048-2002; RK1048; csKZ1048</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1000">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-UCS-2</ccts:Name>
+            <ccts:Description>Source: the 2-octet Basic Multilingual Plane, aka Unicode this needs to specify network byte order: the standard does not specify (it is a 16-bit integer space)
+Reference:
+Aliases: csUnicode</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1001">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-UCS-4</ccts:Name>
+            <ccts:Description>Source: the full code space. (same comment about byte order, these are 31-bit numbers.
+Reference:
+Aliases: csUCS4</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1002">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-UCS-Basic</ccts:Name>
+            <ccts:Description>Source: ASCII subset of Unicode. Basic Latin = collection 1 See ISO 10646, Appendix A
+Reference:
+Aliases: csUnicodeASCII</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1003">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-Unicode-Latin1</ccts:Name>
+            <ccts:Description>Source: ISO Latin-1 subset of Unicode. Basic Latin and Latin-1 Supplement = collections 1 and 2. See ISO 10646, Appendix A. See [RFC1815].
+Reference:
+Aliases: csUnicodeLatin1; ISO-10646</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1004">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-10646-J-1</ccts:Name>
+            <ccts:Description>Source: ISO 10646 Japanese, see [RFC1815].
+Reference:
+Aliases: csUnicodeJapanese</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1005">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-Unicode-IBM-1261</ccts:Name>
+            <ccts:Description>Source: IBM Latin-2, -3, -5, Extended Presentation Set, GCSGID: 1261
+Reference:
+Aliases: csUnicodeIBM1261</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1006">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-Unicode-IBM-1268</ccts:Name>
+            <ccts:Description>Source: IBM Latin-4 Extended Presentation Set, GCSGID: 1268
+Reference:
+Aliases: csUnicodeIBM1268</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1007">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-Unicode-IBM-1276</ccts:Name>
+            <ccts:Description>Source: IBM Cyrillic Greek Extended Presentation Set, GCSGID: 1276
+Reference:
+Aliases: csUnicodeIBM1276</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1008">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-Unicode-IBM-1264</ccts:Name>
+            <ccts:Description>Source: IBM Arabic Presentation Set, GCSGID: 1264
+Reference:
+Aliases: csUnicodeIBM1264</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1009">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-Unicode-IBM-1265</ccts:Name>
+            <ccts:Description>Source: IBM Hebrew Presentation Set, GCSGID: 1265
+Reference:
+Aliases: csUnicodeIBM1265</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1010">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UNICODE-1-1</ccts:Name>
+            <ccts:Description>Source: [RFC1641]
+Reference: [RFC1641]
+Aliases: csUnicode11</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1011">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>SCSU</ccts:Name>
+            <ccts:Description>Source: SCSU See [http://www.iana.org/assignments/charset-reg/SCSU] [Markus_Scherer]
+Reference:
+Aliases: csSCSU</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1012">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-7</ccts:Name>
+            <ccts:Description>Source: [RFC2152]
+Reference: [RFC2152]
+Aliases: csUTF7</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1013">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-16BE</ccts:Name>
+            <ccts:Description>Source: [RFC2781]
+Reference: [RFC2781]
+Aliases: csUTF16BE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1014">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-16LE</ccts:Name>
+            <ccts:Description>Source: [RFC2781]
+Reference: [RFC2781]
+Aliases: csUTF16LE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1015">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-16</ccts:Name>
+            <ccts:Description>Source: [RFC2781]
+Reference: [RFC2781]
+Aliases: csUTF16</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1016">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CESU-8</ccts:Name>
+            <ccts:Description>Source: [http://www.unicode.org/unicode/reports/tr26]
+Reference: [Toby_Phipps]
+Aliases: csCESU8; csCESU-8</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1017">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-32</ccts:Name>
+            <ccts:Description>Source: [http://www.unicode.org/unicode/reports/tr19/]
+Reference: [Mark_Davis]
+Aliases: csUTF32</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1018">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-32BE</ccts:Name>
+            <ccts:Description>Source: [http://www.unicode.org/unicode/reports/tr19/]
+Reference: [Mark_Davis]
+Aliases: csUTF32BE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1019">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UTF-32LE</ccts:Name>
+            <ccts:Description>Source: [http://www.unicode.org/unicode/reports/tr19/]
+Reference: [Mark_Davis]
+Aliases: csUTF32LE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1020">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BOCU-1</ccts:Name>
+            <ccts:Description>Source: [http://www.unicode.org/notes/tn6/]
+Reference: [Markus_Scherer]
+Aliases: csBOCU1; csBOCU-1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2000">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-1-Windows-3.0-Latin-1</ccts:Name>
+            <ccts:Description>Source: Extended ISO 8859-1 Latin-1 for Windows 3.0. PCL Symbol Set id: 9U
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csWindows30Latin1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2001">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-1-Windows-3.1-Latin-1</ccts:Name>
+            <ccts:Description>Source: Extended ISO 8859-1 Latin-1 for Windows 3.1. PCL Symbol Set id: 19U
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csWindows31Latin1</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2002">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-2-Windows-Latin-2</ccts:Name>
+            <ccts:Description>Source: Extended ISO 8859-2. Latin-2 for Windows 3.1. PCL Symbol Set id: 9E
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csWindows31Latin2</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2003">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ISO-8859-9-Windows-Latin-5</ccts:Name>
+            <ccts:Description>Source: Extended ISO 8859-9. Latin-5 for Windows 3.1 PCL Symbol Set id: 5T
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csWindows31Latin5</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2004">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>hp-roman8</ccts:Name>
+            <ccts:Description>Source: LaserJet IIP Printer User's Manual, HP part no 33471-90901, Hewlet-Packard, June 1989.
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.][RFC1345][Keld_Simonsen]
+Aliases: roman8; r8; csHPRoman8</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2005">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adobe-Standard-Encoding</ccts:Name>
+            <ccts:Description>Source: PostScript Language Reference Manual PCL Symbol Set id: 10J
+Reference: [Adobe Systems Incorporated, PostScript Language Reference Manual, second edition, Addison-Wesley Publishing Company, Inc., 1990.]
+Aliases: csAdobeStandardEncoding</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2006">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ventura-US</ccts:Name>
+            <ccts:Description>Source: Ventura US. ASCII plus characters typically used in publishing, like pilcrow, copyright, registered, trade mark, section, dagger, and double dagger in the range A0 (hex) to FF (hex). PCL Symbol Set id: 14J
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csVenturaUS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2007">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ventura-International</ccts:Name>
+            <ccts:Description>Source: Ventura International. ASCII plus coded characters similar to Roman8. PCL Symbol Set id: 13J
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csVenturaInternational</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2008">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DEC-MCS</ccts:Name>
+            <ccts:Description>Source: VAX/VMS User's Manual, Order Number: AI-Y517A-TE, April 1986.
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: dec; csDECMCS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2009">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM850</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp850; 850; csPC850Multilingual</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2010">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM852</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp852; 852; csPCp852</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2011">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM437</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp437; 437; csPC8CodePage437</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2012">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PC8-Danish-Norwegian</ccts:Name>
+            <ccts:Description>Source: PC Danish Norwegian 8-bit PC set for Danish Norwegian PCL Symbol Set id: 11U
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csPC8DanishNorwegian</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2013">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM862</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp862; 862; csPC862LatinHebrew</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2014">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PC8-Turkish</ccts:Name>
+            <ccts:Description>Source: PC Latin Turkish. PCL Symbol Set id: 9T
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csPC8Turkish</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2015">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM-Symbols</ccts:Name>
+            <ccts:Description>Source: Presentation Set, CPGID: 259
+Reference: [IBM Corporation, "ABOUT TYPE: IBM's Technical Reference for Core Interchange Digitized Type", Publication number S544-3708-01]
+Aliases: csIBMSymbols</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2016">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM-Thai</ccts:Name>
+            <ccts:Description>Source: Presentation Set, CPGID: 838
+Reference: [IBM Corporation, "ABOUT TYPE: IBM's Technical Reference for Core Interchange Digitized Type", Publication number S544-3708-01]
+Aliases: csIBMThai</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2017">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HP-Legal</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 1U
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csHPLegal</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2018">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HP-Pi-font</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 15U
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csHPPiFont</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2019">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HP-Math8</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 8M
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csHPMath8</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2020">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adobe-Symbol-Encoding</ccts:Name>
+            <ccts:Description>Source: PostScript Language Reference Manual PCL Symbol Set id: 5M
+Reference: [Adobe Systems Incorporated, PostScript Language Reference Manual, second edition, Addison-Wesley Publishing Company, Inc., 1990.]
+Aliases: csHPPSMath</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2021">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HP-DeskTop</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 7J
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csHPDesktop</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2022">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ventura-Math</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 6M
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csVenturaMath</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2023">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Microsoft-Publishing</ccts:Name>
+            <ccts:Description>Source: PCL 5 Comparison Guide, Hewlett-Packard, HP part number 5961-0510, October 1992 PCL Symbol Set id: 6J
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: csMicrosoftPublishing</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2024">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Windows-31J</ccts:Name>
+            <ccts:Description>Source: Windows Japanese. A further extension of Shift_JIS to include NEC special characters (Row 13), NEC selection of IBM extensions (Rows 89 to 92), and IBM extensions (Rows 115 to 119). The CCS's are JIS X0201:1997, JIS X0208:1997, and these extensions. This charset can be used for the top-level media type "text", but it is of limited or specialized use (see [RFC2278]). PCL Symbol Set id: 19K
+Reference:
+Aliases: csWindows31J</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2025">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GB2312</ccts:Name>
+            <ccts:Description>Source: Chinese for People's Republic of China (PRC) mixed one byte, two byte set: 20-7E = one byte ASCII A1-FE = two byte PRC Kanji See GB 2312-80 PCL Symbol Set Id: 18C
+Reference:
+Aliases: csGB2312</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2026">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Big5</ccts:Name>
+            <ccts:Description>Source: Chinese for Taiwan Multi-byte set. PCL Symbol Set Id: 18T
+Reference:
+Aliases: csBig5</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2027">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>macintosh</ccts:Name>
+            <ccts:Description>Source: The Unicode Standard ver1.0, ISBN 0-201-56788-1, Oct 1991
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: mac; csMacintosh</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2028">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM037</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp037; ebcdic-cp-us; ebcdic-cp-ca; ebcdic-cp-wt; ebcdic-cp-nl; csIBM037</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2029">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM038</ccts:Name>
+            <ccts:Description>Source: IBM 3174 Character Set Ref, GA27-3831-02, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: EBCDIC-INT; cp038; csIBM038</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2030">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM273</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP273; csIBM273</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2031">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM274</ccts:Name>
+            <ccts:Description>Source: IBM 3174 Character Set Ref, GA27-3831-02, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: EBCDIC-BE; CP274; csIBM274</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2032">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM275</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: EBCDIC-BR; cp275; csIBM275</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2033">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM277</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: EBCDIC-CP-DK; EBCDIC-CP-NO; csIBM277</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2034">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM278</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP278; ebcdic-cp-fi; ebcdic-cp-se; csIBM278</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2035">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM280</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP280; ebcdic-cp-it; csIBM280</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2036">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM281</ccts:Name>
+            <ccts:Description>Source: IBM 3174 Character Set Ref, GA27-3831-02, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: EBCDIC-JP-E; cp281; csIBM281</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2037">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM284</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP284; ebcdic-cp-es; csIBM284</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2038">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM285</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP285; ebcdic-cp-gb; csIBM285</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2039">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM290</ccts:Name>
+            <ccts:Description>Source: IBM 3174 Character Set Ref, GA27-3831-02, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp290; EBCDIC-JP-kana; csIBM290</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2040">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM297</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp297; ebcdic-cp-fr; csIBM297</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2041">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM420</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990, IBM NLS RM p 11-11
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp420; ebcdic-cp-ar1; csIBM420</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2042">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM423</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp423; ebcdic-cp-gr; csIBM423</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2043">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM424</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp424; ebcdic-cp-he; csIBM424</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2044">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM500</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP500; ebcdic-cp-be; ebcdic-cp-ch; csIBM500</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2045">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM851</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp851; 851; csIBM851</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2046">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM855</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp855; 855; csIBM855</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2047">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM857</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp857; 857; csIBM857</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2048">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM860</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp860; 860; csIBM860</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2049">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM861</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp861; 861; cp-is; csIBM861</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2050">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM863</ccts:Name>
+            <ccts:Description>Source: IBM Keyboard layouts and code pages, PN 07G4586 June 1991
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp863; 863; csIBM863</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2051">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM864</ccts:Name>
+            <ccts:Description>Source: IBM Keyboard layouts and code pages, PN 07G4586 June 1991
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp864; csIBM864</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2052">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM865</ccts:Name>
+            <ccts:Description>Source: IBM DOS 3.3 Ref (Abridged), 94X9575 (Feb 1987)
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp865; 865; csIBM865</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2053">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM868</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP868; cp-ar; csIBM868</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2054">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM869</ccts:Name>
+            <ccts:Description>Source: IBM Keyboard layouts and code pages, PN 07G4586 June 1991
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp869; 869; cp-gr; csIBM869</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2055">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM870</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP870; ebcdic-cp-roece; ebcdic-cp-yu; csIBM870</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2056">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM871</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP871; ebcdic-cp-is; csIBM871</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2057">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM880</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp880; EBCDIC-Cyrillic; csIBM880</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2058">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM891</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp891; csIBM891</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2059">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM903</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp903; csIBM903</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2060">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM904</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: cp904; 904; csIBBM904</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2061">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM905</ccts:Name>
+            <ccts:Description>Source: IBM 3174 Character Set Ref, GA27-3831-02, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP905; ebcdic-cp-tr; csIBM905</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2062">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM918</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP918; ebcdic-cp-ar2; csIBM918</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2063">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM1026</ccts:Name>
+            <ccts:Description>Source: IBM NLS RM Vol2 SE09-8002-01, March 1990
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: CP1026; csIBM1026</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2064">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-AT-DE</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csIBMEBCDICATDE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2065">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-AT-DE-A</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICATDEA</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2066">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-CA-FR</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICCAFR</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2067">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-DK-NO</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICDKNO</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2068">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-DK-NO-A</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICDKNOA</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2069">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-FI-SE</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICFISE</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2070">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-FI-SE-A</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICFISEA</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2071">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-FR</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICFR</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2072">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-IT</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICIT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2073">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-PT</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICPT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2074">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-ES</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICES</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2075">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-ES-A</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICESA</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2076">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-ES-S</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICESS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2077">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-UK</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICUK</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2078">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>EBCDIC-US</ccts:Name>
+            <ccts:Description>Source: IBM 3270 Char Set Ref Ch 10, GA27-2837-9, April 1987
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csEBCDICUS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2079">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UNKNOWN-8BIT</ccts:Name>
+            <ccts:Description>Source:
+Reference: [RFC1428]
+Aliases: csUnknown8BiT</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2080">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MNEMONIC</ccts:Name>
+            <ccts:Description>Source: [RFC1345], also known as "mnemonic+ascii+38"
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csMnemonic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2081">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MNEM</ccts:Name>
+            <ccts:Description>Source: [RFC1345], also known as "mnemonic+ascii+8200"
+Reference: [RFC1345][Keld_Simonsen]
+Aliases: csMnem</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2082">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>VISCII</ccts:Name>
+            <ccts:Description>Source: [RFC1456]
+Reference: [RFC1456]
+Aliases: csVISCII</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2083">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>VIQR</ccts:Name>
+            <ccts:Description>Source: [RFC1456]
+Reference: [RFC1456]
+Aliases: csVIQR</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2084">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KOI8-R</ccts:Name>
+            <ccts:Description>Source: [RFC1489], based on GOST-19768-74, ISO-6937/8, INIS-Cyrillic, ISO-5427.
+Reference: [RFC1489]
+Aliases: csKOI8R</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2085">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HZ-GB-2312</ccts:Name>
+            <ccts:Description>Source: [RFC1842], [RFC1843][RFC1843][RFC1842]
+Reference:
+Aliases:</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2086">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM866</ccts:Name>
+            <ccts:Description>Source: IBM NLDG Volume 2 (SE09-8002-03) August 1994
+Reference: [Rick_Pond]
+Aliases: cp866; 866; csIBM866</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2087">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM775</ccts:Name>
+            <ccts:Description>Source: HP PCL 5 Comparison Guide (P/N 5021-0329) pp B-13, 1996
+Reference: [Hewlett-Packard Company, "HP PCL 5 Comparison Guide", (P/N 5021-0329) pp B-13, 1996.]
+Aliases: cp775; csPC775Baltic</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2088">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KOI8-U</ccts:Name>
+            <ccts:Description>Source: [RFC2319]
+Reference: [RFC2319]
+Aliases: csKOI8U</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2089">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM00858</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM00858] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID00858; CP00858; PC-Multilingual-850+euro; csIBM00858</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2090">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM00924</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM00924] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID00924; CP00924; ebcdic-Latin9--euro; csIBM00924</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2091">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01140</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01140] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01140; CP01140; ebcdic-us-37+euro; csIBM01140</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2092">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01141</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01141] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01141; CP01141; ebcdic-de-273+euro; csIBM01141</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2093">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01142</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01142] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01142; CP01142; ebcdic-dk-277+euro; ebcdic-no-277+euro; csIBM01142</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2094">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01143</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01143] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01143; CP01143; ebcdic-fi-278+euro; ebcdic-se-278+euro; csIBM01143</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2095">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01144</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01144] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01144; CP01144; ebcdic-it-280+euro; csIBM01144</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2096">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01145</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01145] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01145; CP01145; ebcdic-es-284+euro; csIBM01145</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2097">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01146</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01146] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01146; CP01146; ebcdic-gb-285+euro; csIBM01146</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2098">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01147</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01147] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01147; CP01147; ebcdic-fr-297+euro; csIBM01147</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2099">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01148</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01148] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01148; CP01148; ebcdic-international-500+euro; csIBM01148</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM01149</ccts:Name>
+            <ccts:Description>Source: IBM See [http://www.iana.org/assignments/charset-reg/IBM01149] [Tamer_Mahdi]
+Reference:
+Aliases: CCSID01149; CP01149; ebcdic-is-871+euro; csIBM01149</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Big5-HKSCS</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/Big5-HKSCS]
+Reference: [Nicky_Yick]
+Aliases: csBig5HKSCS</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBM1047</ccts:Name>
+            <ccts:Description>Source: IBM1047 (EBCDIC Latin 1/Open Systems) [http://www-1.ibm.com/servers/eserver/iseries/software/globalization/pdf/cp01047z.pdf]
+Reference: [Reuel_Robrigado]
+Aliases: IBM-1047; csIBM1047</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>PTCP154</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/PTCP154]
+Reference: [Alexander_Uskov]
+Aliases: csPTCP154; PT154; CP154; Cyrillic-Asian; csPTCP154</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amiga-1251</ccts:Name>
+            <ccts:Description>Source: See [http://www.amiga.ultranet.ru/Amiga-1251.html]
+Reference:
+Aliases: Ami1251; Amiga1251; Ami-1251; csAmiga1251 (Aliases are provided for historical reasons and should not be used) [Malyshev]</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>KOI7-switched</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/KOI7-switched]
+Reference:
+Aliases: csKOI7switched</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>BRF</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/BRF] [Samuel_Thibault]
+Reference:
+Aliases: csBRF</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>TSCII</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/TSCII] [Kuppuswamy_Kalyanasu]
+Reference:
+Aliases: csTSCII</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CP51932</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/CP51932] [Yui_Naruse]
+Reference:
+Aliases: csCP51932</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-874</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/windows-874] [Shawn_Steele]
+Reference:
+Aliases: cswindows874</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2250">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1250</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1250] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1250</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2251">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1251</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1251] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1251</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2252">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1252</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1252] [Chris_Wendt]
+Reference:
+Aliases: cswindows1252</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2253">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1253</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1253] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1253</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2254">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1254</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1254] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1254</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2255">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1255</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1255] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1255</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2256">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1256</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1256] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1256</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2257">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1257</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1257] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1257</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2258">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>windows-1258</ccts:Name>
+            <ccts:Description>Source: Microsoft [http://www.iana.org/assignments/charset-reg/windows-1258] [Katya_Lazhintseva]
+Reference:
+Aliases: cswindows1258</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2259">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>TIS-620</ccts:Name>
+            <ccts:Description>Source: Thai Industrial Standards Institute (TISI) [Trin_Tantsetthi]
+Reference:
+Aliases: csTIS620</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2260">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CP50220</ccts:Name>
+            <ccts:Description>Source: See [http://www.iana.org/assignments/charset-reg/CP50220] [Yui_Naruse]
+Reference:
+Aliases: csCP50220</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

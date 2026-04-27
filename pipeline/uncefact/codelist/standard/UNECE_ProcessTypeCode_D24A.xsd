@@ -1,0 +1,1438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 67187 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.10
+Schema date:        23 August 2008
+
+Code list name:     Process Type Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm67187="urn:un:unece:uncefact:codelist:standard:UNECE:ProcessTypeCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:ProcessTypeCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.10">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="ProcessTypeCode" type="clm67187:ProcessTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: ProcessTypeCodeContentType            ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="ProcessTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wood preparation</ccts:Name>
+            <ccts:Description>A process to prepare wood.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Causticizing</ccts:Name>
+            <ccts:Description>Treatment with a caustic agent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Digesting</ccts:Name>
+            <ccts:Description>A process of digesting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Brownstock washing</ccts:Name>
+            <ccts:Description>Washing with brownstock.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bleaching</ccts:Name>
+            <ccts:Description>Removing colour by treatment with an oxidizing agent (a bleach).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pulp drying</ccts:Name>
+            <ccts:Description>The process of drying pulp.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Freezing</ccts:Name>
+            <ccts:Description>Freezing process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processing of structured information</ccts:Name>
+            <ccts:Description>The information to be processed is in structured form.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processing of identical information in structured and unstructured form</ccts:Name>
+            <ccts:Description>The information to be processed is identical and given in structured and unstructured form.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processing of different information in structured and unstructured form</ccts:Name>
+            <ccts:Description>The information to be processed is different and is given in structured and unstructured form.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processing of unstructured information</ccts:Name>
+            <ccts:Description>The information to be processed is in unstructured form.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slaughter</ccts:Name>
+            <ccts:Description>Slaughter process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing</ccts:Name>
+            <ccts:Description>Packing process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Heat sterilisation</ccts:Name>
+            <ccts:Description>Treated by heat sterilisation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical sterilisation</ccts:Name>
+            <ccts:Description>Treated by chemical sterilisation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fumigation</ccts:Name>
+            <ccts:Description>Treated by fumigation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irradiation</ccts:Name>
+            <ccts:Description>Treated by irradiation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fueling</ccts:Name>
+            <ccts:Description>Fueling process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acceptance of business conditions</ccts:Name>
+            <ccts:Description>Code specifying the process of accepting the terms and conditions under which business will be conducted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pathology service</ccts:Name>
+            <ccts:Description>The provision of a pathology service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Radiology service</ccts:Name>
+            <ccts:Description>The provision of a radiology service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contribution payment</ccts:Name>
+            <ccts:Description>The payment of a contribution.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Clinical donation</ccts:Name>
+            <ccts:Description>The process of providing a clinical donation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Medical general practice</ccts:Name>
+            <ccts:Description>The provision of general medical services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Specialist medical service</ccts:Name>
+            <ccts:Description>The provision of specialist medical services, other than pathology or radiology.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dispensing of medicine</ccts:Name>
+            <ccts:Description>The process performed by a pharmacist to prepare and dispense medicine according to a prescription.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Planning</ccts:Name>
+            <ccts:Description>The process of developing plans.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trading</ccts:Name>
+            <ccts:Description>The process of trading.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Operating</ccts:Name>
+            <ccts:Description>The process of operating.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Metering</ccts:Name>
+            <ccts:Description>The process of metering.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Settlement</ccts:Name>
+            <ccts:Description>The process of settling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chilling</ccts:Name>
+            <ccts:Description>To reduce a product's temperature to above 273K.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Collecting</ccts:Name>
+            <ccts:Description>To gather or extract from a number of persons or sources.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cutting</ccts:Name>
+            <ccts:Description>To penetrate with or as if with an edged instrument.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Harvesting</ccts:Name>
+            <ccts:Description>To gather, catch, hunt, or kill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inspecting</ccts:Name>
+            <ccts:Description>To examine officially.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Manufacturing</ccts:Name>
+            <ccts:Description>To make from raw materials by hand or by machinery.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Preserving</ccts:Name>
+            <ccts:Description>To can, pickle, or similarly prepare for future use.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processing</ccts:Name>
+            <ccts:Description>To subject to or handle through an established usually routine set of procedures.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Producing</ccts:Name>
+            <ccts:Description>To make produce by growing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rendering (agriculture)</ccts:Name>
+            <ccts:Description>To extract by melting in order to extract proteins, fats, and other usable parts.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sampling</ccts:Name>
+            <ccts:Description>To take a sample of or from the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Storing</ccts:Name>
+            <ccts:Description>To place or leave in a location (as a warehouse, library, or computer memory) for preservation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transferring</ccts:Name>
+            <ccts:Description>To convey from one person, place, or situation to another.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Treating</ccts:Name>
+            <ccts:Description>To act upon e.g. with some agent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grinding</ccts:Name>
+            <ccts:Description>Treated by grinding.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Addition of secondary inhibitors</ccts:Name>
+            <ccts:Description>The process of adding secondary inhibitors.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Metals recovery</ccts:Name>
+            <ccts:Description>The process of recovering metals e.g. retorting, smelting, chemical process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Solvents recovery</ccts:Name>
+            <ccts:Description>The process of recovering solvents e.g. distillation, extraction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Recovery for reuse</ccts:Name>
+            <ccts:Description>The process of recovering (reclaiming) materials for reuse, e.g. acid regeneration, organics recovery.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Incineration</ccts:Name>
+            <ccts:Description>The process of destruction through the application of heat.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On-site fuel recovery</ccts:Name>
+            <ccts:Description>The process of recovering a material for reuse as a fuel on the same site.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fuel blending</ccts:Name>
+            <ccts:Description>The process of blending fuels.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical reduction</ccts:Name>
+            <ccts:Description>The process of chemical reduction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cyanide destruction</ccts:Name>
+            <ccts:Description>The process of destruction through the application of cyanide.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical oxidation</ccts:Name>
+            <ccts:Description>The process of chemical oxidation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wet air oxidation</ccts:Name>
+            <ccts:Description>The process of wet air oxidation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical precipitation</ccts:Name>
+            <ccts:Description>The process of chemical precipitation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Biological treatment</ccts:Name>
+            <ccts:Description>The process of biological treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adsorption</ccts:Name>
+            <ccts:Description>The process of adsorption.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Air or steam stripping</ccts:Name>
+            <ccts:Description>The process of air or steam stripping.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dewatering</ccts:Name>
+            <ccts:Description>The process of removing water.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Absorption</ccts:Name>
+            <ccts:Description>The process of absorption.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stabilization</ccts:Name>
+            <ccts:Description>The process of stabilization e.g. chemical fixation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Macro-encapsulation</ccts:Name>
+            <ccts:Description>The process of macro-encapsulation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Neutralization</ccts:Name>
+            <ccts:Description>The process of neutralization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Evaporation</ccts:Name>
+            <ccts:Description>The process of evaporation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Phase separation</ccts:Name>
+            <ccts:Description>The process of phase separation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unspecified treatment</ccts:Name>
+            <ccts:Description>Treatment without specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Landfill or surface impoundment disposal</ccts:Name>
+            <ccts:Description>The process of disposing waste as landfill or in a surface impoundment that will be closed as landfill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deep well or underground injection</ccts:Name>
+            <ccts:Description>The process of filling up a deep well or underground pocket.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discharge to sewer</ccts:Name>
+            <ccts:Description>The process of discharging materials into the public sewer system.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Collection and storage, temporary</ccts:Name>
+            <ccts:Description>The process of collecting and temporarily storing objects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cold treatment</ccts:Name>
+            <ccts:Description>The process of cold treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hot air treatment</ccts:Name>
+            <ccts:Description>The process of hot air treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hot water treatment</ccts:Name>
+            <ccts:Description>The process of hot water treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Methyl bromide treatment</ccts:Name>
+            <ccts:Description>The process of treating with methyl bromide.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Phosphine treatment</ccts:Name>
+            <ccts:Description>The process of treating with phosphine.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="79">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Depulping</ccts:Name>
+            <ccts:Description>The process of removing pulp.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="80">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Manual removal</ccts:Name>
+            <ccts:Description>The process of removing by hand.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="81">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sulfuryl fluoride fumigation</ccts:Name>
+            <ccts:Description>The process of fumigating with sulfuryl fluoride.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="82">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Steam treatment</ccts:Name>
+            <ccts:Description>The process of treating with steam.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="83">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vapor heat</ccts:Name>
+            <ccts:Description>The process of treating with vapor heat.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="84">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assembling</ccts:Name>
+            <ccts:Description>The process of assembling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="85">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Boiling</ccts:Name>
+            <ccts:Description>The process of boiling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="86">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Canning</ccts:Name>
+            <ccts:Description>The process of sealing in an airtight container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="87">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chipping</ccts:Name>
+            <ccts:Description>The process of chipping.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="88">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cleaning</ccts:Name>
+            <ccts:Description>The process of making clean.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="89">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Coating</ccts:Name>
+            <ccts:Description>The process of coating.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dehydration</ccts:Name>
+            <ccts:Description>The process of dehydrating.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="91">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Devitalization</ccts:Name>
+            <ccts:Description>The process of devitalizing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="92">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Disinfection</ccts:Name>
+            <ccts:Description>The process of disinfecting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="93">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Drying</ccts:Name>
+            <ccts:Description>The process of drying.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="94">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dyeing</ccts:Name>
+            <ccts:Description>The process of dyeing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="95">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Heat treatment</ccts:Name>
+            <ccts:Description>The process of heat treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="96">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Husking</ccts:Name>
+            <ccts:Description>The process of removing husk.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="97">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Liquification</ccts:Name>
+            <ccts:Description>The process of liquifying.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="98">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shelling</ccts:Name>
+            <ccts:Description>The process of removing shells.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="99">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Washing</ccts:Name>
+            <ccts:Description>The process of washing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Land treatment or application</ccts:Name>
+            <ccts:Description>The process of using bio remediation for treating waste e.g. Tilling the land for aerating the waste.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pasteurization</ccts:Name>
+            <ccts:Description>A process of heating a food, usually liquid, to a specific temperature for a definite length of time, and then cooling it immediately.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Biological recycling</ccts:Name>
+            <ccts:Description>The process of biological recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Biological refining</ccts:Name>
+            <ccts:Description>The process of biological refining.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Blending</ccts:Name>
+            <ccts:Description>The process of blending.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breeding</ccts:Name>
+            <ccts:Description>The process of breeding.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical recycling</ccts:Name>
+            <ccts:Description>The process of chemical recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Combing</ccts:Name>
+            <ccts:Description>The process of combing (e.g. in textiles named 'top making' of fibres).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Agricultural cultivation</ccts:Name>
+            <ccts:Description>The process of managing the growth, development, and yield ofï¿½agricultural crops.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Designing</ccts:Name>
+            <ccts:Description>The process of designing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Disposing</ccts:Name>
+            <ccts:Description>The process of disposing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extrusion</ccts:Name>
+            <ccts:Description>The process of shaping a material by forcing it through a hole.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fatliquoring</ccts:Name>
+            <ccts:Description>The process of applying of fatliquors (e.g. for lubricating and softening hides/skins).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="113">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product finishing</ccts:Name>
+            <ccts:Description>The process of product finishing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="114">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ginning</ccts:Name>
+            <ccts:Description>The process of ginning (e.g. cleaning cotton, flax fibres, etc).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="115">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grading</ccts:Name>
+            <ccts:Description>The process of grading.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="116">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hatching</ccts:Name>
+            <ccts:Description>The process of hatching</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="117">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marketing</ccts:Name>
+            <ccts:Description>The process of marketing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="118">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mechanical recycling</ccts:Name>
+            <ccts:Description>The process of mechanical recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="119">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Polymerisation</ccts:Name>
+            <ccts:Description>The process of reacting monomer molecules together in a chemical reaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre-treatment</ccts:Name>
+            <ccts:Description>The process of pre-treatment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="121">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Printing</ccts:Name>
+            <ccts:Description>The process of printing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="122">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pulp dissolving</ccts:Name>
+            <ccts:Description>The process of dissolving into a liquid, e.g. wood pulp or cotton linters into water.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="123">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quality checking</ccts:Name>
+            <ccts:Description>The process of checking quality, e.g. of products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="124">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Recycling</ccts:Name>
+            <ccts:Description>The process of recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="125">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Refining</ccts:Name>
+            <ccts:Description>The process of refining.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="126">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Retailing</ccts:Name>
+            <ccts:Description>The process of retailing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="127">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Retanning</ccts:Name>
+            <ccts:Description>The process of a secondï¿½tanning stage in which differentï¿½tanningï¿½agents are generally used in comparison to the initial tanning process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="128">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Retting</ccts:Name>
+            <ccts:Description>The process of employing the action of bacteria and moisture on plants to dissolve the cellular tissues and substances.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="129">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Returns management</ccts:Name>
+            <ccts:Description>The process by which activities are associated withï¿½returns.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="130">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Setting out leather</ccts:Name>
+            <ccts:Description>The process of reducing wrinkles from hides/skins.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="131">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shaving hides</ccts:Name>
+            <ccts:Description>The process of making the thickness of hides uniform.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="132">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shearing</ccts:Name>
+            <ccts:Description>The process of shearing</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="133">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Silk reeling</ccts:Name>
+            <ccts:Description>The process by which cocoon baves areï¿½reeledï¿½together to produce a single thread.ï¿½</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="134">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Softening</ccts:Name>
+            <ccts:Description>The process of softening.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="135">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sorting</ccts:Name>
+            <ccts:Description>The process of sorting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="136">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Spinning</ccts:Name>
+            <ccts:Description>The process of spinning.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="137">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Splitting</ccts:Name>
+            <ccts:Description>The process of splitting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="138">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tanning</ccts:Name>
+            <ccts:Description>The process of treating hides or skins with tanning agents.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="139">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Thermo mechanical recycling</ccts:Name>
+            <ccts:Description>The process of thermo mechanical recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="140">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Warehousing</ccts:Name>
+            <ccts:Description>The process of warehousing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="141">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weaving</ccts:Name>
+            <ccts:Description>The process of weaving</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="142">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Knitting</ccts:Name>
+            <ccts:Description>The process of knitting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="143">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Farming</ccts:Name>
+            <ccts:Description>The process of farming.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="144">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Despatching</ccts:Name>
+            <ccts:Description>The process of despatching.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="145">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hide and Skin preservation</ccts:Name>
+            <ccts:Description>The process of hide and skin preservation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="146">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sammying</ccts:Name>
+            <ccts:Description>The process of mechanical removal of grease from the hides/skin by felt absorption in the sammying machine.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="147">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Conditioning (leather)</ccts:Name>
+            <ccts:Description>The process of adding water to the leather to a level of 18-28%.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="148">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Branding</ccts:Name>
+            <ccts:Description>Creating a distinct identity for a business in the mind of a targeted audience and consumers (e.g. company's logo, visual design, mission, etc.).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="149">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Down processing</ccts:Name>
+            <ccts:Description>Cleaning, washing, drying etc of the fluffiest layer of feathers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Concentrating</ccts:Name>
+            <ccts:Description>Flake making, popcorn making, baling, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="151">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carding</ccts:Name>
+            <ccts:Description>Separating individual fibres, using a series of dividing and redividing steps, that causes many of the fibres to lie parallel to one another while also removing most of the remaining impurities.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="152">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Embroidering</ccts:Name>
+            <ccts:Description>Decorating cloth with a pattern of stitches usually using coloured thread.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="153">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Embellishing</ccts:Name>
+            <ccts:Description>Making (something) more attractive by the addition of decorative details or features.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="154">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Molding</ccts:Name>
+            <ccts:Description>Shaping a liquid or malleable raw material by using a fixed frame; known as either a mold or a matrix.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="155">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Non-woven manufacturing</ccts:Name>
+            <ccts:Description>Mechanical, thermal, chemical and solvent processes (e.g. heat-bonded).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="156">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Preparing</ccts:Name>
+            <ccts:Description>Carrying out preparation for a task or undertaking. (e.g. sizing).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="157">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Scouring</ccts:Name>
+            <ccts:Description>Removing fatty waxes and greases from natural fibres, cotton seed and husk.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="158">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ennobling</ccts:Name>
+            <ccts:Description>Applying on textile fabrics the industrial processes of dry-cleaning, printing and embossing, and sizing and finishing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="159">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Twisting</ccts:Name>
+            <ccts:Description>Binding fibres or yarns together in a continuous strand.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="160">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Composting</ccts:Name>
+            <ccts:Description>The process of breaking down organic materials, such as natural textile fibres (e.g., cotton, linen), food scraps, plant matter, or leather, into nutrient-rich soil.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="161">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Repurposing</ccts:Name>
+            <ccts:Description>The process of giving new use to something for a different purpose than the one for which it was originally designed or intended.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="162">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aggregating</ccts:Name>
+            <ccts:Description>The process of collecting, gathering, or combining individual items, data, or elements into a unified whole or group.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="163">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Remanufacturing</ccts:Name>
+            <ccts:Description>The process of rebuilding of a product to specifications of the original manufactured product using a combination of reused, repaired and new parts.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="164">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Refurbishing</ccts:Name>
+            <ccts:Description>The process of adapting, modifying, or transforming an object, material, or resource for a new use or function that differs from its original purpose or intended use.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="165">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Repairing</ccts:Name>
+            <ccts:Description>The process of putting materials or products damaged, broken, or not working correctly back into good condition to enable continuation of its original function or make it work again.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="166">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consuming</ccts:Name>
+            <ccts:Description>The process of using products, materials, and resources.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="167">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Selling</ccts:Name>
+            <ccts:Description>The process of exchanging goods or services for money or other valuable consideration between a seller (vendor, merchant, or supplier) and a buyer (customer or purchaser).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="168">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Landfilling</ccts:Name>
+            <ccts:Description>The process of disposing waste materials by burying them in designated areas of land called landfills.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="169">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Downcycling</ccts:Name>
+            <ccts:Description>The process of converting waste or discarded materials into lower-quality products, typically with a lower value than the original materials.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="170">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Upcycling</ccts:Name>
+            <ccts:Description>The process of taking old or discarded materials and turning them into new, stylish and unique products or accessories. This can involve embellishing, dyeing the materials to create something new and fashionable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="171">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ironing</ccts:Name>
+            <ccts:Description>The process of removing wrinkles and creases from fabric by pressing it with a heated iron or flatiron.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="172">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Remodelling</ccts:Name>
+            <ccts:Description>The process of making significant changes or improvements to the structure, layout, design, or functionality of a building, space, or object.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="173">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reusing</ccts:Name>
+            <ccts:Description>The process of repeating the use of a product, material, or resource for its original purpose or for a new purpose, extending its lifespan and avoiding disposal as waste.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="174">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Renting</ccts:Name>
+            <ccts:Description>The act of temporarily using or occupying property, goods, or services in exchange for payment of a fee or rent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>Process type mutually agreed between interchanging parties.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

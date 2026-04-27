@@ -48,7 +48,10 @@ def test_batch_parse():
     base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business"
     flux_file_list = []
     for filename in sorted(os.listdir(base64_encoded_xml_files_location)):
-        with open(base64_encoded_xml_files_location / filename, "r") as f:
+        filepath = base64_encoded_xml_files_location / filename
+        if not os.path.isfile(filepath):
+            continue
+        with open(filepath, "r") as f:
             xml_string = f.read()
             flux_file_list.append(xml_string)
 
@@ -982,6 +985,336 @@ def test_batch_parse():
                     year=2021, month=1, day=22, hour=9, minute=00, second=0
                 ),
                 "BEL-TRP-Z510-2021012200107",
+            ],
+        ],
+    )
+
+    pd.testing.assert_frame_equal(
+        logbook_reports.reset_index(drop=True),
+        expected_logbook_reports.reset_index(drop=True),
+        check_dtype=False,
+    )
+
+
+def test_batch_parse_sales():
+    sales_xml_files_location = XML_TEST_DATA_LOCATION / "business/sales_notes"
+    flux_file_list = []
+    for filename in sorted(os.listdir(sales_xml_files_location)):
+        filepath = sales_xml_files_location / filename
+        if not os.path.isfile(filepath) or not filename.endswith(".xml"):
+            continue
+        with open(filepath, "r") as f:
+            flux_file_list.append(f.read())
+
+    res = batch_parse(flux_file_list)
+    logbook_reports = res.get("logbook_reports").drop(
+        "integration_datetime_utc", axis=1
+    )
+    assert res["batch_generated_errors"] is False
+
+    sn_products = [
+        {
+            "species": "PLE",
+            "weight": 6.0,
+            "usage": "HCN",
+            "freshness": "A",
+            "preservationState": "FRE",
+            "presentation": "WHL",
+            "price": 1.31,
+            "sizeCategory": "1",
+            "sizeClass": "LSC",
+            "faoZone": "27.3.d.24",
+        },
+        {
+            "species": "PLE",
+            "weight": 36.0,
+            "usage": "HCN",
+            "freshness": "A",
+            "preservationState": "FRE",
+            "presentation": "WHL",
+            "price": 1.29,
+            "sizeCategory": "2",
+            "sizeClass": "LSC",
+            "faoZone": "27.3.d.24",
+        },
+        {
+            "species": "DAB",
+            "weight": 517.0,
+            "usage": "HCN",
+            "freshness": "A",
+            "preservationState": "FRE",
+            "presentation": "WHL",
+            "price": 1.12,
+            "sizeCategory": "2",
+            "sizeClass": "LSC",
+            "faoZone": "27.3.d.24",
+        },
+        {
+            "species": "COD",
+            "weight": 13.0,
+            "usage": "HCN",
+            "freshness": "A",
+            "preservationState": "FRE",
+            "presentation": "GUT",
+            "price": 2.0,
+            "sizeCategory": "3",
+            "sizeClass": "LSC",
+            "faoZone": "27.3.d.24",
+        },
+        {
+            "species": "FLE",
+            "weight": 102.0,
+            "usage": "HCN",
+            "freshness": "A",
+            "preservationState": "FRE",
+            "presentation": "WHL",
+            "price": 0.82,
+            "sizeCategory": "2",
+            "sizeClass": "LSC",
+            "faoZone": "27.3.d.24",
+        },
+        {
+            "species": "LIN",
+            "weight": 9.0,
+            "usage": "HCN",
+            "freshness": "E",
+            "preservationState": "FRE",
+            "presentation": "GUT",
+            "price": 3.55,
+            "sizeCategory": "3",
+            "sizeClass": "LSC",
+            "faoZone": "27.7.a",
+        },
+    ]
+
+    expected_logbook_reports = pd.DataFrame(
+        columns=pd.Index(
+            [
+                "operation_number",
+                "operation_datetime_utc",
+                "operation_type",
+                "report_id",
+                "referenced_report_id",
+                "report_datetime_utc",
+                "cfr",
+                "ircs",
+                "external_identification",
+                "vessel_name",
+                "flag_state",
+                "imo",
+                "log_type",
+                "value",
+                "activity_datetime_utc",
+                "trip_number",
+            ]
+        ),
+        data=[
+            # SN_Normal
+            [
+                "c45040c6-e09e-4ef4-b47a-8c7f9a45ce59",
+                datetime.datetime(2017, 5, 11, 12, 10, 38),
+                "DAT",
+                "c45040c6-e09e-4ef4-b47a-8c7f9a45ce59",
+                None,
+                datetime.datetime(2017, 5, 11, 12, 10, 38),
+                "BEL123456789",
+                None,
+                None,
+                "FAKE VESSEL",
+                "BEL",
+                None,
+                "SN",
+                {
+                    "salesId": "BEL-SN-2017-123456",
+                    "currency": "EUR",
+                    "salesDatetimeUtc": "2017-05-10T07:05:22Z",
+                    "landingPort": "BEOST",
+                    "landingDatetimeUtc": "2017-05-10T05:32:30Z",
+                    "products": sn_products,
+                    "sender": {"name": "Mr SENDER", "id": None},
+                    "buyer": {"name": "Mr BUYER", "id": "0679223791"},
+                    "seller": {"name": "Mr SELLER", "id": None},
+                },
+                datetime.datetime(2017, 5, 10, 7, 5, 22),
+                "BEL-TRP-2015-1435-0456",
+            ],
+            # TOD_Normal
+            [
+                "3B0A058D-A12B-4B8F-A487-2B8ED2DEE2A3",
+                datetime.datetime(2017, 5, 11, 12, 10, 38),
+                "DAT",
+                "3B0A058D-A12B-4B8F-A487-2B8ED2DEE2A3",
+                None,
+                datetime.datetime(2017, 5, 11, 12, 10, 38),
+                "BEL123456789",
+                None,
+                None,
+                "FAKE VESSEL",
+                "BEL",
+                None,
+                "TOD",
+                {
+                    "salesId": "BEL-TOD-2017-123457",
+                    "currency": "EUR",
+                    "salesDatetimeUtc": "2017-05-10T07:05:22Z",
+                    "landingPort": "BEOST",
+                    "landingDatetimeUtc": "2017-05-10T05:32:30Z",
+                    "products": [
+                        {
+                            "species": "PLE",
+                            "weight": 6.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "WHL",
+                            "price": 0.0,
+                            "sizeCategory": "1",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        },
+                        {
+                            "species": "PLE",
+                            "weight": 36.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "WHL",
+                            "price": 0.0,
+                            "sizeCategory": "2",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        },
+                        {
+                            "species": "DAB",
+                            "weight": 517.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "WHL",
+                            "price": 0.0,
+                            "sizeCategory": "2",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        },
+                        {
+                            "species": "COD",
+                            "weight": 13.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "GUT",
+                            "price": 0.0,
+                            "sizeCategory": "3",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        },
+                        {
+                            "species": "FLE",
+                            "weight": 102.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "WHL",
+                            "price": 0.0,
+                            "sizeCategory": "2",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        },
+                        {
+                            "species": "LIN",
+                            "weight": 9.0,
+                            "usage": "UNK",
+                            "freshness": None,
+                            "preservationState": "FRE",
+                            "presentation": "GUT",
+                            "price": 0.0,
+                            "sizeCategory": "3",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.7.a",
+                        },
+                    ],
+                    "sender": {"name": "Mr SENDER", "id": None},
+                    "recipient": {"name": "Mr STORAGE", "id": "456789"},
+                },
+                datetime.datetime(2017, 5, 10, 7, 5, 22),
+                "BEL-TRP-2015-1435-0456",
+            ],
+            # SN_Correction
+            [
+                "128887F0-FA04-4F92-829A-36CEE114EF01",
+                datetime.datetime(2017, 5, 12, 9, 2, 36),
+                "COR",
+                "128887F0-FA04-4F92-829A-36CEE114EF01",
+                "128887F0-FA04-4F92-829A-36CEE114EF96",
+                datetime.datetime(2017, 5, 12, 9, 2, 36),
+                "BEL123456789",
+                None,
+                None,
+                "FAKE VESSEL",
+                "BEL",
+                None,
+                "SN",
+                {
+                    "salesId": "BEL-SN-2017-123456",
+                    "currency": "EUR",
+                    "salesDatetimeUtc": "2017-05-10T07:05:22Z",
+                    "landingPort": "BEOST",
+                    "landingDatetimeUtc": "2017-05-10T05:32:30Z",
+                    "products": sn_products[:1]
+                    + [
+                        {
+                            "species": "PLE",
+                            "weight": 35.1,
+                            "usage": "HCN",
+                            "freshness": "A",
+                            "preservationState": "FRE",
+                            "presentation": "WHL",
+                            "price": 1.29,
+                            "sizeCategory": "2",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.3.d.24",
+                        }
+                    ]
+                    + sn_products[2:]
+                    + [
+                        {
+                            "species": "LIN",
+                            "weight": 90.1,
+                            "usage": "HCN",
+                            "freshness": "E",
+                            "preservationState": "FRE",
+                            "presentation": "GUT",
+                            "price": 35.55,
+                            "sizeCategory": "3",
+                            "sizeClass": "LSC",
+                            "faoZone": "27.7.b",
+                        }
+                    ],
+                    "sender": {"name": "Mr SENDER", "id": None},
+                    "buyer": {"name": "Mr BUYER", "id": "0679223791"},
+                    "seller": {"name": "Mr SELLER", "id": None},
+                },
+                datetime.datetime(2017, 5, 10, 7, 5, 22),
+                "BEL-TRP-2015-1435-0456",
+            ],
+            # SN_Delete
+            [
+                "128887F0-FA04-4F92-829A-36CEE114EF02",
+                datetime.datetime(2017, 5, 12, 17, 4, 36),
+                "DEL",
+                "128887F0-FA04-4F92-829A-36CEE114EF02",
+                "128887F0-FA04-4F92-829A-36CEE114EF01",
+                datetime.datetime(2017, 5, 12, 17, 4, 36),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
             ],
         ],
     )

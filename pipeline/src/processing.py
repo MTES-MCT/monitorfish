@@ -243,6 +243,47 @@ def df_to_dict_series(
     return res
 
 
+def explode_dicts(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    """
+    Expands a column of dicts into one column per dict key.
+
+    The original column is dropped from the result.
+
+    Args:
+        df (pd.DataFrame): input DataFrame
+        column_name (str): name of the column containing dicts
+
+    Returns:
+        pd.DataFrame: DataFrame with the dict column replaced by its expanded keys
+    """
+    return df.join(pd.json_normalize(df[column_name])).drop(columns=column_name)
+
+
+def explode_lists_of_dicts(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    """
+    Expands a column of lists of dicts into one row per dict, one column per key.
+
+    Each dict in each list becomes a row, with dict keys as columns. The index
+    is reset. The original column is dropped from the result.
+
+    Args:
+        df (pd.DataFrame): input DataFrame
+        column_name (str): name of the column containing lists of dicts
+
+    Returns:
+        pd.DataFrame: DataFrame with one row per dict and dict keys as columns
+    """
+    return (
+        df.explode(column_name)
+        .reset_index(drop=True)
+        .pipe(
+            lambda d: d.join(pd.json_normalize(d[column_name])).drop(
+                columns=column_name
+            )
+        )
+    )
+
+
 def zeros_ones_to_bools(
     x: Union[pd.Series, pd.DataFrame]
 ) -> Union[pd.Series, pd.DataFrame]:

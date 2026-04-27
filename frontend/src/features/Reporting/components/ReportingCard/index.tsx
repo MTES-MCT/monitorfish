@@ -190,7 +190,10 @@ export function ReportingCard({
               </>
             )}
           </DateText>
-          {reporting.type === ReportingType.INFRACTION_SUSPICION && <Threat>{reporting.value.threat}</Threat>}
+          {reporting.type === ReportingType.INFRACTION_SUSPICION &&
+            reporting.value.infractions.map(infraction => (
+              <Threat key={infraction.natinfCode}>{infraction.threat}</Threat>
+            ))}
           {reporting.type !== ReportingType.ALERT && (
             <Description $marginTop={reporting.type === ReportingType.OBSERVATION ? 10 : 0}>
               {reporting.value.description}
@@ -199,11 +202,22 @@ export function ReportingCard({
           {reporting.type !== ReportingType.ALERT && !!reporting.value.authorContact && (
             <Contact>Émetteur: {reporting.value.authorContact}</Contact>
           )}
-          {reporting.type !== ReportingType.OBSERVATION && (
+          {reporting.type === ReportingType.ALERT && (
             <StyledTag accent={Accent.PRIMARY} isLight title={getInfractionTitle(reporting)}>
               {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
             </StyledTag>
           )}
+          {reporting.type === ReportingType.INFRACTION_SUSPICION &&
+            reporting.value.infractions.map(infraction => (
+              <StyledTag
+                key={infraction.natinfCode}
+                accent={Accent.PRIMARY}
+                isLight
+                title={getInfractionTitle(reporting)}
+              >
+                {infraction.threatCharacterization} / NATINF {infraction.natinfCode}
+              </StyledTag>
+            ))}
           {reporting.type === ReportingType.ALERT && !!reporting.value.depth && (
             <Natinf>Profondeur: {reporting.value.depth}m</Natinf>
           )}

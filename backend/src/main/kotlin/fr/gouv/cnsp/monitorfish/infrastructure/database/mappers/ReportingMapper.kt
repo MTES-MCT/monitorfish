@@ -1,12 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.exceptions.EntityConversionException
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.InfractionSuspicionDto
+import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.InfractionSuspicionThreatDto
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.ObservationDto
 import org.springframework.stereotype.Component
 
@@ -74,6 +76,28 @@ object ReportingMapper {
 
                 ReportingType.INFRACTION_SUSPICION -> {
                     val infractionSuspicionValue = mapper.readValue(jsonValue, InfractionSuspicionDto::class.java)
+                    // Backward compat: rows written before migration V0.372 store a single
+                    // natinfCode/threat/threatCharacterization at the top level instead of an
+                    // `infractions` array. Can be removed once all environments have been migrated.
+                    val infractions =
+                        if (infractionSuspicionValue.infractions != null) {
+                            infractionSuspicionValue.infractions.map {
+                                InfractionSuspicionThreat(
+                                    natinfCode = it.natinfCode,
+                                    threat = it.threat,
+                                    threatCharacterization = it.threatCharacterization,
+                                )
+                            }
+                        } else {
+                            listOf(
+                                InfractionSuspicionThreat(
+                                    natinfCode = infractionSuspicionValue.natinfCode ?: 0,
+                                    threat = infractionSuspicionValue.threat ?: "Famille inconnue",
+                                    threatCharacterization =
+                                        infractionSuspicionValue.threatCharacterization ?: "Type inconnu",
+                                ),
+                            )
+                        }
                     Reporting.InfractionSuspicion(
                         id = entity.id,
                         vesselId = entity.vesselId,
@@ -108,11 +132,9 @@ object ReportingMapper {
                         satelliteType = infractionSuspicionValue.satelliteType,
                         title = infractionSuspicionValue.title,
                         description = infractionSuspicionValue.description,
-                        natinfCode = infractionSuspicionValue.natinfCode,
+                        infractions = infractions,
                         seaFront = infractionSuspicionValue.seaFront,
                         dml = infractionSuspicionValue.dml,
-                        threat = infractionSuspicionValue.threat ?: "Famille inconnue",
-                        threatCharacterization = infractionSuspicionValue.threatCharacterization ?: "Type inconnu",
                     )
                 }
 
@@ -192,11 +214,16 @@ object ReportingMapper {
                     satelliteType = reporting.satelliteType,
                     title = reporting.title,
                     description = reporting.description,
-                    natinfCode = reporting.natinfCode,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
-                    threat = reporting.threat,
-                    threatCharacterization = reporting.threatCharacterization,
+                    infractions =
+                        reporting.infractions.map {
+                            InfractionSuspicionThreatDto(
+                                natinfCode = it.natinfCode,
+                                threat = it.threat,
+                                threatCharacterization = it.threatCharacterization,
+                            )
+                        },
                 )
 
             is Reporting.Observation ->

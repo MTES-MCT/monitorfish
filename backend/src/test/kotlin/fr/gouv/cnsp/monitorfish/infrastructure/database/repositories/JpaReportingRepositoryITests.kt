@@ -85,10 +85,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 reportingDate = ZonedDateTime.now(),
                 lastUpdateDate = creationDate,
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -106,7 +111,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last() as Reporting.InfractionSuspicion
         assertThat(infraction.reportingSource).isEqualTo(ReportingSource.OPS)
-        assertThat(infraction.natinfCode).isEqualTo(123456)
+        assertThat(infraction.infractions[0].natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
@@ -129,10 +134,15 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 lastUpdateDate = creationDate,
                 flagState = CountryCode.FR,
                 reportingSource = ReportingSource.OPS,
-                natinfCode = 123456,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 title = "A title",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
                 type = ReportingType.INFRACTION_SUSPICION,
                 isDeleted = false,
                 isArchived = false,
@@ -150,7 +160,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings.last().type).isEqualTo(ReportingType.INFRACTION_SUSPICION)
         val infraction = reportings.last() as Reporting.InfractionSuspicion
         assertThat(infraction.reportingSource).isEqualTo(ReportingSource.OPS)
-        assertThat(infraction.natinfCode).isEqualTo(123456)
+        assertThat(infraction.infractions[0].natinfCode).isEqualTo(123456)
         assertThat(infraction.title).isEqualTo("A title")
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
@@ -407,11 +417,16 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 authorContact = "Jean Bon",
                 title = "Une observation",
                 description = "Une description",
-                natinfCode = 1236,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 1236,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
                 seaFront = "MEMN",
                 dml = "DML 56",
-                threat = "Obligations déclaratives",
-                threatCharacterization = "DEP",
             )
 
         // When
@@ -432,7 +447,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
         assertThat((reporting).latitude).isEqualTo(updatedReporting.latitude)
         assertThat((reporting).longitude).isEqualTo(updatedReporting.longitude)
-        assertThat((reporting).natinfCode).isEqualTo(updatedReporting.natinfCode)
+        assertThat((reporting).infractions[0].natinfCode).isEqualTo(updatedReporting.infractions[0].natinfCode)
         assertThat((reporting).seaFront).isEqualTo(updatedReporting.seaFront)
         assertThat((reporting).dml).isEqualTo(updatedReporting.dml)
     }

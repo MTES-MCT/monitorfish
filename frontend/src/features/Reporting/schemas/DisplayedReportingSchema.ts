@@ -10,13 +10,18 @@ export const DisplayedReportingSchema = z.strictObject({
   flagState: z.string(),
   from: z.string(),
   id: z.number(),
+  infractions: z.array(
+    z.object({
+      natinfCode: z.number(),
+      threat: z.string(),
+      threatCharacterization: z.string()
+    })
+  ),
   isArchived: z.boolean(),
   isInfractionSuspicion: z.boolean(),
   isIUU: z.boolean(),
   isObservation: z.boolean(),
   reportingDate: z.string(),
-  threat: stringOrUndefined,
-  threatCharacterization: stringOrUndefined,
   title: z.string(),
   type: z.enum(ReportingType),
   validationDate: stringOrUndefined,

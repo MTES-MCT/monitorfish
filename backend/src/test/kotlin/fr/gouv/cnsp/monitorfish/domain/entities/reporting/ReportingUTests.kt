@@ -22,9 +22,14 @@ class ReportingUTests {
             reportingSource = ReportingSource.UNIT,
             controlUnitId = 1,
             title = "Title",
-            natinfCode = 1234,
-            threat = "T",
-            threatCharacterization = "TC",
+            infractions =
+                listOf(
+                    InfractionSuspicionThreat(
+                        natinfCode = 1234,
+                        threat = "T",
+                        threatCharacterization = "TC",
+                    ),
+                ),
             isArchived = false,
             isDeleted = false,
             createdBy = "user@test.fr",
@@ -70,9 +75,14 @@ class ReportingUTests {
         reportingSource = ReportingSource.UNIT,
         controlUnitId = 1,
         title = "Updated",
-        natinfCode = 5678,
-        threat = "T2",
-        threatCharacterization = "TC2",
+        infractions =
+            listOf(
+                InfractionSuspicionThreat(
+                    natinfCode = 5678,
+                    threat = "T2",
+                    threatCharacterization = "TC2",
+                ),
+            ),
         type = type,
     )
 
@@ -106,9 +116,10 @@ class ReportingUTests {
         assertThat(result.isFishing).isTrue()
         assertThat(result.satelliteType).isEqualTo(SatelliteSource.OTHER)
         assertThat(result.otherSourceType).isEqualTo(OtherSource.NGO)
-        assertThat(result.natinfCode).isEqualTo(5678)
-        assertThat(result.threat).isEqualTo("T2")
-        assertThat(result.threatCharacterization).isEqualTo("TC2")
+        assertThat(result.infractions).hasSize(1)
+        assertThat(result.infractions[0].natinfCode).isEqualTo(5678)
+        assertThat(result.infractions[0].threat).isEqualTo("T2")
+        assertThat(result.infractions[0].threatCharacterization).isEqualTo("TC2")
         // Immutable fields preserved from original entity
         assertThat(result.id).isEqualTo(baseObservation.id)
         assertThat(result.creationDate).isEqualTo(baseObservation.creationDate)
@@ -124,7 +135,8 @@ class ReportingUTests {
         assertThat(result).isInstanceOf(Reporting.InfractionSuspicion::class.java)
         result as Reporting.InfractionSuspicion
         assertThat(result.title).isEqualTo("Updated")
-        assertThat(result.natinfCode).isEqualTo(5678)
+        assertThat(result.infractions).hasSize(1)
+        assertThat(result.infractions[0].natinfCode).isEqualTo(5678)
         assertThat(result.latitude).isEqualTo(10.0)
         assertThat(result.longitude).isEqualTo(20.0)
         assertThat(result.isFishing).isTrue()
@@ -153,7 +165,7 @@ class ReportingUTests {
     }
 
     @Test
-    fun `update Should fall back to entity threat and threatCharacterization When command provides null`() {
+    fun `update Should throw When infractions is empty on Observation to InfractionSuspicion`() {
         val command =
             ReportingUpdateCommand(
                 flagState = CountryCode.FR,
@@ -163,53 +175,7 @@ class ReportingUTests {
                 reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1,
                 title = "Updated",
-                natinfCode = 5678,
-                threat = null,
-                threatCharacterization = null,
-                type = ReportingType.INFRACTION_SUSPICION,
-            )
-
-        val result = baseInfractionSuspicion.update(command) as Reporting.InfractionSuspicion
-
-        assertThat(result.threat).isEqualTo(baseInfractionSuspicion.threat)
-        assertThat(result.threatCharacterization).isEqualTo(baseInfractionSuspicion.threatCharacterization)
-    }
-
-    @Test
-    fun `update Should throw When natinfCode is null on InfractionSuspicion to InfractionSuspicion`() {
-        val command =
-            ReportingUpdateCommand(
-                flagState = CountryCode.FR,
-                reportingDate = now,
-                latitude = 10.0,
-                longitude = 20.0,
-                reportingSource = ReportingSource.UNIT,
-                controlUnitId = 1,
-                title = "Updated",
-                natinfCode = null,
-                type = ReportingType.INFRACTION_SUSPICION,
-            )
-
-        val throwable = catchThrowable { baseInfractionSuspicion.update(command) }
-
-        assertThat(throwable).isInstanceOf(IllegalStateException::class.java)
-        assertThat(throwable.message).contains("NATINF code is required")
-    }
-
-    @Test
-    fun `update Should throw When natinfCode is null on Observation to InfractionSuspicion`() {
-        val command =
-            ReportingUpdateCommand(
-                flagState = CountryCode.FR,
-                reportingDate = now,
-                latitude = 10.0,
-                longitude = 20.0,
-                reportingSource = ReportingSource.UNIT,
-                controlUnitId = 1,
-                title = "Updated",
-                natinfCode = null,
-                threat = "T2",
-                threatCharacterization = "TC2",
+                infractions = emptyList(),
                 type = ReportingType.INFRACTION_SUSPICION,
             )
 
@@ -273,9 +239,14 @@ class ReportingUTests {
             reportingSource = reportingSource,
             otherSourceType = otherSourceType,
             title = "Title",
-            natinfCode = 1234,
-            threat = "T",
-            threatCharacterization = "TC",
+            infractions =
+                listOf(
+                    InfractionSuspicionThreat(
+                        natinfCode = 1234,
+                        threat = "T",
+                        threatCharacterization = "TC",
+                    ),
+                ),
             isArchived = false,
             isDeleted = false,
             createdBy = "user@test.fr",
@@ -420,9 +391,14 @@ class ReportingUTests {
             latitude = latitude,
             longitude = longitude,
             title = "Title",
-            natinfCode = 1234,
-            threat = "T",
-            threatCharacterization = "TC",
+            infractions =
+                listOf(
+                    InfractionSuspicionThreat(
+                        natinfCode = 1234,
+                        threat = "T",
+                        threatCharacterization = "TC",
+                    ),
+                ),
             isArchived = false,
             isDeleted = false,
             createdBy = "user@test.fr",

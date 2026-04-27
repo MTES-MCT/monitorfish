@@ -29,6 +29,21 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatHierarchyDataOu
  * ]
  */
 object InfractionHierarchyBuilder {
+    fun <T> buildSingleThreatHierarchy(
+        item: T,
+        threatExtractor: (T) -> String,
+        characterizationExtractor: (T) -> String,
+        natinfCodeExtractor: (T) -> Int,
+        infractionNameExtractor: (T) -> String,
+    ): ThreatHierarchyDataOutput =
+        buildThreatOutput(
+            threatName = threatExtractor(item),
+            items = listOf(item),
+            characterizationExtractor = characterizationExtractor,
+            natinfCodeExtractor = natinfCodeExtractor,
+            infractionNameExtractor = infractionNameExtractor,
+        )
+
     fun <T> buildThreatHierarchy(
         items: List<T>,
         threatExtractor: (T) -> String,

@@ -4,6 +4,7 @@ import {
   ReportingOriginSourceLabel
 } from '@features/Reporting/types'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 
 import type { LegacyControlUnit } from '../../../ControlUnit/legacyControlUnit'
 
@@ -30,7 +31,15 @@ export function getFrenchOrdinal(index: number): string {
   return `${index + 1}è`
 }
 
-export const getInfractionTitle = (
-  reporting: InfractionSuspicionReporting | PendingAlertReporting
-): string => `${reporting.value.threat} - ${reporting.value.threatCharacterization}
-${reporting.value.natinfCode} - ${reporting.infraction?.infraction}`
+export const getInfractionTitle = (reporting: InfractionSuspicionReporting | PendingAlertReporting): string => {
+  if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
+    return reporting.value.infractions
+      .map(
+        i =>
+          `${i.threat} - ${i.threatCharacterization}\n${i.natinfCode}${i.infraction ? ` - ${i.infraction.infraction}` : ''}`
+      )
+      .join('\n\n')
+  }
+
+  return `${reporting.value.threat} - ${reporting.value.threatCharacterization}\n${reporting.value.natinfCode} - ${reporting.infraction?.infraction}`
+}

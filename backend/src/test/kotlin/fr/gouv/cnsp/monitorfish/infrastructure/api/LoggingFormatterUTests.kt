@@ -45,24 +45,26 @@ class LoggingFormatterUTests {
                     reportingSource = ReportingSource.OPS,
                     type = ReportingType.INFRACTION_SUSPICION,
                     reportingDate = ZonedDateTime.now(),
-                    threatHierarchy =
-                        ThreatHierarchyDataInput(
-                            children =
-                                listOf(
-                                    ThreatCharacterizationDataInput(
-                                        children =
-                                            listOf(
-                                                NatinfDataInput(
-                                                    label = "27689",
-                                                    value = 27689,
+                    threatHierarchies =
+                        listOf(
+                            ThreatHierarchyDataInput(
+                                children =
+                                    listOf(
+                                        ThreatCharacterizationDataInput(
+                                            children =
+                                                listOf(
+                                                    NatinfDataInput(
+                                                        label = "27689",
+                                                        value = 27689,
+                                                    ),
                                                 ),
-                                            ),
-                                        label = "Pêche sans autorisation par navire tiers",
-                                        value = "Pêche sans autorisation par navire tiers",
+                                            label = "Pêche sans autorisation par navire tiers",
+                                            value = "Pêche sans autorisation par navire tiers",
+                                        ),
                                     ),
-                                ),
-                            label = "Activités INN",
-                            value = "Activités INN",
+                                label = "Activités INN",
+                                value = "Activités INN",
+                            ),
                         ),
                     title = "A title",
                 ),
@@ -74,7 +76,7 @@ class LoggingFormatterUTests {
         assertThat(log).contains("\"type\":\"INFRACTION_SUSPICION\"")
         assertThat(log).contains("\"flagState\":\"FR\"")
         assertThat(log).contains("\"title\":\"A title\"")
-        assertThat(log).contains("\"threatHierarchy\"")
+        assertThat(log).contains("\"threatHierarchies\"")
     }
 
     @Test
@@ -97,24 +99,26 @@ class LoggingFormatterUTests {
                     flagState = CountryCode.FR,
                     creationDate = dateTime,
                     reportingDate = dateTime,
-                    threatHierarchy =
-                        ThreatHierarchyDataInput(
-                            children =
-                                listOf(
-                                    ThreatCharacterizationDataInput(
-                                        children =
-                                            listOf(
-                                                NatinfDataInput(
-                                                    label = "27689",
-                                                    value = 27689,
+                    threatHierarchies =
+                        listOf(
+                            ThreatHierarchyDataInput(
+                                children =
+                                    listOf(
+                                        ThreatCharacterizationDataInput(
+                                            children =
+                                                listOf(
+                                                    NatinfDataInput(
+                                                        label = "27689",
+                                                        value = 27689,
+                                                    ),
                                                 ),
-                                            ),
-                                        label = "Pêche sans autorisation par navire tiers",
-                                        value = "Pêche sans autorisation par navire tiers",
+                                            label = "Pêche sans autorisation par navire tiers",
+                                            value = "Pêche sans autorisation par navire tiers",
+                                        ),
                                     ),
-                                ),
-                            label = "Activités INN",
-                            value = "Activités INN",
+                                label = "Activités INN",
+                                value = "Activités INN",
+                            ),
                         ),
                     reportingSource = ReportingSource.OPS,
                     title = "A title",
@@ -144,24 +148,26 @@ class LoggingFormatterUTests {
                 reportingSource = ReportingSource.OPS,
                 type = ReportingType.INFRACTION_SUSPICION,
                 reportingDate = ZonedDateTime.now(),
-                threatHierarchy =
-                    ThreatHierarchyDataInput(
-                        children =
-                            listOf(
-                                ThreatCharacterizationDataInput(
-                                    children =
-                                        listOf(
-                                            NatinfDataInput(
-                                                label = "27689",
-                                                value = 27689,
+                threatHierarchies =
+                    listOf(
+                        ThreatHierarchyDataInput(
+                            children =
+                                listOf(
+                                    ThreatCharacterizationDataInput(
+                                        children =
+                                            listOf(
+                                                NatinfDataInput(
+                                                    label = "27689",
+                                                    value = 27689,
+                                                ),
                                             ),
-                                        ),
-                                    label = "Pêche sans autorisation par navire tiers",
-                                    value = "Pêche sans autorisation par navire tiers",
+                                        label = "Pêche sans autorisation par navire tiers",
+                                        value = "Pêche sans autorisation par navire tiers",
+                                    ),
                                 ),
-                            ),
-                        label = "Activités INN",
-                        value = "Activités INN",
+                            label = "Activités INN",
+                            value = "Activités INN",
+                        ),
                     ),
                 title = "A title",
             )
@@ -175,6 +181,6 @@ class LoggingFormatterUTests {
         assertThat(log).contains("\"type\":\"INFRACTION_SUSPICION\"")
         assertThat(log).contains("\"flagState\":\"FR\"")
         assertThat(log).contains("\"title\":\"A title\"")
-        assertThat(log).contains("\"threatHierarchy\"")
+        assertThat(log).contains("\"threatHierarchies\"")
     }
 }

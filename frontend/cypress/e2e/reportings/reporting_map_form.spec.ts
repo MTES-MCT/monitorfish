@@ -40,7 +40,7 @@ context('Reporting map form', () => {
     cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')
-    cy.fill('Type d\u2019infraction et NATINF', ['27717'])
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
 
     cy.wait('@createReporting')
     cy.wait('@displayReportings')
@@ -56,6 +56,7 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
+    cy.getDataCy('reporting-overlay').contains('Type inconnu / NATINF 27689')
     cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction (BSL Lorient)')
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
     cy.getDataCy('reporting-overlay').contains('Pêche thon rouge sans VMS détecté ni JPE')

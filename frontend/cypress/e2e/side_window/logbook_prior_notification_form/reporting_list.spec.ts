@@ -20,7 +20,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
-    cy.fill('Type d’infraction et NATINF', ['27717'])
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
 
     cy.clickButton('Valider')
 
@@ -59,7 +59,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
         cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
         cy.fill('Titre', 'Sortie non autorisée')
         cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
-        cy.fill('Type d’infraction et NATINF', ['27717'])
+        cy.fill('Type d’infraction et NATINF 1', ['27717'])
 
         cy.clickButton('Valider')
 

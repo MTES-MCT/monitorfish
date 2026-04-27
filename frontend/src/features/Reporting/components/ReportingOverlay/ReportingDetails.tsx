@@ -23,6 +23,7 @@ type ReportingDetailsProps = {
   onClose: () => void
   onDescriptionHeightChange: (height: number) => void
   onEdit: () => void
+  onInfractionTagsHeightChange: (height: number) => void
   overlayPosition?: OverlayPosition | undefined
   reporting: Reporting.ReportingFeature
 }
@@ -34,10 +35,12 @@ export function ReportingDetails({
   onClose,
   onDescriptionHeightChange,
   onEdit,
+  onInfractionTagsHeightChange,
   overlayPosition,
   reporting
 }: ReportingDetailsProps) {
   const descriptionRef = useRef<HTMLDivElement>(null)
+  const infractionTagsRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const el = descriptionRef.current
@@ -54,6 +57,22 @@ export function ReportingDetails({
 
     return () => observer.disconnect()
   }, [reporting.description, onDescriptionHeightChange])
+
+  useLayoutEffect(() => {
+    const el = infractionTagsRef.current
+    if (!el) {
+      onInfractionTagsHeightChange(0)
+
+      return undefined
+    }
+
+    const observer = new ResizeObserver(() => {
+      onInfractionTagsHeightChange(el.clientHeight + 4)
+    })
+    observer.observe(el)
+
+    return () => observer.disconnect()
+  }, [reporting.infractions, onInfractionTagsHeightChange])
   const typeName = Object.values(ReportingTypeCharacteristics).find(c => c.code === reporting.type)?.displayName
   const color = reporting.type === ReportingType.OBSERVATION ? THEME.color.blueGray : THEME.color.maximumRed
 
@@ -98,10 +117,16 @@ export function ReportingDetails({
               )}
             </Tags>
           )}
-          <ThreatAndTitle>
-            {reporting.threat && `${reporting.threat} / ${reporting.threatCharacterization} - `}
-            {reporting.title}
-          </ThreatAndTitle>
+          {reporting.infractions.length > 0 && (
+            <InfractionTags ref={infractionTagsRef}>
+              {reporting.infractions.map(infraction => (
+                <Tag key={infraction.natinfCode} accent={Accent.PRIMARY}>
+                  {infraction.threatCharacterization} / NATINF {infraction.natinfCode}
+                </Tag>
+              ))}
+            </InfractionTags>
+          )}
+          <ThreatTitle $hasInfractions={reporting.infractions.length > 0}>{reporting.title}</ThreatTitle>
           {reporting.description && <Description ref={descriptionRef}>{reporting.description}</Description>}
 
           <EditButton
@@ -194,8 +219,15 @@ const Type = styled.div`
   gap: 4px;
 `
 
-const ThreatAndTitle = styled.div`
-  margin-top: 12px;
+const InfractionTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+`
+
+const ThreatTitle = styled.div<{ $hasInfractions: boolean }>`
+  margin-top: ${p => (p.$hasInfractions ? '8px' : '12px')};
   font-weight: 700;
   color: ${p => p.theme.color.gunMetal};
 `

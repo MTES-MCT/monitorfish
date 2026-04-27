@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -33,7 +34,5 @@ class ReportingUpdateCommand(
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
-    val natinfCode: Int? = null,
-    val threat: String? = null,
-    val threatCharacterization: String? = null,
+    val infractions: List<InfractionSuspicionThreat> = emptyList(),
 )

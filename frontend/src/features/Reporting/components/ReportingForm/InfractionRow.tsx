@@ -42,7 +42,7 @@ export function InfractionRow({
         isLight={isLight}
         isRequired={isFirst}
         isSelect
-        label={`Type d'infraction et NATINF ${index + 1}`}
+        label={`Type d’infraction et NATINF ${index + 1}`}
         name={`infractions[${index}].threatHierarchy`}
         onChange={nextThreats => {
           if (nextThreats && nextThreats.length > 0) {

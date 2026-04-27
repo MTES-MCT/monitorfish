@@ -18,6 +18,7 @@ export const CreateOrEditReportingSchema = z
     latitude: z.number().optional(),
     longitude: z.number().optional(),
     mmsi: z.string().optional(),
+    numberOfVessels: z.number().optional(),
     otherSourceType: z.string().optional(),
     reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
     reportingSource: z.enum(ReportingOriginSource),
@@ -30,6 +31,14 @@ export const CreateOrEditReportingSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.isIUU) {
+      if (!Number.isInteger(data.numberOfVessels)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Veuillez renseigner le nombre de navires.',
+          path: ['numberOfVessels']
+        })
+      }
+
       if (data.latitude === undefined || data.latitude === null) {
         ctx.addIssue({
           code: 'custom',

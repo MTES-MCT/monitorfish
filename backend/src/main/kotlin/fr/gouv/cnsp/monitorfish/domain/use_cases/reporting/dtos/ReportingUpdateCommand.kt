@@ -34,5 +34,6 @@ class ReportingUpdateCommand(
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
+    val numberOfVessels: Int? = null,
     val infractions: List<InfractionSuspicionThreat> = emptyList(),
 )

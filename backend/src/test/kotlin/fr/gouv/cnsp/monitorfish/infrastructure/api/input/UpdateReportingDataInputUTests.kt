@@ -146,6 +146,7 @@ class UpdateReportingDataInputUTests {
                 controlUnitId = 1234,
                 authorContact = "abc@example.com",
                 expirationDate = expirationDate,
+                numberOfVessels = 2,
                 title = "Test title",
                 description = "Test description",
                 threatHierarchies =
@@ -165,6 +166,7 @@ class UpdateReportingDataInputUTests {
         assertThat(result.controlUnitId).isEqualTo(1234)
         assertThat(result.authorContact).isEqualTo("abc@example.com")
         assertThat(result.expirationDate).isEqualTo(expirationDate)
+        assertThat(result.numberOfVessels).isEqualTo(2)
         assertThat(result.title).isEqualTo("Test title")
         assertThat(result.description).isEqualTo("Test description")
         assertThat(result.infractions[0].threat).isEqualTo("Entrave au contrôle")

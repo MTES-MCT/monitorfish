@@ -35,6 +35,7 @@ data class InfractionSuspicionDto(
     val threatCharacterization: String? = null,
     // New list format
     val infractions: List<InfractionSuspicionThreatDto>? = null,
+    val numberOfVessels: Int? = null,
     @JsonProperty("type")
     val reportingTypeMapping: ReportingTypeMapping = ReportingTypeMapping.INFRACTION_SUSPICION,
 )

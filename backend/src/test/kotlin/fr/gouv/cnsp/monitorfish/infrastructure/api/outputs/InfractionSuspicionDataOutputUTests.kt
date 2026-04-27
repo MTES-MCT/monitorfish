@@ -21,6 +21,7 @@ class InfractionSuspicionDataOutputUTests {
         threatCharacterization: String = "Pêche sans autorisation par navire tiers",
         controlUnitId: Int? = null,
         authorContact: String? = null,
+        numberOfVessels: Int? = null,
         seaFront: String? = null,
         dml: String? = null,
     ) = Reporting.InfractionSuspicion(
@@ -40,6 +41,7 @@ class InfractionSuspicionDataOutputUTests {
         reportingSource = ReportingSource.OPS,
         controlUnitId = controlUnitId,
         authorContact = authorContact,
+        numberOfVessels = numberOfVessels,
         title = "Test infraction",
         seaFront = seaFront,
         dml = dml,
@@ -120,6 +122,7 @@ class InfractionSuspicionDataOutputUTests {
                 reportingSource = ReportingSource.UNIT,
                 controlUnitId = 1234,
                 authorContact = "abc@example.com",
+                numberOfVessels = 4,
                 title = "Test title",
                 description = "Test description",
                 seaFront = "MEMN",
@@ -144,6 +147,7 @@ class InfractionSuspicionDataOutputUTests {
         assertThat(output.controlUnitId).isEqualTo(1234)
         assertThat(output.controlUnit).isEqualTo(controlUnit)
         assertThat(output.authorContact).isEqualTo("abc@example.com")
+        assertThat(output.numberOfVessels).isEqualTo(4)
         assertThat(output.title).isEqualTo("Test title")
         assertThat(output.description).isEqualTo("Test description")
         assertThat(output.seaFront).isEqualTo("MEMN")

@@ -36,6 +36,7 @@ class UpdateReportingDataInput(
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
+    val numberOfVessels: Int? = null,
     val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
 ) {
     fun toUpdatedReportingValues(): ReportingUpdateCommand {
@@ -76,6 +77,7 @@ class UpdateReportingDataInput(
             vesselIdentifier = this.vesselIdentifier,
             flagState = this.flagState,
             isFishing = this.isFishing,
+            numberOfVessels = this.numberOfVessels,
             latitude = this.latitude,
             longitude = this.longitude,
         )

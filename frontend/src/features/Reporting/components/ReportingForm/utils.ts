@@ -53,6 +53,7 @@ export function getFormFields(
     return {
       ...base,
       infractions: (value as InfractionSuspicion | undefined)?.infractions ?? ([{}] as any),
+      numberOfVessels: isIUU ? ((value as InfractionSuspicion | undefined)?.numberOfVessels ?? 1) : undefined,
       type: ReportingType.INFRACTION_SUSPICION
     }
   }

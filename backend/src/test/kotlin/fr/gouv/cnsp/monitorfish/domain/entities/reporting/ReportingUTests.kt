@@ -64,6 +64,7 @@ class ReportingUTests {
         type: ReportingType,
         latitude: Double? = 10.0,
         longitude: Double? = 20.0,
+        numberOfVessels: Int? = 3,
     ) = ReportingUpdateCommand(
         flagState = CountryCode.FR,
         reportingDate = now,
@@ -72,6 +73,7 @@ class ReportingUTests {
         satelliteType = SatelliteSource.OTHER,
         otherSourceType = OtherSource.NGO,
         isFishing = true,
+        numberOfVessels = numberOfVessels,
         reportingSource = ReportingSource.UNIT,
         controlUnitId = 1,
         title = "Updated",
@@ -140,6 +142,7 @@ class ReportingUTests {
         assertThat(result.latitude).isEqualTo(10.0)
         assertThat(result.longitude).isEqualTo(20.0)
         assertThat(result.isFishing).isTrue()
+        assertThat(result.numberOfVessels).isEqualTo(3)
         assertThat(result.satelliteType).isEqualTo(SatelliteSource.OTHER)
         assertThat(result.otherSourceType).isEqualTo(OtherSource.NGO)
     }

@@ -138,6 +138,7 @@ sealed class Reporting {
         val title: String,
         val description: String? = null,
         val infractions: List<InfractionSuspicionThreat>,
+        val numberOfVessels: Int? = null,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -182,6 +183,7 @@ sealed class Reporting {
                         expirationDate = command.expirationDate ?: this.expirationDate,
                         reportingDate = command.reportingDate,
                         infractions = command.infractions,
+                        numberOfVessels = command.numberOfVessels,
                         isFishing = command.isFishing ?: false,
                         latitude = command.latitude,
                         longitude = command.longitude,

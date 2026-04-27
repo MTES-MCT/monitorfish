@@ -38,6 +38,7 @@ class CreateReportingDataInput(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
+    val numberOfVessels: Int? = null,
     val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
 ) {
     fun toReporting(createdBy: String): Reporting {
@@ -85,6 +86,7 @@ class CreateReportingDataInput(
                 title = title,
                 description = description,
                 infractions = infractions,
+                numberOfVessels = numberOfVessels,
                 isIUU = isIUU,
                 latitude = latitude,
                 longitude = longitude,

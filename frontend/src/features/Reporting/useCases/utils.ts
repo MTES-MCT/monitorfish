@@ -22,6 +22,8 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     length: formValues.length,
     longitude: formValues.longitude,
     mmsi: formValues.mmsi,
+    numberOfVessels:
+      formValues.type === ReportingType.INFRACTION_SUSPICION ? (formValues as any).numberOfVessels : undefined,
     otherSourceType: formValues.otherSourceType,
     reportingDate: formValues.reportingDate,
     reportingSource: formValues.reportingSource as ReportingOriginSource,

@@ -35,8 +35,10 @@ context('Reporting map form', () => {
     cy.get('body').click(150, 150)
     cy.wait(250)
     cy.clickButton('Valider le point de signalement')
-    cy.fill('Navire absent de la base de données', true)
-    cy.fill('Navire inconnu', true)
+    cy.fill('Nombre de navires', 2)
+    // When numberOfVessels > 1, "navire absent" and "navire inconnu" are auto-checked and labels become plural
+    cy.contains('Navires absents de la base de données').should('be.visible')
+    cy.contains('Navires inconnus').should('be.visible')
     cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')

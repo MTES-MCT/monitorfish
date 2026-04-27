@@ -56,6 +56,7 @@ export function EditReporting() {
         <StyledReportingForm
           editedReporting={editedReporting}
           hasWhiteBackground
+          isIUU={editedReporting.isIUU ?? false}
           onClose={closeForm}
           windowContext={WindowContext.SideWindow}
         />

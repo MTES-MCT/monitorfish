@@ -26,6 +26,7 @@ class DisplayedReportingDataOutput(
     val isInfractionSuspicion: Boolean,
     val isObservation: Boolean,
     val isIUU: Boolean,
+    val numberOfVessels: Int? = null,
     val featureId: String,
     val from: String,
 ) {
@@ -63,6 +64,12 @@ class DisplayedReportingDataOutput(
                 expirationDate = reporting.expirationDate,
                 isArchived = reporting.isArchived,
                 isIUU = reporting.isIUU,
+                numberOfVessels =
+                    when (reporting) {
+                        is Reporting.InfractionSuspicion -> reporting.numberOfVessels
+                        is Reporting.Observation -> reporting.numberOfVessels
+                        else -> null
+                    },
                 featureId = "REPORTING:${reporting.id}",
                 title =
                     when (reporting) {

@@ -1,5 +1,5 @@
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { stringOrUndefined } from 'types'
+import { numberOrUndefined, stringOrUndefined } from 'types'
 import z from 'zod'
 
 export const DisplayedReportingSchema = z.strictObject({
@@ -21,6 +21,7 @@ export const DisplayedReportingSchema = z.strictObject({
   isInfractionSuspicion: z.boolean(),
   isIUU: z.boolean(),
   isObservation: z.boolean(),
+  numberOfVessels: numberOrUndefined,
   reportingDate: z.string(),
   title: z.string(),
   type: z.enum(ReportingType),

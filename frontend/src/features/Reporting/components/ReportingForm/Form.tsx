@@ -341,6 +341,7 @@ export function Form({
       <FormikCoordinatesPicker isLight={isLight} isRequired={isIUU} />
       {isIUU && (
         <NumberInput
+          error={errors.numberOfVessels}
           isLight={isLight}
           isRequired
           label="Nombre de navires"

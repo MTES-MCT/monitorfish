@@ -100,7 +100,7 @@ export function VesselContactToUpdateForm({ vesselId }: VesselContactToUpdateFor
 
 const StyledFormikTextarea = styled(FormikTextarea)`
   > textarea {
-    box-sizing: border-box; // ensures the textarea width matches the parent div
+    box-sizing: border-box; // ensures the textarea width matches the parent div. TODO: move this into monitorui, see https://github.com/MTES-MCT/monitor-ui/issues/1984
   }
 `
 

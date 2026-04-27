@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== AgronomicalObservationReport Schema Module                 ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 24.1
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:AgronomicalObservationReport:24" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:AgronomicalObservationReport:24" elementFormDefault="qualified" attributeFormDefault="unqualified" version="24.1">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AgronomicalObservationReport" type="rsm:AgronomicalObservationReportType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AOR</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>AgronomicalObservationReport</ccts:Name>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>Message that provides to transfer raw datas from the field to any kind of parties</ccts:Definition>
+        <ccts:BusinessProcessContextValue>In All Contexts</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>European, National, Local Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AgronomicalObservationReportType      ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="AgronomicalObservationReportType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AOR-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>Agronomical Observation Report. Details</ccts:DictionaryEntryName>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>Message that provides to transfer raw datas from the field to any kind of parties</ccts:Definition>
+        <ccts:ObjectClassTerm>Agronomical Observation Report</ccts:ObjectClassTerm>
+        <ccts:BusinessProcessContextValue>In All Contexts</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>European, National, Local Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="AgronomicalObservationDocument" type="ram:AgronomicalObservationDocumentType" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01009294</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Agronomical Observation Report. Agronomical Observation_ Document</ccts:DictionaryEntryName>
+            <ccts:Version>1.1</ccts:Version>
+            <ccts:Definition>A collection of data for a piece of written, printed or electronic matter that provides information or evidence of the transfer of agronomical data from the field to one or more parties, such as to set up a network of epidemiological monitoring of crops.</ccts:Definition>
+            <ccts:Cardinality>1..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Agronomical Observation Report</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Document</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Agronomical Observation</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>In All Contexts</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>European, National, Local Regulations</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SingleAgronomicalObservation" type="ram:SingleAgronomicalObservationType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01009309</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Agronomical Observation Report. Single_ Agronomical Observation</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A single collection of diagnostic data, visual or technical, for agronomical purposes.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Agronomical Observation Report</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Agronomical Observation</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Single</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>In All Contexts</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>European, National, Local Regulations</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 68051 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.1
+Schema date:        23 August 2008
+
+Code list name:     Transport Movement Stage Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm68051="urn:un:unece:uncefact:codelist:standard:UNECE:TransportMovementStageCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TransportMovementStageCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.1">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="TransportMovementStageCode" type="clm68051:TransportMovementStageCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: TransportMovementStageCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="TransportMovementStageCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inland transport</ccts:Name>
+            <ccts:Description>Transport by which goods are moved from or to the frontier, or between inland points.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>At the statistical territory limit</ccts:Name>
+            <ccts:Description>Point by which the means of transport are presumed to have left the statistical territory of despatch or to have entered the statistical territory of arrival.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>At arrival</ccts:Name>
+            <ccts:Description>Transport by which goods are moved to the place of arrival.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Means of transport at transit</ccts:Name>
+            <ccts:Description>The means of transport used to carry goods that have come under transit procedures of the customs administration to which a transit declaration is being made.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Means of transport crossing the regulatory border</ccts:Name>
+            <ccts:Description>The means of transport moving into and out of a regulatory territory.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Means of transport at first port of arrival into regulatory territory</ccts:Name>
+            <ccts:Description>The means of transport moving into a regulatory territory at the first port of arrival.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre-carriage transport</ccts:Name>
+            <ccts:Description>Transport by which the goods are moved prior to their main carriage transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>At border</ccts:Name>
+            <ccts:Description>Transport by which goods are moved to the Customs frontier.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>At departure</ccts:Name>
+            <ccts:Description>Transport by which goods are moved from the place of departure.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>At destination</ccts:Name>
+            <ccts:Description>Transport by which goods are moved at the place of destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - fourth carrier</ccts:Name>
+            <ccts:Description>The fourth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - fifth carrier</ccts:Name>
+            <ccts:Description>The fifth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - sixth carrier</ccts:Name>
+            <ccts:Description>The sixth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - seventh carrier</ccts:Name>
+            <ccts:Description>The seventh carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - eighth carrier</ccts:Name>
+            <ccts:Description>The eighth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main-carriage transport</ccts:Name>
+            <ccts:Description>The primary stage in the movement of cargo from the point of origin to the intended destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - first carrier</ccts:Name>
+            <ccts:Description>The first carrier of the ordered transport when more than one carrier is involved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - second carrier</ccts:Name>
+            <ccts:Description>The second carrier of the ordered transport when more than one carrier is involved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - third carrier</ccts:Name>
+            <ccts:Description>The third carrier of the ordered transport when more than one carrier is involved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inland waterway transport</ccts:Name>
+            <ccts:Description>Transport by which goods are moved via an inland body of water.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery carrier all transport</ccts:Name>
+            <ccts:Description>Carrier responsible from the point of origin to the final delivery destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Second pre-carriage transport</ccts:Name>
+            <ccts:Description>Second transport by which the goods are moved prior to their main carriage transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre-acceptance transport</ccts:Name>
+            <ccts:Description>The transport by which the goods are moved to the place of acceptance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Second on-carriage transport</ccts:Name>
+            <ccts:Description>Second transport by which the goods are moved after the main carriage transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - ninth carrier</ccts:Name>
+            <ccts:Description>The ninth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On-carriage transport</ccts:Name>
+            <ccts:Description>Transport by which the goods are moved after the main carriage transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - tenth carrier</ccts:Name>
+            <ccts:Description>The tenth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - eleventh carrier</ccts:Name>
+            <ccts:Description>The eleventh carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Main carriage - twelfth carrier</ccts:Name>
+            <ccts:Description>The twelfth carrier of the ordered transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Overflight</ccts:Name>
+            <ccts:Description>The movement of a conveyance through the airspace over the territories of a country without landing within the territories of the country.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

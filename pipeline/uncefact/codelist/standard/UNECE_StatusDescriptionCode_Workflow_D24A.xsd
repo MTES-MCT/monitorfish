@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 64405_StatusCode_Workflow - Code List Schema Module        ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.7
+Schema date:        23 August 2008
+
+Code list name:     Status Description Code_Workflow
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm64405StatusCodeWorkflow="urn:un:unece:uncefact:codelist:standard:UNECE:StatusDescriptionCode_Workflow:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:StatusDescriptionCode_Workflow:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.7">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="StatusDescriptionCodeWorkflow" type="clm64405StatusCodeWorkflow:StatusDescriptionCodeWorkflowContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: StatusDescriptionCodeWorkflowContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="StatusDescriptionCodeWorkflowContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>To be done</ccts:Name>
+            <ccts:Description>Remark that the requested service in the order remains outstanding.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Done</ccts:Name>
+            <ccts:Description>The instruction has been completed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Passed on</ccts:Name>
+            <ccts:Description>The information has been passed on.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Requested</ccts:Name>
+            <ccts:Description>A status or condition has been requested.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transaction expected to be executed</ccts:Name>
+            <ccts:Description>The transaction is expected to be executed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Started</ccts:Name>
+            <ccts:Description>To specify an event has started.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Revised</ccts:Name>
+            <ccts:Description>To indicate a revision has been made.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assigned</ccts:Name>
+            <ccts:Description>A value has been assigned to an item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Approved</ccts:Name>
+            <ccts:Description>Approval has been given.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Withdrawn</ccts:Name>
+            <ccts:Description>Item is withdrawn.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rejected</ccts:Name>
+            <ccts:Description>Item is rejected.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Approval pending</ccts:Name>
+            <ccts:Description>Approval is pending.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Postponed</ccts:Name>
+            <ccts:Description>Further action is delayed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Replaced</ccts:Name>
+            <ccts:Description>Item has been replaced.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Issued</ccts:Name>
+            <ccts:Description>Has been given out.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Confirmed</ccts:Name>
+            <ccts:Description>Officially acknowledged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="85">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Updated</ccts:Name>
+            <ccts:Description>Brought up to date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="95">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unchanged</ccts:Name>
+            <ccts:Description>Unaltered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="97">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pending</ccts:Name>
+            <ccts:Description>Awaiting decision or settlement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Instructed to start</ccts:Name>
+            <ccts:Description>Received instruction to start.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Instructed to stop</ccts:Name>
+            <ccts:Description>Received instruction to stop.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inactive</ccts:Name>
+            <ccts:Description>Not in operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Active</ccts:Name>
+            <ccts:Description>In operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="121">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Complete</ccts:Name>
+            <ccts:Description>Entire.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

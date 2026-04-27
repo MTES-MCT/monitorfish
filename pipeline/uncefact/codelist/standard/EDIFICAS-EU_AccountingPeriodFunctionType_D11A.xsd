@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 210AccountingE703 - Code List Schema Module                ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     1.0
+Schema date:        23 August 2008
+
+Code list name:     Accounting Period Function Type
+Code list agency:   EDIFICAS-EU
+Code list version:  D11A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm210AccountingE703="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AccountingPeriodFunctionType:D11A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AccountingPeriodFunctionType:D11A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AccountingPeriodFunctionType" type="clm210AccountingE703:AccountingPeriodFunctionTypeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AccountingPeriodFunctionTypeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="AccountingPeriodFunctionTypeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="246">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accounting year</ccts:Name>
+            <ccts:Description>Year considered for accounting of the treaty or portion of the treaty.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="263">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Invoicing period</ccts:Name>
+            <ccts:Description>Period for which an invoice is issued.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="322">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accounting period</ccts:Name>
+            <ccts:Description>A period of time for the recording of financial transactions for accounting.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="325">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tax period</ccts:Name>
+            <ccts:Description>Period a tax rate/tax amount etc. is applicable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="452">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trial balance period</ccts:Name>
+            <ccts:Description>Period covered by the trial balance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="456">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chart of account period</ccts:Name>
+            <ccts:Description>Period covered by the chart of account.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="492">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Balance data/time/period</ccts:Name>
+            <ccts:Description>The date/time/period of a balance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="567">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Report period</ccts:Name>
+            <ccts:Description>Period covered by the report.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="E001">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fiscal consideration period</ccts:Name>
+            <ccts:Description>A period of time for fiscal consideration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

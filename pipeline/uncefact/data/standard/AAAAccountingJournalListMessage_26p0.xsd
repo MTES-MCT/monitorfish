@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== AAAAccountingJournalListMessage Schema Module              ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 26.0
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:AAAAccountingJournalListMessage:26" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:AAAAccountingJournalListMessage:26" elementFormDefault="qualified" attributeFormDefault="unqualified" version="26.0">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AAAAccountingJournalListMessage" type="rsm:AAAAccountingJournalListMessageType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AAAAJL</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>AAAAccountingJournalListMessage</ccts:Name>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The message used to provide the list of specialized accounting journals or sub-journals in use in an entity which is(are) closely related to the business it is running.</ccts:Definition>
+        <ccts:BusinessProcessContextValue>Chart Of Accounts</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AAAAccountingJournalListMessageType   ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="AAAAccountingJournalListMessageType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AAAAJL-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>AAA_ Accounting Journal List Message. Details</ccts:DictionaryEntryName>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The message used to provide the list of specialized accounting journals or sub-journals in use in an entity which is(are) closely related to the business it is running.</ccts:Definition>
+        <ccts:ObjectClassTerm>Accounting Journal List Message</ccts:ObjectClassTerm>
+        <ccts:ObjectClassQualifierTerm>AAA</ccts:ObjectClassQualifierTerm>
+        <ccts:BusinessProcessContextValue>Chart Of Accounts</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="AAAJournalJournalList" type="ram:AAAJournalJournalListType" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01008914</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>AAA_ Accounting Journal List Message. AAA Journal_ Journal List</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>The formalised list of specialized journals or sub-journals in use in an entity to post accounting entries, in  accordance with generally admitted accounting principles.</ccts:Definition>
+            <ccts:Cardinality>1..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Accounting Journal List Message</ccts:ObjectClassTerm>
+            <ccts:ObjectClassQualifierTerm>AAA</ccts:ObjectClassQualifierTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Journal List</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>AAA Journal</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Accounting Account Classification</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

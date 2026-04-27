@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 66145 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.3
+Schema date:        23 August 2008
+
+Code list name:     Dimension Type Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm66145="urn:un:unece:uncefact:codelist:standard:UNECE:DimensionTypeCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DimensionTypeCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.3">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="DimensionTypeCode" type="clm66145:DimensionTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: DimensionTypeCodeContentType          ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="DimensionTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross dimensions</ccts:Name>
+            <ccts:Description>The dimension expressed in a gross value.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package dimensions (including goods)</ccts:Name>
+            <ccts:Description>The dimension of the goods including the packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet dimensions (excluding goods)</ccts:Name>
+            <ccts:Description>The dimension of a pallet excluding the goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet dimensions (including goods)</ccts:Name>
+            <ccts:Description>The dimension of a pallet including the goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension front</ccts:Name>
+            <ccts:Description>The dimension in the length that the cargo exceeds the standard length at the front of an equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension back</ccts:Name>
+            <ccts:Description>The dimension in the length that the cargo exceeds the standard length at the back of an equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension right</ccts:Name>
+            <ccts:Description>The dimension in the width that the cargo exceeds the standard width at the right side of an equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension left</ccts:Name>
+            <ccts:Description>The dimension in the width that the cargo exceeds the standard width at the left side of an equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension general</ccts:Name>
+            <ccts:Description>The dimensions that the cargo exceeds the standard dimensions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>External equipment dimension</ccts:Name>
+            <ccts:Description>The external dimensions of transport equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Internal equipment dimensions</ccts:Name>
+            <ccts:Description>The internal dimensions of equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Damage dimensions</ccts:Name>
+            <ccts:Description>Dimensions of the damaged area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimensions height</ccts:Name>
+            <ccts:Description>The dimension in the height that the cargo exceeds the standard height at the top of a piece of equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Equipment door dimensions</ccts:Name>
+            <ccts:Description>Dimensions (width and height) of the equipment door.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension width</ccts:Name>
+            <ccts:Description>The dimension of the width that the cargo exceeds the standard width of a piece of equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Off-standard dimension length</ccts:Name>
+            <ccts:Description>The dimension of the length that the cargo exceeds the standard length of a piece of equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bundled equipment total height</ccts:Name>
+            <ccts:Description>Total height of multiple pieces of equipment transported as a single unit (e.g. bundles of folded flat racks).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Equipment off-standard dimension height, actual</ccts:Name>
+            <ccts:Description>Actual height of equipment. To be specified for containers if actual height is not defined by a specific ISO size type code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Folded equipment height</ccts:Name>
+            <ccts:Description>Height of equipment in folded condition (e.g. flat rack with end walls folded).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adjustable equipment height</ccts:Name>
+            <ccts:Description>Actual height of adjustable equipment (e.g. flat rack with telescopic corner posts).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Equipment floor height</ccts:Name>
+            <ccts:Description>Floor height of supporting equipment where un-containerized cargo is stowed on.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Container off-standard dimension width at corner posts</ccts:Name>
+            <ccts:Description>Container's actual width at corner post. To be specified if different than 8 feet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Container off-standard dimension width of body</ccts:Name>
+            <ccts:Description>Container's actual width of body. To be specified if different than 8 feet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport unit gross dimensions</ccts:Name>
+            <ccts:Description>The gross dimensions of a transport unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== ReportingCalendarData Schema Module                        ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 32.0
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:ReportingCalendarData:32" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:ReportingCalendarData:32" elementFormDefault="qualified" attributeFormDefault="unqualified" version="32.0">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="ReportingCalendarData" type="rsm:ReportingCalendarDataType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>c4fee3a4-d6e6-40f8-91cd-f91c631f06f3</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>ReportingCalendarData</ccts:Name>
+        <ccts:Version>3.2</ccts:Version>
+        <ccts:Definition>This data exchange allows the ability to send details about a given cost reporting calendar.</ccts:Definition>
+        <ccts:BusinessProcessContextValue>Public Management</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: ReportingCalendarDataType             ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="ReportingCalendarDataType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>c4fee3a4-d6e6-40f8-91cd-f91c631f06f3-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>Reporting Calendar Data. Details</ccts:DictionaryEntryName>
+        <ccts:Version>3.2</ccts:Version>
+        <ccts:Definition>This data exchange allows the ability to send details about a given cost reporting calendar.</ccts:Definition>
+        <ccts:ObjectClassTerm>Reporting Calendar Data</ccts:ObjectClassTerm>
+        <ccts:BusinessProcessContextValue>Public Management</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="StandardReportDocument" type="ram:StandardReportDocumentType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01002039</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Reporting Calendar Data. Standard Report_ Document</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A report detailing standardized information about a project.</ccts:Definition>
+            <ccts:Cardinality>0..1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Reporting Calendar Data</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Document</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Standard Report</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Public Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectReportingCalendar" type="ram:ProjectReportingCalendarType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001799</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Reporting Calendar Data. Project Reporting_ Calendar</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A project reporting calendar identifies and defines when reporting on a project is required.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Reporting Calendar Data</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Calendar</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project Reporting</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

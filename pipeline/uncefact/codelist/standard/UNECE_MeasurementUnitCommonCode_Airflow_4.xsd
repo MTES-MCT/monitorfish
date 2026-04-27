@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 6Recommendation20_Airflow - Code List Schema Module        ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UN/CEFACT
+Schema version: 1.0
+Schema date:    23 August 2008
+
+Code list name:     Measurement Unit Common Code_Airflow
+Code list agency:   UNECE
+Code list version:  4
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, 
+and derivative works that comment on or otherwise explain it or assist 
+in its implementation may be prepared, copied, published and distributed, 
+in whole or in part, without restriction of any kind, provided that the 
+above copyright notice and this paragraph are included on all such copies 
+and derivative works. However, this document itself may not be modified in 
+any way, such as by removing the copyright notice or references to 
+UN/CEFACT, except as needed for the purpose of developing UN/CEFACT 
+specifications, in which case the procedures for copyrights defined in the 
+UN/CEFACT Intellectual Property Rights document must be followed, or as 
+required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked 
+by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS"
+basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING 
+BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL 
+NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR 
+FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm6Recommendation20Airflow="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCode_Airflow:4" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCode_Airflow:4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="MeasurementUnitCommonCodeAirflow" type="clm6Recommendation20Airflow:MeasurementUnitCommonCodeAirflowContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: MeasurementUnitCommonCodeAirflowContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="MeasurementUnitCommonCodeAirflowContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>millilitre per square centimetre second</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>millilitre per second</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="E93">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>kilogram per hour</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gram per day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gram per hour</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gram per minute</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gram per second</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>kilogram per day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>kilogram per minute</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>milligram per day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>milligram per minute</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>milligram per second</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gallon (US) per hour</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>litre per second</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>millilitre per day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>millilitre per hour</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>gallon (US) per day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

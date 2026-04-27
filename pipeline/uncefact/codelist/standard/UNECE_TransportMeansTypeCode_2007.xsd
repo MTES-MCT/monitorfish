@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 6Recommendation 28 - Code List Schema Module               ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.1
+Schema date:        23 August 2008
+
+Code list name:     Transport Means Type Code
+Code list agency:   UNECE
+Code list version:  2007
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm6Recommendation28="urn:un:unece:uncefact:codelist:standard:UNECE:TransportMeansTypeCode:2007" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TransportMeansTypeCode:2007" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.1">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="TransportMeansTypeCode" type="clm6Recommendation28:TransportMeansTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: TransportMeansTypeCodeContentType     ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="TransportMeansTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1501">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grain vessel</ccts:Name>
+            <ccts:Description>Vessel designed to carry grain.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1502">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Timber/log carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry logs and timber.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1503">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wood chips vessel</ccts:Name>
+            <ccts:Description>Vessel designed to carry wood chips.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1504">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Steel products vessel</ccts:Name>
+            <ccts:Description>Vessel designed to carry steel products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1505">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carrier, general cargo/container</ccts:Name>
+            <ccts:Description>Vessel designed to carry general cargo and containers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1506">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Temperature controlled cargo vessels</ccts:Name>
+            <ccts:Description>Vessel designed to carry temperature-controlled cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1511">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Full container ship/cellular vessel</ccts:Name>
+            <ccts:Description>Vessel designed to carry containers only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1512">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RoRo vessel</ccts:Name>
+            <ccts:Description>Vessel with ramp designed to carry roll-on/roll-off cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1513">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Car carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry automotive vehicles or their knock-down parts.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1514">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Livestock carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry livestock.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1515">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Barge carrier - Lash ship</ccts:Name>
+            <ccts:Description>Vessel designed to carry barges. Lash means lighters aboard ship.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1516">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry chemicals in bulk or drums not in tanks.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1517">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irradiated fuel carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry irradiated fuel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1518">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Heavy cargo vessel</ccts:Name>
+            <ccts:Description>Ship designed to carry heavy cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1519">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>RoRo/Container vessel</ccts:Name>
+            <ccts:Description>Vessel designed to carry both containers and roll-on/roll-off cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1521">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dry bulk carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry dry bulk (expellers).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1522">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ore carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry ore.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1523">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cement carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry cement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1524">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gravel carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry gravel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1525">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Coal carrier</ccts:Name>
+            <ccts:Description>Vessel designed to carry coal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1531">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Crude oil tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry crude oil.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1532">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical tanker, coaster</ccts:Name>
+            <ccts:Description>Tanker designed to carry chemicals in coastal traffic.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1533">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chemical tanker, deep sea</ccts:Name>
+            <ccts:Description>Tanker designed to carry chemicals in deep sea.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1534">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oil and other derivatives tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry oil and other derivatives.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1541">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LPG tanker</ccts:Name>
+            <ccts:Description>Vessel designed to carry Liquefied Petroleum Gas (LPG).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1542">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LNG tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry Liquefied Natural Gas (LNG).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1543">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LNG/LPG tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry Liquefied Natural Gas (LNG) and Liquefied Petroleum Gas (LPG).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1551">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Asphalt/bitumen tanker</ccts:Name>
+            <ccts:Description>Tanker designed asphalt and bitumen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1552">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Molasses tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry molasses.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1553">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vegetable oil tanker</ccts:Name>
+            <ccts:Description>Tanker designed to carry vegetable oil.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1591">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cruise ship</ccts:Name>
+            <ccts:Description>Passenger ship designed to carry tourists on specified routes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1592">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ferry</ccts:Name>
+            <ccts:Description>Vessel designed to ply regularly between two or more ports.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1593">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Other passenger ship</ccts:Name>
+            <ccts:Description>Vessel designed to carry passengers, not otherwise specified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1594">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Passenger ship, sailing</ccts:Name>
+            <ccts:Description>Vessel designed to carry passengers and mainly propelled by sails.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1601">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tug, without tow</ccts:Name>
+            <ccts:Description>Vessel designed to tow objects but sailing alone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1602">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tug, with tow</ccts:Name>
+            <ccts:Description>Vessel designed to tow, and towing an object.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1603">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Salvage vessel</ccts:Name>
+            <ccts:Description>Vessel designed to salvage.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1604">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rescue vessel</ccts:Name>
+            <ccts:Description>Vessel designed to effect rescue operations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1605">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oil combat vessel</ccts:Name>
+            <ccts:Description>Vessel designed to combat oil spills.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1606">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oil rig</ccts:Name>
+            <ccts:Description>Object designed for drilling oil at sea.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1607">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hospital vessel</ccts:Name>
+            <ccts:Description>Vessel designed to serve as a hospital at sea.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1711">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pilot boat</ccts:Name>
+            <ccts:Description>Vessel designed to convey pilots to/from ships.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1712">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Patrol/measure ship</ccts:Name>
+            <ccts:Description>Vessel designed to guard, patrol or measure.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1721">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Supply vessel</ccts:Name>
+            <ccts:Description>Vessel designed to provide supplies.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1723">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Offshore support vessel</ccts:Name>
+            <ccts:Description>Vessel designed to provide offshore support.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1724">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pontoon</ccts:Name>
+            <ccts:Description>Flat-bottomed vessel with a flat deck.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1725">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stone dumping vessel</ccts:Name>
+            <ccts:Description>Vessel designed to dump stones.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1726">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cable layer</ccts:Name>
+            <ccts:Description>Vessel designed to lay cable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1727">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Buoyage vessel</ccts:Name>
+            <ccts:Description>Vessel designed to handle buoys.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1728">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Icebreaker</ccts:Name>
+            <ccts:Description>Vessel designed to break ice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1729">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pipelaying vessel</ccts:Name>
+            <ccts:Description>Vessel designed to lay pipe.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1751">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trawler</ccts:Name>
+            <ccts:Description>Vessel designed to drag a bag-like net.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1752">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cutter</ccts:Name>
+            <ccts:Description>Small vessel that sometimes can be carried on a larger ship.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1753">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Factory ship</ccts:Name>
+            <ccts:Description>Vessel designed as a fish factory.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1761">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fishery research vessel</ccts:Name>
+            <ccts:Description>Vessel designed for fishery research.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1762">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Climate registration vessel</ccts:Name>
+            <ccts:Description>Vessel designed for climate registration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1763">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ship for environmental measurement</ccts:Name>
+            <ccts:Description>Vessel designed for environmental monitoring and measurement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1764">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Scientific vessel</ccts:Name>
+            <ccts:Description>Vessel designed for scientific purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1765">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sailing school ship</ccts:Name>
+            <ccts:Description>Vessel designed for training, powered by sail.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1766">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Training vessel</ccts:Name>
+            <ccts:Description>Vessel designed for training.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1781">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Crane, floating</ccts:Name>
+            <ccts:Description>A crane mounted on a barge or pontoon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1782">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dock, floating</ccts:Name>
+            <ccts:Description>A submersible floating structure used as a dock.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2201">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, super express</ccts:Name>
+            <ccts:Description>Train designed for high speed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2202">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, sleeper</ccts:Name>
+            <ccts:Description>Passenger train that includes carriages for sleeping.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2203">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, passenger, hired group</ccts:Name>
+            <ccts:Description>A chartered train.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2301">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Blocktrain</ccts:Name>
+            <ccts:Description>Train for carrying freight to the same destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2302">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, container</ccts:Name>
+            <ccts:Description>Train for carrying containers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2303">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, with one wagon</ccts:Name>
+            <ccts:Description>Train with a single wagon for carrying freight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2304">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, with more than one and less than 20 wagons</ccts:Name>
+            <ccts:Description>Train with more than one and less than 20 wagons for carrying freight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2305">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Train, with more than 20 wagons</ccts:Name>
+            <ccts:Description>Train with more than 20 wagons for carrying freight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner with removal trailer</ccts:Name>
+            <ccts:Description>Automotive tautline truck with trailer capable of carrying household effects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner with removable roof and removal trailer</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with removable roof and a trailer capable of carrying household effects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Car, with caravan</ccts:Name>
+            <ccts:Description>Automobile towing a house trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner, 25 tonne</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with a 25 tonne capacity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner, 25 tonne with removable roof</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with a 25 tonne capacity and a removable roof.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated, flat bed, 25 tonne</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with a flat bed and 25 tonne capacity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated, flat bed, 24 tonne, with 10 metre crane</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with a flat bed and 25 tonne capacity with a 10 metre crane attached.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated, flat bed, 24 tonne, with 15 metre crane</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with a flat bed and 25 tonne capacity with a 15 metre crane attached.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated, flat bed, 24 tonne, with 18 metre crane</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with a flat bed and 25 tonne capacity with an 18 metre crane attached.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated, flat bed, 10 tonne</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with a flat bed and 10 tonne capacity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner, 25 tonne, with 90 cubic metre trailer</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with a 25 tonne capacity and a 90 cubic metre trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner, 25 tonne, with 120 cubic metre trailer</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with a 25 tonne capacity and a 120 cubic metre trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, flat with trailer and 10 metre crane</ccts:Name>
+            <ccts:Description>Automotive vehicle with flat bed and trailer and 10 metre crane.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3113">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, articulated with tank</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle with tank designed for carrying liquid or bulk goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3114">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, flat, 15 tonne</ccts:Name>
+            <ccts:Description>Automotive vehicle with flat bed and a 15 tonne capacity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3115">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lorry, flat, 15 tonne with crane</ccts:Name>
+            <ccts:Description>Automotive vehicle with flat bed and a 15 tonne capacity and attached crane.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3116">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, isothermic</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry temperature-controlled goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3117">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, refrigerated</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry refrigerated goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3118">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Van, freezer</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry frozen goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3119">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Van, isothermic</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry temperature-controlled goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3120">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Van, refrigerated</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry refrigerated goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3121">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, bulk</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry bulk goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3122">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tip-up</ccts:Name>
+            <ccts:Description>Automotive vehicle designed with a tip-up capability.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3123">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, articulated, tip-up</ccts:Name>
+            <ccts:Description>Articulated automotive vehicle designed with a tip-up capability.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3124">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, rigid, with tank</ccts:Name>
+            <ccts:Description>Rigid automotive vehicle designed with a tank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3125">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner</ccts:Name>
+            <ccts:Description>Automotive vehicle with non-rigid sides.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3126">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, tautliner, with removable roof</ccts:Name>
+            <ccts:Description>Automotive tautline vehicle with a removable roof.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3127">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with opening floor</ccts:Name>
+            <ccts:Description>Automotive vehicle with a floor that can be opened.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3128">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, freezer</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry frozen goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3129">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with crane for moving goods, without trailer</ccts:Name>
+            <ccts:Description>A truck with a crane for moving goods, without a trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3130">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with crane for moving goods, with trailer</ccts:Name>
+            <ccts:Description>A truck with a crane for moving goods, with a trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3131">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with crane for lifting goods, without trailer</ccts:Name>
+            <ccts:Description>A truck with a crane for lifting goods, without a trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3132">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with crane for lifting goods, with trailer</ccts:Name>
+            <ccts:Description>A truck with a crane for lifting goods, with a trailer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3133">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Taxi cab</ccts:Name>
+            <ccts:Description>Automotive vehicle licensed to ply for hire.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3134">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, furniture</ccts:Name>
+            <ccts:Description>Automotive vehicle designed for carrying furniture.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3135">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, hydrant</ccts:Name>
+            <ccts:Description>Automotive vehicle designed for the delivery of fuel from a fixed installation to a means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3136">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Car</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry a small number of passengers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3137">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck, with tail-lift</ccts:Name>
+            <ccts:Description>Automotive vehicle with a hydraulic lifting device on the rear of the vehicle for loading and unloading goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3138">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Armoured vehicle</ccts:Name>
+            <ccts:Description>Automotive vehicle designed with fortified body for enhanced protection.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3201">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Car, elevator</ccts:Name>
+            <ccts:Description>Automotive vehicle with raisable work platform.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3301">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bus, with trailer</ccts:Name>
+            <ccts:Description>Automotive vehicle with an attached trailer for carrying passengers and/or luggage.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3302">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bus, highway</ccts:Name>
+            <ccts:Description>Automotive vehicle designed for highway travel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3303">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bus, sightseeing</ccts:Name>
+            <ccts:Description>Automotive vehicle designed for sightseeing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3304">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bus, airport/city</ccts:Name>
+            <ccts:Description>Automotive vehicle designed to carry passengers and their baggage between an airport and a city and return.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4000">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aircraft, type unknown</ccts:Name>
+            <ccts:Description>Aircraft of unknown type.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5000">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mail, type unknown</ccts:Name>
+            <ccts:Description>Mail of unknown type</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8021">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Motor tanker, liquid cargo, type N</ccts:Name>
+            <ccts:Description>Motorized vessel designed for carrying liquid cargo in cargo tanks, type N according to ADN.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8022">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Motor tanker, liquid cargo, type C</ccts:Name>
+            <ccts:Description>Motorized vessel designed for carrying special liquid chemicals in cargo tanks, type C according to ADN.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8023">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Motor tanker, dry cargo</ccts:Name>
+            <ccts:Description>Motorized vessel designed for carrying dry cargo as if liquid in fixed tanks (e.g. cement).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8161">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tank barge, liquid cargo, type N</ccts:Name>
+            <ccts:Description>Lighter or Barge designed for carrying liquid cargo in cargo tanks, type N according to ADN, either having no motive power of its own or having only sufficient motive power to perform restricted manoeuvres.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8162">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tank barge, liquid cargo, type C</ccts:Name>
+            <ccts:Description>Lighter or Barge designed to for carrying special liquid chemicals in cargo tanks, type C according to ADN, either having no motive power of its own or having only sufficient motive power to perform restricted manoeuvres.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8163">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tank barge, dry cargo</ccts:Name>
+            <ccts:Description>Lighter or Barge designed for carrying dry cargo in fixed tanks as if liquid (e.g. cement), either having no motive power of its own or having only sufficient motive power to perform restricted manoeuvres.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8441">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ferry</ccts:Name>
+            <ccts:Description>Vessel designed for carrying passengers and/or vehicles on regular short voyages.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8442">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Red cross ship</ccts:Name>
+            <ccts:Description>Passenger vessel with overnight passenger cabins designed for carrying sick and or disabled people.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8443">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cruise ship</ccts:Name>
+            <ccts:Description>Passenger vessel designed for carrying more than 12 passengers accommodated on board.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8444">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Passenger ship without accommodation</ccts:Name>
+            <ccts:Description>Passenger vessel designed for carrying more than 12 passengers but without passenger accommodation such as cabins etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8445">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Day-trip high speed vessel</ccts:Name>
+            <ccts:Description>Passenger vessel designed for carrying more than 12 passengers but without passenger accommodation such as cabins etc. capable of reaching speeds over 40 km/h in relation to water.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8446">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Day-trip hydrofoil vessel</ccts:Name>
+            <ccts:Description>Passenger vessel designed for carrying more than 12 passengers but without passenger accommodation such as cabins etc., hydrofoil.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8447">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sailing cruise ship</ccts:Name>
+            <ccts:Description>Passenger vessel built and fitted out also with a view to propulsion under sail and designed for carrying more than 12 passengers accommodated on board.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8448">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sailing passenger ship without accommodation</ccts:Name>
+            <ccts:Description>Passenger vessel built and fitted out also with a view to propulsion under sail and designed for carrying more than 12 passengers but without passenger accommodation such as cabins etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8451">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Service vessel</ccts:Name>
+            <ccts:Description>A tender (vessel for logistical support), dealing with the transport of small material and maintenance requirements outside the port area on rivers and other inland waterways.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8452">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Police patrol vessel</ccts:Name>
+            <ccts:Description>A vessel for the supervision by police for the enforcement of applicable rules and regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8453">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Port service vessel</ccts:Name>
+            <ccts:Description>A port tender (vessel for logistical support), dealing with the transport of material and people within a port area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8454">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Navigation surveillance vessel</ccts:Name>
+            <ccts:Description>A vessel of the competent authority supervising waterway traffic and navigation to ensure safety and adherence to the respective rules and regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 68335 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     3.0
+Schema date:        23 August 2008
+
+Code list name:     Transport Contract Movement Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm68335="urn:un:unece:uncefact:codelist:standard:UNECE:TransportContractMovementCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TransportContractMovementCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="TransportContractMovementCode" type="clm68335:TransportContractMovementCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: TransportContractMovementCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="TransportContractMovementCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breakbulk</ccts:Name>
+            <ccts:Description>Defines the movement of general cargo not carried in ISO standard containers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LCL/LCL</ccts:Name>
+            <ccts:Description>Defines the movement of cargo packed in and unpacked from containers by the carrier on behalf of the shipper/consignee. 'LCL' means Less than Container Load.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FCL/FCL</ccts:Name>
+            <ccts:Description>Defines the movement of cargo packed by the shipper or shipper's agent and unpacked by the consignee or consignee's agent. 'FCL' means Full Container Load.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>FCL/LCL</ccts:Name>
+            <ccts:Description>Defines the movement of cargo packed by the shipper or shipper's agent and unpacked by the carrier. 'FCL' means Full Container Load. 'LCL' means Less than Container Load.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>LCL/FCL</ccts:Name>
+            <ccts:Description>Defines the movement of cargo packed by the carrier and unpacked by the consignee or consignee's agent. 'LCL' means Less than Container Load. 'FCL' means Full Load.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consolidation</ccts:Name>
+            <ccts:Description>A movement of multiple shipments to a single destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Parcel post</ccts:Name>
+            <ccts:Description>A movement of material by parcel post.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Expedited truck</ccts:Name>
+            <ccts:Description>A movement of material by expedited truck.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consignor determined means</ccts:Name>
+            <ccts:Description>A movement of material by the means determined by the consignor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Private parcel service</ccts:Name>
+            <ccts:Description>A movement of material by a private parcel service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>House to house</ccts:Name>
+            <ccts:Description>Cargo packed in a unit by the shipper at point of origin and unpacked by consignee at final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>House to terminal</ccts:Name>
+            <ccts:Description>Cargo packed in a unit by the shipper at point of origin and unpacked at the carrier's inland facility between the ship's point of discharge and the final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>House to pier</ccts:Name>
+            <ccts:Description>Cargo packed in a unit by the shipper at point of origin and unpacked by carrier at ship's point of discharge (pier).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Air charter</ccts:Name>
+            <ccts:Description>A movement of material by chartered aircraft.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Air express</ccts:Name>
+            <ccts:Description>A movement of material by air express service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Geographic grouped transport</ccts:Name>
+            <ccts:Description>A movement of material from multiple origins to a single destination utilizing a single carrier and a single freight bill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Less than truck load</ccts:Name>
+            <ccts:Description>A movement of material on a truck that is not full.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pooled piggyback</ccts:Name>
+            <ccts:Description>A movement of material by a trailer on a railcar.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consignee transportation provided</ccts:Name>
+            <ccts:Description>A movement of material transported by the consignee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rail</ccts:Name>
+            <ccts:Description>A movement of material to the consignee via rail.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Terminal to house</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at a carrier's inland facility between point of origin and the ship's point of loading and unpacked by consignee at the final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Terminal to terminal</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at a carrier's inland facility between point of origin and the ship's point of loading and unpacked at a carrier's inland facility between ship's point of discharge and final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Terminal to pier</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at a carrier's inland facility between point of origin and ship's point of loading and unpacked by carrier at ship's point of discharge (pier).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pier to house</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at ship's point of loading and unpacked by consignee at final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pier to terminal</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at ship's point of loading and unpacked at a carrier's inland facility between ship's point of discharge and final destination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pier to pier</ccts:Name>
+            <ccts:Description>Cargo packed in a unit at ship's point of loading and unpacked by carrier at ship's point of discharge (pier).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Station to station</ccts:Name>
+            <ccts:Description>The consignment is moving from one container freight station to another container freight station.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>House to warehouse</ccts:Name>
+            <ccts:Description>The consignment is moving from the premises of the shipper to a warehouse.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Warehouse to house</ccts:Name>
+            <ccts:Description>The consignment is moving from a warehouse to the premises of the consignee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Station to house</ccts:Name>
+            <ccts:Description>The cargo is moving from a container freight station to the premises of the consignee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Geographic grouped transport, multiple origins, multiple destinations</ccts:Name>
+            <ccts:Description>A movement of material from multiple origins to multiple destinations using a single carrier and a single freight bill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Geographic grouped transport, multiple origins, single destination</ccts:Name>
+            <ccts:Description>A movement of material from multiple origins to a single destination utilizing a single carrier and a single freight bill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Geographic receiving</ccts:Name>
+            <ccts:Description>A collection of shipments that involve a single origin, multiple destinations, and a single trailer, and are paid under a single freight bill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

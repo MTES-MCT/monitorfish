@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 61001_DocumentTypeCode_Quotation - Code List Schema Module ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.21
+Schema date:        23 August 2008
+
+Code list name:     Document Name Code_Quotation
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm61001DocumentTypeCodeQuotation="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode_Quotation:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DocumentNameCode_Quotation:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.21">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="DocumentNameCodeQuotation" type="clm61001DocumentTypeCodeQuotation:DocumentNameCodeQuotationContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: DocumentNameCodeQuotationContentType  ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="DocumentNameCodeQuotationContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="310">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Offer / quotation</ccts:Name>
+            <ccts:Description>(1332) Document/message which, with a view to concluding a contract, sets out the conditions under which the goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="311">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for quote</ccts:Name>
+            <ccts:Description>Document/message requesting a quote on specified goods or services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="312">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acknowledgement message</ccts:Name>
+            <ccts:Description>Message providing acknowledgement information at the business application level concerning the processing of a message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for price quote</ccts:Name>
+            <ccts:Description>Document/message requesting price conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="361">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price quote</ccts:Name>
+            <ccts:Description>Document/message confirming price conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="362">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery quote</ccts:Name>
+            <ccts:Description>Document/message confirming delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="363">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price and delivery quote</ccts:Name>
+            <ccts:Description>Document/message confirming price and delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="364">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract price quote</ccts:Name>
+            <ccts:Description>Document/message confirming contractual price conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="365">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract price and delivery quote</ccts:Name>
+            <ccts:Description>Document/message confirming contractual price conditions and contractual delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="366">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price quote, specified end-customer</ccts:Name>
+            <ccts:Description>Document/message confirming price conditions under which goods are offered, provided that they are sold to the end-customer specified on the quote.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="367">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price and delivery quote, specified end-customer</ccts:Name>
+            <ccts:Description>Document/message confirming price conditions and delivery conditions under which goods are offered, provided that they are sold to the end-customer specified on the quote.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="368">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price quote, ship and debit</ccts:Name>
+            <ccts:Description>Document/message from a supplier to a distributor confirming price conditions under which goods can be sold by a distributor to the end-customer specified on the quote with compensation for loss of inventory value.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="369">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price and delivery quote, ship and debit</ccts:Name>
+            <ccts:Description>Document/message from a supplier to a distributor confirming price conditions and delivery conditions under which goods can be sold by a distributor to the end-customer specified on the quote with compensation for loss of inventory value.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="442">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for delivery quote</ccts:Name>
+            <ccts:Description>Document/message requesting delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="443">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for price and delivery quote</ccts:Name>
+            <ccts:Description>Document/message requesting price and delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="444">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for contract price quote</ccts:Name>
+            <ccts:Description>Document/message requesting contractual price conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="445">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for contract price and delivery quote</ccts:Name>
+            <ccts:Description>Document/message requesting contractual price conditions and contractual delivery conditions under which goods are offered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="446">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for price quote, specified end-customer</ccts:Name>
+            <ccts:Description>Document/message requesting price conditions under which goods are offered, provided that they are sold to the end-customer specified on the request for quote.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

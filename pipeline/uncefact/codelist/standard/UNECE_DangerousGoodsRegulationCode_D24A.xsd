@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 68273 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.4
+Schema date:        23 August 2008
+
+Code list name:     Dangerous Goods Regulation Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm68273="urn:un:unece:uncefact:codelist:standard:UNECE:DangerousGoodsRegulationCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DangerousGoodsRegulationCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.4">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="DangerousGoodsRegulationCode" type="clm68273:DangerousGoodsRegulationCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: DangerousGoodsRegulationCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="DangerousGoodsRegulationCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="ADR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>European agreement on the international carriage of dangerous goods on road (ADR)</ccts:Name>
+            <ccts:Description>European agreement on the international carriage of dangerous goods on road. ADR is the abbreviation of "Accord europeen relatif au transport international des marchandises dangereuses par route".</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>NDR European agreement for the transport of dangerous goods on the river Rhine</ccts:Name>
+            <ccts:Description>European agreement giving regulations for the transport of dangerous goods on the river Rhine, officially known as: "Accord europeen relatif au transport international des marchandises dangereuses par navigation sur le Rhin.".</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CA, Transport Canada's dangerous goods requirements</ccts:Name>
+            <ccts:Description>Canadian transport of dangerous goods requirements as published by Transport Canada in the Canadian Gazette, Part II.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>JP, Japanese maritime safety agency dangerous goods regulation code</ccts:Name>
+            <ccts:Description>Regulation regarding the handling of dangerous goods on vessels issued by Japanese maritime safety agency.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MARPOL 73/78</ccts:Name>
+            <ccts:Description>International Convention for the Prevention of Pollution from Ships, 1973, as modified by the Protocol of 1978 relating.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>GHS regulation</ccts:Name>
+            <ccts:Description>The United Nations Globally Harmonized System of Classification and Labelling of Chemicals.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport emergency (TREM) card</ccts:Name>
+            <ccts:Description>A card providing details on procedures for emergencies during transportation according to ADR.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IBC Code</ccts:Name>
+            <ccts:Description>The international Code for the Construction and Equipment of Ships carrying Dangerous Chemicals in Bulk</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IGC Code</ccts:Name>
+            <ccts:Description>The International Code of the Construction and Equipment of Ships Carrying Liquefied Gases in Bulk</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IMSBC Code</ccts:Name>
+            <ccts:Description>The International Maritime Solid Bulk Cargoes Code</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MARPOL Annex I</ccts:Name>
+            <ccts:Description>The International Convention for the Prevention of Pollution from Ships (MARPOL) - Prevention of Pollution by Oil</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AGS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, ADR and GGVS combined regulations for combined transport</ccts:Name>
+            <ccts:Description>Combined German and European regulations for the transportation of dangerous goods on German and other European roads. ADR means: Accord Europeen relatif au Transport international des marchandises Dangereuses par Route. GGVS means: Gefahrgutverordnung Strasse.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ANR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ADNR, Autorisation de transport de matieres Dangereuses pour la Navigation sur le Rhin</ccts:Name>
+            <ccts:Description>Regulations for dangerous goods transportation on the Rhine.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ARD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, ARD and RID - Combined regulations for combined transport</ccts:Name>
+            <ccts:Description>Combined European regulations for the combined transportation of dangerous goods on roads and rails. ARD means: Autorisation de transport par Route de matieres dangereuses. RID means: Reglement International concernant le transport des marchandises Dangereuses par chemin de fer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CFR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>US, 49 Code of federal regulations</ccts:Name>
+            <ccts:Description>United States federal regulations issued by the US Department of transportation covering the domestic transportation of dangerous goods by truck, rail, water and air.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="COM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, ADR, RID, GGVS and GGVE - Combined regulations for combined transport</ccts:Name>
+            <ccts:Description>Combined German and European regulations for the combined transportation of dangerous goods on German and other European roads and rails. ADR means: Accord Europeen relatif au transport international des marchandises Dangereuse par Route. RID means: Reglement International concernant le transport des marchandises Dangereuses par chemin de fer. GGVS means: Gefahrgutverordnung Strasse. GGVE means: Gefahrgutverordnung Eisenbahn.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GVE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, GGVE (Gefahrgutverordnung Eisenbahn)</ccts:Name>
+            <ccts:Description>German regulation for the transportation of dangerous goods on rail.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GVS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, GGVS (Gefahrgutverordnung Strasse)</ccts:Name>
+            <ccts:Description>German regulation for the transportation of dangerous goods on road.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ICA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IATA ICAO</ccts:Name>
+            <ccts:Description>Regulations covering the international transportation of dangerous goods issued by the International Air Transport Association and the International Civil Aviation Organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IMD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>IMO IMDG code</ccts:Name>
+            <ccts:Description>Regulations regarding the transportation of dangerous goods on ocean-going vessels issued by the International Maritime Organization.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RGE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DE, RID and GGVE, Combined regulations for combined transport on rails</ccts:Name>
+            <ccts:Description>Combined German and European regulations for the transportation of dangerous goods on German and other European rails. RID means: Reglement International concernant le transport des marchandises Dangereuses par chemin de fer. GGVE means: Gefahrgutverordnung Eisenbahn.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RID">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Railroad dangerous goods book (RID)</ccts:Name>
+            <ccts:Description>International regulations concerning the international carriage of dangerous goods by rail.
+RID is the abbreviation of "Reglement International concernant le transport des marchandises Dangereuses par chemin de fer".</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>UK IMO book</ccts:Name>
+            <ccts:Description>The United Kingdom (UK) version of the International Maritime Organisation (IMO) book on dangerous goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>Additional and/or other information for the transportation of dangerous goods which are mutually defined.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

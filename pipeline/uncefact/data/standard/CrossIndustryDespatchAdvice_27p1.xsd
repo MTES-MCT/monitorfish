@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== CrossIndustryDespatchAdvice Schema Module                  ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 27.1
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryDespatchAdvice:27" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:CrossIndustryDespatchAdvice:27" elementFormDefault="qualified" attributeFormDefault="unqualified" version="27.1">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="CrossIndustryDespatchAdvice" type="rsm:CrossIndustryDespatchAdviceType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>CIDDH</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>CrossIndustryDespatchAdvice</ccts:Name>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The TBG1 Cross Industry Despatch Advice.</ccts:Definition>
+        <ccts:BusinessProcessContextValue>Delivering</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: CrossIndustryDespatchAdviceType       ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="CrossIndustryDespatchAdviceType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>CIDDH-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>Cross Industry_ Despatch Advice. Details</ccts:DictionaryEntryName>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The TBG1 Cross Industry Despatch Advice.</ccts:Definition>
+        <ccts:ObjectClassTerm>Despatch Advice</ccts:ObjectClassTerm>
+        <ccts:ObjectClassQualifierTerm>Cross Industry</ccts:ObjectClassQualifierTerm>
+        <ccts:BusinessProcessContextValue>Delivering</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="SpecifiedCIExchangedDocumentContext" type="ram:CIExchangedDocumentContextType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>CIDDH01</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Cross Industry_ Despatch Advice. Specified. CI_ Exchanged Document_ Context</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>The scenario or setting of this Cross Industry (CI) Despatch Advice exchanged document, such as its business process application context.</ccts:Definition>
+            <ccts:Cardinality>1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Despatch Advice</ccts:ObjectClassTerm>
+            <ccts:ObjectClassQualifierTerm>Cross Industry</ccts:ObjectClassQualifierTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm>Specified</ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Context</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>CI</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Exchanged Document</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Cross Industry Trade</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="HeaderCIDDHExchangedDocument" type="ram:CIDDHExchangedDocumentType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>CIDDH02</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Cross Industry_ Despatch Advice. Header. CIDDH_ Exchanged_ Document</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A collection of data for a Cross Industry Delivery Despatch Advice Header (CIDDH) that is exchanged between two or more parties in written, printed or electronic form.</ccts:Definition>
+            <ccts:Cardinality>1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Despatch Advice</ccts:ObjectClassTerm>
+            <ccts:ObjectClassQualifierTerm>Cross Industry</ccts:ObjectClassQualifierTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm>Header</ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Document</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>CIDDH</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Exchanged</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Delivering</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SpecifiedCIDDHSupplyChainTradeTransaction" type="ram:CIDDHSupplyChainTradeTransactionType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>CIDDH03</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Cross Industry_ Despatch Advice. Specified. CIDDH_ Supply Chain_ Trade Transaction</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>The trade line items, trade agreement, trade delivery and trade settlement details included in this Cross Industry Delivering Despatch Advice Header (CIDDH).</ccts:Definition>
+            <ccts:Cardinality>1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Despatch Advice</ccts:ObjectClassTerm>
+            <ccts:ObjectClassQualifierTerm>Cross Industry</ccts:ObjectClassQualifierTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm>Specified</ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Trade Transaction</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>CIDDH</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Supply Chain</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Delivering</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

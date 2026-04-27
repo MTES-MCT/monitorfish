@@ -22,6 +22,7 @@ from src.parsers.flux.log_parsers import (
     parse_pno,
     parse_rtp,
 )
+from src.parsers.flux.sales_parsers import parse_flux_sales_report_message_string
 from src.parsers.flux.utils import NS_FLUX, get_element, get_text, make_datetime
 from src.parsers.utils import get_root_tag, tagged_children
 
@@ -338,7 +339,7 @@ def base64_decode(fa_report_message_string: str) -> str:
         decoded_flux_xml_string = gzip.decompress(
             base64.b64decode(fa_report_message.text)
         ).decode("utf-8")
-    elif fa_report_message_tag == "FLUXFAReportMessage":
+    elif fa_report_message_tag in ("FLUXFAReportMessage", "FLUXSalesReportMessage"):
         decoded_flux_xml_string = fa_report_message_string
     else:
         raise FLUXParsingError(
@@ -431,9 +432,26 @@ def batch_parse(fa_report_message_strings: List[str]) -> dict:
             continue
 
         try:
-            operation_number, fa_report_message_data = parse_fa_report_message_string(
-                fa_report_message_string
+            root_tag = get_root_tag(ET.fromstring(fa_report_message_string))
+        except ParseError:
+            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            logging.error(
+                f"Could not parse FLUX xml document {fa_report_message_string[:40]}{log_end}"
             )
+            batch_generated_errors = True
+            continue
+
+        try:
+            if root_tag == "FLUXSalesReportMessage":
+                (
+                    operation_number,
+                    fa_report_message_data,
+                ) = parse_flux_sales_report_message_string(fa_report_message_string)
+            else:
+                (
+                    operation_number,
+                    fa_report_message_data,
+                ) = parse_fa_report_message_string(fa_report_message_string)
         except FLUXParsingError:
             log_end = "..." if len(fa_report_message_string) > 40 else ""
             logging.error(

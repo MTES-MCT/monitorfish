@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 210AccountingE204 - Code List Schema Module                ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     1.0
+Schema date:        23 August 2008
+
+Code list name:     Amortization Method
+Code list agency:   EDIFICAS-EU
+Code list version:  D11A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm210AccountingE204="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AmortizationMethod:D11A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AmortizationMethod:D11A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AmortizationMethod" type="clm210AccountingE204:AmortizationMethodContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AmortizationMethodContentType         ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="AmortizationMethodContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Variable amortization</ccts:Name>
+            <ccts:Description>The amortization is calculated from a number of activity base.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization at constant rate</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the life cycle of the fixed asset.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization after basic allowance</ccts:Name>
+            <ccts:Description>The amortization is calculated after a basic allowance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization with not budgeted constant cost</ccts:Name>
+            <ccts:Description>The amortization is adjusted according to the costs of real maintenance of the fixed asset.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization with budgeted constant cost</ccts:Name>
+            <ccts:Description>The amortization is adjusted according to the costs of budgeted maintenance of the fixed asset.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization with unit budgeted constant cost</ccts:Name>
+            <ccts:Description>The amortization is adjusted according to the costs of budgeted maintenance of the fixed asset and activity base.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Softy amortization</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the life cycle of the fixed asset and the order of the years.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Exponential amortization</ccts:Name>
+            <ccts:Description>The amortization is calculated according to a constant rate applied to a tapering value.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization at lessening rate</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the life cycle of the fixed asset and a previsional lessening rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Normal progressive amortization</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the life cycle of the fixed asset and the order of the years.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization in arithmetic progression</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the time of use of the fixed asset and a constant amount.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization in geometric progression</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the time of use of the fixed asset and the multiplier coefficient.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Financial amortization</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the time of use of the fixed asset and the capitalization rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization at increasing rate</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the life cycle of the fixed asset and a previsional increasing rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amortization with logistic progression</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the time of use of the fixed asset (curve of Gauss).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accelerated amortization (Acquired and made fixed asset between 4-12-2008 and 31-12-2009)</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the French regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="301">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accelerated amortization (Acquired and made fixed asset since 1-1-2010)</ccts:Name>
+            <ccts:Description>The amortization is calculated according to the French regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

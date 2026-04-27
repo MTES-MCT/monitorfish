@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 210AccountingE904 - Code List Schema Module                ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     1.1
+Schema date:        23 August 2008
+
+Code list name:     Additional Postponement
+Code list agency:   EDIFICAS-EU
+Code list version:  D11A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm210AccountingE904="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AdditionalPostponement:D11A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:EDIFICAS-EU:AdditionalPostponement:D11A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.1">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AdditionalPostponement" type="clm210AccountingE904:AdditionalPostponementContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AdditionalPostponementContentType     ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="AdditionalPostponementContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="01">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>1 day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="02">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>2 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="03">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>3 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="04">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>4 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>5 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="06">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>6 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="07">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>7 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="08">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>8 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="09">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>9 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>10 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>11 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>12 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>13 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>14 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>15 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>16 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>17 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>18 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>19 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>20 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>21 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>22 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>23 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>24 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>25 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>26 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>27 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>28 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>29 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="120M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>120 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="150M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>150 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="180M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>180 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="1D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End of the next first day decade</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>210 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="240M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>240 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="270M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>270 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End of the next second day decade</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="300M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>300 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>30 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="330M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>330 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="360M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>360 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End of the next third day decade</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>60 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M00">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M05">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month postponed on the 05</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month postponed on the 10</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month postponed on the 15</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month postponed on the 20</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90M25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>90 days end of month postponed on the 25</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

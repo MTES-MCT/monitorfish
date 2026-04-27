@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 69651 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     1.0
+Schema date:        23 August 2008
+
+Code list name:     Contract Type Code
+Code list agency:   UNECE
+Code list version:  D10B
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm69651="urn:un:unece:uncefact:codelist:standard:UNECE:ContractTypeCode:D10B" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:ContractTypeCode:D10B" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="ContractTypeCode" type="clm69651:ContractTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: ContractTypeCodeContentType           ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="ContractTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="TCA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost plus incentive fee</ccts:Name>
+            <ccts:Description>A cost-plus-incentive-fee contract is a cost-reimbursement contract that provides for an initially negotiated fee to be adjusted later by a formula based on the relationship of total allowable costs to total target costs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TCH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost sharing</ccts:Name>
+            <ccts:Description>A cost-sharing contract is a cost-reimbursement contract in which the contractor receives no fee and is reimbursed only for an agreed-upon portion of its allowable costs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TCL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Letter Contract</ccts:Name>
+            <ccts:Description>A letter contract is a written preliminary contractual instrument that authorizes the contractor to begin immediately manufacturing supplies or performing services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TCS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost</ccts:Name>
+            <ccts:Description>A cost contract is a cost-reimbursement contract in which the contractor receives no fee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TCW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost plus award fee</ccts:Name>
+            <ccts:Description>A cost-plus-award-fee contract is a cost-reimbursement contract that provides for a fee consisting of (a) a base amount (which may be zero) fixed at inception of the contract and (b) an award amount, based upon a judgmental evaluation by the contractee, sufficient to provide motivation for excellence in contract performance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TCX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost plus fixed fee</ccts:Name>
+            <ccts:Description>A cost-plus-fixed-fee contract is a cost-reimbursement contract that provides for payment to the contractor of a negotiated fee that is fixed at the inception of the contract.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price incentive, firm target, with performance incentives</ccts:Name>
+            <ccts:Description>A fixed-price incentive contract, with a firm target, specifies a target cost, a target profit, a price ceiling, and a profit adjustment formula. Non-cost performance of the contractor is factored into the final profit level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price incentive, firm target, without performance incentives</ccts:Name>
+            <ccts:Description>A fixed-price incentive contract, with a firm target, specifies a target cost, a target profit, a price ceiling, and a profit adjustment formula. Non-cost performance of the contractor is not factored into the final profit level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price redetermination prospective</ccts:Name>
+            <ccts:Description>A fixed-price contract with prospective price redetermination provides for: (a) a firm fixed price for an initial period of contract deliveries or performance; and (b) prospective redetermination, at a stated time or times during performance, of the price for subsequent periods of performance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price incentive, successive targets, with performance incentives</ccts:Name>
+            <ccts:Description>A fixed-price incentive, with successive targets, contract specifies an initial target cost, an initial target profit, an initial profit adjustment formula, the production point at which the firm target cost and firm target profit will be negotiated, and a ceiling price. Non-cost performance of the contractor is factored into the final profit level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price incentive, successive targets, without performance incentives</ccts:Name>
+            <ccts:Description>A fixed-price incentive, with successive targets, contract specifies an initial target cost, an initial target profit, an initial profit adjustment formula, the production point at which the firm target cost and firm target profit will be negotiated, and a ceiling price. Non-cost performance of the contractor is not factored into the final profit level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price award fee</ccts:Name>
+            <ccts:Description>A firm-fixed-price, award-fee, term contract specifies an award fee to motivate a contractor such as when other incentives cannot be used because contractor performance cannot be measured objectively.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price level of effort</ccts:Name>
+            <ccts:Description>A firm-fixed-price, level-of-effort, term contract specifies the level of effort required by the contactor and the fixed monetary amount to be paid to the contractor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No cost</ccts:Name>
+            <ccts:Description>A no-cost contract is a contract in which the goods or services provided have little or no cost.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price redetermination retroactive</ccts:Name>
+            <ccts:Description>A fixed-ceiling-price contract with retroactive price redetermination specifies a fixed ceiling price and a retroactive price redetermination within the ceiling after completion of the contract.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Firm fixed price</ccts:Name>
+            <ccts:Description>A firm-fixed-price contract provides for a price that is not subject to any adjustment on the basis of the contractor’s cost experience in performing the contract.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TFX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed price with economic price adjustment</ccts:Name>
+            <ccts:Description>A fixed-price contract with economic price adjustment provides for upward and downward revision of the stated contract price upon the occurrence of specified contingencies, such as changes to initial estimates or changes to price or cost indices.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TLH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Labour hours</ccts:Name>
+            <ccts:Description>A labour-hours contract provides for acquiring supplies or services on the basis of direct labour hours at specified fixed hourly rate(s), regardless of the cost for any materials.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TTM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Time and materials</ccts:Name>
+            <ccts:Description>A time-and-materials contract provides for acquiring supplies or services on the basis of direct labour hours at specified fixed hourly rate(s) and the actual cost for materials.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually Agreed</ccts:Name>
+            <ccts:Description>Mutually agreed upon value.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

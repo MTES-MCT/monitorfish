@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 6Recommendation 20_Duration - Code List Schema Module      ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UN/CEFACT
+Schema version: 1.3
+Schema date:    23 August 2008
+
+Code list name:     Measurement Unit Common Code Duration
+Code list agency:   UNECE
+Code list version:  4
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, 
+and derivative works that comment on or otherwise explain it or assist 
+in its implementation may be prepared, copied, published and distributed, 
+in whole or in part, without restriction of any kind, provided that the 
+above copyright notice and this paragraph are included on all such copies 
+and derivative works. However, this document itself may not be modified in 
+any way, such as by removing the copyright notice or references to 
+UN/CEFACT, except as needed for the purpose of developing UN/CEFACT 
+specifications, in which case the procedures for copyrights defined in the 
+UN/CEFACT Intellectual Property Rights document must be followed, or as 
+required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked 
+by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS"
+basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING 
+BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL 
+NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR 
+FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm6Recommendation20Duration="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCodeDuration:4" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:MeasurementUnitCommonCodeDuration:4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.3">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="MeasurementUnitCommonCodeDuration" type="clm6Recommendation20Duration:MeasurementUnitCommonCodeDurationContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: MeasurementUnitCommonCodeDurationContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="MeasurementUnitCommonCodeDurationContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="ANN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>year</ccts:Name>
+            <ccts:Description>Unit of time equal to 365,25 days.
+Synonym: Julian year</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B98">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>microsecond</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>millisecond</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>nanosecond</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="D42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>tropical year</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DAD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ten day</ccts:Name>
+            <ccts:Description>A unit of time defining the number of days in multiples of 10.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DAY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>day</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DEC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>decade</ccts:Name>
+            <ccts:Description>A unit of count defining the number of decades (decade: quantity equal to 10 or time equal to 10 years).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HUR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>hour</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MIN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>minute [unit of time]</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MON">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>month</ccts:Name>
+            <ccts:Description>Unit of time equal to 1/12 of a year of 365,25 days.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>running or operating hour</ccts:Name>
+            <ccts:Description>A unit of time defining the number of hours of operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SAN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>half year (6 months)</ccts:Name>
+            <ccts:Description>'A unit of time defining the number of half years (6 months).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SEC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>second [unit of time]</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WEE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>week</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

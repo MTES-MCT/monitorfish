@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trimmed schema ReusableAggregateBusinessInformationEntity_20p0.xsd - Only for use within FLUXSalesReportMessage_3p1.xsd -->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" version="20.0" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" schemaLocation="UnqualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" schemaLocation="QualifiedDataType_20p0.xsd" />
+  <xsd:complexType name="AAPProcessType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ConversionFactorNumeric" type="udt:NumericType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="UsedFACatch" type="ram:FACatchType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ResultAAPProduct" type="ram:AAPProductType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AAPProductType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpeciesCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="UnitQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="WeightMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="WeighingMeansCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="UsageCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PackagingUnitQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PackagingTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PackagingUnitAverageWeightMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AppliedAAPProcess" type="ram:AAPProcessType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TotalSalesPrice" type="ram:SalesPriceType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedSizeDistribution" type="ram:SizeDistributionType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="OriginFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OriginFishingActivity" type="ram:FishingActivityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AAPStockType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AuthorizationStatusType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ConditionCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ChangedDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ConstructionEventType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OccurrenceDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RelatedConstructionLocation" type="ram:ConstructionLocationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ConstructionLocationType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="CountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="GeopoliticalRegionCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedContactParty" type="ram:ContactPartyType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PhysicalStructuredAddress" type="ram:StructuredAddressType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ContactPartyType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="NationalityCountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="LanguageCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ResidenceCountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoleCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedStructuredAddress" type="ram:StructuredAddressType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedContactPerson" type="ram:ContactPersonType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TelephoneTelecommunicationCommunication" type="ram:TelecommunicationCommunicationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="FaxTelecommunicationCommunication" type="ram:TelecommunicationCommunicationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="URIEmailCommunication" type="ram:EmailCommunicationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedUniversalCommunication" type="ram:UniversalCommunicationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ContactPersonType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="Title" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="GivenName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="MiddleName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="FamilyNamePrefix" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="FamilyName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="NameSuffix" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="GenderCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Alias" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="BirthDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="BirthplaceName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="TelephoneTelecommunicationCommunication" type="ram:TelecommunicationCommunicationType" />
+      <xsd:element minOccurs="0" name="FaxTelecommunicationCommunication" type="ram:TelecommunicationCommunicationType" />
+      <xsd:element minOccurs="0" name="EmailURIEmailCommunication" type="ram:EmailCommunicationType" />
+      <xsd:element minOccurs="0" name="WebsiteURIWebsiteCommunication" type="ram:WebsiteCommunicationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedUniversalCommunication" type="ram:UniversalCommunicationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DelimitedPeriodType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="StartDateTime" type="udt:DateTimeType" />
+      <xsd:element minOccurs="0" name="EndDateTime" type="udt:DateTimeType" />
+      <xsd:element minOccurs="0" name="DurationMeasure" type="udt:MeasureType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="EmailCommunicationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="URIID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FACatchType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="SpeciesCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="UnitQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="WeightMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="WeighingMeansCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="UsageCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFishingTrip" type="ram:FishingTripType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedSizeDistribution" type="ram:SizeDistributionType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedAAPStock" type="ram:AAPStockType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AppliedAAPProcess" type="ram:AAPProcessType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedSalesBatch" type="ram:SalesBatchType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="UsedFishingGear" type="ram:FishingGearType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableFLUXCharacteristic" type="ram:FLUXCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="DestinationFLUXLocation" type="ram:FLUXLocationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FishingActivityType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OccurrenceDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ReasonCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="VesselRelatedActivityCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="FisheryTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpeciesTargetCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OperationsQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="FishingDurationMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFACatch" type="ram:FACatchType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedGearProblem" type="ram:GearProblemType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXCharacteristic" type="ram:FLUXCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFishingGear" type="ram:FishingGearType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SourceVesselStorageCharacteristic" type="ram:VesselStorageCharacteristicType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="DestinationVesselStorageCharacteristic" type="ram:VesselStorageCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFishingActivity" type="ram:FishingActivityType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLAPDocument" type="ram:FLAPDocumentType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedDelimitedPeriod" type="ram:DelimitedPeriodType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedFishingTrip" type="ram:FishingTripType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedVesselTransportMeans" type="ram:VesselTransportMeansType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FishingCategoryType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="FishingMethodCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="FishingMethod" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="FishingAreaCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="FishingArea" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecialCondition" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AuthorizedFishingGear" type="ram:FishingGearType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FishingGearType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoleCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="IllustrateFLUXPicture" type="ram:FLUXPictureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableGearCharacteristic" type="ram:GearCharacteristicType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FishingTripType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedDelimitedPeriod" type="ram:DelimitedPeriodType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLAPDocumentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="VesselID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="JoinedVesselID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="FirstApplicationIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Remarks" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="DecisionDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXCharacteristic" type="ram:FLUXCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedVesselCrew" type="ram:VesselCrewType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableDelimitedPeriod" type="ram:DelimitedPeriodType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="EntryIntoForceDelimitedPeriod" type="ram:DelimitedPeriodType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedVesselTransportCharter" type="ram:VesselTransportCharterType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedContactParty" type="ram:ContactPartyType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedTargetedQuota" type="ram:TargetedQuotaType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AttachedFLUXBinaryFile" type="ram:FLUXBinaryFileType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedValidationResultDocument" type="ram:ValidationResultDocumentType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFLAPRequestDocument" type="ram:FLAPRequestDocumentType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedAuthorizationStatus" type="ram:AuthorizationStatusType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLAPRequestDocumentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="FADATypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PurposeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Purpose" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RelatedFishingCategory" type="ram:FishingCategoryType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedValidationResultDocument" type="ram:ValidationResultDocumentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXBinaryFileType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Title" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="IncludedBinaryObject" type="udt:BinaryObjectType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SizeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Value" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFLAPDocument" type="ram:FLAPDocumentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXGeographicalCoordinateType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="LongitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="LatitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="AltitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SystemID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXLocationType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="GeopoliticalRegionCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SovereignRightsCountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="JurisdictionCountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RegionalFisheriesManagementOrganizationCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedPhysicalFLUXGeographicalCoordinate" type="ram:FLUXGeographicalCoordinateType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="PostalStructuredAddress" type="ram:StructuredAddressType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PhysicalStructuredAddress" type="ram:StructuredAddressType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="BoundarySpecifiedPolygon" type="ram:SpecifiedPolygonType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableFLUXCharacteristic" type="ram:FLUXCharacteristicType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXOrganizationType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="PostalStructuredAddress" type="ram:StructuredAddressType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXPartyType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXPictureType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TakenDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="AreaIncludedID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="DigitalImageBinaryObject" type="udt:BinaryObjectType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FLUXReportDocumentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ReferencedID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="CreationDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="PurposeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Purpose" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OwnerFLUXParty" type="ram:FLUXPartyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GearCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Value" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GearProblemType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="AffectedQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RecoveryMeasureCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedFishingGear" type="ram:FishingGearType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RegistrationEventType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OccurrenceDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RelatedRegistrationLocation" type="ram:RegistrationLocationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RegistrationLocationType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="CountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="GeopoliticalRegionCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PhysicalStructuredAddress" type="ram:StructuredAddressType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesBatchType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedAAPProduct" type="ram:AAPProductType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TotalSalesPrice" type="ram:SalesPriceType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesDocumentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CurrencyCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TransportDocumentID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SalesNoteID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TakeoverDocumentID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedSalesBatch" type="ram:SalesBatchType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedSalesEvent" type="ram:SalesEventType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFishingActivity" type="ram:FishingActivityType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedSalesParty" type="ram:SalesPartyType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedVehicleTransportMeans" type="ram:VehicleTransportMeansType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedValidationResultDocument" type="ram:ValidationResultDocumentType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TotalSalesPrice" type="ram:SalesPriceType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="DepartureSpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ArrivalSpecifiedFLUXLocation" type="ram:FLUXLocationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesEventType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="OccurrenceDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SellerName" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="BuyerName" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedSalesBatch" type="ram:SalesBatchType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesPartyType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RoleCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedStructuredAddress" type="ram:StructuredAddressType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedFLUXOrganization" type="ram:FLUXOrganizationType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesPriceType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ChargeAmount" type="udt:AmountType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SalesReportType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ItemTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="IncludedSalesDocument" type="ram:SalesDocumentType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="IncludedValidationResultDocument" type="ram:ValidationResultDocumentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SizeDistributionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="CategoryCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ClassCode" type="udt:CodeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SpecifiedDirectPositionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="CoordinateReferenceDimension" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AxisLabelList" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="UOMLabelList" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="CountNumeric" type="udt:NumericType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SpecifiedLinearRingType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Coordinate" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CoordinateSpecifiedDirectPosition" type="ram:SpecifiedDirectPositionType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedFLUXGeographicalCoordinate" type="ram:FLUXGeographicalCoordinateType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SpecifiedPeriodType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="DurationMeasure" type="udt:MeasureType" />
+      <xsd:element minOccurs="0" name="InclusiveIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="StartDateTime" type="udt:DateTimeType" />
+      <xsd:element minOccurs="0" name="EndDateTime" type="udt:DateTimeType" />
+      <xsd:element minOccurs="0" name="CompleteDateTime" type="udt:DateTimeType" />
+      <xsd:element minOccurs="0" name="OpenIndicator" type="udt:IndicatorType" />
+      <xsd:element minOccurs="0" name="SeasonCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SequenceNumeric" type="udt:NumericType" />
+      <xsd:element minOccurs="0" name="StartDateFlexibilityCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="ContinuousIndicator" type="udt:IndicatorType" />
+      <xsd:element minOccurs="0" name="PurposeCode" type="udt:CodeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SpecifiedPolygonType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="InteriorSpecifiedLinearRing" type="ram:SpecifiedLinearRingType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="ExteriorSpecifiedLinearRing" type="ram:SpecifiedLinearRingType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SpecifiedPreferenceType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PriorityRankingNumeric" type="udt:NumericType" />
+      <xsd:element minOccurs="0" name="PreferredIndicator" type="udt:IndicatorType" />
+      <xsd:element minOccurs="0" name="UnavailableSpecifiedPeriod" type="ram:SpecifiedPeriodType" />
+      <xsd:element minOccurs="0" name="AvailableSpecifiedPeriod" type="ram:SpecifiedPeriodType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="StructuredAddressType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element minOccurs="0" name="PostcodeCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="BuildingName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="StreetName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CityName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CountryID" type="udt:IDType" />
+      <xsd:element minOccurs="0" name="CitySubDivisionName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CountryName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CountrySubDivisionName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="BlockName" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="PlotIdentification" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="PostOfficeBox" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="BuildingNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="StaircaseNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="FloorIdentification" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="RoomIdentification" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PostalArea" type="udt:TextType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TargetedQuotaType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="ObjectCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="WeightMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedQuantity" type="udt:QuantityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TelecommunicationCommunicationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="LocalNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CompleteNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CountryNumberCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="ExtensionNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="AreaNumberCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="InternalAccess" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="UseCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="SpecialDeviceType" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="UsageSpecifiedPreference" type="ram:SpecifiedPreferenceType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="UniversalCommunicationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="URIID" type="udt:IDType" />
+      <xsd:element minOccurs="0" name="ChannelCode" type="qdt:CommunicationChannelCodeType" />
+      <xsd:element minOccurs="0" name="LocalNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CompleteNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="CountryNumberCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="ExtensionNumber" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="AreaNumberCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Access" type="udt:TextType" />
+      <xsd:element minOccurs="0" name="UseCode" type="udt:CodeType" />
+      <xsd:element minOccurs="0" name="HTMLPreferredIndicator" type="udt:IndicatorType" />
+      <xsd:element minOccurs="0" name="UsageSpecifiedPreference" type="ram:SpecifiedPreferenceType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ValidationQualityAnalysisType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="LevelCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Result" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ReferencedItem" type="udt:TextType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ValidationResultDocumentType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValidatorID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CreationDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="RelatedValidationQualityAnalysis" type="ram:ValidationQualityAnalysisType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VehicleTransportMeansType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="RegistrationCountryID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="OwnerSalesParty" type="ram:SalesPartyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselAdministrativeCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Value" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueFLUXBinaryFile" type="ram:FLUXBinaryFileType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselCountryType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselCrewType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="MemberQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="MinimumSizeQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="MaximumSizeQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OnDeckSizeQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="AboveDeckSizeQuantity" type="udt:QuantityType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselDimensionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="ValueMeasure" type="udt:MeasureType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselEngineType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="SerialNumberID" type="udt:IDType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RoleCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PropulsionTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="PowerMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="PowerMeasurementMethodCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ManufacturerCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Model" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Manufacturer" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="IllustrateFLUXPicture" type="ram:FLUXPictureType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselEquipmentCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Value" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ValueCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueFLUXBinaryFile" type="ram:FLUXBinaryFileType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselGeographicalCoordinateType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="AltitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="LatitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="LongitudeMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SystemID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselPositionEventType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="ObtainedOccurrenceDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpeedValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CourseValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ActivityTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="1" name="SpecifiedVesselGeographicalCoordinate" type="ram:VesselGeographicalCoordinateType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselStorageCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="MethodTypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="CapacityValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TemperatureValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="UnitValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselTechnicalCharacteristicType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Description" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="Value" type="udt:TextType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueIndicator" type="udt:IndicatorType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueQuantity" type="udt:QuantityType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="ValueFLUXBinaryFile" type="ram:FLUXBinaryFileType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselTransportCharterType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableDelimitedPeriod" type="ram:DelimitedPeriodType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedContactParty" type="ram:ContactPartyType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VesselTransportMeansType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="ID" type="udt:IDType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="Name" type="udt:TextType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="TypeCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="CommissioningDateTime" type="udt:DateTimeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="OperationalStatusCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="HullMaterialCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="DraughtMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpeedMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="TrawlingSpeedMeasure" type="udt:MeasureType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RoleCode" type="udt:CodeType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="RegistrationVesselCountry" type="ram:VesselCountryType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedVesselPositionEvent" type="ram:VesselPositionEventType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedRegistrationEvent" type="ram:RegistrationEventType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedConstructionEvent" type="ram:ConstructionEventType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="AttachedVesselEngine" type="ram:VesselEngineType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedVesselDimension" type="ram:VesselDimensionType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="OnBoardFishingGear" type="ram:FishingGearType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableVesselEquipmentCharacteristic" type="ram:VesselEquipmentCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableVesselAdministrativeCharacteristic" type="ram:VesselAdministrativeCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="IllustrateFLUXPicture" type="ram:FLUXPictureType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SpecifiedContactParty" type="ram:ContactPartyType" />
+      <xsd:element maxOccurs="1" minOccurs="0" name="SpecifiedVesselCrew" type="ram:VesselCrewType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableVesselStorageCharacteristic" type="ram:VesselStorageCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="ApplicableVesselTechnicalCharacteristic" type="ram:VesselTechnicalCharacteristicType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="GrantedFLAPDocument" type="ram:FLAPDocumentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="WebsiteCommunicationType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="WebsiteURIID" type="udt:IDType" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

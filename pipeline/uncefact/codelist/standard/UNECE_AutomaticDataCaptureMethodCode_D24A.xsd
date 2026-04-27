@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 67233_AutomaticDataCaptureMethodCode - Code List Schema Module ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.3
+Schema date:        23 August 2008
+
+Code list name:     AutomaticDataCaptureMethodCode
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm67233AutomaticDataCaptureMethodCode="urn:un:unece:uncefact:codelist:standard:UNECE:AutomaticDataCaptureMethodCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:AutomaticDataCaptureMethodCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.3">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AutomaticDataCaptureMethodCode" type="clm67233AutomaticDataCaptureMethodCode:AutomaticDataCaptureMethodCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AutomaticDataCaptureMethodCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="AutomaticDataCaptureMethodCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package barcoded EAN-13 or EAN-8</ccts:Name>
+            <ccts:Description>The package is barcoded with EAN-13 or EAN-8 code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package barcoded ITF-14 or ITF-6</ccts:Name>
+            <ccts:Description>The package is barcoded with ITF-14 or ITF-6 code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package barcoded UCC or EAN-128</ccts:Name>
+            <ccts:Description>The package is barcoded with UCC or EAN-128 code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package never EPC tagged</ccts:Name>
+            <ccts:Description>The package will never be tagged with an EPC (Electronic Product Code) transponder.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package sometimes EPC tagged</ccts:Name>
+            <ccts:Description>The package will sometimes be tagged with an EPC (Electronic Product Code) transponder.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tagging/bar code instructions</ccts:Name>
+            <ccts:Description>The information provides instructions as to how a package is to be tagged or have a bar code applied to it.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package bar-coded and EPC tagged</ccts:Name>
+            <ccts:Description>The package is bar-coded and tagged with an EPC (Electronic Product Code) transponder.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="79">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package EPC tagged only</ccts:Name>
+            <ccts:Description>The package is tagged with an EPC (Electronic Product Code) transponder only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="81">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package marked with a variable measure barcode</ccts:Name>
+            <ccts:Description>The package is marked with a variable measure barcode.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="82">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package marked with fixed measure barcode.</ccts:Name>
+            <ccts:Description>The package is marked with a fixed measure barcode.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

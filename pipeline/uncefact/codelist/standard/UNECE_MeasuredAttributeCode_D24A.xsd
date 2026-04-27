@@ -1,0 +1,2374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 66313 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.11
+Schema date:        23 August 2008
+
+Code list name:     Measured Attribute Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm66313="urn:un:unece:uncefact:codelist:standard:UNECE:MeasuredAttributeCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:MeasuredAttributeCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.11">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="MeasuredAttributeCode" type="clm66313:MeasuredAttributeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: MeasuredAttributeCodeContentType      ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="MeasuredAttributeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="A">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consolidated weight</ccts:Name>
+            <ccts:Description>The measured consolidated weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net weight</ccts:Name>
+            <ccts:Description>[6160] Weight of goods including any packaging that normally going with the goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Goods item gross weight</ccts:Name>
+            <ccts:Description>[6292] Weight (mass) of goods including packing but excluding the carrier's equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Total net weight</ccts:Name>
+            <ccts:Description>Total weight of goods excluding packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consignment gross weight</ccts:Name>
+            <ccts:Description>[6012] Total gross weight (mass) of all goods items referred to as one consignment including packaging but excluding any transport equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net net weight</ccts:Name>
+            <ccts:Description>[6048] Weight (mass) if goods without any packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stern thrust</ccts:Name>
+            <ccts:Description>Force exerted by a thruster installed at the stern of a vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bow thrust</ccts:Name>
+            <ccts:Description>Force exerted by a thruster installed at the bow of a vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hydrate content of an alcoholic product at bottling</ccts:Name>
+            <ccts:Description>The hydrate content of an alcoholic product at the moment of bottling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of units per pallet</ccts:Name>
+            <ccts:Description>The number of units contained on a pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fat content</ccts:Name>
+            <ccts:Description>An indication of the fat content of a product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport means gross weight</ccts:Name>
+            <ccts:Description>[6300] The measure of the overall size of a ship determined in accordance with the provisions of the International Convention on Tonnage Measurement of Ships, 1969.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net tonnage of the vessel</ccts:Name>
+            <ccts:Description>[6302] The measure of the useful capacity of a ship determined in accordance with the provisions of the International Convention on Tonnage Measurement of Ships, 1969.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Humidity</ccts:Name>
+            <ccts:Description>Degree of moisture.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Voltage</ccts:Name>
+            <ccts:Description>Electromotive force, or difference of electronic potential between two points.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Power consumption</ccts:Name>
+            <ccts:Description>Value of energy consumption.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Heat dissipation</ccts:Name>
+            <ccts:Description>Measurement of the rate of dispersal of heat.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Air flow</ccts:Name>
+            <ccts:Description>Measurement of the flow of air.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shock impact</ccts:Name>
+            <ccts:Description>Measurement of the impact of a shock.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Operative temperature</ccts:Name>
+            <ccts:Description>Temperature identified system or process works according to specifications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Non operative temperature</ccts:Name>
+            <ccts:Description>Temperature identified system or process does not work according to specifications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross volume</ccts:Name>
+            <ccts:Description>The volume unadjusted for factors such as temperature or gravity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net volume</ccts:Name>
+            <ccts:Description>The volume after adjustment for factors such as temperature or gravity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Water content</ccts:Name>
+            <ccts:Description>Water content in product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AAZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tensile stress</ccts:Name>
+            <ccts:Description>The measured tensile stress.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fibrosity</ccts:Name>
+            <ccts:Description>The measured fibrosity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gauge length</ccts:Name>
+            <ccts:Description>The measured gauge length.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Radius</ccts:Name>
+            <ccts:Description>The measured radius.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Straightness</ccts:Name>
+            <ccts:Description>Straightness of the item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Strain</ccts:Name>
+            <ccts:Description>The measured strain.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Item width when unrolled</ccts:Name>
+            <ccts:Description>The width of an item when unrolled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Item length when unrolled</ccts:Name>
+            <ccts:Description>The length of an item when unrolled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Item area when unrolled</ccts:Name>
+            <ccts:Description>The area occupied by an item when unrolled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Original wort</ccts:Name>
+            <ccts:Description>Measure of the malt and hops content of beer, before fermentation has taken place.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Volume</ccts:Name>
+            <ccts:Description>The amount of air space taken up by the entity identified in the 6311 qualifier.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Angle</ccts:Name>
+            <ccts:Description>The angle of an object.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Peg hole horizontal distance from package leftmost edge</ccts:Name>
+            <ccts:Description>Horizontal distance from the left most edge of the package to the center of the hole into which the peg is inserted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Peg hole vertical distance from package top</ccts:Name>
+            <ccts:Description>Vertical distance from the top of the package to the top of the hole into which the peg is inserted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of layers per pallet</ccts:Name>
+            <ccts:Description>The number of layers per pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product strengh, chemical</ccts:Name>
+            <ccts:Description>The amount of the single active chemical ingredient within a product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product strength basis, chemical</ccts:Name>
+            <ccts:Description>Amount of product used as the basis for the specification of the chemical product strenght.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Item weight</ccts:Name>
+            <ccts:Description>Weight at line item level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payload weight, maximum</ccts:Name>
+            <ccts:Description>The maximum weight of a payload.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weight of conveyance</ccts:Name>
+            <ccts:Description>Tonnage of conveyance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Conveyance summer dead weight</ccts:Name>
+            <ccts:Description>Registered summer dead weight total tonnage of the vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ABZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Containerized cargo on vessel's weight</ccts:Name>
+            <ccts:Description>Total weight of containerized cargo on vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Non-containerized cargo on vessel's weight</ccts:Name>
+            <ccts:Description>Total weight of non-containerized cargo on vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ascertained weight</ccts:Name>
+            <ccts:Description>[4240] Endorsement of the true weight (mass) as ascertained or verified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chargeable weight</ccts:Name>
+            <ccts:Description>The weight on which charges are based.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estimated gross weight</ccts:Name>
+            <ccts:Description>Estimated weight (mass) of goods, including packing and excluding carrier's.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estimated volume</ccts:Name>
+            <ccts:Description>Estimated size or measure of anything in three dimensions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vessel overall length</ccts:Name>
+            <ccts:Description>Total overall length of the vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Loading meters</ccts:Name>
+            <ccts:Description>[6046] (6042) (6044) The length in a vehicle, whereby the complete width and height over that length is needed for the goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of axles</ccts:Name>
+            <ccts:Description>Number of axles of movable equipment or means of transport on wheels.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payload</ccts:Name>
+            <ccts:Description>The revenue-producing load carried by a means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Start position in the length</ccts:Name>
+            <ccts:Description>The starting position from the beginning of an item located in the length direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End position in the length</ccts:Name>
+            <ccts:Description>The end position from the beginning of an item located in the length direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Start position in the width</ccts:Name>
+            <ccts:Description>The start position from the beginning of an item located in the width direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End position in the width</ccts:Name>
+            <ccts:Description>The end position from the beginning of an item located in the width direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Start position in the thickness</ccts:Name>
+            <ccts:Description>The start position from the beginning of an item located in the thickness direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End position in the thickness</ccts:Name>
+            <ccts:Description>The end position from the beginning of an item located in the thickness direction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport container actual filling weight</ccts:Name>
+            <ccts:Description>Actual filling weight of a transport container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport container maximum capacity</ccts:Name>
+            <ccts:Description>Maximum capacity of a transport container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ADZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Declared net weight</ccts:Name>
+            <ccts:Description>The declared net weight of a product or products used for invoicing, customs or transport purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Loading height</ccts:Name>
+            <ccts:Description>Maximum height of products or packages loaded onto a given transportation device or equipment such as a pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stacking height</ccts:Name>
+            <ccts:Description>Maximum height up to which the same product or package may be placed one upon the other for storage purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Calculated weight</ccts:Name>
+            <ccts:Description>The calculated weight of the item based on the ordered dimensions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AED">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ferrite</ccts:Name>
+            <ccts:Description>The chemical composition ferrite.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Impurity</ccts:Name>
+            <ccts:Description>The impurity of the product i.e. the measurement of other chemical elements not normally appearing in a product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grain size</ccts:Name>
+            <ccts:Description>The grain size.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lanthanides</ccts:Name>
+            <ccts:Description>The chemical element Lanthanides.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Elasticity</ccts:Name>
+            <ccts:Description>The value of the elasticity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Drained weight</ccts:Name>
+            <ccts:Description>The weight of a product when all liquids used in the packaging of the product have been removed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gallium</ccts:Name>
+            <ccts:Description>Measurement of the gallium component.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Strontium</ccts:Name>
+            <ccts:Description>Measurement of the strontium component.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Area</ccts:Name>
+            <ccts:Description>Extent or measure of a surface.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Equipment storage limitation</ccts:Name>
+            <ccts:Description>Maximum storage limit of the equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Radioactive index of transport</ccts:Name>
+            <ccts:Description>The index of transport determines the maximum radiation level at a distance of 1m from the external surface.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Radioactivity</ccts:Name>
+            <ccts:Description>Activity of radioactive material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Average gross weight</ccts:Name>
+            <ccts:Description>Weight which is the outcome of the division of the total gross weight by the number of units.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forward draft</ccts:Name>
+            <ccts:Description>Depth of water from the surface of water to the bottom of the vessel measured at the draft mark of the bow.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AER">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>After draft</ccts:Name>
+            <ccts:Description>Depth of water from the surface of water to the bottom of the vessel measured at the draft mark of the stern.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AES">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acidity</ccts:Name>
+            <ccts:Description>The quality, state, or degree of being acid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AET">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport equipment gross weight</ccts:Name>
+            <ccts:Description>[6294] Weight of a transport equipment including the cargo and carrier's equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Total transport equipment gross weight</ccts:Name>
+            <ccts:Description>Total weight of all transport equipment including the cargo and carrier's equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acidity of juice</ccts:Name>
+            <ccts:Description>Acid measurement of juice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Penetrometry</ccts:Name>
+            <ccts:Description>Measurement of force required to drive a standard penetrating stamp.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Durofel</ccts:Name>
+            <ccts:Description>Measurement of the elastic force using a standard penetrating stamp.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Juice weight per 100 grams</ccts:Name>
+            <ccts:Description>Measurement of weight of juice, based on 100 grams of the entire weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AEZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fruit skin colour</ccts:Name>
+            <ccts:Description>Measurement of the colouring of the epidermis of a fruit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Angle of bend</ccts:Name>
+            <ccts:Description>The measured angle of bend.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed incremental measurement</ccts:Name>
+            <ccts:Description>The measurement of the fixed increment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Durofel D10</ccts:Name>
+            <ccts:Description>Measure of the elastic force of the pulp of a fruit. It is measured with a penetrating stamp with diameter 10.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Durofel D25</ccts:Name>
+            <ccts:Description>Measure of the elastic force of the pulp of a fruit. It is measured with a penetrating stamp with diameter 25.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Durofel D50</ccts:Name>
+            <ccts:Description>Measure of the elastic force of the pulp of a fruit. It is measured with a penetrating stamp with diameter 50.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maximum stacking weight</ccts:Name>
+            <ccts:Description>The maximum weight which may be stacked upon a product or package without the product or packaging being crushed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross measure cube</ccts:Name>
+            <ccts:Description>The total cubic space occupied by an item, taking into account any protruding components, arrived at by multiplying the maximum length, width and height.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Percentage fat content in dry matter</ccts:Name>
+            <ccts:Description>The percentage of fat content in dry matter.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Saccharometric content</ccts:Name>
+            <ccts:Description>Measurement of the sugar content of a solution.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hydrate content of an alcoholic product after bottling</ccts:Name>
+            <ccts:Description>The hydrate content which occurs in an alcoholic product after bottling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Anhydrous content</ccts:Name>
+            <ccts:Description>The non-water content.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Certified weight</ccts:Name>
+            <ccts:Description>Weight which has been certified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Freeboard</ccts:Name>
+            <ccts:Description>The vertical distance between the waterline and the upper edge of the deck line.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maximum vessel draught</ccts:Name>
+            <ccts:Description>The depth of water needed to float the ship (Maximum vessel draught according to Load Line Certificate IMO, MSC/Circ. 920 15 June 1999).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net explosive weight</ccts:Name>
+            <ccts:Description>Mass of the explosive part or substance of goods without any packing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Radioactive criticality safety index</ccts:Name>
+            <ccts:Description>A number, assigned to fissile material i.e. material capable of sustaining a nuclear chain reaction, which is used to provide control over the accumulation of packages containing such material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Waste currently on board</ccts:Name>
+            <ccts:Description>Amount of waste on board at the moment of the notification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Waste to be delivered at waste reception facility</ccts:Name>
+            <ccts:Description>Amount of waste to be delivered to a waste reception facility, e.g. in the port of call.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Waste to be generated until next port of call, estimated</ccts:Name>
+            <ccts:Description>Estimated amount of waste to be generated between creation of the current notification and arrival in the next port of call, irrespective of use of incinerator or compactor or disposal at sea.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Waste remaining on board at departure</ccts:Name>
+            <ccts:Description>Amount of waste remaining on board when leaving the port of call.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Colour depth</ccts:Name>
+            <ccts:Description>The number of distinct colours represented, e.g. in an image or in a display.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Colour depth, maximum</ccts:Name>
+            <ccts:Description>The maximum number of distinct colours that can be represented, e.g. in an image or in a display.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Image resolution</ccts:Name>
+            <ccts:Description>The level of detail of an image.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Device resolution, maximum</ccts:Name>
+            <ccts:Description>The maximum level of detail produced by a device.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AFX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acoustic absorption coefficient</ccts:Name>
+            <ccts:Description>The portion of sound energy a surface absorbs, measured at different frequencies.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Billed weight</ccts:Name>
+            <ccts:Description>The measured billed weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breaking load</ccts:Name>
+            <ccts:Description>The measured breaking load.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BMY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Platinum</ccts:Name>
+            <ccts:Description>The measurement of the platinum component.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BMZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Silver</ccts:Name>
+            <ccts:Description>The measurement of the silver component.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>List</ccts:Name>
+            <ccts:Description>The leaning or inclination of a vessel expressed in degrees port or starboard.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trim</ccts:Name>
+            <ccts:Description>The condition of a vessel with reference to its longitudinal axis.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Free water</ccts:Name>
+            <ccts:Description>The volume of water present in a container that is not in suspension in the contained liquid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BND">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bands</ccts:Name>
+            <ccts:Description>The measured bands.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>API (American Petroleum Institute) gravity</ccts:Name>
+            <ccts:Description>The relative density of petroleum liquids as specified by a standard developed by the API.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum gross observed volume</ccts:Name>
+            <ccts:Description>The total volume of all petroleum liquids and sediment and water, excluding free water, at observed temperature and pressure.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum gross standard volume</ccts:Name>
+            <ccts:Description>The total volume of all petroleum liquids, sediment, and water excluding free water, corrected by the appropriate volume correction factor for the observed temperature and American Petroleum Institute relative density, or density to a standard temperature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Volume variance</ccts:Name>
+            <ccts:Description>The change in the volume measurement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum net standard volume</ccts:Name>
+            <ccts:Description>The total volume of all petroleum liquids, excluding sediment and water and free water, corrected by the appropriate volume correction factor for the observed temperature and American Petroleum Institute gravity relative to density or to a standard temperature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Material on-board quantity, after discharge</ccts:Name>
+            <ccts:Description>The material in vessel tanks, void spaces, and pipelines after discharge.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum total calculated volume</ccts:Name>
+            <ccts:Description>The total volume of all petroleum liquids, sediment and water corrected by the appropriate volume correction factor for the observed temperature and American Petroleum Institute (API) gravity, relative density, or density to a standard temperature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum total observed volume</ccts:Name>
+            <ccts:Description>The total volume of all petroleum liquids, sediment and water and free water at observed temperature and pressure.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Innage gauge distance</ccts:Name>
+            <ccts:Description>The measured distance from the surface of the liquid to a fixed datum plate or to the tank bottom.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Petroleum net standard weight</ccts:Name>
+            <ccts:Description>The total weight of all petroleum liquids excluding sediments, water and free water.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sediment and water in petroleum</ccts:Name>
+            <ccts:Description>The measurement of non-hydrocarbon solid material and water in suspension in petroleum liquid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Observed reference height, tank</ccts:Name>
+            <ccts:Description>The observed distance from the tank bottom or datum plate to the established reference point.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reference height, tank</ccts:Name>
+            <ccts:Description>The measured distance from the tank bottom or datum plate to the established reference point.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ullage gauge distance</ccts:Name>
+            <ccts:Description>The measured distance from the cargo liquid surface to the reference point.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trim correction</ccts:Name>
+            <ccts:Description>The correction applied to the observed gauge or observed volume when a vessel is not on an even keel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bow to bridge distance</ccts:Name>
+            <ccts:Description>The distance between the bow and the bridge of a vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Peg hole number</ccts:Name>
+            <ccts:Description>Used to identify the peg hole if more than one hole is present in the product or packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of inner packs</ccts:Name>
+            <ccts:Description>Indicates the number of non coded physical groupings (inner packs) of next lower level trade items within the current trade item level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of next level trade items within inner pack</ccts:Name>
+            <ccts:Description>The number of next lower level trade items contained within the physical non-coded grouping (inner pack).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of trade items per pallet layer</ccts:Name>
+            <ccts:Description>The number of trade items contained on a single layer of a pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packed items layer height</ccts:Name>
+            <ccts:Description>The height of a single layer of packed items.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BNZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing material weight, skin tight covering</ccts:Name>
+            <ccts:Description>The weight measurement of the packing material used for skin tight covering (e.g. when packaging prepared meats, poultry, cheese, and other food products).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Brightness</ccts:Name>
+            <ccts:Description>The measured brightness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Brakes</ccts:Name>
+            <ccts:Description>The measured brakes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Components labelled for recycling percentage</ccts:Name>
+            <ccts:Description>Percentage of trade item components that clearly label how to facilitate product disassembly and recycling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Renewable plastic components percentage, by net weight</ccts:Name>
+            <ccts:Description>The percentage of the plastic components only made from rapidly renewable plant-based material by net weight of product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Clamp pressure, required</ccts:Name>
+            <ccts:Description>The pressure that should be applied by a clamp.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Break</ccts:Name>
+            <ccts:Description>The measured break.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ascertained volume</ccts:Name>
+            <ccts:Description>Endorsement of the true volume as ascertained or verified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unit weight</ccts:Name>
+            <ccts:Description>The weight of a unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Total volume</ccts:Name>
+            <ccts:Description>Total volume of goods and/or parcels.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unit volume</ccts:Name>
+            <ccts:Description>The volume of a unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vertical center of gravity</ccts:Name>
+            <ccts:Description>Distance of vertical center of gravity relative to item's base.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maximum allowable transport stacking weight</ccts:Name>
+            <ccts:Description>Maximum weight allowed to be stowed on top of an item during transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carbon Dioxide</ccts:Name>
+            <ccts:Description>Measurement of the carbon dioxide (C02) component.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of base units per pallet</ccts:Name>
+            <ccts:Description>The number of base units contained on a pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Colony forming unit</ccts:Name>
+            <ccts:Description>Micro-organism colonies that are to be counted under determined conditions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Diluted liquid volume</ccts:Name>
+            <ccts:Description>The volume of liquid which results after a dilution agent has been added, e.g. undiluted orange juice of 200ml, after dilution with water the volume of diluted liquid equals 1 litre.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Energy efficiency</ccts:Name>
+            <ccts:Description>A measurement of the energy efficiency of an article.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of layers</ccts:Name>
+            <ccts:Description>Number of layers of a product or products within a package, container, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maximum demand</ccts:Name>
+            <ccts:Description>The highest demand recorded during the period of recording of usage of the supply.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of pallet places</ccts:Name>
+            <ccts:Description>The number of pallet places needed to store or to transport pallets (can be stacked).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package net measurement, cubed</ccts:Name>
+            <ccts:Description>An indication of the net cubed measurement of a package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Power factor</ccts:Name>
+            <ccts:Description>The ratio of the power dissipated (active power in kW) to the total power (which is the product of the input volts times amps given in kVa). When equipment which uses reactive power is being operated the power factor will be less than one.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BRV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stacking factor excluding bottom item</ccts:Name>
+            <ccts:Description>Maximum number of identical items stackable on top of item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breaking strength</ccts:Name>
+            <ccts:Description>The measured breaking strength.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BSW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breaking strength wet</ccts:Name>
+            <ccts:Description>The measured breaking strength when wet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BSX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Step size</ccts:Name>
+            <ccts:Description>An indication of measurements in which options contained within a Customer Specific Article are available, e.g. 10 metre planks of wood may be sold in step sizes of 2 metres.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BSY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of units per package</ccts:Name>
+            <ccts:Description>The number of identified units per package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BSZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of units per layer</ccts:Name>
+            <ccts:Description>Number of units of a product or package within one layer of a package, container, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weight per running metre</ccts:Name>
+            <ccts:Description>A code used to indicate the weight per running metre of floor coverings over floor area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weight per square metre</ccts:Name>
+            <ccts:Description>A code used to indicate the weight per square metre of floor coverings over floor area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Acidity of meat</ccts:Name>
+            <ccts:Description>The meat's acid quality or condition.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slaughtering weight</ccts:Name>
+            <ccts:Description>Weight immediately after slaughter.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stacking factor including bottom item</ccts:Name>
+            <ccts:Description>Maximum number of items stackable upon each other, including the bottom item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of units in the width of a layer</ccts:Name>
+            <ccts:Description>Number of units of a product or package which make up the width of a layer in a package, container, pallet, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Number of units in the depth of a layer</ccts:Name>
+            <ccts:Description>Number of units of a product or package which make up the depth of a layer in a package, container, pallet, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nestable percentage</ccts:Name>
+            <ccts:Description>Extent expressed as a percentage to which an item can be nested within an identical item, e.g. paper cups.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross weight including carrier's equipment</ccts:Name>
+            <ccts:Description>Weight (mass) of goods including packaging and the carrier's equipment. In this context 'carrier's equipment' means any material resources necessary to facilitate the transport and handling of the goods without having the ability to move by its own propulsion, e.g. pallet, container, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sugar content</ccts:Name>
+            <ccts:Description>The rate of sugar.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Self-accelerating polymerization temperature (SAPT)</ccts:Name>
+            <ccts:Description>The lowest temperature at which polymerization may occur for a substance as packed for transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Self-accelerating decomposition temperature (SADT)</ccts:Name>
+            <ccts:Description>The lowest temperature at which self-accelerating decomposition may occur for a substance as packed for transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BTM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Control temperature</ccts:Name>
+            <ccts:Description>The controlled transport temperature to avoid decomposition of self-reactive substances and organic peroxides.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basis weight</ccts:Name>
+            <ccts:Description>(6030) The measured basis weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CHN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Change</ccts:Name>
+            <ccts:Description>The measured change.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CHO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Emergency temperature</ccts:Name>
+            <ccts:Description>The temperature at which emergency response is required for self-reactive substances and organic peroxides.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Colour</ccts:Name>
+            <ccts:Description>The measured colour.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contents of package</ccts:Name>
+            <ccts:Description>In combination with the other data elements of the actual segment this code indicates the measured content of a package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Commercial weight</ccts:Name>
+            <ccts:Description>Item weight considering its maximum possible humidity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Core length</ccts:Name>
+            <ccts:Description>To specify length of core on which product is to be placed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Destination weight agreement</ccts:Name>
+            <ccts:Description>The agreed weight of despatched goods whose weight may change during transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Diameter</ccts:Name>
+            <ccts:Description>Diameter of an article.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delta value L</ccts:Name>
+            <ccts:Description>The measured delta value L.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Density</ccts:Name>
+            <ccts:Description>The measured density.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Depth</ccts:Name>
+            <ccts:Description>The measured depth.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Denier</ccts:Name>
+            <ccts:Description>The measured fineness of a material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Distance between points</ccts:Name>
+            <ccts:Description>The measured distance between points.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Width, boxcar door</ccts:Name>
+            <ccts:Description>The measured width of a boxcar door.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="E">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estimated new weight</ccts:Name>
+            <ccts:Description>The measured estimated new weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Elongation</ccts:Name>
+            <ccts:Description>The measured elongation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deficit weight</ccts:Name>
+            <ccts:Description>The measured deficit weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Filament count</ccts:Name>
+            <ccts:Description>Used e.g. in textile, print industries.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Longitudinal flatness</ccts:Name>
+            <ccts:Description>The measured longitudinal flatness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flatness</ccts:Name>
+            <ccts:Description>The measured flatness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transverse flatness</ccts:Name>
+            <ccts:Description>The measured transverse flatness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gauge</ccts:Name>
+            <ccts:Description>The measured gauge.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross weight, maximum</ccts:Name>
+            <ccts:Description>The measured maximum gross weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hardness</ccts:Name>
+            <ccts:Description>The measured hardness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Height, maximum</ccts:Name>
+            <ccts:Description>The measured maximum height.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Height dimension</ccts:Name>
+            <ccts:Description>Numeric value of height.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Impact energy</ccts:Name>
+            <ccts:Description>The measured impact energy.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ID">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inside diameter</ccts:Name>
+            <ccts:Description>The measured inside diameter.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="L">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Legal weight</ccts:Name>
+            <ccts:Description>[6146] The measured legal weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Length, maximum</ccts:Name>
+            <ccts:Description>The measured maximum length.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Length</ccts:Name>
+            <ccts:Description>[6168] To specify the value of a length dimension.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LND">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lost end</ccts:Name>
+            <ccts:Description>The measured lost end.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="M">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Minimum weight</ccts:Name>
+            <ccts:Description>The measured minimum weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Moisture</ccts:Name>
+            <ccts:Description>Measurement application is the moisture content of the item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maximum weight</ccts:Name>
+            <ccts:Description>The measured maximum weight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="N">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Actual net weight</ccts:Name>
+            <ccts:Description>The actual weight of the goods excluding packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Outside diameter</ccts:Name>
+            <ccts:Description>The measured outside diameter.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PRS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre stretch</ccts:Name>
+            <ccts:Description>Measurement identifying the amount an item has been stretched prior to use.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PTN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per tonne</ccts:Name>
+            <ccts:Description>A measurement per tonne.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Relative humidity</ccts:Name>
+            <ccts:Description>The measured relative humidity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Resistivity</ccts:Name>
+            <ccts:Description>The measured resistivity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rockwell C</ccts:Name>
+            <ccts:Description>Hardness in the Rockwell C scale.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RMW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ream weight</ccts:Name>
+            <ccts:Description>Measurement indication for paper.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reduction of area</ccts:Name>
+            <ccts:Description>The measured reduction of area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RUN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Run (process)</ccts:Name>
+            <ccts:Description>The measured run (process).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ratio</ccts:Name>
+            <ccts:Description>The measured ratio.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shipped quantity</ccts:Name>
+            <ccts:Description>The measured shipped quantity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="T">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tare weight</ccts:Name>
+            <ccts:Description>(6052) (6156) Weight excluding goods and loose accessories.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Temperature</ccts:Name>
+            <ccts:Description>A measurement in relation to temperature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Thickness</ccts:Name>
+            <ccts:Description>The measured thickness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Time period</ccts:Name>
+            <ccts:Description>Measurement of a specific length of time.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Time</ccts:Name>
+            <ccts:Description>The measured time.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VGM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport equipment verified gross mass (weight)</ccts:Name>
+            <ccts:Description>The gross mass (weight) of the transport equipment verified according to SOLAS Chapter VI, Regulation 2, paragraphs 4-6.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Height, van door</ccts:Name>
+            <ccts:Description>The height of the door of a van or container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Width, van door</ccts:Name>
+            <ccts:Description>The width of the door of a van or container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weight per unit of area</ccts:Name>
+            <ccts:Description>The weight per unit of an area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Width dimension</ccts:Name>
+            <ccts:Description>Numeric value of width.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Width, maximum</ccts:Name>
+            <ccts:Description>The maximum distance from side to side.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Weight per unit of length</ccts:Name>
+            <ccts:Description>The weight per unit of length.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Side height, flat bed with removable sides</ccts:Name>
+            <ccts:Description>The height of the removable sides of a flat bed truck.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Squareness</ccts:Name>
+            <ccts:Description>The measured squareness.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Spool size</ccts:Name>
+            <ccts:Description>The measured spool size.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="YS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Yield stress</ccts:Name>
+            <ccts:Description>The measured yield stress.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZAL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aluminium</ccts:Name>
+            <ccts:Description>The measured chemical element aluminium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZAS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Arsenic</ccts:Name>
+            <ccts:Description>The measured chemical element arsenic.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Boron</ccts:Name>
+            <ccts:Description>The measured chemical element boron.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZBI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bismuth</ccts:Name>
+            <ccts:Description>The measured chemical element bismuth.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carbon</ccts:Name>
+            <ccts:Description>The measured chemical element carbon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Calcium</ccts:Name>
+            <ccts:Description>The measured chemical element calcium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Columbium</ccts:Name>
+            <ccts:Description>The measured chemical element columbium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cerium</ccts:Name>
+            <ccts:Description>The measured chemical element cerium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chlorine</ccts:Name>
+            <ccts:Description>The measured chemical element chlorine.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cobalt</ccts:Name>
+            <ccts:Description>The measured chemical element cobalt.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chromium</ccts:Name>
+            <ccts:Description>The measured chemical element chromium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZCU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Copper</ccts:Name>
+            <ccts:Description>The measured chemical element copper.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZFE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Iron</ccts:Name>
+            <ccts:Description>The measured chemical element iron.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZFS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Iron plus silicon</ccts:Name>
+            <ccts:Description>The measured substance iron plus silicon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZGE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Germanium</ccts:Name>
+            <ccts:Description>The measured chemical element germanium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hydrogen</ccts:Name>
+            <ccts:Description>The measured chemical element hydrogen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Potassium</ccts:Name>
+            <ccts:Description>The measured chemical element potassium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZMG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Magnesium</ccts:Name>
+            <ccts:Description>The measured chemical element magnesium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZMN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Manganese</ccts:Name>
+            <ccts:Description>The measured chemical element manganese.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZMO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Molybdenum</ccts:Name>
+            <ccts:Description>The measured chemical element molybdenum.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nitrogen</ccts:Name>
+            <ccts:Description>The measured chemical element nitrogen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZNA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sodium</ccts:Name>
+            <ccts:Description>The measured chemical element sodium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZNB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Niobium</ccts:Name>
+            <ccts:Description>The chemical element niobium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZNI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nickel</ccts:Name>
+            <ccts:Description>The measured chemical element nickel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oxygen</ccts:Name>
+            <ccts:Description>The measured chemical element oxygen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Phosphorus</ccts:Name>
+            <ccts:Description>The measured chemical element phosphorus.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZPB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lead</ccts:Name>
+            <ccts:Description>The measured chemical element lead.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sulphur</ccts:Name>
+            <ccts:Description>The measured chemical element sulphur.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZSB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Antimony</ccts:Name>
+            <ccts:Description>The measured chemical element antimony.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZSE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Selenium</ccts:Name>
+            <ccts:Description>The measured chemical element selenium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZSI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Silicon</ccts:Name>
+            <ccts:Description>The measured chemical element silicon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZSL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Silicium oxyd</ccts:Name>
+            <ccts:Description>The measured substance silicium oxyd.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZSN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tin</ccts:Name>
+            <ccts:Description>The measured chemical element tin.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZTA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tantalium</ccts:Name>
+            <ccts:Description>The measured chemical element tantalium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZTE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tellurium</ccts:Name>
+            <ccts:Description>The measured chemical element tellurium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZTI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Titanium</ccts:Name>
+            <ccts:Description>The measured chemical element titanium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vanadium</ccts:Name>
+            <ccts:Description>The measured chemical element vanadium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tungsten</ccts:Name>
+            <ccts:Description>The measured chemical element tungsten.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZWA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Waste content</ccts:Name>
+            <ccts:Description>The measured waste content.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zinc</ccts:Name>
+            <ccts:Description>The measured chemical element zinc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zirconium</ccts:Name>
+            <ccts:Description>The measured chemical element zirconium.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>A code assigned within a code list to be used on an interim basis and as defined among trading partners until a precise code can be assigned to the code list.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

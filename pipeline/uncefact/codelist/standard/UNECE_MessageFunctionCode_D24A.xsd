@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 61225_MessageFunctionTypeCode - Code List Schema Module    ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.3
+Schema date:        23 August 2008
+
+Code list name:     Message Function Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm61225MessageFunctionTypeCode="urn:un:unece:uncefact:codelist:standard:UNECE:MessageFunctionCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:MessageFunctionCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.3">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="MessageFunctionCode" type="clm61225MessageFunctionTypeCode:MessageFunctionCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: MessageFunctionCodeContentType        ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="MessageFunctionCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancellation</ccts:Name>
+            <ccts:Description>Message cancelling a previous transmission for a given transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Addition</ccts:Name>
+            <ccts:Description>Message containing items to be added.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deletion</ccts:Name>
+            <ccts:Description>Message containing items to be deleted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Change</ccts:Name>
+            <ccts:Description>Message containing items to be changed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Replace</ccts:Name>
+            <ccts:Description>Message replacing a previous message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Confirmation</ccts:Name>
+            <ccts:Description>Message confirming the details of a previous transmission where such confirmation is required or recommended under the terms of a trading partner agreement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Duplicate</ccts:Name>
+            <ccts:Description>The message is a duplicate of a previously generated message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Status</ccts:Name>
+            <ccts:Description>Code indicating that the referenced message is a status.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Original</ccts:Name>
+            <ccts:Description>Initial transmission related to a given transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not found</ccts:Name>
+            <ccts:Description>Message whose reference number is not filed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Response</ccts:Name>
+            <ccts:Description>Message responding to a previous message or document.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not processed</ccts:Name>
+            <ccts:Description>Message indicating that the referenced message was received but not yet processed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request</ccts:Name>
+            <ccts:Description>Code indicating that the referenced message is a request.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advance notification</ccts:Name>
+            <ccts:Description>Code indicating that the information contained in the message is an advance notification of information to follow.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reminder</ccts:Name>
+            <ccts:Description>Repeated message transmission for reminding purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Proposal</ccts:Name>
+            <ccts:Description>Message content is a proposal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancel, to be reissued</ccts:Name>
+            <ccts:Description>Referenced transaction cancelled, reissued message will follow.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reissue</ccts:Name>
+            <ccts:Description>New issue of a previous message (maybe cancelled).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seller initiated change</ccts:Name>
+            <ccts:Description>Change information submitted by buyer but initiated by seller.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Replace heading section only</ccts:Name>
+            <ccts:Description>Message to replace the heading of a previous message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Replace item detail and summary only</ccts:Name>
+            <ccts:Description>Message to replace item detail and summary of a previous message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Final transmission</ccts:Name>
+            <ccts:Description>Final message in a related series of messages together making up a commercial, administrative or transport transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transaction on hold</ccts:Name>
+            <ccts:Description>Message not to be processed until further release information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery instruction</ccts:Name>
+            <ccts:Description>Delivery schedule message only used to transmit short-term delivery instructions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forecast</ccts:Name>
+            <ccts:Description>Delivery schedule message only used to transmit long-term schedule information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery instruction and forecast</ccts:Name>
+            <ccts:Description>Combination of codes '24' and '25'.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not accepted</ccts:Name>
+            <ccts:Description>Message to inform that the referenced message is not accepted by the recipient.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted, with amendment in heading section</ccts:Name>
+            <ccts:Description>Message accepted but amended in heading section.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted without amendment</ccts:Name>
+            <ccts:Description>Referenced message is entirely accepted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted, with amendment in detail section</ccts:Name>
+            <ccts:Description>Referenced message is accepted but amended in detail section.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Copy</ccts:Name>
+            <ccts:Description>Indicates that the message is a copy of an original message that has been sent, e.g. for action or information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Approval</ccts:Name>
+            <ccts:Description>A message releasing an existing referenced message for action to the receiver.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Change in heading section</ccts:Name>
+            <ccts:Description>Message changing the referenced message heading section.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted with amendment</ccts:Name>
+            <ccts:Description>The referenced message is accepted but amended.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Retransmission</ccts:Name>
+            <ccts:Description>Change-free transmission of a message previously sent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Change in detail section</ccts:Name>
+            <ccts:Description>Message changing referenced detail section.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reversal of a debit</ccts:Name>
+            <ccts:Description>Reversal of a previously posted debit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reversal of a credit</ccts:Name>
+            <ccts:Description>Reversal of a previously posted credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reversal for cancellation</ccts:Name>
+            <ccts:Description>Code indicating that the referenced message is reversing a cancellation of a previous transmission for a given transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Request for deletion</ccts:Name>
+            <ccts:Description>The message is given to inform the recipient to delete the referenced transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Finishing/closing order</ccts:Name>
+            <ccts:Description>Last of series of call-offs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Confirmation via specific means</ccts:Name>
+            <ccts:Description>Message confirming a transaction previously agreed via other means (e.g. phone).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Additional transmission</ccts:Name>
+            <ccts:Description>Message already transmitted via another communication channel. This transmission is to provide electronically processable data only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted without reserves</ccts:Name>
+            <ccts:Description>Message accepted without reserves.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted with reserves</ccts:Name>
+            <ccts:Description>Message accepted with reserves.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Provisional</ccts:Name>
+            <ccts:Description>Message content is provisional.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Definitive</ccts:Name>
+            <ccts:Description>Message content is definitive.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted, contents rejected</ccts:Name>
+            <ccts:Description>Message to inform that the previous message is received, but it cannot be processed due to regulations, laws, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Settled dispute</ccts:Name>
+            <ccts:Description>The reported dispute is settled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Withdraw</ccts:Name>
+            <ccts:Description>Message withdrawing a previously approved message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Authorisation</ccts:Name>
+            <ccts:Description>Message authorising a message or transaction(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Proposed amendment</ccts:Name>
+            <ccts:Description>A code used to indicate an amendment suggested by the sender.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Test</ccts:Name>
+            <ccts:Description>Code indicating the message is to be considered as a test.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extract</ccts:Name>
+            <ccts:Description>A subset of the original.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Notification only</ccts:Name>
+            <ccts:Description>The receiver may use the notification information for analysis only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advice of ledger booked items</ccts:Name>
+            <ccts:Description>An advice that items have been booked in the ledger.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advice of items pending to be booked in the ledger</ccts:Name>
+            <ccts:Description>An advice that items are pending to be booked in the ledger.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre-advice of items requiring further information</ccts:Name>
+            <ccts:Description>A pre-advice that items require further information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pre-adviced items</ccts:Name>
+            <ccts:Description>A pre-advice of items.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No action since last message</ccts:Name>
+            <ccts:Description>Code indicating the fact that no action has taken place since the last message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Complete schedule</ccts:Name>
+            <ccts:Description>The message function is a complete schedule.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Update schedule</ccts:Name>
+            <ccts:Description>The message function is an update to a schedule.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not accepted, provisional</ccts:Name>
+            <ccts:Description>Not accepted, subject to confirmation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Verification</ccts:Name>
+            <ccts:Description>The message is transmitted to verify information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unsettled dispute</ccts:Name>
+            <ccts:Description>To report an unsettled dispute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discharge of operation guarantee</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the discharge of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Termination of operation guarantee</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the termination of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Start of operation guarantee</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the start of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>New declaration data</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing new declaration data.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amended declaration data</ccts:Name>
+            <ccts:Description>A message related to the amendment of declaration data.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Refusal to start operation guarantee</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the refusal to start of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seals information (Start)</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the seals during the start of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seals information (Terminate)</ccts:Name>
+            <ccts:Description>A message related to a guarantee containing information about the seals during the termination of an operation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

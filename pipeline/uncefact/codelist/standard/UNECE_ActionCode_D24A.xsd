@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 61229_LineStatusCode - Code List Schema Module             ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.2
+Schema date:        23 August 2008
+
+Code list name:     Action Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm61229LineStatusCode="urn:un:unece:uncefact:codelist:standard:UNECE:ActionCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:ActionCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.2">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="ActionCode" type="clm61229LineStatusCode:ActionCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: ActionCodeContentType                 ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="ActionCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Added</ccts:Name>
+            <ccts:Description>The information is to be or has been added.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deleted</ccts:Name>
+            <ccts:Description>The information is to be or has been deleted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Changed</ccts:Name>
+            <ccts:Description>The information is to be or has been changed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No action</ccts:Name>
+            <ccts:Description>This line item is not affected by the actual message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted without amendment</ccts:Name>
+            <ccts:Description>This line item is entirely accepted by the seller.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted with amendment</ccts:Name>
+            <ccts:Description>This line item is accepted but amended by the seller.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not accepted</ccts:Name>
+            <ccts:Description>This line item is not accepted by the seller.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Schedule only</ccts:Name>
+            <ccts:Description>Code specifying that the message is a schedule only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amendments</ccts:Name>
+            <ccts:Description>Code specifying that amendments are requested/notified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not found</ccts:Name>
+            <ccts:Description>This line item is not found in the referenced message.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not amended</ccts:Name>
+            <ccts:Description>This line is not amended by the buyer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Line item numbers changed</ccts:Name>
+            <ccts:Description>Code specifying that the line item numbers have changed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Buyer has deducted amount</ccts:Name>
+            <ccts:Description>Buyer has deducted amount from payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Buyer claims against invoice</ccts:Name>
+            <ccts:Description>Buyer has a claim against an outstanding invoice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Charge back by seller</ccts:Name>
+            <ccts:Description>Factor has been requested to charge back the outstanding item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seller will issue credit note</ccts:Name>
+            <ccts:Description>Seller agrees to issue a credit note.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Terms changed for new terms</ccts:Name>
+            <ccts:Description>New settlement terms have been agreed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Abide outcome of negotiations</ccts:Name>
+            <ccts:Description>Factor agrees to abide by the outcome of negotiations between seller and buyer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seller rejects dispute</ccts:Name>
+            <ccts:Description>Seller does not accept validity of dispute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Settlement</ccts:Name>
+            <ccts:Description>The reported situation is settled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No delivery</ccts:Name>
+            <ccts:Description>Code indicating that no delivery will be required.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Call-off delivery</ccts:Name>
+            <ccts:Description>A request for delivery of a particular quantity of goods to be delivered on a particular date (or within a particular period).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Proposed amendment</ccts:Name>
+            <ccts:Description>A code used to indicate an amendment suggested by the sender.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accepted with amendment, no confirmation required</ccts:Name>
+            <ccts:Description>Accepted with changes which require no confirmation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Equipment provisionally repaired</ccts:Name>
+            <ccts:Description>The equipment or component has been provisionally repaired.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Included</ccts:Name>
+            <ccts:Description>Code indicating that the entity is included.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Upon receipt and verification of documents we shall cover you when due as per your instructions</ccts:Name>
+            <ccts:Description>Upon receipt and verification of documents we shall cover you when due as per your instructions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Upon receipt and verification of documents we shall authorize you to debit our account with you when due</ccts:Name>
+            <ccts:Description>Upon receipt and verification of documents we shall authorize you to debit our account with you when due.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On receipt of your authenticated advice we shall cover you when due as per your instructions</ccts:Name>
+            <ccts:Description>On receipt of your authenticated advice we shall cover you when due as per your instructions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On receipt of your authenticated advice we shall authorize you to debit our account with you when due</ccts:Name>
+            <ccts:Description>On receipt of your authenticated advice we shall authorize you to debit our account with you when due.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On receipt of your authenticated advice we shall credit your account with us when due</ccts:Name>
+            <ccts:Description>On receipt of your authenticated advice we shall credit your account with us when due.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Credit advice requested for direct debit</ccts:Name>
+            <ccts:Description>A credit advice is requested for the direct debit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Credit advice and acknowledgement for direct debit</ccts:Name>
+            <ccts:Description>A credit advice and acknowledgement are requested for the direct debit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inquiry</ccts:Name>
+            <ccts:Description>Request for information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Checked</ccts:Name>
+            <ccts:Description>Checked.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not checked</ccts:Name>
+            <ccts:Description>Not checked.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancelled</ccts:Name>
+            <ccts:Description>Discontinued.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Replaced</ccts:Name>
+            <ccts:Description>Provide a replacement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>New</ccts:Name>
+            <ccts:Description>Not existing before.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Agreed</ccts:Name>
+            <ccts:Description>Consent.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Proposed</ccts:Name>
+            <ccts:Description>Put forward for consideration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Already delivered</ccts:Name>
+            <ccts:Description>Delivery has taken place.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Additional subordinate structures will follow</ccts:Name>
+            <ccts:Description>Additional subordinate structures will follow the current hierarchy level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Additional subordinate structures will not follow</ccts:Name>
+            <ccts:Description>No additional subordinate structures will follow the current hierarchy level.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Result opposed</ccts:Name>
+            <ccts:Description>A notification that the result is opposed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Auction held</ccts:Name>
+            <ccts:Description>A notification that an auction was held.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Legal action pursued</ccts:Name>
+            <ccts:Description>A notification that legal action has been pursued.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Meeting held</ccts:Name>
+            <ccts:Description>A notification that a meeting was held.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Result set aside</ccts:Name>
+            <ccts:Description>A notification that the result has been set aside.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Result disputed</ccts:Name>
+            <ccts:Description>A notification that the result has been disputed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Countersued</ccts:Name>
+            <ccts:Description>A notification that a countersuit has been filed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pending</ccts:Name>
+            <ccts:Description>A notification that an action is awaiting settlement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Court action dismissed</ccts:Name>
+            <ccts:Description>A notification that a court action will no longer be heard.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Referred item, accepted</ccts:Name>
+            <ccts:Description>The item being referred to has been accepted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Referred item, rejected</ccts:Name>
+            <ccts:Description>The item being referred to has been rejected.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Debit advice statement line</ccts:Name>
+            <ccts:Description>Notification that the statement line is a debit advice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Credit advice statement line</ccts:Name>
+            <ccts:Description>Notification that the statement line is a credit advice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grouped credit advices</ccts:Name>
+            <ccts:Description>Notification that the credit advices are grouped.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Grouped debit advices</ccts:Name>
+            <ccts:Description>Notification that the debit advices are grouped.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Registered</ccts:Name>
+            <ccts:Description>The name is registered.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment denied</ccts:Name>
+            <ccts:Description>The payment has been denied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Approved as amended</ccts:Name>
+            <ccts:Description>Approved with modifications.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Approved as submitted</ccts:Name>
+            <ccts:Description>The request has been approved as submitted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancelled, no activity</ccts:Name>
+            <ccts:Description>Cancelled due to the lack of activity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Under investigation</ccts:Name>
+            <ccts:Description>Investigation is being done.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Initial claim received</ccts:Name>
+            <ccts:Description>Notification that the initial claim was received.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not in process</ccts:Name>
+            <ccts:Description>Not in process.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rejected, duplicate</ccts:Name>
+            <ccts:Description>Rejected because it is a duplicate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rejected, resubmit with corrections</ccts:Name>
+            <ccts:Description>Rejected but may be resubmitted when corrected.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pending, incomplete</ccts:Name>
+            <ccts:Description>Pending because of incomplete information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Under field office investigation</ccts:Name>
+            <ccts:Description>Investigation by the field is being done.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pending, awaiting additional material</ccts:Name>
+            <ccts:Description>Pending awaiting receipt of additional material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pending, awaiting review</ccts:Name>
+            <ccts:Description>Pending while awaiting review.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reopened</ccts:Name>
+            <ccts:Description>Opened again.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed by primary, forwarded to additional payer(s)</ccts:Name>
+            <ccts:Description>This request has been processed by the primary payer and sent to additional payer(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed by secondary, forwarded to additional payer(s)</ccts:Name>
+            <ccts:Description>This request has been processed by the secondary payer and sent to additional payer(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed by tertiary, forwarded to additional payer(s)</ccts:Name>
+            <ccts:Description>This request has been processed by the tertiary payer and sent to additional payer(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Previous payment decision reversed</ccts:Name>
+            <ccts:Description>A previous payment decision has been reversed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="79">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not our claim, forwarded to another payer(s)</ccts:Name>
+            <ccts:Description>A request does not belong to this payer but has been forwarded to another payer(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="80">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transferred to correct insurance carrier</ccts:Name>
+            <ccts:Description>The request has been transferred to the correct insurance carrier for processing.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="81">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not paid, predetermination pricing only</ccts:Name>
+            <ccts:Description>Payment has not been made and the enclosed response is predetermination pricing only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="82">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentation claim</ccts:Name>
+            <ccts:Description>The claim is for documentation purposes only, no payment required.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="83">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reviewed</ccts:Name>
+            <ccts:Description>Assessed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="84">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Repriced</ccts:Name>
+            <ccts:Description>This price was changed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="85">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Audited</ccts:Name>
+            <ccts:Description>An official examination has occurred.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="86">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Conditionally paid</ccts:Name>
+            <ccts:Description>Payment has been conditionally made.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="87">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On appeal</ccts:Name>
+            <ccts:Description>Reconsideration of the decision has been applied for.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="88">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Closed</ccts:Name>
+            <ccts:Description>Shut.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="89">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reaudited</ccts:Name>
+            <ccts:Description>A subsequent official examination has occurred.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="90">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reissued</ccts:Name>
+            <ccts:Description>Issued again.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="91">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Closed after reopening</ccts:Name>
+            <ccts:Description>Reopened and then closed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="92">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Redetermined</ccts:Name>
+            <ccts:Description>Determined again or differently.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="93">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed as primary</ccts:Name>
+            <ccts:Description>Processed as the first.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="94">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed as secondary</ccts:Name>
+            <ccts:Description>Processed as the second.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="95">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Processed as tertiary</ccts:Name>
+            <ccts:Description>Processed as the third.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="96">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Correction of error</ccts:Name>
+            <ccts:Description>A correction to information previously communicated which contained an error.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="97">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Single credit item of a group</ccts:Name>
+            <ccts:Description>Notification that the credit item is a single credit item of a group of credit items.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="98">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Single debit item of a group</ccts:Name>
+            <ccts:Description>Notification that the debit item is a single debit item of a group of debit items.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="99">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Interim response</ccts:Name>
+            <ccts:Description>The response is an interim one.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="100">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Final response</ccts:Name>
+            <ccts:Description>The response is an final one.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Debit advice requested</ccts:Name>
+            <ccts:Description>A debit advice is requested for the transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transaction not impacted</ccts:Name>
+            <ccts:Description>Advice that the transaction is not impacted.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Patient to be notified</ccts:Name>
+            <ccts:Description>The action to take is to notify the patient.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Healthcare provider to be notified</ccts:Name>
+            <ccts:Description>The action to take is to notify the healthcare provider.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Usual general practitioner to be notified</ccts:Name>
+            <ccts:Description>The action to take is to notify the usual general practitioner.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advice without details</ccts:Name>
+            <ccts:Description>An advice without details is requested or notified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advice with details</ccts:Name>
+            <ccts:Description>An advice with details is requested or notified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amendment requested</ccts:Name>
+            <ccts:Description>An amendment is requested.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>For information</ccts:Name>
+            <ccts:Description>Included for information only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Withdraw</ccts:Name>
+            <ccts:Description>A code indicating discontinuance or retraction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="111">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery date change</ccts:Name>
+            <ccts:Description>The action / notiification is a change of the delivery date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="112">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quantity change</ccts:Name>
+            <ccts:Description>The action / notification is a change of quantity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="113">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Resale and claim</ccts:Name>
+            <ccts:Description>The identified items have been sold by the distributor to the end customer, and compensation for the loss of inventory value is claimed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="114">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Resale</ccts:Name>
+            <ccts:Description>The identified items have been sold by the distributor to the end customer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="115">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Prior addition</ccts:Name>
+            <ccts:Description>This existing line item becomes available at an earlier date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="116">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Expired</ccts:Name>
+            <ccts:Description>This line has expired.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="117">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hold</ccts:Name>
+            <ccts:Description>This line is on Hold.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="118">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Open</ccts:Name>
+            <ccts:Description>This line is open.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="119">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Observe</ccts:Name>
+            <ccts:Description>The object or item is to be or has been observed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

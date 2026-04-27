@@ -116,7 +116,8 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.fill('Statuts de diffusion', [
       PriorNotification.STATE_LABEL[PriorNotification.State.AUTO_SEND_DONE],
       'Invalidé',
-      PriorNotification.STATE_LABEL[PriorNotification.State.VERIFIED_AND_SENT]
+      PriorNotification.STATE_LABEL[PriorNotification.State.VERIFIED_AND_SENT],
+      PriorNotification.STATE_LABEL[PriorNotification.State.PENDING_VERIFICATION]
     ])
     cy.wait('@getPriorNotificationsStatuses')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)

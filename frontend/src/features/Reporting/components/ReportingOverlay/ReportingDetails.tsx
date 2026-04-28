@@ -1,5 +1,6 @@
 import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { Accent, Button, Dot, Icon, IconButton, Size, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
@@ -81,8 +82,12 @@ export function ReportingDetails({
       <Wrapper data-cy="reporting-overlay">
         <Header>
           <VesselName>
-            <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
-            {reporting.vesselName ?? 'Navire inconnu'}
+            {!!reporting.flagState && reporting.flagState !== UNKNOWN_VESSEL.flagState && (
+              <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
+            )}
+            {reporting.numberOfVessels !== undefined && reporting.numberOfVessels > 1
+              ? `${reporting.numberOfVessels} navires`
+              : `${reporting.vesselName ?? 'Navire inconnu'}`}
           </VesselName>
           {isSelected && (
             <CloseButton

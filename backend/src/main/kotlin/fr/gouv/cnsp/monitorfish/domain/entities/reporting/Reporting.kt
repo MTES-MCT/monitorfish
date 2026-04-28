@@ -138,6 +138,7 @@ sealed class Reporting {
         val title: String,
         val description: String? = null,
         val infractions: List<InfractionSuspicionThreat>,
+        val numberOfVessels: Int? = null,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -182,6 +183,7 @@ sealed class Reporting {
                         expirationDate = command.expirationDate ?: this.expirationDate,
                         reportingDate = command.reportingDate,
                         infractions = command.infractions,
+                        numberOfVessels = command.numberOfVessels,
                         isFishing = command.isFishing ?: false,
                         latitude = command.latitude,
                         longitude = command.longitude,
@@ -264,6 +266,7 @@ sealed class Reporting {
         val satelliteType: SatelliteSource? = null,
         val title: String,
         val description: String? = null,
+        val numberOfVessels: Int? = null,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -311,6 +314,7 @@ sealed class Reporting {
                         longitude = command.longitude,
                         otherSourceType = command.otherSourceType,
                         satelliteType = command.satelliteType,
+                        numberOfVessels = command.numberOfVessels,
                     )
                 ReportingType.INFRACTION_SUSPICION ->
                     InfractionSuspicion(

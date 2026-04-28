@@ -22,6 +22,7 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     length: formValues.length,
     longitude: formValues.longitude,
     mmsi: formValues.mmsi,
+    numberOfVessels: formValues.numberOfVessels,
     otherSourceType: formValues.otherSourceType,
     reportingDate: formValues.reportingDate,
     reportingSource: formValues.reportingSource as ReportingOriginSource,

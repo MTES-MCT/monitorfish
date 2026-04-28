@@ -133,6 +133,7 @@ object ReportingMapper {
                         title = infractionSuspicionValue.title,
                         description = infractionSuspicionValue.description,
                         infractions = infractions,
+                        numberOfVessels = infractionSuspicionValue.numberOfVessels,
                         seaFront = infractionSuspicionValue.seaFront,
                         dml = infractionSuspicionValue.dml,
                     )
@@ -175,6 +176,7 @@ object ReportingMapper {
                         satelliteType = observationValue.satelliteType,
                         title = observationValue.title,
                         description = observationValue.description,
+                        numberOfVessels = observationValue.numberOfVessels,
                         seaFront = observationValue.seaFront,
                         dml = observationValue.dml,
                     )
@@ -214,6 +216,7 @@ object ReportingMapper {
                     satelliteType = reporting.satelliteType,
                     title = reporting.title,
                     description = reporting.description,
+                    numberOfVessels = reporting.numberOfVessels,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
                     infractions =
@@ -235,6 +238,7 @@ object ReportingMapper {
                     satelliteType = reporting.satelliteType,
                     title = reporting.title,
                     description = reporting.description,
+                    numberOfVessels = reporting.numberOfVessels,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
                 )

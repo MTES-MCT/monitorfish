@@ -187,34 +187,38 @@ describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
   })
 
   it('passes when isIUU is true and both latitude and longitude are provided', () => {
-    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, longitude: -4.2 })
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseIUUData,
+      latitude: 48.5,
+      longitude: -4.2,
+      numberOfVessels: 1
+    })
     expect(result.success).toBe(true)
   })
 
   it('fails when isIUU is true and latitude is missing', () => {
-    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, longitude: -4.2 })
+    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, longitude: -4.2, numberOfVessels: 1 })
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)
       expect(paths).toContainEqual(['latitude'])
+    }
+  })
+
+  it('fails when isIUU is true and numberOfVessels is missing', () => {
+    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, longitude: -4.2 })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      const paths = result.error.issues.map(i => i.path)
+      expect(paths).toContainEqual(['numberOfVessels'])
     }
   })
 
   it('fails when isIUU is true and longitude is missing', () => {
-    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5 })
+    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, numberOfVessels: 1 })
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)
-      expect(paths).toContainEqual(['longitude'])
-    }
-  })
-
-  it('fails when isIUU is true and both latitude and longitude are missing', () => {
-    const result = CreateOrEditReportingSchema.safeParse(baseIUUData)
-    expect(result.success).toBe(false)
-    if (!result.success) {
-      const paths = result.error.issues.map(i => i.path)
-      expect(paths).toContainEqual(['latitude'])
       expect(paths).toContainEqual(['longitude'])
     }
   })

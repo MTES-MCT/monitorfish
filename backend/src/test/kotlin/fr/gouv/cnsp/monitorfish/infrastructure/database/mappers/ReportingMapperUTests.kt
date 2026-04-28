@@ -210,6 +210,7 @@ class ReportingMapperUTests {
                 "\"title\": \"A title !\"," +
                 "\"description\": \"A description !\"," +
                 "\"dml\": \"DML 56\"," +
+                "\"numberOfVessels\": 3," +
                 "\"infractions\": [" +
                 "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans autorisation par navire tiers\"}," +
                 "{\"natinfCode\": 7059, \"threat\": \"Mesures techniques\", \"threatCharacterization\": \"Engin\"}" +
@@ -229,6 +230,7 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.InfractionSuspicion
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.dml).isEqualTo("DML 56")
+        Assertions.assertThat(parsedReporting.numberOfVessels).isEqualTo(3)
         Assertions.assertThat(parsedReporting.infractions).hasSize(2)
         Assertions.assertThat(parsedReporting.infractions[0].natinfCode).isEqualTo(2608)
         Assertions.assertThat(parsedReporting.infractions[0].threat).isEqualTo("Activités INN")
@@ -286,6 +288,7 @@ class ReportingMapperUTests {
                 reportingSource = ReportingSource.OPS,
                 title = "A title !",
                 description = "A description !",
+                numberOfVessels = 5,
                 infractions =
                     listOf(
                         InfractionSuspicionThreat(
@@ -306,6 +309,7 @@ class ReportingMapperUTests {
         Assertions.assertThat(infractionSuspicionValue.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(infractionSuspicionValue.title).isEqualTo("A title !")
         Assertions.assertThat(infractionSuspicionValue.description).isEqualTo("A description !")
+        Assertions.assertThat(infractionSuspicionValue.numberOfVessels).isEqualTo(5)
         Assertions.assertThat(infractionSuspicionValue.infractions).hasSize(1)
         Assertions.assertThat(infractionSuspicionValue.infractions!![0].natinfCode).isEqualTo(1234)
         Assertions.assertThat(infractionSuspicionValue.infractions!![0].threat).isEqualTo("Obligations déclaratives")

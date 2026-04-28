@@ -231,7 +231,8 @@
                     "natinfCode": 27689,
                     "dml": "DML 29",
                     "type": "INFRACTION_SUSPICION",
-                    "seaFront": "NAMO"
+                    "seaFront": "NAMO",
+		    "numberOfVessels": 1
                 },
                 "vessel_id": 11,
                 "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",

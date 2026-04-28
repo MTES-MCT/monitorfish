@@ -27,6 +27,7 @@ export const InfractionSuspicionSchema = z.strictObject({
   description: stringOrUndefined,
   dml: stringOrUndefined,
   infractions: z.array(InfractionSuspicionThreatSchema),
+  numberOfVessels: numberOrUndefined,
   otherSourceType: z.enum(OtherSourceType).or(z.undefined()),
   reportingSource: z.enum(ReportingOriginSource).or(z.undefined()),
   satelliteType: z.enum(SatelliteSource).or(z.undefined()),

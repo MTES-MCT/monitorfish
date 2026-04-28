@@ -27,6 +27,7 @@ import {
   getOptionsFromLabelledEnum,
   Icon,
   MultiRadio,
+  NumberInput,
   Select
 } from '@mtes-mct/monitor-ui'
 import { getOptionsFromStrings } from '@utils/getOptionsFromStrings'
@@ -61,7 +62,9 @@ type FormProps = Readonly<{
   onAutoSave?: ((values: FormEditedReporting) => void) | undefined
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  onVesselStateChange?: ((vesselName: string | undefined, flagState: string | undefined) => void) | undefined
+  onVesselStateChange?:
+    | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
+    | undefined
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
 }>
 export function Form({
@@ -118,6 +121,7 @@ export function Form({
   ])
   const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
+  const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
   const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
   const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
@@ -151,7 +155,7 @@ export function Form({
     return mapControlUnitsToUniqueSortedIdsAsOptions(controlUnitsQuery.data)
   }, [controlUnitsQuery.data])
 
-  function clearVesselValues() {
+  function clearVesselValues(override?: Partial<FormEditedReporting>) {
     setValues({
       ...values,
       cfr: undefined,
@@ -162,7 +166,8 @@ export function Form({
       mmsi: undefined,
       vesselId: undefined,
       vesselIdentifier: undefined,
-      vesselName: undefined
+      vesselName: undefined,
+      ...override
     })
   }
 
@@ -193,6 +198,17 @@ export function Form({
     } else {
       setIsVesselAbsent(false)
     }
+  }
+
+  const handleNumberOfVesselsChange = (nextValue: number | undefined) => {
+    if (!isIUU || (nextValue ?? 1) <= 1) {
+      setFieldValue('numberOfVessels', nextValue)
+
+      return
+    }
+
+    setIsVesselAbsent(true)
+    clearVesselValues({ isUnknownVessel: true, numberOfVessels: nextValue })
   }
 
   const handleObservationTypeSelect = (observationTitle: string | undefined) => {
@@ -240,8 +256,8 @@ export function Form({
   }, [submitForm, submitRef])
 
   useEffect(() => {
-    onVesselStateChange?.(values.vesselName, values.flagState)
-  }, [onVesselStateChange, values.flagState, values.vesselName])
+    onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)
+  }, [onVesselStateChange, values.flagState, values.vesselName, values.numberOfVessels])
 
   useEffect(() => {
     if (!onAutoSave || !isValid || !dirty) {
@@ -324,6 +340,18 @@ export function Form({
       )}
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikCoordinatesPicker isLight={isLight} isRequired={isIUU} />
+      {isIUU && (
+        <NumberInput
+          error={errors.numberOfVessels}
+          isLight={isLight}
+          isRequired
+          label="Nombre de navires"
+          min={1}
+          name="numberOfVessels"
+          onChange={handleNumberOfVesselsChange}
+          value={values.numberOfVessels}
+        />
+      )}
       {!hideVesselSection && (
         <VesselSection $hasError={!!errors?.isUnknownVessel}>
           <VesselSearch
@@ -338,7 +366,7 @@ export function Form({
             <StyledCheckbox
               checked={isVesselAbsent}
               isLight
-              label="Navire absent de la base de données"
+              label={isPlural ? 'Navires absents de la base de données' : 'Navire absent de la base de données'}
               name="isVesselAbsent"
               onChange={handleAbsentToggle}
             />
@@ -368,7 +396,11 @@ export function Form({
                 searchable
                 virtualized
               />
-              <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
+              <FormikCheckbox
+                isLight
+                label={isPlural ? 'Navires en action de pêche' : 'Navire en action de pêche'}
+                name="isFishing"
+              />
             </VesselCard>
           )}
           {isVesselAbsent && (
@@ -402,7 +434,7 @@ export function Form({
                 checked={values.isUnknownVessel}
                 isErrorMessageHidden
                 isLight
-                label="Navire inconnu"
+                label={isPlural ? 'Navires inconnus' : 'Navire inconnu'}
                 name="isUnknownVessel"
                 onChange={isChecked => {
                   setFieldValue('isUnknownVessel', isChecked)
@@ -416,7 +448,11 @@ export function Form({
                 searchable
                 virtualized
               />
-              <FormikCheckbox isLight label="Navire en action de pêche" name="isFishing" />
+              <FormikCheckbox
+                isLight
+                label={isPlural ? 'Navires en action de pêche' : 'Navire en action de pêche'}
+                name="isFishing"
+              />
             </VesselCard>
           )}
         </VesselSection>
@@ -564,7 +600,7 @@ const StyledCheckbox = styled(Checkbox)`
 const VesselSection = styled.div<{ $hasError: boolean }>`
   background: ${p => p.theme.color.gainsboro};
   padding: 8px;
-  margin-top: 24px;
+  margin-top: 16px;
   z-index: 9999;
   border: ${p => (p.$hasError ? `1px solid ${p.theme.color.maximumRed}` : 'unset')};
 

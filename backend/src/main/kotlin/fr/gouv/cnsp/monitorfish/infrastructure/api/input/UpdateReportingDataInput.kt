@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionSuspicionThreatDataOutput
 import java.time.ZonedDateTime
 
 class UpdateReportingDataInput(
@@ -36,6 +35,7 @@ class UpdateReportingDataInput(
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
+    val numberOfVessels: Int? = null,
     val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
 ) {
     fun toUpdatedReportingValues(): ReportingUpdateCommand {
@@ -76,6 +76,7 @@ class UpdateReportingDataInput(
             vesselIdentifier = this.vesselIdentifier,
             flagState = this.flagState,
             isFishing = this.isFishing,
+            numberOfVessels = this.numberOfVessels,
             latitude = this.latitude,
             longitude = this.longitude,
         )

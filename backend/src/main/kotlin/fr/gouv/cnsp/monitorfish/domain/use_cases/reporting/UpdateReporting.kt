@@ -62,5 +62,4 @@ class UpdateReporting(
             }
         return controlUnits.find { it.id == controlUnitId }
     }
-
 }

@@ -8,7 +8,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionSuspicionThreatDataOutput
 import java.time.ZonedDateTime
 
 class UpdateReportingDataInput(

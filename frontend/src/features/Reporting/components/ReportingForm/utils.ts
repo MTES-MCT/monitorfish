@@ -39,7 +39,7 @@ export function getFormFields(
     length: editedReporting?.length,
     longitude: editedReporting?.longitude,
     mmsi: editedReporting?.mmsi,
-    numberOfVessels: isIUU ? ((value as InfractionSuspicion | undefined)?.numberOfVessels ?? 1) : undefined,
+    numberOfVessels: isIUU ? (value?.numberOfVessels ?? 1) : undefined,
     otherSourceType: value?.otherSourceType,
     reportingDate: editedReporting?.reportingDate ?? customDayjs().utc().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,

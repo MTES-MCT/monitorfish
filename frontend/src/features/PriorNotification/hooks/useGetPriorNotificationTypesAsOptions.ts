@@ -1,5 +1,9 @@
 import { useMemo } from 'react'
 
+import {
+  IS_PRIOR_NOTIFICATION_ZERO,
+  IS_PRIOR_NOTIFICATION_ZERO_LABEL
+} from '../components/PriorNotificationList/constants'
 import { useGetPriorNotificationTypesQuery } from '../priorNotificationApi'
 
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -15,10 +19,14 @@ export function useGetPriorNotificationTypesAsOptions() {
       return undefined
     }
 
-    return types.map(type => ({
+    const options = types.map(type => ({
       label: type,
       value: type
     }))
+
+    options.push({ label: IS_PRIOR_NOTIFICATION_ZERO_LABEL, value: IS_PRIOR_NOTIFICATION_ZERO })
+
+    return options
   }, [types])
 
   return {

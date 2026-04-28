@@ -26,7 +26,11 @@ type ReportingFormProps = {
   onAutoSaved?: ((reporting: Reporting.Reporting) => void) | undefined
   onClose: () => void
   onIsDirty?: ((isDirty: boolean) => void) | undefined
-  onVesselStateChange?: (vesselName: string | undefined, flagState: string | undefined) => void
+  onVesselStateChange?: (
+    vesselName: string | undefined,
+    flagState: string | undefined,
+    numberOfVessels: number | undefined
+  ) => void
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
   windowContext: WindowContext
 }

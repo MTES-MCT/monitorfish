@@ -7,6 +7,7 @@ import { ReportingForm } from '@features/Reporting/components/ReportingForm'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -28,6 +29,7 @@ export function IUUReportingMapForm() {
   const { isOpened, isRendered } = useDisplayMapBox(isReportingMapFormDisplayed)
   const [vesselName, setVesselName] = useState<string | undefined>(undefined)
   const [flagState, setFlagState] = useState<string | undefined>(undefined)
+  const [numberOfVessels, setNumberOfVessels] = useState<number | undefined>(undefined)
   const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
   const submitRef = useRef<(() => Promise<void>) | undefined>(undefined)
   const isDirtyRef = useRef(false)
@@ -42,6 +44,7 @@ export function IUUReportingMapForm() {
       reportingTypeRef.current = undefined
       setVesselName(undefined)
       setFlagState(undefined)
+      setNumberOfVessels(undefined)
       setAutoSavedLastUpdateDate(undefined)
 
       return
@@ -85,10 +88,18 @@ export function IUUReportingMapForm() {
     dispatch(deleteReporting(reportingIdRef.current, reportingTypeRef.current))
   }
 
-  const handleVesselStateChange = useCallback((name: string | undefined, flag: string | undefined) => {
-    setVesselName(name)
-    setFlagState(flag)
-  }, [])
+  const handleVesselStateChange = useCallback(
+    (
+      nextVesselName: string | undefined,
+      nextFlagState: string | undefined,
+      nextNumberOfVessels: number | undefined
+    ) => {
+      setVesselName(nextVesselName)
+      setFlagState(nextFlagState)
+      setNumberOfVessels(nextNumberOfVessels)
+    },
+    []
+  )
 
   const handleAutoSaved = useCallback((reporting: Reporting.Reporting) => {
     setAutoSavedLastUpdateDate(reporting.lastUpdateDate)
@@ -102,6 +113,18 @@ export function IUUReportingMapForm() {
 
   const lastUpdateDate = autoSavedLastUpdateDate ?? editedReporting?.lastUpdateDate
 
+  const title = (() => {
+    if (!lastUpdateDate) {
+      return 'NOUVEAU SIGNALEMENT INN'
+    }
+
+    if (numberOfVessels !== undefined && numberOfVessels > 1) {
+      return `${numberOfVessels} NAVIRES`
+    }
+
+    return `${vesselName ?? 'NAVIRE INCONNU'}`
+  })()
+
   return (
     <>
       {isRendered && (
@@ -110,24 +133,11 @@ export function IUUReportingMapForm() {
             <Header>
               <HeaderTitle>
                 <Icon.Report color={THEME.color.white} />
-                <StyledTitle title={!vesselName && !!lastUpdateDate ? 'NAVIRE INCONNU' : vesselName}>
-                  {vesselName && (
-                    <>
-                      {flagState && flagState !== 'UNDEFINED' && (
-                        <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
-                      )}
-                      {vesselName}
-                    </>
+                <StyledTitle>
+                  {!!flagState && flagState !== UNKNOWN_VESSEL.flagState && (
+                    <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
                   )}
-                  {!vesselName && !lastUpdateDate && 'NOUVEAU SIGNALEMENT INN'}
-                  {!vesselName && !!lastUpdateDate && (
-                    <>
-                      {flagState && flagState !== 'UNDEFINED' && (
-                        <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
-                      )}
-                      NAVIRE INCONNU
-                    </>
-                  )}
+                  {title}
                 </StyledTitle>
               </HeaderTitle>
               <CloseButton Icon={Icon.Close} onClick={onClose} title="Fermer" />

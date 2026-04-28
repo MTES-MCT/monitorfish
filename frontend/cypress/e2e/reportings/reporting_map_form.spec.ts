@@ -38,7 +38,9 @@ context('Reporting map form', () => {
     cy.fill('Nombre de navires', 2)
     // When numberOfVessels > 1, "navire absent" and "navire inconnu" are auto-checked and labels become plural
     cy.contains('Navires absents de la base de données').should('be.visible')
+    cy.get('[id="isVesselAbsent"]').should('have.attr', 'aria-checked', 'true')
     cy.contains('Navires inconnus').should('be.visible')
+    cy.get('[id="isUnknownVessel"]').should('have.attr', 'aria-checked', 'true')
     cy.fill('Nationalité', 'France')
     cy.fill('Engin', 'PTM')
     cy.fill('Titre', 'Test INN - pêche illicite')

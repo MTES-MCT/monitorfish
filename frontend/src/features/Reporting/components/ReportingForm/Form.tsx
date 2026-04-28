@@ -62,7 +62,9 @@ type FormProps = Readonly<{
   onAutoSave?: ((values: FormEditedReporting) => void) | undefined
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
-  onVesselStateChange?: ((vesselName: string | undefined, flagState: string | undefined) => void) | undefined
+  onVesselStateChange?:
+    | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
+    | undefined
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
 }>
 export function Form({
@@ -254,8 +256,8 @@ export function Form({
   }, [submitForm, submitRef])
 
   useEffect(() => {
-    onVesselStateChange?.(values.vesselName, values.flagState)
-  }, [onVesselStateChange, values.flagState, values.vesselName])
+    onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)
+  }, [onVesselStateChange, values.flagState, values.vesselName, values.numberOfVessels])
 
   useEffect(() => {
     if (!onAutoSave || !isValid || !dirty) {

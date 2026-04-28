@@ -82,16 +82,12 @@ export function ReportingDetails({
       <Wrapper data-cy="reporting-overlay">
         <Header>
           <VesselName>
-            {reporting.numberOfVessels !== undefined && reporting.numberOfVessels > 1 ? (
-              `${reporting.numberOfVessels} navires`
-            ) : (
-              <>
-                {reporting.flagState !== UNKNOWN_VESSEL.flagState && (
-                  <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
-                )}
-                {reporting.vesselName ?? 'Navire inconnu'}
-              </>
+            {!!reporting.flagState && reporting.flagState !== UNKNOWN_VESSEL.flagState && (
+              <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
             )}
+            {reporting.numberOfVessels !== undefined && reporting.numberOfVessels > 1
+              ? `${reporting.numberOfVessels} navires`
+              : `${reporting.vesselName ?? 'Navire inconnu'}`}
           </VesselName>
           {isSelected && (
             <CloseButton

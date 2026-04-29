@@ -1,4 +1,5 @@
 import xml
+from datetime import datetime
 
 from src.parsers.ers.childless_parsers import (
     parse_edci,
@@ -357,8 +358,8 @@ def parse_eof(eof):
 
 def parse_src(src):
     return {
-        "landingDate": src.get("DL"),
-        "landingPort": src.get("PO"),
+        "landing_datetime_utc": make_datetime(src.get("DL")),
+        "landing_port": src.get("PO"),
     }
 
 
@@ -401,14 +402,14 @@ def parse_sli(sli):
     children = tagged_children(sli)
 
     data = {
-        "saleDate": sli.get("DA"),
-        "saleCountry": sli.get("SC"),
-        "saleLocation": sli.get("SL"),
-        "sellerName": sli.get("NS"),
-        "buyerName": sli.get("NB"),
-        "buyerIdentificationNumber": sli.get("VN"),
-        "salesContractReference": sli.get("CN"),
-        "bcdNumber": sli.get("BC"),
+        "sales_datetime_utc": datetime.fromisoformat(sli.get("DA")),
+        "sale_country": sli.get("SC"),
+        "sale_port_code": sli.get("SL"),
+        "seller_name": sli.get("NS"),
+        "buyer_name": sli.get("NB"),
+        "buyer_id": sli.get("VN"),
+        "sales_contract_reference": sli.get("CN"),
+        "bcd_number": sli.get("BC"),
     }
 
     assert "SRC" in children
@@ -425,9 +426,9 @@ def parse_tli(tli):
     children = tagged_children(tli)
 
     data = {
-        "takeoverDate": tli.get("DA"),
-        "takeoverCountry": tli.get("SC"),
-        "takeoverLocation": tli.get("SL"),
+        "sales_datetime_utc": tli.get("DA"),
+        "sale_country": tli.get("SC"),
+        "sale_location": tli.get("SL"),
         "takeoverOrganizationName": tli.get("NT"),
         "storageFacilityName": tli.get("NF"),
         "storageFacilityAddress": tli.get("AF"),
@@ -439,7 +440,7 @@ def parse_tli(tli):
         data = {**data, **parse_src(children["SRC"][0])}
 
     if "CST" in children:
-        data["consignments"] = [parse_cst(cst) for cst in children["CST"]]
+        data["products"] = [parse_cst(cst) for cst in children["CST"]]
 
     return data
 

@@ -205,12 +205,20 @@ def parse(el):
         raise ERSParsingError
 
 
-def parse_xml_string(xml_string):
+def parse_logbook_xml_string(xml_string):
     try:
         el = ET.fromstring(xml_string.strip("¿"))
     except ParseError:
         raise ERSParsingError
     return parse(el)
+
+
+def parse_sales_xml_string(xml_string):
+    try:
+        el = ET.fromstring(xml_string.strip("¿"))
+    except ParseError:
+        raise ERSParsingError
+    metadata, data_iterator = parse(el)
 
 
 def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
@@ -256,9 +264,16 @@ def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
         "integration_datetime_utc": None,
     }
 
+    xml_string_parsers = {
+        DataDomain.LOGBOOK: parse_logbook_xml_string,
+        DataDomain.SALES: parse_sales_xml_string,
+    }
+
+    xml_string_parser = xml_string_parsers[data_domain]
+
     for xml_message in xml_messages:
         try:
-            metadata, data_iterator = parse_xml_string(xml_message)
+            metadata, data_iterator = xml_string_parser(xml_message)
             now = datetime.utcnow()
             raw = {
                 "operation_number": metadata.get("operation_number"),

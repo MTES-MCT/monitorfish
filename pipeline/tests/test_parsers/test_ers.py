@@ -4,7 +4,7 @@ import os
 import pytest
 
 from config import TEST_DATA_LOCATION
-from src.parsers.ers.ers import ERSParsingError, parse_xml_string
+from src.parsers.ers.ers import ERSParsingError, parse_logbook_xml_string
 
 XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/ers"
 
@@ -12,7 +12,7 @@ XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/ers"
 def parse_file(test_file: str, has_data: bool = False):
     with open(os.path.join(XML_TEST_DATA_LOCATION, test_file), "r") as f:
         xml_string = f.read()
-    metadata, data_iter = parse_xml_string(xml_string)
+    metadata, data_iter = parse_logbook_xml_string(xml_string)
     data_list = list(data_iter)
     return metadata, data_list
 

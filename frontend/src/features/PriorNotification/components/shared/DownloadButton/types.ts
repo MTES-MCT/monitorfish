@@ -7,6 +7,7 @@ export type TemplateData = {
   internalReferenceNumber: string
   ircs: string
   isLanding: boolean
+  isZero: boolean
   port: string | undefined
   portEntranceAuthorization: string
   portLandingAuthorization: string

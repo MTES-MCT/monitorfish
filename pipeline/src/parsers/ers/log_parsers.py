@@ -1,5 +1,4 @@
 import xml
-from datetime import datetime
 
 from src.parsers.ers.childless_parsers import (
     parse_edci,
@@ -15,7 +14,6 @@ from src.parsers.utils import (
     tagged_children,
     try_float,
 )
-from src.processing import remove_nones_from_dict
 
 
 def default_log_parser(el: xml.etree.ElementTree.Element):
@@ -354,128 +352,6 @@ def parse_eof(eof):
         "value": value,
     }
     return data
-
-
-def parse_src(src):
-    return {
-        "landing_datetime_utc": make_datetime(src.get("DL")),
-        "landing_port": src.get("PO"),
-    }
-
-
-def parse_css(css):
-    children = tagged_children(css)
-
-    data = {
-        "unitPrice": try_float(css.get("FP")),
-        "totalPrice": try_float(css.get("TP")),
-        "currency": css.get("CR"),
-        "fishSize": css.get("SF"),
-        "productDestination": css.get("PP"),
-        "withdrawn": css.get("WD"),
-        "producerOrganizationUse": css.get("OP"),
-    }
-
-    assert "SPE" in children
-    assert len(children["SPE"]) == 1
-    data = {**data, **parse_spe(children["SPE"][0])}
-    data = remove_nones_from_dict(data)
-
-    return data
-
-
-def parse_cst(cst):
-    children = tagged_children(cst)
-
-    data = {
-        "fishSize": cst.get("SF"),
-    }
-
-    if "SPE" in children:
-        assert len(children["SPE"]) == 1
-        data["species"] = parse_spe(children["SPE"][0])
-
-    return data
-
-
-def parse_sli(sli):
-    children = tagged_children(sli)
-
-    data = {
-        "sales_datetime_utc": datetime.fromisoformat(sli.get("DA")),
-        "sale_country": sli.get("SC"),
-        "sale_port_code": sli.get("SL"),
-        "seller_name": sli.get("NS"),
-        "buyer_name": sli.get("NB"),
-        "buyer_id": sli.get("VN"),
-        "sales_contract_reference": sli.get("CN"),
-        "bcd_number": sli.get("BC"),
-    }
-
-    assert "SRC" in children
-    assert len(children["SRC"]) == 1
-    data = {**data, **parse_src(children["SRC"][0])}
-
-    assert "CSS" in children
-    data["products"] = [parse_css(css) for css in children["CSS"]]
-
-    return data
-
-
-def parse_tli(tli):
-    children = tagged_children(tli)
-
-    data = {
-        "sales_datetime_utc": tli.get("DA"),
-        "sale_country": tli.get("SC"),
-        "sale_location": tli.get("SL"),
-        "takeoverOrganizationName": tli.get("NT"),
-        "storageFacilityName": tli.get("NF"),
-        "storageFacilityAddress": tli.get("AF"),
-        "transportDocumentReference": tli.get("TR"),
-    }
-
-    if "SRC" in children:
-        assert len(children["SRC"]) == 1
-        data = {**data, **parse_src(children["SRC"][0])}
-
-    if "CST" in children:
-        data["products"] = [parse_cst(cst) for cst in children["CST"]]
-
-    return data
-
-
-def parse_sal(sal):
-    children = tagged_children(sal)
-
-    value = {
-        "salesNoteNumber": sal.get("NR"),
-        "salesNoteDate": sal.get("ND"),
-        "takeoverContractReference": sal.get("CN"),
-        "transportDocumentReference": sal.get("TR"),
-    }
-
-    if "SLI" in children:
-        value["salesLines"] = [parse_sli(sli) for sli in children["SLI"]]
-
-    if "TLI" in children:
-        value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
-
-    metadata = {
-        "cfr": sal.get("IR"),
-        "ircs": sal.get("RC"),
-        "external_identification": sal.get("XR"),
-        "vessel_name": sal.get("NA"),
-        "flag_state": sal.get("FS"),
-        "imo": None,
-    }
-
-    data = {
-        "log_type": "SAL",
-        "value": value,
-    }
-
-    return metadata, None, None, data
 
 
 def parse_rtp(rtp):

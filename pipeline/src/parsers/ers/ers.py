@@ -22,8 +22,8 @@ from src.parsers.ers.log_parsers import (
     parse_lan,
     parse_pno,
     parse_rtp,
-    parse_sal,
 )
+from src.parsers.ers.sal_parsers import parse_sli, parse_tli
 from src.parsers.utils import (
     get_first_child,
     get_root_tag,
@@ -137,6 +137,25 @@ def parse_log(log):
     return metadata, None, logs, None
 
 
+def parse_sal(sal):
+    sals = [
+        child for child in list(sal) if remove_namespace(child.tag) in ("SLI", "TLI")
+    ]
+    metadata = {
+        "cfr": sal.get("IR"),
+        "ircs": sal.get("RC"),
+        "external_identification": sal.get("XR"),
+        "vessel_name": sal.get("NA"),
+        "flag_state": sal.get("FS"),
+        "invoice_number": sal.get("NR"),
+        "invoice_datetime_utc": make_datetime(sal.get("ND")),
+        "takeover_contract_reference": sal.get("CN"),
+        "transport_document_reference": sal.get("TR"),
+    }
+
+    return metadata, None, sals, None
+
+
 parsers = {
     "DAT": partial(simple_parser, pass_child=True),
     "COR": parse_cor,
@@ -148,6 +167,8 @@ parsers = {
     "ERS": parse_ers,
     "LOG": parse_log,
     "SAL": parse_sal,
+    "SLI": parse_sli,
+    "TLI": parse_tli,
     "DEP": parse_dep,
     "FAR": parse_far,
     "ECPS": parse_ecps,
@@ -189,7 +210,7 @@ def parse(el):
         child_metadata, data_iter = parse(child)
         return {**metadata, **child_metadata}, data_iter
 
-    # LOG elements with FAR, LAN, PNO... children
+    # LOG and SAL elements with FAR, LAN, PNO, SLI, TLI... children
     elif metadata is not None and child is None and logs is not None and data is None:
         return metadata, map(parse_, logs)
 
@@ -205,20 +226,12 @@ def parse(el):
         raise ERSParsingError
 
 
-def parse_logbook_xml_string(xml_string):
+def parse_xml_string(xml_string):
     try:
         el = ET.fromstring(xml_string.strip("¿"))
     except ParseError:
         raise ERSParsingError
     return parse(el)
-
-
-def parse_sales_xml_string(xml_string):
-    try:
-        el = ET.fromstring(xml_string.strip("¿"))
-    except ParseError:
-        raise ERSParsingError
-    metadata, data_iterator = parse(el)
 
 
 def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
@@ -245,35 +258,33 @@ def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
         "xml_message",
     ]
 
-    reports_defaults = {
-        "operation_number": None,
-        "operation_country": None,
-        "operation_datetime_utc": None,
-        "operation_type": None,
-        "report_id": None,
-        "referenced_report_id": None,
-        "report_datetime_utc": None,
-        "cfr": None,
-        "ircs": None,
-        "external_identification": None,
-        "vessel_name": None,
-        "flag_state": None,
-        "imo": None,
-        "log_type": None,
-        "value": None,
-        "integration_datetime_utc": None,
+    defaults = {
+        DataDomain.LOGBOOK: {
+            "operation_number": None,
+            "operation_country": None,
+            "operation_datetime_utc": None,
+            "operation_type": None,
+            "report_id": None,
+            "referenced_report_id": None,
+            "report_datetime_utc": None,
+            "cfr": None,
+            "ircs": None,
+            "external_identification": None,
+            "vessel_name": None,
+            "flag_state": None,
+            "imo": None,
+            "log_type": None,
+            "value": None,
+            "integration_datetime_utc": None,
+        },
+        DataDomain.SALES: {},
     }
 
-    xml_string_parsers = {
-        DataDomain.LOGBOOK: parse_logbook_xml_string,
-        DataDomain.SALES: parse_sales_xml_string,
-    }
-
-    xml_string_parser = xml_string_parsers[data_domain]
+    reports_defaults = defaults[data_domain]
 
     for xml_message in xml_messages:
         try:
-            metadata, data_iterator = xml_string_parser(xml_message)
+            metadata, data_iterator = parse_xml_string(xml_message)
             now = datetime.utcnow()
             raw = {
                 "operation_number": metadata.get("operation_number"),

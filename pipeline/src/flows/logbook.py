@@ -1,6 +1,5 @@
 import os
 import re
-from enum import Enum
 from pathlib import Path
 from typing import List, Union
 from zipfile import ZipFile
@@ -9,6 +8,11 @@ from prefect import flow, get_run_logger, task
 
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
+from src.entities.data_exchange_standards import (
+    DataDomain,
+    TransmissionFormat,
+    ZippedFileType,
+)
 from src.parsers.ers import ers
 from src.parsers.flux import flux
 from src.processing import drop_rows_already_in_table, to_json
@@ -20,76 +24,55 @@ TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"
 ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
 
 
-class LogbookZippedFileType(Enum):
-    ERS3 = "ERS3"
-    ERS3_ACK = "ERS3_ACK"
-    UN = "UN"
-
-
-class LogbookTransmissionFormat(Enum):
-    ERS = "ERS"
-    FLUX = "FLUX"
-
-    @staticmethod
-    def from_zipped_file_type(t: LogbookZippedFileType):
-        mapping = {
-            LogbookZippedFileType.ERS3: LogbookTransmissionFormat.ERS,
-            LogbookZippedFileType.ERS3_ACK: LogbookTransmissionFormat.ERS,
-            LogbookZippedFileType.UN: LogbookTransmissionFormat.FLUX,
-        }
-        return mapping[t]
-
-
 ####################################### HELPERS #######################################
 
 
-def get_logbook_zipped_file_type(zipfile_name: str) -> LogbookZippedFileType:
+def get_zipped_file_type(zipfile_name: str) -> ZippedFileType:
     """Takes a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip
-    and returns the coresponding `LogbookZippedFileType`, based on pattern matching.
+    and returns the coresponding `ZippedFileType`, based on pattern matching.
 
     The expected pattern is of the form
 
-        `<prefix>_JBE<YYYYMMXXXXXX>.zip`
+        `<prefix><YYYYMMXXXXXX>.zip`
 
     where :
 
-    * prefix is one of the `LogbookZippedFileType` enum values
+    * prefix is one of the `ZippedFileType` enum values
     * Y, M and X are digits
 
     Args:
-        zipfile_name (str): name of a zipfile containing logbook data.
+        zipfile_name (str): name of a zipfile containing logbook or sales data.
 
     Returns:
-        LogbookZippedFileType: the type of data corresponding to the name of the
-          zipfile
+        ZippedFileType: the type of data corresponding to the name of the zipfile
 
     Raises:
         ValueError: if the name does not match the expected pattern or the matched
-          string does not correspond to a known `LogbookZippedFileType`.
+          string does not correspond to a known `ZippedFileType`.
 
     Examples:
-        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.zip")
-        <LogbookZippedFileType.UN: 'UN'>
+        >>> get_zipped_file_type("UN_JBE2020010199999.zip")
+        <ZippedFileType.UN: 'UN_JBE'>
 
-        >>> get_logbook_zipped_file_type("UN_JBE20200101999999.zip")
+        >>> get_zipped_file_type("UN_JBE20200101999999.zip")
         ValueError
 
-        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.txt")
+        >>> get_zipped_file_type("UN_JBE2020010199999.txt")
         ValueError
     """
-    zipfile_name_pattern = r"^(?P<logbook_type>.*)_JBE\d{12}.zip"
+    zipfile_name_pattern = r"^(?P<file_type>.*)\d{12}.zip"
     match = re.match(zipfile_name_pattern, zipfile_name)
 
     try:
         assert match
-        return LogbookZippedFileType[match["logbook_type"]]
+        return ZippedFileType[match["file_type"]]
     except (AssertionError, KeyError):
         raise ValueError(
             (
                 "Unexpected file name. Files containing logbook data are expected to "
                 f"have a name matching the pattern {zipfile_name_pattern}, with "
-                "`logbook_type` equal to one of "
-                f"{list(map(lambda s: s.name, LogbookZippedFileType))} .Got "
+                "`file_type` equal to one of "
+                f"{list(map(lambda s: s.name, ZippedFileType))} .Got "
                 f"{zipfile_name} which does not match."
             )
         )
@@ -199,14 +182,14 @@ def extract_zipfiles(
 
             for zipfile_name in zipfile_names:
                 try:
-                    zipped_file_type = get_logbook_zipped_file_type(zipfile_name)
+                    zipped_file_type = get_zipped_file_type(zipfile_name)
                 except ValueError as e:
                     logger.error(e)
-                    move(
-                        zipfile_input_dir / zipfile_name,
-                        zipfile_error_dir,
-                        if_exists="replace",
-                    )
+                    # move(
+                    #     zipfile_input_dir / zipfile_name,
+                    #     zipfile_error_dir,
+                    #     if_exists="replace",
+                    # )
                     continue
 
                 res.append(
@@ -215,7 +198,10 @@ def extract_zipfiles(
                         "input_dir": zipfile_input_dir,
                         "treated_dir": zipfile_treated_dir,
                         "error_dir": zipfile_error_dir,
-                        "transmission_format": LogbookTransmissionFormat.from_zipped_file_type(
+                        "data_domain": DataDomain.from_zipped_file_type(
+                            zipped_file_type
+                        ),
+                        "transmission_format": TransmissionFormat.from_zipped_file_type(
                             zipped_file_type
                         ),
                     }
@@ -237,6 +223,7 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
             integration
           - error_dir (`Path`): path where the zipfile should be transfered
             in case of error during its treatment
+          - zipped_file_type (`ZippedFileType`): type of data in the zip file
           - transmission_format (`LogbookTransmissionFormat`): transmission format
 
     Opens the corresponding zipfile on the filesystem, reads the xml files it is
@@ -270,8 +257,8 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 @task
 def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
     batch_parsers = {
-        LogbookTransmissionFormat.ERS: ers.batch_parse,
-        LogbookTransmissionFormat.FLUX: flux.batch_parse,
+        TransmissionFormat.ERS: ers.batch_parse,
+        TransmissionFormat.FLUX: flux.batch_parse,
     }
 
     logger = get_run_logger()
@@ -279,10 +266,10 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
         logger.info(f"Parsing messages of zipfile {zipfile['full_name']}")
         transmission_format = zipfile["transmission_format"]
         batch_parser = batch_parsers[transmission_format]
-        parsed_batch = batch_parser(zipfile["xml_messages"])
-        parsed_batch["logbook_reports"][
-            "transmission_format"
-        ] = transmission_format.value
+        parsed_batch = batch_parser(
+            zipfile["xml_messages"], data_domain=zipfile["data_domain"]
+        )
+        parsed_batch["reports"]["transmission_format"] = transmission_format.value
         zipfile.pop("xml_messages")
         zipfile = {**zipfile, **parsed_batch}
         return zipfile
@@ -292,7 +279,7 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
 def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = get_run_logger()
     if zipfile:
-        if zipfile["transmission_format"] is LogbookTransmissionFormat.ERS:
+        if zipfile["transmission_format"] is TransmissionFormat.ERS:
             logger.info(
                 "Removing QUE and RSP messages from messages of "
                 + f"zipfile {zipfile['full_name']}."
@@ -339,8 +326,8 @@ def load_logbook_data(cleaned_data: List[dict]):
             transmission_format = zipfile["transmission_format"]
             try:
                 assert transmission_format in (
-                    LogbookTransmissionFormat.FLUX,
-                    LogbookTransmissionFormat.ERS,
+                    TransmissionFormat.FLUX,
+                    TransmissionFormat.ERS,
                 )
             except AssertionError:
                 logger.error(
@@ -368,7 +355,7 @@ def load_logbook_data(cleaned_data: List[dict]):
                 logger=logger,
             )
 
-            if zipfile["transmission_format"] is LogbookTransmissionFormat.FLUX:
+            if zipfile["transmission_format"] is TransmissionFormat.FLUX:
                 logbook_reports = drop_rows_already_in_table(
                     df=logbook_reports,
                     df_column_name="report_id",
@@ -442,7 +429,7 @@ def load_logbook_data(cleaned_data: List[dict]):
                 )
 
 
-@flow(name="Monitorfish - Logbook")
+@flow(name="Monitorfish - Logbook", log_prints=True)
 def logbook_flow(
     received_directory: str = RECEIVED_DIRECTORY.as_posix(),
     treated_directory: str = TREATED_DIRECTORY.as_posix(),
@@ -460,4 +447,5 @@ def logbook_flow(
     zipfiles = extract_xmls_from_zipfile.map(zipfiles)
     zipfiles = parse_xmls.map(zipfiles)
     zipfiles = clean.map(zipfiles)
-    load_logbook_data(zipfiles)
+    return zipfiles
+    # load_logbook_data(zipfiles)

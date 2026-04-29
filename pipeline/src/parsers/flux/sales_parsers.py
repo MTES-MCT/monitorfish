@@ -95,22 +95,33 @@ def parse_sales_document(
         "sales_datetime_utc": _get(
             doc, "./ram:SpecifiedSalesEvent/ram:OccurrenceDateTime/udt:DateTime"
         ),
-        "landing_port": _get(
+        "sale_port_code": _get(
             doc, './ram:SpecifiedFLUXLocation/ram:ID[@schemeID="LOCATION"]'
         ),
-        "landing_datetime_utc": _get(
+        "landing_port_code": _get(
+            doc,
+            './ram:SpecifiedFishingActivity/ram:RelatedFLUXLocation/ram:ID[@schemeID="LOCATION"]',
+        ),
+        "trip_start_datetime_utc": _get(
             doc,
             "./ram:SpecifiedFishingActivity/ram:SpecifiedDelimitedPeriod/ram:StartDateTime/udt:DateTime",
         ),
+        "trip_end_datetime_utc": _get(
+            doc,
+            "./ram:SpecifiedFishingActivity/ram:SpecifiedDelimitedPeriod/ram:EndDateTime/udt:DateTime",
+        ),
         "products": products,
-        **parties,
     }
+
+    party_types = ["sender", "provider", "buyer", "recipient", "carrier"]
+    for party_type in party_types:
+        if party_type in parties:
+            sales_data[f"{party_type}_id"] = parties[party_type].get("id")
+            sales_data[f"{party_type}_name"] = parties[party_type].get("name")
 
     vessel = _find(
         doc, "./ram:SpecifiedFishingActivity/ram:RelatedVesselTransportMeans"
     )
-    vessel_data = {}
-    trip_number = None
     if vessel is not None:
         vessel_data = {
             "cfr": _get(vessel, './ram:ID[@schemeID="CFR"]'),
@@ -123,10 +134,20 @@ def parse_sales_document(
             ),
             "imo": _get(vessel, './ram:ID[@schemeID="UVI"]'),
         }
-        trip_number = _get(
-            doc,
-            './ram:SpecifiedFishingActivity/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]',
-        )
+    else:
+        vessel_data = {
+            "cfr": None,
+            "ircs": None,
+            "external_identification": None,
+            "vessel_name": None,
+            "flag_state": None,
+            "imo": None,
+        }
+
+    trip_number = _get(
+        doc,
+        './ram:SpecifiedFishingActivity/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]',
+    )
 
     return sales_data, vessel_data, trip_number
 

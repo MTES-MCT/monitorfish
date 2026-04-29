@@ -23,48 +23,49 @@ export function Infraction({ data, hasError, hasMultipleInfraction, index, onDel
 
   return (
     <Wrapper $hasError={hasError}>
-      <FirstColumn>
-        <Legend>
-          Infraction {hasMultipleInfraction && index + 1} -{' '}
-          <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
-        </Legend>
+      <Row>
+        <FirstColumn>
+          <Legend>
+            Infraction {hasMultipleInfraction && index + 1} -{' '}
+            <ThreatCharacterization>{natinfAndThreatCharacterization.threat}</ThreatCharacterization>
+          </Legend>
+        </FirstColumn>
+        <SecondColumn>
+          <IconButton
+            accent={Accent.SECONDARY}
+            Icon={Icon.Edit}
+            onClick={() => onEdit(index)}
+            style={{ marginRight: '8px' }}
+            title="Éditer l'infraction"
+          />
+          <IconButton
+            accent={Accent.SECONDARY}
+            color={THEME.color.maximumRed}
+            Icon={Icon.Delete}
+            onClick={() => onDelete(index)}
+            title="Supprimer l'infraction"
+          />
+        </SecondColumn>
+      </Row>
+      <InnerWrapper>
+        <div>
+          <TagGroup>
+            <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
+            {data.infractionType !== MissionAction.InfractionType.PENDING && (
+              <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
+                {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
+                {natinfAndThreatCharacterization.natinf}
+              </StyledTag>
+            )}
+          </TagGroup>
+        </div>
 
-        <InnerWrapper>
-          <div>
-            <TagGroup>
-              <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
-              {data.infractionType !== MissionAction.InfractionType.PENDING && (
-                <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
-                  {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
-                  {natinfAndThreatCharacterization.natinf}
-                </StyledTag>
-              )}
-            </TagGroup>
-          </div>
-
-          {data.comments?.trim().length > 0 && (
-            <article>
-              <ReactMarkdown>{data.comments}</ReactMarkdown>
-            </article>
-          )}
-        </InnerWrapper>
-      </FirstColumn>
-      <SecondColumn>
-        <IconButton
-          accent={Accent.SECONDARY}
-          Icon={Icon.Edit}
-          onClick={() => onEdit(index)}
-          style={{ marginRight: '8px' }}
-          title="Éditer l'infraction"
-        />
-        <IconButton
-          accent={Accent.SECONDARY}
-          color={THEME.color.maximumRed}
-          Icon={Icon.Delete}
-          onClick={() => onDelete(index)}
-          title="Supprimer l'infraction"
-        />
-      </SecondColumn>
+        {data.comments?.trim().length > 0 && (
+          <article>
+            <ReactMarkdown>{data.comments}</ReactMarkdown>
+          </article>
+        )}
+      </InnerWrapper>
     </Wrapper>
   )
 }
@@ -74,19 +75,15 @@ const Wrapper = styled.div<{
 }>`
   padding: 16px;
 
-  > legend {
-    padding: 12px 0 8px;
-
-    &:first-child {
-      padding: 0 0 8px;
-    }
-  }
-  display: flex;
   ${p =>
     p.$hasError &&
     css`
       border: 2px solid ${p.theme.color.maximumRed};
     `}
+`
+
+const Row = styled.div`
+  display: flex;
 `
 
 const FirstColumn = styled.div``

@@ -8,7 +8,7 @@ data class ManualPriorNotificationFormDataInput(
     val hasPortLandingAuthorization: Boolean,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: ZonedDateTime,
-    val expectedLandingDate: ZonedDateTime,
+    val expectedLandingDate: ZonedDateTime?,
     val fishingCatches: List<ManualPriorNotificationFishingCatchDataInput>,
     val globalFaoArea: String?,
     val note: String?,

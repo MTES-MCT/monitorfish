@@ -43,6 +43,8 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
 
   const [isThirdPartyVessel, setIsThirdPartyVessel] = useState(false)
 
+  const isLanding = values.purpose === PriorNotification.PurposeCode.LAN
+
   const updateIsThirdPartyVessel = useCallback((nextVessel: Vessel.VesselIdentity | undefined) => {
     const nextIsThirdPartyVessel = getHasAuthorizedLandingDownload(
       nextVessel?.flagState,
@@ -105,22 +107,24 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
         withTime
       />
 
-      <FieldGroup>
-        <FormikDatePicker
-          baseContainer={newWindowContainerRef.current}
-          disabled={values.isExpectedLandingDateSameAsExpectedArrivalDate}
-          isStringDate
-          label="Date et heure prévues de débarque (UTC)"
-          name="expectedLandingDate"
-          readOnly={isReadOnly}
-          withTime
-        />
-        <FormikCheckbox
-          label="équivalentes à celles de l'arrivée au port"
-          name="isExpectedLandingDateSameAsExpectedArrivalDate"
-          readOnly={isReadOnly}
-        />
-      </FieldGroup>
+      {isLanding && (
+        <FieldGroup>
+          <FormikDatePicker
+            baseContainer={newWindowContainerRef.current}
+            disabled={values.isExpectedLandingDateSameAsExpectedArrivalDate}
+            isStringDate
+            label="Date et heure prévues de débarque (UTC)"
+            name="expectedLandingDate"
+            readOnly={isReadOnly}
+            withTime
+          />
+          <FormikCheckbox
+            label="équivalentes à celles de l'arrivée au port"
+            name="isExpectedLandingDateSameAsExpectedArrivalDate"
+            readOnly={isReadOnly}
+          />
+        </FieldGroup>
+      )}
 
       <FormikSelect
         disabled={!portsAsOptions}
@@ -132,9 +136,13 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
         virtualized
       />
 
-      <FormikFaoAreaSelect isReadOnly={isReadOnly} />
+      {isLanding && (
+        <>
+          <FormikFaoAreaSelect isReadOnly={isReadOnly} />
 
-      <FormikFishingCatchesMultiSelect isReadOnly={isReadOnly} />
+          <FormikFishingCatchesMultiSelect isReadOnly={isReadOnly} />
+        </>
+      )}
 
       <FormikMultiSelect
         disabled={!gearsAsOptions}

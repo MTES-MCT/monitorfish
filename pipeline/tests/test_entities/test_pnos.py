@@ -57,6 +57,7 @@ def rendered_pno() -> RenderedPno:
                 email_address_or_number="ronald.mcdonald@ham.burger",
             ),
         ],
+        purpose_suffix="de débarquement",
     )
 
 

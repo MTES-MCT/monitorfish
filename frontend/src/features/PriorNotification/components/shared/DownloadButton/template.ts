@@ -1,8 +1,6 @@
-/**
- * This HTML template is being enriched by `utils/fillTemplate()`
- * All variables in the `{variable}` format are replaced by the value.
- */
-export const HTML_TEMPLATE = `
+import type { TemplateData } from './types'
+
+export const generateHTML = (data: TemplateData) => `
 <!DOCTYPE html><html lang="fr">
   <head>
     <meta charset="UTF-8">
@@ -10,17 +8,17 @@ export const HTML_TEMPLATE = `
   <body>
     <header>
       <h1>
-        <p>PREAVIS - {purpose}</p>
+        <p>PREAVIS - ${data.purpose}</p>
         <p>
-        {vesselName}
-        <img id="state_flag_icon" src="{flagStateFilePath}" />
+        ${data.vesselName}
+        <img id="state_flag_icon" src="${data.flagStateFilePath}" />
         </p>
       </h1>
       <ul id="vessel_ids_list">
-        <li>CFR - {internalReferenceNumber}</li>
-        <li>Marquage ext. - {externalReferenceNumber}</li>
-        <li>IMO - {imo}</li>
-        <li>Call Sign - {ircs}</li>
+        <li>CFR - ${data.internalReferenceNumber}</li>
+        <li>Marquage ext. - ${data.externalReferenceNumber}</li>
+        <li>IMO - ${data.imo}</li>
+        <li>Call Sign - ${data.ircs}</li>
       </ul>
     </header>
     <main>
@@ -30,29 +28,37 @@ export const HTML_TEMPLATE = `
         <table>
           <tr>
             <td class="data-label">Préavis envoyé</td>
-            <td><strong>{reportDateTime}</strong></td>
+            <td><strong>${data.reportDateTime}</strong></td>
           </tr>
           <tr>
             <td class="data-label">Arrivée estimée</td>
-            <td><strong>{predictedArrivalDatetimeUtc}</strong></td>
-          </tr>
+            <td><strong>${data.predictedArrivalDatetimeUtc}</strong></td>
+          </tr>${
+            data.isLanding
+              ? `
           <tr>
             <td class="data-label">Débarque prévue</td>
-            <td><strong>{predictedLandingDatetimeUtc}</strong></td>
-          </tr>
+            <td><strong>${data.predictedLandingDatetimeUtc}</strong></td>
+          </tr>`
+              : ''
+          }
           <tr>
             <td class="data-label"></td>
             <td></td>
           </tr>
           <tr>
-            <td class="data-label">Port de débarque</td>
-            <td><strong>{portName} ({port})</strong></td>
+            <td class="data-label">Port ${data.isLanding ? 'de débarque' : "d'arrivée"}</td>
+            <td><strong>${data.portName} (${data.port})</strong></td>
           </tr>
           <tr>
             <td class="data-label">Décision CNSP</td>
             <td>
-            {portEntranceAuthorization}
-            {portLandingAuthorization}
+            ${data.portEntranceAuthorization}${
+              data.isLanding
+                ? `
+            ${data.portLandingAuthorization}`
+                : ''
+            }
             </td>
           </tr>
         </table>
@@ -61,8 +67,10 @@ export const HTML_TEMPLATE = `
         <h2>ACTIVITÉ DU NAVIRE</h2>
         <hr/>
         <table>
-          <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>{gearDetails}</strong></td></tr>
-        </table>
+          <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>${data.gearDetails}</strong></td></tr>
+        </table>${
+          data.isLanding
+            ? `
         <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
         <table border="1" class="dataframe">
           <thead>
@@ -73,8 +81,10 @@ export const HTML_TEMPLATE = `
               <th>Nb</th>
             </tr>
           </thead>
-          <tbody>{catchDetails}</tbody>
-        </table>
+          <tbody>${data.catchDetails}</tbody>
+        </table>`
+            : ''
+        }
       </section>
     </main>
     <footer>

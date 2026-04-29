@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Préavis de débarquement - {{ vessel_name }}</title>
+        <title>Préavis {{ purpose_suffix }} - {{ vessel_name }}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body style='font-size: 10pt; font-family: Verdana,Geneva,sans-serif'>
         <main>
             <p>Bonjour,</p>
-            <p>Veuillez trouver ci-joint un préavis de débarquement :</p>
+            <p>Veuillez trouver ci-joint un préavis {{ purpose_suffix }} :</p>
             <ul>
                 <li>Navire : <strong>{{ vessel_name }} - {{ cfr }}</strong></li>
                 <li>Segment(s) de flotte : <strong>{{ trip_segments or "-" }}</strong></li>
@@ -18,9 +18,14 @@
             <ul>
                 <li>Préavis envoyé : <strong>{{ "le {}".format(report_datetime_utc) if report_datetime_utc else "-" }}</strong></li>
                 <li>Arrivée estimée : <strong>{{ "le {}".format(predicted_arrival_datetime_utc) if predicted_arrival_datetime_utc else "-" }}</strong></li>
+                <li>Raison du préavis : <strong>{{ purpose }}</strong></li>
+                {% if is_landing %}
                 <li>Débarque prévue : <strong>{{ "le {}".format(predicted_landing_datetime_utc) if predicted_landing_datetime_utc else "-" }}</strong></li>
-                <li>Port de débarquement : <strong>{{ port_name }} ({{ port_locode }})</strong></li>
+                {% endif %}
+                <li>Port {{ "de débarquement" if is_landing else "d'arrivée" }} : <strong>{{ port_name }} ({{ port_locode }})</strong></li>
+                {% if is_landing %}
                 <li>Type(s) de préavis : <strong>{{ pno_types or "-" }}</strong></li>
+                {% endif %}
             </ul>
             {% if note %}
             <p><span style="color:red;"><strong>[ ! ] Demande de contrôle du CNSP</strong></span> - Consultez le pdf du préavis et contactez le CNSP pour plus d'informations.</p>

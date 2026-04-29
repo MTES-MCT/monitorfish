@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== AAABundleCollectionMessage Schema Module                   ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 25.0
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:AAABundleCollectionMessage:25" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:AAABundleCollectionMessage:25" elementFormDefault="qualified" attributeFormDefault="unqualified" version="25.0">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="AAABundleCollectionMessage" type="rsm:AAABundleCollectionMessageType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AAAABC</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>AAABundleCollectionMessage</ccts:Name>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The message used to liaise an accounting entry to a document to be archived or to be retrieved.</ccts:Definition>
+        <ccts:BusinessProcessContextValue>AAA Archive</ccts:BusinessProcessContextValue>
+        <ccts:BusinessProcessContextValue>Bundle Collection</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: AAABundleCollectionMessageType        ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="AAABundleCollectionMessageType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>AAAABC-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>AAA_ Bundle Collection Message. Details</ccts:DictionaryEntryName>
+        <ccts:Version>1.0</ccts:Version>
+        <ccts:Definition>The message used to liaise an accounting entry to a document to be archived or to be retrieved.</ccts:Definition>
+        <ccts:ObjectClassTerm>Bundle Collection Message</ccts:ObjectClassTerm>
+        <ccts:ObjectClassQualifierTerm>AAA</ccts:ObjectClassQualifierTerm>
+        <ccts:BusinessProcessContextValue>AAA Archive</ccts:BusinessProcessContextValue>
+        <ccts:BusinessProcessContextValue>Bundle Collection</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="AAAArchiveBundleCollection" type="ram:AAAArchiveBundleCollectionType" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01009078</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>AAA_ Bundle Collection Message. AAA Archive_ Bundle Collection</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>The document to be archived or or to be retrieved and that is related to an accounting entry.</ccts:Definition>
+            <ccts:Cardinality>1..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Bundle Collection Message</ccts:ObjectClassTerm>
+            <ccts:ObjectClassQualifierTerm>AAA</ccts:ObjectClassQualifierTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Bundle Collection</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>AAA Archive</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>AAA Archive</ccts:BusinessProcessContextValue>
+            <ccts:BusinessProcessContextValue>Bundle Collection</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>In All Contexts</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>International, National, Local Generally Admitted Accounting Principles and Regulations</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>Accounting, Audit</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

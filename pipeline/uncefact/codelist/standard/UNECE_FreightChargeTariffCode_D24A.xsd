@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 65243 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.2
+Schema date:        23 August 2008
+
+Code list name:     Freight Charge Tariff Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm65243="urn:un:unece:uncefact:codelist:standard:UNECE:FreightChargeTariffCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:FreightChargeTariffCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.2">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="FreightChargeTariffCode" type="clm65243:FreightChargeTariffCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: FreightChargeTariffCodeContentType    ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="FreightChargeTariffCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="A">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Senior person rate</ccts:Name>
+            <ccts:Description>Rate class applies to senior persons.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basic</ccts:Name>
+            <ccts:Description>Code specifying that the rate or tariff is a basic one.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Specific commodity rate</ccts:Name>
+            <ccts:Description>Code specifying the specific commodity rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Teenager rate</ccts:Name>
+            <ccts:Description>Rate class applies to teenagers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="E">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Child rate</ccts:Name>
+            <ccts:Description>Rate class applies to children.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adult rate</ccts:Name>
+            <ccts:Description>Rate class applies to adults.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Export Subsidy Rate</ccts:Name>
+            <ccts:Description>Rate a foreign government supplies in the export process</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="H">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Subsidy Rate</ccts:Name>
+            <ccts:Description>Rate a foreign government gives its manufacturers so that they can manufacture their goods for less</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="K">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rate per kilogram</ccts:Name>
+            <ccts:Description>Code specifying the rate per kilogram.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="M">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Minimum charge rate</ccts:Name>
+            <ccts:Description>Code specifying the minimum charge rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="N">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Normal rate</ccts:Name>
+            <ccts:Description>Code specifying the normal rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Q">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quantity rate</ccts:Name>
+            <ccts:Description>Code specifying the quantity rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="R">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Class rate (Reduction on normal rate)</ccts:Name>
+            <ccts:Description>Code specifying the reduction on normal rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="S">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Class rate (Surcharge on normal rate)</ccts:Name>
+            <ccts:Description>Code specifying the surcharge on normal rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

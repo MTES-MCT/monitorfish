@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 65375 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.2
+Schema date:        23 August 2008
+
+Code list name:     Price Type Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm65375="urn:un:unece:uncefact:codelist:standard:UNECE:PriceTypeCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:PriceTypeCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.2">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="PriceTypeCode" type="clm65375:PriceTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: PriceTypeCodeContentType              ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="PriceTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="AA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancellation price</ccts:Name>
+            <ccts:Description>Price authorized to be charged in the event of an order being cancelled.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per ton</ccts:Name>
+            <ccts:Description>To indicate that the price applies per ton.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Minimum order price</ccts:Name>
+            <ccts:Description>A code to identify the price when the minimum number is purchased.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Export price</ccts:Name>
+            <ccts:Description>A code to identify a price for the export market.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Range dependent price</ccts:Name>
+            <ccts:Description>A code identifying the price for a specific range of purchase quantities.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Competitor price</ccts:Name>
+            <ccts:Description>Price given by competitor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Daily Price</ccts:Name>
+            <ccts:Description>A daily fixed sum of money for a product or service which is or may be bought or sold.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Service Price</ccts:Name>
+            <ccts:Description>A sum of money for a service which is or may be bought or sold.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Active ingredient</ccts:Name>
+            <ccts:Description>The price is referring to the active ingredient.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dynamic Price</ccts:Name>
+            <ccts:Description>A sum of money for a product or service is or may be bought or sold.that is flexible and determined real-time in response to market demands.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basic Price</ccts:Name>
+            <ccts:Description>A sum of money for which a product or service is or may be bought or sold without any discount or surcharge being applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extra Price</ccts:Name>
+            <ccts:Description>A sum of money which is an addition to the price for which a product or service is or may be bought or sold, such as for a special meal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discount Price</ccts:Name>
+            <ccts:Description>A sum of money which is discount against a price for which a product or service is or may be bought or sold..</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cancellation Price</ccts:Name>
+            <ccts:Description>A sum of money for cancelling a product or service which is or may be bought or sold.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Refund Price</ccts:Name>
+            <ccts:Description>A sum of money that is paid back to somebody, especially because somebody paid too much or because somebody returned a product or service.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Commission Price</ccts:Name>
+            <ccts:Description>A sum of money that is paid to somebody for selling a product or service and that increases with the amount of a product or service that is or may be bought or sold..</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>As is quantity</ccts:Name>
+            <ccts:Description>The price is referring to the measured quantity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Penalty Price</ccts:Name>
+            <ccts:Description>A sum of money that is paid or has to be paid because of breaking a law, rule, or contract.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Catalogue</ccts:Name>
+            <ccts:Description>Code specifying the catalogue price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract</ccts:Name>
+            <ccts:Description>Code specifying the contract price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consumer unit</ccts:Name>
+            <ccts:Description>The price is referring to the consumer unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Distributor</ccts:Name>
+            <ccts:Description>Code specifying the distributor price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ECSC price</ccts:Name>
+            <ccts:Description>Price registered at European Commission Steel and Carbon office (DG III).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Net weight</ccts:Name>
+            <ccts:Description>Code specifying the net weight price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Price catalogue</ccts:Name>
+            <ccts:Description>Code specifying the catalogue price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per each</ccts:Name>
+            <ccts:Description>Code specifying the price per item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per kilogram</ccts:Name>
+            <ccts:Description>Code specifying the price per kilogram.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per litre</ccts:Name>
+            <ccts:Description>Code specifying the price per litre.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Per tonne</ccts:Name>
+            <ccts:Description>Code specifying the price per tonne.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Specified unit</ccts:Name>
+            <ccts:Description>Code specifying the price per specified unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Provisional price</ccts:Name>
+            <ccts:Description>Code specifying a provisional price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross weight</ccts:Name>
+            <ccts:Description>Code specifying the gross weight price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="QT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quoted</ccts:Name>
+            <ccts:Description>Code specifying the quoted price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Suggested retail</ccts:Name>
+            <ccts:Description>Code specifying the suggested retail price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>To be negotiated</ccts:Name>
+            <ccts:Description>Code specifying that the price has to be negotiated.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Traded unit</ccts:Name>
+            <ccts:Description>The price is referring to the traded unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Theoretical weight</ccts:Name>
+            <ccts:Description>Weight calculated on ordered dimension (length, width, thickness) not on final dimension (e.g. steel products).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wholesale</ccts:Name>
+            <ccts:Description>Code specifying the wholesale price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gross volume</ccts:Name>
+            <ccts:Description>The price is calculated based on gross volume.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

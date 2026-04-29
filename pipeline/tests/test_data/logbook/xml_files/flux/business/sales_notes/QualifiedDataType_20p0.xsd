@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trimmed schema QualifiedDataType_20p0.xsd - Only for use within FLUXSalesReportMessage_3p1.xsd -->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" version="20.0" xmlns:clm63155CommunicationChannelCode="urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" schemaLocation="UnqualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A" schemaLocation="codelist_standard_UNECE_CommunicationMeansTypeCode_D16A.xsd" />
+  <xsd:simpleType name="AccountingDebitCreditStatusCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AccountingDocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AcknowledgementCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AddressTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AdjustmentReasonCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AllowanceChargeReasonCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AutomaticDataCaptureMethodCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CargoCategoryCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CargoOperationalCategoryCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CargoTypeClassificationCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ChargePayingPartyRoleCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CodeListResponsibleAgencyCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CommitmentLevelCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CommunicationChannelCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="CommunicationChannelCodeType">
+    <xsd:simpleContent>
+      <xsd:extension base="clm63155CommunicationChannelCode:CommunicationMeansTypeCodeContentType">
+        <xsd:attribute fixed="3155_CommunicationChannelCode" name="listID" type="xsd:token" use="optional" />
+        <xsd:attribute fixed="6" name="listAgencyID" type="qdt:CommunicationChannelCodeListAgencyIDContentType" use="optional" />
+        <xsd:attribute fixed="D16A" name="listVersionID" type="xsd:token" use="optional" />
+        <xsd:attribute name="listURI" type="xsd:anyURI" use="optional" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:simpleType name="ContactTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CountryIDSchemeAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="5" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CurrencyCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="5" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DangerousGoodsPackagingLevelCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DangerousGoodsRegulationCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateMandatoryDateTimeType">
+    <xsd:union memberTypes="xsd:dateTime xsd:date" />
+  </xsd:simpleType>
+  <xsd:simpleType name="DeliveryTermsCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DimensionTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DocumentStatusCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FinancialAdjustmentReasonCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FreightChargeTariffClassCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FreightChargeTypeIDSchemeAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="GovernmentActionCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="InvoiceDocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LanguageCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="5" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LineStatusCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LocationFunctionCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MarkingInstructionCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MeasuredAttributeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MessageFunctionCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MIMECodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="379" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PackageTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PackagingLevelCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PackagingMarkingCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PartyRoleCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentGuaranteeMeansCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentMeansChannelCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentMeansCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentMethodCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentTermsEventTimeReferenceCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentTermsIDSchemeAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PaymentTermsTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PriceTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PriorityDescriptionCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProcessTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="QuotationDocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReferenceCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RemittanceDocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ResponseTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SchedulingDocumentCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StatusCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SubjectCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TaxCategoryCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TaxTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TemperatureTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TimeReferenceCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportEquipmentCategoryCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportEquipmentFullnessCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportEquipmentSizeTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportMeansTypeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportModeCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportMovementStageCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="WorkflowStatusCodeListAgencyIDContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="6" />
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

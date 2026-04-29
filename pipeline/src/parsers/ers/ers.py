@@ -8,6 +8,7 @@ from xml.etree.ElementTree import ParseError
 
 import pandas as pd
 
+from src.entities.data_exchange_standards import DataDomain
 from src.parsers.ers.log_parsers import (
     default_log_parser,
     parse_coe,
@@ -22,6 +23,7 @@ from src.parsers.ers.log_parsers import (
     parse_pno,
     parse_rtp,
 )
+from src.parsers.ers.sal_parsers import parse_sli, parse_tli
 from src.parsers.utils import (
     get_first_child,
     get_root_tag,
@@ -135,6 +137,25 @@ def parse_log(log):
     return metadata, None, logs, None
 
 
+def parse_sal(sal):
+    sals = [
+        child for child in list(sal) if remove_namespace(child.tag) in ("SLI", "TLI")
+    ]
+    metadata = {
+        "cfr": sal.get("IR"),
+        "ircs": sal.get("RC"),
+        "external_identification": sal.get("XR"),
+        "vessel_name": sal.get("NA"),
+        "flag_state": sal.get("FS"),
+        "invoice_number": sal.get("NR"),
+        "invoice_datetime_utc": make_datetime(sal.get("ND")),
+        "takeover_contract_reference": sal.get("CN"),
+        "transport_document_reference": sal.get("TR"),
+    }
+
+    return metadata, None, sals, None
+
+
 parsers = {
     "DAT": partial(simple_parser, pass_child=True),
     "COR": parse_cor,
@@ -145,6 +166,9 @@ parsers = {
     "OPS": parse_ops,
     "ERS": parse_ers,
     "LOG": parse_log,
+    "SAL": parse_sal,
+    "SLI": parse_sli,
+    "TLI": parse_tli,
     "DEP": parse_dep,
     "FAR": parse_far,
     "ECPS": parse_ecps,
@@ -186,7 +210,7 @@ def parse(el):
         child_metadata, data_iter = parse(child)
         return {**metadata, **child_metadata}, data_iter
 
-    # LOG elements with FAR, LAN, PNO... children
+    # LOG and SAL elements with FAR, LAN, PNO, SLI, TLI... children
     elif metadata is not None and child is None and logs is not None and data is None:
         return metadata, map(parse_, logs)
 
@@ -210,7 +234,7 @@ def parse_xml_string(xml_string):
     return parse(el)
 
 
-def batch_parse(xml_messages: List[str]) -> dict:
+def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
     """Parses a list of ERS messages and returns a dictionnary with the information
     extracted from the messages.
 
@@ -220,14 +244,13 @@ def batch_parse(xml_messages: List[str]) -> dict:
     Returns:
         dict : dictionnary with 3 elemements:
 
-          - logbook_reports pd.DataFrame: Dataframe with parsed data
-          - logbook_raw_messages (pd.DataFrame):  Dataframe with the original xml
-            messages
+          - reports pd.DataFrame: Dataframe with parsed data
+          - raw_messages (pd.DataFrame):  Dataframe with the original xml messages
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
-    logbook_reports_list = []
-    logbook_raw_messages_list = []
+    reports_list = []
+    raw_messages_list = []
     batch_generated_errors = False
 
     raw_messages_columns = [
@@ -235,24 +258,29 @@ def batch_parse(xml_messages: List[str]) -> dict:
         "xml_message",
     ]
 
-    reports_defaults = {
-        "operation_number": None,
-        "operation_country": None,
-        "operation_datetime_utc": None,
-        "operation_type": None,
-        "report_id": None,
-        "referenced_report_id": None,
-        "report_datetime_utc": None,
-        "cfr": None,
-        "ircs": None,
-        "external_identification": None,
-        "vessel_name": None,
-        "flag_state": None,
-        "imo": None,
-        "log_type": None,
-        "value": None,
-        "integration_datetime_utc": None,
+    defaults = {
+        DataDomain.LOGBOOK: {
+            "operation_number": None,
+            "operation_country": None,
+            "operation_datetime_utc": None,
+            "operation_type": None,
+            "report_id": None,
+            "referenced_report_id": None,
+            "report_datetime_utc": None,
+            "cfr": None,
+            "ircs": None,
+            "external_identification": None,
+            "vessel_name": None,
+            "flag_state": None,
+            "imo": None,
+            "log_type": None,
+            "value": None,
+            "integration_datetime_utc": None,
+        },
+        DataDomain.SALES: {},
     }
+
+    reports_defaults = defaults[data_domain]
 
     for xml_message in xml_messages:
         try:
@@ -263,7 +291,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                 "xml_message": xml_message,
             }
             for data in data_iterator:
-                logbook_reports_list.append(
+                reports_list.append(
                     pd.Series(
                         {
                             **reports_defaults,
@@ -273,7 +301,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                         }
                     )
                 )
-            logbook_raw_messages_list.append(pd.Series(raw))
+            raw_messages_list.append(pd.Series(raw))
         except ERSParsingError:
             log_end = "..." if len(xml_message) > 40 else ""
             logging.error(
@@ -286,15 +314,15 @@ def batch_parse(xml_messages: List[str]) -> dict:
             logging.error("Unkonwn error with message " + xml_message)
             batch_generated_errors = True
 
-    logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
-    logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw_messages_columns))
-    if len(logbook_reports_list) > 0:
-        logbook_reports = pd.concat(logbook_reports_list, axis=1).T
-    if len(logbook_raw_messages_list) > 0:
-        logbook_raw_messages = pd.concat(logbook_raw_messages_list, axis=1).T
+    reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+    raw_messages = pd.DataFrame(columns=pd.Index(raw_messages_columns))
+    if len(reports_list) > 0:
+        reports = pd.concat(reports_list, axis=1).T
+    if len(raw_messages_list) > 0:
+        raw_messages = pd.concat(raw_messages_list, axis=1).T
 
     return {
-        "logbook_reports": logbook_reports,
-        "logbook_raw_messages": logbook_raw_messages,
+        "reports": reports,
+        "raw_messages": raw_messages,
         "batch_generated_errors": batch_generated_errors,
     }

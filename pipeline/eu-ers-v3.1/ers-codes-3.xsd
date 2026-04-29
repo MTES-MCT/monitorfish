@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by - - - (European Commission - IPSC) -->
+<!-- Part of ERS version 3.1 Final 19-09-2011 -->
+<!-- 3.0-3.1: relaxed patterns for FaoSubAreaType, FaoDivisionType, FaoSubDivisionType and FishPresentationType -->
+<!-- 3.0-3.1: made explicit the length of all strings that are constrained to a pattern -->
+<!-- 30-06-2011: removed MDR code list comments -->
+<!-- 16-06-2011: changed length to minLength/maxLength in FishPresentationType -->
+<!-- 30-05-2011: added missing \ in regexp definition for FishPresentationType -->
+<!-- 2.0-3.0: Codes updated using those published in the Master Data Register as of 25-05-2011. -->
+<!-- 2.0-3.0: Enumerations commented out because the reference is now the Master Data Management. -->
+<xs:schema xmlns:ers="http://ec.europa.eu/fisheries/schema/ers/v3" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ec.europa.eu/fisheries/schema/ers/v3" 
+	version="3.1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="ReturnStatusType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[0-9]{3}" />
+			<!-- Code values are listed in MDR: ERS Return Status -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CountryType">
+		<xs:annotation>
+			<xs:documentation>ISO alpha-3 country code</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Countries & Currencies -->
+			<!-- In context of OPS FR and AD attribute values see instead: ERS Senders/Recipients -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CurrencyType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Countries & Currencies -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReasonReturnType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: ERS Reason for Return -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AnticipatedActivityType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Vessel Activity -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GearType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="2" />
+			<xs:maxLength value="3" />
+			<xs:pattern value="[A-Z]{2}[A-Z12]?" />
+			<!-- Code values are listed in MDR: Gear Type -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FishFreshnessType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="2" />
+			<xs:pattern value="[A-Z]{1,2}" />
+			<!-- Code values are listed in MDR: Fish Freshness -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FishSizeType">
+		<xs:annotation>
+			<xs:documentation>As per AnnexII of Council R. 2406/96 </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="2" />
+			<xs:pattern value="[1-8][a-c]?" />
+			<!-- Code values are listed in MDR: Fish Size Category -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProductDestinationType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Product Destination -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FishStateType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Fish Preservation State -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FishPresentationType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="3" />
+			<xs:maxLength value="5" />
+			<xs:pattern value="[A-Z]{3}[\-C]{0,2}" />
+			<!-- Code values are listed in MDR: Fish Presentation -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FishPackagingType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Fish Packaging -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RelocationToType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Relocation Destination -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TargetSpeciesType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Effort Target Species -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProducerOrganizationUseType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Producers Organizations Use -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaoAreaType">
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+			<xs:pattern value="[0-9]{2}" />
+			<!-- Code values are listed in MDR: Relevant Fishing Area -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaoSubAreaType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="2" />
+			<xs:pattern value="[a-zA-Z0-9]{1,2}" />
+			<!-- Code values are listed in MDR: Relevant Fishing Area -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaoDivisionType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="2" />
+			<xs:pattern value="[a-zA-Z0-9][012]?" />
+			<!-- Code values are listed in MDR: Relevant Fishing Area -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaoSubDivisionType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="2" />
+			<xs:pattern value="[a-zA-Z0-9]{1,2}" />
+			<!-- Code values are listed in MDR: Relevant Fishing Area -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FaoUnitType">
+		<xs:annotation>
+			<xs:documentation>FAO unit</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+			<!-- Code values are listed in MDR: Relevant Fishing Area -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EffortZoneType">
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+			<xs:pattern value="[A-Z]" />
+			<!-- Code values are listed in MDR: Effort Zones -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EconomicZoneType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Economic Zones -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PortType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="5" />
+			<xs:maxLength value="6" />
+			<xs:pattern value="[A-Z]{2}[ ]?[A-Z2-9]{3}" />
+			<!-- Code values are listed in MDR: Location: Sea Port & Take Over Location -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SpeciesType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[a-zA-Z]{3}" />
+			<!-- Code values are listed in MDR: Species -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PurposeOfCallType">
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: ERS Reason for Return -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VatNumberType">
+		<xs:annotation>
+			<xs:documentation>Starts with 2-letter country code, and has between 2 and 12 "ciphers" afterwards. In some EU countries these ciphers can be capital letters.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4" />
+			<xs:maxLength value="14" />
+			<xs:pattern value="[A-Z]{2}[A-Z0-9]{2,12}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RecordNumberType">
+		<xs:annotation>
+			<xs:documentation>Serial number of the message (format AAAYYYYMMDD999999) </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="17" />
+			<xs:pattern
+				value="[a-zA-Z]{3}(\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01]))[0-9]{6}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CfrType">
+		<xs:annotation>
+			<xs:documentation>With format AAAXXXXXXXXX where A is an uppercase letter being the country of first registration within the EU and X being a letter or a number </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="12" />
+			<xs:pattern value="[A-Z]{3}[a-zA-Z0-9]{9}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RadioCallSignType">
+		<xs:annotation>
+			<xs:documentation>International radio call sign</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4" />
+			<xs:maxLength value="7" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HullRegistrationType">
+		<xs:annotation>
+			<xs:documentation>Side (hull) registration number and letters of the vessel </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1" />
+			<xs:maxLength value="14" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SenderType">
+		<xs:annotation>
+			<xs:documentation>Sender type (MAS: master, REP: his representative, AGE: agent)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Sender Type -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LatitudeType">
+		<xs:annotation>
+			<xs:documentation>Latitude expressed in accordance with the WGS84 format used for VMS </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="-90" />
+			<xs:maxInclusive value="90" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LongitudeType">
+		<xs:annotation>
+			<xs:documentation>Longitude expressed in accordance with the WGS84 format used for VMS </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="-180" />
+			<xs:maxInclusive value="180" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GearShotIdentifierType">
+		<xs:annotation>
+			<xs:documentation>Date gear shot operation was completed and day sequence number (MMDDXX) (The daily sequence number shall start with 01 for the first set of gear shot. For example the second set of gear shot on December 20 would be 122002)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="6" />
+			<xs:pattern value="(0\d|1[0-2])([0-2]\d|3[01])\d\d" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StatisticalRectangleType">
+		<xs:restriction base="xs:string">
+			<xs:length value="4" />
+			<xs:pattern value="[0-9]{2}[a-zA-Z]{1}[0-9]{1}" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MeansOfWeightMeasureType">
+		<xs:annotation>
+			<xs:documentation>means of weight measuring: estimation (EST), weighing on board (WGH)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="3" />
+			<xs:pattern value="[A-Z]{3}" />
+			<!-- Code values are listed in MDR: Means of Weight Measuring -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="WithdrawnStateType">
+		<xs:annotation>
+			<xs:documentation>Withdrawn through a producer's organisation (Y-yes, N-no, T-temporarily)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="1" />
+			<xs:pattern value="[A-Z]{1}" />
+			<!-- Code values are listed in MDR: Withdrawn -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BooleanType">
+		<xs:annotation>
+			<xs:documentation>0 or 1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DelayedFlagType">
+		<xs:annotation>
+			<xs:documentation>Type of message, either Current (CU) or Delayed (DE), for use in DAT TM attribute</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="2" />
+			<xs:pattern value="[A-Z]{2}" />
+			<!-- Code values are listed in MDR: ERS Message Type -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UtcDateType">
+		<xs:annotation>
+			<xs:documentation>UTC Date, no timezone, YYYY-MM-DD</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date">
+			<xs:pattern value="[^:Z]*" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UtcTimeType">
+		<xs:annotation>
+			<xs:documentation>UTC Time, no timezone, hh:mm</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="5" />
+			<xs:pattern value="([01]\d|2[0-3]):[0-5]\d" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

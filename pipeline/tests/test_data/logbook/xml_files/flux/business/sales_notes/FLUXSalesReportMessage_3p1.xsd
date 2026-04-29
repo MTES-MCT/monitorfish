@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Trimmed schema FLUXSalesReportMessage_3p1.xsd -->
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3" version="3.1" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" schemaLocation="UnqualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" schemaLocation="QualifiedDataType_20p0.xsd" />
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" schemaLocation="ReusableAggregateBusinessInformationEntity_20p0.xsd" />
+  <xsd:element name="FLUXSalesReportMessage" type="rsm:FLUXSalesReportMessageType" />
+  <xsd:complexType name="FLUXSalesReportMessageType">
+    <xsd:sequence>
+      <xsd:element minOccurs="1" name="FLUXReportDocument" type="ram:FLUXReportDocumentType" />
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="SalesReport" type="ram:SalesReportType" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -208,6 +208,9 @@ pipeline/monitorfish.egg-info
 .idea
 CLAUDE.md
 
+# AI agents
+.claude/**/*
+
 # Doc
 docs/redmine_wiki/*
 datascience/docs/build

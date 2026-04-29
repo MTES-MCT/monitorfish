@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 67233_PackagingMarkingCode - Code List Schema Module       ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.2
+Schema date:        23 August 2008
+
+Code list name:     PackagingMarkingCode
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm67233PackagingMarkingCode="urn:un:unece:uncefact:codelist:standard:UNECE:PackagingMarkingCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:PackagingMarkingCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.2">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="PackagingMarkingCode" type="clm67233PackagingMarkingCode:PackagingMarkingCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: PackagingMarkingCodeContentType       ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="PackagingMarkingCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product ingredients not marked on package</ccts:Name>
+            <ccts:Description>The ingredients of the product are not marked on the packaging of the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product price not marked on packaging</ccts:Name>
+            <ccts:Description>The product price is not marked on the packaging of the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product best before date not marked on product package</ccts:Name>
+            <ccts:Description>The product best before date is not marked on the packaging of the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package not marked recyclable</ccts:Name>
+            <ccts:Description>Package is not marked as recyclable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Promotional details marked</ccts:Name>
+            <ccts:Description>A code indicating that promotional details have been marked on the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Labeled according to general EAN.UCC specifications for clothing and fashion accessories</ccts:Name>
+            <ccts:Description>The item is labeled according to the general EAN.UCC specifications for clothing and fashion accessories.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sell-by date marked on package</ccts:Name>
+            <ccts:Description>The package is marked with the last date on which the item may be sold.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Use-by date marked on package</ccts:Name>
+            <ccts:Description>The package is marked with the last date on which the item may be used.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packaging / manufacturing date marked on package</ccts:Name>
+            <ccts:Description>The package is marked with the date of the packaging or manufacturing of the item.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No freshness date marked on package</ccts:Name>
+            <ccts:Description>Package is not marked with any kind of date indicating freshness, such as use-by, best before or packaging date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package best before date marked</ccts:Name>
+            <ccts:Description>Package is marked with the product best before date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package marked recyclable</ccts:Name>
+            <ccts:Description>The package is marked recyclable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package marked returnable</ccts:Name>
+            <ccts:Description>The package is marked returnable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product marking</ccts:Name>
+            <ccts:Description>The information is related to product marking.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Type of package</ccts:Name>
+            <ccts:Description>The information is related to the type of package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package specifications</ccts:Name>
+            <ccts:Description>The information specifies the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package protection</ccts:Name>
+            <ccts:Description>The information is related to protection of the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tarping</ccts:Name>
+            <ccts:Description>The information describes how coverage with tarpaulins is to be provided.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Platform/skid location</ccts:Name>
+            <ccts:Description>The information describes the platform or skid location.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bearing piece location</ccts:Name>
+            <ccts:Description>The information gives the location of the load bearing piece.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Skid/pallet type</ccts:Name>
+            <ccts:Description>The information describes the type of skid or pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Placement on carrier</ccts:Name>
+            <ccts:Description>The information describes the placement on the carrier.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Spacing directions</ccts:Name>
+            <ccts:Description>Descriptions to be provided.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unloading device</ccts:Name>
+            <ccts:Description>The information specifies the unloading device which must be used to handle the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unloading equipment</ccts:Name>
+            <ccts:Description>The information specifies the unloading equipment which must be used to handle the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing method</ccts:Name>
+            <ccts:Description>The method used in packing the commodity, e.g. hermetically sealed, repacked in original container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing group I</ccts:Name>
+            <ccts:Description>Substances presenting high danger.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing group II</ccts:Name>
+            <ccts:Description>Substances presenting medium danger.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Packing group III</ccts:Name>
+            <ccts:Description>Substances presenting low danger.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package price marked</ccts:Name>
+            <ccts:Description>The package is marked with the price.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product ingredients marked on package</ccts:Name>
+            <ccts:Description>The ingredients of the product contained in a package are marked on that package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Core characteristics</ccts:Name>
+            <ccts:Description>Specifies the characteristics of the core of the package.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shipping requirement</ccts:Name>
+            <ccts:Description>The packaging as per shipping requirement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Customs requirement</ccts:Name>
+            <ccts:Description>The packaging as per Customs requirement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transport contract requirement</ccts:Name>
+            <ccts:Description>The packaging as per transport contract requirement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Preservation method</ccts:Name>
+            <ccts:Description>The packaging related information is for methods of preservation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product marking pattern</ccts:Name>
+            <ccts:Description>The information describes the pattern used to mark the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Product marking location</ccts:Name>
+            <ccts:Description>The information provides the location of the product marking.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Package/container mark location</ccts:Name>
+            <ccts:Description>The information provides the location of a package or container mark.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marking method</ccts:Name>
+            <ccts:Description>The information details the marking method.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Receiving facility limitations</ccts:Name>
+            <ccts:Description>The information describes limitations which apply to a receiving facility.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shipping package labelling</ccts:Name>
+            <ccts:Description>The labelling of a package in which goods are shipped.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shipping package sealing</ccts:Name>
+            <ccts:Description>The sealing particulars of a package in which goods are shipped.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Optional packaging procedure</ccts:Name>
+            <ccts:Description>To indicate an optional procedure for packaging.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cleaning or drying specification</ccts:Name>
+            <ccts:Description>Identification of the cleaning or drying specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cushioning thickness specification</ccts:Name>
+            <ccts:Description>Identification of the cushioning thickness specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cushioning and dunnage specification</ccts:Name>
+            <ccts:Description>Identification of the cushioning and dunnage specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Level of preservation specification</ccts:Name>
+            <ccts:Description>Identification of the level of preservation specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Preservation material specification</ccts:Name>
+            <ccts:Description>Identification of the preservation material specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Unit container specification</ccts:Name>
+            <ccts:Description>Identification of the unit container specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Material wrapping specification</ccts:Name>
+            <ccts:Description>Identification of the material wrapping specification.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="80">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marked with ï¿½display until dateï¿½</ccts:Name>
+            <ccts:Description>Package is marked with the date by which the product should be removed from the display location.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

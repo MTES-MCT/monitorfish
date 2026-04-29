@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 65305 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.7
+Schema date:        23 August 2008
+
+Code list name:     Duty or Tax or Fee Category Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm65305="urn:un:unece:uncefact:codelist:standard:UNECE:DutyorTaxorFeeCategoryCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DutyorTaxorFeeCategoryCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.7">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="DutyorTaxorFeeCategoryCode" type="clm65305:DutyorTaxorFeeCategoryCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: DutyorTaxorFeeCategoryCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="DutyorTaxorFeeCategoryCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="A">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mixed tax rate</ccts:Name>
+            <ccts:Description>Code specifying that the rate is based on mixed tax.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lower rate</ccts:Name>
+            <ccts:Description>Tax rate is lower than standard rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Exempt for resale</ccts:Name>
+            <ccts:Description>A tax category code indicating the item is tax exempt when the item is bought for future resale.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) not now due for payment</ccts:Name>
+            <ccts:Description>A code to indicate that the Value Added Tax (VAT) amount which is due on the current invoice is to be paid on receipt of a separate VAT payment request.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) due from a previous invoice</ccts:Name>
+            <ccts:Description>A code to indicate that the Value Added Tax (VAT) amount of a previous invoice is to be paid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>VAT Reverse Charge</ccts:Name>
+            <ccts:Description>Code specifying that the standard VAT rate is levied from the invoicee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transferred (VAT)</ccts:Name>
+            <ccts:Description>VAT not to be paid to the issuer of the invoice but directly to relevant tax authority.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Duty paid by supplier</ccts:Name>
+            <ccts:Description>Duty associated with shipment of goods is paid by the supplier; customer receives goods with duty paid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="D">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) margin scheme - travel agents</ccts:Name>
+            <ccts:Description>Indication that the VAT margin scheme for travel agents is applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="E">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Exempt from tax</ccts:Name>
+            <ccts:Description>Code specifying that taxes are not applicable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="F">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) margin scheme - second-hand goods</ccts:Name>
+            <ccts:Description>Indication that the VAT margin scheme for second-hand goods is applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="G">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Free export item, tax not charged</ccts:Name>
+            <ccts:Description>Code specifying that the item is free export and taxes are not charged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="H">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Higher rate</ccts:Name>
+            <ccts:Description>Code specifying a higher rate of duty or tax or fee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="I">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) margin scheme - works of art Margin scheme ï¿½ Works of art</ccts:Name>
+            <ccts:Description>Indication that the VAT margin scheme for works of art is applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="J">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Value Added Tax (VAT) margin scheme - collectorï¿½s items and antiques</ccts:Name>
+            <ccts:Description>Indication that the VAT margin scheme for collectorï¿½s items and antiques is applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="K">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>VAT exempt for EEA intra-community supply of goods and services</ccts:Name>
+            <ccts:Description>A tax category code indicating the item is VAT exempt due to an intra-community supply in the European Economic Area.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="L">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Canary Islands general indirect tax</ccts:Name>
+            <ccts:Description>Impuesto General Indirecto Canario (IGIC) is an indirect tax levied on goods and services supplied in the Canary Islands (Spain) by traders and professionals, as well as on import of goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="M">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tax for production, services and importation in Ceuta and Melilla</ccts:Name>
+            <ccts:Description>Impuesto sobre la Producciï¿½n, los Servicios y la Importaciï¿½n (IPSI) is an indirect municipal tax, levied on the production, processing and import of all kinds of movable tangible property, the supply of services and the transfer of immovable property located in the cities of Ceuta and Melilla.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="N">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>standard rate additional VAT</ccts:Name>
+            <ccts:Description>standard VAT calculated for an additional taxable base when the additional taxable base is not included in the document totals</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="O">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Services outside scope of tax</ccts:Name>
+            <ccts:Description>Code specifying that taxes are not applicable to the services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="S">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Standard rate</ccts:Name>
+            <ccts:Description>Code specifying the standard rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Z">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zero rated goods</ccts:Name>
+            <ccts:Description>Code specifying that the goods are at a zero rate.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== NetworkSchedule Schema Module                              ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:  UNCEFACT
+Schema version: 32.0
+Schema date:    13/01/2013
+
+Copyright (C) UN/CEFACT (2013). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rsm="urn:un:unece:uncefact:data:standard:NetworkSchedule:32" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" targetNamespace="urn:un:unece:uncefact:data:standard:NetworkSchedule:32" elementFormDefault="qualified" attributeFormDefault="unqualified" version="32.0">
+<!-- ======================================================================= -->
+<!-- ===== Imports                                                     ===== -->
+<!-- ======================================================================= -->
+<!-- ======================================================================= -->
+<!-- ===== Import of Unqualified Data Type Schema Module               ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:37" schemaLocation="UnqualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Qualified Data Type Schema Module                 ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:QualifiedDataType:37" schemaLocation="QualifiedDataType_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Import of Reusable Aggregate Business Information Entity Schema Module ===== -->
+<!-- ======================================================================= -->
+  <xsd:import namespace="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:37" schemaLocation="ReusableAggregateBusinessInformationEntity_37p0.xsd"/>
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element Declarations                                   ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="NetworkSchedule" type="rsm:NetworkScheduleType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>b1b1be07-4a4c-442d-9508-e6c3ae5a1973</ccts:UniqueID>
+        <ccts:Acronym>RSM</ccts:Acronym>
+        <ccts:Name>NetworkSchedule</ccts:Name>
+        <ccts:Version>3.2</ccts:Version>
+        <ccts:Definition>The network schedule data exchange is the work task and milestone details (Project_ Task).</ccts:Definition>
+        <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: NetworkScheduleType                   ===== -->
+<!-- ================================================================== -->
+  <xsd:complexType name="NetworkScheduleType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        <ccts:UniqueID>b1b1be07-4a4c-442d-9508-e6c3ae5a1973-2</ccts:UniqueID>
+        <ccts:Acronym>MA</ccts:Acronym>
+        <ccts:DictionaryEntryName>Network Schedule. Details</ccts:DictionaryEntryName>
+        <ccts:Version>3.2</ccts:Version>
+        <ccts:Definition>The network schedule data exchange is the work task and milestone details (Project_ Task).</ccts:Definition>
+        <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+        <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+        <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+        <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+        <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+        <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+        <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+        <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+        <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="ScheduleReportDocument" type="ram:ScheduleReportDocumentType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01002039</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Schedule Report_ Document</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A report detailing the schedule data for a project.</ccts:Definition>
+            <ccts:Cardinality>0..1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Document</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Schedule Report</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectScheduleTaskRelationship" type="ram:ProjectScheduleTaskRelationshipType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001945</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Project_ Schedule Task Relationship</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A relationship between tasks within a project.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Schedule Task Relationship</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectResource" type="ram:ProjectResourceType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001934</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Project_ Resource</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A stock or supply of people, materials, or assets that can be used in a project.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Resource</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProgressMonitoredProject" type="ram:ProgressMonitoredProjectType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001780</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Progress Monitored_ Project</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>An endeavour carefully planned and monitored to achieve a unique product, service, or other particular aim such as a construction project.</ccts:Definition>
+            <ccts:Cardinality>0..1</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Project</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Progress Monitored</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectScheduleTask" type="ram:ProjectScheduleTaskType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001953</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Project_ Schedule Task</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A cohesive activity, collection of activities, or milestone with a definite duration or date which is required to create a deliverable within a project.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Schedule Task</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectSoftwareConfiguration" type="ram:ProjectSoftwareConfigurationType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01003984</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Project_ Software Configuration</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>The internal structure and commands of a project's computer program which determine the program's behaviour.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Software Configuration</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProjectNote" type="ram:ProjectNoteType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:UniqueID>UN01001871</ccts:UniqueID>
+            <ccts:Acronym>ASMA</ccts:Acronym>
+            <ccts:DictionaryEntryName>Network Schedule. Project_ Note</ccts:DictionaryEntryName>
+            <ccts:Version>1.0</ccts:Version>
+            <ccts:Definition>A means to capture general text information for a project.</ccts:Definition>
+            <ccts:Cardinality>0..n</ccts:Cardinality>
+            <ccts:ObjectClassTerm>Network Schedule</ccts:ObjectClassTerm>
+            <ccts:AssociationType>composition</ccts:AssociationType>
+            <ccts:PropertyTerm></ccts:PropertyTerm>
+            <ccts:AssociatedObjectClassTerm>Note</ccts:AssociatedObjectClassTerm>
+            <ccts:AssociatedObjectClassQualifierTerm>Project</ccts:AssociatedObjectClassQualifierTerm>
+            <ccts:BusinessProcessContextValue>Project Management</ccts:BusinessProcessContextValue>
+            <ccts:GeopoliticalOrRegionContextValue>In All Contexts</ccts:GeopoliticalOrRegionContextValue>
+            <ccts:OfficialConstraintContextValue>None</ccts:OfficialConstraintContextValue>
+            <ccts:ProductContextValue>In All Contexts</ccts:ProductContextValue>
+            <ccts:IndustryContextValue>In All Contexts</ccts:IndustryContextValue>
+            <ccts:BusinessProcessRoleContextValue>In All Contexts</ccts:BusinessProcessRoleContextValue>
+            <ccts:SupportingRoleContextValue>In All Contexts</ccts:SupportingRoleContextValue>
+            <ccts:SystemCapabilitiesContextValue>In All Contexts</ccts:SystemCapabilitiesContextValue>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

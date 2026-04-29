@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 64053 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     4.0
+Schema date:        23 August 2008
+
+Code list name:     Delivery Terms Code
+Code list agency:   UNECE
+Code list version:  2020
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm64053="urn:un:unece:uncefact:codelist:standard:UNECE:DeliveryTermsCode:2020" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:DeliveryTermsCode:2020" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="DeliveryTermsCode" type="clm64053:DeliveryTermsCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: DeliveryTermsCodeContentType          ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="DeliveryTermsCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery arranged by the supplier</ccts:Name>
+            <ccts:Description>Indicates that the supplier will arrange delivery of the goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivery arranged by logistic service provider</ccts:Name>
+            <ccts:Description>Code indicating that the logistic service provider has arranged the delivery of goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CFR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost and Freight (insert named port of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CIF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost, Insurance and Freight (insert named port of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CIP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carriage and Insurance Paid to (insert named place of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CPT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Carriage Paid To (insert named place of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DAP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivered At Place (insert named place of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DDP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivered Duty Paid (insert named place of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Delivered At Place Unloaded (insert named place of destination)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EXW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ex Works (insert named place of delivery)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FAS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Free Alongside Ship (insert named port of shipment)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FCA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Free Carrier (insert named place of delivery)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FOB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Free On Board (insert named port of shipment)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

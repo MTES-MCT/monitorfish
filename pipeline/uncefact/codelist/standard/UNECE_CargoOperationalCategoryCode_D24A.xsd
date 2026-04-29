@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 67085b - Code List Schema Module                           ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.4
+Schema date:        23 August 2008
+
+Code list name:     Cargo Operational Category Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm67085b="urn:un:unece:uncefact:codelist:standard:UNECE:CargoOperationalCategoryCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:CargoOperationalCategoryCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.4">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="CargoOperationalCategoryCode" type="clm67085b:CargoOperationalCategoryCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: CargoOperationalCategoryCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="CargoOperationalCategoryCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documents</ccts:Name>
+            <ccts:Description>Printed, typed or written matter including leaflets, pamphlets, certificates etc., which are not subject to import duties and taxes, restrictions and prohibitions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Low value non-dutiable consignments</ccts:Name>
+            <ccts:Description>Imported consignments/items/goods in respect of which Customs duties and other taxes are waived as they are below a value determined by the Customs administration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Low value dutiable consignments</ccts:Name>
+            <ccts:Description>Imported consignments/items/goods in respect of which Customs duties and other taxes are payable are below a certain amount as determined by the Customs administration.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>High value consignments</ccts:Name>
+            <ccts:Description>Imported consignments/items/goods which are determined as having a value above a certain amount fixed by the Customs administration, which may or may not attract duties and taxes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Other non-containerized</ccts:Name>
+            <ccts:Description>Non-containerized cargo which cannot be categorized by any of the other nature of cargo code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vehicles</ccts:Name>
+            <ccts:Description>Vehicles which are not stowed in containers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Roll-on roll-off</ccts:Name>
+            <ccts:Description>Cargo transported or to be transported on roll-on roll-off vessels and which is transportable on its own wheels or stowed on special heavy duty trailers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Palletized</ccts:Name>
+            <ccts:Description>Non-containerized cargo which is palletized.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Containerized</ccts:Name>
+            <ccts:Description>Cargo stowed or to be stowed in a container.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breakbulk</ccts:Name>
+            <ccts:Description>Non-containerized cargo stowed in vessels' holds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hazardous cargo</ccts:Name>
+            <ccts:Description>Cargo with dangerous properties, according to appropriate dangerous goods regulations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>General cargo</ccts:Name>
+            <ccts:Description>Cargo of a general nature, not otherwise specified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Liquid cargo</ccts:Name>
+            <ccts:Description>Cargo in liquid form.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Temperature controlled cargo</ccts:Name>
+            <ccts:Description>Cargo transported under specified temperature conditions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Environmental pollutant cargo</ccts:Name>
+            <ccts:Description>Cargo is an environmental pollutant.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not-hazardous cargo</ccts:Name>
+            <ccts:Description>Cargo which is not hazardous.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Diplomatic</ccts:Name>
+            <ccts:Description>Cargo transported under diplomatic conditions.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Military</ccts:Name>
+            <ccts:Description>Cargo for military purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Obnoxious</ccts:Name>
+            <ccts:Description>Cargo that is objectionable to human senses.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Out of gauge</ccts:Name>
+            <ccts:Description>Cargo that has at least one non-standard dimension.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Household goods and personal effects</ccts:Name>
+            <ccts:Description>Cargo consisting of household goods and personal effects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Frozen cargo</ccts:Name>
+            <ccts:Description>Cargo of frozen products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ballast only</ccts:Name>
+            <ccts:Description>No cargo, means of transport is carrying only ballast.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Incompatible cargo</ccts:Name>
+            <ccts:Description>Incompatible cargo to be transported / stored with other types of cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deep-frozen cargo</ccts:Name>
+            <ccts:Description>Cargo of deep-frozen products.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

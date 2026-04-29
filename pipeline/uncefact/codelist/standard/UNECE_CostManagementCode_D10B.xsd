@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 69653 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     1.4
+Schema date:        23 August 2008
+
+Code list name:     Cost Management Code
+Code list agency:   UNECE
+Code list version:  D10B
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm69653="urn:un:unece:uncefact:codelist:standard:UNECE:CostManagementCode:D10B" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:CostManagementCode:D10B" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.4">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="CostManagementCode" type="clm69653:CostManagementCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: CostManagementCodeContentType         ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="CostManagementCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="ABC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Authorized Baseline Changes</ccts:Name>
+            <ccts:Description>The amount that was authorized for baseline changes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TBR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Total Budget Reprogramming</ccts:Name>
+            <ccts:Description>The total of all budget reprogramming</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ACP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Actual cost of work performed</ccts:Name>
+            <ccts:Description>The actual cost of work performed to accomplish a task, whether or not the task itself is complete.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Accrued expenditures</ccts:Name>
+            <ccts:Description>Expenditures for which it is known that payment will be made, but for which payment has not actually been made.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Funding authorized to date</ccts:Name>
+            <ccts:Description>Funding amount which has been authorized to be expended.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BCP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Budgeted cost of work performed</ccts:Name>
+            <ccts:Description>The cost that was budgeted for tasks that have been completed, regardless of the actual cost of completing those tasks.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BCS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Budgeted cost of work scheduled</ccts:Name>
+            <ccts:Description>The amount budgeted for completion of a task or tasks.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost adjustment</ccts:Name>
+            <ccts:Description>An adjustment to an existing cost.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DAW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract work authorized and defined</ccts:Name>
+            <ccts:Description>The cost of contract work that has been both authorized and defined by the contractee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EST">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estimated amount</ccts:Name>
+            <ccts:Description>An amount that has been estimated.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Funds carry-over</ccts:Name>
+            <ccts:Description>Funds that have been authorized for use within a prior fiscal period that had not been spent and are being added to the existing fiscal period.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FOB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forecast of billings</ccts:Name>
+            <ccts:Description>An estimate of costs that will be billed to the contractee at a future date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NAF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forecast of not yet authorized funding</ccts:Name>
+            <ccts:Description>An estimate of future funding that has not yet been authorized by the contractee.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NDW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract work authorized but not definitized</ccts:Name>
+            <ccts:Description>Work on a contract that has been authorized by the contractee but for which the scope has been fully determined.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NRC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Non-recurring</ccts:Name>
+            <ccts:Description>Costs that are single occurrence.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Open contract commitment</ccts:Name>
+            <ccts:Description>An estimate of costs that the contractor is obligated to pay.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OCC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Open contract commitment, cancellable</ccts:Name>
+            <ccts:Description>An estimate of costs, excluding accrued expenditures, that the contractor can make void if the contract does not continue to completion.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OCN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Open contract commitment, non-cancellable</ccts:Name>
+            <ccts:Description>An estimate of costs, excluding accrued expenditures, that the contractor cannot make void if the contract does not continue to completion.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forecast of funding for all other work</ccts:Name>
+            <ccts:Description>An estimate of future funding for all work not otherwise defined.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="REC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Recurring</ccts:Name>
+            <ccts:Description>Costs that recurr on a periodic basis.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Schedule adjustment</ccts:Name>
+            <ccts:Description>An adjustment to a schedule.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Costs to terminate the contract</ccts:Name>
+            <ccts:Description>The amount contractually defined to be paid by the parties of the contract in the event of contract termination.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TOT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Total</ccts:Name>
+            <ccts:Description>Total costs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VCA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reprogram variance cost adjustment</ccts:Name>
+            <ccts:Description>An adjustment to cost variance in the event of reprogramming the budget baseline of a project.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VSA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reprogram variance schedule adjustment</ccts:Name>
+            <ccts:Description>An adjustment to schedule variance in the event of reprogramming the budget baseline of a project.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>Mutually agreed upon cost management code.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

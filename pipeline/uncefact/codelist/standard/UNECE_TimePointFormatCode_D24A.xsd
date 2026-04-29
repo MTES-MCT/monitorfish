@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 62379 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     6.6
+Schema date:        23 August 2008
+
+Code list name:     TimePointFormatCode
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm62379="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TimePointFormatCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="6.6">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="TimePointFormatCode" type="clm62379:TimePointFormatCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: TimePointFormatCodeContentType        ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="TimePointFormatCodeContentType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DDMMYY</ccts:Name>
+            <ccts:Description>Calendar date: D = Day; M = Month; Y = Year.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MMDDYY</ccts:Name>
+            <ccts:Description>Calendar date: M = Month; D = Day; Y = Year.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DDMMCCYY</ccts:Name>
+            <ccts:Description>Calendar date C=Century; Y=Year; M=Month; D=Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DDMMCCYYHHMM</ccts:Name>
+            <ccts:Description>Calendar date and time: C=Century; Y=Year; M=Month; D=Day; H=Hour; M=Minute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMB</ccts:Name>
+            <ccts:Description>Half-month: CC=century YY=year MM=month, B=1:first half month, B=2:second half month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMW</ccts:Name>
+            <ccts:Description>Week within a calendar month: CC=century YY=year MM=month. W=1-5 first week to fifth week in a month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDS</ccts:Name>
+            <ccts:Description>Shift within a calendar day: CC=century YY=year MM=month DD=day S=1-9 shift in a day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDPP</ccts:Name>
+            <ccts:Description>Time period within a calendar day: CC=century YY=year MM=month DD=day PP=00-99 time period.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDTHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time with minutes: C=Century; Y=Year; M=Month; D=Day; T=Time designator; H=Hour; M=Minutes.
+ The character [T] shall be used as time designator to indicate the start of the representation of the time. For example: 20010912T1433.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="101">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDD</ccts:Name>
+            <ccts:Description>Calendar date: Y = Year; M = Month; D = Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="102">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDD</ccts:Name>
+            <ccts:Description>Calendar date: C = Century ; Y = Year ; M = Month ; D = Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="103">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYWWD</ccts:Name>
+            <ccts:Description>Calendar week day: Y = Year ; W = Week ; D = Day Week number 01 is always first week of January Day number 1 is always Monday.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="104">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MMWW-MMWW</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start week of a month followed by the end week of a month. Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="105">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYDDD</ccts:Name>
+            <ccts:Description>Calendar day: Y = Year ; D = Day January the first = Day 001 Always start numbering the days of the year from January 1st through December 31st.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="106">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MMDD</ccts:Name>
+            <ccts:Description>Day of a month: M = Month; D = Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="107">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DDD</ccts:Name>
+            <ccts:Description>Day's number within a specific year: D = Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="108">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>WW</ccts:Name>
+            <ccts:Description>Week's number within a specific year: W = Week.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="109">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MM</ccts:Name>
+            <ccts:Description>Month's number within a specific year: M = Month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="110">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DD</ccts:Name>
+            <ccts:Description>Day's number within is a specific month: D = Day.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="201">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time without seconds: Y = Year; M = Month; D = Day; H = Hour; M = Minute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="202">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMMSS</ccts:Name>
+            <ccts:Description>Calendar date including time with seconds: Y = Year; M = Month; D = Day; H = Hour; m = Minutes = Seconds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="203">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time with minutes: C=Century; Y=Year; M=Month; D=Day; H=Hour; M=Minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="204">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMSS</ccts:Name>
+            <ccts:Description>Calendar date including time with seconds: C=Century;Y=Year; M=Month;D=Day;H=Hour;M=Minute;S=Second.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="205">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMZHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time and time zone expressed in hours and minutes.
+ZHHMM = time zone given as offset from Coordinated Universal Time (UTC).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="206">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMMZHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time without seconds, with Time Zone:
+Y = Year; M = Month; D = Day; H = Hour; M = Minute,
+Z = leading plus/minus sign, HHMM = difference to UTC in Hours and Minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="207">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMMSSZHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time with seconds, with Time Zone:
+Y = Year; M = Month; D = Day; H = Hour; M = Minute, S = Seconds
+Z = leading plus/minus sign, HHMM = difference to UTC in Hours and Minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="208">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMSSZHHMM</ccts:Name>
+            <ccts:Description>Calendar date including time with seconds, with Time Zone:
+C = Century, Y = Year; M = Month; D = Day; H = Hour; M = Minute, S = Seconds, Z = leading plus/minus sign, HHMM = difference to UTC in Hours and Minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="209">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSSZHHMM</ccts:Name>
+            <ccts:Description>Time with seconds and with Time Zone:
+H = Hour; M = Minute, S = Seconds, Z = leading plus/minus sign, HHMM = difference to UTC in Hours and Minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="210">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSSZHHMM-HHMMSSZHHMM</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start time followed by the end time (both expressed by hours, minutes, seconds and time zone leading plus/minus sign and time zone difference in hours and minutes).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="301">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMMZZZ</ccts:Name>
+            <ccts:Description>See 201 + Z = Time zone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="302">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMMSSZZZ</ccts:Name>
+            <ccts:Description>See 202 + Z = Time zone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="303">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMZZZ</ccts:Name>
+            <ccts:Description>See 203 plus Z=Time zone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="304">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMSSZZZ</ccts:Name>
+            <ccts:Description>See 204 plus Z=Time zone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="305">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MMDDHHMM</ccts:Name>
+            <ccts:Description>Month, day, hours, minutes; M = Month; D = Day; H = Hour; M = Minute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="306">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DDHHMM</ccts:Name>
+            <ccts:Description>Day, hours, minutes; D = Day; H = Hour; M = Minute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="307">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMSSFFF</ccts:Name>
+            <ccts:Description>Calendar date including time with seconds and milliseconds
+C = century, Y = year, M = month, D = day, H = hour, M = minute, S = second, F = millisecond.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="308">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMZZZ-CCYYMMDDHHMMZZZ</ccts:Name>
+            <ccts:Description>A period of time which includes the century, year, month, day, hour and minute and time zone. Format of period to be given in actual message without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="401">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMM</ccts:Name>
+            <ccts:Description>Time without seconds: H = Hour; m = Minute.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="402">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSS</ccts:Name>
+            <ccts:Description>Time with seconds: H = Hour; m = Minute; s = Seconds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="404">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSSZZZ</ccts:Name>
+            <ccts:Description>See 402 plus Z=Time zone.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="405">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>MMMMSS</ccts:Name>
+            <ccts:Description>Time without hours: m=minutes, s=seconds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="406">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ZHHMM</ccts:Name>
+            <ccts:Description>Offset from Coordinated Universal Time (UTC) where Z is plus (+) or minus (-).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="501">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMHHMM</ccts:Name>
+            <ccts:Description>Time span without seconds: H = Hour; m = Minute;.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="502">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSS-HHMMSS</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start time followed by the end time (both expressed by hours minutes and seconds). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="503">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>HHMMSSZZZ-HHMMSSZZZ</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start time followed by the end time (both expressed by hours minutes, seconds and time zone). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="600">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CC</ccts:Name>
+            <ccts:Description>Century.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="601">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YY</ccts:Name>
+            <ccts:Description>Calendar year: Y = Year.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="602">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYY</ccts:Name>
+            <ccts:Description>Calendar year including century: C = Century; Y = Year.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="603">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYS</ccts:Name>
+            <ccts:Description>Semester in a calendar year: Y = Year; S = Semester.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="604">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYS</ccts:Name>
+            <ccts:Description>Semester in a calendar year: C = Century; Y = Year; S = Semester.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="608">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYQ</ccts:Name>
+            <ccts:Description>Quarter in a calendar year: C = Century; Y = Year; Q = Quarter.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="609">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMM</ccts:Name>
+            <ccts:Description>Month within a calendar year: Y = Year; M = Month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="610">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMM</ccts:Name>
+            <ccts:Description>Month within a calendar year: CC = Century; Y = Year; M = Month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="613">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMA</ccts:Name>
+            <ccts:Description>To specifiy a ten-day period within a month of a year (A = ten day period).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="614">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMA</ccts:Name>
+            <ccts:Description>To specifiy a ten-day period within a month of a year, including century  (A = ten day period).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="615">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYWW</ccts:Name>
+            <ccts:Description>Week within a calendar year: Y = Year; W = Week 1st week of January = week 01.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="616">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYWW</ccts:Name>
+            <ccts:Description>Week within a calendar year: CC = Century; Y = Year; W = Week (1st week of January = week 01).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="701">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YY-YY</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start year followed by the end year (both without century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="702">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYY-CCYY</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start year followed by the end year (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="703">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYS-YYS</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start semester of a year followed by the end semester of a year (both not including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="704">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYS-CCYYS</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start semester of a year followed by the end semester of a year (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="705">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYPYYP</ccts:Name>
+            <ccts:Description>Format of period to be given without hyphen (P = period of 4 months).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="706">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYP-CCYYP</ccts:Name>
+            <ccts:Description>Format of period to be given without hyphen (P = period of 4 months).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="707">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYQ-YYQ</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start quarter of a year followed by the end quarter of year (both not including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="708">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYQ-CCYYQ</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start quarter of a year followed by the end quarter of year (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="709">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMM-YYMM</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start month of a year followed by the end month of a year (both not including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="710">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMM-CCYYMM</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start month of a year followed by the end month of a year (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="713">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDDHHMM-YYMMDDHHMM</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start time followed by the end time (format year, month, day, hour and minute). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="715">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYWW-YYWW</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start week of a year followed by the end week of year (both not including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="716">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYWW-CCYYWW</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start week of a year followed by the end week of year (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="717">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>YYMMDD-YYMMDD</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start date followed by the end date (both not including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="718">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDD-CCYYMMDD</ccts:Name>
+            <ccts:Description>A period of time specified by giving the start date followed by the end date (both including century). Data is to be transmitted as consecutive characters without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="719">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMM-CCYYMMDDHHMM</ccts:Name>
+            <ccts:Description>A period of time which includes the century, year, month, day, hour and minute. Format of period to be given in actual message without hyphen.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="720">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>DHHMM-DHHMM</ccts:Name>
+            <ccts:Description>Format of period to be given without hyphen (D=day of the week, 1=Monday; 2=Tuesday; ... 7=Sunday).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="721">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CCYYMMDDHHMMZHHMM-CCYYMMDDHHMMZHHMM</ccts:Name>
+            <ccts:Description>Period with time zone offset.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="801">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Year</ccts:Name>
+            <ccts:Description>To indicate a quantity of years.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="802">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Month</ccts:Name>
+            <ccts:Description>To indicate a quantity of months.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="803">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Week</ccts:Name>
+            <ccts:Description>To indicate a quantity of weeks.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="804">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Day</ccts:Name>
+            <ccts:Description>To indicate a quantity of days.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="805">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hour</ccts:Name>
+            <ccts:Description>To indicate a quantity of hours.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="806">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Minute</ccts:Name>
+            <ccts:Description>To indicate a quantity of minutes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="807">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Second</ccts:Name>
+            <ccts:Description>To indicate a quantity of seconds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="808">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Semester</ccts:Name>
+            <ccts:Description>To indicate a quantity of semesters (six months).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="809">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Four months period</ccts:Name>
+            <ccts:Description>To indicate a quantity of four months periods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="810">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trimester</ccts:Name>
+            <ccts:Description>To indicate a quantity of trimesters (three months).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="811">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Half month</ccts:Name>
+            <ccts:Description>To indicate a quantity of half months.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="812">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ten days</ccts:Name>
+            <ccts:Description>To indicate a quantity of ten days periods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="813">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Day of the week</ccts:Name>
+            <ccts:Description>Numeric representation of the day (Monday = 1).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="814">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Working days</ccts:Name>
+            <ccts:Description>Number of working days.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

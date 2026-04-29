@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 64279 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.1
+Schema date:        23 August 2008
+
+Code list name:     Payment Terms Type Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm64279="urn:un:unece:uncefact:codelist:standard:UNECE:PaymentTermsTypeCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:PaymentTermsTypeCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.1">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="PaymentTermsTypeCode" type="clm64279:PaymentTermsTypeCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: PaymentTermsTypeCodeContentType       ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="PaymentTermsTypeCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basic</ccts:Name>
+            <ccts:Description>Payment conditions normally applied.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>End of month</ccts:Name>
+            <ccts:Description>Payments are due at end of month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed date</ccts:Name>
+            <ccts:Description>Payments are due on the fixed date specified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deferred</ccts:Name>
+            <ccts:Description>Payments are deferred beyond the normal due date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discount not applicable</ccts:Name>
+            <ccts:Description>Payment terms on which discounts are not applicable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mixed</ccts:Name>
+            <ccts:Description>Different payment terms negotiated under a documentary credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Extended</ccts:Name>
+            <ccts:Description>Payment is extended beyond the normal due date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basic discount offered</ccts:Name>
+            <ccts:Description>Payment terms reflect the basic offered discount.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Proximo</ccts:Name>
+            <ccts:Description>Occurring in the next month after present.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Instant</ccts:Name>
+            <ccts:Description>Payment is due on receipt of invoice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Elective</ccts:Name>
+            <ccts:Description>Payment terms to be chosen by buyer (from options separately advised).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>10 days after end of month</ccts:Name>
+            <ccts:Description>Payment due ten days after end of a calendar month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seller to advise buyer</ccts:Name>
+            <ccts:Description>Seller will advise buyer of payment terms by separate transaction.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Paid against statement</ccts:Name>
+            <ccts:Description>Payments are to be made against statement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No charge</ccts:Name>
+            <ccts:Description>Payment terms have no charge.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Not yet defined</ccts:Name>
+            <ccts:Description>Payment terms are not yet defined.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ultimo</ccts:Name>
+            <ccts:Description>Payment is due the end of the current or specified month.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Previously agreed upon</ccts:Name>
+            <ccts:Description>Payment terms have been previously agreed upon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>United States funds</ccts:Name>
+            <ccts:Description>The payment terms require the use of United States funds.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Penalty terms</ccts:Name>
+            <ccts:Description>Payment terms on which penalties apply.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment by instalment</ccts:Name>
+            <ccts:Description>Payment terms are based on instalment payments.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discount</ccts:Name>
+            <ccts:Description>Payment terms on which discounts are applicable.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by sight payment</ccts:Name>
+            <ccts:Description>Payment made at sight.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by deferred payment</ccts:Name>
+            <ccts:Description>Payment made at deferred date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by acceptance</ccts:Name>
+            <ccts:Description>Payment on acceptance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by negotiation with any bank</ccts:Name>
+            <ccts:Description>Payment made by negotiation with any bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by negotiation with any bank in ...</ccts:Name>
+            <ccts:Description>Payment made by negotiation with any bank in a specified location.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="28">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by negotiation by named bank</ccts:Name>
+            <ccts:Description>Payment made by negotiation with a specified financial institution.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="29">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available by negotiation</ccts:Name>
+            <ccts:Description>Payment made by negotiation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="30">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Adjustment payment</ccts:Name>
+            <ccts:Description>Payment adjusted for outstanding credits or debits.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="31">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Late payment</ccts:Name>
+            <ccts:Description>Payment after due date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="32">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Advanced payment</ccts:Name>
+            <ccts:Description>Payment in advance of due date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="33">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment by instalments according to progress (as agreed)</ccts:Name>
+            <ccts:Description>Payment by instalments according to progress (as agreed).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment by instalments according to progress (to be agreed)</ccts:Name>
+            <ccts:Description>Payment by instalments according to progress (to be agreed).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nonstandard</ccts:Name>
+            <ccts:Description>Terms of payment differ from the normal terms.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tenor payment terms</ccts:Name>
+            <ccts:Description>Payment to be made according to bilaterally agreed conditions between buyer and seller.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Complete payment</ccts:Name>
+            <ccts:Description>Payment must be made for complete value and may not be paid in instalments.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment terms defined in consolidated invoice</ccts:Name>
+            <ccts:Description>Payment terms are specified in a consolidated invoice.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Payment upon completion</ccts:Name>
+            <ccts:Description>The payment terms require payment upon completion.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Partial advance</ccts:Name>
+            <ccts:Description>The payment terms require a partial payment in advance of completion.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Consignment</ccts:Name>
+            <ccts:Description>The payment terms are that the goods will be paid for when they are sold or consumed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inter-company account</ccts:Name>
+            <ccts:Description>The payment terms involve the use of an inter-company account.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sell by note</ccts:Name>
+            <ccts:Description>The payment terms involve a debtor who promises to pay a definite sum of money on demand or at a definite time in the future.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Supplier floor plan</ccts:Name>
+            <ccts:Description>The payment terms involve payment for merchandise owned by a third party.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Contract basis</ccts:Name>
+            <ccts:Description>The payment terms are based on a contract with a vendor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Credit controlled</ccts:Name>
+            <ccts:Description>The payment terms involve the monitoring of credit by the grantor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dating given</ccts:Name>
+            <ccts:Description>The payment terms in which suppliers may extend seasonal dating.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trade acceptance</ccts:Name>
+            <ccts:Description>A trade acceptance is a written acknowledgement of the sale of goods and promise to pay at a definite date and place.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cost plus</ccts:Name>
+            <ccts:Description>The payment terms permit reimbursement of costs plus other authorised changes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Letter of credit</ccts:Name>
+            <ccts:Description>The payment terms require the use of a letter of credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="51">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lease agreement</ccts:Name>
+            <ccts:Description>The payment terms are included in the lease agreement.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="52">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash On Delivery (COD)</ccts:Name>
+            <ccts:Description>The payment terms are cash is due on delivery of merchandise.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="53">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash by state law</ccts:Name>
+            <ccts:Description>The payment terms are dictated by state law requiring payment of cash.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="54">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bank transfer</ccts:Name>
+            <ccts:Description>The payment terms require the use of bank transfer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="55">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash on arrival</ccts:Name>
+            <ccts:Description>The payment terms require payment by cash on arrival of the goods or services.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="56">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash</ccts:Name>
+            <ccts:Description>The payment terms are that payments are made in cash.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="57">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash discount terms apply</ccts:Name>
+            <ccts:Description>The payment terms are that a discount is applicable if the payment is made in cash.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="58">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash with order</ccts:Name>
+            <ccts:Description>The payment terms require the payment in cash with placement of the order.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="59">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash per vendor request</ccts:Name>
+            <ccts:Description>The payment terms involve a vendor request for payment by cash.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="60">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irrevocable letter of credit</ccts:Name>
+            <ccts:Description>The payment terms require the use of an irrevocable letter of credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documents against acceptance</ccts:Name>
+            <ccts:Description>The payment terms require acceptance of liability before document transfer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Charge card</ccts:Name>
+            <ccts:Description>The payment terms permit the use of a charge card to effect payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="63">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documents against payment</ccts:Name>
+            <ccts:Description>The payment terms require payment before document transfer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Usance bill</ccts:Name>
+            <ccts:Description>The payment terms are based on the time allowed by commercial usage for the payment of foreign bills of exchange.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Letter of credit at sight</ccts:Name>
+            <ccts:Description>The payment terms require the presentation of a letter of credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="66">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Secured account</ccts:Name>
+            <ccts:Description>The payment terms call for the use of a secured account.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="67">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basic commission terms</ccts:Name>
+            <ccts:Description>The payment terms call for the use of basic commission terms.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="68">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deposit required</ccts:Name>
+            <ccts:Description>The payment terms require a deposit be provided.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discount with prompt pay</ccts:Name>
+            <ccts:Description>The payment terms include a discount when payment is made within a time frame designated as prompt pay.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Discount with advance payment</ccts:Name>
+            <ccts:Description>The payment terms include a discount when payment is made in advance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Certified cheque</ccts:Name>
+            <ccts:Description>The payment terms require the use of a certified cheque.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="72">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cash against documents</ccts:Name>
+            <ccts:Description>The payment terms require cash payment before document transfer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="73">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bill of exchange</ccts:Name>
+            <ccts:Description>The payment terms require the use of bill of exchange.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="74">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Progressive discount</ccts:Name>
+            <ccts:Description>The payment terms include a progressive discount based on the amount and speed with which payments are made.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="75">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lump sum</ccts:Name>
+            <ccts:Description>The payment term requires a lump sum payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="76">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fixed fee</ccts:Name>
+            <ccts:Description>The payment term requires a fixed fee payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="77">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Promissory note</ccts:Name>
+            <ccts:Description>The payment term requires the use of a promissory note as a means of payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="78">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Factoring</ccts:Name>
+            <ccts:Description>Payment term requires payment being made by the factoring company according to the agreement between buyer, bank and factoring company.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>A code assigned within a code list to be used on an interim basis and as defined among trading partners until a precise code can be assigned to the code list.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 68053 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.6
+Schema date:        23 August 2008
+
+Code list name:     Transport Equipment Category Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm68053="urn:un:unece:uncefact:codelist:standard:UNECE:TransportEquipmentCategoryCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:TransportEquipmentCategoryCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.6">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="TransportEquipmentCategoryCode" type="clm68053:TransportEquipmentCategoryCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: TransportEquipmentCategoryCodeContentType ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="TransportEquipmentCategoryCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="AA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ground equipment</ccts:Name>
+            <ccts:Description>Ground equipment being fuelled or serviced.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chain</ccts:Name>
+            <ccts:Description>Chain used in the securing of cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Temperature recorder</ccts:Name>
+            <ccts:Description>Temperature recorder to provide a record of the actual temperature.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Body trailer</ccts:Name>
+            <ccts:Description>The part of the vehicle where the cargo is loaded.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slipsheet</ccts:Name>
+            <ccts:Description>A cardboard platform used for holding product for storage or transportation.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>No special equipment needed</ccts:Name>
+            <ccts:Description>A code to indicate that there is no special equipment needed.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vessel hold</ccts:Name>
+            <ccts:Description>A compartment forming part of a transport vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flat rack</ccts:Name>
+            <ccts:Description>Type of open container used for carrying objects.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aircraft</ccts:Name>
+            <ccts:Description>To indicate that the equipment is an aircraft.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Medical device</ccts:Name>
+            <ccts:Description>A device used for medical purposes.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Refrigerated container</ccts:Name>
+            <ccts:Description>A refrigerated (reefer) container that is actively cooling the product.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Synthetic pallet 80*120cm</ccts:Name>
+            <ccts:Description>A pallet with standard dimensions 80*120 centimetres made of synthetic material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Synthetic pallet 100*120cm</ccts:Name>
+            <ccts:Description>A standard pallet with standard dimensions 100*120 centimetres made of synthetic material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Clothing hanger rack</ccts:Name>
+            <ccts:Description>Equipment used to store and transport clothing in a hanging position.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Road/rail trailer</ccts:Name>
+            <ccts:Description>Trailer designated for combined road/rail use.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Overhang wagon</ccts:Name>
+            <ccts:Description>Empty rail wagon added to the loaded wagons, when goods are longer than the loaded wagon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Un-containerized cargo (breakbulk)</ccts:Name>
+            <ccts:Description>Cargoes in bulk not stuffed in equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Blocks</ccts:Name>
+            <ccts:Description>A piece of equipment that is normally a piece of wood to fix cargo (e.g. coils) during transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Box pallet non-exchangeable</ccts:Name>
+            <ccts:Description>A box pallet which cannot be exchanged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck being transported</ccts:Name>
+            <ccts:Description>A road vehicle capable of carrying goods which is being carried on another means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Truck and trailer combination being transported</ccts:Name>
+            <ccts:Description>A road vehicle capable of carrying goods with an attached trailer which is being carried on another means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tractor and trailer being transported</ccts:Name>
+            <ccts:Description>A trailer accompanied by a self-propelling tractor unit which is being carried on another means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Postal bag</ccts:Name>
+            <ccts:Description>Bag intended primarily for the conveyance of postal items.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Letter Tray</ccts:Name>
+            <ccts:Description>Tray intended primarily for the conveyance of letter mail items of size slightly exceeding C5, in which the items are stood on their long edge.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Roller Cage</ccts:Name>
+            <ccts:Description>Wheeled wire cage.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flats Tray</ccts:Name>
+            <ccts:Description>Tray intended primarily for the conveyance of letter mail items of from C5 up to in excess of C4, in which the items are stacked one on top of another. May also be used for letter mail smaller items stood on their long edge.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Out of bag parcel</ccts:Name>
+            <ccts:Description>Postal item which is conveyed individually, with only the wrapping provided by the mailer for protection.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wheeled Platform</ccts:Name>
+            <ccts:Description>Device, consisting of a flat surface mounted on a wheels, which is designed for the conveyance of items which may safely be stacked. Normally also equipped with a handle to allow the device to be easily manoeuvred.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Container non-compliant with the Customs Convention on Containers</ccts:Name>
+            <ccts:Description>The container is not compliant with the Customs Convention on Containers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Box pallet EUR Y non exchangeable</ccts:Name>
+            <ccts:Description>A euro-pallet of type Y that may not be exchanged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BPZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Roll Pallet 1</ccts:Name>
+            <ccts:Description>80 X 60 cm pallet on casters.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Barge</ccts:Name>
+            <ccts:Description>Flat bottomed inland cargo vessel for canals and rivers with or without own propulsion for the purpose of transported goods. (Synonym: Lighter).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Boxcar</ccts:Name>
+            <ccts:Description>An enclosed railway goods wagon.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chassis</ccts:Name>
+            <ccts:Description>A wheeled carriage onto which an ocean container is mounted for inland conveyance.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Container</ccts:Name>
+            <ccts:Description>Equipment item as defined by ISO for transport. It must be of: A) permanent character, strong enough for repeated use; B) designed to facilitate the carriage of goods, by one or more modes of transport, without intermediate reloading; C) fitted with devices for its ready handling, particularly.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Deadlight (panel)</ccts:Name>
+            <ccts:Description>A set of panels fixed inside a porthole.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Roll Pallet 2</ccts:Name>
+            <ccts:Description>120 X 60 cm pallet on casters.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Container gantry crane</ccts:Name>
+            <ccts:Description>A fixed gantry crane ashore for container handling operations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mobile crane</ccts:Name>
+            <ccts:Description>A mobile crane for handling operations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Floating crane</ccts:Name>
+            <ccts:Description>A crane mounted on a dedicated vessel.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ship's equipment crane</ccts:Name>
+            <ccts:Description>A crane mounted on a ship for handling operations.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Conveyor belt</ccts:Name>
+            <ccts:Description>Rolling carpet belt.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Forklift</ccts:Name>
+            <ccts:Description>Equipment device for handling and moving goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Stacking equipment</ccts:Name>
+            <ccts:Description>Equipment device for stacking goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Taillift</ccts:Name>
+            <ccts:Description>Equipment device at the rear of a truck for loading and unloading cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet ISO 0 - 1/2 EURO Pallet</ccts:Name>
+            <ccts:Description>Standard pallet with dimensions 80 X 60 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>On-board equipment</ccts:Name>
+            <ccts:Description>Equipment permanently on board a means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet ISO 1 - 1/1 EURO Pallet (GS1 Temporary Code)</ccts:Name>
+            <ccts:Description>Standard pallet with dimensions 80 X 120 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet ISO 2</ccts:Name>
+            <ccts:Description>Standard pallet with dimensions 100 X 120 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DPO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>1/4 EURO Pallet</ccts:Name>
+            <ccts:Description>Standard pallet with dimensions 60 X 40 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Exchangeable EUR flat pallet</ccts:Name>
+            <ccts:Description>A flat euro-pallet that may be exchanged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>1/8 EURO Pallet</ccts:Name>
+            <ccts:Description>Standard pallet with dimensions 40 X 30 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wholesaler pallet</ccts:Name>
+            <ccts:Description>Pallet provided by the wholesaler.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet 80 X 100 cm</ccts:Name>
+            <ccts:Description>Pallet with dimensions 80 X 100 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet 60 X 100 cm</ccts:Name>
+            <ccts:Description>Pallet with dimensions 60 X 100 cm.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oneway pallet</ccts:Name>
+            <ccts:Description>Pallet need not be returned to the point of expedition.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Returnable pallet</ccts:Name>
+            <ccts:Description>Pallet must be returned to the point of expedition.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bottlecrate</ccts:Name>
+            <ccts:Description>A container for the storage or movement of bottles, a.k.a. bottlerack.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFX">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bottle, non-protected, cylindrical</ccts:Name>
+            <ccts:Description>A non-protected cylindrical container with a narrow neck made usually of glass or plastic which is especially used for liquids.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Box</ccts:Name>
+            <ccts:Description>A lidded package which can be made of cardboard, wood, plastic,tin,etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EFZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>CHEP Eurobox</ccts:Name>
+            <ccts:Description>A box mounted on a pallet base under the control of CHEP.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Case</ccts:Name>
+            <ccts:Description>A package such as a box.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Display package</ccts:Name>
+            <ccts:Description>A package used for the dispaly of goods, usually during a promotion.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Isothermic case</ccts:Name>
+            <ccts:Description>A case used for products which require constant temperature control.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet modular collars 80*100</ccts:Name>
+            <ccts:Description>Collars, with the dimensions 80cms * 100cms, which when fitted onto a pallet enable the pallet to be transformed into a box pallet with, if necessary, a lid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet modular collars 80*120</ccts:Name>
+            <ccts:Description>Collars, with the dimensions 80cms * 120cms, which when fitted onto a pallet enable the pallet to be transformed into a box pallet with, if necessary, a lid.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tray</ccts:Name>
+            <ccts:Description>A flat receptacle with low sides for carrying or holding articles.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Roll cage</ccts:Name>
+            <ccts:Description>A three sided cage mounted on wheels.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trolley</ccts:Name>
+            <ccts:Description>A low cart for the transportation and storage of groceries, milk, etc.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EGI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Landside power generator</ccts:Name>
+            <ccts:Description>A generator located landside at a terminal, used to provide electric power to a vessel or other means of transport.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EYP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Exchangeable EUR Y box pallet</ccts:Name>
+            <ccts:Description>A euro-pallet of type Y that may be exchanged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FPN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flat pallet EUR non exchangeable</ccts:Name>
+            <ccts:Description>A flat euro-pallet that may not be exchanged.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FPR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flat pallet (railway property) non-exchangeable</ccts:Name>
+            <ccts:Description>A non-exchangeable flat pallet owned by a railroad.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lidded stackable rigid tray (CEN TS 14482:2002)</ccts:Name>
+            <ccts:Description>Lidded stackable rigid tray compliant with CEN TS 14482:2002.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LAR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lashing rope</ccts:Name>
+            <ccts:Description>A rope for lashing cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Load/unload device on equipment</ccts:Name>
+            <ccts:Description>A mechanical device used in the loading and/or unloading of cargo into and from transport equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MPA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Movable panel</ccts:Name>
+            <ccts:Description>A panel which can be moved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pallet</ccts:Name>
+            <ccts:Description>A platform on which goods can be stacked in order to facilitate the movement by a forklift or sling.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PBP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Identified private box pallet</ccts:Name>
+            <ccts:Description>A box pallet identified as being privately owned.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PFP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Identified private flat pallet</ccts:Name>
+            <ccts:Description>A flat pallet identified as being privately owned.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Platform</ccts:Name>
+            <ccts:Description>A piece of equipment normally having a flat surface, or prepared for carrying cargo with a specific shape.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PPA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Protecting panel</ccts:Name>
+            <ccts:Description>A panel used for protection.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PST">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Portable stove</ccts:Name>
+            <ccts:Description>A portable heating unit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Flat car</ccts:Name>
+            <ccts:Description>A railway wagon without raised sides or ends.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reefer generator</ccts:Name>
+            <ccts:Description>A generator used to control the temperature in temperature-controlled transport equipment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RGF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ground facility</ccts:Name>
+            <ccts:Description>Storage tank or facility capable of receiving shipment of goods or commodity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rope</ccts:Name>
+            <ccts:Description>Rope used in the securing of cargo.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rail car</ccts:Name>
+            <ccts:Description>To identify that the equipment is a rail car.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Semi-trailer</ccts:Name>
+            <ccts:Description>A road trailer without a front axle and with wheels only at the back end.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SPP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Identified special pallet</ccts:Name>
+            <ccts:Description>A pallet identified as special.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="STR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Strap</ccts:Name>
+            <ccts:Description>A narrow strip of flexible material.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swap body</ccts:Name>
+            <ccts:Description>Rectangular equipment unit without wheels, which can be mounted on a chassis or positioned on legs.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Trailer</ccts:Name>
+            <ccts:Description>A vehicle without motive power, designed for the carriage of cargo and to be towed by a motor vehicle.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tank</ccts:Name>
+            <ccts:Description>A tank container used for the storage, transport and stockpiling of bulk cargoes such as gases or liquids.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TP">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tarpaulin</ccts:Name>
+            <ccts:Description>Waterproof material, e.g. canvas, to spread over cargo to protect it from getting wet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tackles</ccts:Name>
+            <ccts:Description>Identification of loading tackle used (sheets, ropes, chains, etc.), as specified in DCU 9 to CIM Article 13; and of containers, as specified in Articles 5 and 10 of Annex III to CIM (CIM 17).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TSU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tarpaulin support</ccts:Name>
+            <ccts:Description>A device to support a tarpaulin.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>ULD (Unit load device)</ccts:Name>
+            <ccts:Description>An aircraft container or pallet.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

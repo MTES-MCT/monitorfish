@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 64439 - Code List Schema Module                            ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     5.1
+Schema date:        23 August 2008
+
+Code list name:     Payment Method Code
+Code list agency:   UNECE
+Code list version:  D24A
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm64439="urn:un:unece:uncefact:codelist:standard:UNECE:PaymentMethodCode:D24A" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:UNECE:PaymentMethodCode:D24A" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.1">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="PaymentMethodCode" type="clm64439:PaymentMethodCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: PaymentMethodCodeContentType          ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="PaymentMethodCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Direct payment</ccts:Name>
+            <ccts:Description>An assigned invoice has been paid by the buyer to the factor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="2">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Automatic clearing house credit</ccts:Name>
+            <ccts:Description>Credit transaction via an ACH (Automated Clearing House).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="3">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Automatic clearing house debit</ccts:Name>
+            <ccts:Description>Debit transaction via an ACH (Automated Clearing House).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="4">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Automatic clearing house credit-savings account</ccts:Name>
+            <ccts:Description>Credit transaction via an ACH (Automated Clearing House) to an interest bearing deposit account without a stated maturity.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="5">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Automatic clearing house debit-demand account</ccts:Name>
+            <ccts:Description>Debit transaction via an ACH (Automated Clearing House) to an account paying funds on demand without notice of intended withdrawal.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="6">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bank book transfer (credit)</ccts:Name>
+            <ccts:Description>Current value of an asset, moved from one account to another, as it appears on the balance sheet (credit).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="7">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bank book transfer (debit)</ccts:Name>
+            <ccts:Description>Current value of an asset, moved from one account to another, as it appears on the balance sheet (debit).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="8">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Doc collection via 3rd party with bill of EX</ccts:Name>
+            <ccts:Description>Presentment of negotiable instruments to the point of origin, and receiving payment from the paying bank, using a 3rd party with bill of exchange.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="9">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Doc collection via 3rd party no bill of EX</ccts:Name>
+            <ccts:Description>Presentment of negotiable instruments to the point of origin, and receiving payment from the paying bank, using a 3rd party without bill of exchange.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="10">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irrevocable documentary credit</ccts:Name>
+            <ccts:Description>Written undertaking by a bank to pay a seller against stipulated documents that cannot be amended or cancelled without the consent of all parties involved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="11">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transferable irrevocable documentary credit</ccts:Name>
+            <ccts:Description>Written undertaking by a bank to pay a seller against stipulated documents that cannot be amended or cancelled without the consent of all parties involved and that can be transferred by the first beneficiary to one or more beneficiaries.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="12">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Confirmed irrevocable documentary credit</ccts:Name>
+            <ccts:Description>Written undertaking by a bank to pay a seller against credit conform stipulated documents that cannot be amended or cancelled without the consent of all parties involved.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="13">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Transferable confirmed irrevocable documentary credit</ccts:Name>
+            <ccts:Description>Written undertaking by a bank to pay a seller against credit conform stipulated documents that cannot be amended or cancelled without the consent of all parties involved and that can be transferred by the first beneficiary to one or more beneficiaries.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="14">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Revocable documentary credit</ccts:Name>
+            <ccts:Description>Written undertaking by a bank to pay a seller against stipulated documents that can be amended or cancelled at any time.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="15">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irrevocable letter of credit-confirmed</ccts:Name>
+            <ccts:Description>Letter of credit that cannot be cancelled or amended without agreement by all the parties involved, and carries the endorsement of both the issuing bank and its correspondent, guaranteeing payment of all drafts written against.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="16">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Letter of guarantee</ccts:Name>
+            <ccts:Description>Any guarantee, bond or other payment undertaking given for the payment of money on presentation in conformity with the terms of the undertaking of a demand for payment and other documents specified.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="17">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Revocable letter of credit</ccts:Name>
+            <ccts:Description>Letter of credit that can be cancelled or amended at any time by the issuing bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="18">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Standby letter of credit</ccts:Name>
+            <ccts:Description>Letter of credit which is a contingent (future) obligation of the issuing bank to make payment to the designated beneficiary if the bank's customer fails to perform as called for under the terms of a contract.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="19">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irrevocable letter of credit unconfirmed</ccts:Name>
+            <ccts:Description>Letter of credit that cannot be cancelled or amended before a specific date without agreement by all the parties involved, and carries no guarantee that a correspondent will honour drafts presented for payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="20">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Clean collection (ICC)</ccts:Name>
+            <ccts:Description>A collection in which the seller has already sent the goods and any documents giving control of such goods directly to the buyer, and where he subsequently sends his claim for payment. This type of collection involves financial documents only.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="21">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentary collection (ICC)</ccts:Name>
+            <ccts:Description>A collection in which the seller exchanges the delivery of the goods and any documents giving control of such goods for payment or upon promise of payment by acceptance of a commercial document. This type of collection involves financial and commercial documents. International Chamber of Commerce (ICC) term.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="22">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentary sight collection (ICC)</ccts:Name>
+            <ccts:Description>A collection in which the commercial documents are delivered against immediate payment. International Chamber of Commerce (ICC) term.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="23">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentary collection with date of expiry (ICC)</ccts:Name>
+            <ccts:Description>A collection in which the commercial documents are valid for a term or until a specified date. International Chamber of Commerce (ICC) term.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="24">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentary collection: bill of exchange against acceptance</ccts:Name>
+            <ccts:Description>A collection in which the bill of exchange is handed over on acceptance and the payment will take place on a future date.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="25">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documentary collection: bill of exchange against payment</ccts:Name>
+            <ccts:Description>A collection in which the bill of exchange is handed over when payment is obtained.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="26">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Collection subject to buyer's approval (ICC)</ccts:Name>
+            <ccts:Description>The collection is subject to the buyer's approval. International Chamber of Commerce (ICC) term.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="27">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Collection by a bank consignee for the goods (ICC)</ccts:Name>
+            <ccts:Description>A collection in which the bank stores the goods on its premises. International Chamber of Commerce (ICC) term.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="34">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Seller to advise buyer</ccts:Name>
+            <ccts:Description>Payment conditions to be advised by the seller to the buyer.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="35">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Documents through banks</ccts:Name>
+            <ccts:Description>Also known as 'documents against presentation', the documents are sent to a bank, and the buyer obtains the documents by paying the invoice amount to the bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="36">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Charging (to account)</ccts:Name>
+            <ccts:Description>Amount due booked to accounts payable/accounts receivables accordingly.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="37">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with issuing bank</ccts:Name>
+            <ccts:Description>Documentary credit is available with the issuing bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="38">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with advising bank</ccts:Name>
+            <ccts:Description>Documentary credit is available with the advising bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="39">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with named bank</ccts:Name>
+            <ccts:Description>Documentary credit is available with the financial institution identified in the FII segment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="40">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with any bank</ccts:Name>
+            <ccts:Description>Documentary credit is available with any bank.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="41">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with any bank in ...</ccts:Name>
+            <ccts:Description>Documentary credit is available with any bank located in a place identified in the LOC segment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="42">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Indirect payment</ccts:Name>
+            <ccts:Description>An assigned invoice has been paid by the buyer to the seller or to the seller's agent instead of to the factor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="43">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reassignment</ccts:Name>
+            <ccts:Description>An invoice or credit note assigned to a factor has been reassigned back to the seller or to another factor.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="44">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Offset</ccts:Name>
+            <ccts:Description>An invoice/credit note has been (partly) offset against other items on the seller's or buyer's account.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="45">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Special entries</ccts:Name>
+            <ccts:Description>Payment to be treated as special booking entry by the beneficiary.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="46">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Instalment payment</ccts:Name>
+            <ccts:Description>Payment is to be made in one or more instalments.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="47">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Instalment payment with draft</ccts:Name>
+            <ccts:Description>Payment is to be made by bank draft in one or more instalments.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="48">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Available with advise through bank</ccts:Name>
+            <ccts:Description>Available with the financial institution through which the advising bank is to advise the documentary credit.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="49">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>General conditions of sale</ccts:Name>
+            <ccts:Description>Refer to general conditions of sale for payment condition information.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="50">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Special payment</ccts:Name>
+            <ccts:Description>Payment with special condition(s).</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="61">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Set-off by exchange of documents</ccts:Name>
+            <ccts:Description>Payment will be initiated by the exchange of documents.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="62">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Set-off by reciprocal credits</ccts:Name>
+            <ccts:Description>Payment will be initiated by the settling of reciprocal credits.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="64">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Set-off by exchange of goods</ccts:Name>
+            <ccts:Description>Payment will be initiated by the exchange of goods.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="65">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Reverse factoring</ccts:Name>
+            <ccts:Description>Condition of payment to suppliers in which a third party (for example, a bank) manages the payments that one company has to make to its suppliers.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="69">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Other set-off</ccts:Name>
+            <ccts:Description>Payment will be initiated by an action not otherwise stipulated.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="70">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Supplier to invoice</ccts:Name>
+            <ccts:Description>To identify in an order that the supplier is required to invoice for payment.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="71">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Recipient to self bill</ccts:Name>
+            <ccts:Description>To identify in an order that the receiver of the goods is expected to self bill.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZZZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mutually defined</ccts:Name>
+            <ccts:Description>A code assigned within a code list to be used on an interim basis and as defined among trading partners until a precise code can be assigned to the code list.</ccts:Description>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

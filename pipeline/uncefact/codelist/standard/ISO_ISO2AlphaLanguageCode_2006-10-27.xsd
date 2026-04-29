@@ -1,0 +1,2600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== -->
+<!-- ===== 5ISO 639-1 2A - Code List Schema Module                    ===== -->
+<!-- ====================================================================== -->
+<!--
+Schema agency:      UN/CEFACT
+Schema version:     4.2
+Schema date:        23 August 2008
+
+Code list name:     ISO 2 Alpha Language Code
+Code list agency:   ISO
+Code list version:  2006-10-27
+
+Copyright (C) UN/CEFACT (2008). All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not be modified in any way, such as by removing the copyright notice or references to UN/CEFACT, except as needed for the purpose of developing UN/CEFACT specifications, in which case the procedures for copyrights defined in the UN/CEFACT Intellectual Property Rights document must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by UN/CEFACT or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and UN/CEFACT DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:clm5ISO63912A="urn:un:unece:uncefact:codelist:standard:ISO:ISO2AlphaLanguageCode:2006-10-27" xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2" targetNamespace="urn:un:unece:uncefact:codelist:standard:ISO:ISO2AlphaLanguageCode:2006-10-27" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.2">
+<!-- ======================================================================= -->
+<!-- ===== Element Declarations                                        ===== -->
+<!-- ======================================================================= -->
+<!-- ===== Root Element                                                ===== -->
+<!-- ======================================================================= -->
+  <xsd:element name="ISO2AlphaLanguageCode" type="clm5ISO63912A:ISO2AlphaLanguageCodeContentType"/>
+<!-- ================================================================== -->
+<!-- ===== Type Definitions                                       ===== -->
+<!-- ================================================================== -->
+<!-- ===== Type Definition: ISO2AlphaLanguageCodeContentType      ===== -->
+<!-- ================================================================== -->
+  <xsd:simpleType name="ISO2AlphaLanguageCodeContentType">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="aa">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Afar</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Afar</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ab">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Abkhazian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Abkhazian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ae">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Avestan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Avestan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="af">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Afrikaans</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Afrikaans</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ak">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Akan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Akan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="am">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amharic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Amharic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="an">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aragonese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aragonese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ar">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Arabic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Arabic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="as">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assamese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Assamese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="av">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Avaric</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Avaric</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ay">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aymara</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Aymara</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="az">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Azerbaijani</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="AZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Azerbaijani</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ba">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bashkir</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bashkir</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="be">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Belarusian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Belarusian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bulgarian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bulgarian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bislama</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bislama</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bm">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bambara</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bambara</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bengali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bengali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tibetan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tibetan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="br">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breton</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Breton</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="bs">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bosnian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="BS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bosnian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ca">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Catalan; Valencian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Catalan; Valencian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ce">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chechen</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chechen</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ch">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chamorro</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chamorro</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="co">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Corsican</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Corsican</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="cr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cree</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cree</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="cs">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Czech</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Czech</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="cu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="cv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chuvash</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chuvash</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="cy">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Welsh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="CY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Welsh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="da">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Danish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Danish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="de">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>German</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>German</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="dv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Divehi; Dhivehi; Maldivian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Divehi; Dhivehi; Maldivian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="dz">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dzongkha</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="DZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dzongkha</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ee">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ewe</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ewe</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="el">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Greek; Modern (1453-)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Greek; Modern (1453-)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="en">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>English</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>English</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="eo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Esperanto</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Esperanto</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="es">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Spanish; Castilian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ES">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Spanish; Castilian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="et">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estonian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ET">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Estonian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="eu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basque</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="EU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Basque</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fa">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Persian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Persian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ff">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fulah</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FF">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fulah</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Finnish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Finnish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fj">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fijian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Fijian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Faroese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Faroese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>French</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>French</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="fy">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Western Frisian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="FY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Western Frisian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ga">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Irish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="gd">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gaelic; Scottish Gaelic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gaelic; Scottish Gaelic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="gl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Galician</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Galician</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="gn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Guarani</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Guarani</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="gu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gujarati</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Gujarati</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="gv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Manx</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="GV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Manx</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ha">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hausa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hausa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="he">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hebrew</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hebrew</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="hi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hindi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hindi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ho">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hiri Motu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hiri Motu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="hr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Croatian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Croatian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ht">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Haitian; Haitian Creole</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Haitian; Haitian Creole</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="hu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hungarian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Hungarian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="hy">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Armenian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Armenian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="hz">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Herero</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="HZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Herero</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ia">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Interlingua (International Auxiliary Language Association)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Interlingua (International Auxiliary Language Association)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="id">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Indonesian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ID">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Indonesian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ie">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Interlingue</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Interlingue</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ig">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Igbo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Igbo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ii">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sichuan Yi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="II">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sichuan Yi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ik">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inupiaq</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inupiaq</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="io">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ido</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ido</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="is">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Icelandic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Icelandic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="it">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Italian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Italian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="iu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inuktiut</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="IU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Inuktiut</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ja">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Japanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="JA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Japanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="jv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Javanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="JV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Javanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ka">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Georgian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Georgian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kongo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kongo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ki">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kikuyu; Gikuyu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kikuyu; Gikuyu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kj">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kuanyama; Kwanyama</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kuanyama; Kwanyama</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kk">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kazakh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kazakh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kalaallisut; Greenlandic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kalaallisut; Greenlandic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="km">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Central Khmer</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Central Khmer</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kannada</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kannada</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ko">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Korean</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Korean</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kanuri</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kanuri</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ks">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kashmiri</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kashmiri</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ku">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kurdish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kurdish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Komi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Komi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="kw">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cornish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Cornish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ky">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kirghiz; Kyrgyz</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="KY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kirghiz; Kyrgyz</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="la">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Latin</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Latin</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lb">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Luxembourgish; Letzeburgesch</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Luxembourgish; Letzeburgesch</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ganda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ganda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="li">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Limburgan; Limburger; Limburgish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Limburgan; Limburger; Limburgish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ln">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lingala</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lingala</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lao</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lao</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lt">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lithuanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Lithuanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Luba-Katanga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Luba-Katanga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="lv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Latvian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="LV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Latvian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malagasy</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malagasy</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mh">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marshallese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marshallese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maori</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maori</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mk">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Macedonian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Macedonian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ml">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malayalam</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ML">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malayalam</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mongolian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Mongolian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marathi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Marathi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ms">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malay</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Malay</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="mt">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maltese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Maltese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="my">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Burmese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="MY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Burmese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="na">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nauru</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nauru</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nb">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bokmal Norwegian; Norwegian Bokmal</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NB">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Bokmal Norwegian; Norwegian Bokmal</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nd">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndebele; North; North Ndebele</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ND">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndebele; North; North Ndebele</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ne">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nepali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Nepali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ng">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndonga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndonga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dutch; Flemish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Dutch; Flemish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Norwegian Nynorsk; Nynorsk, Norwegian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Norwegian Nynorsk; Nynorsk, Norwegian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="no">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Norwegian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Norwegian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndebele; South; South Ndebele</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ndebele; South; South Ndebele</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="nv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Navajo; Navaho</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Navajo; Navaho</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ny">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chichewa; Chewa; Nyanja</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="NY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chichewa; Chewa; Nyanja</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="oc">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Occitan (post 1500)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Occitan (post 1500)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="oj">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ojibwa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OJ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ojibwa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="om">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oromo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oromo</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="or">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oriya</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Oriya</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="os">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ossetian; Ossetic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="OS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ossetian; Ossetic</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="pa">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Panjabi; Punjabi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Panjabi; Punjabi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="pi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="pl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Polish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Polish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ps">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pushto; Pashto</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Pushto; Pashto</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="pt">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Portuguese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="PT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Portuguese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="qu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quechua</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="QU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Quechua</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="rm">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Romansh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Romansh</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="rn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rundi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Rundi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ro">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Romanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Romanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ru">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Russian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Russian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="rw">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kinyarwanda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="RW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Kinyarwanda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sa">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sanskrit</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sanskrit</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sc">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sardinian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SC">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sardinian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sd">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sindhi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SD">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sindhi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="se">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Northern Sami</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Northern Sami</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sango</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sango</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="si">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sinhala; Sinhalese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sinhala; Sinhalese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sk">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slovak</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slovak</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slovenian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Slovenian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sm">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Samoan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SM">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Samoan</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shona</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Shona</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="so">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Somali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Somali</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sq">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Albanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SQ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Albanian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Serbian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Serbian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ss">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swati</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swati</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="st">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sotho, Southern</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ST">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sotho, Southern</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="su">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sundanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Sundanese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sv">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swedish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SV">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swedish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="sw">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swahili</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="SW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Swahili</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ta">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tamil</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tamil</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="te">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Telugu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Telugu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tg">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tajik</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tajik</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="th">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Thai</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Thai</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ti">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tigrinya</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tigrinya</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tk">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Turkmen</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Turkmen</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tl">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tagalog</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TL">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tagalog</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tn">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tswana</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TN">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tswana</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="to">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tonga (Tonga Islands)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tonga (Tonga Islands)</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tr">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Turkish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Turkish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ts">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tsonga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TS">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tsonga</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tt">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tatar</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TT">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tatar</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="tw">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Twi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TW">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Twi</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ty">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tahitian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="TY">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Tahitian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ug">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Uighur; Uyghur</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UG">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Uighur; Uyghur</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="uk">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ukrainian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UK">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Ukrainian</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ur">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Urdu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UR">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Urdu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="uz">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Uzbek</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="UZ">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Uzbek</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ve">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Venda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VE">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Venda</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="vi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vietnamese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Vietnamese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="vo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Volapük</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="VO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Volapük</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="wa">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Walloon</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Walloon</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="wo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wolof</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="WO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Wolof</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="xh">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Xhosa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="XH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Xhosa</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="yi">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Yiddish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="YI">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Yiddish</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="yo">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Yoruba</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="YO">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Yoruba</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="za">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zhuang; Chuang</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZA">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zhuang; Chuang</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="zh">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chinese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZH">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Chinese</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="zu">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zulu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="ZU">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            <ccts:Name>Zulu</ccts:Name>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

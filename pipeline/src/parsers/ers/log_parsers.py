@@ -457,8 +457,8 @@ def parse_sal(sal):
     if "SLI" in children:
         value["salesLines"] = [parse_sli(sli) for sli in children["SLI"]]
 
-    # if "TLI" in children:
-    #     value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
+    if "TLI" in children:
+        value["takeoverLines"] = [parse_tli(tli) for tli in children["TLI"]]
 
     metadata = {
         "cfr": sal.get("IR"),

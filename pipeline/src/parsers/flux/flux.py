@@ -11,6 +11,7 @@ from xml.etree.ElementTree import ParseError
 import pandas as pd
 from dateutil.parser import parse
 
+from src.entities.data_exchange_standards import DataDomain
 from src.parsers.flux.log_parsers import (
     null_parser,
     parse_coe,
@@ -22,7 +23,7 @@ from src.parsers.flux.log_parsers import (
     parse_pno,
     parse_rtp,
 )
-from src.parsers.flux.sales_parsers import parse_flux_sales_report_message_string
+from src.parsers.flux.sales_parsers import parse_sales_report_message_string
 from src.parsers.flux.utils import NS_FLUX, get_element, get_text, make_datetime
 from src.parsers.utils import get_root_tag, tagged_children
 
@@ -381,25 +382,25 @@ def parse_fa_report_message_string(
     return operation_number, fa_report_message_data
 
 
-def batch_parse(fa_report_message_strings: List[str]) -> dict:
+def batch_parse(report_message_strings: List[str], data_domain: DataDomain) -> dict:
     """Parses a list of FLUX messages and returns a dictionnary with the information
     extracted from the messages.
 
     Args:
-        flux_fa_report_message_strings (List[str]): list of FLUX xml documents, some of
+        report_message_strings (List[str]): list of FLUX xml documents, some of
           which may be BASE64 encoded
 
     Returns:
         dict : dictionnary with 3 elemements:
 
-          - logbook_reports pd.DataFrame: Dataframe with parsed data
-          - logbook_raw_messages (pd.DataFrame):  Dataframe with the original xml
+          - reports pd.DataFrame: Dataframe with parsed data
+          - raw_messages (pd.DataFrame):  Dataframe with the original xml
             messages
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
-    logbook_reports_list = []
-    logbook_raw_messages_list = []
+    reports_list = []
+    raw_messages_list = []
     batch_generated_errors = False
 
     reports_defaults = {
@@ -420,23 +421,23 @@ def batch_parse(fa_report_message_strings: List[str]) -> dict:
         "integration_datetime_utc": None,
     }
 
-    for fa_report_message_string in fa_report_message_strings:
+    for report_message_string in report_message_strings:
         try:
-            fa_report_message_string = base64_decode(fa_report_message_string)
+            report_message_string = base64_decode(report_message_string)
         except FLUXParsingError:
-            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            log_end = "..." if len(report_message_string) > 40 else ""
             logging.error(
-                f"Could not BASE64 decode message {fa_report_message_string[:40]}{log_end}"
+                f"Could not BASE64 decode message {report_message_string[:40]}{log_end}"
             )
             batch_generated_errors = True
             continue
 
         try:
-            root_tag = get_root_tag(ET.fromstring(fa_report_message_string))
+            root_tag = get_root_tag(ET.fromstring(report_message_string))
         except ParseError:
-            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            log_end = "..." if len(report_message_string) > 40 else ""
             logging.error(
-                f"Could not parse FLUX xml document {fa_report_message_string[:40]}{log_end}"
+                f"Could not parse FLUX xml document {report_message_string[:40]}{log_end}"
             )
             batch_generated_errors = True
             continue
@@ -445,19 +446,19 @@ def batch_parse(fa_report_message_strings: List[str]) -> dict:
             if root_tag == "FLUXSalesReportMessage":
                 (
                     operation_number,
-                    fa_report_message_data,
-                ) = parse_flux_sales_report_message_string(fa_report_message_string)
+                    report_message_data,
+                ) = parse_sales_report_message_string(report_message_string)
             else:
                 (
                     operation_number,
-                    fa_report_message_data,
-                ) = parse_fa_report_message_string(fa_report_message_string)
+                    report_message_data,
+                ) = parse_fa_report_message_string(report_message_string)
         except FLUXParsingError:
-            log_end = "..." if len(fa_report_message_string) > 40 else ""
+            log_end = "..." if len(report_message_string) > 40 else ""
             logging.error(
                 (
                     "Could not parse report message "
-                    f"{fa_report_message_string[:40]}{log_end}. "
+                    f"{report_message_string[:40]}{log_end}. "
                     "This message will be skipped."
                 )
             )
@@ -467,36 +468,36 @@ def batch_parse(fa_report_message_strings: List[str]) -> dict:
         now = datetime.utcnow()
         raw = {
             "operation_number": operation_number,
-            "xml_message": fa_report_message_string,
+            "xml_message": report_message_string,
         }
-        logbook_raw_messages_list.append(pd.Series(raw))
+        raw_messages_list.append(pd.Series(raw))
 
-        for fa_report_document_data in fa_report_message_data:
-            logbook_reports_list.append(
+        for report_document_data in report_message_data:
+            reports_list.append(
                 pd.Series(
                     {
                         **reports_defaults,
-                        **fa_report_document_data,
+                        **report_document_data,
                         "integration_datetime_utc": now,
                     }
                 )
             )
 
-    logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
-    logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw))
-    if len(logbook_reports_list) > 0:
-        logbook_reports = (
-            pd.concat(logbook_reports_list, axis=1)
+    reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+    raw_messages = pd.DataFrame(columns=pd.Index(raw))
+    if len(reports_list) > 0:
+        reports = (
+            pd.concat(reports_list, axis=1)
             .T.sort_values("operation_datetime_utc")
             .drop_duplicates(subset=["report_id"])
         )
-    if len(logbook_raw_messages_list) > 0:
-        logbook_raw_messages = pd.concat(
-            logbook_raw_messages_list, axis=1
-        ).T.drop_duplicates(subset=["operation_number"])
+    if len(raw_messages_list) > 0:
+        raw_messages = pd.concat(raw_messages_list, axis=1).T.drop_duplicates(
+            subset=["operation_number"]
+        )
 
     return {
-        "logbook_reports": logbook_reports,
-        "logbook_raw_messages": logbook_raw_messages,
+        "reports": reports,
+        "raw_messages": raw_messages,
         "batch_generated_errors": batch_generated_errors,
     }

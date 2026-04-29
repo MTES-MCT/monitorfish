@@ -8,6 +8,7 @@ from xml.etree.ElementTree import ParseError
 
 import pandas as pd
 
+from src.entities.data_exchange_standards import DataDomain
 from src.parsers.ers.log_parsers import (
     default_log_parser,
     parse_coe,
@@ -212,7 +213,7 @@ def parse_xml_string(xml_string):
     return parse(el)
 
 
-def batch_parse(xml_messages: List[str]) -> dict:
+def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
     """Parses a list of ERS messages and returns a dictionnary with the information
     extracted from the messages.
 
@@ -222,14 +223,13 @@ def batch_parse(xml_messages: List[str]) -> dict:
     Returns:
         dict : dictionnary with 3 elemements:
 
-          - logbook_reports pd.DataFrame: Dataframe with parsed data
-          - logbook_raw_messages (pd.DataFrame):  Dataframe with the original xml
-            messages
+          - reports pd.DataFrame: Dataframe with parsed data
+          - raw_messages (pd.DataFrame):  Dataframe with the original xml messages
           - batch_generated_errors (boolean): `True` if an error occurred during the
             treatment of one or more of the messages
     """
-    logbook_reports_list = []
-    logbook_raw_messages_list = []
+    reports_list = []
+    raw_messages_list = []
     batch_generated_errors = False
 
     raw_messages_columns = [
@@ -265,7 +265,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                 "xml_message": xml_message,
             }
             for data in data_iterator:
-                logbook_reports_list.append(
+                reports_list.append(
                     pd.Series(
                         {
                             **reports_defaults,
@@ -275,7 +275,7 @@ def batch_parse(xml_messages: List[str]) -> dict:
                         }
                     )
                 )
-            logbook_raw_messages_list.append(pd.Series(raw))
+            raw_messages_list.append(pd.Series(raw))
         except ERSParsingError:
             log_end = "..." if len(xml_message) > 40 else ""
             logging.error(
@@ -288,15 +288,15 @@ def batch_parse(xml_messages: List[str]) -> dict:
             logging.error("Unkonwn error with message " + xml_message)
             batch_generated_errors = True
 
-    logbook_reports = pd.DataFrame(columns=pd.Index(reports_defaults))
-    logbook_raw_messages = pd.DataFrame(columns=pd.Index(raw_messages_columns))
-    if len(logbook_reports_list) > 0:
-        logbook_reports = pd.concat(logbook_reports_list, axis=1).T
-    if len(logbook_raw_messages_list) > 0:
-        logbook_raw_messages = pd.concat(logbook_raw_messages_list, axis=1).T
+    reports = pd.DataFrame(columns=pd.Index(reports_defaults))
+    raw_messages = pd.DataFrame(columns=pd.Index(raw_messages_columns))
+    if len(reports_list) > 0:
+        reports = pd.concat(reports_list, axis=1).T
+    if len(raw_messages_list) > 0:
+        raw_messages = pd.concat(raw_messages_list, axis=1).T
 
     return {
-        "logbook_reports": logbook_reports,
-        "logbook_raw_messages": logbook_raw_messages,
+        "reports": reports,
+        "raw_messages": raw_messages,
         "batch_generated_errors": batch_generated_errors,
     }

@@ -89,18 +89,16 @@ def parse_sales_document(
                 "id": _get(party, "./ram:ID"),
             }
 
-    sales_datetime_utc_str = _get(
-        doc, "./ram:SpecifiedSalesEvent/ram:OccurrenceDateTime/udt:DateTime"
-    )
-
-    value = {
-        "salesId": _get(doc, './ram:ID[@schemeID="EU_SALES_ID"]'),
+    sales_data = {
+        "sales_id": _get(doc, './ram:ID[@schemeID="EU_SALES_ID"]'),
         "currency": _get(doc, './ram:CurrencyCode[@listID="TERRITORY_CURR"]'),
-        "salesDatetimeUtc": sales_datetime_utc_str,
-        "landingPort": _get(
+        "sales_datetime_utc": _get(
+            doc, "./ram:SpecifiedSalesEvent/ram:OccurrenceDateTime/udt:DateTime"
+        ),
+        "landing_port": _get(
             doc, './ram:SpecifiedFLUXLocation/ram:ID[@schemeID="LOCATION"]'
         ),
-        "landingDatetimeUtc": _get(
+        "landing_datetime_utc": _get(
             doc,
             "./ram:SpecifiedFishingActivity/ram:SpecifiedDelimitedPeriod/ram:StartDateTime/udt:DateTime",
         ),
@@ -116,21 +114,24 @@ def parse_sales_document(
     if vessel is not None:
         vessel_data = {
             "cfr": _get(vessel, './ram:ID[@schemeID="CFR"]'),
+            "ircs": _get(vessel, './ram:ID[@schemeID="IRCS"]'),
+            "external_identification": _get(vessel, './ram:ID[@schemeID="EXT_MARK"]'),
             "vessel_name": _get(vessel, "./ram:Name"),
             "flag_state": _get(
                 vessel,
                 './ram:RegistrationVesselCountry/ram:ID[@schemeID="TERRITORY"]',
             ),
+            "imo": _get(vessel, './ram:ID[@schemeID="UVI"]'),
         }
         trip_number = _get(
             doc,
             './ram:SpecifiedFishingActivity/ram:SpecifiedFishingTrip/ram:ID[@schemeID="EU_TRIP_ID"]',
         )
 
-    return value, vessel_data, trip_number, sales_datetime_utc_str
+    return sales_data, vessel_data, trip_number
 
 
-def parse_flux_sales_report_message_string(
+def parse_sales_report_message_string(
     message_string: str,
 ) -> Tuple[str, List[dict]]:
     from src.parsers.flux.flux import FLUXParsingError, get_operation_type
@@ -165,16 +166,7 @@ def parse_flux_sales_report_message_string(
     sales_reports = _findall(root, "SalesReport")
 
     if not sales_reports:
-        return operation_number, [
-            {
-                **operation_data,
-                **report_data,
-                "log_type": None,
-                "activity_datetime_utc": None,
-                "trip_number": None,
-                "value": None,
-            }
-        ]
+        return operation_number, [{**operation_data, **report_data}]
 
     message_data = []
     for sales_report in sales_reports:
@@ -184,31 +176,27 @@ def parse_flux_sales_report_message_string(
         if doc is not None:
             try:
                 (
-                    value,
+                    sales_data,
                     vessel_data,
                     trip_number,
-                    sales_datetime_str,
                 ) = parse_sales_document(doc)
-                activity_datetime_utc = _make_datetime(sales_datetime_str)
             except Exception:
                 logging.error(
                     "Could not parse sales document. This report will be skipped."
                 )
                 continue
         else:
-            value = None
+            sales_data = {}
             vessel_data = {}
             trip_number = None
-            activity_datetime_utc = None
 
         message_data.append(
             {
                 **operation_data,
                 **report_data,
-                "log_type": sales_type,
-                "activity_datetime_utc": activity_datetime_utc,
+                "sales_type": sales_type,
                 "trip_number": trip_number,
-                "value": value,
+                **sales_data,
                 **vessel_data,
             }
         )

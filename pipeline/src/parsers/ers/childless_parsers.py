@@ -1,4 +1,5 @@
-from src.parsers.utils import tagged_children, try_float, try_int
+from src.parsers.utils import make_datetime, tagged_children, try_float, try_int
+from src.processing import remove_nones_from_dict
 
 
 def parse_ras(ras):
@@ -92,5 +93,47 @@ def parse_gea(gea):
         "mesh": try_float(gea.get("ME")),
         "dimensions": gea.get("GC"),
     }
+
+    return data
+
+
+def parse_src(src):
+    return {
+        "landing_datetime_utc": make_datetime(src.get("DL")),
+        "landing_port": src.get("PO"),
+    }
+
+
+def parse_css(css):
+    children = tagged_children(css)
+
+    data = {
+        "unitPrice": try_float(css.get("FP")),
+        "totalPrice": try_float(css.get("TP")),
+        "currency": css.get("CR"),
+        "fishSize": css.get("SF"),
+        "productDestination": css.get("PP"),
+        "withdrawn": css.get("WD"),
+        "producerOrganizationUse": css.get("OP"),
+    }
+
+    assert "SPE" in children
+    assert len(children["SPE"]) == 1
+    data = {**data, **parse_spe(children["SPE"][0])}
+    data = remove_nones_from_dict(data)
+
+    return data
+
+
+def parse_cst(cst):
+    children = tagged_children(cst)
+
+    data = {
+        "fishSize": cst.get("SF"),
+    }
+
+    if "SPE" in children:
+        assert len(children["SPE"]) == 1
+        data["species"] = parse_spe(children["SPE"][0])
 
     return data

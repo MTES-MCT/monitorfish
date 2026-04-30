@@ -62,6 +62,8 @@ class PnoToRender:
     is_verified: bool
     is_being_sent: bool
     source: PnoSource
+    is_correction: bool
+    previous_notification_date_utc: datetime | None
 
     def __post_init__(self):
         datetime_attrs = [
@@ -70,6 +72,7 @@ class PnoToRender:
             "predicted_arrival_datetime_utc",
             "predicted_landing_datetime_utc",
             "last_control_datetime_utc",
+            "previous_notification_date_utc",
         ]
 
         for att in datetime_attrs:
@@ -85,6 +88,7 @@ class PnoToRender:
             "vessel_length",
             "risk_factor",
             "last_control_datetime_utc",
+            "previous_notification_date_utc",
         ]
 
         for att in nullables_to_correct:
@@ -131,6 +135,8 @@ class PreRenderedPno:
     source: PnoSource
     purpose_suffix: str
     is_zero: bool
+    is_correction: bool
+    previous_notification_date_utc: datetime | None
 
     @staticmethod
     def assert_equal(left: object, right: object):
@@ -225,6 +231,9 @@ class RenderedPno:
     control_units: List[ControlUnit] | None = None
     additional_addressees: List[PnoAddressee] = None
     is_zero: bool = False
+    is_correction: bool = False
+    previous_notification_date_utc: datetime | None = None
+
 
     def get_addressees(
         self, communication_means: CommunicationMeans

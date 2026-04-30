@@ -154,6 +154,7 @@ INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES
     ('13', '<ERS>Message ERS xml</ERS>'),
     ('14', '<ERS>Message ERS xml</ERS>'),
     ('15', '<ERS>Message ERS xml</ERS>'),
+    ('15b', '<ERS>Message ERS xml</ERS>'),
     ('16', '<ERS>Message ERS xml</ERS>'),
     ('17', '<ERS>Message ERS xml</ERS>'),
     ('18', '<ERS>Message ERS xml</ERS>'),
@@ -212,6 +213,15 @@ INSERT INTO logbook_reports (
     '___TARGET___', 'TRGT', 'TARGET', 'NAVIRE CIBLE', 'FRA', null, 'PNO',
     '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP, '20510003', 'ERS',
+    true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
+),
+-- CORRECTION PNO - This will set is_correction = true
+(
+    '15b', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 28 minutes')::TIMESTAMP, 'COR',
+    '15', '15', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP,
+    '___TARGET___', 'TRGT', 'TARGET', 'NAVIRE CIBLE', 'FRA', null, 'PNO',
+    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 26 minutes')::TIMESTAMP, '20510003', 'ERS',
     true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
 ),
 (

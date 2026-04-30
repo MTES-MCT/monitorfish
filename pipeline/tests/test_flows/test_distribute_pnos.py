@@ -810,6 +810,8 @@ def pno_to_render_1() -> PnoToRender:
         is_verified=False,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
+        is_correction=False,
+        previous_notification_date_utc=None,
     )
 
 @pytest.fixture
@@ -883,6 +885,8 @@ def pno_zero_to_render_1() -> PnoToRender:
         is_verified=False,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
+        is_correction=False,
+        previous_notification_date_utc=None,
     )
 
 @pytest.fixture
@@ -975,6 +979,8 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         purpose_suffix="de débarquement",
         is_landing=True,
         is_zero=False,
+        is_correction=False,
+        previous_notification_date_utc=None,
     )
 
 
@@ -1030,6 +1036,8 @@ def pre_rendered_pno_zero_1(pre_rendered_pno_zero_1_catch_onboard) -> PreRendere
         purpose_suffix="de débarquement",
         is_landing=True,
         is_zero=True,
+        is_correction=False,
+        previous_notification_date_utc=None,
     )
 
 @pytest.fixture
@@ -1064,6 +1072,8 @@ def pno_to_render_2() -> PnoToRender:
         is_verified=True,
         is_being_sent=True,
         source=PnoSource.LOGBOOK,
+        is_correction=True,
+        previous_notification_date_utc=datetime(2024, 5, 5, 8, 40, 38, 259967),
     )
 
 
@@ -1103,6 +1113,8 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         purpose_suffix="d'accès aux services",
         is_landing=False,
         is_zero=False,
+        is_correction=True,
+        previous_notification_date_utc=datetime(2024, 5, 5, 8, 40, 38, 259967),
     )
 
 
@@ -1530,30 +1542,39 @@ def some_more_sent_messages(
 
 @pytest.fixture
 def loaded_sent_messages() -> pd.DataFrame:
+    now = datetime.utcnow()
     return pd.DataFrame(
         {
-            "id": [1, 2, 3],
-            "prior_notification_report_id": ["Report-1", "Report-1", "Report-1"],
-            "prior_notification_source": ["LOGBOOK", "LOGBOOK", "LOGBOOK"],
+            "id": [1, 2, 3, 4, 5],
+            "prior_notification_report_id": ["15", "00000000-0000-4000-0000-000000000007", "Report-1", "Report-1", "Report-1"],
+            "prior_notification_source": ["LOGBOOK", "MANUAL", "LOGBOOK", "LOGBOOK", "LOGBOOK"],
             "date_time_utc": [
+                now - relativedelta(months=1, minutes=35),
+                now - relativedelta(minutes=20),
                 datetime(2023, 6, 6, 16, 10, 00),
                 datetime(2023, 6, 6, 16, 10, 00),
                 datetime(2023, 6, 6, 16, 10, 00),
             ],
-            "communication_means": ["EMAIL", "EMAIL", "SMS"],
+            "communication_means": ["EMAIL", "EMAIL", "EMAIL", "EMAIL", "SMS"],
             "recipient_address_or_number": [
+                "test@example.org",
+                "test@example.org",
                 "email1@control.unit",
                 "email.in.error@control.unit",
                 "00000000000",
             ],
-            "success": [True, False, True],
-            "error_message": [None, "Error when sending email", None],
+            "success": [True, True, True, False, True],
+            "error_message": [None, None, None, "Error when sending email", None],
             "recipient_name": [
+                "Test Recipient",
+                "Test Recipient",
                 "Unité de test numero 1",
                 "Unité de test numero 2",
                 "Unité de test numero 2",
             ],
             "recipient_organization": [
+                "Test Organization",
+                "Test Organization",
                 "Une Administration quelconque",
                 "Une autre Administration",
                 "Une autre Administration",
@@ -1715,7 +1736,7 @@ def test_extract_pno_extra_subscriptions(reset_test_data, pno_extra_subscription
 
 def test_to_pnos_to_render(extracted_pnos):
     res = to_pnos_to_render(pnos=extracted_pnos)
-    assert len(res) == 9
+    assert len(res) == 10
     assert isinstance(res[0], PnoToRender)
 
 
@@ -2413,8 +2434,22 @@ def test_load_prior_notification_sent_messages(
     load_prior_notification_sent_messages(messages_sent_by_email + messages_sent_by_sms)
     final_sent_messages = read_query(query=query, db="monitorfish_remote")
 
-    assert len(initial_sent_messages) == 0
-    pd.testing.assert_frame_equal(final_sent_messages, loaded_sent_messages)
+    assert len(initial_sent_messages) == 2
+
+    approximate_datetime_columns = [
+        "date_time_utc",
+    ]
+
+    pd.testing.assert_frame_equal(
+        final_sent_messages.drop(columns=approximate_datetime_columns),
+        loaded_sent_messages.drop(columns=approximate_datetime_columns),
+    )
+
+    for col in approximate_datetime_columns:
+        assert (
+            (final_sent_messages[col].dropna() - loaded_sent_messages[col].dropna()).abs()
+            < timedelta(seconds=10)
+        ).all()
 
 
 def test_make_update_logbook_reports_statement(

@@ -1,6 +1,7 @@
 import { ThreatSchema } from '@features/Infraction/schemas/ThreatSchema'
 import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
 import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { z } from 'zod'
 
 const InfractionSuspicionOrObservationCreation = InfractionSuspicionSchema.omit({
@@ -19,4 +20,7 @@ export const ReportingCreationSchema = BaseReportingSchema.omit({
 })
   .extend(InfractionSuspicionOrObservationCreation.shape)
   .omit({ authorTrigram: true, controlUnit: true, infractions: true })
-  .extend({ threatHierarchies: z.array(ThreatSchema) })
+  .extend({
+    threatHierarchies: z.array(ThreatSchema),
+    validityOption: z.nativeEnum(ReportingValidityOption).optional()
+  })

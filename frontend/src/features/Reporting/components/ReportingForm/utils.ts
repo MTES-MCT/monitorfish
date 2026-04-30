@@ -1,7 +1,7 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-
-import { customDayjs } from '../../../../../cypress/e2e/utils/customDayjs'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
@@ -19,13 +19,21 @@ export function getFormFields(
     editedReporting?.externalMarker
   )
   const defaultExpirationDate = isIUU ? customDayjs().utc().add(1, 'day').toISOString() : undefined
+  const defaultValidityOption = isIUU ? ReportingValidityOption.CUSTOM : undefined
+
+  const validityOption = editedReporting?.validityOption ?? defaultValidityOption
+  const computedValidityExpiration =
+    validityOption === ReportingValidityOption.ONE_MONTH || validityOption === ReportingValidityOption.TWELVE_MONTHS
+      ? undefined
+      : (editedReporting?.expirationDate ?? defaultExpirationDate)
 
   const base = {
     authorContact: value?.authorContact,
     cfr: editedReporting?.cfr,
     controlUnitId: value?.controlUnitId,
     description: value?.description,
-    expirationDate: editedReporting?.expirationDate ?? defaultExpirationDate,
+    expirationDate: computedValidityExpiration,
+    ...(validityOption !== undefined ? { validityOption } : {}),
     externalMarker: editedReporting?.externalMarker,
     flagState: editedReporting?.flagState ?? 'UNDEFINED',
     gearCode: editedReporting?.gearCode,

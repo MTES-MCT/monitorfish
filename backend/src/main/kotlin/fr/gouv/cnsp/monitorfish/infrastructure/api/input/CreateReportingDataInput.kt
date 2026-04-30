@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
@@ -31,6 +32,7 @@ class CreateReportingDataInput(
     val reportingDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
+    val validityOption: ReportingValidityOption? = null,
     val reportingSource: ReportingSource,
     val controlUnitId: Int? = null,
     val authorContact: String? = null,
@@ -75,6 +77,7 @@ class CreateReportingDataInput(
                 lastUpdateDate = creationDate,
                 validationDate = validationDate,
                 expirationDate = expirationDate,
+                validityOption = validityOption,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = createdBy,
@@ -110,6 +113,7 @@ class CreateReportingDataInput(
                 lastUpdateDate = creationDate,
                 validationDate = validationDate,
                 expirationDate = expirationDate,
+                validityOption = validityOption,
                 isDeleted = false,
                 isArchived = false,
                 createdBy = createdBy,

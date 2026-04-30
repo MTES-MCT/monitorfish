@@ -116,6 +116,15 @@ class SeafrontGroupUTests {
         val result = SeafrontGroup.NO_FACADE.toSeafronts()
 
         // Then
+<<<<<<< Updated upstream
         assertThat(result).containsExactlyInAnyOrder(Seafront.POLYNESIE_CLIPPERTON)
+=======
+        assertThat(result).containsExactlyInAnyOrder(
+            Seafront.POLYNESIE_FRANCAISE,
+            Seafront.NOUVELLE_CALEDONIE,
+            Seafront.CLIPPERTON,
+            Seafront.WALLIS_FUTUNA,
+        )
+>>>>>>> Stashed changes
     }
 }

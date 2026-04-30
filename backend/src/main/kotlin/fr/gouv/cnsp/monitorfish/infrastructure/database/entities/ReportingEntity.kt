@@ -5,6 +5,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
 import fr.gouv.cnsp.monitorfish.infrastructure.database.mappers.ReportingMapper
@@ -81,6 +82,8 @@ data class ReportingEntity(
     val createdBy: String,
     @Column(name = "reporting_date", nullable = false)
     val reportingDate: ZonedDateTime,
+    @Column(name = "validity_option")
+    val validityOption: ReportingValidityOption? = null,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
         ReportingMapper.getReportingFromJSON(
@@ -154,6 +157,12 @@ data class ReportingEntity(
             latitude = reporting.latitude,
             longitude = reporting.longitude,
             reportingDate = reporting.reportingDate,
+            validityOption =
+                when (reporting) {
+                    is Reporting.InfractionSuspicion -> reporting.validityOption
+                    is Reporting.Observation -> reporting.validityOption
+                    is Reporting.Alert -> null
+                },
         )
     }
 }

@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
@@ -30,6 +31,7 @@ class ReportingDataOutput(
     val creationDate: ZonedDateTime,
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
+    val validityOption: ReportingValidityOption? = null,
     val value: ReportingValueDataOutput,
     val isArchived: Boolean,
     val isDeleted: Boolean,
@@ -79,6 +81,12 @@ class ReportingDataOutput(
                 creationDate = reporting.creationDate,
                 validationDate = reporting.validationDate,
                 expirationDate = reporting.expirationDate,
+                validityOption =
+                    when (reporting) {
+                        is Reporting.InfractionSuspicion -> reporting.validityOption
+                        is Reporting.Observation -> reporting.validityOption
+                        is Reporting.Alert -> null
+                    },
                 value = value,
                 isArchived = reporting.isArchived,
                 isDeleted = reporting.isDeleted,

@@ -32,6 +32,7 @@ type ReportingFormProps = {
     numberOfVessels: number | undefined
   ) => void
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
+  vesselHasLogbook?: boolean
   windowContext: WindowContext
 }
 export function ReportingForm({
@@ -47,6 +48,7 @@ export function ReportingForm({
   onIsDirty,
   onVesselStateChange,
   submitRef,
+  vesselHasLogbook,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
@@ -132,6 +134,7 @@ export function ReportingForm({
         onIsDirty={onIsDirty}
         onVesselStateChange={onVesselStateChange}
         submitRef={submitRef}
+        {...(vesselHasLogbook !== undefined ? { vesselHasLogbook } : {})}
       />
     </Formik>
   )

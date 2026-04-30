@@ -169,6 +169,54 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findExpiredReportings(): List<Int>
 
+    /**
+     * Search for unarchived OBSERVATION and INFRACTION_SUSPICION reportings with validity_option = 'UNTIL_NEXT_DEP'
+     * that have received an acknowledged DEP logbook message after their validation_date.
+     */
+    @Query(
+        value = """
+        WITH recent_dep_messages AS (
+            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
+            FROM logbook_reports lr
+            WHERE
+                lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
+                lr.log_type = 'DEP'
+            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
+        ),
+
+        acknowledged_report_ids AS (
+            SELECT DISTINCT referenced_report_id
+            FROM logbook_reports lr
+            WHERE
+                lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
+                lr.operation_type = 'RET' AND
+                lr.value->>'returnStatus' = '000'
+        )
+
+        SELECT
+            r.id
+        FROM
+            reportings r
+        INNER JOIN
+            recent_dep_messages rdp
+            ON CASE
+                WHEN r.vessel_identifier = 'INTERNAL_REFERENCE_NUMBER' THEN r.internal_reference_number = rdp.cfr
+                WHEN r.vessel_identifier = 'IRCS' THEN r.ircs = rdp.ircs
+                WHEN r.vessel_identifier = 'EXTERNAL_REFERENCE_NUMBER' THEN r.external_reference_number = rdp.external_identification
+            END
+
+        WHERE
+            r.archived is false AND
+            r.deleted is false AND
+            r.type IN ('OBSERVATION', 'INFRACTION_SUSPICION') AND
+            r.validity_option = 'UNTIL_NEXT_DEP' AND
+            rdp.last_dep_date_time >= r.validation_date AT TIME ZONE 'UTC' AND
+            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+        """,
+        nativeQuery = true,
+    )
+    fun findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage(): List<Int>
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         value = """

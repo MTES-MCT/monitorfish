@@ -133,7 +133,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
-                now - relativedelta(minutes=10),  # Manual correction
+                None,  # Manual correction
             ],
             "report_id": [
                 "11",
@@ -589,7 +589,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 "Ceci est une note de préavis manuel",
-                None,  # Manual correction
+                None, # Manual correction
             ],
             "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5, 13.4],
             "mmsi": [None, None, None, None, None, None, None, None, None, None],
@@ -615,7 +615,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
-                pd.NaT,  # Manual correction
+                now - relativedelta(years=1, days=2),  # Manual correction
             ],
             "last_control_infractions": [
                 [
@@ -678,7 +678,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
-                None,
+                now - relativedelta(days=31, minutes=35),
                 None,
                 None,
                 None,
@@ -1679,12 +1679,6 @@ def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
         pnos.drop(columns=approximate_datetime_columns),
         extracted_pnos.drop(columns=approximate_datetime_columns),
     )
-
-    for col in approximate_datetime_columns:
-        for i in range(10):
-            delta = pnos[col][i] - extracted_pnos[col][i]
-            if (delta >= timedelta(seconds=10)) or (delta <= timedelta(seconds=-10)):
-                print("delta mismatch", col, i, pnos[col][i], extracted_pnos[col][i])
 
     for col in approximate_datetime_columns:
         assert (

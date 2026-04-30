@@ -122,17 +122,18 @@ def extracted_pnos() -> pd.DataFrame:
     now = datetime.utcnow()
     return pd.DataFrame(
         {
-            "id": [35.0, 36.0, 37.0, 38.0, 39.0, None, None, None, None],
+            "id": [35.0, 36.0, 37.0, 38.0, 40.0, None, None, None, None, None],
             "operation_datetime_utc": [
                 now - relativedelta(months=1, hours=1),
                 now - relativedelta(months=1, minutes=25),
                 now - relativedelta(months=1, hours=2),
                 now - relativedelta(months=1, minutes=52),
-                now - relativedelta(months=1, minutes=32),
+                now - relativedelta(months=1, minutes=28),
                 None,
                 None,
                 None,
                 None,
+                now - relativedelta(minutes=10),  # Manual correction
             ],
             "report_id": [
                 "11",
@@ -144,19 +145,21 @@ def extracted_pnos() -> pd.DataFrame:
                 "00000000-0000-4000-0000-000000000003",
                 "00000000-0000-4000-0000-000000000004",
                 "00000000-0000-4000-0000-000000000005",
+                "00000000-0000-4000-0000-000000000007",  # Manual correction
             ],
             "report_datetime_utc": [
                 now - relativedelta(months=1, hours=1, minutes=2),
                 now - relativedelta(months=1, minutes=27),
                 now - relativedelta(months=1, hours=2, minutes=2),
                 now - relativedelta(months=1, minutes=54),
-                now - relativedelta(months=1, minutes=34),
+                now - relativedelta(months=1, minutes=30),
                 now - relativedelta(minutes=15),
                 now - relativedelta(months=3),
                 now - relativedelta(weeks=3),
                 now - relativedelta(days=3),
+                now - relativedelta(minutes=10),  # Manual correction
             ],
-            "vessel_id": [2, None, 1, 1, 7, 3, 6, 6, 6],
+            "vessel_id": [2, None, 1, 1, 7, 3, 6, 6, 6, 2],
             "cfr": [
                 "ABC000542519",
                 "ABC000000000",
@@ -167,6 +170,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
+                "ABC000306959",  # Manual correction
             ],
             "ircs": [
                 "FQ7058",
@@ -178,6 +182,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "ZZ000000",
                 "ZZ000000",
                 "ZZ000000",
+                "FQ7058",  # Manual correction
             ],
             "external_identification": [
                 "RO237719",
@@ -189,6 +194,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "ZZTOPACDC",
                 "ZZTOPACDC",
                 "ZZTOPACDC",
+                "RO237719",  # Manual correction
             ],
             "vessel_name": [
                 "DEVINER FIGURE CONSCIENCE",
@@ -200,6 +206,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "I DO 4H REPORT",
                 "I DO 4H REPORT",
                 "I DO 4H REPORT",
+                "ÉTABLIR IMPRESSION LORSQUE",  # Manual correction
             ],
             "flag_state": [
                 "FRA",
@@ -211,8 +218,9 @@ def extracted_pnos() -> pd.DataFrame:
                 "FRA",
                 "FRA",
                 "FRA",
+                "FRA",  # Manual correction
             ],
-            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN"],
+            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN"],
             "catch_onboard": [
                 [
                     {
@@ -408,6 +416,10 @@ def extracted_pnos() -> pd.DataFrame:
                     {"nbFish": 2, "weight": 502, "faoZone": "27.2.a", "species": "SWO"},
                     {"nbFish": 1, "weight": 202, "faoZone": "27.2.a", "species": "SWO"},
                 ],
+                [
+                    {'nbFish': None, 'weight': 150.0, 'faoZone': '27.8.a', 'species': 'GHL'},
+                    {'nbFish': None, 'weight': 1450.0, 'faoZone': '27.8.a', 'species': 'HKE'},
+                ],
             ],
             "port_locode": [
                 "FRCQF",
@@ -419,6 +431,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "FRDPE",
                 "FRDKK",
                 "FRLEH",
+                "FRDKK",  # Manual correction
             ],
             "port_name": [
                 "Somewhere over the rainbow",
@@ -430,29 +443,32 @@ def extracted_pnos() -> pd.DataFrame:
                 "Somewhere over the clouds",
                 "Somewhere over the swell",
                 "Somewhere over the ocean",
+                "Somewhere over the swell",  # Manual correction
             ],
-            "facade": ["NAMO", "SA", "NAMO", "SA", None, "SA", None, "NAMO", "SA"],
+            "facade": ["NAMO", "SA", "NAMO", "SA", None, "SA", None, "NAMO", "SA", "NAMO"],
             "predicted_arrival_datetime_utc": [
                 now - relativedelta(months=1, hours=1) + relativedelta(hours=4),
                 now - relativedelta(months=1, minutes=25) + relativedelta(hours=4),
                 now - relativedelta(months=1, hours=2) + relativedelta(hours=4),
                 now - relativedelta(months=1, minutes=52) + relativedelta(hours=4),
-                now - relativedelta(months=1, minutes=32) + relativedelta(hours=4),
+                now - relativedelta(months=1, minutes=28) + relativedelta(hours=4),
                 datetime(2021, 5, 6, 7, 41, 3, 340000),
                 datetime(2021, 5, 6, 7, 41, 3, 340000),
                 datetime(2021, 5, 6, 7, 41, 3, 340000),
                 datetime(2021, 5, 6, 7, 41, 3, 340000),
+                datetime(2020, 5, 6, 11, 41, 3, 340000),  # Manual correction
             ],
             "predicted_landing_datetime_utc": [
                 now - relativedelta(months=1, hours=1) + relativedelta(hours=4),
                 now - relativedelta(months=1, minutes=25) + relativedelta(hours=4),
                 now - relativedelta(months=1, hours=2) + relativedelta(hours=4),
                 now - relativedelta(months=1, minutes=52) + relativedelta(hours=4),
-                now - relativedelta(months=1, minutes=32) + relativedelta(hours=4),
+                now - relativedelta(months=1, minutes=28) + relativedelta(hours=4),
                 datetime(2021, 5, 6, 11, 41, 3, 340000),
                 datetime(2021, 5, 6, 11, 41, 3, 340000),
                 datetime(2021, 5, 6, 11, 41, 3, 340000),
                 datetime(2021, 5, 6, 11, 41, 3, 340000),
+                datetime(2020, 5, 6, 15, 41, 3, 340000),  # Manual correction
             ],
             "trip_gears": [
                 [
@@ -467,6 +483,7 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
                 [{"gear": "LNP"}, {"gear": "OTM", "mesh": 80}],
+                [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],  # Manual correction
             ],
             "trip_segments": [
                 [
@@ -489,6 +506,7 @@ def extracted_pnos() -> pd.DataFrame:
                     {"segment": "NWW09", "segmentName": "Lignes"},
                     {"segment": "SWW01", "segmentName": "Chaluts de fond"},
                 ],
+                [],  # Manual correction
             ],
             "pno_types": [
                 [
@@ -557,6 +575,9 @@ def extracted_pnos() -> pd.DataFrame:
                         "minimumNotificationPeriod": 4,
                     },
                 ],
+                [
+                    {'pnoTypeName': 'Préavis type 2', 'hasDesignatedPorts': True, 'minimumNotificationPeriod': 4.0},
+                ],
             ],
             "note": [
                 None,
@@ -568,9 +589,10 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 "Ceci est une note de préavis manuel",
+                None,  # Manual correction
             ],
-            "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5],
-            "mmsi": [None, None, None, None, None, None, None, None, None],
+            "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5, 13.4],
+            "mmsi": [None, None, None, None, None, None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,
                 3.9,
@@ -581,6 +603,7 @@ def extracted_pnos() -> pd.DataFrame:
                 2.8,
                 3.1,
                 3.8,
+                2.14443662414848,  # Manual correction
             ],
             "last_control_datetime_utc": [
                 now - relativedelta(years=1, days=2),
@@ -592,6 +615,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
+                pd.NaT,  # Manual correction
             ],
             "last_control_infractions": [
                 [
@@ -612,9 +636,19 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
                 [],
+                [
+                    {
+                        "natinf": 27724,
+                        "comments": "Infraction engin",
+                        "infractionType": "WITHOUT_RECORD",
+                    },
+                    {"natinf": 2606},
+                    {"natinf": 4761},
+                    {"natinf": 22206},
+                ],  # Manual correction
             ],
-            "is_verified": [True, True, False, False, False, False, True, False, True],
-            "is_being_sent": [True, True, False, True, True, True, True, False, True],
+            "is_verified": [True, True, False, False, False, False, True, False, True, False],
+            "is_being_sent": [True, True, False, True, True, True, True, False, True, True],
             "source": [
                 "LOGBOOK",
                 "LOGBOOK",
@@ -625,6 +659,31 @@ def extracted_pnos() -> pd.DataFrame:
                 "MANUAL",
                 "MANUAL",
                 "MANUAL",
+                "MANUAL",   # Manual correction
+            ],
+            "is_correction": [
+                False,
+                False,
+                False,
+                False,
+                True,
+                False,
+                False,
+                False,
+                False,
+                True,   # Manual correction 00000000-0000-4000-0000-000000000007
+            ],
+            "previous_notification_date_utc": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                now - relativedelta(minutes=20),           # Original send date for manual PNO
             ],
         }
     )
@@ -1608,6 +1667,7 @@ def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
         "last_control_datetime_utc",
         "predicted_arrival_datetime_utc",
         "predicted_landing_datetime_utc",
+        "previous_notification_date_utc",
     ]
 
     pnos, generation_needed = extract_pnos_to_generate(
@@ -1619,6 +1679,12 @@ def test_extract_pnos_to_generate(reset_test_data, extracted_pnos):
         pnos.drop(columns=approximate_datetime_columns),
         extracted_pnos.drop(columns=approximate_datetime_columns),
     )
+
+    for col in approximate_datetime_columns:
+        for i in range(10):
+            delta = pnos[col][i] - extracted_pnos[col][i]
+            if (delta >= timedelta(seconds=10)) or (delta <= timedelta(seconds=-10)):
+                print("delta mismatch", col, i, pnos[col][i], extracted_pnos[col][i])
 
     for col in approximate_datetime_columns:
         assert (

@@ -160,6 +160,7 @@ export function IUUReportingMapForm() {
                 onIsDirty={handleDirty}
                 onVesselStateChange={handleVesselStateChange}
                 submitRef={submitRef}
+                vesselHasLogbook={false}
                 windowContext={WindowContext.MainWindow}
               />
             </Body>

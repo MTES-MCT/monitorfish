@@ -37,7 +37,7 @@ context('Vessel sidebar reporting tab', () => {
       .contains("Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
     cy.get('*[data-cy="reporting-card"]').eq(0).contains('Émetteur: Jean Bon (0612365896)')
     cy.getDataCy('reporting-card').contains('Transbordement / NATINF 27717').should('be.visible')
-    cy.get('*[data-cy="reporting-card"]').first().contains('Pas de fin de validité')
+    cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le')
 
     // The reporting should be found in the reporting tab of the side window
     cy.visit('/side_window')
@@ -225,8 +225,9 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Titre', 'Dérogation temporaire licence')
 
     cy.fill('Source', 'Unité')
-    cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
+    cy.fill("Choisir l’unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.fill('Choisir une échéance', 'dans 1 mois')
     cy.clickButton('Valider')
 
     cy.wait('@createReporting').then(createInterception => {
@@ -239,6 +240,83 @@ context('Vessel sidebar reporting tab', () => {
       cy.clickButton('Supprimer')
       cy.wait('@deleteReporting')
     })
+  })
+
+  it('Should show "Fin de validité le" in the card when using the "dans 1 mois" preset', () => {
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+    cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
+
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.wait('@getVesselReportings')
+
+    cy.clickButton('Ouvrir un signalement')
+    cy.fill('Source', 'OPS')
+    cy.fill('Titre', 'Sortie sans autorisation')
+    cy.fill('Choisir une échéance', 'dans 1 mois')
+    cy.fill('Type de signalement', 'Observation')
+    cy.fill('Type', 'Suspensions administratives')
+
+    cy.clickButton('Valider')
+    cy.wait('@createReporting').then(createInterception => {
+      if (!createInterception.response) assert.fail('No response')
+
+      cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le')
+      cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
+      cy.clickButton('Supprimer')
+      cy.wait('@deleteReporting')
+    })
+  })
+
+  it('Should show "Jusqu\'à nouvel ordre" in the card when using the "jusqu\'à nouvel ordre" preset', () => {
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+    cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
+
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.wait('@getVesselReportings')
+
+    cy.clickButton('Ouvrir un signalement')
+    cy.fill('Source', 'OPS')
+    cy.fill('Titre', 'Sortie sans autorisation')
+    cy.fill('Choisir une échéance', "jusqu'à nouvel ordre")
+    cy.fill('Type de signalement', 'Observation')
+    cy.fill('Type', 'Suspensions administratives')
+
+    cy.clickButton('Valider')
+    cy.wait('@createReporting').then(createInterception => {
+      if (!createInterception.response) assert.fail('No response')
+
+      cy.get('*[data-cy="reporting-card"]').first().contains("Jusqu'à nouvel ordre")
+      cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
+      cy.clickButton('Supprimer')
+      cy.wait('@deleteReporting')
+    })
+  })
+
+  it('Should show validation error when no validity option is chosen', () => {
+    cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
+
+    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
+    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
+    cy.wait('@getVesselReportings')
+
+    cy.clickButton('Ouvrir un signalement')
+    cy.fill('Source', 'OPS')
+    cy.fill('Titre', 'Sortie sans autorisation')
+    cy.fill('Type de signalement', 'Observation')
+    cy.fill('Type', 'Suspensions administratives')
+
+    cy.clickButton('Valider')
+    cy.contains('Veuillez choisir une fin de validité.').should('be.visible')
   })
 
   it('Reporting Should be deleted', () => {

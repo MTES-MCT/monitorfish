@@ -1,0 +1,7 @@
+export enum ReportingValidityOption {
+  CUSTOM = 'CUSTOM',
+  INDEFINITE = 'INDEFINITE',
+  ONE_MONTH = 'ONE_MONTH',
+  TWELVE_MONTHS = 'TWELVE_MONTHS',
+  UNTIL_NEXT_DEP = 'UNTIL_NEXT_DEP'
+}

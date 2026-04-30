@@ -11,12 +11,17 @@ import { updateReportingSource } from '@features/Reporting/components/ReportingF
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
+import { vesselSelectors } from '@features/Vessel/slice'
+import { VesselFeature } from '@features/Vessel/types/vessel'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import {
   Accent,
   Button,
   Checkbox,
+  DatePicker,
   FieldError,
   FormikCheckbox,
   FormikDatePicker,
@@ -66,6 +71,7 @@ type FormProps = Readonly<{
     | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
     | undefined
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
+  vesselHasLogbook?: boolean
 }>
 export function Form({
   className,
@@ -79,7 +85,8 @@ export function Form({
   onClose,
   onIsDirty,
   onVesselStateChange,
-  submitRef
+  submitRef,
+  vesselHasLogbook
 }: FormProps) {
   const { dirty, errors, isValid, setFieldValue, setValues, submitForm, values } =
     useFormikContext<FormEditedReporting>()
@@ -121,6 +128,15 @@ export function Form({
   ])
   const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
+  const selectedVesselHasLogbook = useMainAppSelector(state => {
+    if (!state.vessel.selectedVesselIdentity) {
+      return false
+    }
+    const featureId = VesselFeature.getVesselFeatureId(state.vessel.selectedVesselIdentity)
+
+    return !!vesselSelectors.selectById(state.vessel.vessels, featureId)?.lastLogbookMessageDateTime
+  })
+  const depOptionEnabled = vesselHasLogbook !== undefined ? vesselHasLogbook : selectedVesselHasLogbook
   const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
   const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
@@ -228,6 +244,16 @@ export function Form({
 
     setFieldValue('title', observationTitle)
     setIsTitleDisplayed(false)
+  }
+
+  const handleExpirationDateChange = (nextDate: string | undefined) => {
+    setFieldValue('expirationDate', nextDate)
+    setFieldValue('validityOption', nextDate ? ReportingValidityOption.CUSTOM : undefined)
+  }
+
+  const handleValidityOptionChange = (nextOption: string | undefined) => {
+    setFieldValue('validityOption', nextOption ?? undefined)
+    setFieldValue('expirationDate', undefined)
   }
 
   const handleReportingTypeRadio = (reportingType: string | undefined) => {
@@ -557,16 +583,46 @@ export function Form({
           name="reportingDate"
           withTime
         />
-        <FormikDatePicker
+        <DatePicker
+          key={values.expirationDate ? 'date-picker' : (values.validityOption ?? 'empty')}
           baseContainer={formRef.current as unknown as HTMLDivElement}
+          defaultValue={values.expirationDate}
+          error={(errors as any).expirationDate}
           isCalendarTop
           isLight={isLight}
+          isRequired
           isStringDate
           label="Fin de validité"
           name="expirationDate"
+          onChange={handleExpirationDateChange}
           withTime={false}
         />
       </TwoCol>
+      <ValidityOptionWrapper>
+        <ValidityOrLabel>ou</ValidityOrLabel>
+        <Select
+          error={(errors as any).validityOption}
+          isLight={isLight}
+          label="Choisir une échéance"
+          name="validityOption"
+          onChange={handleValidityOptionChange}
+          options={[
+            { label: 'dans 1 mois', value: ReportingValidityOption.ONE_MONTH },
+            { label: 'dans 12 mois', value: ReportingValidityOption.TWELVE_MONTHS },
+            {
+              isDisabled: !depOptionEnabled,
+              label: "jusqu'au prochain message DEP",
+              value: ReportingValidityOption.UNTIL_NEXT_DEP
+            },
+            { label: "jusqu'à nouvel ordre", value: ReportingValidityOption.INDEFINITE }
+          ]}
+          value={
+            values.validityOption && values.validityOption !== ReportingValidityOption.CUSTOM
+              ? values.validityOption
+              : undefined
+          }
+        />
+      </ValidityOptionWrapper>
       {values.isArchived && <ArchivedMessage>Le signalement a été archivé.</ArchivedMessage>}
       {!hideButtons && (
         <>
@@ -595,6 +651,24 @@ const InfractionListWrapper = styled.div`
 
 const StyledCheckbox = styled(Checkbox)`
   margin-top: 8px;
+`
+
+const ValidityOptionWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+
+  > :last-child {
+    flex: 1;
+  }
+`
+
+const ValidityOrLabel = styled.span`
+  color: ${p => p.theme.color.slateGray};
+  font-size: 13px;
+  margin-bottom: 6px;
+  white-space: nowrap;
 `
 
 const VesselSection = styled.div<{ $hasError: boolean }>`

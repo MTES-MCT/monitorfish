@@ -3,6 +3,7 @@ import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -44,11 +45,13 @@ export function ReportingCard({
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
+  const validityOption = reporting.type !== ReportingType.ALERT ? reporting.validityOption : undefined
   const willExpireAfterNewVoyage =
     reporting.type === ReportingType.ALERT
       ? !!reporting.value.name && alertsNamesWithAutomaticArchiving.includes(reporting.value.name)
-      : false
-  const willExpire = willExpireAfterNewVoyage || !!reporting.expirationDate
+      : validityOption === ReportingValidityOption.UNTIL_NEXT_DEP
+  const willExpire =
+    willExpireAfterNewVoyage || !!reporting.expirationDate || validityOption === ReportingValidityOption.INDEFINITE
   const canBeArchived = !(
     reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   )
@@ -71,27 +74,27 @@ export function ReportingCard({
   }, [reporting, reportingName])
 
   const expirationDateText = useMemo(() => {
-    if (!willExpireAfterNewVoyage && !reporting.expirationDate) {
-      return 'Pas de fin de validité'
+    if (validityOption === ReportingValidityOption.INDEFINITE) {
+      return "Jusqu'à nouvel ordre"
     }
 
     if (willExpireAfterNewVoyage && !reporting.isArchived) {
-      return 'Fin de validité au prochain DEP du navire'
-    }
-
-    if (!!reporting.expirationDate && !reporting.isArchived) {
-      return `Fin de validité le ${getDate(reporting.expirationDate)}`
+      return 'Fin de validité au prochain message DEP'
     }
 
     if (willExpireAfterNewVoyage && reporting.isArchived) {
       return 'Archivé automatiquement suite au DEP du navire'
     }
 
+    if (!!reporting.expirationDate && !reporting.isArchived) {
+      return `Fin de validité le ${getDate(reporting.expirationDate)}`
+    }
+
     if (!!reporting.expirationDate && reporting.isArchived) {
       return `La fin de validité était le ${getDate(reporting.expirationDate)}`
     }
 
-    return ''
+    return 'Pas de fin de validité'
   }, [reporting, willExpireAfterNewVoyage])
 
   const askForDeletionConfirmation = () => {
@@ -152,7 +155,9 @@ export function ReportingCard({
     onEdit(reporting)
   }
 
-  const hasWillExpire = !reporting.isArchived || (reporting.isArchived && willExpire)
+  const hasWillExpire =
+    !reporting.isArchived ||
+    (reporting.isArchived && willExpire && validityOption !== ReportingValidityOption.INDEFINITE)
 
   return (
     <>

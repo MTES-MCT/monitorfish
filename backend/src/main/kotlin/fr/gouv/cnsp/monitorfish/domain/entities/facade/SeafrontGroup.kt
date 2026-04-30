@@ -7,6 +7,7 @@ enum class SeafrontGroup {
     NAMO,
     OUTREMEROA,
     OUTREMEROI,
+    OUTREMEROP,
     SA,
     NO_FACADE,
     ;
@@ -36,7 +37,13 @@ enum class SeafrontGroup {
                         Seafront.TAAF,
                     ),
                 SA to listOf(Seafront.SA),
-                NO_FACADE to listOf(Seafront.POLYNESIE_CLIPPERTON),
+                OUTREMEROP to
+                    listOf(
+                        Seafront.POLYNESIE_FRANCAISE,
+                        Seafront.NOUVELLE_CALEDONIE,
+                        Seafront.CLIPPERTON,
+                        Seafront.WALLIS_FUTUNA,
+                    ),
             )
 
         fun fromSeafront(seafront: Seafront?): SeafrontGroup =

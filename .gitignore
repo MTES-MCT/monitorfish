@@ -228,3 +228,6 @@ backend/build
 
 # Backups
 /.backups/
+
+# Matomo exports
+frontend/scripts/matomo/**

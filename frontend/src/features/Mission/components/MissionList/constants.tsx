@@ -52,6 +52,7 @@ export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = 
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
+  OUTREMEROP: 'O-M OP',
   NO_FACADE: 'Hors f.'
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

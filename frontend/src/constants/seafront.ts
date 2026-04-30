@@ -7,6 +7,7 @@ export enum SeafrontGroup {
   OUTREMEROA = 'OUTREMEROA',
   NO_FACADE = 'NO_FACADE',
   OUTREMEROI = 'OUTREMEROI',
+  OUTREMEROP = 'OUTREMEROP',
   SA = 'SA'
 }
 export const ALL_SEAFRONT_GROUP = 'ALL'
@@ -23,7 +24,10 @@ export enum Seafront {
   MED = 'MED',
   MEMN = 'MEMN',
   NAMO = 'NAMO',
-  POLYNESIE_CLIPPERTON = 'Polynésie et Clipperton',
+  POLYNESIE_FRANCAISE = 'Polynésie Française',
+  NOUVELLE_CALEDONIE = 'Nouvelle Calédonie',
+  CLIPPERTON = 'Clipperton',
+  WALLIS_FUTUNA = 'Wallis et Futuna',
   SA = 'SA',
   SAINT_PIERRE_MIQUELON = 'Saint-Pierre et Miquelon',
   SAINT_MARTIN = 'Saint-Martin',
@@ -36,7 +40,7 @@ export const SEAFRONT_GROUP_SEAFRONTS: Record<SeafrontGroup, Seafront[]> = {
   MED: [Seafront.CORSE, Seafront.MED],
   MEMN: [Seafront.MEMN],
   NAMO: [Seafront.NAMO],
-  NO_FACADE: [Seafront.POLYNESIE_CLIPPERTON],
+  NO_FACADE: [],
   OUTREMEROA: [
     Seafront.SAINT_PIERRE_MIQUELON,
     Seafront.SAINT_MARTIN,
@@ -46,6 +50,7 @@ export const SEAFRONT_GROUP_SEAFRONTS: Record<SeafrontGroup, Seafront[]> = {
     Seafront.MARTINIQUE
   ],
   OUTREMEROI: [Seafront.OI_HORS_ZEE, Seafront.LA_REUNION, Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN, Seafront.TAAF],
+  OUTREMEROP: [Seafront.POLYNESIE_FRANCAISE, Seafront.NOUVELLE_CALEDONIE, Seafront.CLIPPERTON, Seafront.WALLIS_FUTUNA],
   SA: [Seafront.SA]
 }
 

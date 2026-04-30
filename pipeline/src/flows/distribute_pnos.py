@@ -334,6 +334,7 @@ def pre_render_pno(
         source=pno.source,
         is_landing=pno.purpose == "LAN",
         purpose_suffix=purpose_suffix,
+        is_zero=is_prior_notification_zero(pno)
     )
 
 
@@ -487,6 +488,7 @@ def render_pno(
         ),
         is_landing=pno.is_landing,
         purpose_suffix=pno.purpose_suffix,
+        is_zero=pno.is_zero,
     )
 
     html_email_body = email_body_template.render(
@@ -512,6 +514,7 @@ def render_pno(
         is_landing=pno.is_landing,
         purpose_suffix=pno.purpose_suffix,
         purpose=pno.purpose,
+        is_zero=pno.is_zero
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"
@@ -529,6 +532,7 @@ def render_pno(
         ),
         port_name=pno.port_name,
         note=pno.note,
+        is_zero=pno.is_zero,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(
@@ -748,10 +752,12 @@ def create_email(
             )
         ] + (uploaded_attachments.get(pno.report_id) or [])
 
+        subject_suffix = " - préavis zéro" if pno.is_zero else ""
+
         message = create_html_email(
             to=to,
             cc=cc,
-            subject=f"Préavis {pno.purpose_suffix} - {pno.vessel_name}",
+            subject=f"Préavis {pno.purpose_suffix} - {pno.vessel_name}{subject_suffix}",
             html=pno.html_email_body,
             from_=MONITORFISH_EMAIL_ADDRESS,
             images=[
@@ -1147,3 +1153,15 @@ def distribute_pnos_flow(
                 execute_statement(update_manual_pnos_statement)
 
     return pnos_to_generate, pnos_to_distribute
+
+def is_prior_notification_zero(pno: PnoToRender) -> bool:
+    # ported from `isPriorNotificationZero` in /frontend/src/features/PriorNotification/utils.ts
+
+    if not pno.catch_onboard:
+        return False
+
+    for c in pno.catch_onboard:
+        if c.get("weight") != 0:
+            return False
+        
+    return True

@@ -12,7 +12,7 @@
 
         <header>
         <h1>
-            <p>PRÉAVIS - {{ purpose }}</p>
+            <p>PRÉAVIS - {{ purpose }}{{ " (préavis zéro)" if is_zero else "" }}</p>
             <p>
                 {{ vessel_name }}
                 <img id="state_flag_icon", src="{{ state_flag_icon_src }}" alt="Pavillon">

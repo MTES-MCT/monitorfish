@@ -122,7 +122,7 @@ class GetNumberToVerifyUTests {
             ).execute()
 
         // Then
-        assertThat(result.perSeafrontGroupCount.values).hasSize(8)
+        assertThat(result.perSeafrontGroupCount.values).hasSize(9)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.ALL]).isEqualTo(2)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.NAMO]).isEqualTo(1)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.OUTREMEROA]).isEqualTo(1)

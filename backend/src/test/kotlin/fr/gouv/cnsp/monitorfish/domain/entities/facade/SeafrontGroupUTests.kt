@@ -116,6 +116,11 @@ class SeafrontGroupUTests {
         val result = SeafrontGroup.OUTREMEROP.toSeafronts()
 
         // Then
-        assertThat(result).containsExactlyInAnyOrder(Seafront.POLYNESIE_FRANCAISE)
+        assertThat(result).containsExactlyInAnyOrder(
+            Seafront.POLYNESIE_FRANCAISE,
+            Seafront.NOUVELLE_CALEDONIE,
+            Seafront.CLIPPERTON,
+            Seafront.WALLIS_FUTUNA,
+            )
     }
 }

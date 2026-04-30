@@ -19,6 +19,7 @@ export const SUB_MENU_LABEL: Record<AlertSubMenu, string> = {
   MED: 'MED',
   OUTREMEROA: 'OUTRE-MER OA',
   OUTREMEROI: 'OUTRE-MER OI',
+  OUTREMEROP: 'OUTRE-MER OP',
   NO_FACADE: 'Hors façade',
   SUSPENDED_ALERTS: 'Suspension d’alertes',
   ALERT_MANAGEMENT: 'Gestion alertes'

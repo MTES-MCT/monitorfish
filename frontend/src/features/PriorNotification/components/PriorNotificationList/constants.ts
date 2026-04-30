@@ -13,6 +13,7 @@ export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = 
   SA: 'SA',
   OUTREMEROA: 'O-M OA',
   OUTREMEROI: 'O-M OI',
+  OUTREMEROP: 'O-M OP',
   NO_FACADE: 'Hors f.'
 }
 export const SUB_MENUS_AS_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)

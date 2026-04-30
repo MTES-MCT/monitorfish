@@ -137,6 +137,7 @@ export function getPriorNotificationsFakeResponse({
         NO_FACADE: 0,
         OUTREMEROA: 0,
         OUTREMEROI: 0,
+        OUTREMEROP: 0,
         SA: 0
       }
     },

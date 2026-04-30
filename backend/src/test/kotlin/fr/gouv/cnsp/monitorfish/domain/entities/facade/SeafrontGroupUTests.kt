@@ -111,11 +111,16 @@ class SeafrontGroupUTests {
     }
 
     @Test
-    fun `toSeafronts should return POLYNESIE_CLIPPERTON for NO_FACADE group`() {
+    fun `toSeafronts should return POLYNESIE_CLIPPERTON for OUTREMEROP group`() {
         // When
-        val result = SeafrontGroup.NO_FACADE.toSeafronts()
+        val result = SeafrontGroup.OUTREMEROP.toSeafronts()
 
         // Then
-        assertThat(result).containsExactlyInAnyOrder(Seafront.POLYNESIE_CLIPPERTON)
+        assertThat(result).containsExactlyInAnyOrder(
+            Seafront.POLYNESIE_FRANCAISE,
+            Seafront.NOUVELLE_CALEDONIE,
+            Seafront.CLIPPERTON,
+            Seafront.WALLIS_FUTUNA,
+            )
     }
 }

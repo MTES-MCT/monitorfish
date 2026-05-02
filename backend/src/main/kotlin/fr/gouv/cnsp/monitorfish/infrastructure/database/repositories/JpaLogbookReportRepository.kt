@@ -49,6 +49,8 @@ class JpaLogbookReportRepository(
                 tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
                 willArriveAfter = filter.willArriveAfter,
                 willArriveBefore = filter.willArriveBefore,
+                isZero = filter.isZero,
+                createdBefore = filter.createdBefore,
             )
 
         val referencedReportIds =

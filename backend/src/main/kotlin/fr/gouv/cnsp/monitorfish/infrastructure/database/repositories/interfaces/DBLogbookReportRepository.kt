@@ -27,7 +27,9 @@ interface DBLogbookReportRepository :
             :priorNotificationTypesAsSqlArrayString,
             :specyCodesAsSqlArrayString,
             :tripGearCodesAsSqlArrayString,
-            :tripSegmentCodesAsSqlArrayString
+            :tripSegmentCodesAsSqlArrayString,
+            :isZero,
+            :createdBefore,
         )
         """,
         nativeQuery = true,
@@ -46,6 +48,8 @@ interface DBLogbookReportRepository :
         tripSegmentCodesAsSqlArrayString: String?,
         willArriveAfter: ZonedDateTime,
         willArriveBefore: ZonedDateTime,
+        isZero: Boolean?,
+        createdBefore: ZonedDateTime?,
     ): List<LogbookReportEntity>
 
     @Query(
@@ -80,13 +84,24 @@ interface DBLogbookReportRepository :
                     THEN activity_datetime_utc
                 END) AS end_date_lan,
                 MIN(operation_datetime_utc) AS first_operation_datetime_utc,
-                MAX(operation_datetime_utc) AS last_operation_datetime_utc
+                MAX(operation_datetime_utc) AS last_operation_datetime_utc,
+                (
+                    SELECT 
+                        CASE 
+                            WHEN COUNT(*) > 0 
+                                AND bool_and(COALESCE((catchOnboard->>'weight')::DOUBLE PRECISION, 0) = 0)
+                            THEN TRUE 
+                            ELSE FALSE 
+                        END
+                    FROM jsonb_array_elements(mpn.value->'catchOnboard') AS catchOnboard
+                ) AS is_zero
             FROM logbook_reports
             WHERE
                 operation_datetime_utc >= NOW() AT TIME ZONE 'UTC' - INTERVAL '24 hours'
                 AND operation_datetime_utc < NOW() AT TIME ZONE 'UTC' + INTERVAL '24 hours'
                 AND cfr = :internalReferenceNumber
                 AND trip_number IS NOT NULL
+                AND (:createdBefore IS NULL OR operation_datetime_utc <= CAST(:createdBefore AS TIMESTAMP WITH TIME ZONE))
             GROUP BY trip_number
         )
 

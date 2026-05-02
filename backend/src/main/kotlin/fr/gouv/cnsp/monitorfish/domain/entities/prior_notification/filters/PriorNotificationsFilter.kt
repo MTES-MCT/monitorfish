@@ -16,4 +16,6 @@ data class PriorNotificationsFilter(
     val tripSegmentCodes: List<String>? = null,
     val willArriveAfter: ZonedDateTime,
     val willArriveBefore: ZonedDateTime,
+    var isZero: Boolean? = null,
+    var createdBefore: ZonedDateTime? = null,
 )

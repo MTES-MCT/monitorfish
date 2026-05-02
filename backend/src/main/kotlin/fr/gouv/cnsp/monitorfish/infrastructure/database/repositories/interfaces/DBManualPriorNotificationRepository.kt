@@ -48,6 +48,22 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
                         unaccent(lower(mpn.vessel_name)) ILIKE CONCAT('%', unaccent(lower(:searchQuery)), '%') OR
                         lower(mpn.cfr) ILIKE CONCAT('%', lower(:searchQuery), '%')
                     )
+
+                    -- Is zero
+                    AND (
+                        :isZero IS NULL 
+                        OR (
+                            EXISTS (SELECT 1 FROM jsonb_array_elements(mpn.value->'catchOnboard')) 
+                            AND NOT EXISTS (
+                                SELECT 1 
+                                FROM jsonb_array_elements(mpn.value->'catchOnboard') AS catchOnboard
+                                WHERE COALESCE((catchOnboard->>'weight')::DOUBLE PRECISION, 0) != 0
+                            )
+                        )
+                    )
+
+                    -- Created before
+                    AND (:createdBefore IS NULL OR mpn.created_at <= CAST(:createdBefore AS TIMESTAMP WITH TIME ZONE))
             ),
 
             distinct_vessel_ids AS MATERIALIZED (
@@ -119,6 +135,8 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
         tripSegmentCodesAsSqlArrayString: String?,
         willArriveAfter: ZonedDateTime,
         willArriveBefore: ZonedDateTime,
+        isZero: Boolean?,
+        createdBefore: ZonedDateTime?,
     ): List<ManualPriorNotificationEntity>
 
     @Query(

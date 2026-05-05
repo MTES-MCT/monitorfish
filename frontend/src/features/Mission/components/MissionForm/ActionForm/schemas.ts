@@ -6,6 +6,8 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
 import { array, boolean, number, object, string } from 'yup'
 
+import { gearHasMeshFields } from './shared/utils'
+
 // -----------------------------------------------------------------------------
 // Form Schema Validators
 
@@ -47,12 +49,12 @@ const actionDatetimeUtcValidator = string()
 export const GearOnboardSchema = object({
   gearWasControlled: boolean().required(HIDDEN_ERROR),
   declaredMesh: number().when(['gearCode', 'controlledMesh'], {
-    is: (gearCode, controlledMesh, context) => {
+    is: (gearCode: string | undefined, controlledMesh: number | undefined, context) => {
       const { gears } = mainStore.getState().gear
-      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
+      const gear = gears.find(g => g.code === gearCode)
       const declaredMesh = context?.parent?.declaredMesh
 
-      if (isMeshRequiredForSegment) {
+      if (gearHasMeshFields(gear)) {
         return controlledMesh === undefined && declaredMesh === undefined
       }
 

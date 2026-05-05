@@ -32,9 +32,10 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSubscri
 
     expect(result).toEqual([
       {
-        email: 'email@example.com',
+        emails: ['email@example.com'],
         name: 'John Doe',
-        organization: 'Org A'
+        organization: 'Org A',
+        phones: []
       }
     ] satisfies Subscriber[])
   })
@@ -67,10 +68,10 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSubscri
 
     expect(result).toEqual([
       {
-        email: 'email@example.com',
+        emails: ['email@example.com'],
         name: 'John Doe',
         organization: 'Org A',
-        phone: '1234567890'
+        phones: ['1234567890']
       }
     ] satisfies Subscriber[])
   })
@@ -113,24 +114,27 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSubscri
 
     expect(result).toEqual([
       {
-        email: 'email1@example.com',
+        emails: ['email1@example.com'],
         name: 'John Doe',
-        organization: 'Org A'
+        organization: 'Org A',
+        phones: []
       },
       {
+        emails: [],
         name: 'Jane Smith',
         organization: 'Org B',
-        phone: '1234567890'
+        phones: ['1234567890']
       },
       {
+        emails: [],
         name: 'Alice Johnson',
         organization: 'Org C',
-        phone: '0987654321'
+        phones: ['0987654321']
       }
     ] satisfies Subscriber[])
   })
 
-  it('Should deduplicate subscribers by organization and name', () => {
+  it('Should accumulate all emails when the same subscriber has multiple email messages', () => {
     const sentMessages: PriorNotification.SentMessage[] = [
       {
         communicationMeans: 'EMAIL',
@@ -158,14 +162,15 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSubscri
 
     expect(result).toEqual([
       {
-        email: 'email2@example.com',
+        emails: ['email1@example.com', 'email2@example.com'],
         name: 'John Doe',
-        organization: 'Org A'
+        organization: 'Org A',
+        phones: []
       }
     ] satisfies Subscriber[])
   })
 
-  it('Should set both email and phone when the same subscriber has messages with different communication means', () => {
+  it('Should set all emails and phones when the same subscriber has messages with different communication means', () => {
     const sentMessages: PriorNotification.SentMessage[] = [
       {
         communicationMeans: 'EMAIL',
@@ -203,10 +208,46 @@ describe('features/PriorNotification/components/shared/CardBodyHead > getSubscri
 
     expect(result).toEqual([
       {
-        email: 'email@example.com',
+        emails: ['email@example.com'],
         name: 'John Doe',
         organization: 'Org A',
-        phone: '0987654321'
+        phones: ['1234567890', '0987654321']
+      }
+    ] satisfies Subscriber[])
+  })
+
+  it('Should deduplicate identical addresses for the same subscriber', () => {
+    const sentMessages: PriorNotification.SentMessage[] = [
+      {
+        communicationMeans: 'EMAIL',
+        dateTimeUtc: '2023-10-01T10:00:00Z',
+        errorMessage: undefined,
+        id: 1,
+        recipientAddressOrNumber: 'email@example.com',
+        recipientName: 'John Doe',
+        recipientOrganization: 'Org A',
+        success: true
+      },
+      {
+        communicationMeans: 'EMAIL',
+        dateTimeUtc: '2023-10-01T10:01:00Z',
+        errorMessage: undefined,
+        id: 2,
+        recipientAddressOrNumber: 'email@example.com',
+        recipientName: 'John Doe',
+        recipientOrganization: 'Org A',
+        success: true
+      }
+    ]
+
+    const result = getSubscribersFromSentMessages(sentMessages)
+
+    expect(result).toEqual([
+      {
+        emails: ['email@example.com'],
+        name: 'John Doe',
+        organization: 'Org A',
+        phones: []
       }
     ] satisfies Subscriber[])
   })

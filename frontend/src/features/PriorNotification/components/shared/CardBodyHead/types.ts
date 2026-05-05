@@ -2,10 +2,10 @@ import type { SentMessagesBatchStatus } from './constants'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 
 export type Subscriber = {
-  email?: string
+  emails: string[]
   name: string
   organization: string
-  phone?: string
+  phones: string[]
 }
 
 export type SentMessageBatch = {

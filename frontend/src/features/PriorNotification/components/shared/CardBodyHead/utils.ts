@@ -13,16 +13,22 @@ export function getSubscribersFromSentMessages(sentMessages: PriorNotification.S
     if (!subscribersMapAccumulator[subscriberKey]) {
       // eslint-disable-next-line no-param-reassign
       subscribersMapAccumulator[subscriberKey] = {
+        emails: [],
         name: sentMessage.recipientName,
-        organization: sentMessage.recipientOrganization
+        organization: sentMessage.recipientOrganization,
+        phones: []
       }
     }
 
-    const subscriber = subscribersMapAccumulator[subscriberKey]
+    const subscriber = subscribersMapAccumulator[subscriberKey]!
     if (sentMessage.communicationMeans === 'EMAIL') {
-      subscriber.email = sentMessage.recipientAddressOrNumber
+      if (!subscriber.emails.includes(sentMessage.recipientAddressOrNumber)) {
+        subscriber.emails.push(sentMessage.recipientAddressOrNumber)
+      }
     } else if (sentMessage.communicationMeans === 'SMS' || sentMessage.communicationMeans === 'FAX') {
-      subscriber.phone = sentMessage.recipientAddressOrNumber
+      if (!subscriber.phones.includes(sentMessage.recipientAddressOrNumber)) {
+        subscriber.phones.push(sentMessage.recipientAddressOrNumber)
+      }
     }
 
     return subscribersMapAccumulator

@@ -225,7 +225,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Titre', 'Dérogation temporaire licence')
 
     cy.fill('Source', 'Unité')
-    cy.fill("Choisir l’unité", 'OFB SD 56 (Office Français de la Biodiversité)')
+    cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
     cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
     cy.fill('Choisir une échéance', 'dans 1 mois')
     cy.clickButton('Valider')

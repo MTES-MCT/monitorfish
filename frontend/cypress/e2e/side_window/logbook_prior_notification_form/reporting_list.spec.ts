@@ -21,6 +21,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
     cy.fill('Type d’infraction et NATINF 1', ['27717'])
+    cy.fill('Choisir une échéance', 'dans 1 mois')
 
     cy.clickButton('Valider')
 

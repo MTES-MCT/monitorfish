@@ -52,7 +52,7 @@ export function addAndCreateReportingWithinVesselSidebar() {
   cy.clickButton('Ouvrir un signalement')
 
   cy.fill('Source', 'Unité')
-  cy.fill("Choisir l’unité", 'OFB SD 56 (Office Français de la Biodiversité)')
+  cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
   cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
   cy.fill('Titre', 'Sortie non autorisée')
   cy.fill('Description', "Ce navire ne devrait pas être en mer, il n’a plus de points sur son permis")

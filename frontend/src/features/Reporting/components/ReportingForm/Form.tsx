@@ -71,7 +71,6 @@ type FormProps = Readonly<{
     | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
     | undefined
   submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
-  vesselHasLogbook?: boolean
 }>
 export function Form({
   className,
@@ -85,8 +84,7 @@ export function Form({
   onClose,
   onIsDirty,
   onVesselStateChange,
-  submitRef,
-  vesselHasLogbook
+  submitRef
 }: FormProps) {
   const { dirty, errors, isValid, setFieldValue, setValues, submitForm, values } =
     useFormikContext<FormEditedReporting>()
@@ -134,9 +132,11 @@ export function Form({
     }
     const featureId = VesselFeature.getVesselFeatureId(state.vessel.selectedVesselIdentity)
 
-    return !!vesselSelectors.selectById(state.vessel.vessels, featureId)?.lastLogbookMessageDateTime
+    const vessel = vesselSelectors.selectById(state.vessel.vessels, featureId)
+
+    return !!vessel?.lastLogbookMessageDateTime && !!vessel?.length && vessel.length > 12
   })
-  const depOptionEnabled = vesselHasLogbook !== undefined ? vesselHasLogbook : selectedVesselHasLogbook
+  const isDepOptionEnabled = !isIUU && selectedVesselHasLogbook
   const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
   const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
@@ -247,13 +247,19 @@ export function Form({
   }
 
   const handleExpirationDateChange = (nextDate: string | undefined) => {
-    setFieldValue('expirationDate', nextDate)
-    setFieldValue('validityOption', nextDate ? ReportingValidityOption.CUSTOM : undefined)
+    setValues({
+      ...values,
+      expirationDate: nextDate,
+      validityOption: nextDate ? ReportingValidityOption.CUSTOM : undefined
+    })
   }
 
   const handleValidityOptionChange = (nextOption: string | undefined) => {
-    setFieldValue('validityOption', nextOption ?? undefined)
-    setFieldValue('expirationDate', undefined)
+    setValues({
+      ...values,
+      expirationDate: undefined,
+      validityOption: nextOption as ReportingValidityOption | undefined
+    })
   }
 
   const handleReportingTypeRadio = (reportingType: string | undefined) => {
@@ -308,6 +314,16 @@ export function Form({
 
     return values.title ?? undefined
   })()
+  const reportingValidityOptions = [
+    { label: 'dans 1 mois', value: ReportingValidityOption.ONE_MONTH },
+    { label: 'dans 12 mois', value: ReportingValidityOption.TWELVE_MONTHS },
+    {
+      isDisabled: !isDepOptionEnabled,
+      label: "jusqu'au prochain message DEP",
+      value: ReportingValidityOption.UNTIL_NEXT_DEP
+    },
+    { label: "jusqu'à nouvel ordre", value: ReportingValidityOption.INDEFINITE }
+  ]
 
   return (
     <StyledForm
@@ -572,57 +588,93 @@ export function Form({
           </AddInfractionButton>
         </InfractionListWrapper>
       )}
-      <TwoCol>
-        <FormikDatePicker
-          baseContainer={formRef.current as unknown as HTMLDivElement}
-          isCalendarTop
-          isLight={isLight}
-          isRequired
-          isStringDate
-          label="Date et heure"
-          name="reportingDate"
-          withTime
-        />
-        <DatePicker
-          key={values.expirationDate ? 'date-picker' : (values.validityOption ?? 'empty')}
-          baseContainer={formRef.current as unknown as HTMLDivElement}
-          defaultValue={values.expirationDate}
-          error={(errors as any).expirationDate}
-          isCalendarTop
-          isLight={isLight}
-          isRequired
-          isStringDate
-          label="Fin de validité"
-          name="expirationDate"
-          onChange={handleExpirationDateChange}
-          withTime={false}
-        />
-      </TwoCol>
-      <ValidityOptionWrapper>
-        <ValidityOrLabel>ou</ValidityOrLabel>
-        <Select
-          error={(errors as any).validityOption}
-          isLight={isLight}
-          label="Choisir une échéance"
-          name="validityOption"
-          onChange={handleValidityOptionChange}
-          options={[
-            { label: 'dans 1 mois', value: ReportingValidityOption.ONE_MONTH },
-            { label: 'dans 12 mois', value: ReportingValidityOption.TWELVE_MONTHS },
-            {
-              isDisabled: !depOptionEnabled,
-              label: "jusqu'au prochain message DEP",
-              value: ReportingValidityOption.UNTIL_NEXT_DEP
-            },
-            { label: "jusqu'à nouvel ordre", value: ReportingValidityOption.INDEFINITE }
-          ]}
-          value={
-            values.validityOption && values.validityOption !== ReportingValidityOption.CUSTOM
-              ? values.validityOption
-              : undefined
-          }
-        />
-      </ValidityOptionWrapper>
+      {isIUU && (
+        <TwoCol>
+          <FormikDatePicker
+            baseContainer={formRef.current as unknown as HTMLDivElement}
+            isCalendarTop
+            isLight={isLight}
+            isRequired
+            isStringDate
+            label="Date et heure"
+            name="reportingDate"
+            withTime
+          />
+          <DatePicker
+            key={values.expirationDate ? 'date-picker' : (values.validityOption ?? 'empty')}
+            baseContainer={formRef.current as unknown as HTMLDivElement}
+            defaultValue={values.expirationDate}
+            error={(errors as any).expirationDate}
+            isCalendarTop
+            isLight={isLight}
+            isRequired
+            isStringDate
+            label="Fin de validité"
+            name="expirationDate"
+            onChange={handleExpirationDateChange}
+            withTime={false}
+          />
+        </TwoCol>
+      )}
+      {!isIUU && (
+        <>
+          <FormikDatePicker
+            baseContainer={formRef.current as unknown as HTMLDivElement}
+            isCalendarTop
+            isLight={isLight}
+            isRequired
+            isStringDate
+            label="Date et heure"
+            name="reportingDate"
+            withTime
+          />
+          <ValidityOptionWrapper>
+            <DatePicker
+              key={values.expirationDate ? 'date-picker' : (values.validityOption ?? 'empty')}
+              baseContainer={formRef.current as unknown as HTMLDivElement}
+              defaultValue={values.expirationDate}
+              error={errors.validityOption}
+              isCalendarTop
+              isErrorMessageHidden
+              isLight={isLight}
+              isRequired
+              isStringDate
+              label="Fin de validité"
+              name="expirationDate"
+              onChange={handleExpirationDateChange}
+              withTime={false}
+            />
+            <ValidityOrLabel>ou</ValidityOrLabel>
+            <Select
+              error={errors.validityOption}
+              isErrorMessageHidden
+              isLabelHidden
+              isLight={isLight}
+              label="Choisir une échéance"
+              name="validityOption"
+              onChange={handleValidityOptionChange}
+              options={reportingValidityOptions}
+              placeholder="Choisir une échéance"
+              renderMenuItem={(label, item) => {
+                const isDisabled = item.value === ReportingValidityOption.UNTIL_NEXT_DEP && !isDepOptionEnabled
+
+                return (
+                  <ValidityOptionMenuItem $isDisabled={isDisabled}>
+                    {label}
+                    {isDisabled && <StyledInfo size={17} title="Le navire n’a pas de JPE ou son JPE est incomplet." />}
+                  </ValidityOptionMenuItem>
+                )
+              }}
+              value={
+                values.validityOption && values.validityOption !== ReportingValidityOption.CUSTOM
+                  ? values.validityOption
+                  : undefined
+              }
+            />
+          </ValidityOptionWrapper>
+          {typeof errors.validityOption === 'string' && <FieldError>{errors.validityOption}</FieldError>}
+        </>
+      )}
       {values.isArchived && <ArchivedMessage>Le signalement a été archivé.</ArchivedMessage>}
       {!hideButtons && (
         <>
@@ -637,6 +689,17 @@ export function Form({
     </StyledForm>
   )
 }
+
+const StyledInfo = styled(Icon.Info)`
+  margin-left: 8px;
+  color: ${p => p.theme.color.slateGray};
+`
+
+const ValidityOptionMenuItem = styled.span<{
+  $isDisabled: boolean
+}>`
+  ${p => p.$isDisabled && `color: ${p.theme.color.lightGray};`}
+`
 
 const AddInfractionButton = styled(Button)`
   margin-top: 10px;

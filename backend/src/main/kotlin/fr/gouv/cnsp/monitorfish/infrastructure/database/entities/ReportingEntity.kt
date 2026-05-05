@@ -83,6 +83,8 @@ data class ReportingEntity(
     @Column(name = "reporting_date", nullable = false)
     val reportingDate: ZonedDateTime,
     @Column(name = "validity_option")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
     val validityOption: ReportingValidityOption? = null,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =

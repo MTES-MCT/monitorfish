@@ -17,7 +17,6 @@ import {
 } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { z } from 'zod'
 
 import type { OtherSourceType } from './types/OtherSourceType'
@@ -88,10 +87,9 @@ type FormBaseEditedFields = Pick<
   | 'type'
   | 'vesselId'
   | 'vesselIdentifier'
+  | 'validityOption'
   | 'vesselName'
-> & {
-  validityOption?: ReportingValidityOption
-}
+>
 
 export type FormEditedReporting =
   | (Partial<InfractionSuspicion> &

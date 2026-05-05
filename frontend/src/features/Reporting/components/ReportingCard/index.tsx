@@ -95,7 +95,7 @@ export function ReportingCard({
     }
 
     return 'Pas de fin de validité'
-  }, [reporting, willExpireAfterNewVoyage])
+  }, [reporting, validityOption, willExpireAfterNewVoyage])
 
   const askForDeletionConfirmation = () => {
     setIsDeletionConfirmationModalOpen(true)

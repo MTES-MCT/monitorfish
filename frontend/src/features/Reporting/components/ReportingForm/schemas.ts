@@ -19,7 +19,6 @@ export const CreateOrEditReportingSchema = z
     latitude: z.number().optional(),
     longitude: z.number().optional(),
     mmsi: z.string().optional(),
-    validityOption: z.nativeEnum(ReportingValidityOption).optional(),
     numberOfVessels: z.number().optional(),
     otherSourceType: z.string().optional(),
     reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
@@ -29,6 +28,7 @@ export const CreateOrEditReportingSchema = z
       .string('Veuillez renseigner le titre du signalement.')
       .min(1, 'Veuillez renseigner le titre du signalement.'),
     type: z.enum(ReportingType),
+    validityOption: z.enum(ReportingValidityOption).optional(),
     vesselName: z.string().optional()
   })
   .superRefine((data, ctx) => {

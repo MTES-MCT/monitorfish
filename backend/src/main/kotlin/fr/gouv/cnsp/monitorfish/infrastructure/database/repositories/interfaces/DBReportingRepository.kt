@@ -264,6 +264,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             length = :length,
             gear_code = :gearCode,
             vessel_identifier = CAST(:vesselIdentifier AS vessel_identifier),
+            validity_option = :validityOption,
             flag_state = :flagState,
             is_fishing = :isFishing
         WHERE id = :id
@@ -289,6 +290,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         length: Double?,
         gearCode: String?,
         vesselIdentifier: String?,
+        validityOption: String?,
         flagState: String,
         isFishing: Boolean?,
     )

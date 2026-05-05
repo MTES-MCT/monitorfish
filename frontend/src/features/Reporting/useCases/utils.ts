@@ -34,7 +34,6 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     latitude: formValues.latitude,
     length: formValues.length,
     longitude: formValues.longitude,
-    validityOption: formValues.validityOption,
     mmsi: formValues.mmsi,
     numberOfVessels: formValues.numberOfVessels,
     otherSourceType: formValues.otherSourceType,
@@ -48,6 +47,7 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     title: formValues.title as string,
     type: formValues.type,
     validationDate: undefined,
+    validityOption: formValues.validityOption,
     vesselId: formValues.vesselId,
     vesselIdentifier: formValues.vesselIdentifier,
     vesselName: formValues.vesselName

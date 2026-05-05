@@ -33,7 +33,6 @@ export function getFormFields(
     controlUnitId: value?.controlUnitId,
     description: value?.description,
     expirationDate: computedValidityExpiration,
-    ...(validityOption !== undefined ? { validityOption } : {}),
     externalMarker: editedReporting?.externalMarker,
     flagState: editedReporting?.flagState ?? 'UNDEFINED',
     gearCode: editedReporting?.gearCode,
@@ -53,6 +52,7 @@ export function getFormFields(
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
     satelliteType: value?.satelliteType,
     title: value?.title ?? '',
+    validityOption,
     vesselId: editedReporting?.vesselId,
     vesselIdentifier: editedReporting?.vesselIdentifier,
     vesselName: editedReporting?.vesselName

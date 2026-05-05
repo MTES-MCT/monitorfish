@@ -44,8 +44,12 @@ export function SentMessageList({ detail, state }: SentMessageListProps) {
                   <b>{subsriber.name}</b> ({subsriber.organization})
                 </p>
                 <SubscriberRowBody>
-                  {subsriber.email && <span>{subsriber.email}</span>}
-                  {subsriber.phone && <span>{subsriber.phone}</span>}
+                  {subsriber.emails.map(email => (
+                    <span key={email}>{email}</span>
+                  ))}
+                  {subsriber.phones.map(phone => (
+                    <span key={phone}>{phone}</span>
+                  ))}
                 </SubscriberRowBody>
               </SubscriberRow>
             ))}

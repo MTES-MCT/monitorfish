@@ -7,7 +7,6 @@
             // ALL POSSIBLE STATES (ordered by their specs binary representation)
             // See adrs/0006-prior-notification-states-specifications.md
             // =========================================================================================================
-
             // - State: 10000
             // - Vessel: POISSON PAS NET
             // - Updated by BOB (using legacy `authorTrigram`)
@@ -733,7 +732,6 @@
             // =========================================================================================================
             // OTHER CASES
             // =========================================================================================================
-
             // - Vessel: GOUJON BOUGON
             // - Arrival date: 2023
             {
@@ -859,6 +857,186 @@
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
                     "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: ITA
+            // - Foreign vessel landing in a foreign port
+            // - Outdated zero notice
+            {
+                "report_id": "00000000-0000-4000-0000-000000000013",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "flag_state": "ITA",
+                "did_not_fish_after_zero_notice": true,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "authorTrigram": null,
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 0.0,
+                            "nbFish": null,
+                            "species": "SWO",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '22 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '21.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '35 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedAt": null,
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: ITA
+            // - Foreign vessel landing in a foreign port
+            // - Valid zero notice
+            {
+                "report_id": "00000000-0000-4000-0000-000000000014",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "flag_state": "ITA",
+                "did_not_fish_after_zero_notice": true,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '23 hours'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '23 hours'",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "authorTrigram": null,
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 0.0,
+                            "nbFish": null,
+                            "species": "SWO",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '20 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '19.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '33 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedAt": null,
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: ITA
+            // - Foreign vessel landing in a foreign port
+            // - Old non-zero notice
+            {
+                "report_id": "00000000-0000-4000-0000-000000000015",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "flag_state": "ITA",
+                "did_not_fish_after_zero_notice": true,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "authorTrigram": null,
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 10.0,
+                            "nbFish": null,
+                            "species": "SWO",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '22 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '21.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '35 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedAt": null,
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: ITA
+            // - Foreign vessel landing in a foreign port
+            // - Old non-zero notice 2
+            {
+                "report_id": "00000000-0000-4000-0000-000000000016",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "flag_state": "ITA",
+                "did_not_fish_after_zero_notice": true,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "authorTrigram": null,
+                    "riskFactor": 2.9,
+                    "catchOnboard": [],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '22 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '21.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '35 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedAt": null,
+                    "updatedBy": null
+                }
+            },
+            // - Vessel: VIVA L'ITALIA
+            // - Flag state: ITA
+            // - Foreign vessel landing in a foreign port
+            // - Old zero notice without BFT or SWO
+            {
+                "report_id": "00000000-0000-4000-0000-000000000017",
+                "cfr": "CFR120",
+                "vessel_id": 120,
+                "flag_state": "ITA",
+                "did_not_fish_after_zero_notice": true,
+                "sent_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "created_at:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours'",
+                "trip_gears": null,
+                "trip_segments": null,
+                "vessel_name": "VIVA L'ITALIA",
+                "value:jsonb": {
+                    "authorTrigram": null,
+                    "riskFactor": 2.9,
+                    "catchOnboard": [
+                        {
+                            "weight": 0.0,
+                            "nbFish": null,
+                            "species": "BLU",
+                            "faoZone": "27.8.a",
+                            "effortZone": "C",
+                            "economicZone": "FRA",
+                            "statisticalRectangle": "23E6"
+                        }
+                    ],
+                    "port": "AUSYD",
+                    "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '22 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '21.5 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "purpose": "LAN",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '35 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "updatedAt": null,
                     "updatedBy": null
                 }
             }

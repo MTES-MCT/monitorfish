@@ -32,6 +32,9 @@ class JpaLogbookReportRepository(
     private val dbLogbookReportRepository: DBLogbookReportRepository,
     private val objectMapper: ObjectMapper,
 ) : LogbookReportRepository {
+    /**
+     * filter.isZero and filter.createdBefore are ignored
+     */
     override fun findAllAcknowledgedPriorNotifications(filter: PriorNotificationsFilter): List<PriorNotification> {
         // Acknowledged "DAT", "COR" and "DEL" operations
         val logbookReportsWithDatCorAndDel =

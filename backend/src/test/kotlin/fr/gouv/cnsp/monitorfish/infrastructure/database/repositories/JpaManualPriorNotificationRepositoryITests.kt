@@ -457,6 +457,81 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAll Should return the expected manual prior notifications with isZero filter true`() {
+        // Given
+        val filter =
+            defaultPriorNotificationsFilter.copy(
+                isZero = true,
+            )
+
+        // When
+        val result = jpaManualPriorNotificationRepository.findAll(filter)
+
+        // Then
+        assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
+        assertThat(
+            result.all {
+                it.logbookMessageAndValue.value.catchOnboard
+                    .isNotEmpty()
+            },
+        ).isTrue()
+        assertThat(
+            result.all {
+                it.logbookMessageAndValue.value.catchOnboard
+                    .all { catch -> catch.weight == 0.0 }
+            },
+        ).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return the expected manual prior notifications with isZero filter false`() {
+        // Given
+        val filter =
+            defaultPriorNotificationsFilter.copy(
+                isZero = false,
+            )
+
+        // When
+        val result = jpaManualPriorNotificationRepository.findAll(filter)
+
+        // Then
+        assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
+        assertThat(
+            result.all {
+                it.logbookMessageAndValue.value.catchOnboard
+                    .isEmpty() ||
+                    it.logbookMessageAndValue.value.catchOnboard
+                        .all { catch -> catch.weight != 0.0 }
+            },
+        ).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return the expected manual prior notifications with createdBefore filter`() {
+        val createdBefore = ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+
+        // Given
+        val filter =
+            defaultPriorNotificationsFilter.copy(
+                createdBefore = createdBefore,
+            )
+
+        // When
+        val result = jpaManualPriorNotificationRepository.findAll(filter)
+
+        // Then
+        assertThat(result).hasSizeBetween(1, allManualPriorNotificationsLength - 1)
+        assertThat(
+            result.all {
+                it.createdAt != null && it.createdAt < createdBefore
+            },
+        ).isTrue()
+    }
+
+    @Test
+    @Transactional
     fun `findByReportId Should return the expected manual prior notification`() {
         // Given
         val reportId = "00000000-0000-4000-0000-000000000002"

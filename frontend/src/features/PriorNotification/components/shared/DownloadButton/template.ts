@@ -8,7 +8,7 @@ export const generateHTML = (data: TemplateData) => `
   <body>
     <header>
       <h1>
-        <p>PREAVIS - ${data.purpose}</p>
+        <p>PREAVIS - ${data.purpose}${data.isZero ? ' (préavis zéro)' : ''}</p>
         <p>
         ${data.vesselName}
         <img id="state_flag_icon" src="${data.flagStateFilePath}" />

@@ -68,6 +68,7 @@ from src.flows.distribute_pnos import (
 )
 from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
+from tests.test_helpers.test_snapshots import should_generate_snapshots
 
 
 @pytest.fixture
@@ -752,6 +753,78 @@ def pno_to_render_1() -> PnoToRender:
         source=PnoSource.LOGBOOK,
     )
 
+@pytest.fixture
+def pno_zero_to_render_1() -> PnoToRender:
+    return PnoToRender(
+        id=35,
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
+        report_id="11",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        vessel_id=2,
+        cfr="ABC000542519",
+        ircs="FQ7058",
+        external_identification="RO237719",
+        vessel_name="DEVINER FIGURE CONSCIENCE",
+        flag_state="FRA",
+        purpose="LAN",
+        catch_onboard=[
+            {
+                "nbFish": None,
+                "weight": 0.0,
+                "faoZone": "27.8.a",
+                "species": "GHL",
+                "statisticalRectangle": "47E3",
+            },
+        ],
+        port_locode="FRCQF",
+        port_name="Somewhere over the rainbow",
+        facade="NAMO",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
+        trip_gears=[
+            {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
+            {"gear": "OTT", "dimensions": "250.0"},
+        ],
+        trip_segments=[
+            {"segment": "SHKE27", "segmentName": "Merlu en zone 27"},
+            {"segment": "SOTM", "segmentName": "Chaluts pélagiques"},
+        ],
+        pno_types=[
+            {
+                "pnoTypeName": "Préavis type 1",
+                "hasDesignatedPorts": True,
+                "minimumNotificationPeriod": 4.0,
+            },
+            {
+                "pnoTypeName": "Préavis type 2",
+                "hasDesignatedPorts": False,
+                "minimumNotificationPeriod": 4.0,
+            },
+        ],
+        note=(
+            "Attention attention faites bien attention très attention sait-on "
+            "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
+            "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
+            "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
+        ),
+        vessel_length=13.4,
+        mmsi=None,
+        risk_factor=2.09885592141872,
+        last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
+        last_control_infractions=[
+            {
+                "natinf": 27724,
+                "comments": "Infraction engin",
+                "infractionType": "WITHOUT_RECORD",
+            },
+            {"natinf": 2606},
+            {"natinf": 4761},
+            {"natinf": 22206},
+        ],
+        is_verified=False,
+        is_being_sent=True,
+        source=PnoSource.LOGBOOK,
+    )
 
 @pytest.fixture
 def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
@@ -776,6 +849,20 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
         }
     )
 
+@pytest.fixture
+def pre_rendered_pno_zero_1_catch_onboard() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "Espèces": [
+                "Pou Hasse Caille (GHL)",
+            ],
+            "Zones de pêche": [
+                "27.8.a (47E3)",
+            ],
+            "Qtés (kg)": [0],
+            "Nb": ["-"],
+        }
+    )
 
 @pytest.fixture
 def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
@@ -828,8 +915,63 @@ def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
         source=PnoSource.LOGBOOK,
         purpose_suffix="de débarquement",
         is_landing=True,
+        is_zero=False,
     )
 
+
+@pytest.fixture
+def pre_rendered_pno_zero_1(pre_rendered_pno_zero_1_catch_onboard) -> PreRenderedPno:
+    return PreRenderedPno(
+        id=35,
+        operation_datetime_utc=datetime(2024, 5, 5, 8, 13, 38, 259967),
+        report_id="11",
+        report_datetime_utc=datetime(2024, 5, 5, 8, 11, 38, 259967),
+        vessel_id=2,
+        cfr="ABC000542519",
+        ircs="FQ7058",
+        external_identification="RO237719",
+        vessel_name="DEVINER FIGURE CONSCIENCE",
+        flag_state="FRA",
+        purpose="Débarquement",
+        catch_onboard=pre_rendered_pno_zero_1_catch_onboard,
+        bft_summary=None,
+        port_locode="FRCQF",
+        port_name="Somewhere over the rainbow",
+        facade="NAMO",
+        predicted_arrival_datetime_utc=datetime(2020, 5, 6, 11, 41, 3, 340000),
+        predicted_landing_datetime_utc=datetime(2020, 5, 6, 16, 40),
+        trip_gears=[
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux", mesh=140),
+            FishingGear(code="OTT", name="Chaluts jumeaux à panneaux"),
+        ],
+        trip_segments=[
+            FleetSegment(code="SHKE27", name="Merlu en zone 27"),
+            FleetSegment(code="SOTM", name="Chaluts pélagiques"),
+        ],
+        pno_types=["Préavis type 1", "Préavis type 2"],
+        note=(
+            "Attention attention faites bien attention très attention sait-on "
+            "jamais ce qui pourrait, ô grand Dieu des Poissons qui se font "
+            "pêcher, nous arriver, si on ne fait pas assez attention à ce qu'y "
+            "pêche c'te navire d'pêche qui fait d'la pêche de poissons."
+        ),
+        vessel_length=13.4,
+        mmsi=None,
+        risk_factor=2.09885592141872,
+        last_control_datetime_utc=datetime(2023, 6, 3, 9, 13, 38, 259967),
+        last_control_infractions=[
+            Infraction(natinf=27724, comments="Infraction engin"),
+            Infraction(natinf=2606, comments=None),
+            Infraction(natinf=4761, comments=None),
+            Infraction(natinf=22206, comments=None),
+        ],
+        is_verified=False,
+        is_being_sent=True,
+        source=PnoSource.LOGBOOK,
+        purpose_suffix="de débarquement",
+        is_landing=True,
+        is_zero=True,
+    )
 
 @pytest.fixture
 def pno_to_render_2() -> PnoToRender:
@@ -901,6 +1043,7 @@ def pre_rendered_pno_2() -> PreRenderedPno:
         source=PnoSource.LOGBOOK,
         purpose_suffix="d'accès aux services",
         is_landing=False,
+        is_zero=False,
     )
 
 
@@ -1537,6 +1680,15 @@ def test_pre_render_pno_2(
     )
     PreRenderedPno.assert_equal(res, pre_rendered_pno_2)
 
+def test_pre_render_pno_zero_1(
+    pno_zero_to_render_1, species_names, fishing_gear_names, pre_rendered_pno_zero_1
+):
+    res = pre_render_pno(
+        pno=pno_zero_to_render_1,
+        species_names=species_names,
+        fishing_gear_names=fishing_gear_names,
+    )
+    PreRenderedPno.assert_equal(res, pre_rendered_pno_zero_1)
 
 @patch(
     "src.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
@@ -1568,15 +1720,72 @@ def test_render_pno_1(
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_1.html"
     )
 
-    ######################### Uncomment to replace test files #########################
-    # with open(test_html_filepath, "w") as f:
-    #     f.write(pno.html_for_pdf)
+    if should_generate_snapshots():
+        with open(test_html_filepath, "w") as f:
+            f.write(pno.html_for_pdf)
 
-    # with open(test_email_body_file_path, "w") as f:
-    #     f.write(pno.html_email_body)
+        with open(test_email_body_file_path, "w") as f:
+            f.write(pno.html_email_body)
 
-    # with open(test_sms_filepath, "w") as f:
-    #     f.write(pno.sms_content)
+        with open(test_sms_filepath, "w") as f:
+            f.write(pno.sms_content)
+
+    ###################################################################################
+    with open(test_html_filepath, "r") as f:
+        expected_html = f.read()
+
+    with open(test_email_body_file_path, "r") as f:
+        expected_html_email_body = f.read()
+
+    with open(test_sms_filepath, "r") as f:
+        expected_sms_content = f.read()
+
+    assert isinstance(pno, RenderedPno)
+    assert pno.html_for_pdf == expected_html
+    assert pno.html_email_body == expected_html_email_body
+    assert pno.report_id == "11"
+    assert pno.source == PnoSource.LOGBOOK
+    assert pno.sms_content == expected_sms_content
+
+@patch(
+    "src.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
+    Path("/email/fonts/location"),
+)
+@patch("src.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
+@patch("src.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
+    Path("/state/flags/icons/location"),
+)
+def test_render_pno_zero_1(
+    html_for_pdf_template, pre_rendered_pno_zero_1, email_body_template, sms_template
+):
+    pno = render_pno(
+        pno=pre_rendered_pno_zero_1,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+
+    test_sms_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_sms_zero_1.txt"
+    )
+    test_html_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_zero_1.html"
+    )
+    test_email_body_file_path = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_zero_1.html"
+    )
+
+    if should_generate_snapshots():
+        with open(test_html_filepath, "w") as f:
+            f.write(pno.html_for_pdf)
+
+        with open(test_email_body_file_path, "w") as f:
+            f.write(pno.html_email_body)
+
+        with open(test_sms_filepath, "w") as f:
+            f.write(pno.sms_content)
 
     ###################################################################################
     with open(test_html_filepath, "r") as f:
@@ -1626,15 +1835,15 @@ def test_render_pno_2(
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_2.html"
     )
 
-    ######################### Uncomment to replace test files #########################
-    # with open(test_html_filepath, "w") as f:
-    #     f.write(pno.html_for_pdf)
+    if should_generate_snapshots():
+        with open(test_html_filepath, "w") as f:
+            f.write(pno.html_for_pdf)
 
-    # with open(test_email_body_file_path, "w") as f:
-    #     f.write(pno.html_email_body)
+        with open(test_email_body_file_path, "w") as f:
+            f.write(pno.html_email_body)
 
-    # with open(test_sms_filepath, "w") as f:
-    #     f.write(pno.sms_content)
+        with open(test_sms_filepath, "w") as f:
+            f.write(pno.sms_content)
 
     ###################################################################################
     with open(test_html_filepath, "r") as f:
@@ -1667,9 +1876,9 @@ def test_render_pno_1_pdf(
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_1.pdf"
 
-    ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "wb") as f:
-    #     f.write(pno.pdf_document)
+    if should_generate_snapshots():
+        with open(test_filepath, "wb") as f:
+            f.write(pno.pdf_document)
 
     ###################################################################################
     with open(test_filepath, "rb") as f:
@@ -1696,9 +1905,9 @@ def test_render_pno_2_pdf(
 
     test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf"
 
-    ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "wb") as f:
-    #     f.write(pno.pdf_document)
+    if should_generate_snapshots():
+        with open(test_filepath, "wb") as f:
+            f.write(pno.pdf_document)
 
     ###################################################################################
     with open(test_filepath, "rb") as f:
@@ -1707,6 +1916,34 @@ def test_render_pno_2_pdf(
     assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
 
     assert pno.report_id == "12"
+    assert pno.source == PnoSource.LOGBOOK
+    assert isinstance(pno.generation_datetime_utc, datetime)
+
+def test_render_pno_zero_1_pdf(
+    html_for_pdf_template, pre_rendered_pno_zero_1, email_body_template, sms_template
+):
+    pno = render_pno(
+        pno=pre_rendered_pno_zero_1,
+        html_for_pdf_template=html_for_pdf_template,
+        email_body_template=email_body_template,
+        sms_template=sms_template,
+    )
+    pdf = pypdf.PdfReader(io.BytesIO(pno.pdf_document))
+
+    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_zero_1.pdf"
+
+    if should_generate_snapshots():
+        with open(test_filepath, "wb") as f:
+            f.write(pno.pdf_document)
+
+    ###################################################################################
+    with open(test_filepath, "rb") as f:
+        expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
+
+    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
+    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
+
+    assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK
     assert isinstance(pno.generation_datetime_utc, datetime)
 
@@ -1914,8 +2151,8 @@ def test_execute_prior_notification_attachments_query_when_result_is_empty(
 
 
 @pytest.mark.parametrize(
-    "test_mode,pno_has_uploaded_attachments",
-    [(False, False), (False, True), (True, False), (True, True)],
+    "test_mode,pno_has_uploaded_attachments,is_zero",
+    [(False, False, False), (False, True, False), (True, False, False), (True, True, False), (False, False, True)],
 )
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
@@ -1926,7 +2163,11 @@ def test_create_email(
     facade_email_addresses,
     test_mode,
     pno_has_uploaded_attachments,
+    is_zero,
 ):
+    if is_zero:
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned.is_zero = True
+
     pno_to_send = create_email(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
         uploaded_attachments=prior_notification_attachments
@@ -1955,8 +2196,10 @@ def test_create_email(
     assert pno_to_send.message["From"] == "monitorfish@test.email"
     assert pno_to_send.message["Bcc"] is None
     assert pno_to_send.message["Reply-To"] == "cnsp.france@test.email"
+
+    expected_title_suffix = " - préavis zéro" if is_zero else ""
     assert (
-        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"
+        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"+expected_title_suffix
     )
 
     attachments = list(pno_to_send.message.iter_attachments())

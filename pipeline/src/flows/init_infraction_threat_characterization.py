@@ -67,7 +67,7 @@ def load_threat_characterization_and_join_table(
     e = create_engine("monitorfish_remote")
 
     with e.begin() as con:
-        con.execute(text("DROP CONSTRAINT vessels_risk_elements_risk_element_code_fkey"))
+        con.execute(text("ALTER TABLE vessels_risk_elements DROP CONSTRAINT vessels_risk_elements_risk_element_code_fkey"))
         delete(
             tables=[
                 infraction_threat_characterization_table,

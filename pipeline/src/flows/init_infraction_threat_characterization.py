@@ -1,6 +1,6 @@
 import pandas as pd
 from prefect import flow, get_run_logger, task
-from sqlalchemy import DDL, Table
+from sqlalchemy import DDL, Table, text
 
 from config import LIBRARY_LOCATION
 from src.db_config import create_engine
@@ -67,6 +67,7 @@ def load_threat_characterization_and_join_table(
     e = create_engine("monitorfish_remote")
 
     with e.begin() as con:
+        con.execute(text("ALTER TABLE vessels_risk_elements DROP CONSTRAINT vessels_risk_elements_risk_element_code_fkey"))
         delete(
             tables=[
                 infraction_threat_characterization_table,
@@ -144,6 +145,7 @@ def load_threat_characterization_and_join_table(
             logger=logger,
             how="append",
         )
+        con.execute(text("ALTER TABLE vessels_risk_elements ADD CONSTRAINT vessels_risk_elements_risk_element_code_fkey FOREIGN KEY (risk_element_code) REFERENCES risk_elements (code)"))
 
 
 @flow(name="Monitorfish - Init infractions threat characterization")

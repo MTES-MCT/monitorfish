@@ -38,6 +38,8 @@ class JpaManualPriorNotificationRepository(
                 tripSegmentCodesAsSqlArrayString = toSqlArrayString(filter.tripSegmentCodes),
                 willArriveAfter = filter.willArriveAfter,
                 willArriveBefore = filter.willArriveBefore,
+                isZero = filter.isZero,
+                createdBefore = filter.createdBefore,
             ).map { it.toPriorNotification(mapper) }
 
     @Cacheable(value = ["manual_pno_to_verify"])
@@ -57,6 +59,8 @@ class JpaManualPriorNotificationRepository(
                 tripSegmentCodesAsSqlArrayString = null,
                 willArriveAfter = ZonedDateTime.now().minusHours(24),
                 willArriveBefore = ZonedDateTime.now().plusHours(24),
+                isZero = null,
+                createdBefore = null,
             ).map {
                 it.toPriorNotification(mapper)
             }.filter {

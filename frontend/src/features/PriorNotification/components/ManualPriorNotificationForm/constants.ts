@@ -40,7 +40,7 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormVal
     then: schema => schema.required('Veuillez indiquer la zone FAO.')
   }),
   hasGlobalFaoArea: boolean()
-    .default(false) // doubt about this
+    .default(false)
     .when('$purpose', {
       is: PriorNotification.PurposeCode.LAN,
       then: schema => schema.required()
@@ -54,7 +54,14 @@ export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormVal
     .oneOf(Object.values(PriorNotification.PurposeCode))
     .required('Veuillez indiquer la raison du préavis.'),
   sentAt: string().required('Veuillez indiquer la date de réception du préavis.'),
-  tripGearCodes: array().of(string().required()).ensure().required().min(1, 'Veuillez sélectionner au moins un engin.'),
+  tripGearCodes: array()
+    .of(string().required())
+    .ensure()
+    .required()
+    .when('$purpose', {
+      is: PriorNotification.PurposeCode.LAN,
+      then: schema => schema.min(1, 'Veuillez sélectionner au moins un engin.')
+    }),
   vesselIdentity: VESSEL_IDENTITY_VALIDATION_SCHEMA.required('Veuillez indiquer le navire concerné.')
 })
 

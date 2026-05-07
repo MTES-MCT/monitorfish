@@ -486,6 +486,18 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         <table>
           <tr><td class="data-label">Engin(s) utilisé(s)</td><td><strong>Chaluts de fond (non spécifiés) (TB) - Maillage 100 mm, Chaluts de fond à crevettes (TBS) - Maillage 120.5 mm</strong></td></tr>
         </table>
+        <p class="data-label">Espèces à bord par zone de pêche <em>(tous les poids sont vifs)</em> :</p>
+        <table border="1" class="dataframe">
+          <thead>
+            <tr style="text-align: left;">
+              <th>Espèces</th>
+              <th>Zones de pêche</th>
+              <th>Qtés (kg)</th>
+              <th>Nb</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </section>
     </main>
     <footer>

@@ -136,13 +136,9 @@ export function Form({ isNewPriorNotification, isReadOnly }: FormProps) {
         virtualized
       />
 
-      {isLanding && (
-        <>
-          <FormikFaoAreaSelect isReadOnly={isReadOnly} />
+      <FormikFaoAreaSelect isReadOnly={isReadOnly} />
 
-          <FormikFishingCatchesMultiSelect isReadOnly={isReadOnly} />
-        </>
-      )}
+      <FormikFishingCatchesMultiSelect isReadOnly={isReadOnly} />
 
       <FormikMultiSelect
         disabled={!gearsAsOptions}

@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThr
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.dtos.ReportingUpdateCommand
@@ -32,6 +33,7 @@ class UpdateReportingDataInput(
     val otherSourceType: OtherSource? = null,
     val satelliteType: SatelliteSource? = null,
     val expirationDate: ZonedDateTime? = null,
+    val validityOption: ReportingValidityOption? = null,
     val reportingDate: ZonedDateTime,
     val title: String,
     val description: String? = null,
@@ -68,6 +70,7 @@ class UpdateReportingDataInput(
             otherSourceType = this.otherSourceType,
             satelliteType = this.satelliteType,
             expirationDate = this.expirationDate,
+            validityOption = this.validityOption,
             reportingDate = this.reportingDate,
             title = this.title,
             description = this.description,

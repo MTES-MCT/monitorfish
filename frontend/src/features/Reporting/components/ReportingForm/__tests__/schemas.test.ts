@@ -1,5 +1,6 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { describe, expect, it } from '@jest/globals'
 
 import { CreateOrEditReportingSchema } from '../schemas'
@@ -9,6 +10,7 @@ const baseValidData = {
   reportingSource: ReportingOriginSource.OPS,
   title: 'Test',
   type: ReportingType.OBSERVATION,
+  validityOption: ReportingValidityOption.INDEFINITE,
   vesselName: 'MY VESSEL'
 }
 
@@ -48,7 +50,8 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
       reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
       title: 'Test',
-      type: ReportingType.OBSERVATION
+      type: ReportingType.OBSERVATION,
+      validityOption: ReportingValidityOption.INDEFINITE
     })
     expect(result.success).toBe(true)
   })
@@ -171,6 +174,86 @@ describe('CreateOrEditReportingSchema reportingSource conditional fields validat
   })
 })
 
+describe('CreateOrEditReportingSchema validityOption validation', () => {
+  it('passes when validityOption is INDEFINITE', () => {
+    const result = CreateOrEditReportingSchema.safeParse(baseValidData)
+    expect(result.success).toBe(true)
+  })
+
+  it('passes when a future expirationDate is provided without validityOption', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      expirationDate: '2999-01-01T00:00:00.000Z',
+      validityOption: undefined
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('passes when validityOption is UNTIL_NEXT_DEP without expirationDate', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      validityOption: ReportingValidityOption.UNTIL_NEXT_DEP
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('passes when validityOption is ONE_MONTH without expirationDate', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      validityOption: ReportingValidityOption.ONE_MONTH
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('fails when neither expirationDate nor validityOption is provided', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      validityOption: undefined
+    })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      const paths = result.error.issues.map(i => i.path)
+      expect(paths).toContainEqual(['validityOption'])
+      expect(result.error.issues.some(i => i.message === 'Veuillez choisir une fin de validité.')).toBe(true)
+    }
+  })
+
+  it('passes when isArchived is true even without validityOption or expirationDate', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      isArchived: true,
+      validityOption: undefined
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('fails when expirationDate is in the past', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      expirationDate: '2000-01-01T00:00:00.000Z',
+      validityOption: ReportingValidityOption.CUSTOM
+    })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      const paths = result.error.issues.map(i => i.path)
+      expect(paths).toContainEqual(['expirationDate'])
+      expect(result.error.issues.some(i => i.message === 'La date de fin de validité doit être dans le futur.')).toBe(
+        true
+      )
+    }
+  })
+
+  it('passes when isArchived is true and expirationDate is in the past', () => {
+    const result = CreateOrEditReportingSchema.safeParse({
+      ...baseValidData,
+      expirationDate: '2000-01-01T00:00:00.000Z',
+      isArchived: true,
+      validityOption: ReportingValidityOption.CUSTOM
+    })
+    expect(result.success).toBe(true)
+  })
+})
+
 describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
   const baseIUUData = {
     isIUU: true,
@@ -178,6 +261,7 @@ describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
     reportingSource: ReportingOriginSource.OPS,
     title: 'Test IUU',
     type: ReportingType.OBSERVATION,
+    validityOption: ReportingValidityOption.INDEFINITE,
     vesselName: 'MY VESSEL'
   }
 

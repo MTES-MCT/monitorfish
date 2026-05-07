@@ -45,6 +45,7 @@ export namespace Reporting {
     longitude?: undefined
     reportingDate?: undefined
     type?: undefined
+    validityOption?: undefined
     value?: undefined
   }
 
@@ -86,6 +87,7 @@ type FormBaseEditedFields = Pick<
   | 'type'
   | 'vesselId'
   | 'vesselIdentifier'
+  | 'validityOption'
   | 'vesselName'
 >
 

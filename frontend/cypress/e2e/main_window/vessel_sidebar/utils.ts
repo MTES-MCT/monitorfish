@@ -57,6 +57,7 @@ export function addAndCreateReportingWithinVesselSidebar() {
   cy.fill('Titre', 'Sortie non autorisée')
   cy.fill('Description', "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
   cy.fill('Type d’infraction et NATINF 1', ['27717'])
+  cy.fill('Choisir une échéance', 'dans 1 mois')
 
   cy.clickButton('Valider')
   cy.wait('@createReporting')

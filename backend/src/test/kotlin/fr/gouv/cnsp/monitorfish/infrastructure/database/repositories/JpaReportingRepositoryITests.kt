@@ -427,6 +427,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                     ),
                 seaFront = "MEMN",
                 dml = "DML 56",
+                validityOption = ReportingValidityOption.ONE_MONTH,
             )
 
         // When
@@ -450,6 +451,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting).infractions[0].natinfCode).isEqualTo(updatedReporting.infractions[0].natinfCode)
         assertThat((reporting).seaFront).isEqualTo(updatedReporting.seaFront)
         assertThat((reporting).dml).isEqualTo(updatedReporting.dml)
+        assertThat((reporting).validityOption).isEqualTo(ReportingValidityOption.ONE_MONTH)
     }
 
     @Test
@@ -477,6 +479,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
                 authorContact = "Jean Bon",
                 title = "Une observation",
                 description = "Une description",
+                validityOption = ReportingValidityOption.TWELVE_MONTHS,
             )
 
         // When
@@ -493,6 +496,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting).validityOption).isEqualTo(ReportingValidityOption.TWELVE_MONTHS)
     }
 
     @Test
@@ -536,6 +540,7 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat((reporting).authorContact).isEqualTo(updatedReporting.authorContact)
         assertThat((reporting).title).isEqualTo(updatedReporting.title)
         assertThat((reporting).description).isEqualTo(updatedReporting.description)
+        assertThat((reporting).validityOption).isNull()
     }
 
     @Test
@@ -548,6 +553,54 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings).hasSize(1)
         assertThat(reportings.first().first).isEqualTo(1)
         assertThat(reportings.first().second.type).isEqualTo(AlertType.POSITION_ALERT)
+    }
+
+    @Test
+    @Transactional
+    fun `findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage Should return non-alert reporting candidates`() {
+        // Given - An INFRACTION_SUSPICION reporting for vessel ABC000180832, which already has a recent
+        // acknowledged DEP logbook message (FAKE_OPERATION_121) in the test fixtures (V666.5.2)
+        val reporting =
+            jpaReportingRepository.save(
+                Reporting.InfractionSuspicion(
+                    cfr = "ABC000180832",
+                    externalMarker = "VP374069",
+                    ircs = "CG1312",
+                    vesselId = 123456,
+                    vesselName = "MARIAGE ÎLE HASARD",
+                    creationDate = ZonedDateTime.now().minusDays(1),
+                    validationDate = ZonedDateTime.now().minusHours(1),
+                    reportingDate = ZonedDateTime.now(),
+                    lastUpdateDate = ZonedDateTime.now(),
+                    flagState = CountryCode.FR,
+                    isDeleted = false,
+                    isArchived = false,
+                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    reportingSource = ReportingSource.UNIT,
+                    controlUnitId = 1,
+                    authorContact = "Jean Bon",
+                    title = "Pêche IUU",
+                    infractions =
+                        listOf(
+                            InfractionSuspicionThreat(
+                                natinfCode = 27689,
+                                threat = "Obligations déclaratives",
+                                threatCharacterization = "DEP",
+                            ),
+                        ),
+                    seaFront = "NAMO",
+                    dml = "DML 29",
+                    validityOption = ReportingValidityOption.UNTIL_NEXT_DEP,
+                    createdBy = "test@example.gouv.fr",
+                ),
+            )
+
+        // When
+        val reportingIds = jpaReportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage()
+
+        // Then
+        assertThat(reportingIds).hasSize(1)
+        assertThat(reportingIds.first()).isEqualTo(reporting.id)
     }
 
     @Test

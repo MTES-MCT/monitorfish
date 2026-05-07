@@ -56,14 +56,62 @@ class ArchiveOutdatedReportingsUTests {
         )
         given(positionAlertSpecification.findAllByIsDeletedIsFalse())
             .willReturn(listOf(DUMMY_POSITION_ALERT))
-        given(reportingRepository.findExpiredReportings()).willReturn(
-            listOf(4, 5),
-        )
+        given(reportingRepository.findExpiredReportings()).willReturn(listOf(4, 5))
+        given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
+            .willReturn(emptyList())
 
         // When
         ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
 
         // Then
         verify(reportingRepository).archiveReportings(eq(listOf(1, 3, 4, 5)))
+    }
+
+    @Test
+    fun `execute Should archive OBSERVATION and INFRACTION_SUSPICION reportings with UNTIL_NEXT_DEP after a new voyage`() {
+        // Given
+        given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(emptyList())
+        given(positionAlertSpecification.findAllByIsDeletedIsFalse()).willReturn(emptyList())
+        given(reportingRepository.findExpiredReportings()).willReturn(emptyList())
+        given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
+            .willReturn(listOf(10, 11))
+
+        // When
+        ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
+
+        // Then
+        verify(reportingRepository).archiveReportings(eq(listOf(10, 11)))
+    }
+
+    @Test
+    fun `execute Should combine alert voyages, expired, and UNTIL_NEXT_DEP non-alert reportings`() {
+        // Given
+        given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(
+            listOf(
+                Pair(
+                    1,
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = 1,
+                        natinfCode = 7059,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
+                        name = "Chalutage dans les 3 milles",
+                    ),
+                ),
+            ),
+        )
+        given(positionAlertSpecification.findAllByIsDeletedIsFalse())
+            .willReturn(listOf(DUMMY_POSITION_ALERT))
+        given(reportingRepository.findExpiredReportings()).willReturn(listOf(2))
+        given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
+            .willReturn(listOf(3, 4))
+
+        // When
+        ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
+
+        // Then
+        verify(reportingRepository).archiveReportings(eq(listOf(1, 2, 3, 4)))
     }
 }

@@ -76,6 +76,11 @@ class JpaReportingRepository(
             length = updatedReporting.length,
             gearCode = updatedReporting.gearCode,
             vesselIdentifier = updatedReporting.vesselIdentifier?.name,
+            validityOption = when (updatedReporting) {
+                is Reporting.InfractionSuspicion -> updatedReporting.validityOption?.name
+                is Reporting.Observation -> updatedReporting.validityOption?.name
+                is Reporting.Alert -> null
+            },
             flagState = updatedReporting.flagState.name,
             isFishing = updatedReporting.isFishing,
         )
@@ -255,6 +260,9 @@ class JpaReportingRepository(
         }
 
     override fun findExpiredReportings(): List<Int> = dbReportingRepository.findExpiredReportings()
+
+    override fun findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage(): List<Int> =
+        dbReportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage()
 
     override fun archiveReportings(ids: List<Int>): Int = dbReportingRepository.archiveReportings(ids)
 

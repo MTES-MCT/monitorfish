@@ -27,6 +27,7 @@ export const createReportingFromPriorNotificationForm = (vesselName: string, rep
 
   cy.fill('Titre', faker.word.words(3))
   cy.fill('Type d’infraction et NATINF 1', ['27717'])
+  cy.fill('Choisir une échéance', 'dans 1 mois')
 
   cy.clickButton('Valider')
 

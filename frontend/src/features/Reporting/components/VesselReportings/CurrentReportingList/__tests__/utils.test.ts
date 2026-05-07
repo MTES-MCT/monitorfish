@@ -42,6 +42,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
       type: ReportingType.ALERT,
       underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',
+      validityOption: undefined,
       value: {
         alertId: 1,
         dml: null,

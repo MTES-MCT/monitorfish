@@ -1,5 +1,6 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import z from 'zod'
 
@@ -27,6 +28,7 @@ export const CreateOrEditReportingSchema = z
       .string('Veuillez renseigner le titre du signalement.')
       .min(1, 'Veuillez renseigner le titre du signalement.'),
     type: z.enum(ReportingType),
+    validityOption: z.enum(ReportingValidityOption).optional(),
     vesselName: z.string().optional()
   })
   .superRefine((data, ctx) => {
@@ -110,7 +112,21 @@ export const CreateOrEditReportingSchema = z
       })
     }
 
-    if (data.expirationDate && !data.isArchived && !customDayjs().isBefore(data.expirationDate)) {
+    if (!data.isArchived && !data.expirationDate && !data.validityOption) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Veuillez choisir une fin de validité.',
+        path: ['validityOption']
+      })
+    }
+
+    const hasCustomDate =
+      !!data.expirationDate &&
+      (!data.validityOption ||
+        data.validityOption === ReportingValidityOption.CUSTOM ||
+        data.validityOption === ReportingValidityOption.ONE_MONTH ||
+        data.validityOption === ReportingValidityOption.TWELVE_MONTHS)
+    if (hasCustomDate && !data.isArchived && !customDayjs().isBefore(data.expirationDate!)) {
       ctx.addIssue({
         code: 'custom',
         message: 'La date de fin de validité doit être dans le futur.',

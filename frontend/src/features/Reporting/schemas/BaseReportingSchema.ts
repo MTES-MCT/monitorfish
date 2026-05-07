@@ -1,5 +1,6 @@
 import { InfractionSchema } from '@features/Infraction/schemas/InfractionSchema'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from 'types'
 import z from 'zod'
@@ -29,6 +30,7 @@ export const BaseReportingSchema = z.strictObject({
   type: z.enum(ReportingType),
   underCharter: booleanOrUndefined,
   validationDate: stringOrUndefined,
+  validityOption: z.union([z.enum(ReportingValidityOption), z.undefined()]),
   vesselId: numberOrUndefined,
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()]),
   vesselName: stringOrUndefined

@@ -36,6 +36,10 @@ export const getNextMembershipsFromFile = async (file: File): Promise<ProducerOr
 
   const rowsAsArray: string[][] = utils.sheet_to_json<string[]>(worksheet, { header: 1 }).slice(1)
 
+  if (rowsAsArray.length === 0) {
+    throw new Error(EMPTY_CSV_ERROR)
+  }
+
   return rowsAsArray.map(row => ({
     internalReferenceNumber: getFieldOrThrow(row, 0),
     joiningDate: getFieldOrThrow(row, 8),

@@ -21,16 +21,19 @@ export function FilterBar() {
       return
     }
 
-    await dispatch(updateProducerOrganizationMemberships(fileType.blobFile as File))
-    dispatch(
-      addMainWindowBanner({
-        children: 'Mise à jour des données effectuée',
-        closingDelay: 6000,
-        isClosable: true,
-        level: Level.SUCCESS,
-        withAutomaticClosing: true
-      })
-    )
+    const success = await dispatch(updateProducerOrganizationMemberships(fileType.blobFile as File))
+
+    if (success) {
+      dispatch(
+        addMainWindowBanner({
+          children: 'Mise à jour des données effectuée',
+          closingDelay: 6000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        })
+      )
+    }
   }
 
   const updateSearchQuery = useCallback(

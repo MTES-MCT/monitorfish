@@ -17,7 +17,6 @@ export function buildAISVesselFeature(vessel: AISVessel.AISVessel): AISVessel.AI
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */
   const feature = new Feature({
-    cfr: vessel.cfr,
     coordinates: vessel.coordinates,
     course: vessel.course,
     dateTime: vessel.dateTime,

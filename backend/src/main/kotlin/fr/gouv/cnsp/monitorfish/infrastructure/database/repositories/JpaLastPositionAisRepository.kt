@@ -13,4 +13,9 @@ class JpaLastPositionAisRepository(
         dbLastPositionAisRepository
             .findAll()
             .map { it.toLastPositionAis() }
+
+    override fun findByIsAtPort(isAtPort: Boolean): List<LastPositionAIS> =
+        dbLastPositionAisRepository
+            .findByIsAtPort(isAtPort)
+            .map { it.toLastPositionAis() }
 }

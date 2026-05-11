@@ -60,4 +60,26 @@ class JpaLastPositionAisRepositoryITests : AbstractDBTests() {
             assertThat(position.flagState).isNotEqualTo(CountryCode.UNDEFINED)
         }
     }
+
+    @Test
+    @Transactional
+    fun `findByIsAtPort Should return only vessels at port when isAtPort is true`() {
+        // When
+        val positions = jpaLastPositionAisRepository.findByIsAtPort(true)
+
+        // Then
+        assertThat(positions).isNotEmpty()
+        assertThat(positions).allSatisfy { assertThat(it.isAtPort).isTrue() }
+    }
+
+    @Test
+    @Transactional
+    fun `findByIsAtPort Should return only vessels at sea when isAtPort is false`() {
+        // When
+        val positions = jpaLastPositionAisRepository.findByIsAtPort(false)
+
+        // Then
+        assertThat(positions).isNotEmpty()
+        assertThat(positions).allSatisfy { assertThat(it.isAtPort).isFalse() }
+    }
 }

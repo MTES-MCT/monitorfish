@@ -1,23 +1,20 @@
 import { z } from 'zod'
 
-import { numberOrUndefined, stringOrUndefined } from '../../../types'
-
 export const AISVesselSchema = z.strictObject({
-  cfr: stringOrUndefined,
   coordinates: z.array(z.number()),
-  course: numberOrUndefined,
+  course: z.number().optional(),
   dateTime: z.string(),
-  externalMarker: stringOrUndefined,
+  externalMarker: z.string().optional(),
   flagState: z.string(),
-  imo: stringOrUndefined,
-  ircs: stringOrUndefined,
+  imo: z.string().optional(),
+  ircs: z.string().optional(),
   isAtPort: z.boolean(),
   lastPositionSentAt: z.number(),
   latitude: z.number(),
-  length: numberOrUndefined,
+  length: z.number().optional(),
   longitude: z.number(),
   mmsi: z.number(),
-  speed: numberOrUndefined,
+  speed: z.number().optional(),
   vesselFeatureId: z.string(),
-  vesselName: stringOrUndefined
+  vesselName: z.string().optional()
 })

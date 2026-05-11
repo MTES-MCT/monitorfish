@@ -21,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOr
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
@@ -1140,7 +1141,7 @@ class VesselControllerITests {
                 isAtPort = false,
                 imo = "9876543",
             )
-        given(getLastPositionsAIS.execute()).willReturn(listOf(aisPosition))
+        given(getLastPositionsAIS.execute(anyOrNull())).willReturn(listOf(aisPosition))
 
         // When
         api
@@ -1152,7 +1153,7 @@ class VesselControllerITests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].mmsi", equalTo(aisPosition.mmsi.toInt())))
-            .andExpect(jsonPath("$[0].cfr", equalTo(aisPosition.cfr)))
+            .andExpect(jsonPath("$[0].imo", equalTo(aisPosition.imo)))
             .andExpect(jsonPath("$[0].ircs", equalTo(aisPosition.ircs)))
             .andExpect(jsonPath("$[0].vesselName", equalTo(aisPosition.vesselName)))
             .andExpect(jsonPath("$[0].flagState", equalTo(aisPosition.flagState.toString())))
@@ -1162,6 +1163,33 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].course", equalTo(aisPosition.course)))
             .andExpect(jsonPath("$[0].isAtPort", equalTo(aisPosition.isAtPort)))
             .andExpect(jsonPath("$[0].length", equalTo(aisPosition.length)))
+    }
+
+    @Test
+    fun `Should get AIS last positions filtered by vesselLocation`() {
+        // Given
+        val aisPosition =
+            LastPositionAIS(
+                mmsi = 123456789L,
+                latitude = 47.5,
+                longitude = -2.3,
+                dateTime = ZonedDateTime.now(),
+                isAtPort = true,
+                flagState = CountryCode.FR,
+            )
+        given(getLastPositionsAIS.execute(VesselLocation.PORT)).willReturn(listOf(aisPosition))
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/ais?vesselLocation=PORT")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].mmsi", equalTo(aisPosition.mmsi.toInt())))
+            .andExpect(jsonPath("$[0].isAtPort", equalTo(true)))
     }
 
     @Test

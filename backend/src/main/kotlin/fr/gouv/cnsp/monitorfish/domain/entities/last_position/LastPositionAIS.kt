@@ -5,8 +5,6 @@ import java.time.ZonedDateTime
 
 data class LastPositionAIS(
     val mmsi: Long,
-    val vesselId: Int? = null,
-    val cfr: String? = null,
     val ircs: String? = null,
     val externalMarker: String? = null,
     val vesselName: String? = null,

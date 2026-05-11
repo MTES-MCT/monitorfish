@@ -12,10 +12,6 @@ data class LastPositionAisEntity(
     @Id
     @Column(name = "mmsi")
     val mmsi: Long,
-    @Column(name = "vessel_id")
-    val vesselId: Int? = null,
-    @Column(name = "cfr")
-    val internalReferenceNumber: String? = null,
     @Column(name = "ircs")
     val ircs: String? = null,
     @Column(name = "external_immatriculation")
@@ -48,8 +44,6 @@ data class LastPositionAisEntity(
     fun toLastPositionAis() =
         LastPositionAIS(
             mmsi = mmsi,
-            vesselId = vesselId,
-            cfr = internalReferenceNumber,
             ircs = ircs,
             externalMarker = externalReferenceNumber,
             vesselName = vesselName,

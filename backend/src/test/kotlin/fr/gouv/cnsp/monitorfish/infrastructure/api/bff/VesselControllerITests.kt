@@ -1124,8 +1124,6 @@ class VesselControllerITests {
         val aisPosition =
             LastPositionAIS(
                 mmsi = 123456789L,
-                vesselId = null,
-                cfr = "FR123456789",
                 ircs = "ABCD",
                 externalMarker = "EXT01",
                 vesselName = "BELLE DU NORD",

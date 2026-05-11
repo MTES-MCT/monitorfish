@@ -15,15 +15,32 @@ export function AISVesselsButton() {
   }
 
   return (
-    <AISButton Icon={areAISVesselsDisplayed ? Icon.Display : Icon.Hide} onClick={toggleDisplayAISVessels}>
+    <AISButton
+      $isActive={areAISVesselsDisplayed}
+      Icon={areAISVesselsDisplayed ? Icon.Display : Icon.Hide}
+      onClick={toggleDisplayAISVessels}
+    >
       AIS
     </AISButton>
   )
 }
 
-const AISButton = styled(Button)`
+const AISButton = styled(Button)<{
+  $isActive: boolean
+}>`
   flex-shrink: 0;
   height: 40px;
+
+  ${p => {
+    const activeProperties = p.$isActive
+      ? `
+      background: ${p.theme.color.blueGray};
+      border-color: ${p.theme.color.blueGray};
+    `
+      : ''
+
+    return activeProperties
+  }}
 
   .Element-IconBox {
     margin-right: 4px;

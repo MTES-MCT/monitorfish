@@ -139,7 +139,7 @@ export function MapButtons() {
       </LeftMenu>
       <TopBar $top={top}>
         <VesselLoader />
-        <AISVesselsButton />
+        {import.meta.env.FRONTEND_AIS_VESSELS_ENABLED === 'true' && <AISVesselsButton />}
         {isVesselSearchDisplayed && <VesselSidebarHeader />}
         {isVesselSidebarOpen && <VesselSidebar />}
       </TopBar>

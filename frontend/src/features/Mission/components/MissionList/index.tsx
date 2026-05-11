@@ -17,7 +17,7 @@ import { useGetFilteredMissionsQuery } from './hooks/useGetFilteredMissionsQuery
 import { missionListActions } from './slice'
 import { EmptyCardTable } from '../../../../ui/card-table/EmptyCardTable'
 import { ExportActivityReportsDialog } from '../../../ActivityReport/components/ExportActivityReportsDialog'
-import { fitToExtent } from '../../../Map/slice'
+import { fitMapToExtent } from '../../../Map/useCases/animateMap'
 import { SubMenu } from '../../../SideWindow/SubMenu'
 import { Mission } from '../../mission.types'
 import { addMission } from '../../useCases/addMission'
@@ -89,7 +89,7 @@ export function MissionList() {
       return
     }
 
-    dispatch(fitToExtent(extent))
+    fitMapToExtent(extent)
   }
 
   return (

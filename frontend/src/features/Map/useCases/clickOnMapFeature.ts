@@ -91,7 +91,7 @@ export const clickOnMapFeature =
 
       if (mapClick.ctrlKeyPressed) {
         // Vessel dispatches can only be called from the main app (map)
-        ;(dispatch as MainAppDispatch)(showVesselTrack(clickedVessel, true, null))
+        ;(dispatch as MainAppDispatch)(showVesselTrack(clickedVessel, null))
       } else {
         ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false))
       }

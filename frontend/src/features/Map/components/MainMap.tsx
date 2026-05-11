@@ -16,7 +16,6 @@ import { BaseMap } from './BaseMap'
 import { ControlOverlay } from './ControlOverlay'
 import { LayerDetailsBox } from './LayerDetailsBox'
 import MapHistory from './MapHistory'
-import { MapVesselClickAndAnimationHandler } from './MapVesselClickAndAnimationHandler'
 import { RightClickMapMenu } from './RightClickMapMenu'
 import { SelectedControlOverlay } from './SelectedControlOverlay'
 import { TrackTypeOverlay } from './TrackTypeOverlay'
@@ -106,7 +105,6 @@ export function MainMap() {
         showedLayers={showedLayers}
       />
       <AdministrativeLayers />
-      <MapVesselClickAndAnimationHandler />
       <MapHistory
         historyMoveTrigger={historyMoveTrigger}
         setShouldUpdateView={setShouldUpdateView}

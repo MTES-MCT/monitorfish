@@ -1,5 +1,5 @@
 import { InteractionListener, OpenLayersGeometryType } from '@features/Map/constants'
-import { fitToExtent } from '@features/Map/slice'
+import { fitMapToExtent } from '@features/Map/useCases/animateMap'
 import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExtent'
 import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
@@ -74,7 +74,7 @@ export function FormikCoordinatesPicker({ isLight, isRequired }: FormikCoordinat
     }
 
     const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
-    dispatch(fitToExtent(bufferedExtent))
+    fitMapToExtent(bufferedExtent)
   }
 
   const addOrEditCoordinates = useCallback(async () => {

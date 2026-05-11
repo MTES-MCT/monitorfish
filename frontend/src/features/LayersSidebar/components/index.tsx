@@ -79,7 +79,9 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   transition: all 0.3s;
 `
 
-const Sidebar = styled(MapToolBox)``
+const Sidebar = styled(MapToolBox)`
+  top: 0;
+`
 
 const Layers = styled.div<{
   $hasHealthcheckTextWarning: boolean

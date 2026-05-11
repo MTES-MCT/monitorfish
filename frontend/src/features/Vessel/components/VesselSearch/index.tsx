@@ -3,12 +3,14 @@ import { Accent, Icon, IconButton, Link, useClickOutsideEffect, useFieldControl 
 import Fuse from 'fuse.js'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
-import { VESSEL_SEARCH_OPTIONS } from './constants'
+import { AIS_VESSEL_SEARCH_OPTIONS, VESSEL_SEARCH_OPTIONS } from './constants'
 import { enrichWithVesselIdentifierIfUndefined } from './utils'
 import { VesselSearchResult } from './VesselSearchResult'
 import { searchVessel } from '../../useCases/searchVessels'
 
+import type { AISVessel } from '../../AISVessel.types'
 import type { Vessel } from '../../Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { ChangeEvent, InputHTMLAttributes, MutableRefObject } from 'react'
@@ -16,37 +18,45 @@ import type { Promisable } from 'type-fest'
 
 export type VesselSearchProps = Readonly<
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'onChange' | 'value'> & {
+    aisVessels?: AISVessel.AISVessel[] | undefined
     baseRef?: MutableRefObject<HTMLDivElement | undefined> | undefined
-    displayedErrorKey: DisplayedErrorKey
+    displayedErrorKey?: DisplayedErrorKey | undefined
+    extendedWidth?: number | undefined
     hasError?: boolean | undefined
+    isExtended?: boolean | undefined
     isVesselIdRequiredFromResults?: boolean
     onBlur?: () => Promisable<void>
-    onChange: (nextVessel: Vessel.VesselIdentity | undefined) => Promisable<void>
+    onChange: (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => Promisable<void>
     onFocus?: () => Promisable<void>
     onVesselLinkClick?: (vessel: Vessel.VesselIdentity) => Promisable<void>
     shouldCloseOnClickOutside?: boolean
+    shouldResetInputOnBlur?: boolean | undefined
     shouldResetSelectedVesselOnChange?: boolean
     value?: Vessel.VesselIdentity | undefined
-    vesselIdentitiesFromLastPositions?: Vessel.VesselIdentity[]
+    vmsVessels?: Vessel.VesselIdentity[]
     withLastSearchResults?: boolean
   }
 >
 
 export function VesselSearch({
+  aisVessels,
   baseRef,
   className,
-  displayedErrorKey,
+  displayedErrorKey = undefined,
+  extendedWidth,
   hasError,
+  isExtended = false,
   isVesselIdRequiredFromResults = false,
   onBlur,
   onChange,
   onFocus,
   onVesselLinkClick,
   shouldCloseOnClickOutside,
+  shouldResetInputOnBlur = false,
   shouldResetSelectedVesselOnChange = false,
   style,
   value,
-  vesselIdentitiesFromLastPositions,
+  vmsVessels,
   withLastSearchResults = false,
   ...inputNativeProps
 }: VesselSearchProps) {
@@ -64,16 +74,29 @@ export function VesselSearch({
   const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
   const [isOpen, setIsOpen] = useState(false)
 
-  const fuse = useMemo(
-    () =>
-      vesselIdentitiesFromLastPositions
-        ? new Fuse(vesselIdentitiesFromLastPositions, VESSEL_SEARCH_OPTIONS)
-        : undefined,
-    [vesselIdentitiesFromLastPositions]
+  const fuse = useMemo(() => (vmsVessels ? new Fuse(vmsVessels, VESSEL_SEARCH_OPTIONS) : undefined), [vmsVessels])
+
+  const aisFuse = useMemo(
+    () => (aisVessels ? new Fuse(aisVessels, AIS_VESSEL_SEARCH_OPTIONS) : undefined),
+    [aisVessels]
+  )
+
+  const [foundAISVessels, setFoundAISVessels] = useState<AISVessel.AISVessel[]>([])
+
+  const handleAISVesselChange = useCallback(
+    (aisVessel: AISVessel.AISVessel) => {
+      setFoundAISVessels([])
+      setFoundVessels([])
+      setInputValue('')
+      setIsOpen(false)
+      onChange(aisVessel, true)
+    },
+    [onChange]
   )
 
   const clean = useCallback(async () => {
     setFoundVessels([])
+    setFoundAISVessels([])
     setInputValue('')
     setIsOpen(false)
 
@@ -96,25 +119,29 @@ export function VesselSearch({
     [onChange, handleOnChange, shouldResetSelectedVesselOnChange]
   )
 
+  const runSearch = useDebouncedCallback(async (searchQuery: string) => {
+    if (searchQuery.length <= 1) {
+      setFoundVessels([])
+      setFoundAISVessels([])
+
+      return
+    }
+
+    const nextFoundVessels = await dispatch(
+      searchVessel(searchQuery, isVesselIdRequiredFromResults, fuse, displayedErrorKey)
+    )
+
+    setFoundVessels(nextFoundVessels)
+    setFoundAISVessels(aisFuse ? aisFuse.search(searchQuery, { limit: 10 }).map(r => r.item) : [])
+  }, 200)
+
   const handleChange = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       const searchQuery = event.target.value
-
       setInputValue(searchQuery)
-
-      if (searchQuery.length <= 1) {
-        setFoundVessels([])
-
-        return
-      }
-
-      const nextFoundVessels = await dispatch(
-        searchVessel(searchQuery, isVesselIdRequiredFromResults, fuse, displayedErrorKey)
-      )
-
-      setFoundVessels(nextFoundVessels)
+      runSearch(searchQuery)
     },
-    [dispatch, displayedErrorKey, fuse, isVesselIdRequiredFromResults]
+    [runSearch]
   )
 
   const handleClickOutside = useCallback(() => {
@@ -124,8 +151,14 @@ export function VesselSearch({
 
     setIsOpen(false)
 
+    if (shouldResetInputOnBlur) {
+      setInputValue('')
+      setFoundVessels([])
+      setFoundAISVessels([])
+    }
+
     onBlur?.()
-  }, [onBlur, shouldCloseOnClickOutside])
+  }, [onBlur, shouldCloseOnClickOutside, shouldResetInputOnBlur])
 
   const handleFocus = () => {
     setIsOpen(true)
@@ -148,7 +181,13 @@ export function VesselSearch({
   useClickOutsideEffect(wrapperRef, handleClickOutside, baseRef?.current)
 
   return (
-    <Wrapper ref={wrapperRef} className={className} style={style}>
+    <Wrapper
+      ref={wrapperRef}
+      $extendedWidth={extendedWidth}
+      $isExtended={isExtended}
+      className={className}
+      style={style}
+    >
       <InputWrapper>
         <Input
           ref={inputRef}
@@ -188,7 +227,9 @@ export function VesselSearch({
       </InputWrapper>
       {isOpen && (
         <VesselSearchResult
+          foundAISVessels={foundAISVessels}
           foundVessels={foundVessels}
+          onAISChange={handleAISVesselChange}
           onSelect={selectVessel}
           searchQuery={inputValue}
           withLastSearchResults={withLastSearchResults}
@@ -198,11 +239,14 @@ export function VesselSearch({
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $extendedWidth: number | undefined
+  $isExtended: boolean
+}>`
   box-sizing: border-box;
   transition: all 0.7s;
   position: relative;
-  width: 320px;
+  width: ${p => (p.$isExtended && p.$extendedWidth !== undefined ? p.$extendedWidth : 320)}px;
 
   * {
     box-sizing: border-box;

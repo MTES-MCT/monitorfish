@@ -2,12 +2,11 @@ import { StyledTransparentButton, Title } from '@features/LayersSidebar/componen
 import { LayerType } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CustomZone } from './CustomZone'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIconButton } from '../../../commonStyles/icons/ChevronIconButton'
@@ -19,13 +18,12 @@ import { showOrHide } from '../../useCases/showOrHide'
 export type CustomZonesProps = Readonly<{
   hideLayersListWhenSearching?: boolean
 }>
-
 export function CustomZones({ hideLayersListWhenSearching = false }: CustomZonesProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
 
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
-  const [isOpened, setIsOpened] = useState(false)
+  const isOpened = !hideLayersListWhenSearching && layersSidebarOpenedLayerType === LayerType.CUSTOM
   const { isOpened: isListOpened, isRendered } = useDisplayMapBox(isOpened)
 
   const zones = useMainAppSelector(state => state.customZone.zones)
@@ -36,16 +34,6 @@ export function CustomZones({ hideLayersListWhenSearching = false }: CustomZones
     dispatch(initDragAndDrop(isSuperUser))
     dispatch(initLayer())
   }, [dispatch, isSuperUser])
-
-  useEffect(() => {
-    setIsOpened(layersSidebarOpenedLayerType === LayerType.CUSTOM)
-  }, [layersSidebarOpenedLayerType, setIsOpened])
-
-  useEffect(() => {
-    if (hideLayersListWhenSearching) {
-      setIsOpened(false)
-    }
-  }, [hideLayersListWhenSearching])
 
   const onToggleShow = useCallback(
     (uuid: string) => {
@@ -114,7 +102,7 @@ const List = styled.ul<{
   overflow-x: hidden;
   max-height: 48vh;
   height: ${p => (p.$isOpened ? 36 * p.$zonesLength + 110 : 0)}px;
-  background: ${COLORS.white};
+  background: ${p => p.theme.color.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;

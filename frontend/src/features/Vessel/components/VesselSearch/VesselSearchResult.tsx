@@ -6,17 +6,38 @@ import styled from 'styled-components'
 
 import { VesselSearchResultItem } from './VesselSearchResultItem'
 
+import type { AISVessel } from '../../AISVessel.types'
 import type { Vessel } from '../../Vessel.types'
 
 type VesselSearchResultProps = Readonly<{
+  foundAISVessels?: AISVessel.AISVessel[] | undefined
   foundVessels: Vessel.VesselIdentity[]
+  onAISChange?: ((vessel: AISVessel.AISVessel) => void) | undefined
   onSelect: (vessel: Vessel.VesselIdentity) => void
   searchQuery: string | undefined
   withLastSearchResults: boolean
 }>
 
+function aisVesselToVesselIdentity(v: AISVessel.AISVessel): Vessel.VesselIdentity {
+  return {
+    beaconNumber: undefined,
+    districtCode: undefined,
+    externalReferenceNumber: undefined,
+    flagState: v.flagState,
+    internalReferenceNumber: undefined,
+    ircs: v.ircs,
+    mmsi: String(v.mmsi),
+    vesselId: undefined,
+    vesselIdentifier: undefined,
+    vesselLength: undefined,
+    vesselName: v.vesselName
+  }
+}
+
 export function VesselSearchResult({
+  foundAISVessels,
   foundVessels,
+  onAISChange,
   onSelect,
   searchQuery,
   withLastSearchResults
@@ -54,6 +75,22 @@ export function VesselSearchResult({
                 onClick={onSelect}
                 searchQuery={searchQuery}
                 vessel={vessel}
+              />
+            ))}
+          </List>
+        </Results>
+      )}
+      {!!foundAISVessels?.length && (
+        <Results>
+          <List>
+            {foundAISVessels.map(aisVessel => (
+              <VesselSearchResultItem
+                key={aisVessel.vesselFeatureId}
+                baseUrl={baseUrl}
+                // eslint-disable-next-line react/jsx-no-bind
+                onClick={_ => onAISChange?.(aisVessel)}
+                searchQuery={searchQuery}
+                vessel={aisVesselToVesselIdentity(aisVessel)}
               />
             ))}
           </List>

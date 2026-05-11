@@ -10,6 +10,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import type { EditedAlertSpecification } from '@features/Alert/types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 
 const baseUrl = window.location.origin
 
@@ -23,11 +24,15 @@ export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const [updatedVessels, setUpdatedVessels] = useState<Vessel.VesselIdentity[]>(vessels)
 
-  const handleAddVessel = (nextVessel: Vessel.VesselIdentity | undefined) => {
-    assertNotNullish(nextVessel?.vesselId)
+  const handleAddVessel = (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+    if (isAIS) {
+      return
+    }
+    const vessel = nextVessel as Vessel.VesselIdentity | undefined
+    assertNotNullish(vessel?.vesselId)
 
-    helper.setValue(input.value.concat(nextVessel?.vesselId))
-    setUpdatedVessels(previousVessels => previousVessels.concat(nextVessel))
+    helper.setValue(input.value.concat(vessel.vesselId))
+    setUpdatedVessels(previousVessels => previousVessels.concat(vessel))
   }
 
   const handleDeleteCriteria = () => {

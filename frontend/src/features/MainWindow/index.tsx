@@ -19,7 +19,6 @@ import { DrawLayerModal } from '../Draw/components/DrawModal'
 import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
-import { VesselLoader } from '../Vessel/components/VesselLoader'
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -71,7 +70,6 @@ export function MainWindow() {
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
 
-        <VesselLoader />
         <APIWorker />
 
         <IUUReportingMapForm />

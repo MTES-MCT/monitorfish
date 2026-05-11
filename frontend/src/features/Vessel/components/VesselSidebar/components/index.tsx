@@ -90,7 +90,7 @@ const Wrapper = styled(MapToolBox)`
   padding: 0;
   top: 40px;
   transition:
-    all 0.5s,
+    all 0.3s,
     right 0.3s,
     opacity 0.3s;
   width: 500px;

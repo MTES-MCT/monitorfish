@@ -3,6 +3,8 @@ import { layerActions } from '@features/Map/layer.slice'
 import { ReportingOverlay } from '@features/Reporting/components/ReportingOverlay'
 import { SelectedReportingOverlay } from '@features/Reporting/components/SelectedReportingOverlay'
 import { ReportingLayer } from '@features/Reporting/layers/ReportingLayer'
+import { AISVesselCardOverlay } from '@features/Vessel/components/AISVesselCardOverlay'
+import { AISVesselsLayer } from '@features/Vessel/layers/AISVesselsLayer'
 import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -143,6 +145,7 @@ export function MainMap() {
 
       <VesselsLabelsLayer mapMovingAndZoomEvent={mapMovingAndZoomEvent} />
       <VesselsLayer />
+      <AISVesselsLayer />
       {areVesselsDisplayed && <VesselEstimatedPositionLayer />}
       {areVesselsDisplayed && <VesselSelectedLayer />}
       {areVesselsDisplayed && <VesselAlertLayer />}
@@ -151,6 +154,7 @@ export function MainMap() {
       {areVesselsDisplayed && <VesselInfractionSuspicionLayer />}
       <VesselsTracksLayerMemoized />
       <VesselCardOverlay feature={hoveredFeature} />
+      <AISVesselCardOverlay feature={hoveredFeature} />
       <TrackTypeOverlay feature={hoveredFeature} />
       <VesselEstimatedPositionOverlay feature={hoveredFeature} />
       <VesselTrackOverlay feature={hoveredFeature} />

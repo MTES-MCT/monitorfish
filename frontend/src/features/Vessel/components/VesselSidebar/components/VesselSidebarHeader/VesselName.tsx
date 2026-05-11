@@ -88,6 +88,7 @@ const Wrapper = styled.div<{
   margin: 0;
   background-color: ${COLORS.charcoal};
   border: none;
+  border-bottom: 1px ${p => p.theme.color.lightGray} solid;
   border-radius: 0;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;

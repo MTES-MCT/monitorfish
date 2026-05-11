@@ -30,6 +30,18 @@ context('VesselSearch', () => {
     // Search a vessel in the vessel table
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('MALOTRU')
     cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).eq(0).contains('MALOTRU')
+
+    // Enable AIS layer and search for an AIS-only vessel
+    cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
+    cy.clickButton('AIS')
+    cy.wait('@aisVessels')
+    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).clear().type('DANIEL TILLMAN')
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).contains('DANIEL TILLMAN')
+
+    // Clicking an AIS result zooms the map but does not open the sidebar
+    cy.get('*[data-cy^="vessel-search-item"]', { timeout: 10000 }).contains('DANIEL TILLMAN').click()
+    cy.get('*[data-cy^="vessel-sidebar"]').should('not.exist')
+    cy.get('*[data-cy^="VesselSearch-input"]').should('have.value', '')
   })
 
   it('Vessel history Should be shown When having previously searched vessels', () => {

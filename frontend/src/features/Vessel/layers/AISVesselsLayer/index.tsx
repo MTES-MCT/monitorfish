@@ -18,16 +18,20 @@ function UnmemoizedAISVesselsLayer() {
   const dispatch = useMainAppDispatch()
   const areAISVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areAISVesselsDisplayed)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
+  const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
     state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
   )
 
+  const vesselLocation =
+    listFilterValues.vesselsLocation?.length === 1 ? listFilterValues.vesselsLocation[0] : undefined
+
   const {
     data: vessels,
     error,
     isError
-  } = useGetAISVesselsQuery(undefined, {
+  } = useGetAISVesselsQuery(vesselLocation, {
     pollingInterval: FIVE_MINUTES
   })
 

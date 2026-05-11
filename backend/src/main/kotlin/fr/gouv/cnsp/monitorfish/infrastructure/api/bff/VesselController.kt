@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
@@ -58,8 +59,10 @@ class VesselController(
 
     @GetMapping("/ais")
     @Operation(summary = "Get all AIS last positions")
-    fun getVessels(): List<LastPositionAISDataOutput> {
-        val lastPositionsAIS = getLastPositionsAIS.execute()
+    fun getVessels(
+        @RequestParam(required = false) vesselLocation: VesselLocation?,
+    ): List<LastPositionAISDataOutput> {
+        val lastPositionsAIS = getLastPositionsAIS.execute(vesselLocation)
 
         return lastPositionsAIS.map {
             LastPositionAISDataOutput.fromLastPositionAIS(it)

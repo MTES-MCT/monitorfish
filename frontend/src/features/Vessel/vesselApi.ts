@@ -19,6 +19,7 @@ import type { Meta } from '@api/BackendApi.types'
 import type { VesselReportings } from '@features/Reporting/types'
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
+import type { VesselLocation } from '@features/Vessel/types/vessel'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -44,8 +45,8 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         parseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
     }),
 
-    getAISVessels: builder.query<AISVessel.AISVessel[], void>({
-      query: () => `/vessels/ais`,
+    getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({
+      query: vesselLocation => getUrlOrPathWithQueryParams('/vessels/ais', { vesselLocation }),
       transformResponse: (baseQueryReturnValue: AISVessel.AISVessel[]) =>
         parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
     }),

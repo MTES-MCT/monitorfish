@@ -1,13 +1,16 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPositionAIS
 import java.time.ZonedDateTime
 
+// We remove null fields from the payload to reduce JSON size
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class LastPositionAISDataOutput(
     val mmsi: Long,
-    val cfr: String? = null,
+    val imo: String? = null,
     val ircs: String? = null,
     val externalMarker: String? = null,
     val vesselName: String? = null,
@@ -26,12 +29,12 @@ class LastPositionAISDataOutput(
 ) {
     companion object {
         fun getVesselFeatureId(position: LastPositionAIS): String =
-            "AIS_VESSELS_POINTS:${position.mmsi}/${position.cfr ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalMarker ?: "UNKNOWN"}"
+            "AIS_VESSELS_POINTS:${position.mmsi}/${position.imo ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalMarker ?: "UNKNOWN"}"
 
         fun fromLastPositionAIS(lastPosition: LastPositionAIS): LastPositionAISDataOutput =
             LastPositionAISDataOutput(
                 mmsi = lastPosition.mmsi,
-                cfr = lastPosition.cfr,
+                imo = lastPosition.imo,
                 ircs = lastPosition.ircs,
                 externalMarker = lastPosition.externalMarker,
                 vesselName = lastPosition.vesselName,

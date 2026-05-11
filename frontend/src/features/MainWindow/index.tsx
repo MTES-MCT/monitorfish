@@ -1,3 +1,4 @@
+import { EnvironmentBox, getEnvironmentBorderStyle } from '@components/EnvironmentBox'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
@@ -5,6 +6,7 @@ import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { trackEvent } from '@hooks/useTracking'
+import { getEnvironmentData } from '@utils/getEnvironmentData'
 import { useCallback, useEffect } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -20,6 +22,8 @@ import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadba
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
 import { VesselLoader } from '../Vessel/components/VesselLoader'
+
+const { isEnvironmentBoxVisible } = getEnvironmentData()
 
 export function MainWindow() {
   const isControlUnitDialogDisplayed = useMainAppSelector(
@@ -59,8 +63,10 @@ export function MainWindow() {
 
       <PreviewFilteredVessels />
 
-      <Wrapper id="mainWindowWrapper">
+      <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible} id="mainWindowWrapper">
+        <EnvironmentBox />
         <BannerStack />
+
         <VesselFiltersHeadband />
 
         <LegacyRsuiteComponentsWrapper>
@@ -83,9 +89,12 @@ export function MainWindow() {
   )
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  $isEnvironmentBoxVisible: boolean
+}>`
+  ${p => getEnvironmentBorderStyle(p.$isEnvironmentBoxVisible)}
   font-size: 13px;
   overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+  width: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 8px)' : '100%')};
+  height: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 10px)' : '100%')};
 `

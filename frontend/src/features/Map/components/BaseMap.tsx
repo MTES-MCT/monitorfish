@@ -107,12 +107,12 @@ export function BaseMap({
 
 const MapWrapper = styled.div`
   display: flex;
-  flex: 1;
+  height: 100%;
 `
 
 const MapContainer = styled.div`
   background-color: #d4dadc;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

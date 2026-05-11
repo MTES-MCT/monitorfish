@@ -71,9 +71,11 @@ export const vesselGroupActions = vesselGroupSlice.actions
 
 export const vesselGroupReducer = vesselGroupSlice.reducer
 
+const selectAllVesselGroupsQuery = vesselGroupApi.endpoints.getAllVesselGroups.select()
+
 export const selectVesselGroupsIdsFiltered = createSelector(
   [
-    (state: MainRootState) => vesselGroupApi.endpoints.getAllVesselGroups.select()(state),
+    (state: MainRootState) => selectAllVesselGroupsQuery(state),
     (state: MainRootState) => state.vesselGroup.filteredGroupType,
     (state: MainRootState) => state.vesselGroup.filteredSharing,
     (state: MainRootState) => state.vesselGroup.vesselGroupsIdsPinned

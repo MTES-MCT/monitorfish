@@ -220,14 +220,14 @@ const BackofficeContainer = styled.div`
   position: relative;
   background-color: ${p => p.theme.color.white};
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `
 
 const RegulatoryZonePanel = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-height: 100vh;
+  max-height: 100%;
   max-width: 50%;
   background-color: ${p => p.theme.color.white};
 `

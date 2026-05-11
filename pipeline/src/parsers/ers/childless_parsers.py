@@ -100,7 +100,7 @@ def parse_gea(gea):
 def parse_src(src):
     return {
         "landing_datetime_utc": make_datetime(src.get("DL")),
-        "landing_port": src.get("PO"),
+        "landing_port_code": src.get("PO"),
     }
 
 
@@ -132,8 +132,9 @@ def parse_cst(cst):
         "fishSize": cst.get("SF"),
     }
 
-    if "SPE" in children:
-        assert len(children["SPE"]) == 1
-        data["species"] = parse_spe(children["SPE"][0])
+    assert "SPE" in children
+    assert len(children["SPE"]) == 1
+    data = {**data, **parse_spe(children["SPE"][0])}
+    data = remove_nones_from_dict(data)
 
     return data

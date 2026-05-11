@@ -32,7 +32,7 @@ def _make_datetime(date_str: Optional[str]):
     return make_datetime(date_str)
 
 
-def parse_product(product: ET.Element) -> dict:
+def parse_product(product: ET.Element, currency: str) -> dict:
     return {
         "species": _get(product, './ram:SpeciesCode[@listID="FAO_SPECIES"]'),
         "weight": try_float(_get(product, './ram:WeightMeasure[@unitCode="KGM"]')),
@@ -51,6 +51,7 @@ def parse_product(product: ET.Element) -> dict:
         "totalPrice": try_float(
             _get(product, "./ram:TotalSalesPrice/ram:ChargeAmount")
         ),
+        "currency": currency,
         "sizeCategory": _get(
             product,
             './ram:SpecifiedSizeDistribution/ram:CategoryCode[@listID="FISH_SIZE_CATEGORY"]',
@@ -73,8 +74,10 @@ def parse_sales_document(
     Returns:
         (value_dict, vessel_dict, trip_number, sales_datetime_utc_str)
     """
+
+    currency = (_get(doc, './ram:CurrencyCode[@listID="TERRITORY_CURR"]'),)
     products = [
-        parse_product(p)
+        parse_product(p, currency=currency)
         for p in _findall(doc, "./ram:SpecifiedSalesBatch/ram:SpecifiedAAPProduct")
     ]
 
@@ -91,22 +94,21 @@ def parse_sales_document(
 
     sales_data = {
         "sales_id": _get(doc, './ram:ID[@schemeID="EU_SALES_ID"]'),
-        "currency": _get(doc, './ram:CurrencyCode[@listID="TERRITORY_CURR"]'),
         "sales_datetime_utc": _get(
             doc, "./ram:SpecifiedSalesEvent/ram:OccurrenceDateTime/udt:DateTime"
         ),
-        "sale_port_code": _get(
+        "sales_port_code": _get(
             doc, './ram:SpecifiedFLUXLocation/ram:ID[@schemeID="LOCATION"]'
         ),
         "landing_port_code": _get(
             doc,
             './ram:SpecifiedFishingActivity/ram:RelatedFLUXLocation/ram:ID[@schemeID="LOCATION"]',
         ),
-        "trip_start_datetime_utc": _get(
+        "departure_datetime_utc": _get(
             doc,
             "./ram:SpecifiedFishingActivity/ram:SpecifiedDelimitedPeriod/ram:StartDateTime/udt:DateTime",
         ),
-        "trip_end_datetime_utc": _get(
+        "landing_datetime_utc": _get(
             doc,
             "./ram:SpecifiedFishingActivity/ram:SpecifiedDelimitedPeriod/ram:EndDateTime/udt:DateTime",
         ),

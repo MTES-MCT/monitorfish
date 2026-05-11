@@ -70,6 +70,23 @@ def parse_ops(ops):
     return metadata, child, None, None
 
 
+def parse_sales_ops(ops):
+    ops_date = ops.get("OD")
+    ops_time = ops.get("OT")
+
+    ops_datetime = make_datetime(ops_date, ops_time)
+
+    metadata = {
+        "operation_number": ops.get("ON"),
+        "operation_country": ops.get("FR"),
+        "operation_datetime_utc": ops_datetime,
+    }
+
+    child = get_first_child(list(ops), assert_child_single=True)
+
+    return metadata, child, None, None
+
+
 def parse_cor(cor):
     metadata = {"operation_type": "COR", "referenced_report_id": cor.get("RN")}
     child = get_first_child(cor, assert_child_single=True)
@@ -157,41 +174,53 @@ def parse_sal(sal):
 
 
 parsers = {
-    "DAT": partial(simple_parser, pass_child=True),
-    "COR": parse_cor,
-    "DEL": parse_del,
-    "RET": parse_ret,
-    "QUE": partial(simple_parser, pass_child=False),
-    "RSP": partial(simple_parser, pass_child=False),
-    "OPS": parse_ops,
-    "ERS": parse_ers,
-    "LOG": parse_log,
-    "SAL": parse_sal,
-    "SLI": parse_sli,
-    "TLI": parse_tli,
-    "DEP": parse_dep,
-    "FAR": parse_far,
-    "ECPS": parse_ecps,
-    "DIS": parse_dis,
-    "EOF": parse_eof,
-    "PNO": parse_pno,
-    "RTP": parse_rtp,
-    "LAN": parse_lan,
-    "RLC": default_log_parser,
-    "TRA": default_log_parser,
-    "COE": parse_coe,
-    "COX": parse_cox,
-    "CRO": parse_cro,
-    "TRZ": default_log_parser,
-    "INS": default_log_parser,
-    "PNT": default_log_parser,
+    DataDomain.LOGBOOK: {
+        "DAT": partial(simple_parser, pass_child=True),
+        "COR": parse_cor,
+        "DEL": parse_del,
+        "RET": parse_ret,
+        "QUE": partial(simple_parser, pass_child=False),
+        "RSP": partial(simple_parser, pass_child=False),
+        "OPS": parse_ops,
+        "ERS": parse_ers,
+        "LOG": parse_log,
+        "DEP": parse_dep,
+        "FAR": parse_far,
+        "ECPS": parse_ecps,
+        "DIS": parse_dis,
+        "EOF": parse_eof,
+        "PNO": parse_pno,
+        "RTP": parse_rtp,
+        "LAN": parse_lan,
+        "RLC": default_log_parser,
+        "TRA": default_log_parser,
+        "COE": parse_coe,
+        "COX": parse_cox,
+        "CRO": parse_cro,
+        "TRZ": default_log_parser,
+        "INS": default_log_parser,
+        "PNT": default_log_parser,
+    },
+    DataDomain.SALES: {
+        "DAT": partial(simple_parser, pass_child=True),
+        "COR": parse_cor,
+        "DEL": parse_del,
+        "RET": parse_ret,
+        "QUE": partial(simple_parser, pass_child=False),
+        "RSP": partial(simple_parser, pass_child=False),
+        "OPS": parse_sales_ops,
+        "ERS": parse_ers,
+        "SAL": parse_sal,
+        "SLI": parse_sli,
+        "TLI": parse_tli,
+    },
 }
 
 
-def parse_(el):
+def parse_(el, data_domain):
     root_tag = get_root_tag(el)
     try:
-        parser = parsers[root_tag]
+        parser = parsers[data_domain][root_tag]
     except KeyError:
         logging.warning(f"Parser not implemented for xml tag: {root_tag}")
         raise ERSParsingError
@@ -202,17 +231,17 @@ def parse_(el):
     return res
 
 
-def parse(el):
-    metadata, child, logs, data = parse_(el)
+def parse(el, data_domain: DataDomain):
+    metadata, child, logs, data = parse_(el, data_domain)
 
     # OPS, DAT, COR and ERS elements with metadata and a child element to parse
     if metadata is not None and child is not None and logs is None and data is None:
-        child_metadata, data_iter = parse(child)
+        child_metadata, data_iter = parse(child, data_domain)
         return {**metadata, **child_metadata}, data_iter
 
     # LOG and SAL elements with FAR, LAN, PNO, SLI, TLI... children
     elif metadata is not None and child is None and logs is not None and data is None:
-        return metadata, map(parse_, logs)
+        return metadata, map(partial(parse_, data_domain=data_domain), logs)
 
     # DEL, RET elements with no child, no logs
     elif metadata is not None and child is None and logs is None and data is not None:
@@ -226,12 +255,13 @@ def parse(el):
         raise ERSParsingError
 
 
-def parse_xml_string(xml_string):
+def parse_xml_string(xml_string, data_domain: DataDomain):
     try:
         el = ET.fromstring(xml_string.strip("¿"))
     except ParseError:
         raise ERSParsingError
-    return parse(el)
+    res = parse(el, data_domain)
+    return res
 
 
 def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
@@ -277,14 +307,59 @@ def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
             "value": None,
             "integration_datetime_utc": None,
         },
-        DataDomain.SALES: {},
+        DataDomain.SALES: {
+            "operation_number": None,
+            "operation_country": None,
+            "operation_datetime_utc": None,
+            "operation_type": None,
+            "report_id": None,
+            "referenced_report_id": None,
+            "report_datetime_utc": None,
+            "cfr": None,
+            "ircs": None,
+            "external_identification": None,
+            "vessel_name": None,
+            "flag_state": None,
+            "imo": None,
+            "sales_type": None,
+            "products": None,
+            "integration_datetime_utc": None,
+            "sender_id": None,
+            "sender_name": None,
+            "provider_id": None,
+            "provider_name": None,
+            "buyer_id": None,
+            "buyer_name": None,
+            "recipient_id": None,
+            "recipient_name": None,
+            "carrier_id": None,
+            "carrier_name": None,
+            "buyer_id": None,
+            "buyer_name": None,
+            "sales_type": None,
+            "sales_datetime_utc": None,
+            "sales_country": None,
+            "sales_port_code": None,
+            "provider_name": None,
+            "sales_contract_reference": None,
+            "bcd_number": None,
+            "takeover_organization_name": None,
+            "storage_facility_name": None,
+            "storage_facility_address": None,
+            "transport_document_reference": None,
+            "departure_datetime_utc": None,
+            "sales_id": None,
+            "trip_number": None,
+        },
     }
 
     reports_defaults = defaults[data_domain]
 
     for xml_message in xml_messages:
         try:
-            metadata, data_iterator = parse_xml_string(xml_message)
+            metadata, data_iterator = parse_xml_string(
+                xml_message, data_domain=data_domain
+            )
             now = datetime.utcnow()
             raw = {
                 "operation_number": metadata.get("operation_number"),

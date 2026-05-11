@@ -1,3 +1,4 @@
+import { AIS_VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/AISVesselsLayer/constants'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
@@ -12,6 +13,9 @@ export const hideVesselsNotInVesselGroups =
     await dispatch(vesselGroupActions.setAreVesselsNotInVesselGroupsHidden(areHidden))
 
     VESSELS_VECTOR_LAYER.updateStyleVariables({
+      areVesselsNotInVesselGroupsHidden: booleanToInt(areHidden)
+    })
+    AIS_VESSELS_VECTOR_LAYER.updateStyleVariables({
       areVesselsNotInVesselGroupsHidden: booleanToInt(areHidden)
     })
 

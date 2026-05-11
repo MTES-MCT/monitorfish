@@ -103,7 +103,8 @@ export const mainReducer = {
     {
       ...getCommonPersistReducerConfig<DisplayedComponentState>('mainPersistorDisplayedComponent', [
         'isMissionsLayerDisplayed',
-        'isReportingLayerDisplayed'
+        'isReportingLayerDisplayed',
+        'areAISVesselsDisplayed'
       ])
     },
     displayedComponentReducer

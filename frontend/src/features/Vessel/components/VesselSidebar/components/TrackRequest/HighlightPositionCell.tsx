@@ -1,4 +1,5 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
+import { animateToVesselCoordinates } from '@features/Map/useCases/animateMap'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, Tag } from '@mtes-mct/monitor-ui'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 import { getCoordinates } from '../../../../../../coordinates'
 import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.svg?react'
-import { animateToCoordinates } from '../../../../../Map/slice'
 import { highlightVesselTrackPosition } from '../../../../slice'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -34,9 +34,9 @@ export function HighlightPositionCell({
 
   return (
     <span
-      onClick={() => dispatch(animateToCoordinates(olCoordinates))}
+      onClick={() => animateToVesselCoordinates(olCoordinates as [number, number], true)}
       onFocus={() => dispatch(highlightVesselTrackPosition(row))}
-      onKeyDown={() => dispatch(animateToCoordinates(olCoordinates))}
+      onKeyDown={() => animateToVesselCoordinates(olCoordinates as [number, number], true)}
       onMouseEnter={() => dispatch(highlightVesselTrackPosition(row))}
       role="presentation"
       style={{ cursor: 'pointer' }}

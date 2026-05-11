@@ -10,6 +10,7 @@ import { EmptyDataLabel, Info } from './styles'
 import { getVesselSubscriptionTableColumns } from './utils'
 
 import type { PriorNotificationSubscriber } from '@features/PriorNotification/PriorNotificationSubscriber.types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { Promisable } from 'type-fest'
 
@@ -31,12 +32,16 @@ export function VesselSubscriptionsField({
     number | undefined
   >(undefined)
 
-  const add = (newVesselIdentity: Vessel.VesselIdentity | undefined) => {
-    if (!newVesselIdentity?.vesselId) {
+  const add = (newVesselIdentity: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+    if (isAIS) {
+      return
+    }
+    const vessel = newVesselIdentity as Vessel.VesselIdentity | undefined
+    if (!vessel?.vesselId) {
       return
     }
 
-    onAdd(newVesselIdentity.vesselId)
+    onAdd(vessel.vesselId)
   }
 
   const askForRemovalConfirmation = (vesselIdToRemove: number) => {

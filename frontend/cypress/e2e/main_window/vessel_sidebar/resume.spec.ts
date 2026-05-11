@@ -62,7 +62,7 @@ context('Vessel sidebar resume tab', () => {
      * An alert should be shown on the vessel sidebar
      */
     // When
-    cy.getDataCy('vessel-search-input').type('tempete couleur')
+    cy.getDataCy('VesselSearch-input').type('tempete couleur')
     cy.getDataCy('vessel-search-item').eq(0).click()
     cy.wait(200)
     cy.getDataCy('vessel-sidebar').should('be.visible')

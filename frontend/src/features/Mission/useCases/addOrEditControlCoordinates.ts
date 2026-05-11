@@ -6,7 +6,7 @@ import { transformExtent } from 'ol/proj'
 
 import { openDrawLayerModal } from './addOrEditMissionZone'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
-import { fitToExtent } from '../../Map/slice'
+import { fitMapToExtent } from '../../Map/useCases/animateMap'
 import { unselectVessel } from '../../Vessel/useCases/unselectVessel'
 
 import type { MainAppThunk } from '@store'
@@ -28,12 +28,12 @@ export const addOrEditControlCoordinates =
 
       const featureCoordinates = geometry.coordinates
       const bufferedExtent = getCoordinatesExtent(featureCoordinates)
-      dispatch(fitToExtent(bufferedExtent))
+      fitMapToExtent(bufferedExtent)
     } else if (missionGeometry) {
       const extent = getExtentOfPolygons(missionGeometry)
 
       if (extent) {
-        dispatch(fitToExtent(extent))
+        fitMapToExtent(extent)
       }
     }
 

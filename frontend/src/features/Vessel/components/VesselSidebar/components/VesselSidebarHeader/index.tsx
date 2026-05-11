@@ -1,7 +1,10 @@
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
+import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
+import { showAISVessel } from '@features/Vessel/useCases/showAISVessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { useGetAISVesselsQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -11,19 +14,25 @@ import styled from 'styled-components'
 import { VesselName } from './VesselName'
 import { expandRightMenu } from '../../../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
-import { VesselSearch } from '../../../../../VesselSearch'
 
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export function VesselSidebarHeader() {
   const dispatch = useMainAppDispatch()
 
-  const { isFocusedOnVesselSearch, selectedVessel, selectedVesselIdentity, vesselSidebarIsOpen } = useMainAppSelector(
-    state => state.vessel
-  )
-
+  const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
+  const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const areAISVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areAISVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+
+  const vesselLocation =
+    listFilterValues.vesselsLocation?.length === 1 ? listFilterValues.vesselsLocation[0] : undefined
+  const { data: aisVessels } = useGetAISVesselsQuery(vesselLocation)
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
 
@@ -36,11 +45,18 @@ export function VesselSidebarHeader() {
   }, [dispatch])
 
   const handleVesselChange = useCallback(
-    (vesselIdentity: Vessel.VesselIdentity | undefined) => {
-      if (!vesselIdentity) {
+    (vessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+      if (!vessel) {
         return
       }
 
+      if (isAIS) {
+        dispatch(showAISVessel(vessel as AISVessel.AISVessel))
+
+        return
+      }
+
+      const vesselIdentity = vessel as Vessel.VesselIdentity
       if (!vesselsAreEquals(vesselIdentity, selectedVesselIdentity)) {
         dispatch(showVessel(vesselIdentity, true))
       }
@@ -54,13 +70,17 @@ export function VesselSidebarHeader() {
       <VesselNameOrInput $isRightMenuOpen={rightMenuIsOpen} data-cy="vessel-name" isHidden={previewFilteredVesselsMode}>
         {isVesselNameShown && <VesselName focusOnVesselSearchInput={handleInputClick} />}
         {!isVesselNameShown && (
-          <VesselSearch
+          <VesselSearchWithMapVessels
+            aisVessels={areAISVesselsDisplayed ? aisVessels : undefined}
+            autoFocus={isFocusedOnVesselSearch}
             extendedWidth={500}
             isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
-            isLastSearchedVesselsShowed={isFocusedOnVesselSearch || vesselSidebarIsOpen}
+            onBlur={handleClickOutsideOrEscape}
             onChange={handleVesselChange}
-            onClickOutsideOrEscape={handleClickOutsideOrEscape}
-            onInputClick={handleInputClick}
+            onClick={handleInputClick}
+            shouldCloseOnClickOutside
+            shouldResetInputOnBlur
+            withLastSearchResults={isFocusedOnVesselSearch || vesselSidebarIsOpen}
           />
         )}
       </VesselNameOrInput>

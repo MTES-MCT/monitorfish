@@ -6,6 +6,7 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import type { ManualPriorNotificationFormValues } from '../types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FormikVesselSelectProps = Readonly<{
@@ -18,9 +19,13 @@ export function FormikVesselSelect({ onChange, readOnly }: FormikVesselSelectPro
   const { newWindowContainerRef } = useNewWindow()
 
   const handleVesselSearchChange = useCallback(
-    (nextVessel: Vessel.VesselIdentity | undefined) => {
-      helper.setValue(nextVessel)
-      onChange(nextVessel)
+    (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+      if (isAIS) {
+        return
+      }
+      const vessel = nextVessel as Vessel.VesselIdentity | undefined
+      helper.setValue(vessel)
+      onChange(vessel)
     },
 
     /* eslint-disable react-hooks/exhaustive-deps */

@@ -3,7 +3,7 @@ import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExten
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { setInitialGeometry, setInteractionTypeAndListener } from '../../Draw/slice'
-import { fitToExtent } from '../../Map/slice'
+import { fitMapToExtent } from '../../Map/useCases/animateMap'
 
 import type { MainAppThunk } from '@store'
 import type { Point } from 'geojson'
@@ -16,7 +16,7 @@ export const addOrEditReportingCoordinates =
 
       const featureCoordinates = geometry.coordinates
       const bufferedExtent = getCoordinatesExtent(featureCoordinates)
-      dispatch(fitToExtent(bufferedExtent))
+      fitMapToExtent(bufferedExtent)
     }
 
     dispatch(

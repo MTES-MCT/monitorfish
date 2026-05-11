@@ -25,7 +25,7 @@ context('Authorization', () => {
     // When
     cy.intercept('GET', `/bff/v1/vessels/search*`, { statusCode: 401 }).as('searchVessel')
     cy.intercept('GET', '/bff/v1/authorization/current', { statusCode: 401 })
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
+    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('Pheno')
     cy.wait('@searchVessel')
 
     // Then

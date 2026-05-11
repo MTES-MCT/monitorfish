@@ -1,5 +1,4 @@
-import { animateToExtent } from '@features/Map/slice'
-import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { fitMapToVesselTrack } from '@features/Map/useCases/animateMap'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import styled from 'styled-components'
 
@@ -8,7 +7,7 @@ import ShowTrackSVG from '../../../../icons/Bouton_afficher_toute_la_piste.svg?r
 
 export function AnimateToTrack({ isSidebarOpen }) {
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
-  const dispatch = useMainAppDispatch()
+  const vesselTrackExtent = useMainAppSelector(state => state.vessel.vesselTrackExtent)
 
   return (
     <VesselSidebarActionButton
@@ -16,7 +15,12 @@ export function AnimateToTrack({ isSidebarOpen }) {
       $top={153}
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
-      onClick={() => dispatch(animateToExtent())}
+      // eslint-disable-next-line react/jsx-no-bind
+      onClick={() => {
+        if (vesselTrackExtent?.length) {
+          fitMapToVesselTrack(vesselTrackExtent)
+        }
+      }}
       title="Centrer sur la piste"
     >
       <ShowTrackIcon />

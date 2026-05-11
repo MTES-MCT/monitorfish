@@ -30,17 +30,15 @@ const AISButton = styled(Button)<{
 }>`
   flex-shrink: 0;
   height: 40px;
+  border-radius: 2px;
 
-  ${p => {
-    const activeProperties = p.$isActive
+  ${p =>
+    p.$isActive
       ? `
       background: ${p.theme.color.blueGray};
       border-color: ${p.theme.color.blueGray};
     `
-      : ''
-
-    return activeProperties
-  }}
+      : ''}
 
   .Element-IconBox {
     margin-right: 4px;

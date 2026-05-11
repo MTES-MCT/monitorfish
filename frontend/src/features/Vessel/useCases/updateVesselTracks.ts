@@ -21,5 +21,5 @@ const updateVesselTracksWithDefaultTrackDepth = dispatch => vesselTrack => {
     return
   }
 
-  dispatch(showVesselTrack(vesselTrack.vesselIdentity, false, null))
+  dispatch(showVesselTrack(vesselTrack.vesselIdentity, null))
 }

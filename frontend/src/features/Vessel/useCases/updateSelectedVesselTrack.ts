@@ -1,6 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
-import { animateToExtent, doNotAnimate } from '@features/Map/slice'
+import { animateToExtent } from '@features/Map/slice'
 import {
   resetLoadingVessel,
   setSelectedVesselCustomTrackRequest,
@@ -63,6 +63,5 @@ export const updateSelectedVesselTrack =
   }
 
 function dispatchIsUpdating(dispatch: MainAppDispatch) {
-  dispatch(doNotAnimate(true))
   dispatch(updatingVesselTrackDepth())
 }

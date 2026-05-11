@@ -212,8 +212,8 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing trips Should be walkable', () => {
     // Given
-    cy.get('*[data-cy^="vessel-search-input"]').click()
-    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
+    cy.get('*[data-cy^="VesselSearch-input"]').click()
+    cy.get('*[data-cy^="VesselSearch-input"]').type('FR263454484')
     cy.wait(50)
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
     cy.wait(200)
@@ -240,8 +240,8 @@ context('Vessel sidebar logbook tab', () => {
   })
 
   it('Fishing trips Should be selected from the trips list', () => {
-    cy.get('*[data-cy^="vessel-search-input"]').click()
-    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
+    cy.get('*[data-cy^="VesselSearch-input"]').click()
+    cy.get('*[data-cy^="VesselSearch-input"]').type('FR263454484')
     cy.wait(50)
     cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
     cy.wait(200)

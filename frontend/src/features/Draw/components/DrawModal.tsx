@@ -17,7 +17,7 @@ import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { fitToExtent } from '../../Map/slice'
+import { fitMapToExtent } from '../../Map/useCases/animateMap'
 import { setInteractionType } from '../slice'
 import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature'
 import { closeDraw } from '../useCases/closeDraw'
@@ -144,7 +144,7 @@ export function DrawLayerModal() {
         return
       }
 
-      dispatch(fitToExtent(extent))
+      fitMapToExtent(extent)
     },
     [dispatch]
   )

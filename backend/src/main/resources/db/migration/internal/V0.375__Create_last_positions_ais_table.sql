@@ -1,7 +1,5 @@
 CREATE TABLE last_positions_ais (
   mmsi                          BIGINT PRIMARY KEY,
-  vessel_id                     INTEGER,
-  cfr                           VARCHAR(100),
   ircs                          VARCHAR(100),
   external_immatriculation      VARCHAR(100),
   vessel_name                   VARCHAR(100),

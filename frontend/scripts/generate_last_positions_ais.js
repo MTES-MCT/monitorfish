@@ -249,7 +249,6 @@ function generateVessel(mmsi) {
   const minutesAgo = faker.number.int({ max: 240, min: 1 })
 
   return {
-    cfr: hasNavpro ? `${flagState}${faker.string.alphanumeric({ casing: 'upper', length: 9 })}` : null,
     course,
     external_immatriculation: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: 8 }) : null,
     flag_state: flagState,
@@ -264,7 +263,6 @@ function generateVessel(mmsi) {
     mmsi,
     speed,
     status,
-    vessel_id: null,
     vessel_name: randomVesselName(),
   }
 }

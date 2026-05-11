@@ -13,6 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPositionAIS
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
@@ -66,6 +67,9 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getActiveVessels: GetActiveVessels
+
+    @MockitoBean
+    private lateinit var getLastPositionsAIS: GetLastPositionsAIS
 
     @MockitoBean
     private lateinit var getVessel: GetVessel
@@ -1110,6 +1114,54 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
+    }
+
+    @Test
+    fun `Should get all AIS last positions`() {
+        // Given
+        val fixedDateTime = ZonedDateTime.of(EPOCH, LocalTime.MAX.plusSeconds(1), ZoneId.of("UTC"))
+        val aisPosition =
+            LastPositionAIS(
+                mmsi = 123456789L,
+                vesselId = null,
+                cfr = "FR123456789",
+                ircs = "ABCD",
+                externalMarker = "EXT01",
+                vesselName = "BELLE DU NORD",
+                flagState = CountryCode.FR,
+                latitude = 47.5,
+                longitude = -2.3,
+                speed = 8.5,
+                course = 270.0,
+                heading = 265.0,
+                status = "Under way using engine",
+                dateTime = fixedDateTime,
+                length = 24.0,
+                isAtPort = false,
+                imo = "9876543",
+            )
+        given(getLastPositionsAIS.execute()).willReturn(listOf(aisPosition))
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/ais")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].mmsi", equalTo(aisPosition.mmsi.toInt())))
+            .andExpect(jsonPath("$[0].cfr", equalTo(aisPosition.cfr)))
+            .andExpect(jsonPath("$[0].ircs", equalTo(aisPosition.ircs)))
+            .andExpect(jsonPath("$[0].vesselName", equalTo(aisPosition.vesselName)))
+            .andExpect(jsonPath("$[0].flagState", equalTo(aisPosition.flagState.toString())))
+            .andExpect(jsonPath("$[0].latitude", equalTo(aisPosition.latitude)))
+            .andExpect(jsonPath("$[0].longitude", equalTo(aisPosition.longitude)))
+            .andExpect(jsonPath("$[0].speed", equalTo(aisPosition.speed)))
+            .andExpect(jsonPath("$[0].course", equalTo(aisPosition.course)))
+            .andExpect(jsonPath("$[0].isAtPort", equalTo(aisPosition.isAtPort)))
+            .andExpect(jsonPath("$[0].length", equalTo(aisPosition.length)))
     }
 
     @Test

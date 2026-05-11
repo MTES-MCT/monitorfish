@@ -1,9 +1,9 @@
-import { degreesToRadian } from '@features/Vessel/layers/style'
 import { VESSEL_SELECTOR_STYLE } from '@features/Vessel/types/vessel'
 import { type FeatureLike } from 'ol/Feature'
 import { Icon, Style } from 'ol/style'
 
 import { theme } from '../../../../ui/theme'
+import { degreesToRadian } from '../VesselsLayer/style'
 
 export const getSelectedVesselStyle = (isLight: boolean) => (feature: FeatureLike) => {
   const course = feature.get('course')

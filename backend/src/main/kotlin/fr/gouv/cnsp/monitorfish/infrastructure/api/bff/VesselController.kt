@@ -26,6 +26,7 @@ import java.time.ZonedDateTime
 @Tag(name = "APIs for Vessels")
 class VesselController(
     private val getActiveVessels: GetActiveVessels,
+    private val getLastPositionsAIS: GetLastPositionsAIS,
     private val getVessel: GetVessel,
     private val getVesselById: GetVesselById,
     private val getVesselPositions: GetVesselPositions,
@@ -52,6 +53,16 @@ class VesselController(
                 enrichedActiveVessel = vessel,
                 index = index,
             )
+        }
+    }
+
+    @GetMapping("/ais")
+    @Operation(summary = "Get all AIS last positions")
+    fun getVessels(): List<LastPositionAISDataOutput> {
+        val lastPositionsAIS = getLastPositionsAIS.execute()
+
+        return lastPositionsAIS.map {
+            LastPositionAISDataOutput.fromLastPositionAIS(it)
         }
     }
 

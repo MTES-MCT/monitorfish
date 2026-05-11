@@ -17,7 +17,6 @@ export function VesselLoader() {
   const dispatch = useMainAppDispatch()
 
   const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
-  const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
   const {
     data: vessels,
@@ -65,14 +64,12 @@ export function VesselLoader() {
           <BigVessel />
         </FirstLoadWrapper>
       )}
-      <UpdateWrapper $isVesselSidebarOpen={vesselSidebarIsOpen}>
-        {(isFetching || loadingPositions) && isAppLoaded && (
-          <>
-            <FulfillingBouncingCircleLoader className="update-vessels" size={30} />
-            <VesselIcon />
-          </>
-        )}
-      </UpdateWrapper>
+      {(isFetching || loadingPositions) && isAppLoaded && (
+        <UpdateWrapper>
+          <FulfillingBouncingCircleLoader className="update-vessels" size={30} />
+          <VesselIcon />
+        </UpdateWrapper>
+      )}
     </>
   )
 }
@@ -92,14 +89,11 @@ const BigVessel = styled(VesselSVG)`
   transform: scale(2);
 `
 
-const UpdateWrapper = styled(MapComponent)<{
-  $isVesselSidebarOpen: boolean
-}>`
-  position: absolute;
-  top: 30px;
-  right: ${p => (p.$isVesselSidebarOpen ? '510px' : '370px')};
+const UpdateWrapper = styled(MapComponent)`
+  position: relative;
   width: 30px;
-  transform: translate(-50%, -50%);
+  align-self: center;
+  flex-shrink: 0;
 `
 
 const FirstLoadWrapper = styled(MapComponent)`

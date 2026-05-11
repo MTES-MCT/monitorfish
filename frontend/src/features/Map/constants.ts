@@ -95,6 +95,7 @@ export const layersGroups: Record<string, MonitorFishMap.CodeAndName> = {
 }
 
 export enum LayerType {
+  AIS_VESSEL = 'AIS_VESSEL',
   BASE_LAYER = 'BASE_LAYER',
   CUSTOM = 'CUSTOM',
   DRAW = 'DRAW',
@@ -125,6 +126,11 @@ export const LayerProperties: Record<MonitorFishMap.MonitorFishLayer, MonitorFis
   [MonitorFishMap.MonitorFishLayer.VESSELS]: {
     code: MonitorFishMap.MonitorFishLayer.VESSELS,
     type: LayerType.VESSEL,
+    zIndex: 1000
+  },
+  [MonitorFishMap.MonitorFishLayer.AIS_VESSELS]: {
+    code: MonitorFishMap.MonitorFishLayer.AIS_VESSELS,
+    type: LayerType.AIS_VESSEL,
     zIndex: 1000
   },
   [MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT]: {

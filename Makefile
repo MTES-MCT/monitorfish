@@ -19,23 +19,28 @@ help:
 	echo ""
 	echo -e "\033[1mLocal Development\033[0m:"
 	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##LOCAL' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = "(: |##LOCAL)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+		awk 'BEGIN {FS = "(: |##LOCAL)"}; {printf "\033[36m%-35s\033[0m %s\n", $$2, $$3}'
+	echo ""
+	echo -e "\033[1mTest Data\033[0m:"
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##TESTDATA' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##TESTDATA)"}; {printf "\033[36m%-35s\033[0m %s\n", $$2, $$3}'
 	echo ""
 	echo -e "\033[1mTesting\033[0m:"
-	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##TEST' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = "(: |##TEST)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##TEST[^A-Z]' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = "(: |##TEST)"}; {printf "\033[36m%-35s\033[0m %s\n", $$2, $$3}'
 	echo ""
 	echo -e "\033[1mCommands for RUN (STAGING and PROD)\033[0m:"
 	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##RUN' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = "(: |##RUN)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+		awk 'BEGIN {FS = "(: |##RUN)"}; {printf "\033[36m%-35s\033[0m %s\n", $$2, $$3}'
 	echo ""
 	echo -e "\033[1mOther commands\033[0m:"
 	grep -E '^\.PHONY: [a-zA-Z0-9_-]+ .*?##OTHER' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = "(: |##OTHER)"}; {printf "\033[36m%-30s\033[0m %s\n", $$2, $$3}'
+		awk 'BEGIN {FS = "(: |##OTHER)"}; {printf "\033[36m%-35s\033[0m %s\n", $$2, $$3}'
 	echo ""
 	echo "Tips 💡"
 	echo "	- use tab for auto-completion"
 	echo "	- use the dry run option '-n' to show what make is attempting to do. example: environmentName=dev make -n deploy"
+	echo "	- run a single Kotlin test class: class=JpaLastPositionAisRepositoryITests make test-back"
 
 docker-env:
 	cd ./infra/docker && ../../frontend/node_modules/.bin/import-meta-env-prepare -u -x ./.env.local.defaults\
@@ -56,9 +61,13 @@ clean: docker-env
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v
 
-.PHONY: generate-test-data ##LOCAL Generate test data (SQL files from .jsonc)
+.PHONY: generate-test-data ##TESTDATA Generate test data (SQL files from .jsonc)
 generate-test-data:
 	cd frontend && npm run generate:testdata
+
+.PHONY: generate-last-positions-ais ##TESTDATA Generate last_positions_ais .jsonc file (10k AIS vessels)
+generate-last-positions-ais:
+	cd frontend && node ./scripts/generate_last_positions_ais.js
 
 compile-back:
 	cd backend && ./gradlew assemble
@@ -153,6 +162,7 @@ run-cypress:
 run-puppeteer:
 	cd ./frontend && npm run test:multi-windows:open
 
+.PHONY: test-back ##TEST ✅ Run backend tests — use class=MyClassITests for a single Kotlin test class
 test-back: check-clean-archi
 	@if [ -z "$(class)" ]; then \
 		echo "Running all Backend tests..."; \

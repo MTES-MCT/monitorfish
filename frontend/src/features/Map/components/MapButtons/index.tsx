@@ -5,7 +5,9 @@ import { LayersSidebar } from '@features/LayersSidebar/components'
 import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { ReportingMapButton } from '@features/Reporting/components/ReportingMapButton'
+import { AISVesselsButton } from '@features/Vessel/components/AISVesselsButton'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
+import { VesselLoader } from '@features/Vessel/components/VesselLoader'
 import { VesselSidebar } from '@features/Vessel/components/VesselSidebar/components'
 import { VesselSidebarHeader } from '@features/Vessel/components/VesselSidebar/components/VesselSidebarHeader'
 import { VesselGroupMapButton } from '@features/VesselGroup/components/VesselGroupMapButton'
@@ -135,13 +137,13 @@ export function MapButtons() {
           </Group>
         </BottomSection>
       </LeftMenu>
+      <TopBar $top={top}>
+        <VesselLoader />
+        <AISVesselsButton />
+        {isVesselSearchDisplayed && <VesselSidebarHeader />}
+        {isVesselSidebarOpen && <VesselSidebar />}
+      </TopBar>
       <RightMenu $top={top}>
-        <Group>
-          <MenuItem>
-            {isVesselSearchDisplayed && <VesselSidebarHeader />}
-            {isVesselSidebarOpen && <VesselSidebar />}
-          </MenuItem>
-        </Group>
         <Group>
           {isVesselListMapButtonDisplayed && (
             <MenuItem>
@@ -193,6 +195,7 @@ export function MapButtons() {
 const Menu = styled.menu<{ $top: number }>`
   display: flex;
   flex-direction: column;
+  pointer-events: none;
   position: absolute;
   row-gap: 32px;
   top: calc(${p => p.$top}px + 10px);
@@ -216,12 +219,26 @@ const TopSection = styled.div`
 const BottomSection = styled.div``
 
 const RightMenu = styled(Menu)`
+  padding-top: 72px;
   right: 10px;
 `
 
-const MenuItem = styled.li`
-  position: relative;
+const TopBar = styled.div<{ $top: number }>`
+  align-items: center;
   display: flex;
+  gap: 4px;
+  position: absolute;
+  right: 10px;
+  top: calc(${p => p.$top}px + 10px);
+  z-index: 1;
+`
+
+const MenuItem = styled.li`
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  pointer-events: auto;
+  position: relative;
 `
 
 const Group = styled.ul`

@@ -21,7 +21,6 @@ import { DrawLayerModal } from '../Draw/components/DrawModal'
 import { HealthcheckHeadband } from '../Healthcheck/components/HealthcheckHeadband'
 import { MapButtons } from '../Map/components/MapButtons'
 import { SideWindowLauncher } from '../SideWindow/SideWindowLauncher'
-import { VesselLoader } from '../Vessel/components/VesselLoader'
 
 const { isEnvironmentBoxVisible } = getEnvironmentData()
 
@@ -77,7 +76,6 @@ export function MainWindow() {
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
 
-        <VesselLoader />
         <APIWorker />
 
         <IUUReportingMapForm />

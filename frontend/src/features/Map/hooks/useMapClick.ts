@@ -20,7 +20,7 @@ export function useMapClick(map: OpenLayerMap) {
 
       const feature = map.forEachFeatureAtPixel<FeatureLike>(event.pixel, clicked => clicked, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer => layer.get('isClickable') === true
+        layerFilter: layer => layer.get('isClickable') === true && layer.getOpacity() > 0
       })
       const isCtrl = platformModifierKeyOnly(event)
       dispatch(clickOnMapFeature({ ctrlKeyPressed: isCtrl, feature }) as unknown as MainAppThunk)

@@ -2,6 +2,7 @@ import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -16,6 +17,7 @@ import { Vessel } from './Vessel.types'
 
 import type { Meta } from '@api/BackendApi.types'
 import type { VesselReportings } from '@features/Reporting/types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
@@ -40,6 +42,12 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       query: () => `/vessels`,
       transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
         parseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
+    }),
+
+    getAISVessels: builder.query<AISVessel.AISVessel[], void>({
+      query: () => `/vessels/ais`,
+      transformResponse: (baseQueryReturnValue: AISVessel.AISVessel[]) =>
+        parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
     }),
 
     getVessel: builder.query<Vessel.SelectedVessel, number>({
@@ -204,6 +212,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 export const {
   useCreateVesselContactMethodMutation,
   useGetActiveVesselsQuery,
+  useGetAISVesselsQuery,
   useGetVesselContactToUpdateQuery,
   useGetVesselQuery,
   useGetVesselReportingsByVesselIdentityQuery,

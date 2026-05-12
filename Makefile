@@ -69,6 +69,10 @@ generate-test-data:
 generate-last-positions-ais:
 	cd frontend && node ./scripts/generate_last_positions_ais.js
 
+.PHONY: generate-ais-positions ##TESTDATA Generate ais_positions SQL file (10 vessels, 4 weeks, 7-min intervals)
+generate-ais-positions:
+	cd frontend && node ./scripts/generate_ais_positions.js
+
 compile-back:
 	cd backend && ./gradlew assemble
 
@@ -79,10 +83,10 @@ init-local-sig:
 install-front:
 	cd ./frontend && npm i
 
-.PHONY: run-back ##LOCAL ▶️  Run backend API
+.PHONY: run-back ##LOCAL ▶️  Run backend API — pass kafka=true to also start the Kafka broker
 run-back: run-stubbed-apis
 	./frontend/node_modules/.bin/import-meta-env-prepare -u -x ./backend/.env.example -p ./backend/.env.local.defaults
-	docker compose up -d --quiet-pull --wait db keycloak
+	docker compose $(if $(kafka),--profile kafka,) up -d --quiet-pull --wait db keycloak $(if $(kafka),kafka,)
 	@bash -c 'set -a; source .env; cd backend && ./gradlew bootRun'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
@@ -144,6 +148,22 @@ dev-restore-db:
 
 ################################################################################
 # Testing
+
+.PHONY: generate-kafka-certificates ##LOCAL 🔐 Generate SSL certificates for local Kafka development
+generate-kafka-certificates:
+	./infra/kafka/scripts/create_certificate.sh
+	CERTS_DIR="$$(pwd)/infra/kafka/certs"
+	ENV_FILE="backend/.env.local.defaults"
+	upsert_env() {
+		if grep -q "^$$1=" "$$ENV_FILE"; then
+			sed -i "s|^$$1=.*|$$1=$$2|" "$$ENV_FILE"
+		else
+			printf '\n%s=%s\n' "$$1" "$$2" >> "$$ENV_FILE"
+		fi
+	}
+	upsert_env MONITORFISH_KAFKA_AIS_KEYSTORE "$$CERTS_DIR/monitorfish/monitorfish.p12"
+	upsert_env MONITORFISH_KAFKA_AIS_TRUSTSTORE "$$CERTS_DIR/monitorfish/monitorfish-truststore.p12"
+	echo "✓ backend/.env.local.defaults updated — run with: kafka=true make run-back"
 
 .PHONY: test ##TEST ✅ Run all tests
 test: test-back

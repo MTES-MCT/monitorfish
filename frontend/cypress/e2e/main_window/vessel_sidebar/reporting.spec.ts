@@ -15,7 +15,7 @@ context('Vessel sidebar reporting tab', () => {
   it('An infraction suspicion reporting Should be added from the reporting form', () => {
     // Given
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('FRAIS avis')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -58,7 +58,7 @@ context('Vessel sidebar reporting tab', () => {
 
     // Given
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('ABC000597493')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -111,7 +111,7 @@ context('Vessel sidebar reporting tab', () => {
   it('Reporting Should be archived', () => {
     // Given
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('FRAIS avis')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -141,7 +141,7 @@ context('Vessel sidebar reporting tab', () => {
   it('Reporting summary of reportings should be displayed', () => {
     // Given
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('mariage ile hasard')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -177,7 +177,7 @@ context('Vessel sidebar reporting tab', () => {
   it('Reporting Should be showed for more years', () => {
     // Given
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('FRAIS avis')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
     cy.intercept('GET', '/bff/v1/vessels/reportings*').as('getVesselReportings')
@@ -201,7 +201,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('ABC000597493')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 
@@ -322,7 +322,7 @@ context('Vessel sidebar reporting tab', () => {
   it('Reporting Should be deleted', () => {
     cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
     cy.get('*[data-cy="VesselSearch-input"]', { timeout: 10000 }).type('FRAIS avis')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
+    cy.get('*[data-cy="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(50)
     cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
 

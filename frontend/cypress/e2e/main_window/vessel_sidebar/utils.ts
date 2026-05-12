@@ -13,7 +13,7 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
   cy.wait(500)
 
   cy.getDataCy('VesselSearch-input').type(vesselName)
-  cy.getDataCy('vessel-search-item').eq(0).click()
+  cy.getDataCy('VesselSearch-item').eq(0).click()
 
   cy.getDataCy('vessel-sidebar').should('be.visible')
 

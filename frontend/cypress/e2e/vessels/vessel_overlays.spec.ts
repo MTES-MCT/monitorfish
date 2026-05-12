@@ -49,8 +49,8 @@ context('Vessels Overlays', () => {
     /**
      * Beacon malfunction
      */
-    cy.get('*[data-cy^="vessel-search-input"]').type('EH VOLER MADAME')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.get('*[data-cy^="VesselSearch-input"]').type('EH VOLER MADAME')
+    cy.get('*[data-cy^="VesselSearch-item"]').eq(0).click()
     cy.wait(5000)
 
     // When we move the pointer cursor (from one point to another to emit an event)

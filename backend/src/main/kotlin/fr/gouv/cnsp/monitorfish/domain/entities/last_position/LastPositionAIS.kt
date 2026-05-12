@@ -19,4 +19,5 @@ data class LastPositionAIS(
     val length: Double? = null,
     val isAtPort: Boolean = false,
     val imo: String? = null,
+    val destination: String? = null,
 )

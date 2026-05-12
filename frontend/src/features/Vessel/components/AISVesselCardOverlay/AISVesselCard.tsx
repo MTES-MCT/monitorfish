@@ -28,6 +28,7 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
   const vesselProperties = extractAISVesselPropertiesFromFeature(feature, [
     'course',
     'dateTime',
+    'destination',
     'flagState',
     'mmsi',
     'imo',
@@ -77,9 +78,9 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
             <FieldValue>
               {vesselProperties.dateTime ? timeago.format(vesselProperties.dateTime, 'fr') : <NoValue>-</NoValue>}
             </FieldValue>
-            <FieldName>Cadencement</FieldName>
+            <FieldName>Destination</FieldName>
             <FieldValue>
-              <NoValue>-</NoValue>
+              {vesselProperties.destination ?? <NoValue>-</NoValue>}
             </FieldValue>
           </Position>
         </ThreeColumnsBody>

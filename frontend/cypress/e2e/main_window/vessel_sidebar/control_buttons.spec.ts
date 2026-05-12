@@ -12,7 +12,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Control buttons should be disabled When vessel has no positions', () => {
     // Given
     cy.get('*[data-cy^="VesselSearch-input"]').type('MALOTRU')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.get('*[data-cy^="VesselSearch-item"]').eq(0).click()
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
 
     // When
@@ -27,7 +27,7 @@ context('Vessel sidebar controls buttons', () => {
     // Given
     cy.cleanDownloadedFiles()
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
+    cy.get('*[data-cy^="VesselSearch-item"]').eq(0).click()
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
     cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()

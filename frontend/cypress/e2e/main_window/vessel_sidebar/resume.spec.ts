@@ -63,7 +63,7 @@ context('Vessel sidebar resume tab', () => {
      */
     // When
     cy.getDataCy('VesselSearch-input').type('tempete couleur')
-    cy.getDataCy('vessel-search-item').eq(0).click()
+    cy.getDataCy('VesselSearch-item').eq(0).click()
     cy.wait(200)
     cy.getDataCy('vessel-sidebar').should('be.visible')
 

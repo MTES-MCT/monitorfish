@@ -11,7 +11,7 @@ LOGBOOK_XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/ers"
 SALES_XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "sales_notes/xml_files/ers"
 
 
-def parse_logbook_file(test_file: str, has_data: bool = False):
+def parse_logbook_file(test_file: str):
     with open(os.path.join(LOGBOOK_XML_TEST_DATA_LOCATION, test_file), "r") as f:
         xml_string = f.read()
     metadata, data_iter = parse_xml_string(xml_string)

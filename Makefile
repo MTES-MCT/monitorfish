@@ -56,7 +56,7 @@ check-clean-archi:
 .PHONY: clean ##LOCAL Clean all backend assets and stop docker containers
 clean: docker-env
 	rm -Rf ./backend/target
-	docker compose down -v
+	docker compose --profile kafka down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.monitorenv.dev.yml down -v
 	docker compose --env-file ./infra/docker/.env -f ./infra/docker/docker-compose.cypress.yml down -v
 	docker compose -f ./infra/docker/docker-compose.puppeteer.yml down -v

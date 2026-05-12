@@ -2,6 +2,7 @@ CREATE TABLE last_positions_ais (
   mmsi                          BIGINT PRIMARY KEY,
   ircs                          VARCHAR(100),
   external_immatriculation      VARCHAR(100),
+  destination                   TEXT,
   vessel_name                   VARCHAR(100),
   flag_state                    VARCHAR(100),
   latitude                      DOUBLE PRECISION NOT NULL,

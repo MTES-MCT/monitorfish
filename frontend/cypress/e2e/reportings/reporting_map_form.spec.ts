@@ -91,7 +91,8 @@ context('Reporting map form', () => {
     cy.get('#isFishing').should('be.checked')
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
 
-    openVesselBySearch('MALOTRU')
+    cy.get('[aria-label="Vider le champ"]').click()
+    openVesselBySearch('MALOTRU', 1)
 
     cy.clickButton('Fermer')
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')

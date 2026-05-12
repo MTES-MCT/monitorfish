@@ -26,6 +26,7 @@ class LastPositionAISDataOutput(
     // Properties for WebGL
     val coordinates: List<Double>?,
     val lastPositionSentAt: Long,
+    val destination: String? = null,
 ) {
     companion object {
         fun getVesselFeatureId(position: LastPositionAIS): String =
@@ -53,6 +54,7 @@ class LastPositionAISDataOutput(
                 dateTime = lastPosition.dateTime,
                 length = lastPosition.length,
                 isAtPort = lastPosition.isAtPort,
+                destination = lastPosition.destination,
             )
     }
 }

@@ -40,6 +40,8 @@ data class LastPositionAisEntity(
     val isAtPort: Boolean,
     @Column(name = "imo")
     val imo: String? = null,
+    @Column(name = "destination")
+    val destination: String? = null,
 ) : Serializable {
     fun toLastPositionAis() =
         LastPositionAIS(
@@ -65,5 +67,6 @@ data class LastPositionAisEntity(
             length = length,
             isAtPort = isAtPort,
             imo = imo,
+            destination = destination,
         )
 }

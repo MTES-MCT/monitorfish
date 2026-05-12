@@ -11,6 +11,7 @@ context('VesselSearch', () => {
     // When searching a vessel from the last positions table
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('Pheno')
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('firstVessel')
+    cy.wait(200)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@firstVessel')
     cy.wait(200)
@@ -19,6 +20,7 @@ context('VesselSearch', () => {
     // We should be able to search again when the vessel sidebar is already opened
     cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('détacher')
+    cy.wait(200)
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('secondVessel')
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@secondVessel')
@@ -29,6 +31,7 @@ context('VesselSearch', () => {
 
     // Search a vessel in the vessel table
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('MALOTRU')
+    cy.wait(200)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).contains('MALOTRU')
 
     // Enable AIS layer and search for an AIS-only vessel
@@ -48,12 +51,13 @@ context('VesselSearch', () => {
     // Given
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('Pheno')
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('firstVessel')
+    cy.wait(200)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@firstVessel')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
 
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('détacher')
-
+    cy.wait(200)
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('secondVessel')
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@secondVessel')
@@ -82,6 +86,7 @@ context('VesselSearch', () => {
   it('Vessel Should be searched from the search bar with few positions When a beacon number is entered', () => {
     // When
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('FGED')
+    cy.wait(200)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait(200)
     cy.get('*[data-cy^="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')

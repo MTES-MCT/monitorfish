@@ -1,3 +1,4 @@
+import { aisVesselToVesselIdentity } from '@features/Vessel/components/VesselSearch/utils'
 import { getVesselCompositeIdentifier, getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
 import { localStorageManager } from '@libs/LocalStorageManager'
 import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
@@ -11,34 +12,17 @@ import type { Vessel } from '../../Vessel.types'
 
 type VesselSearchResultProps = Readonly<{
   foundAISVessels?: AISVessel.AISVessel[] | undefined
-  foundVessels: Vessel.VesselIdentity[]
-  onAISChange?: ((vessel: AISVessel.AISVessel) => void) | undefined
-  onSelect: (vessel: Vessel.VesselIdentity) => void
+  foundVMSOrReferentialVessels: Vessel.VesselIdentity[]
+  onAISVesselSelect?: ((vessel: AISVessel.AISVessel) => void) | undefined
+  onVMSOrReferentialVesselSelect: (vessel: Vessel.VesselIdentity) => void
   searchQuery: string | undefined
   withLastSearchResults: boolean
 }>
-
-function aisVesselToVesselIdentity(v: AISVessel.AISVessel): Vessel.VesselIdentity {
-  return {
-    beaconNumber: undefined,
-    districtCode: undefined,
-    externalReferenceNumber: undefined,
-    flagState: v.flagState,
-    internalReferenceNumber: undefined,
-    ircs: v.ircs,
-    mmsi: String(v.mmsi),
-    vesselId: undefined,
-    vesselIdentifier: undefined,
-    vesselLength: undefined,
-    vesselName: v.vesselName
-  }
-}
-
 export function VesselSearchResult({
   foundAISVessels,
-  foundVessels,
-  onAISChange,
-  onSelect,
+  foundVMSOrReferentialVessels,
+  onAISVesselSelect,
+  onVMSOrReferentialVesselSelect,
   searchQuery,
   withLastSearchResults
 }: VesselSearchResultProps) {
@@ -48,49 +32,45 @@ export function VesselSearchResult({
     .get<Vessel.VesselIdentity[]>(LocalStorageKey.LastSearchVessels, [])
     .map(getVesselIdentityFromLegacyVesselIdentity)
 
+  const hasFoundVessels = foundVMSOrReferentialVessels.length > 0 || !!foundAISVessels?.length
+
   return (
     <>
-      {foundVessels.length > 0 && (
+      {hasFoundVessels && (
         <Results>
           <List>
-            {foundVessels.map(featureOrIdentity => (
+            {foundVMSOrReferentialVessels.map(featureOrIdentity => (
               <VesselSearchResultItem
                 key={`${featureOrIdentity.vesselId}-${getVesselCompositeIdentifier(featureOrIdentity)}`}
                 baseUrl={baseUrl}
-                onClick={onSelect}
+                onClick={onVMSOrReferentialVesselSelect}
                 searchQuery={searchQuery}
                 vessel={featureOrIdentity}
+              />
+            ))}
+            {foundAISVessels?.map(aisVessel => (
+              <VesselSearchResultItem
+                key={aisVessel.vesselFeatureId}
+                baseUrl={baseUrl}
+                // eslint-disable-next-line react/jsx-no-bind
+                onClick={_ => onAISVesselSelect?.(aisVessel)}
+                searchQuery={searchQuery}
+                vessel={aisVesselToVesselIdentity(aisVessel)}
               />
             ))}
           </List>
         </Results>
       )}
-      {withLastSearchResults && !foundVessels.length && lastSearchResults.length > 0 && (
+      {withLastSearchResults && !hasFoundVessels && lastSearchResults.length > 0 && (
         <Results>
           <List>
             {lastSearchResults.map(vessel => (
               <VesselSearchResultItem
                 key={`${vessel.vesselId}-${getVesselCompositeIdentifier(vessel)}`}
                 baseUrl={baseUrl}
-                onClick={onSelect}
+                onClick={onVMSOrReferentialVesselSelect}
                 searchQuery={searchQuery}
                 vessel={vessel}
-              />
-            ))}
-          </List>
-        </Results>
-      )}
-      {!!foundAISVessels?.length && (
-        <Results>
-          <List>
-            {foundAISVessels.map(aisVessel => (
-              <VesselSearchResultItem
-                key={aisVessel.vesselFeatureId}
-                baseUrl={baseUrl}
-                // eslint-disable-next-line react/jsx-no-bind
-                onClick={_ => onAISChange?.(aisVessel)}
-                searchQuery={searchQuery}
-                vessel={aisVesselToVesselIdentity(aisVessel)}
               />
             ))}
           </List>

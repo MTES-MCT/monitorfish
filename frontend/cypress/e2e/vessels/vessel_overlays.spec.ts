@@ -1,3 +1,5 @@
+import {openVesselBySearch} from "../main_window/utils";
+
 context('Vessels Overlays', () => {
   it('Last position card with vessel groups Should be seen on the map on pointer move', () => {
     cy.login('superuser')
@@ -49,9 +51,7 @@ context('Vessels Overlays', () => {
     /**
      * Beacon malfunction
      */
-    cy.get('*[data-cy^="VesselSearch-input"]').type('EH VOLER MADAME')
-    cy.get('*[data-cy^="VesselSearch-item"]').eq(0).click()
-    cy.wait(5000)
+    openVesselBySearch('EH VOLER MADAME')
 
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.hoverVesselByName('EH VOLER MADAME')

@@ -33,9 +33,8 @@ function UnmemoizedAISVesselsLayer() {
     isError
   } = useGetAISVesselsQuery(vesselLocation, {
     pollingInterval: FIVE_MINUTES,
-    skip: import.meta.env.FRONTEND_AIS_VESSELS_ENABLED !== 'true'
+    skip: import.meta.env.FRONTEND_AIS_VESSELS_ENABLED !== 'true' || !areAISVesselsDisplayed
   })
-
   useEffect(() => {
     if (isError || !vessels) {
       if (error) {

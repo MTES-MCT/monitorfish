@@ -4,9 +4,12 @@ import io.sentry.Sentry
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
-@SpringBootApplication class MonitorFishApplication
+@SpringBootApplication
+@ConfigurationPropertiesScan
+class MonitorFishApplication
 
 fun main(args: Array<String>) {
     val ctx = runApplication<MonitorFishApplication>(*args)

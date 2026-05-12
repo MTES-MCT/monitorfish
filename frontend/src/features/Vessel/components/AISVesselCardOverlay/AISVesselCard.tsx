@@ -79,9 +79,7 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
               {vesselProperties.dateTime ? timeago.format(vesselProperties.dateTime, 'fr') : <NoValue>-</NoValue>}
             </FieldValue>
             <FieldName>Destination</FieldName>
-            <FieldValue>
-              {vesselProperties.destination ?? <NoValue>-</NoValue>}
-            </FieldValue>
+            <FieldValue>{vesselProperties.destination ?? <NoValue>-</NoValue>}</FieldValue>
           </Position>
         </ThreeColumnsBody>
         <Identification>

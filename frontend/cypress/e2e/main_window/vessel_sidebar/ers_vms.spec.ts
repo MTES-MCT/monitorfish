@@ -112,8 +112,7 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselTwoBeaconMalfunctions')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).click()
-    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('U_W0')
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
+    openVesselBySearch('U_W0')
     cy.wait('@openVesselTwo')
     cy.wait('@vesselTwoBeaconMalfunctions').then(({ response }) => expect(response && response.statusCode).equal(200))
 

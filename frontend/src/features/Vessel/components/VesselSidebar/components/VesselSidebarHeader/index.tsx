@@ -4,7 +4,7 @@ import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { showAISVessel } from '@features/Vessel/useCases/showAISVessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
-import { useGetAISVesselsQuery } from '@features/Vessel/vesselApi'
+import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Icon } from '@mtes-mct/monitor-ui'
@@ -32,7 +32,7 @@ export function VesselSidebarHeader() {
 
   const vesselLocation =
     listFilterValues.vesselsLocation?.length === 1 ? listFilterValues.vesselsLocation[0] : undefined
-  const { data: aisVessels } = useGetAISVesselsQuery(vesselLocation)
+  const { data: aisVessels } = useMainAppSelector(vesselApi.endpoints.getAISVessels.select(vesselLocation))
 
   const isVesselNameShown = !isFocusedOnVesselSearch && selectedVesselIdentity
 

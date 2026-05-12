@@ -70,23 +70,25 @@ export function VesselSearch({
   const wrapperRef = useRef(null)
   const inputRef = useRef(null)
 
-  const [foundVessels, setFoundVessels] = useState<Vessel.VesselIdentity[]>([])
+  const [foundVessels, setFoundVMSOrReferentialVessels] = useState<Vessel.VesselIdentity[]>([])
   const [inputValue, setInputValue] = useState(selectedVessel?.vesselName ?? '')
   const [isOpen, setIsOpen] = useState(false)
 
-  const fuse = useMemo(() => (vmsVessels ? new Fuse(vmsVessels, VESSEL_SEARCH_OPTIONS) : undefined), [vmsVessels])
-
-  const aisFuse = useMemo(
+  const vmsVesselsFuse = useMemo(
+    () => (vmsVessels ? new Fuse(vmsVessels, VESSEL_SEARCH_OPTIONS) : undefined),
+    [vmsVessels]
+  )
+  const aisVesselsFuse = useMemo(
     () => (aisVessels ? new Fuse(aisVessels, AIS_VESSEL_SEARCH_OPTIONS) : undefined),
     [aisVessels]
   )
 
   const [foundAISVessels, setFoundAISVessels] = useState<AISVessel.AISVessel[]>([])
 
-  const handleAISVesselChange = useCallback(
+  const selectAISVessel = useCallback(
     (aisVessel: AISVessel.AISVessel) => {
       setFoundAISVessels([])
-      setFoundVessels([])
+      setFoundVMSOrReferentialVessels([])
       setInputValue('')
       setIsOpen(false)
       onChange(aisVessel, true)
@@ -94,16 +96,7 @@ export function VesselSearch({
     [onChange]
   )
 
-  const clean = useCallback(async () => {
-    setFoundVessels([])
-    setFoundAISVessels([])
-    setInputValue('')
-    setIsOpen(false)
-
-    handleOnChange(undefined)
-  }, [handleOnChange])
-
-  const selectVessel = useCallback(
+  const selectVMSVessel = useCallback(
     (vesselIdentity: Vessel.VesselIdentity) => {
       const vesselWithIdentifier = enrichWithVesselIdentifierIfUndefined(vesselIdentity)
 
@@ -119,20 +112,29 @@ export function VesselSearch({
     [onChange, handleOnChange, shouldResetSelectedVesselOnChange]
   )
 
+  const clean = useCallback(async () => {
+    setFoundVMSOrReferentialVessels([])
+    setFoundAISVessels([])
+    setInputValue('')
+    setIsOpen(false)
+
+    handleOnChange(undefined)
+  }, [handleOnChange])
+
   const runSearch = useDebouncedCallback(async (searchQuery: string) => {
     if (searchQuery.length <= 1) {
-      setFoundVessels([])
+      setFoundVMSOrReferentialVessels([])
       setFoundAISVessels([])
 
       return
     }
 
     const nextFoundVessels = await dispatch(
-      searchVessel(searchQuery, isVesselIdRequiredFromResults, fuse, displayedErrorKey)
+      searchVessel(searchQuery, isVesselIdRequiredFromResults, vmsVesselsFuse, displayedErrorKey)
     )
 
-    setFoundVessels(nextFoundVessels)
-    setFoundAISVessels(aisFuse ? aisFuse.search(searchQuery, { limit: 10 }).map(r => r.item) : [])
+    setFoundVMSOrReferentialVessels(nextFoundVessels)
+    setFoundAISVessels(aisVesselsFuse ? aisVesselsFuse.search(searchQuery, { limit: 10 }).map(r => r.item) : [])
   }, 200)
 
   const handleChange = useCallback(
@@ -153,7 +155,7 @@ export function VesselSearch({
 
     if (shouldResetInputOnBlur) {
       setInputValue('')
-      setFoundVessels([])
+      setFoundVMSOrReferentialVessels([])
       setFoundAISVessels([])
     }
 
@@ -228,9 +230,9 @@ export function VesselSearch({
       {isOpen && (
         <VesselSearchResult
           foundAISVessels={foundAISVessels}
-          foundVessels={foundVessels}
-          onAISChange={handleAISVesselChange}
-          onSelect={selectVessel}
+          foundVMSOrReferentialVessels={foundVessels}
+          onAISVesselSelect={selectAISVessel}
+          onVMSOrReferentialVesselSelect={selectVMSVessel}
           searchQuery={inputValue}
           withLastSearchResults={withLastSearchResults}
         />

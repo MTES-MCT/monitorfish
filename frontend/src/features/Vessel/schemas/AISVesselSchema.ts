@@ -4,6 +4,7 @@ export const AISVesselSchema = z.strictObject({
   coordinates: z.array(z.number()),
   course: z.number().optional(),
   dateTime: z.string(),
+  destination: z.string().optional(),
   externalMarker: z.string().optional(),
   flagState: z.string(),
   imo: z.string().optional(),
@@ -16,6 +17,5 @@ export const AISVesselSchema = z.strictObject({
   mmsi: z.number(),
   speed: z.number().optional(),
   vesselFeatureId: z.string(),
-  vesselName: z.string().optional(),
-  destination: z.string().optional()
+  vesselName: z.string().optional()
 })

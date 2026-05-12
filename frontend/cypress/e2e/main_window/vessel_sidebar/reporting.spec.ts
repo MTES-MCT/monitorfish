@@ -231,9 +231,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
     cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
 
-    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('ABC000597493')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.wait('@getVesselReportings')
 
@@ -260,9 +258,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
     cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
 
-    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('ABC000597493')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.wait('@getVesselReportings')
 
@@ -287,9 +283,7 @@ context('Vessel sidebar reporting tab', () => {
   it('Should show validation error when no validity option is chosen', () => {
     cy.intercept('GET', '/bff/v1/vessels/reportings?*').as('getVesselReportings')
 
-    cy.get('*[data-cy="vessel-search-input"]', { timeout: 10000 }).type('ABC000597493')
-    cy.get('*[data-cy="vessel-search-item"]', { timeout: 10000 }).eq(0).click()
-    cy.get('*[data-cy="vessel-sidebar"]', { timeout: 10000 }).should('be.visible')
+    openVesselBySearch('ABC000597493')
     cy.get('*[data-cy="vessel-menu-reporting"]').click({ timeout: 10000 })
     cy.wait('@getVesselReportings')
 

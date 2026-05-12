@@ -269,6 +269,7 @@ function generateVessel(mmsi) {
 
 async function run() {
   const spinner = ora(`Generating ${VESSEL_COUNT} AIS last positions...`).start()
+  console.info('⚠️  It might break Cypress tests based on vessels names (i.e ais_positions_overlay.spec.ts)\n')
 
   // Generate unique MMSIs: real MMSIs are 9-digit numbers, MMSI 200000000-799999999 are assigned to vessels
   const usedMmsis = new Set()

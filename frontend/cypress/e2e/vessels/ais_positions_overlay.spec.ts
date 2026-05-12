@@ -7,10 +7,10 @@ context('AIS Positions Overlay', () => {
     cy.clickButton('AIS')
     cy.wait(3000)
 
-    cy.hoverVesselByName('SYLVIA ABBOTT', 'AIS_VESSELS_POINTS')
+    cy.hoverVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
 
     cy.wait(50)
-    cy.get('*[data-cy="vessel-card-name"]').contains('SYLVIA ABBOTT')
+    cy.get('*[data-cy="vessel-card-name"]').contains('ETOILE DES ILES')
     cy.get('*[data-cy="vessel-card-latitude"]').should('be.visible')
     cy.get('*[data-cy="vessel-card-longitude"]').should('be.visible')
 
@@ -18,7 +18,7 @@ context('AIS Positions Overlay', () => {
     cy.clickButton('AIS')
     cy.wait(250)
 
-    cy.hoverVesselByName('SYLVIA ABBOTT', 'AIS_VESSELS_POINTS')
+    cy.hoverVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
 
     cy.wait(50)
     cy.get('*[data-cy="vessel-card-name"]').should('not.exist')

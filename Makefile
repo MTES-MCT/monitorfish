@@ -65,7 +65,7 @@ clean: docker-env
 generate-test-data:
 	cd frontend && npm run generate:testdata
 
-.PHONY: generate-last-positions-ais ##TESTDATA Generate last_positions_ais .jsonc file (10k AIS vessels)
+.PHONY: generate-last-positions-ais ##TESTDATA Generate last_positions_ais .jsonc file (10k AIS vessels) /!\ It might break Cypress tests based on vessels names (i.e ais_positions_overlay.spec.ts)
 generate-last-positions-ais:
 	cd frontend && node ./scripts/generate_last_positions_ais.js
 

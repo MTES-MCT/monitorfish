@@ -256,7 +256,7 @@ const TopBar = styled.div<{
   right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
   top: calc(${p => p.$top}px + 10px);
   transition: right 0.3s;
-  z-index: 1;
+  z-index: 2;
 `
 
 const MenuItem = styled.li`

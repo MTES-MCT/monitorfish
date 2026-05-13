@@ -52,51 +52,51 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
           docker push ${{ env.IMAGE_TAG }}
 
-  build-database-upgrade-image:
-    name: Build database upgrade image
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        include:
-          - distribution: "bookworm"
-            from_pg_major: "13"
-            to_pg_major: "16"
-            timescaledb_version: "2.14.2"
-            postgis_version: "3.5.1"
-            dockerfile: "upgrade_pg.Dockerfile"
-            image_version: "pg13_to_pg16-ts2.14.2-postgis3.5.1"
+  # build-database-upgrade-image:
+  #   name: Build database upgrade image
+  #   runs-on: ubuntu-22.04
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - distribution: "bookworm"
+  #           from_pg_major: "13"
+  #           to_pg_major: "16"
+  #           timescaledb_version: "2.14.2"
+  #           postgis_version: "3.5.1"
+  #           dockerfile: "upgrade_pg.Dockerfile"
+  #           image_version: "pg13_to_pg16-ts2.14.2-postgis3.5.1"
 
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v5
 
-      - name: Set IMAGE_TAG
-        run: echo "IMAGE_TAG=ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:${{ matrix.image_version }}" >> $GITHUB_ENV
+  #     - name: Set IMAGE_TAG
+  #       run: echo "IMAGE_TAG=ghcr.io/mtes-mct/monitorfish/monitorfish-database-upgrade:${{ matrix.image_version }}" >> $GITHUB_ENV
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@master
+  #     - name: Set up Docker Buildx
+  #       id: buildx
+  #       uses: docker/setup-buildx-action@master
 
-      - name: Build image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          load: true
-          builder: ${{ steps.buildx.outputs.name }}
-          file: infra/docker/database/${{ matrix.dockerfile }}
-          push: false
-          tags: ${{ env.IMAGE_TAG }}
-          build-args: |
-            DISTRIBUTION=${{ matrix.distribution }}
-            FROM_PG_MAJOR=${{ matrix.from_pg_major }}
-            TO_PG_MAJOR=${{ matrix.to_pg_major }}
-            TIMESCALEDB_VERSION=${{ matrix.timescaledb_version }}
-            POSTGIS_VERSION=${{ matrix.postgis_version }}
+  #     - name: Build image
+  #       uses: docker/build-push-action@v7
+  #       with:
+  #         context: .
+  #         load: true
+  #         builder: ${{ steps.buildx.outputs.name }}
+  #         file: infra/docker/database/${{ matrix.dockerfile }}
+  #         push: false
+  #         tags: ${{ env.IMAGE_TAG }}
+  #         build-args: |
+  #           DISTRIBUTION=${{ matrix.distribution }}
+  #           FROM_PG_MAJOR=${{ matrix.from_pg_major }}
+  #           TO_PG_MAJOR=${{ matrix.to_pg_major }}
+  #           TIMESCALEDB_VERSION=${{ matrix.timescaledb_version }}
+  #           POSTGIS_VERSION=${{ matrix.postgis_version }}
 
-      - name: Push docker image to registry
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
-          docker push ${{ env.IMAGE_TAG }}
+  #     - name: Push docker image to registry
+  #       run: |
+  #         echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+  #         docker push ${{ env.IMAGE_TAG }}

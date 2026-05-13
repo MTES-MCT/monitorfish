@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rsm:FLUXSalesReportMessage xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXFAReportMessage:3 FLUXFAReportMessage_3p1.xsd" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xmlns:rsm="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rsm:FLUXReportDocument>
+        <ram:ID schemeID="UUID">29c3e26d-e1a0-4fce-a500-a78e479d4f4e</ram:ID>
+        <ram:ReferencedID schemeID="UUID">ee26ca74-21a7-42fd-bbd6-84149f8c7b68</ram:ReferencedID>
+        <ram:CreationDateTime>
+            <udt:DateTime>2022-01-31T22:00:06.449Z</udt:DateTime>
+        </ram:CreationDateTime>
+        <ram:PurposeCode listID="FLUX_GP_PURPOSE">5</ram:PurposeCode>
+        <ram:OwnerFLUXParty>
+            <ram:ID schemeID="FLUX_GP_PARTY">DNK</ram:ID>
+            <ram:Name>Denmark</ram:Name>
+        </ram:OwnerFLUXParty>
+    </rsm:FLUXReportDocument>
+    <rsm:SalesReport>
+        <ram:ItemTypeCode listID="FLUX_SALES_TYPE">SN</ram:ItemTypeCode>
+        <ram:IncludedSalesDocument>
+            <ram:ID schemeID="EU_SALES_ID">DNK-SN-00000000000000000000000</ram:ID>
+            <ram:CurrencyCode listID="TERRITORY_CURR">DKK</ram:CurrencyCode>
+            <ram:SpecifiedSalesBatch>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">USK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">54.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>1809.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">N/A</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">USK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">27.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>830.25</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">N/A</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">52.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>2314.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">68.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>3060.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">55.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>2337.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">22.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>951.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">4</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">8.5</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>170.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">5</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MON</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">26.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">B</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>130.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">N/A</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">WHG</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">189.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>2835.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">330.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>18645.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">88.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>5720.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">88.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>5412.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">22.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>1254.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">132.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>7590.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">88.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>3520.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HKE</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">220.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>10835.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HAD</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">297.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>9875.25</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HAD</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">810.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>20452.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">HAD</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">540.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>8910.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">LIN</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">459.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>17097.75</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">LIN</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">27.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>1147.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">LIN</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">135.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>5467.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">LIN</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">162.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>6358.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">100.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>3300.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">286.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>9295.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">189.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>6142.5</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">918.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>29835.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">2484.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>75141.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">POK</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">6723.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>188244.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">4</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">COD</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">54.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>2565.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MEG</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">104.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>8944.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+                <ram:SpecifiedAAPProduct>
+                    <ram:SpeciesCode listID="FAO_SPECIES">MEG</ram:SpeciesCode>
+                    <ram:WeightMeasure unitCode="KGM">104.0</ram:WeightMeasure>
+                    <ram:UsageCode listID="PROD_USAGE">HCN</ram:UsageCode>
+                    <ram:AppliedAAPProcess>
+                        <ram:TypeCode listID="FISH_FRESHNESS">A</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+                        <ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+                    </ram:AppliedAAPProcess>
+                    <ram:TotalSalesPrice>
+                        <ram:ChargeAmount>7852.0</ram:ChargeAmount>
+                    </ram:TotalSalesPrice>
+                    <ram:SpecifiedSizeDistribution>
+                        <ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+                        <ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+                    </ram:SpecifiedSizeDistribution>
+                    <ram:OriginFLUXLocation>
+                        <ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+                        <ram:CountryID schemeID="TERRITORY">XEU</ram:CountryID>
+                        <ram:ID schemeID="FAO_AREA">27.4.a</ram:ID>
+                    </ram:OriginFLUXLocation>
+                </ram:SpecifiedAAPProduct>
+            </ram:SpecifiedSalesBatch>
+            <ram:SpecifiedSalesEvent>
+                <ram:OccurrenceDateTime>
+                    <udt:DateTime>2022-01-18T06:00:00Z</udt:DateTime>
+                </ram:OccurrenceDateTime>
+            </ram:SpecifiedSalesEvent>
+            <ram:SpecifiedFishingActivity>
+                <ram:TypeCode>LAN</ram:TypeCode>
+                <ram:RelatedFLUXLocation>
+                    <ram:TypeCode listID="FLUX_LOCATION_TYPE">LOCATION</ram:TypeCode>
+                    <ram:CountryID schemeID="TERRITORY">DNK</ram:CountryID>
+                    <ram:ID schemeID="LOCATION">DKHAN</ram:ID>
+                </ram:RelatedFLUXLocation>
+                <ram:SpecifiedDelimitedPeriod>
+                    <ram:StartDateTime>
+                        <udt:DateTime>2022-01-18T05:00:00Z</udt:DateTime>
+                    </ram:StartDateTime>
+                    <ram:EndDateTime>
+                        <udt:DateTime>2022-01-18T05:00:00Z</udt:DateTime>
+                    </ram:EndDateTime>
+                </ram:SpecifiedDelimitedPeriod>
+                <ram:RelatedVesselTransportMeans>
+                    <ram:ID schemeID="CFR">FRA000999999</ram:ID>
+                    <ram:ID schemeID="IRCS">ZZZZ</ram:ID>
+                    <ram:ID schemeID="EXT_MARK">AA123456</ram:ID>
+                    <ram:Name>FAKE VESSEL</ram:Name>
+                    <ram:RegistrationVesselCountry>
+                        <ram:ID schemeID="TERRITORY">FRA</ram:ID>
+                    </ram:RegistrationVesselCountry>
+                    <ram:SpecifiedContactParty>
+                        <ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+                        <ram:SpecifiedContactPerson>
+                            <ram:GivenName>SOMEONE</ram:GivenName>
+                            <ram:FamilyName>SOMEONE</ram:FamilyName>
+                        </ram:SpecifiedContactPerson>
+                    </ram:SpecifiedContactParty>
+                </ram:RelatedVesselTransportMeans>
+            </ram:SpecifiedFishingActivity>
+            <ram:SpecifiedFLUXLocation>
+                <ram:TypeCode listID="FLUX_LOCATION_TYPE">LOCATION</ram:TypeCode>
+                <ram:CountryID schemeID="TERRITORY">DNK</ram:CountryID>
+                <ram:ID schemeID="LOCATION">DKHAN</ram:ID>
+            </ram:SpecifiedFLUXLocation>
+            <ram:SpecifiedSalesParty>
+                <ram:ID schemeID="MS">9999</ram:ID>
+                <ram:Name>Buyer</ram:Name>
+                <ram:RoleCode listID="FLUX_SALES_PARTY_ROLE">BUYER</ram:RoleCode>
+            </ram:SpecifiedSalesParty>
+            <ram:SpecifiedSalesParty>
+                <ram:ID schemeID="MS">9999</ram:ID>
+                <ram:Name>Sender</ram:Name>
+                <ram:RoleCode listID="FLUX_SALES_PARTY_ROLE">SENDER</ram:RoleCode>
+            </ram:SpecifiedSalesParty>
+            <ram:SpecifiedSalesParty>
+                <ram:Name>Provider</ram:Name>
+                <ram:RoleCode listID="FLUX_SALES_PARTY_ROLE">PROVIDER</ram:RoleCode>
+            </ram:SpecifiedSalesParty>
+        </ram:IncludedSalesDocument>
+    </rsm:SalesReport>
+</rsm:FLUXSalesReportMessage>

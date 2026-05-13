@@ -21,6 +21,8 @@ from src.processing import (
     df_values_to_psql_arrays,
     drop_duplicates_by_decreasing_priority,
     drop_rows_already_in_table,
+    explode_dicts,
+    explode_lists_of_dicts,
     get_matched_groups,
     get_unused_col_name,
     is_a_value,
@@ -943,6 +945,74 @@ def test_get_matched_groups():
     s_4 = None
     series_4 = get_matched_groups(s_4, regex)
     pd.testing.assert_series_equal(series_4, default_series)
+
+
+def test_explode_dicts():
+    df = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "data": [
+                {"a": 10, "b": "x"},
+                {"a": 20, "b": "y"},
+                {"a": 30, "b": "z"},
+            ],
+        }
+    )
+
+    res = explode_dicts(df, "data")
+
+    expected = pd.DataFrame({"id": [1, 2, 3], "a": [10, 20, 30], "b": ["x", "y", "z"]})
+    pd.testing.assert_frame_equal(res, expected)
+
+    # None values in dicts become NaN in the expanded columns
+    df_with_nones = pd.DataFrame(
+        {
+            "id": [1, 2],
+            "data": [{"a": 10, "b": None}, {"a": None, "b": "y"}],
+        }
+    )
+
+    res_with_nones = explode_dicts(df_with_nones, "data")
+
+    expected_with_nones = pd.DataFrame(
+        {"id": [1, 2], "a": [10.0, None], "b": [None, "y"]}
+    )
+    pd.testing.assert_frame_equal(res_with_nones, expected_with_nones)
+
+
+def test_explode_lists_of_dicts():
+    df = pd.DataFrame(
+        {
+            "id": [1, 2],
+            "items": [
+                [{"a": 10, "b": "x"}, {"a": 20, "b": "y"}],
+                [{"a": 30, "b": "z"}],
+            ],
+        }
+    )
+
+    res = explode_lists_of_dicts(df, "items")
+
+    expected = pd.DataFrame({"id": [1, 1, 2], "a": [10, 20, 30], "b": ["x", "y", "z"]})
+    pd.testing.assert_frame_equal(res, expected)
+
+    # None values in dicts become NaN in the expanded columns
+    df_with_nones = pd.DataFrame(
+        {
+            "id": [1, 2],
+            "items": [
+                [{"a": 10, "b": None}, {"a": None, "b": "y"}],
+                [{"a": 30, "b": "z"}],
+            ],
+        }
+    )
+
+    res_with_nones = explode_lists_of_dicts(df_with_nones, "items")
+
+    expected_with_nones = pd.DataFrame(
+        {"id": [1, 1, 2], "a": [10.0, None, 30.0], "b": [None, "y", "z"]}
+    )
+    pd.testing.assert_frame_equal(res_with_nones, expected_with_nones)
 
 
 def test_merge_dicts():

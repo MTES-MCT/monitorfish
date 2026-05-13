@@ -1,6 +1,5 @@
 import os
 import re
-from enum import Enum
 from pathlib import Path
 from typing import List, Union
 from zipfile import ZipFile
@@ -9,87 +8,72 @@ from prefect import flow, get_run_logger, task
 
 from config import ERS_FILES_LOCATION
 from src.db_config import create_engine
+from src.entities.data_exchange_standards import (
+    DataDomain,
+    TransmissionFormat,
+    ZippedFileType,
+)
+from src.generic_tasks import load
 from src.parsers.ers import ers
 from src.parsers.flux import flux
-from src.processing import drop_rows_already_in_table, to_json
+from src.processing import drop_rows_already_in_table
 from src.shared_tasks.control_flow import str_to_path
-from src.utils import get_table, move, psql_insert_copy
+from src.utils import get_table, move
 
 RECEIVED_DIRECTORY = ERS_FILES_LOCATION / "received"
 TREATED_DIRECTORY = ERS_FILES_LOCATION / "treated"
 ERROR_DIRECTORY = ERS_FILES_LOCATION / "error"
 
 
-class LogbookZippedFileType(Enum):
-    ERS3 = "ERS3"
-    ERS3_ACK = "ERS3_ACK"
-    UN = "UN"
-
-
-class LogbookTransmissionFormat(Enum):
-    ERS = "ERS"
-    FLUX = "FLUX"
-
-    @staticmethod
-    def from_zipped_file_type(t: LogbookZippedFileType):
-        mapping = {
-            LogbookZippedFileType.ERS3: LogbookTransmissionFormat.ERS,
-            LogbookZippedFileType.ERS3_ACK: LogbookTransmissionFormat.ERS,
-            LogbookZippedFileType.UN: LogbookTransmissionFormat.FLUX,
-        }
-        return mapping[t]
-
-
 ####################################### HELPERS #######################################
 
 
-def get_logbook_zipped_file_type(zipfile_name: str) -> LogbookZippedFileType:
+def get_zipped_file_type(zipfile_name: str) -> ZippedFileType:
     """Takes a zipfile name like UN_JBE202001123614.zip or ERS3_ACK_JBE202102365445.zip
-    and returns the coresponding `LogbookZippedFileType`, based on pattern matching.
+    and returns the coresponding `ZippedFileType`, based on pattern matching.
 
     The expected pattern is of the form
 
-        `<prefix>_JBE<YYYYMMXXXXXX>.zip`
+        `<prefix><YYYYMMXXXXXX>.zip`
 
     where :
 
-    * prefix is one of the `LogbookZippedFileType` enum values
+    * prefix is one of the `ZippedFileType` enum values
     * Y, M and X are digits
 
     Args:
-        zipfile_name (str): name of a zipfile containing logbook data.
+        zipfile_name (str): name of a zipfile containing logbook or sales data.
 
     Returns:
-        LogbookZippedFileType: the type of data corresponding to the name of the
-          zipfile
+        ZippedFileType: the type of data corresponding to the name of the zipfile
 
     Raises:
         ValueError: if the name does not match the expected pattern or the matched
-          string does not correspond to a known `LogbookZippedFileType`.
+          string does not correspond to a known `ZippedFileType`.
 
     Examples:
-        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.zip")
-        <LogbookZippedFileType.UN: 'UN'>
+        >>> get_zipped_file_type("UN_JBE2020010199999.zip")
+        <ZippedFileType.UN: 'UN_JBE'>
 
-        >>> get_logbook_zipped_file_type("UN_JBE20200101999999.zip")
+        >>> get_zipped_file_type("UN_JBE20200101999999.zip")
         ValueError
 
-        >>> get_logbook_zipped_file_type("UN_JBE2020010199999.txt")
+        >>> get_zipped_file_type("UN_JBE2020010199999.txt")
         ValueError
     """
-    zipfile_name_pattern = r"^(?P<logbook_type>.*)_JBE\d{12}.zip"
+    zipfile_name_pattern = r"^(?P<file_type>.*)\d{12}.zip"
     match = re.match(zipfile_name_pattern, zipfile_name)
 
     try:
         assert match
-        return LogbookZippedFileType[match["logbook_type"]]
+        return ZippedFileType[match["file_type"]]
     except (AssertionError, KeyError):
         raise ValueError(
             (
                 "Unexpected file name. Files containing logbook data are expected to "
                 f"have a name matching the pattern {zipfile_name_pattern}, with "
-                "`logbook_type` equal to one of "
-                f"{list(map(lambda s: s.name, LogbookZippedFileType))} .Got "
+                "`file_type` equal to one of "
+                f"{list(map(lambda s: s.name, ZippedFileType))} .Got "
                 f"{zipfile_name} which does not match."
             )
         )
@@ -199,7 +183,7 @@ def extract_zipfiles(
 
             for zipfile_name in zipfile_names:
                 try:
-                    zipped_file_type = get_logbook_zipped_file_type(zipfile_name)
+                    zipped_file_type = get_zipped_file_type(zipfile_name)
                 except ValueError as e:
                     logger.error(e)
                     move(
@@ -215,7 +199,10 @@ def extract_zipfiles(
                         "input_dir": zipfile_input_dir,
                         "treated_dir": zipfile_treated_dir,
                         "error_dir": zipfile_error_dir,
-                        "transmission_format": LogbookTransmissionFormat.from_zipped_file_type(
+                        "data_domain": DataDomain.from_zipped_file_type(
+                            zipped_file_type
+                        ),
+                        "transmission_format": TransmissionFormat.from_zipped_file_type(
                             zipped_file_type
                         ),
                     }
@@ -237,7 +224,9 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
             integration
           - error_dir (`Path`): path where the zipfile should be transfered
             in case of error during its treatment
-          - transmission_format (`LogbookTransmissionFormat`): transmission format
+          - zipped_file_type (`ZippedFileType`): type of data in the zip file
+          - data_domain (`DataDomain`): data domain
+          - transmission_format (`TransmissionFormat`): transmission format
 
     Opens the corresponding zipfile on the filesystem, reads the xml files it is
     expected to contain, puts the content of these xml files in a list of strings,
@@ -270,8 +259,8 @@ def extract_xmls_from_zipfile(zipfile: Union[None, dict]) -> Union[None, dict]:
 @task
 def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
     batch_parsers = {
-        LogbookTransmissionFormat.ERS: ers.batch_parse,
-        LogbookTransmissionFormat.FLUX: flux.batch_parse,
+        TransmissionFormat.ERS: ers.batch_parse,
+        TransmissionFormat.FLUX: flux.batch_parse,
     }
 
     logger = get_run_logger()
@@ -279,10 +268,10 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
         logger.info(f"Parsing messages of zipfile {zipfile['full_name']}")
         transmission_format = zipfile["transmission_format"]
         batch_parser = batch_parsers[transmission_format]
-        parsed_batch = batch_parser(zipfile["xml_messages"])
-        parsed_batch["logbook_reports"][
-            "transmission_format"
-        ] = transmission_format.value
+        parsed_batch = batch_parser(
+            zipfile["xml_messages"], data_domain=zipfile["data_domain"]
+        )
+        parsed_batch["reports"]["transmission_format"] = transmission_format.value
         zipfile.pop("xml_messages")
         zipfile = {**zipfile, **parsed_batch}
         return zipfile
@@ -292,87 +281,72 @@ def parse_xmls(zipfile: Union[None, dict]) -> Union[None, dict]:
 def clean(zipfile: Union[None, dict]) -> Union[None, dict]:
     logger = get_run_logger()
     if zipfile:
-        if zipfile["transmission_format"] is LogbookTransmissionFormat.ERS:
+        if zipfile["transmission_format"] is TransmissionFormat.ERS:
             logger.info(
                 "Removing QUE and RSP messages from messages of "
                 + f"zipfile {zipfile['full_name']}."
             )
-            zipfile["logbook_reports"] = zipfile["logbook_reports"][
-                zipfile["logbook_reports"].operation_type.isin(
-                    ["DAT", "DEL", "COR", "RET"]
-                )
+            zipfile["reports"] = zipfile["reports"][
+                zipfile["reports"].operation_type.isin(["DAT", "DEL", "COR", "RET"])
             ]
-            zipfile["logbook_raw_messages"] = zipfile["logbook_raw_messages"][
-                zipfile["logbook_raw_messages"].operation_number.isin(
-                    zipfile["logbook_reports"]["operation_number"]
+            zipfile["raw_messages"] = zipfile["raw_messages"][
+                zipfile["raw_messages"].operation_number.isin(
+                    zipfile["reports"]["operation_number"]
                 )
             ]
         return zipfile
 
 
 @task
-def load_logbook_data(cleaned_data: List[dict]):
-    """Loads logbook data into public.logbook_reports and public.logbook_raw_messages tables.
+def load_sales_and_logbook_data(cleaned_data: List[dict]):
+    """
+    Loads sales logbook data into public.logbook_reports / public.sales_notes and
+    public.logbook_raw_messages / public.sales_notes_raw_messages tables.
 
     Args:
         cleaned_data (list) : list of dictionaries (output of `clean` task)
     """
     schema = "public"
-    logbook_reports_table_name = "logbook_reports"
-    logbook_raw_messages_table_name = "logbook_raw_messages"
     engine = create_engine("monitorfish_remote")
     logger = get_run_logger()
 
-    logbook_reports_table = get_table(
-        logbook_reports_table_name, schema, engine, logger
-    )
-    logbook_raw_messages_table = get_table(
-        logbook_raw_messages_table_name, schema, engine, logger
-    )
-
     cleaned_data = list(filter(lambda x: True if x else False, cleaned_data))
+    reports_tables = {
+        DataDomain.LOGBOOK: get_table("logbook_reports", schema, engine, logger),
+        DataDomain.SALES: get_table("sales_notes", schema, engine, logger),
+    }
+
+    raw_messages_tables = {
+        DataDomain.LOGBOOK: get_table("logbook_raw_messages", schema, engine, logger),
+        DataDomain.SALES: get_table("sales_notes_raw_messages", schema, engine, logger),
+    }
 
     for zipfile in cleaned_data:
+        data_domain = zipfile["data_domain"]
+        reports_table = reports_tables[data_domain]
+        raw_messages_table = raw_messages_tables[data_domain]
+
         with engine.begin() as connection:
-            logbook_reports = zipfile["logbook_reports"]
-            logbook_raw_messages = zipfile["logbook_raw_messages"]
+            reports = zipfile["reports"]
+            raw_messages = zipfile["raw_messages"]
             transmission_format = zipfile["transmission_format"]
-            try:
-                assert transmission_format in (
-                    LogbookTransmissionFormat.FLUX,
-                    LogbookTransmissionFormat.ERS,
-                )
-            except AssertionError:
-                logger.error(
-                    (
-                        f"Unexpected transmission_format {transmission_format}. "
-                        f"Moving {zipfile['full_name']} to error_dir"
-                    )
-                )
-                move(
-                    zipfile["input_dir"] / zipfile["full_name"],
-                    zipfile["error_dir"],
-                    if_exists="replace",
-                )
-                continue
 
             # Drop rows for which the operation number already exists in the
             # logbook_raw_messages database
-
-            logbook_raw_messages = drop_rows_already_in_table(
-                df=logbook_raw_messages,
+            raw_messages = drop_rows_already_in_table(
+                df=raw_messages,
                 df_column_name="operation_number",
-                table=logbook_raw_messages_table,
+                table=raw_messages_table,
                 table_column_name="operation_number",
                 connection=connection,
                 logger=logger,
             )
 
-            if zipfile["transmission_format"] is LogbookTransmissionFormat.FLUX:
-                logbook_reports = drop_rows_already_in_table(
-                    df=logbook_reports,
+            if transmission_format is TransmissionFormat.FLUX:
+                reports = drop_rows_already_in_table(
+                    df=reports,
                     df_column_name="report_id",
-                    table=logbook_reports_table,
+                    table=reports_table,
                     table_column_name="report_id",
                     connection=connection,
                     logger=logger,
@@ -387,41 +361,44 @@ def load_logbook_data(cleaned_data: List[dict]):
                 #
                 # What we do instead is ensure we only insert logbook_reports for which
                 # the corresponding logbook_raw_message is not yet in the database.
-                logbook_reports = logbook_reports[
-                    logbook_reports.operation_number.isin(
-                        logbook_raw_messages.operation_number
-                    )
+                reports = reports[
+                    reports.operation_number.isin(raw_messages.operation_number)
                 ]
 
-            if len(logbook_raw_messages) > 0:
-                n_lines = len(logbook_raw_messages)
+            if len(raw_messages) > 0:
+                n_lines = len(raw_messages)
                 logger.info(
-                    f"Inserting {n_lines} messages in logbook_raw_messages table."
+                    f"Inserting {n_lines} messages in {raw_messages_table.name} table."
                 )
 
-                logbook_raw_messages.to_sql(
-                    name=logbook_raw_messages_table_name,
-                    con=connection,
+                load(
+                    raw_messages,
+                    table_name=raw_messages_table.name,
                     schema=schema,
-                    index=False,
-                    method=psql_insert_copy,
-                    if_exists="append",
+                    logger=logger,
+                    how="append",
+                    connection=connection,
                 )
 
-            if len(logbook_reports) > 0:
-                n_lines = len(logbook_reports)
-                logger.info(f"Inserting {n_lines} messages in logbook_reports table.")
+            if len(reports) > 0:
+                n_lines = len(reports)
+                logger.info(
+                    f"Inserting {n_lines} messages in {reports_table.name} table."
+                )
 
-                # Serialize dicts to prepare for insertion as json in database
-                logbook_reports["value"] = logbook_reports.value.map(to_json)
+                jsonb_column = {
+                    DataDomain.LOGBOOK: "value",
+                    DataDomain.SALES: "products",
+                }[data_domain]
 
-                logbook_reports.to_sql(
-                    name=logbook_reports_table_name,
-                    con=connection,
+                load(
+                    reports,
+                    table_name=reports_table.name,
                     schema=schema,
-                    index=False,
-                    method=psql_insert_copy,
-                    if_exists="append",
+                    logger=logger,
+                    how="append",
+                    connection=connection,
+                    jsonb_columns=[jsonb_column],
                 )
 
             if zipfile["batch_generated_errors"]:
@@ -442,8 +419,8 @@ def load_logbook_data(cleaned_data: List[dict]):
                 )
 
 
-@flow(name="Monitorfish - Logbook")
-def logbook_flow(
+@flow(name="Monitorfish - Sales and Logbook", log_prints=True)
+def sales_and_logbook_flow(
     received_directory: str = RECEIVED_DIRECTORY.as_posix(),
     treated_directory: str = TREATED_DIRECTORY.as_posix(),
     error_directory: str = ERROR_DIRECTORY.as_posix(),
@@ -460,4 +437,4 @@ def logbook_flow(
     zipfiles = extract_xmls_from_zipfile.map(zipfiles)
     zipfiles = parse_xmls.map(zipfiles)
     zipfiles = clean.map(zipfiles)
-    load_logbook_data(zipfiles)
+    load_sales_and_logbook_data(zipfiles)

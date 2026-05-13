@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLUXSalesReportMessage xmlns:clm63155CommunicationChannelCode="urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3 file:///H:/My%20Documents/MARE/Actions/ERS/SalesNotes/02_Life%20Cycle/025_Test%20Acceptance/xml-examples/FLUX_CCL16B_28SEP16_trimmed/FLUXSalesReportMessage_3p1/FLUXSalesReportMessage_3p1.xsd" xmlns="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<FLUXReportDocument>
+		<ram:ID schemeID="UUID">3B0A058D-A12B-4B8F-A487-2B8ED2DEE2A3</ram:ID>
+		<ram:CreationDateTime>
+			<udt:DateTime>2017-05-11T12:10:38Z</udt:DateTime>
+		</ram:CreationDateTime>
+		<ram:PurposeCode listID="FLUX_GP_PURPOSE">9</ram:PurposeCode>
+		<ram:Purpose>Take-over document example</ram:Purpose>
+		<ram:OwnerFLUXParty>
+			<ram:ID schemeID="FLUX_GP_PARTY">BEL</ram:ID>
+		</ram:OwnerFLUXParty>
+	</FLUXReportDocument>
+	<SalesReport>
+		<ram:ItemTypeCode listID="FLUX_SALES_TYPE">TOD</ram:ItemTypeCode>
+		<ram:IncludedSalesDocument>
+			<ram:ID schemeID="EU_SALES_ID">BEL-TOD-2017-123457</ram:ID>
+			<ram:CurrencyCode listID="TERRITORY_CURR">EUR</ram:CurrencyCode>
+			<ram:SpecifiedSalesBatch>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">PLE</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">6</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">WHL</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">1</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.3.d.24</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">PLE</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">36</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">WHL</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.3.d.24</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">DAB</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">517</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">WHL</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.3.d.24</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">COD</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">13</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.3.d.24</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">FLE</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">102</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">WHL</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">2</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.3.d.24</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+				<ram:SpecifiedAAPProduct>
+					<ram:SpeciesCode listID="FAO_SPECIES">LIN</ram:SpeciesCode>
+					<ram:WeightMeasure unitCode="KGM">9</ram:WeightMeasure>
+					<ram:UsageCode listID="PROD_USAGE">UNK</ram:UsageCode>
+					<ram:AppliedAAPProcess>
+						<ram:TypeCode listID="FISH_PRESERVATION">FRE</ram:TypeCode>
+						<ram:TypeCode listID="FISH_PRESENTATION">GUT</ram:TypeCode>
+					</ram:AppliedAAPProcess>
+					<ram:TotalSalesPrice>
+						<ram:ChargeAmount>0</ram:ChargeAmount>
+					</ram:TotalSalesPrice>
+					<ram:SpecifiedSizeDistribution>
+						<ram:CategoryCode listID="FISH_SIZE_CATEGORY">3</ram:CategoryCode>
+						<ram:ClassCode listID="FISH_SIZE_CLASS">LSC</ram:ClassCode>
+					</ram:SpecifiedSizeDistribution>
+					<ram:OriginFLUXLocation>
+						<ram:TypeCode listID="FLUX_LOCATION_TYPE">AREA</ram:TypeCode>
+						<ram:ID schemeID="FAO_AREA">27.7.a</ram:ID>
+					</ram:OriginFLUXLocation>
+				</ram:SpecifiedAAPProduct>
+			</ram:SpecifiedSalesBatch>
+			<ram:SpecifiedSalesEvent>
+				<ram:OccurrenceDateTime>
+					<udt:DateTime>2017-05-10T07:05:22Z</udt:DateTime>
+				</ram:OccurrenceDateTime>
+			</ram:SpecifiedSalesEvent>
+			<ram:SpecifiedFishingActivity>
+				<ram:TypeCode>LAN</ram:TypeCode>
+				<ram:RelatedFLUXLocation>
+					<ram:TypeCode listID="FLUX_LOCATION_TYPE">POSITION</ram:TypeCode>
+					<ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+						<ram:LongitudeMeasure>-1.65</ram:LongitudeMeasure>
+						<ram:LatitudeMeasure>49.65</ram:LatitudeMeasure>
+					</ram:SpecifiedPhysicalFLUXGeographicalCoordinate>
+				</ram:RelatedFLUXLocation>
+				<ram:SpecifiedDelimitedPeriod>
+					<ram:StartDateTime>
+						<udt:DateTime>2017-05-10T05:32:30Z</udt:DateTime>
+					</ram:StartDateTime>
+				</ram:SpecifiedDelimitedPeriod>
+				<ram:SpecifiedFishingTrip>
+					<ram:ID schemeID="EU_TRIP_ID">BEL-TRP-2015-1435-0456</ram:ID>
+				</ram:SpecifiedFishingTrip>
+				<ram:RelatedVesselTransportMeans>
+					<ram:ID schemeID="CFR">BEL123456789</ram:ID>
+					<ram:Name>FAKE VESSEL</ram:Name>
+					<ram:RegistrationVesselCountry>
+						<ram:ID schemeID="TERRITORY">BEL</ram:ID>
+					</ram:RegistrationVesselCountry>
+					<ram:SpecifiedContactParty>
+						<ram:RoleCode listID="FLUX_CONTACT_ROLE">MASTER</ram:RoleCode>
+						<ram:SpecifiedContactPerson>
+							<ram:GivenName>Henrick</ram:GivenName>
+							<ram:MiddleName>Jan</ram:MiddleName>
+							<ram:FamilyName>JANSEN</ram:FamilyName>
+						</ram:SpecifiedContactPerson>
+					</ram:SpecifiedContactParty>
+				</ram:RelatedVesselTransportMeans>
+			</ram:SpecifiedFishingActivity>
+			<ram:SpecifiedFLUXLocation>
+				<ram:TypeCode listID="FLUX_LOCATION_TYPE">LOCATION</ram:TypeCode>
+				<ram:CountryID schemeID="TERRITORY">BEL</ram:CountryID>
+				<ram:ID schemeID="LOCATION">BEOST</ram:ID>
+			</ram:SpecifiedFLUXLocation>
+			<ram:SpecifiedSalesParty>
+				<ram:Name>Mr SENDER</ram:Name>
+				<ram:RoleCode listID="FLUX_SALES_PARTY_ROLE">SENDER</ram:RoleCode>
+			</ram:SpecifiedSalesParty>
+			<ram:SpecifiedSalesParty>
+				<ram:ID schemeID="MS">456789</ram:ID>
+				<ram:Name>Mr STORAGE</ram:Name>
+				<ram:TypeCode listID="FLUX_SALES_PARTY_ROLE">RECIPIENT</ram:TypeCode>
+				<ram:SpecifiedFLUXOrganization>
+					<ram:Name>Ostend Visserij Organisatie</ram:Name>
+					<ram:PostalStructuredAddress>
+						<ram:StreetName>Voorhavenlaan</ram:StreetName>
+						<ram:CityName>Ostend</ram:CityName>
+						<ram:CountryID schemeID="TERRITORY">BEL</ram:CountryID>
+						<ram:PlotIdentification>4a</ram:PlotIdentification>
+						<ram:PostalArea>8400</ram:PostalArea>
+					</ram:PostalStructuredAddress>
+				</ram:SpecifiedFLUXOrganization>
+			</ram:SpecifiedSalesParty>
+		</ram:IncludedSalesDocument>
+	</SalesReport>
+</FLUXSalesReportMessage>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FLUXSalesReportMessage xmlns:clm63155CommunicationChannelCode="urn:un:unece:uncefact:codelist:standard:UNECE:CommunicationMeansTypeCode:D16A" xmlns:qdt="urn:un:unece:uncefact:data:Standard:QualifiedDataType:20" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:20" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:20" xsi:schemaLocation="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3 FLUXSalesReportMessage_3p1.xsd" xmlns="urn:un:unece:uncefact:data:standard:FLUXSalesReportMessage:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<FLUXReportDocument>
+		<ram:ID schemeID="UUID">128887F0-FA04-4F92-829A-36CEE114EF02</ram:ID>
+		<ram:ReferencedID schemeID="UUID">128887F0-FA04-4F92-829A-36CEE114EF01</ram:ReferencedID>
+		<ram:CreationDateTime>
+			<udt:DateTime>2017-05-12T17:04:36Z</udt:DateTime>
+		</ram:CreationDateTime>
+		<ram:PurposeCode listID="FLUX_GP_PURPOSE">3</ram:PurposeCode>
+		<ram:Purpose>Sales note deletion example</ram:Purpose>
+		<ram:OwnerFLUXParty>
+			<ram:ID schemeID="FLUX_GP_PARTY">BEL</ram:ID>
+		</ram:OwnerFLUXParty>
+	</FLUXReportDocument>
+</FLUXSalesReportMessage>

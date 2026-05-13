@@ -48,7 +48,6 @@ from src.flows.init_infraction_threat_characterization import (
 from src.flows.init_pno_types import init_pno_types_flow
 from src.flows.init_species_groups import init_species_groups_flow
 from src.flows.last_positions import last_positions_flow
-from src.flows.logbook import logbook_flow
 from src.flows.missing_dep_alerts import missing_dep_alerts_flow
 from src.flows.missing_far_alerts import missing_far_alerts_flow
 from src.flows.missing_trip_numbers import missing_trip_numbers_flow
@@ -64,6 +63,7 @@ from src.flows.regulations_checkup import regulations_checkup_flow
 from src.flows.regulations_open_data import regulations_open_data_flow
 from src.flows.risk_elements import risk_elements_flow
 from src.flows.risk_factors import risk_factors_flow
+from src.flows.sales_and_logbook import sales_and_logbook_flow
 from src.flows.scrape_legipeche import scrape_legipeche_flow
 from src.flows.species import species_flow
 from src.flows.suspicions_of_under_declaration_alerts import (
@@ -214,7 +214,7 @@ flows_to_deploy = [
         ],
     ),
     FlowAndSchedules(
-        flow=logbook_flow,
+        flow=sales_and_logbook_flow,
         schedules=[Schedule(cron="0,5,10,15,20,25,30,35,40,45,50,55 * * * *")],
     ),
     FlowAndSchedules(
@@ -387,7 +387,7 @@ for flow_to_deploy in flows_to_deploy:
     deployment.work_pool_name = "monitorfish"
     deployment.storage = LocalStorage("/home/monitorfish-pipeline/pipeline")
 
-    if deployment.name == "Monitorfish - Logbook":
+    if deployment.name == "Monitorfish - Sales and Logbook":
         deployment.job_variables["container_create_kwargs"] = {
             "group_add": [LOGBOOK_FILES_GID]
         }

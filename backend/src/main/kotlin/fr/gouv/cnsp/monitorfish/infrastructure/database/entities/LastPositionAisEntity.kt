@@ -28,8 +28,6 @@ data class LastPositionAisEntity(
     val speed: Double? = null,
     @Column(name = "course")
     val course: Double? = null,
-    @Column(name = "heading")
-    val heading: Double? = null,
     @Column(name = "status")
     val status: String? = null,
     @Column(name = "last_position_datetime_utc")
@@ -61,7 +59,6 @@ data class LastPositionAisEntity(
             longitude = longitude,
             speed = speed,
             course = course,
-            heading = heading,
             status = status,
             dateTime = dateTime,
             length = length,

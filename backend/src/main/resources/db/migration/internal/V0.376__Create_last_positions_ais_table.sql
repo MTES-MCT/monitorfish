@@ -9,7 +9,6 @@ CREATE TABLE last_positions_ais (
   longitude                     DOUBLE PRECISION NOT NULL,
   speed                         DOUBLE PRECISION,
   course                        DOUBLE PRECISION,
-  heading                       DOUBLE PRECISION,
   status                        TEXT,
   last_position_datetime_utc    TIMESTAMP WITH TIME ZONE NOT NULL,
   length                        DOUBLE PRECISION,

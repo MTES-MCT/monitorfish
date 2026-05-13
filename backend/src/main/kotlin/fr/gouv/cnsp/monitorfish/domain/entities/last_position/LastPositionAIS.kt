@@ -13,7 +13,6 @@ data class LastPositionAIS(
     val longitude: Double,
     val speed: Double? = null,
     val course: Double? = null,
-    val heading: Double? = null,
     val status: String? = null,
     val dateTime: ZonedDateTime,
     val length: Double? = null,

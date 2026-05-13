@@ -27,6 +27,7 @@ class LastPositionAISDataOutput(
     val coordinates: List<Double>?,
     val lastPositionSentAt: Long,
     val destination: String? = null,
+    val shipType: Int? = null,
 ) {
     companion object {
         fun getVesselFeatureId(position: LastPositionAIS): String =
@@ -55,6 +56,7 @@ class LastPositionAISDataOutput(
                 length = lastPosition.length,
                 isAtPort = lastPosition.isAtPort,
                 destination = lastPosition.destination,
+                shipType = lastPosition.shipType,
             )
     }
 }

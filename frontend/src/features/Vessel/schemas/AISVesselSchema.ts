@@ -15,6 +15,7 @@ export const AISVesselSchema = z.strictObject({
   length: z.number().optional(),
   longitude: z.number(),
   mmsi: z.number(),
+  shipType: z.number().int().optional(),
   speed: z.number().optional(),
   vesselFeatureId: z.string(),
   vesselName: z.string().optional()

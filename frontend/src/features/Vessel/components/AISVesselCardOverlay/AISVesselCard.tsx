@@ -6,7 +6,7 @@ import styled, { useTheme } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AIS_CARD_WIDTH, AIS_VESSEL_OVERLAY_CARD_MARGIN } from './constants'
-import { extractAISVesselPropertiesFromFeature } from './utils'
+import { extractAISVesselPropertiesFromFeature, getAISShipTypeLabel } from './utils'
 import { getCoordinates } from '../../../../coordinates'
 import { timeagoFrenchLocale } from '../../../../utils'
 
@@ -33,6 +33,7 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
     'mmsi',
     'imo',
     'ircs',
+    'shipType',
     'speed',
     'vesselName'
   ])
@@ -101,7 +102,11 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
             <Col>
               <Key>Type de navire</Key>
               <Value>
-                <NoValue>–</NoValue>
+                {vesselProperties.shipType != null ? (
+                  (getAISShipTypeLabel(vesselProperties.shipType) ?? <NoValue>–</NoValue>)
+                ) : (
+                  <NoValue>–</NoValue>
+                )}
               </Value>
             </Col>
           </Row>

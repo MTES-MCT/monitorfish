@@ -33,6 +33,7 @@ data class AisPositionMessage(
             vesselName = navpro?.vesselName ?: ais?.shipname,
             ircs = ais?.callsign ?: navpro?.ircs,
             flagState = navpro?.flagState,
+            length = if (ais?.toBow != null && ais.toStern != null) ais.toBow + ais.toStern else null,
         )
     }
 
@@ -56,6 +57,8 @@ data class AisDetails(
     val shipname: String? = null,
     val shiptype: Int? = null,
     val destination: String? = null,
+    @JsonProperty("to_bow") val toBow: Double? = null,
+    @JsonProperty("to_stern") val toStern: Double? = null,
 )
 
 data class NavproDetails(

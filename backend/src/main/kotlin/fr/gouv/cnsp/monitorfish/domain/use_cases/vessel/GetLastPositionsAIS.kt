@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class GetLastPositionsAIS(
-    private val lastPositionsAisRepository: LastPositionAisRepository
+    private val lastPositionsAisRepository: LastPositionAisRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetLastPositionsAIS::class.java)
 

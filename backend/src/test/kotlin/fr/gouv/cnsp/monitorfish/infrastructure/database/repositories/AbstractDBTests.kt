@@ -28,7 +28,7 @@ abstract class AbstractDBTests {
     companion object {
         @JvmStatic
         val container =
-            GenericContainer("ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2")
+            GenericContainer("ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.27.0-postgis3.6.3")
                 .apply {
                     withExposedPorts(5432)
                     withEnv("POSTGRES_DB", "testdb")

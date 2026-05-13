@@ -16,9 +16,9 @@ jobs:
         include:
           - pg_major: "16"
             timescaledb_version: "2.27.0"
-            postgis_version: "3.6.2"
+            postgis_version: "3.6.3"
             dockerfile: "pg13_16.Dockerfile"
-            image_version: "pg16-ts2.27.0-postgis3.6.2"
+            image_version: "pg16-ts2.27.0-postgis3.6.3"
     permissions:
       contents: read
       packages: write

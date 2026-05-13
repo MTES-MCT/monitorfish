@@ -1132,7 +1132,6 @@ class VesselControllerITests {
                 longitude = -2.3,
                 speed = 8.5,
                 course = 270.0,
-                heading = 265.0,
                 status = "Under way using engine",
                 dateTime = fixedDateTime,
                 length = 24.0,

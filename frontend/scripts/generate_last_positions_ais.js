@@ -239,7 +239,6 @@ function generateVessel(mmsi) {
     ? faker.number.float({ fractionDigits: 1, max: 18,  min: 1.1 })
     : faker.number.float({ fractionDigits: 1, max: 1.0, min: 0.0 })
   const course = faker.number.float({ fractionDigits: 1, max: 360, min: 0 })
-  const heading = faker.number.float({ fractionDigits: 1, max: 360, min: 0 })
 
   const status = isAtPort
     ? faker.helpers.arrayElement(['At anchor', 'Moored'])
@@ -252,7 +251,6 @@ function generateVessel(mmsi) {
     course,
     external_immatriculation: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: 8 }) : null,
     flag_state: flagState,
-    heading,
     imo: faker.datatype.boolean(0.6) ? `${faker.number.int({ max: 9999999, min: 1000000 })}` : null,
     is_at_port: isAtPort,
     ircs: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: { max: 5, min: 4 } }) : null,
@@ -261,6 +259,13 @@ function generateVessel(mmsi) {
     length: faker.datatype.boolean(0.7) ? faker.number.float({ fractionDigits: 1, max: 80, min: 6 }) : null,
     longitude,
     mmsi,
+    ship_type: faker.helpers.weightedArrayElement([
+      { value: 30, weight: 50 },
+      { value: 70, weight: 15 },
+      { value: 80, weight: 10 },
+      { value: 60, weight: 10 },
+      { value: null, weight: 15 },
+    ]),
     speed,
     status,
     vessel_name: randomVesselName(),

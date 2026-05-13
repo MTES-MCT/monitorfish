@@ -13,5 +13,6 @@ CREATE TABLE last_positions_ais (
   last_position_datetime_utc    TIMESTAMP WITH TIME ZONE NOT NULL,
   length                        DOUBLE PRECISION,
   is_at_port                    BOOLEAN NOT NULL DEFAULT FALSE,
-  imo                           VARCHAR(100)
+  imo                           VARCHAR(100),
+  ship_type                     INTEGER
 );

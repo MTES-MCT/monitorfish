@@ -30,6 +30,7 @@ export function buildAISVesselFeature(vessel: AISVessel.AISVessel): AISVessel.AI
     length: vessel.length,
     longitude: vessel.longitude,
     mmsi: vessel.mmsi,
+    shipType: vessel.shipType,
     speed: vessel.speed,
     vesselFeatureId: vessel.vesselFeatureId,
     vesselName: vessel.vesselName

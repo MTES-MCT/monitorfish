@@ -1,4 +1,4 @@
-import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
@@ -7,12 +7,10 @@ import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { VesselName } from './VesselName'
-import { expandRightMenu } from '../../../../../../domain/shared_slices/Global'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
@@ -23,12 +21,12 @@ export function VesselSidebarHeader() {
 
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
   const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
-  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const areAISVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areAISVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
 
   const vesselLocation =
     listFilterValues.vesselsLocation?.length === 1 ? listFilterValues.vesselsLocation[0] : undefined
@@ -66,42 +64,33 @@ export function VesselSidebarHeader() {
   )
 
   return (
-    <>
-      <VesselNameOrInput $isRightMenuOpen={rightMenuIsOpen} data-cy="vessel-name" isHidden={previewFilteredVesselsMode}>
-        {isVesselNameShown && <VesselName focusOnVesselSearchInput={handleInputClick} />}
-        {!isVesselNameShown && (
-          <VesselSearchWithMapVessels
-            aisVessels={areAISVesselsDisplayed ? aisVessels : undefined}
-            autoFocus={isFocusedOnVesselSearch}
-            extendedWidth={500}
-            isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
-            onBlur={handleClickOutsideOrEscape}
-            onChange={handleVesselChange}
-            onClick={handleInputClick}
-            shouldCloseOnClickOutside
-            shouldResetInputOnBlur
-            withLastSearchResults={isFocusedOnVesselSearch || vesselSidebarIsOpen}
-          />
-        )}
-      </VesselNameOrInput>
-      <SearchIconWrapper onMouseDown={e => e.stopPropagation()}>
-        <MapToolButton
-          Icon={Icon.Search}
-          isActive={!!selectedVessel}
+    <VesselNameOrInput
+      $isReportingOpen={isReportingMapFormDisplayed}
+      $isRightMenuOpen={rightMenuIsOpen}
+      data-cy="vessel-name"
+      isHidden={previewFilteredVesselsMode}
+    >
+      {isVesselNameShown && <VesselName focusOnVesselSearchInput={handleInputClick} />}
+      {!isVesselNameShown && (
+        <VesselSearchWithMapVessels
+          aisVessels={areAISVesselsDisplayed ? aisVessels : undefined}
+          autoFocus={isFocusedOnVesselSearch}
+          extendedWidth={500}
+          isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}
+          onBlur={handleClickOutsideOrEscape}
+          onChange={handleVesselChange}
           onClick={handleInputClick}
-          onMouseEnter={() => dispatch(expandRightMenu())}
-          title="Rechercher un navire"
+          shouldCloseOnClickOutside
+          shouldResetInputOnBlur
+          withLastSearchResults={isFocusedOnVesselSearch || vesselSidebarIsOpen}
         />
-      </SearchIconWrapper>
-    </>
+      )}
+    </VesselNameOrInput>
   )
 }
 
-const SearchIconWrapper = styled.div`
-  display: contents;
-`
-
 const VesselNameOrInput = styled(MapComponent)<{
+  $isReportingOpen: boolean
   $isRightMenuOpen: boolean
 }>`
   display: flex;
@@ -115,7 +104,7 @@ const VesselNameOrInput = styled(MapComponent)<{
   border-radius: 2px;
   padding: 0;
   transition: all 0.3s;
-  margin-right: ${p => (p.$isRightMenuOpen ? 11 : 1)}px;
+  margin-right: ${p => (p.$isRightMenuOpen ? 11 : 1) + +(p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH + 8 : 0)}px;
   z-index: 2;
 
   &:hover,

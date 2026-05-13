@@ -24,6 +24,7 @@ import { MeasurementMapButton } from '../../../Measurement/components/Measuremen
 import { MissionsMapMenu } from '../../../Mission/components/MissionsMapMenu'
 import { PriorNotificationListButton } from '../../../PriorNotification/components/PriorNotificationListButton'
 import { MapSettingsButton } from '../MapSettingsButton'
+import { VesselSearchButton } from './VesselSearchButton'
 
 export function MapButtons() {
   const isSuperUser = useIsSuperUser()
@@ -70,6 +71,8 @@ export function MapButtons() {
   )
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
 
   const top = useGetTopOffset()
 
@@ -137,13 +140,18 @@ export function MapButtons() {
           </Group>
         </BottomSection>
       </LeftMenu>
-      <TopBar $top={top}>
+      <TopBar $isRightMenuOpen={rightMenuIsOpen} $top={top}>
         <VesselLoader />
         {import.meta.env.FRONTEND_AIS_VESSELS_ENABLED === 'true' && <AISVesselsButton />}
         {isVesselSearchDisplayed && <VesselSidebarHeader />}
-        {isVesselSidebarOpen && <VesselSidebar />}
+        <VesselSearchButton />
       </TopBar>
-      <RightMenu $top={top}>
+      {isVesselSidebarOpen && (
+        <VesselSidebarContainer $isReportingOpen={isReportingMapFormDisplayed} $top={top}>
+          <VesselSidebar />
+        </VesselSidebarContainer>
+      )}
+      <RightMenu $hasSearchButton={isVesselSearchDisplayed} $isRightMenuOpen={rightMenuIsOpen} $top={top}>
         <Group>
           {isVesselListMapButtonDisplayed && (
             <MenuItem>
@@ -218,18 +226,36 @@ const TopSection = styled.div`
 
 const BottomSection = styled.div``
 
-const RightMenu = styled(Menu)`
-  padding-top: 72px;
-  right: 10px;
+const RightMenu = styled(Menu)<{
+  $hasSearchButton: boolean
+  $isRightMenuOpen: boolean
+}>`
+  padding-top: ${p => (p.$hasSearchButton ? 120 : 72)}px;
+  right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
 `
 
-const TopBar = styled.div<{ $top: number }>`
+const VesselSidebarContainer = styled.div<{ $isReportingOpen: boolean; $top: number }>`
+  height: 0;
+  overflow: visible;
+  position: absolute;
+  right: ${p => (p.$isReportingOpen ? 8 : 0)}px;
+  top: calc(${p => p.$top}px + 10px);
+  transition: right 0.3s;
+  width: 0;
+  z-index: 1;
+`
+
+const TopBar = styled.div<{
+  $isRightMenuOpen: boolean
+  $top: number
+}>`
   align-items: center;
   display: flex;
   gap: 4px;
   position: absolute;
-  right: 10px;
+  right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
   top: calc(${p => p.$top}px + 10px);
+  transition: right 0.3s;
   z-index: 1;
 `
 
@@ -246,3 +272,4 @@ const Group = styled.ul`
   flex-direction: column;
   row-gap: 8px;
 `
+export { VesselSearchButton } from './VesselSearchButton'

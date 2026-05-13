@@ -20,7 +20,8 @@ class AisPositionKafkaConsumerUTests {
     fun `consume Should not rethrow When saveAisPositions throws`() {
         // Given
         val consumer = AisPositionKafkaConsumer(saveAisPositions)
-        val message = AisPositionMessage(mmsi = 123456789L, coord = null, ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"))
+        val message =
+            AisPositionMessage(mmsi = 123456789L, coord = null, ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"))
         doThrow(RuntimeException("DB error")).whenever(saveAisPositions).execute(any())
 
         // When / Then

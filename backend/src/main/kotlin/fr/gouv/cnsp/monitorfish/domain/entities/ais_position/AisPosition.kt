@@ -18,4 +18,5 @@ data class AisPosition(
     val vesselName: String? = null,
     val ircs: String? = null,
     val flagState: String? = null,
+    val length: Double? = null,
 )

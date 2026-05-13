@@ -49,7 +49,9 @@ abstract class AbstractKafkaTests : AbstractDBTests() {
         fun kafkaProps(reg: DynamicPropertyRegistry) {
             reg.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers)
             reg.add("spring.kafka.properties.security.protocol") { "PLAINTEXT" }
-            reg.add("spring.kafka.producer.value-serializer") { "org.springframework.kafka.support.serializer.JsonSerializer" }
+            reg.add(
+                "spring.kafka.producer.value-serializer",
+            ) { "org.springframework.kafka.support.serializer.JsonSerializer" }
             reg.add("monitorfish.kafka.ais.enabled") { true }
         }
     }

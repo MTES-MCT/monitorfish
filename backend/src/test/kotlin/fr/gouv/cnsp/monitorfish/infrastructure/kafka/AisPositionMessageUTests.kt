@@ -137,6 +137,69 @@ class AisPositionMessageUTests {
     }
 
     @Test
+    fun `toAisPosition Should compute length as to_bow plus to_stern`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 123456789L,
+                coord = "POINT(-2.7335 47.6078)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+                features =
+                    AisFeatures(
+                        ais = AisDetails(toBow = 30.0, toStern = 10.0),
+                    ),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.length).isEqualTo(40.0)
+    }
+
+    @Test
+    fun `toAisPosition Should set length to null When to_bow is null`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 123456789L,
+                coord = "POINT(-2.7335 47.6078)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+                features =
+                    AisFeatures(
+                        ais = AisDetails(toBow = null, toStern = 10.0),
+                    ),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.length).isNull()
+    }
+
+    @Test
+    fun `toAisPosition Should set length to null When to_stern is null`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 123456789L,
+                coord = "POINT(-2.7335 47.6078)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+                features =
+                    AisFeatures(
+                        ais = AisDetails(toBow = 30.0, toStern = null),
+                    ),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.length).isNull()
+    }
+
+    @Test
     fun `toAisPosition Should fall back to navpro ircs When ais callsign is null`() {
         // Given
         val message =

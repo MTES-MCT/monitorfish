@@ -44,6 +44,8 @@ data class AisPositionEntity(
     val ircs: String? = null,
     @Column(name = "flag_state")
     val flagState: String? = null,
+    @Column(name = "length")
+    val length: Double? = null,
 ) {
     companion object {
         fun fromAisPosition(position: AisPosition): AisPositionEntity =
@@ -62,6 +64,7 @@ data class AisPositionEntity(
                 vesselName = position.vesselName,
                 ircs = position.ircs,
                 flagState = position.flagState,
+                length = position.length,
             )
     }
 }

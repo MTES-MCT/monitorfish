@@ -14,6 +14,7 @@ CREATE TABLE ais_positions (
   vessel_name              VARCHAR(100),
   ircs                     VARCHAR(100),
   flag_state               VARCHAR(100),
+  length                   DOUBLE PRECISION,
   PRIMARY KEY (mmsi, date_time)
 );
 

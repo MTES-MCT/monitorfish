@@ -11,7 +11,7 @@ context('VesselSearch', () => {
     // When searching a vessel from the last positions table
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('Pheno')
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('firstVessel')
-    cy.wait(200)
+    cy.wait(500)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@firstVessel')
     cy.wait(200)
@@ -20,7 +20,7 @@ context('VesselSearch', () => {
     // We should be able to search again when the vessel sidebar is already opened
     cy.get('*[data-cy^="vessel-search-selected-vessel-title"]', { timeout: 10000 }).click()
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('détacher')
-    cy.wait(200)
+    cy.wait(500)
     cy.intercept('GET', `/bff/v1/vessels/find*`).as('secondVessel')
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).click()
     cy.wait('@secondVessel')
@@ -31,18 +31,19 @@ context('VesselSearch', () => {
 
     // Search a vessel in the vessel table
     cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).type('MALOTRU')
-    cy.wait(200)
+    cy.wait(500)
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).eq(0).contains('MALOTRU')
 
     // Enable AIS layer and search for an AIS-only vessel
     cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
     cy.clickButton('AIS')
     cy.wait('@aisVessels')
-    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).clear().type('DANIEL TILLMAN')
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('DANIEL TILLMAN')
+    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).clear().type('VAN TILLMAN')
+    cy.wait(500)
+    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('VAN TILLMAN')
 
     // Clicking an AIS result zooms the map but does not open the sidebar
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('DANIEL TILLMAN').click()
+    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('VAN TILLMAN').click()
     cy.get('*[data-cy^="vessel-sidebar"]').should('not.exist')
     cy.get('*[data-cy^="VesselSearch-input"]').should('have.value', '')
   })

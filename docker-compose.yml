@@ -1,6 +1,6 @@
 services:
   db:
-    image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.14.2-postgis3.4.2
+    image: ghcr.io/mtes-mct/monitorfish/monitorfish-database:pg16-ts2.27.0-postgis3.6.3
     container_name: monitorfish_database
     environment:
       - POSTGRES_USER=postgres

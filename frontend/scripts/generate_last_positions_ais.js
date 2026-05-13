@@ -248,6 +248,7 @@ function generateVessel(mmsi) {
   const minutesAgo = faker.number.int({ max: 240, min: 1 })
 
   return {
+    cfr: faker.datatype.boolean(0.02) ? `${flagState}${faker.string.numeric(9)}` : null,
     course,
     external_immatriculation: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: 8 }) : null,
     flag_state: flagState,

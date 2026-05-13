@@ -14,8 +14,8 @@ class GetLastPositionsAIS(
 
     fun execute(vesselLocation: VesselLocation? = null): List<LastPositionAIS> =
         when (vesselLocation) {
-            VesselLocation.PORT -> lastPositionsAisRepository.findByIsAtPort(true)
-            VesselLocation.SEA -> lastPositionsAisRepository.findByIsAtPort(false)
-            null -> lastPositionsAisRepository.findAll()
+            VesselLocation.PORT -> lastPositionsAisRepository.findAllByCfrIsNullAndIsAtPort(true)
+            VesselLocation.SEA -> lastPositionsAisRepository.findAllByCfrIsNullAndIsAtPort(false)
+            null -> lastPositionsAisRepository.findAllByCfrIsNull()
         }
 }

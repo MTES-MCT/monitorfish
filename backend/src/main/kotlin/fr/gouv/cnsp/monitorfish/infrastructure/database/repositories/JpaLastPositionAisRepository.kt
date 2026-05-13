@@ -9,13 +9,13 @@ import org.springframework.stereotype.Repository
 class JpaLastPositionAisRepository(
     private val dbLastPositionAisRepository: DBLastPositionAisRepository,
 ) : LastPositionAisRepository {
-    override fun findAll(): List<LastPositionAIS> =
+    override fun findAllByCfrIsNull(): List<LastPositionAIS> =
         dbLastPositionAisRepository
-            .findAll()
+            .findByCfrIsNull()
             .map { it.toLastPositionAis() }
 
-    override fun findByIsAtPort(isAtPort: Boolean): List<LastPositionAIS> =
+    override fun findAllByCfrIsNullAndIsAtPort(isAtPort: Boolean): List<LastPositionAIS> =
         dbLastPositionAisRepository
-            .findByIsAtPort(isAtPort)
+            .findByCfrIsNullAndIsAtPort(isAtPort)
             .map { it.toLastPositionAis() }
 }

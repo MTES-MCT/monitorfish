@@ -4,6 +4,7 @@ CREATE TABLE last_positions_ais (
   external_immatriculation      VARCHAR(100),
   destination                   TEXT,
   vessel_name                   VARCHAR(100),
+  cfr                           VARCHAR(100),
   flag_state                    VARCHAR(100),
   latitude                      DOUBLE PRECISION NOT NULL,
   longitude                     DOUBLE PRECISION NOT NULL,

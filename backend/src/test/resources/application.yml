@@ -79,7 +79,7 @@ spring:
     test-on-borrow: true
     hikari:
       maxLifetime: 60000
-      maximum-pool-size: 30
+      maximum-pool-size: 5
   servlet:
     multipart:
       max-file-size: 5MB

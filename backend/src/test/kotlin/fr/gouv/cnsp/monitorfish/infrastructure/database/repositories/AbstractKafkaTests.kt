@@ -52,6 +52,7 @@ abstract class AbstractKafkaTests : AbstractDBTests() {
             reg.add(
                 "spring.kafka.producer.value-serializer",
             ) { "org.springframework.kafka.support.serializer.JsonSerializer" }
+            reg.add("spring.kafka.consumer.group-id") { "monitorfish-test" }
             reg.add("monitorfish.kafka.ais.enabled") { true }
         }
     }

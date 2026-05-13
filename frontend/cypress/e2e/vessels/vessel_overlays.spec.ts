@@ -52,6 +52,7 @@ context('Vessels Overlays', () => {
      * Beacon malfunction
      */
     openVesselBySearch('EH VOLER MADAME')
+    cy.wait(3000)
 
     // When we move the pointer cursor (from one point to another to emit an event)
     cy.hoverVesselByName('EH VOLER MADAME')

@@ -92,7 +92,7 @@ context('Reporting map form', () => {
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
 
     cy.get('[aria-label="Vider le champ"]').click()
-    openVesselBySearch('MALOTRU', 1)
+    openVesselBySearch('MALOTRU')
 
     cy.clickButton('Fermer')
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
@@ -110,6 +110,7 @@ context('Reporting map form', () => {
 
     // Display the reporting layer
     cy.clickButton('Afficher les signalements')
+    cy.wait('@displayReportings')
 
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 

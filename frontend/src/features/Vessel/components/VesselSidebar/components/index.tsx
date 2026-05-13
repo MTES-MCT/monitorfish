@@ -94,4 +94,5 @@ const Wrapper = styled(MapToolBox)`
     right 0.3s,
     opacity 0.3s;
   width: 500px;
+  z-index: 1;
 `

@@ -74,11 +74,7 @@ export namespace Vessel {
     course: number
     dateTime: string
     destination: string | undefined
-    externalReferenceNumber: string | undefined
     flagState: string
-    from: string
-    internalReferenceNumber: string | undefined
-    ircs: string | undefined
     isAtPort: boolean | undefined
     isFishing: boolean | undefined
     isManual: boolean | undefined
@@ -88,8 +84,6 @@ export namespace Vessel {
     networkType: NetworkType | undefined
     positionType: string
     speed: number
-    tripNumber: number | undefined
-    vesselName: string
   }
 
   export interface VesselPointFeature extends Feature<Point> {

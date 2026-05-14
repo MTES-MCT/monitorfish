@@ -75,10 +75,8 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
             </FieldValue>
           </Course>
           <Position>
-            <FieldName>Dernier signal AIS</FieldName>
-            <FieldValue>
-              {vesselProperties.dateTime ? timeago.format(vesselProperties.dateTime, 'fr') : <NoValue>-</NoValue>}
-            </FieldValue>
+            <FieldName>Dernier signal</FieldName>
+            <FieldValue>{timeago.format(vesselProperties.dateTime, 'fr')} (AIS)</FieldValue>
             <FieldName>Destination</FieldName>
             <FieldValue>{vesselProperties.destination ?? <NoValue>-</NoValue>}</FieldValue>
           </Position>

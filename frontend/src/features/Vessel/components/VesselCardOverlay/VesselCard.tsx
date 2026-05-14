@@ -40,6 +40,7 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
     'hasInfractionSuspicion',
     'hasCurrentTripInfractionSuspicion',
     'lastLogbookMessageDateTime',
+    'positionType',
     'segments',
     'speed',
     'vesselName',
@@ -115,9 +116,13 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
             </FieldValue>
           </Course>
           <Position>
-            <FieldName>Dernier signal VMS</FieldName>
+            <FieldName>Dernier signal</FieldName>
             <FieldValue>
-              {vesselProperties.dateTime ? timeago.format(vesselProperties.dateTime, 'fr') : <NoValue>-</NoValue>}
+              {vesselProperties.dateTime ? (
+                `${timeago.format(vesselProperties.dateTime, 'fr')} (${vesselProperties.positionType})`
+              ) : (
+                <NoValue>-</NoValue>
+              )}
             </FieldValue>
             <FieldName>Cadencement</FieldName>
             <FieldValue>

@@ -86,6 +86,7 @@ export function buildFeature(
     longitude: vessel.longitude,
     mmsi: vessel.mmsi,
     numberOfGroupsHidden: vesselGroupDisplayed.numberOfGroupsHidden,
+    positionType: vessel.positionType,
     probabilityRiskFactor: vessel.probabilityRiskFactor,
     riskFactor: vessel.riskFactor,
     segments: vessel.segments,

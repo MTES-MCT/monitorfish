@@ -84,27 +84,20 @@ function getVesselName(selectedVesselIdentity) {
 const Wrapper = styled.div<{
   $isOpen: boolean
 }>`
+  box-sizing: border-box;
   font-weight: bolder;
   margin: 0;
-  background-color: ${COLORS.charcoal};
+  background-color: ${p => p.theme.color.charcoal};
   border: none;
-  border-bottom: 1px ${p => p.theme.color.lightGray} solid;
-  border-radius: 0;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  color: ${COLORS.gainsboro};
+  border-radius: 2px 2px 0 0;
+  color: ${p => p.theme.color.gainsboro};
   height: 40px;
-  width: ${p => (p.$isOpen ? 490 : 320)}px;
+  width: ${p => (p.$isOpen ? 500 : 320)}px;
   padding: 0 0 0 10px;
   flex: 3;
   text-align: left;
   cursor: text;
   transition: width 0.7s ease forwards;
-
-  &:hover,
-  &:focus {
-    border-bottom: 1px ${p => p.theme.color.lightGray} solid;
-  }
 `
 
 const FavoriteIcon = styled(FavoriteSVG)<{

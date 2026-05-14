@@ -164,16 +164,6 @@ export const vesselIsShowed = (
   vesselsAreEquals(vesselIdentity, selectedVesselIdentity) ||
   vesselsAreEquals(vesselIdentity, vesselsTrackShowed?.vesselIdentity)
 
-export const getVesselLastPositionVisibilityDates = vesselsLastPositionVisibility => {
-  const vesselIsHidden = new Date()
-  vesselIsHidden.setHours(vesselIsHidden.getHours() - vesselsLastPositionVisibility.hidden)
-
-  const vesselIsOpacityReduced = new Date()
-  vesselIsOpacityReduced.setHours(vesselIsOpacityReduced.getHours() - vesselsLastPositionVisibility.opacityReduced)
-
-  return { vesselIsHidden, vesselIsOpacityReduced }
-}
-
 const VesselIdentifier = {
   EXTERNAL_REFERENCE_NUMBER: 'EXTERNAL_REFERENCE_NUMBER',
   INTERNAL_REFERENCE_NUMBER: 'INTERNAL_REFERENCE_NUMBER',

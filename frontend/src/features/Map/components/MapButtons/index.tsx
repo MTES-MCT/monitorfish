@@ -151,7 +151,7 @@ export function MapButtons() {
           <VesselSidebar />
         </VesselSidebarContainer>
       )}
-      <RightMenu $hasSearchButton={isVesselSearchDisplayed} $isRightMenuOpen={rightMenuIsOpen} $top={top}>
+      <RightMenu $isRightMenuOpen={rightMenuIsOpen} $top={top}>
         <Group>
           {isVesselListMapButtonDisplayed && (
             <MenuItem>
@@ -227,10 +227,9 @@ const TopSection = styled.div`
 const BottomSection = styled.div``
 
 const RightMenu = styled(Menu)<{
-  $hasSearchButton: boolean
   $isRightMenuOpen: boolean
 }>`
-  padding-top: ${p => (p.$hasSearchButton ? 120 : 72)}px;
+  padding-top: 72px;
   right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
 `
 

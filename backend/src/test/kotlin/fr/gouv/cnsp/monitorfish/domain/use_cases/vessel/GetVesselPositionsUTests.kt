@@ -2,8 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.repositories.AisPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
@@ -27,6 +30,9 @@ class GetVesselPositionsUTests {
     private lateinit var positionRepository: PositionRepository
 
     @MockitoBean
+    private lateinit var aisPositionRepository: AisPositionRepository
+
+    @MockitoBean
     private lateinit var logbookReportRepository: LogbookReportRepository
 
     @Autowired
@@ -46,7 +52,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",
@@ -87,7 +93,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+                    GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -115,7 +121,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+                    GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -144,7 +150,7 @@ class GetVesselPositionsUTests {
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+            GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -174,7 +180,7 @@ class GetVesselPositionsUTests {
 
         // When
         runBlocking {
-            GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+            GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -195,6 +201,86 @@ class GetVesselPositionsUTests {
     }
 
     @Test
+    fun `execute Should merge AIS positions with VMS positions sorted by dateTime`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val vmsPositions =
+            listOf(
+                Position(
+                    internalReferenceNumber = "FR224226850",
+                    mmsi = "224226850",
+                    positionType = PositionType.VMS,
+                    latitude = 16.0,
+                    longitude = 48.0,
+                    speed = 1.0,
+                    course = 90.0,
+                    dateTime = now.minusHours(6),
+                ),
+                Position(
+                    internalReferenceNumber = "FR224226850",
+                    mmsi = "224226850",
+                    positionType = PositionType.VMS,
+                    latitude = 16.1,
+                    longitude = 48.1,
+                    speed = 1.0,
+                    course = 90.0,
+                    dateTime = now.minusHours(3),
+                ),
+            )
+        val aisPositions =
+            listOf(
+                Position(
+                    internalReferenceNumber = "FR224226850",
+                    mmsi = "224226850",
+                    positionType = PositionType.AIS,
+                    latitude = 16.2,
+                    longitude = 48.2,
+                    speed = 2.0,
+                    course = 90.0,
+                    dateTime = now.minusHours(1),
+                ),
+            )
+        given(positionRepository.findVesselLastPositionsByInternalReferenceNumber(any(), any(), any())).willReturn(
+            vmsPositions,
+        )
+        given(aisPositionRepository.findVesselLastAisPositionsByCfr(any(), any(), any())).willReturn(
+            aisPositions,
+        )
+
+        // When
+        val pair =
+            runBlocking {
+                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                    .execute(
+                        internalReferenceNumber = "FR224226850",
+                        externalReferenceNumber = "",
+                        ircs = "",
+                        trackDepth = VesselTrackDepth.TWELVE_HOURS,
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        fromDateTime = null,
+                        toDateTime = null,
+                    )
+            }
+
+        // Then
+        runBlocking {
+            val positions = pair.second.await()
+            assertThat(positions).hasSize(3)
+            assertThat(positions[0].positionType).isEqualTo(PositionType.VMS)
+            assertThat(positions[0].dateTime).isEqualTo(now.minusHours(6))
+            assertThat(positions[1].positionType).isEqualTo(PositionType.VMS)
+            assertThat(positions[1].dateTime).isEqualTo(now.minusHours(3))
+            assertThat(positions[2].positionType).isEqualTo(PositionType.AIS)
+            assertThat(positions[2].dateTime).isEqualTo(now.minusHours(1))
+        }
+        Mockito.verify(aisPositionRepository).findVesselLastAisPositionsByCfr(
+            eq("FR224226850"),
+            any(),
+            any(),
+        )
+    }
+
+    @Test
     fun `execute Should call findVesselLastPositionsWithoutSpecifiedIdentifier When the vessel identifier is null`() {
         // Given
         val now = ZonedDateTime.now().minusDays(1)
@@ -207,7 +293,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, getDatesFromVesselTrackDepth)
+                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",

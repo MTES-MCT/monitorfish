@@ -1,6 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
+import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.ais_position.AisPosition
+import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
+import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import jakarta.persistence.*
 import java.io.Serializable
 import java.time.ZonedDateTime
@@ -47,6 +50,30 @@ data class AisPositionEntity(
     @Column(name = "length")
     val length: Double? = null,
 ) {
+    fun toPosition(): Position =
+        Position(
+            id = null,
+            internalReferenceNumber = cfr,
+            mmsi = pk.mmsi.toString(),
+            ircs = ircs,
+            externalReferenceNumber = externalImmatriculation,
+            vesselName = vesselName,
+            flagState = flagState?.let { runCatching { CountryCode.valueOf(it) }.getOrElse { CountryCode.UNDEFINED } },
+            positionType = PositionType.AIS,
+            isManual = null,
+            isFishing = null,
+            isAtPort = null,
+            latitude = latitude,
+            longitude = longitude,
+            speed = speed,
+            course = course,
+            dateTime = pk.dateTime,
+            from = null,
+            destination = null,
+            tripNumber = null,
+            networkType = null,
+        )
+
     companion object {
         fun fromAisPosition(position: AisPosition): AisPositionEntity =
             AisPositionEntity(

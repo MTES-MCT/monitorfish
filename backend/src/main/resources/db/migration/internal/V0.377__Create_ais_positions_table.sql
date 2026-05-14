@@ -20,3 +20,6 @@ CREATE TABLE ais_positions (
 
 SELECT create_hypertable('ais_positions', by_range('date_time', INTERVAL '1 day'), if_not_exists => TRUE);
 CREATE INDEX ON ais_positions (mmsi, date_time DESC);
+CREATE INDEX ON ais_positions (cfr, date_time DESC);
+CREATE INDEX ON ais_positions (external_immatriculation, date_time DESC);
+CREATE INDEX ON ais_positions (ircs, date_time DESC);

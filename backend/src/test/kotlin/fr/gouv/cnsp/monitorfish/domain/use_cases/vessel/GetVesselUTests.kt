@@ -42,6 +42,9 @@ class GetVesselUTests {
     @MockitoBean
     private lateinit var positionRepository: PositionRepository
 
+    @MockitoBean
+    private lateinit var aisPositionRepository: AisPositionRepository
+
     @Mock
     private val reportingRepository: ReportingRepository = mock()
 

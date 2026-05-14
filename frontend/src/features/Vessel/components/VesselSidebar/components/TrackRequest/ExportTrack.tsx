@@ -16,14 +16,18 @@ import ExportSVG from '../../../../../icons/Bouton_exporter_piste_navire.svg?rea
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 type VesselPositionWithId = Vessel.VesselPosition & {
+  externalReferenceNumber: string | undefined
   id: string
+  internalReferenceNumber: string | undefined
+  ircs: string | undefined
   latitude: string
   longitude: string
+  vesselName: string | undefined
 }
 
 export function ExportTrack() {
   const { coordinatesFormat } = useMainAppSelector(state => state.map)
-  const { selectedVesselPositions } = useMainAppSelector(state => state.vessel)
+  const { selectedVessel, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
   const { trackEvent } = useTracking()
 
   const exportedPositions: VesselPositionWithId[] =
@@ -36,9 +40,13 @@ export function ExportTrack() {
 
         return {
           ...position,
+          externalReferenceNumber: selectedVessel?.externalReferenceNumber,
           id: position.dateTime,
+          internalReferenceNumber: selectedVessel?.internalReferenceNumber,
+          ircs: selectedVessel?.ircs,
           latitude: coordinates[0],
-          longitude: coordinates[1]
+          longitude: coordinates[1],
+          vesselName: selectedVessel?.vesselName
         }
       })
       ?.filter((position): position is VesselPositionWithId => position !== undefined) ?? []
@@ -49,9 +57,7 @@ export function ExportTrack() {
         return
       }
 
-      const vesselIdentifier = positions[0].internalReferenceNumber
-        ? positions[0].internalReferenceNumber
-        : positions[0].ircs
+      const vesselIdentifier = selectedVessel?.internalReferenceNumber ?? selectedVessel?.ircs
       const date = getDate(dayjs().toISOString())
       const randomNumber = Math.floor(Math.random() * 100) + 1
       const fileName = `export_${vesselIdentifier}_vms_${date}_${randomNumber}`

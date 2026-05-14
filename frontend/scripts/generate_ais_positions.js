@@ -15,6 +15,8 @@ const TOTAL_MINUTES = DURATION_WEEKS * 7 * 24 * 60  // 40320
 const STEPS = Math.floor(TOTAL_MINUTES / INTERVAL_MINUTES)  // 5760
 const BATCH_SIZE = 1000
 
+const DURATION_12H_MINUTES = 12 * 60  // 720
+
 // Bounding box for EU fishing zone
 const LAT_MIN = 35
 const LAT_MAX = 60
@@ -22,16 +24,19 @@ const LON_MIN = -20
 const LON_MAX = 15
 
 const VESSELS = [
-  { mmsi: 227123001, vesselName: 'BELLE ETOILE',      ircs: 'FZAB1', flagState: 'FR', imo: '9123001', shipType: 30, startLat: 47.5,  startLon: -5.0,  startCourse: 220 },
-  { mmsi: 227123002, vesselName: 'CAP BRETON',         ircs: 'FZAC2', flagState: 'FR', imo: '9123002', shipType: 30, startLat: 50.2,  startLon: -7.3,  startCourse: 145 },
-  { mmsi: 227123003, vesselName: 'NORD ATLANTIQUE',    ircs: 'FZAD3', flagState: 'FR', imo: '9123003', shipType: 30, startLat: 49.5,  startLon: -2.1,  startCourse:  90 },
-  { mmsi: 224123001, vesselName: 'VIENTO DEL MAR',     ircs: 'EBVD1', flagState: 'ES', imo: '9124001', shipType: 30, startLat: 44.1,  startLon: -3.4,  startCourse: 180 },
-  { mmsi: 227123004, vesselName: 'MER DU LARGE',       ircs: 'FZAE4', flagState: 'FR', imo: '9123004', shipType: 30, startLat: 46.0,  startLon: -9.2,  startCourse: 310 },
-  { mmsi: 227123005, vesselName: 'SAINT PIERRE',       ircs: 'FZAF5', flagState: 'FR', imo: '9123005', shipType: 30, startLat: 43.2,  startLon:  4.1,  startCourse:  60 },
-  { mmsi: 244123001, vesselName: 'NOORDZEE',           ircs: 'PBNO1', flagState: 'NL', imo: '9244001', shipType: 30, startLat: 52.1,  startLon:  3.2,  startCourse:  15 },
-  { mmsi: 263123001, vesselName: 'ATLANTICO SUL',      ircs: 'CTAS1', flagState: 'PT', imo: '9263001', shipType: 30, startLat: 40.3,  startLon: -11.0, startCourse: 270 },
-  { mmsi: 232123001, vesselName: 'CELTIC DAWN',        ircs: 'GBCD1', flagState: 'GB', imo: '9232001', shipType: 30, startLat: 50.5,  startLon:  0.1,  startCourse: 200 },
-  { mmsi: 227123006, vesselName: 'GOLFE DE GASCOGNE',  ircs: 'FZAG6', flagState: 'FR', imo: '9123006', shipType: 30, startLat: 46.3,  startLon: -7.1,  startCourse: 190 },
+  { cfr: null, mmsi: 227123001, vesselName: 'BELLE ETOILE',      ircs: 'FZAB1', flagState: 'FR', imo: '9123001', shipType: 30, startLat: 47.5,  startLon: -5.0,  startCourse: 220 },
+  { cfr: null, mmsi: 227123002, vesselName: 'CAP BRETON',         ircs: 'FZAC2', flagState: 'FR', imo: '9123002', shipType: 30, startLat: 50.2,  startLon: -7.3,  startCourse: 145 },
+  { cfr: null, mmsi: 227123003, vesselName: 'NORD ATLANTIQUE',    ircs: 'FZAD3', flagState: 'FR', imo: '9123003', shipType: 30, startLat: 49.5,  startLon: -2.1,  startCourse:  90 },
+  { cfr: null, mmsi: 224123001, vesselName: 'VIENTO DEL MAR',     ircs: 'EBVD1', flagState: 'ES', imo: '9124001', shipType: 30, startLat: 44.1,  startLon: -3.4,  startCourse: 180 },
+  { cfr: null, mmsi: 227123004, vesselName: 'MER DU LARGE',       ircs: 'FZAE4', flagState: 'FR', imo: '9123004', shipType: 30, startLat: 46.0,  startLon: -9.2,  startCourse: 310 },
+  { cfr: null, mmsi: 227123005, vesselName: 'SAINT PIERRE',       ircs: 'FZAF5', flagState: 'FR', imo: '9123005', shipType: 30, startLat: 43.2,  startLon:  4.1,  startCourse:  60 },
+  { cfr: null, mmsi: 244123001, vesselName: 'NOORDZEE',           ircs: 'PBNO1', flagState: 'NL', imo: '9244001', shipType: 30, startLat: 52.1,  startLon:  3.2,  startCourse:  15 },
+  { cfr: null, mmsi: 263123001, vesselName: 'ATLANTICO SUL',      ircs: 'CTAS1', flagState: 'PT', imo: '9263001', shipType: 30, startLat: 40.3,  startLon: -11.0, startCourse: 270 },
+  { cfr: null, mmsi: 232123001, vesselName: 'CELTIC DAWN',        ircs: 'GBCD1', flagState: 'GB', imo: '9232001', shipType: 30, startLat: 50.5,  startLon:  0.1,  startCourse: 200 },
+  { cfr: null, mmsi: 227123006, vesselName: 'GOLFE DE GASCOGNE',  ircs: 'FZAG6', flagState: 'FR', imo: '9123006', shipType: 30, startLat: 46.3,  startLon: -7.1,  startCourse: 190 },
+  // VMS vessels: 12 h of AIS positions at 10-minute intervals, starting from last_positions coordinates
+  { cfr: 'ABC000339263', mmsi: 23858744,  vesselName: 'PAYSAGE ROMAN LIER',   ircs: 'YHIZ',   flagState: 'FR', imo: null, shipType: 30, startLat: 48.097, startLon: -4.323, startCourse: 351, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES },
+  { cfr: 'ABC000570464', mmsi: 819527780, vesselName: 'POÉSIE POUVOIR RESTE',  ircs: 'QO0830', flagState: 'FR', imo: null, shipType: 30, startLat: 45.468, startLon: -1.551, startCourse:  90, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES },
 ]
 
 const MODES = {
@@ -78,6 +83,10 @@ function normalizeAngle(angle) {
 }
 
 function generateVesselPositions(vessel, seed) {
+  const intervalMinutes = vessel.intervalMinutes ?? INTERVAL_MINUTES
+  const totalMinutes    = vessel.totalMinutes    ?? TOTAL_MINUTES
+  const steps           = Math.floor(totalMinutes / intervalMinutes)
+
   const rand = seededRand(seed)
   const positions = []
 
@@ -89,7 +98,7 @@ function generateVesselPositions(vessel, seed) {
   let stepsInMode = 0
   let maxStepsInMode = randInt(MODES.FISHING.minSteps, MODES.FISHING.maxSteps, rand)
 
-  for (let step = 0; step < STEPS; step++) {
+  for (let step = 0; step < steps; step++) {
     // Mode transition check
     if (stepsInMode >= maxStepsInMode) {
       modeName = pickWeighted(MODE_TRANSITIONS[modeName], rand)
@@ -106,7 +115,7 @@ function generateVesselPositions(vessel, seed) {
     }
 
     const mode = MODES[modeName]
-    const minutesAgo = TOTAL_MINUTES - step * INTERVAL_MINUTES
+    const minutesAgo = totalMinutes - step * intervalMinutes
 
     positions.push({
       mmsi:       vessel.mmsi,
@@ -120,11 +129,12 @@ function generateVesselPositions(vessel, seed) {
       vesselName: vessel.vesselName,
       shipType:   vessel.shipType,
       imo:        vessel.imo,
+      cfr:        vessel.cfr,
     })
 
     // Advance position via dead reckoning
     if (modeName !== 'ANCHORED') {
-      const distNm = speed * (INTERVAL_MINUTES / 60)
+      const distNm = speed * (intervalMinutes / 60)
       const courseRad = (course * Math.PI) / 180
       const deltaLat = (distNm / 60) * Math.cos(courseRad)
       const deltaLon = (distNm / 60) * Math.sin(courseRad) / Math.cos((lat * Math.PI) / 180)
@@ -154,24 +164,26 @@ function escapeStr(s) {
 }
 
 function rowToSql(p) {
-  const ts = `(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '${p.minutesAgo} minutes'`
-  return `(${p.mmsi},${ts},${p.lat},${p.lon},${p.speed},${p.course},${escapeStr(p.status)},${escapeStr(p.ircs)},${escapeStr(p.vesselName)},${p.shipType},${escapeStr(p.imo)})`
+  const ts  = `(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '${p.minutesAgo} minutes'`
+  const imo = p.imo ? escapeStr(p.imo) : 'NULL'
+  const cfr = p.cfr ? escapeStr(p.cfr) : 'NULL'
+  return `(${p.mmsi},${ts},${p.lat},${p.lon},${p.speed},${p.course},${escapeStr(p.status)},${escapeStr(p.ircs)},${escapeStr(p.vesselName)},${p.shipType},${imo},${cfr})`
 }
 
 async function run() {
-  const spinner = ora(`Generating AIS positions for ${VESSELS.length} vessels (${STEPS} steps each)...`).start()
+  const spinner = ora(`Generating AIS positions for ${VESSELS.length} vessels...`).start()
 
   const allRows = []
   for (let i = 0; i < VESSELS.length; i++) {
     const vessel = VESSELS[i]
-    spinner.text = `Simulating route for ${vessel.shipName} (${i + 1}/${VESSELS.length})...`
+    spinner.text = `Simulating route for ${vessel.vesselName} (${i + 1}/${VESSELS.length})...`
     const positions = generateVesselPositions(vessel, vessel.mmsi)
     allRows.push(...positions)
   }
 
   spinner.text = 'Writing SQL file...'
 
-  const cols = '(mmsi, date_time, latitude, longitude, speed, course, status, ircs, vessel_name, ship_type, imo)'
+  const cols = '(mmsi, date_time, latitude, longitude, speed, course, status, ircs, vessel_name, ship_type, imo, cfr)'
   const lines = ['TRUNCATE TABLE ais_positions;', '']
 
   for (let i = 0; i < allRows.length; i += BATCH_SIZE) {

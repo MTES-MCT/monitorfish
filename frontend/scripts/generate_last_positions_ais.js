@@ -273,13 +273,53 @@ function generateVessel(mmsi) {
   }
 }
 
+// Fixed VMS vessels that also have AIS positions in ais_positions — survive re-generation
+const VMS_VESSELS = [
+  {
+    cfr: 'ABC000339263',
+    course: 351,
+    external_immatriculation: 'CN775734',
+    flag_state: 'FR',
+    imo: null,
+    is_at_port: false,
+    ircs: 'YHIZ',
+    'last_position_datetime_utc:sql': "NOW() - ('10 minutes')::interval",
+    latitude: 48.097,
+    length: 17,
+    longitude: -4.323,
+    mmsi: 23858744,
+    ship_type: 30,
+    speed: 3.5,
+    status: 'Engaged in fishing',
+    vessel_name: 'PAYSAGE ROMAN LIER',
+  },
+  {
+    cfr: 'ABC000570464',
+    course: 90,
+    external_immatriculation: 'ZP350150',
+    flag_state: 'FR',
+    imo: null,
+    is_at_port: false,
+    ircs: 'QO0830',
+    'last_position_datetime_utc:sql': "NOW() - ('10 minutes')::interval",
+    latitude: 45.468,
+    length: 17,
+    longitude: -1.551,
+    mmsi: 819527780,
+    ship_type: 30,
+    speed: 4.5,
+    status: 'Engaged in fishing',
+    vessel_name: 'POÉSIE POUVOIR RESTE',
+  },
+]
+
 async function run() {
   const spinner = ora(`Generating ${VESSEL_COUNT} AIS last positions...`).start()
   console.info('⚠️  It might break Cypress tests based on vessels names (i.e ais_positions_overlay.spec.ts)\n')
 
   // Generate unique MMSIs: real MMSIs are 9-digit numbers, MMSI 200000000-799999999 are assigned to vessels
-  const usedMmsis = new Set()
-  const vessels = []
+  const usedMmsis = new Set(VMS_VESSELS.map(v => v.mmsi))
+  const vessels = [...VMS_VESSELS]
 
   for (let i = 0; i < VESSEL_COUNT; i++) {
     let mmsi

@@ -87,7 +87,7 @@ install-front:
 run-back: run-stubbed-apis
 	./frontend/node_modules/.bin/import-meta-env-prepare -u -x ./backend/.env.example -p ./backend/.env.local.defaults
 	docker compose $(if $(kafka),--profile kafka,) up -d --quiet-pull --wait db keycloak $(if $(kafka),kafka,)
-	@bash -c 'set -a; source .env; cd backend && ./gradlew bootRun'
+	@bash -c 'set -a; source .env; $(if $(kafka),MONITORFISH_KAFKA_AIS_ENABLED=true; MONITORFISH_KAFKA_AIS_PRODUCER_ENABLED=true; ,)cd backend && ./gradlew bootRun'
 
 .PHONY: run-front ##LOCAL ▶️  Run frontend for development
 run-front:

@@ -15,10 +15,10 @@ class GetDatesFromVesselTrackDepth(
     private val logger: Logger = LoggerFactory.getLogger(GetDatesFromVesselTrackDepth::class.java)
 
     fun execute(
-        internalReferenceNumber: String,
         trackDepth: VesselTrackDepth,
-        fromDateTime: ZonedDateTime? = null,
-        toDateTime: ZonedDateTime? = null,
+        internalReferenceNumber: String?,
+        fromDateTime: ZonedDateTime?,
+        toDateTime: ZonedDateTime?,
     ): DatesOfVesselTrackDepth {
         var isTrackDepthModified = false
 
@@ -35,15 +35,21 @@ class GetDatesFromVesselTrackDepth(
             when (trackDepth) {
                 VesselTrackDepth.TWELVE_HOURS -> ZonedDateTime.now().minusHours(12)
                 VesselTrackDepth.LAST_DEPARTURE -> {
-                    try {
-                        // We subtract 4h to this date to ensure the track starts at the port
-                        // (the departure message may be sent after the departure)
-                        val lastTrip = logbookReportRepository.findAllTrips(internalReferenceNumber).last()
-                        lastTrip.startDateTime.minusHours(4)
-                    } catch (e: NoSuchElementException) {
-                        logger.warn(e.message)
-                        isTrackDepthModified = true
+                    if (internalReferenceNumber == null) {
+                        // No CFR: AIS-only vessel, fall back to 1 day
                         ZonedDateTime.now().minusDays(1)
+                    } else {
+                        try {
+                            // We subtract 4h to this date to ensure the track starts at the port
+                            // (the departure message may be sent after the departure)
+                            val lastTrip = logbookReportRepository.findAllTrips(internalReferenceNumber).last()
+                            lastTrip.startDateTime.minusHours(4)
+                        } catch (e: NoSuchElementException) {
+                            logger.warn(e.message)
+
+                            isTrackDepthModified = true
+                            ZonedDateTime.now().minusDays(1)
+                        }
                     }
                 }
                 VesselTrackDepth.ONE_DAY -> ZonedDateTime.now().minusDays(1)

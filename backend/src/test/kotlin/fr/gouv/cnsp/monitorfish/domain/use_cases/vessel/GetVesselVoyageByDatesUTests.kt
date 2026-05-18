@@ -92,10 +92,10 @@ class GetVesselVoyageByDatesUTests {
                     getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
                     getLogbookMessages = getLogbookMessages,
                 ).execute(
-                    expectedCfr,
-                    VesselTrackDepth.CUSTOM,
-                    expectedStartDate.plusHours(1),
-                    expectedEndDate.minusHours(1),
+                    internalReferenceNumber = expectedCfr,
+                    trackDepth = VesselTrackDepth.CUSTOM,
+                    fromDateTime = expectedStartDate.plusHours(1),
+                    toDateTime = expectedEndDate.minusHours(1),
                 )
             }
         assertThat(exception.code).isEqualTo(BackendUsageErrorCode.NOT_FOUND_BUT_OK)
@@ -106,10 +106,10 @@ class GetVesselVoyageByDatesUTests {
                 getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
                 getLogbookMessages = getLogbookMessages,
             ).execute(
-                expectedCfr,
-                VesselTrackDepth.CUSTOM,
-                expectedStartDate.minusHours(1),
-                expectedEndDate.plusHours(1),
+                internalReferenceNumber = expectedCfr,
+                trackDepth = VesselTrackDepth.CUSTOM,
+                fromDateTime = expectedStartDate.minusHours(1),
+                toDateTime = expectedEndDate.plusHours(1),
             )
 
         val voyage1 =
@@ -118,10 +118,10 @@ class GetVesselVoyageByDatesUTests {
                 getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
                 getLogbookMessages = getLogbookMessages,
             ).execute(
-                expectedCfr,
-                VesselTrackDepth.CUSTOM,
-                expectedStartDate.minusYears(1),
-                expectedEndDate.plusHours(1),
+                internalReferenceNumber = expectedCfr,
+                trackDepth = VesselTrackDepth.CUSTOM,
+                fromDateTime = expectedStartDate.minusYears(1),
+                toDateTime = expectedEndDate.plusHours(1),
             )
 
         // Then
@@ -201,8 +201,8 @@ class GetVesselVoyageByDatesUTests {
                 getDatesFromVesselTrackDepth = getDatesFromVesselTrackDepth,
                 getLogbookMessages = getLogbookMessages,
             ).execute(
-                expectedCfr,
-                VesselTrackDepth.THREE_DAYS,
+                internalReferenceNumber = expectedCfr,
+                trackDepth = VesselTrackDepth.THREE_DAYS,
                 fromDateTime = null,
                 toDateTime = null,
             )

@@ -14,6 +14,22 @@ interface DBAisPositionRepository : JpaRepository<AisPositionEntity, AisPosition
         to: ZonedDateTime,
     ): List<AisPositionEntity>
 
+    @Query(
+        """
+        SELECT a
+        FROM AisPositionEntity a
+        WHERE a.pk.mmsi = :mmsi AND
+            a.pk.dateTime >= :from AND
+            a.pk.dateTime <= :to
+        ORDER BY a.pk.dateTime DESC
+    """,
+    )
+    fun findLastByMmsi(
+        mmsi: Long,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<AisPositionEntity>
+
     @Query("SELECT a FROM AisPositionEntity a WHERE a.ircs = :ircs AND a.pk.dateTime >= :from AND a.pk.dateTime <= :to")
     fun findLastByIrcs(
         ircs: String,
@@ -21,7 +37,9 @@ interface DBAisPositionRepository : JpaRepository<AisPositionEntity, AisPosition
         to: ZonedDateTime,
     ): List<AisPositionEntity>
 
-    @Query("SELECT a FROM AisPositionEntity a WHERE a.externalImmatriculation = :externalImmatriculation AND a.pk.dateTime >= :from AND a.pk.dateTime <= :to")
+    @Query(
+        "SELECT a FROM AisPositionEntity a WHERE a.externalImmatriculation = :externalImmatriculation AND a.pk.dateTime >= :from AND a.pk.dateTime <= :to",
+    )
     fun findLastByExternalImmatriculation(
         externalImmatriculation: String,
         from: ZonedDateTime,

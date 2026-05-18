@@ -23,3 +23,5 @@ CREATE INDEX ON ais_positions (mmsi, date_time DESC);
 CREATE INDEX ON ais_positions (cfr, date_time DESC);
 CREATE INDEX ON ais_positions (external_immatriculation, date_time DESC);
 CREATE INDEX ON ais_positions (ircs, date_time DESC);
+
+SELECT add_retention_policy('ais_positions', drop_after => INTERVAL '1 month');

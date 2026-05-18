@@ -24,6 +24,12 @@ class JpaAisPositionRepository(
         to: ZonedDateTime,
     ): List<Position> = dbAisPositionRepository.findLastByCfr(cfr, from, to).map { it.toPosition() }
 
+    override fun findVesselLastAisPositionsByMmsi(
+        mmsi: Long,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<Position> = dbAisPositionRepository.findLastByMmsi(mmsi, from, to).map { it.toPosition() }
+
     override fun findVesselLastAisPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,
@@ -34,5 +40,8 @@ class JpaAisPositionRepository(
         externalImmatriculation: String,
         from: ZonedDateTime,
         to: ZonedDateTime,
-    ): List<Position> = dbAisPositionRepository.findLastByExternalImmatriculation(externalImmatriculation, from, to).map { it.toPosition() }
+    ): List<Position> =
+        dbAisPositionRepository.findLastByExternalImmatriculation(externalImmatriculation, from, to).map {
+            it.toPosition()
+        }
 }

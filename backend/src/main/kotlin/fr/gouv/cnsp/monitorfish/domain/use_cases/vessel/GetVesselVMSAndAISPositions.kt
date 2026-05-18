@@ -16,12 +16,12 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @UseCase
-class GetVesselPositions(
+class GetVesselVMSAndAISPositions(
     private val positionRepository: PositionRepository,
     private val aisPositionRepository: AisPositionRepository,
     private val getDatesFromVesselTrackDepth: GetDatesFromVesselTrackDepth,
 ) {
-    private val logger: Logger = LoggerFactory.getLogger(GetVesselPositions::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(GetVesselVMSAndAISPositions::class.java)
 
     suspend fun execute(
         internalReferenceNumber: String,
@@ -136,7 +136,11 @@ class GetVesselPositions(
                 }
             VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
                 async {
-                    aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(externalReferenceNumber, from, to)
+                    aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(
+                        externalReferenceNumber,
+                        from,
+                        to,
+                    )
                 }
             else ->
                 async {
@@ -146,7 +150,11 @@ class GetVesselPositions(
                         ircs.isNotEmpty() ->
                             aisPositionRepository.findVesselLastAisPositionsByIrcs(ircs, from, to)
                         externalReferenceNumber.isNotEmpty() ->
-                            aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(externalReferenceNumber, from, to)
+                            aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(
+                                externalReferenceNumber,
+                                from,
+                                to,
+                            )
                         else -> listOf()
                     }
                 }

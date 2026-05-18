@@ -30,7 +30,8 @@ class VesselController(
     private val getLastPositionsAIS: GetLastPositionsAIS,
     private val getVessel: GetVessel,
     private val getVesselById: GetVesselById,
-    private val getVesselPositions: GetVesselPositions,
+    private val getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions,
+    private val getVesselAISPositions: GetVesselAISPositions,
     private val getVesselVoyage: GetVesselVoyage,
     private val getVesselVoyageByDates: GetVesselVoyageByDates,
     private val searchVessels: SearchVessels,
@@ -68,6 +69,34 @@ class VesselController(
             LastPositionAISDataOutput.fromLastPositionAIS(it)
         }
     }
+
+    @GetMapping("/ais/positions")
+    @Operation(summary = "Get vessel's AIS positions")
+    fun getVesselAISPositions(
+        @Parameter(description = "MMSI")
+        @RequestParam(name = "mmsi")
+        mmsi: Long,
+        @Parameter(description = "Vessel track depth")
+        @RequestParam(name = "trackDepth")
+        trackDepth: VesselTrackDepth,
+        @Parameter(description = "from date")
+        @RequestParam(name = "afterDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        afterDateTime: ZonedDateTime?,
+        @Parameter(description = "to date")
+        @RequestParam(name = "beforeDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        beforeDateTime: ZonedDateTime?,
+    ): List<PositionDataOutput> =
+        getVesselAISPositions
+            .execute(
+                mmsi = mmsi,
+                trackDepth = trackDepth,
+                fromDateTime = afterDateTime,
+                toDateTime = beforeDateTime,
+            ).map {
+                PositionDataOutput.fromPosition(it)
+            }
 
     @GetMapping("/{vesselId}")
     @Operation(summary = "Get a vessel by its ID")
@@ -182,7 +211,7 @@ class VesselController(
     ): ResponseEntity<List<PositionDataOutput>> =
         runBlocking {
             val (vesselTrackHasBeenModified, positions) =
-                getVesselPositions.execute(
+                getVesselVMSAndAISPositions.execute(
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = IRCS,

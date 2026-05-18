@@ -23,7 +23,7 @@ class GetVessel(
     private val vesselRepository: VesselRepository,
     private val logbookReportRepository: LogbookReportRepository,
     private val logbookRawMessageRepository: LogbookRawMessageRepository,
-    private val getVesselPositions: GetVesselPositions,
+    private val getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions,
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
@@ -51,7 +51,7 @@ class GetVessel(
             val userService = getAuthorizedUser.execute(userEmail).service
 
             val (vesselTrackHasBeenModified, positions) =
-                getVesselPositions.execute(
+                getVesselVMSAndAISPositions.execute(
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = ircs,

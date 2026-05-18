@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 
 @Import(GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
-class GetVesselPositionsUTests {
+class GetVesselVMSAndAISPositionsUTests {
     @MockitoBean
     private lateinit var positionRepository: PositionRepository
 
@@ -52,7 +52,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",
@@ -93,7 +93,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                    GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -121,7 +121,7 @@ class GetVesselPositionsUTests {
         val throwable =
             catchThrowable {
                 runBlocking {
-                    GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                    GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                         .execute(
                             internalReferenceNumber = "FR224226850",
                             externalReferenceNumber = "",
@@ -150,7 +150,7 @@ class GetVesselPositionsUTests {
         val fromDateTime = ZonedDateTime.now().minusMinutes(15)
         val toDateTime = ZonedDateTime.now()
         runBlocking {
-            GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+            GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -180,7 +180,7 @@ class GetVesselPositionsUTests {
 
         // When
         runBlocking {
-            GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+            GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                 .execute(
                     internalReferenceNumber = "FR224226850",
                     externalReferenceNumber = "",
@@ -250,7 +250,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",
@@ -293,7 +293,7 @@ class GetVesselPositionsUTests {
         // When
         val pair =
             runBlocking {
-                GetVesselPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
+                GetVesselVMSAndAISPositions(positionRepository, aisPositionRepository, getDatesFromVesselTrackDepth)
                     .execute(
                         internalReferenceNumber = "FR224226850",
                         externalReferenceNumber = "",

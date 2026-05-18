@@ -79,7 +79,7 @@ class VesselControllerITests {
     private lateinit var getVesselById: GetVesselById
 
     @MockitoBean
-    private lateinit var getVesselPositions: GetVesselPositions
+    private lateinit var getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions
 
     @MockitoBean
     private lateinit var getVesselVoyage: GetVesselVoyage
@@ -107,6 +107,9 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var saveVesselContactToUpdate: SaveVesselContactToUpdate
+
+    @MockitoBean
+    private lateinit var getVesselAISPositions: GetVesselAISPositions
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -525,7 +528,7 @@ class VesselControllerITests {
                     ),
             )
         givenSuspended {
-            getVesselPositions.execute(any(), any(), any(), any(), any(), eq(null), eq(null))
+            getVesselVMSAndAISPositions.execute(any(), any(), any(), any(), any(), eq(null), eq(null))
         } willReturn {
             Pair(false, CompletableDeferred(listOf(firstPosition, secondPosition, thirdPosition)))
         }
@@ -542,7 +545,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$.length()", equalTo(3)))
 
         runBlocking {
-            Mockito.verify(getVesselPositions).execute(
+            Mockito.verify(getVesselVMSAndAISPositions).execute(
                 "FR224226850",
                 "123",
                 "IEF4",
@@ -552,6 +555,49 @@ class VesselControllerITests {
                 null,
             )
         }
+    }
+
+    @Test
+    fun `Should get AIS positions for a vessel`() {
+        // Given
+        val now = ZonedDateTime.now()
+        val position =
+            Position(
+                id = null,
+                internalReferenceNumber = null,
+                mmsi = "224226850",
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = null,
+                positionType = PositionType.AIS,
+                isManual = false,
+                isFishing = false,
+                latitude = 16.445,
+                longitude = 48.2525,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = now.minusHours(1),
+            )
+        given(getVesselAISPositions.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(listOf(position))
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/ais/positions?mmsi=224226850&trackDepth=TWELVE_HOURS",
+                ).with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+
+        Mockito.verify(getVesselAISPositions).execute(
+            eq(224226850L),
+            eq(VesselTrackDepth.TWELVE_HOURS),
+            eq(null),
+            eq(null),
+        )
     }
 
     @Test

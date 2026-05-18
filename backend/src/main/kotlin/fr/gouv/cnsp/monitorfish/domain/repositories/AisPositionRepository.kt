@@ -13,6 +13,12 @@ interface AisPositionRepository {
         to: ZonedDateTime,
     ): List<Position>
 
+    fun findVesselLastAisPositionsByMmsi(
+        mmsi: Long,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<Position>
+
     fun findVesselLastAisPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,

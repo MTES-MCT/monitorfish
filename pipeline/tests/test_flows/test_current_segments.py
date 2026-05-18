@@ -362,7 +362,7 @@ def current_segments() -> pd.DataFrame:
                 now - datetime.timedelta(days=1, hours=6),
                 now - datetime.timedelta(weeks=1, days=3),
                 now - relativedelta.relativedelta(months=1, minutes=14),
-                now - relativedelta.relativedelta(months=1, minutes=34),
+                now - relativedelta.relativedelta(months=1, minutes=30),
             ],
             "departure_datetime_utc": [
                 pd.NaT,

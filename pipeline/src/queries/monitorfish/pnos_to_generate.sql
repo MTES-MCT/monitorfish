@@ -36,6 +36,16 @@ last_controls AS (
     LEFT JOIN LATERAL jsonb_array_elements(last_control_infractions) AS inf
     ON true
     GROUP BY 1, 2, 3
+),
+
+last_successful_sends AS (
+    SELECT
+        prior_notification_report_id,
+        prior_notification_source,
+        MAX(date_time_utc) AS last_successful_send_date_utc
+    FROM prior_notification_sent_messages
+    WHERE success = true
+    GROUP BY prior_notification_report_id, prior_notification_source
 )
 
 (SELECT DISTINCT ON (r.report_id) -- In rare cases the same PNO with the same data and the same report_id is sent multiple times in messages with different operation numbers
@@ -67,7 +77,9 @@ last_controls AS (
     COALESCE(lc.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
-    'LOGBOOK' AS source
+    'LOGBOOK' AS source,
+    r.operation_type = 'COR' AS is_correction,
+    lss.last_successful_send_date_utc AS previous_notification_date_utc
 FROM logbook_reports r
 LEFT JOIN vessels v
 ON v.cfr = r.cfr
@@ -75,6 +87,10 @@ LEFT JOIN last_controls lc
 ON lc.cfr = r.cfr
 LEFT JOIN ports p
 ON p.locode = r.value->>'port'
+LEFT JOIN last_successful_sends lss
+ON r.operation_type = 'COR'
+   AND lss.prior_notification_report_id = r.referenced_report_id
+   AND lss.prior_notification_source = 'LOGBOOK'
 WHERE
     operation_datetime_utc >= :start_datetime_utc
     AND operation_datetime_utc < :end_datetime_utc
@@ -133,7 +149,9 @@ UNION ALL
     COALESCE(lc.last_control_infractions, '[]'::jsonb) AS last_control_infractions,
     (value->>'isVerified')::BOOLEAN AS is_verified,
     (value->>'isBeingSent')::BOOLEAN AS is_being_sent,
-    'MANUAL' AS source
+    'MANUAL' AS source,
+    lss.last_successful_send_date_utc IS NOT NULL AS is_correction,
+    lss.last_successful_send_date_utc AS previous_notification_date_utc
 FROM manual_prior_notifications r
 LEFT JOIN vessels v
 ON v.id = r.vessel_id
@@ -141,6 +159,9 @@ LEFT JOIN last_controls lc
 ON lc.vessel_id = r.vessel_id
 LEFT JOIN ports p
 ON p.locode = r.value->>'port'
+LEFT JOIN last_successful_sends lss
+ON lss.prior_notification_report_id = r.report_id
+   AND lss.prior_notification_source = 'MANUAL'
 WHERE
     (
         (value->>'isInvalidated') IS NULL

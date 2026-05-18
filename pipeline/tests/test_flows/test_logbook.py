@@ -332,15 +332,15 @@ def test_flow(mock_move, reset_test_data):
 
     assert state.is_completed()
     final_logbook_reports = read_query(query, db="monitorfish_remote")
-    assert (~initial_logbook_reports.is_test_message).sum() == 54
+    assert (~initial_logbook_reports.is_test_message).sum() == 56
     assert initial_logbook_reports.is_test_message.sum() == 0
 
-    assert (~final_logbook_reports.is_test_message).sum() == 74
+    assert (~final_logbook_reports.is_test_message).sum() == 76
     assert final_logbook_reports.is_test_message.sum() == 1
     assert (
         final_logbook_reports.loc[
             final_logbook_reports.is_test_message, "operation_number"
         ].values[0]
     ) == "FRA20200321502645"
-    assert initial_logbook_reports.activity_datetime_utc.notnull().sum() == 30
-    assert final_logbook_reports.activity_datetime_utc.notnull().sum() == 44
+    assert initial_logbook_reports.activity_datetime_utc.notnull().sum() == 31
+    assert final_logbook_reports.activity_datetime_utc.notnull().sum() == 45

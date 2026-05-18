@@ -8,6 +8,11 @@
         <main>
             <p>Bonjour,</p>
             <p>Veuillez trouver ci-joint un préavis {{ purpose_suffix }}{{ " (préavis zéro)" if is_zero else "" }} :</p>
+            {% if is_correction %}
+            <p style="color:red;font-family:marianne,arial,sans-serif;">
+                Ce préavis remplace celui diffusé précédemment{{ " le {}".format(previous_notification_date_utc) if previous_notification_date_utc else "" }}
+            </p>
+            {% endif %}
             <ul>
                 <li>Navire : <strong>{{ vessel_name }} - {{ cfr }}</strong></li>
                 <li>Segment(s) de flotte : <strong>{{ trip_segments or "-" }}</strong></li>

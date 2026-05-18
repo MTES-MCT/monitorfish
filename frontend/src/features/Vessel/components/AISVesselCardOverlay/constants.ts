@@ -46,10 +46,10 @@ export const AIS_VESSEL_OVERLAY_CARD_MARGIN: OverlayCardMargins = {
   xMiddle: -185,
   xRight: -407,
   yBottom: -230,
-  yMiddle: -115,
+  yMiddle: -110,
   yTop: 20
 }
 
-/** Approximate rendered height of the AIS vessel card (px). Must match |yBottom| of the margins above. */
-export const AIS_CARD_HEIGHT = 220
+/** Approximate rendered height of the AIS vessel card (px). Must match |yBottom| - 20px of the margins above. */
+export const AIS_CARD_HEIGHT = 210
 export const AIS_CARD_WIDTH = 387

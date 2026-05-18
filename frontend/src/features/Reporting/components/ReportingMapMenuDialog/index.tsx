@@ -245,6 +245,7 @@ const StyledBody = styled(MapMenuDialog.Body)`
 `
 
 const Wrapper = styled(MapToolBox)`
+  top: 0;
   width: 320px;
 `
 

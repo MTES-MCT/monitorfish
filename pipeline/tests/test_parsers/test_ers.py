@@ -4,22 +4,41 @@ import os
 import pytest
 
 from config import TEST_DATA_LOCATION
-from src.parsers.ers.ers import ERSParsingError, parse_xml_string
+from src.entities.data_exchange_standards import DataDomain
+from src.parsers.ers.ers import ERSParsingError, batch_parse, parse_xml_string
 
-XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/ers"
+LOGBOOK_XML_TEST_DATA_LOCATION = (
+    TEST_DATA_LOCATION / "sales_and_logbook/xml_files/logbook/ers"
+)
+SALES_XML_TEST_DATA_LOCATION = (
+    TEST_DATA_LOCATION / "sales_and_logbook/xml_files/sales_notes/ers"
+)
 
 
-def parse_file(test_file: str, has_data: bool = False):
-    with open(os.path.join(XML_TEST_DATA_LOCATION, test_file), "r") as f:
+def parse_logbook_file(test_file: str):
+    with open(os.path.join(LOGBOOK_XML_TEST_DATA_LOCATION, test_file), "r") as f:
         xml_string = f.read()
-    metadata, data_iter = parse_xml_string(xml_string)
+    metadata, data_iter = parse_xml_string(xml_string, DataDomain.LOGBOOK)
     data_list = list(data_iter)
     return metadata, data_list
 
 
+def test_batch_parse_sales_files():
+    xml_strings = []
+    for test_file in os.listdir(SALES_XML_TEST_DATA_LOCATION):
+        with open(SALES_XML_TEST_DATA_LOCATION / test_file, "r") as f:
+            xml_strings.append(f.read())
+    res = batch_parse(xml_strings, DataDomain.SALES)
+
+    assert set(res.keys()) == {"reports", "raw_messages", "batch_generated_errors"}
+    assert len(res["reports"]) == 2
+    assert len(res["raw_messages"]) == 2
+    assert res["batch_generated_errors"] is False
+
+
 def test_cor_parser():
     test_file = "OOE20200402018600.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
 
     expected_metadata = {
         "is_test_message": False,
@@ -56,7 +75,7 @@ def test_cor_parser():
 
 def test_coe_parser():
     test_file = "OOE20200323034702.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
 
     expected_metadata = {
         "is_test_message": True,
@@ -96,7 +115,7 @@ def test_coe_parser():
 
 def test_cox_parser():
     test_file = "OOE20200323034701.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
 
     expected_metadata = {
         "is_test_message": True,
@@ -166,7 +185,7 @@ def test_cox_parser():
 
 def test_cro_parser():
     test_file = "OOE20200324042000.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "CRO"
@@ -194,7 +213,7 @@ def test_cro_parser():
 
 def test_dep_parser():
     test_file = "OOF20200324001900.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "DEP"
@@ -213,7 +232,7 @@ def test_dep_parser():
 
 def test_dis_parser():
     test_file = "OOE20200321003301.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "DIS"
@@ -256,7 +275,7 @@ def test_dis_parser():
 
 def test_eof_parser():
     test_file = "OOF20200324011801.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "EOF"
@@ -267,7 +286,7 @@ def test_eof_parser():
 
 def test_far_parser():
     test_file = "OOF20200324066300.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "FAR"
@@ -285,7 +304,7 @@ def test_far_parser():
 
 def test_cps_parser():
     test_file = "OOF20230228013803.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert data_list == [
         {
             "activity_datetime_utc": datetime.datetime(2023, 2, 28, 17, 44),
@@ -336,7 +355,7 @@ def test_cps_parser():
 
 def test_ins_parser():
     test_file = "OOF20200306070900.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data == {"log_type": "INS"}
@@ -344,7 +363,7 @@ def test_ins_parser():
 
 def test_pnt_parser():
     test_file = "OOY20200408047904.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data == {"log_type": "PNT"}
@@ -352,7 +371,7 @@ def test_pnt_parser():
 
 def test_rlc_parser():
     test_file = "OOF20200331006307.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data == {"log_type": "RLC"}
@@ -360,7 +379,7 @@ def test_rlc_parser():
 
 def test_tra_parser():
     test_file = "OOF20200729010401.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data == {"log_type": "TRA"}
@@ -368,7 +387,7 @@ def test_tra_parser():
 
 def test_pno_parser():
     test_file = "OOF20200326013602.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "PNO"
@@ -391,7 +410,7 @@ def test_pno_parser():
 
 def test_rtp_parser():
     test_file = "OOE20200326032800.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     assert len(data_list) == 1
     data = data_list[0]
     assert data["log_type"] == "RTP"
@@ -408,12 +427,12 @@ def test_rtp_parser():
 def test_parse_empty_message():
     test_file = "empty_message.xml"
     with pytest.raises(ERSParsingError):
-        parse_file(test_file)
+        parse_logbook_file(test_file)
 
 
 def test_del_parser():
     test_file = "OOF20200321016003.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
 
     expected_metadata = {
         "is_test_message": False,
@@ -431,7 +450,7 @@ def test_del_parser():
 
 def test_ret_parser():
     test_file = "FRA20200321502645.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
 
     expected_metadata = {
         "is_test_message": False,
@@ -449,7 +468,7 @@ def test_ret_parser():
 
 def test_multi_line_message():
     test_file = "FAC20211018001928.xml"
-    metadata, data_list = parse_file(test_file)
+    metadata, data_list = parse_logbook_file(test_file)
     expected_metadata = {
         "is_test_message": False,
         "operation_number": "FAC20211018001928",

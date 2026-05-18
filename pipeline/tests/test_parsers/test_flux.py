@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 from config import TEST_DATA_LOCATION
+from src.entities.data_exchange_standards import DataDomain
 from src.parsers.flux.flux import (
     FLUXParsingError,
     base64_decode,
@@ -12,7 +13,12 @@ from src.parsers.flux.flux import (
     parse_fa_report_message_string,
 )
 
-XML_TEST_DATA_LOCATION = TEST_DATA_LOCATION / "logbook/xml_files/flux"
+LOGBOOK_XML_TEST_DATA_LOCATION = (
+    TEST_DATA_LOCATION / "sales_and_logbook/xml_files/logbook/flux"
+)
+SALES_NOTES_XML_TEST_DATA_LOCATION = (
+    TEST_DATA_LOCATION / "sales_and_logbook/xml_files/sales_notes/flux"
+)
 
 
 def test_parse_empty_message_raises_flux_parsing_error():
@@ -21,7 +27,7 @@ def test_parse_empty_message_raises_flux_parsing_error():
 
 
 def test_decode_flux_decodes_base64_encoded_flux_document():
-    with open(XML_TEST_DATA_LOCATION / "base64_encoded.xml") as f:
+    with open(LOGBOOK_XML_TEST_DATA_LOCATION / "base64_encoded.xml") as f:
         s = f.read()
 
     decoded_xml = base64_decode(s)
@@ -29,7 +35,7 @@ def test_decode_flux_decodes_base64_encoded_flux_document():
 
 
 def test_decode_flux_returns_unchanged_input_string_if_not_base64_encoded():
-    with open(XML_TEST_DATA_LOCATION / "not_base64_encoded.xml") as f:
+    with open(LOGBOOK_XML_TEST_DATA_LOCATION / "not_base64_encoded.xml") as f:
         s = f.read()
 
     decoded_xml = base64_decode(s)
@@ -37,7 +43,7 @@ def test_decode_flux_returns_unchanged_input_string_if_not_base64_encoded():
 
 
 def test_decode_flux_raises_flux_parsing_error():
-    with open(XML_TEST_DATA_LOCATION / "corrupt_message.xml") as f:
+    with open(LOGBOOK_XML_TEST_DATA_LOCATION / "corrupt_message.xml") as f:
         s = f.read()
 
     with pytest.raises(FLUXParsingError):
@@ -45,22 +51,24 @@ def test_decode_flux_raises_flux_parsing_error():
 
 
 def test_batch_parse():
-    base64_encoded_xml_files_location = XML_TEST_DATA_LOCATION / "business"
+    base64_encoded_xml_files_location = LOGBOOK_XML_TEST_DATA_LOCATION / "business"
     flux_file_list = []
     for filename in sorted(os.listdir(base64_encoded_xml_files_location)):
-        with open(base64_encoded_xml_files_location / filename, "r") as f:
+        filepath = base64_encoded_xml_files_location / filename
+        if not os.path.isfile(filepath):
+            continue
+        with open(filepath, "r") as f:
             xml_string = f.read()
             flux_file_list.append(xml_string)
 
-    res = batch_parse(flux_file_list)
-    logbook_reports = res.get("logbook_reports").drop(
-        "integration_datetime_utc", axis=1
-    )
+    res = batch_parse(flux_file_list, DataDomain.LOGBOOK)
+    logbook_reports = res.get("reports").drop("integration_datetime_utc", axis=1)
 
     expected_logbook_reports = pd.DataFrame(
         columns=pd.Index(
             [
                 "operation_number",
+                "operation_country",
                 "operation_datetime_utc",
                 "operation_type",
                 "report_id",
@@ -81,6 +89,7 @@ def test_batch_parse():
         data=[
             [
                 "8826952f-b240-4570-a9dc-59f3a24c7bf1",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 39, 33),
                 "DAT",
                 "1e1bff95-dfff-4cc3-82d3-d72b46fda745",
@@ -128,6 +137,7 @@ def test_batch_parse():
             ],
             [
                 "5ee8be46-2efe-4a29-b2df-bdf2d3ed66a1",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 39, 40),
                 "DAT",
                 "7712fe73-cef2-4646-97bb-d634fde00b07",
@@ -159,6 +169,7 @@ def test_batch_parse():
             ],
             [
                 "48794a8f-adfa-43b2-b4c3-2e8d3581bfb4",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 39, 46),
                 "DAT",
                 "2843bd5b-e4e7-4816-8372-76805201301e",
@@ -197,6 +208,7 @@ def test_batch_parse():
             ],
             [
                 "196aca16-da66-4077-b340-ecad701be662",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 39, 59),
                 "DAT",
                 "b2fca5fb-d1cd-4ec7-8a8c-645cecab6866",
@@ -243,6 +255,7 @@ def test_batch_parse():
             ],
             [
                 "4a4c8d24-f4be-4ccb-8aef-99ab5aae7e02",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 5),
                 "DAT",
                 "1a87f3de-dea9-4018-8c2e-d6cdfa97318e",
@@ -306,6 +319,7 @@ def test_batch_parse():
             ],
             [
                 "251db84c-1d8b-49be-b426-f70bb2c68a2d",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 11),
                 "DAT",
                 "fe7acdb9-ff2e-4cfa-91a9-fd2e06b556e1",
@@ -332,6 +346,7 @@ def test_batch_parse():
             ],
             [
                 "08a125d6-6b6d-4f90-b26a-bf8426673eea",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 17),
                 "DAT",
                 "74fcd0f7-8117-4791-9aa3-37d5c7dce880",
@@ -363,6 +378,7 @@ def test_batch_parse():
             ],
             [
                 "9e38840b-f05a-49a4-ab34-e41131749fd0",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 22),
                 "DAT",
                 "1706938b-c3c8-4d34-b32f-54c8d2c0705a",
@@ -406,6 +422,7 @@ def test_batch_parse():
             ],
             [
                 "60e0d2e0-2713-43d7-9fa1-fcf968e34d82",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 28),
                 "DAT",
                 "a36d23c5-b339-455d-9b0b-bf766a9d57d9",
@@ -432,6 +449,7 @@ def test_batch_parse():
             ],
             [
                 "0e1ea2b6-f4f5-4958-bc48-cfb016a22f58",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 34),
                 "DAT",
                 "a913a52e-5e66-4f40-8c64-148f90fa8cd9",
@@ -461,6 +479,7 @@ def test_batch_parse():
             ],
             [
                 "3cffa378-0f8c-4540-b849-747621cfcb4a",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 40),
                 "DAT",
                 "7b487ada-019c-4b62-be32-7d15f7718344",
@@ -487,6 +506,7 @@ def test_batch_parse():
             ],
             [
                 "7bf7401d-cbb1-4e6f-bad8-7e309ee004cf",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 45),
                 "DAT",
                 "ced42f65-a1ac-40e1-93c7-851d4933f770",
@@ -513,6 +533,7 @@ def test_batch_parse():
             ],
             [
                 "cc7ee632-e515-460f-a1c1-f82222a6d419",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 51),
                 "DAT",
                 "f006a2e5-0fdd-48a0-9a9a-ccae00d052d8",
@@ -551,6 +572,7 @@ def test_batch_parse():
             ],
             [
                 "a3c52754-97e1-4a21-ba2e-d8f16f4544e9",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 40, 57),
                 "DAT",
                 "9d1ddd34-1394-470e-b8a6-469b86150e1e",
@@ -589,6 +611,7 @@ def test_batch_parse():
             ],
             [
                 "d5c3b039-aaee-4cca-bcae-637fa8effe14",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 3),
                 "DAT",
                 "7ee30c6c-adf9-4f60-a4f1-f7f15ab92803",
@@ -626,6 +649,7 @@ def test_batch_parse():
             ],
             [
                 "d5c3b039-aaee-4cca-bcae-637fa8effe14",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 3),
                 "COR",
                 "7ee30c6c-adf9-4f60-a4f1-f7f15ab92804",
@@ -663,6 +687,7 @@ def test_batch_parse():
             ],
             [
                 "7cfcdde3-286c-4713-8460-2ed82a59be34",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 9),
                 "DAT",
                 "fc16ea8a-3148-44b2-977f-de2a2ae550b9",
@@ -694,6 +719,7 @@ def test_batch_parse():
             ],
             [
                 "4f971076-e6c6-48f6-b87e-deae90fe4705",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 15),
                 "DAT",
                 "cc45063f-2d3c-4cda-ac0c-8381e279e150",
@@ -724,6 +750,7 @@ def test_batch_parse():
             ],
             [
                 "8f06061e-e723-4b89-8577-3801a61582a2",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 20),
                 "DAT",
                 "dde5df56-24c2-4a2e-8afb-561f32113256",
@@ -757,6 +784,7 @@ def test_batch_parse():
             ],
             [
                 "9f06061e-e723-4b89-8577-3801a61582a3",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 20),
                 "DAT",
                 "ede5df56-24c2-4a2e-8afb-561f32113257",
@@ -788,6 +816,7 @@ def test_batch_parse():
             ],
             [
                 "8db132d1-68fc-4ae6-b12e-4af594351701",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 26),
                 "DAT",
                 "83952732-ef89-4168-b2a1-df49d0aa1aff",
@@ -834,6 +863,7 @@ def test_batch_parse():
             ],
             [
                 "b509d82f-ce27-46c2-b5a3-d2bcae09de8a",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 32),
                 "DAT",
                 "ddf8f969-86f1-4eb9-a9a6-d61067a846bf",
@@ -860,6 +890,7 @@ def test_batch_parse():
             ],
             [
                 "6c26236d-51ad-4aee-ac37-8e83978346a0",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 38),
                 "DAT",
                 "b581876a-ae95-4a07-8b56-b6b5d8098a57",
@@ -886,6 +917,7 @@ def test_batch_parse():
             ],
             [
                 "81cf0182-db9c-4384-aca3-a75b1067c41a",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 43),
                 "DAT",
                 "ce5c46ca-3912-4de1-931c-d66b801b5362",
@@ -912,6 +944,7 @@ def test_batch_parse():
             ],
             [
                 "ab1058c7-b7cf-4345-a0b3-a9f472cc6ef1",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 49),
                 "DEL",
                 "e43c3bf0-163c-4fb0-a1de-1a61beb87981",
@@ -930,6 +963,7 @@ def test_batch_parse():
             ],
             [
                 "ab1058c7-b7cf-4345-a0b3-a9f472cc6ef6",
+                None,
                 datetime.datetime(2020, 5, 6, 18, 41, 49),
                 "DAT",
                 "e43c3bf0-163c-4fb0-a1de-1a61beb87988",
@@ -956,6 +990,7 @@ def test_batch_parse():
             ],
             [
                 "9376ccbd-be2f-4d3d-b4ac-3c559ac9586a",
+                None,
                 datetime.datetime(2021, 1, 31, 12, 29, 2),
                 "DAT",
                 "8eec0190-c353-4147-8a65-fcc697fbadbc",
@@ -991,3 +1026,20 @@ def test_batch_parse():
         expected_logbook_reports.reset_index(drop=True),
         check_dtype=False,
     )
+
+
+def test_batch_parse_sales():
+    flux_file_list = []
+    for filename in sorted(os.listdir(SALES_NOTES_XML_TEST_DATA_LOCATION)):
+        filepath = SALES_NOTES_XML_TEST_DATA_LOCATION / filename
+        if not os.path.isfile(filepath) or not filename.endswith(".xml"):
+            continue
+        with open(filepath, "r") as f:
+            flux_file_list.append(f.read())
+
+    res = batch_parse(flux_file_list, DataDomain.SALES)
+
+    assert set(res.keys()) == {"reports", "raw_messages", "batch_generated_errors"}
+    assert len(res["reports"]) == 5
+    assert len(res["raw_messages"]) == 5
+    assert res["batch_generated_errors"] is False

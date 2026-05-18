@@ -55,9 +55,15 @@ export function Form({ className, initialValues, onArchive, onCancel, onDelete, 
         <div className={className} style={style}>
           <Title>{isNew ? 'Ajouter un moyen' : 'Éditer un moyen'}</Title>
           <StyledForm onSubmit={handleSubmit}>
-            <FormikSelect isLight label="Type de moyen" name="type" options={CONTROL_UNIT_RESOURCE_TYPES_AS_OPTIONS} />
+            <FormikSelect
+              isLight
+              label="Type de moyen"
+              name="type"
+              options={CONTROL_UNIT_RESOURCE_TYPES_AS_OPTIONS}
+              searchable
+            />
             <FormikTextInput isLight label="Nom du moyen" name="name" />
-            <FormikSelect isLight label="Base du moyen" name="stationId" options={stationsAsOptions} />
+            <FormikSelect isLight label="Base du moyen" name="stationId" options={stationsAsOptions} searchable />
             <FormikTextarea isLight label="Commentaire" name="note" />
 
             <ActionBar>

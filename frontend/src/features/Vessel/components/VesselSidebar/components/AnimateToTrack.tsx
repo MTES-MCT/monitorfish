@@ -12,7 +12,7 @@ export function AnimateToTrack({ isSidebarOpen }) {
   return (
     <VesselSidebarActionButton
       $isSidebarOpen={isSidebarOpen}
-      $top={153}
+      $top={103}
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
       // eslint-disable-next-line react/jsx-no-bind

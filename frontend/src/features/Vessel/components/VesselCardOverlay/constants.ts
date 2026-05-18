@@ -5,12 +5,12 @@ export const marginsWithoutAlert: OverlayCardMargins = {
   xMiddle: -185,
   xRight: -407,
   yBottom: -210,
-  yMiddle: -105,
+  yMiddle: -100,
   yTop: 20
 }
 
 /** Approximate base rendered height of the vessel card (px), excluding dynamic warnings/groups offset. */
-export const VESSEL_CARD_BASE_HEIGHT = 200
+export const VESSEL_CARD_BASE_HEIGHT = 192
 export const VESSEL_CARD_WIDTH = 387
 
 /** Heights of dynamic card sections used to grow the overlay when extra content is shown. */

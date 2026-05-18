@@ -90,6 +90,7 @@ export function NewFeatures() {
 }
 
 const StyledMapToolBox = styled(MapToolBox)`
+  top: 0;
   margin-top: -120px;
 `
 

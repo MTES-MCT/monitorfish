@@ -67,7 +67,7 @@ export function ControlUnitListDialog() {
 
   return (
     isRendered && (
-      <MapToolBox isOpen={isOpened} isTransparent>
+      <StyledToolBox isOpen={isOpened} isTransparent>
         <MapMenuDialog.Container style={{ margin: '0' }}>
           <MissionsMenuHeader>
             <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />
@@ -85,10 +85,14 @@ export function ControlUnitListDialog() {
               filteredControlUnits.map(controlUnit => <Item key={controlUnit.id} controlUnit={controlUnit} />)}
           </MapMenuDialog.Body>
         </MapMenuDialog.Container>
-      </MapToolBox>
+      </StyledToolBox>
     )
   )
 }
+
+const StyledToolBox = styled(MapToolBox)`
+  top: 0;
+`
 
 const MissionsMenuHeader = styled(MapMenuDialog.Header)`
   height: 40px;

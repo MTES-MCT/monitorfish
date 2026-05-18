@@ -116,5 +116,6 @@ const EstimatedPosition = styled(EstimatedPositionSVG)`
 `
 
 const Wrapper = styled(MapToolBox)`
+  top: 0;
   width: 406px;
 `

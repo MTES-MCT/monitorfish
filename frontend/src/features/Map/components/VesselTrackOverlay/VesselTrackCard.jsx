@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { COLORS } from '../../../../constants/constants'
-import { getCoordinates } from '../../../../coordinates'
 import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../constants'
 
 import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 
 timeago.register('fr', timeagoFrenchLocale)
 

@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
-import { getCoordinates } from '../../../../coordinates'
 import { LayerProperties, WSG84_PROJECTION } from '../../../Map/constants'
 import { monitorfishMap } from '../../../Map/monitorfishMap'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 
 function VesselEstimatedPositionOverlay({ feature }) {
   const coordinatesFormat = useSelector(state => state.map.coordinatesFormat)

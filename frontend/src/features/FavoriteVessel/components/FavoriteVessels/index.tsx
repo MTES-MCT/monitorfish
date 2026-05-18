@@ -132,5 +132,6 @@ const Header = styled.div<{
 `
 
 const FavoriteVesselsBox = styled(MapToolBox)`
+  top: 0;
   width: 305px;
 `

@@ -47,6 +47,12 @@ monitorfish:
     keycloak:
         proxy:
             enabled: ${MONITORFISH_KEYCLOAK_PROXY_ENABLED:false}
+    kafka:
+        ais:
+            enabled: ${MONITORFISH_KAFKA_AIS_ENABLED:false}
+            topic: ${MONITORFISH_KAFKA_AIS_TOPIC:monitor.ais.position}
+            producer:
+                enabled: ${MONITORFISH_KAFKA_AIS_PRODUCER_ENABLED:false}
 
 logging:
     level:
@@ -89,6 +95,26 @@ spring:
     servlet:
         multipart:
             max-file-size: 5MB
+    kafka:
+        bootstrap-servers: ${MONITORFISH_KAFKA_AIS_SERVERS:}
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        consumer:
+            group-id: ${MONITORFISH_KAFKA_AIS_GROUP_ID:monitorfish}
+            auto-offset-reset: latest
+            max-poll-records: ${MONITORFISH_KAFKA_AIS_BATCH_SIZE:100}
+            fetch-max-wait: ${MONITORFISH_KAFKA_AIS_FETCH_MAX_WAIT:1s}
+        properties:
+            max.poll.interval.ms: ${MONITORFISH_KAFKA_AIS_TIMEOUT:300000}
+            security.protocol: SSL
+            ssl.keystore.location: ${MONITORFISH_KAFKA_AIS_KEYSTORE:}
+            ssl.keystore.password: ${MONITORFISH_KAFKA_AIS_KEYSTORE_PASSWORD:}
+            ssl.key.password: ${MONITORFISH_KAFKA_AIS_KEY_PASSWORD:}
+            ssl.keystore.type: PKCS12
+            ssl.truststore.location: ${MONITORFISH_KAFKA_AIS_TRUSTSTORE:}
+            ssl.truststore.password: ${MONITORFISH_KAFKA_AIS_TRUSTSTORE_PASSWORD:}
+            ssl.truststore.type: PKCS12
 
 monitorenv:
     url: ${MONITORENV_URL}

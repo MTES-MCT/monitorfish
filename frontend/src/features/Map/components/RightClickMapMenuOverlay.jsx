@@ -60,7 +60,7 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
         trackDepth: VesselTrackDepth.CUSTOM
       }
 
-      dispatch(showVesselTrack(vessel, true, trackRequest))
+      dispatch(showVesselTrack(vessel, trackRequest, true))
 
       monitorfishMap.removeOverlay(getOverlay())
 
@@ -85,7 +85,7 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
 
     const trackRequest = getTrackRequestFromTrackDepth(selectedTrackDepth)
 
-    dispatch(showVesselTrack(vessel, true, trackRequest))
+    dispatch(showVesselTrack(vessel, trackRequest, true))
 
     monitorfishMap.removeOverlay(getOverlay())
     setIsOpen(false)

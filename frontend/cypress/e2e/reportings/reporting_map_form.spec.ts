@@ -91,6 +91,7 @@ context('Reporting map form', () => {
     cy.get('#isFishing').should('be.checked')
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
 
+    cy.get('[aria-label="Vider le champ"]').click()
     openVesselBySearch('MALOTRU')
 
     cy.clickButton('Fermer')
@@ -109,6 +110,7 @@ context('Reporting map form', () => {
 
     // Display the reporting layer
     cy.clickButton('Afficher les signalements')
+    cy.wait('@displayReportings')
 
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 

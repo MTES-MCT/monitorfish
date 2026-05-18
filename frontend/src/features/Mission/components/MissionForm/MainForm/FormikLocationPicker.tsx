@@ -4,7 +4,7 @@ import {
   OpenLayersGeometryType,
   WSG84_PROJECTION
 } from '@features/Map/constants'
-import { fitToExtent } from '@features/Map/slice'
+import { fitMapToExtent } from '@features/Map/useCases/animateMap'
 import { addOrEditMissionZone } from '@features/Mission/useCases/addOrEditMissionZone'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
@@ -81,22 +81,19 @@ export function FormikLocationPicker() {
     [values.geom]
   )
 
-  const handleCenterOnMap = useCallback(
-    (coordinates: Coordinate[][]) => {
-      const firstRing = coordinates[0]
-      if (!firstRing) {
-        return
-      }
+  const handleCenterOnMap = useCallback((coordinates: Coordinate[][]) => {
+    const firstRing = coordinates[0]
+    if (!firstRing) {
+      return
+    }
 
-      const extent = transformExtent(boundingExtent(firstRing), WSG84_PROJECTION, OPENLAYERS_PROJECTION)
-      if (!extent) {
-        return
-      }
+    const extent = transformExtent(boundingExtent(firstRing), WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+    if (!extent) {
+      return
+    }
 
-      dispatch(fitToExtent(extent))
-    },
-    [dispatch]
-  )
+    fitMapToExtent(extent)
+  }, [])
 
   useEffect(
     () => {

@@ -17,7 +17,7 @@ export function HideNonSelectedVessels({ isSidebarOpen }) {
     <VesselSidebarActionButton
       $backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
       $isSidebarOpen={isSidebarOpen}
-      $top={188}
+      $top={138}
       data-cy="trigger-hide-other-vessels-from-sidebar"
       disabled={!selectedVesselPositions?.length}
       onClick={() => dispatch(setHideNonSelectedVessels(!hideNonSelectedVessels))}

@@ -212,12 +212,7 @@ context('Vessel sidebar logbook tab', () => {
 
   it('Fishing trips Should be walkable', () => {
     // Given
-    cy.get('*[data-cy^="vessel-search-input"]').click()
-    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('FR263454484')
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
     cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
     cy.get('input[name="tripNumber"]').should('have.value', 'SRC-TRP-TTT20200506194051795')
@@ -240,12 +235,7 @@ context('Vessel sidebar logbook tab', () => {
   })
 
   it('Fishing trips Should be selected from the trips list', () => {
-    cy.get('*[data-cy^="vessel-search-input"]').click()
-    cy.get('*[data-cy^="vessel-search-input"]').type('FR263454484')
-    cy.wait(50)
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(200)
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('FR263454484')
     cy.get('*[data-cy^="vessel-menu-fishing"]').click()
     cy.get('*[data-cy^="vessel-fishing"]').should('be.visible')
     cy.get('input[name="tripNumber"]').should('have.value', 'SRC-TRP-TTT20200506194051795')

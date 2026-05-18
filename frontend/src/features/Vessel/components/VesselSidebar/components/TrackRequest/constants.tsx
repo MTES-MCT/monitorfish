@@ -55,11 +55,7 @@ export const DUMMY_VESSEL_POSITION: Vessel.VesselPosition = {
   course: 0,
   dateTime: '',
   destination: undefined,
-  externalReferenceNumber: undefined,
   flagState: 'FR',
-  from: '',
-  internalReferenceNumber: undefined,
-  ircs: undefined,
   isAtPort: undefined,
   isFishing: undefined,
   isManual: undefined,
@@ -68,9 +64,7 @@ export const DUMMY_VESSEL_POSITION: Vessel.VesselPosition = {
   mmsi: undefined,
   networkType: undefined,
   positionType: '',
-  speed: 0,
-  tripNumber: undefined,
-  vesselName: ''
+  speed: 0
 }
 
 export const SELECT_TRACK_DEPTH_OPTIONS: Option<VesselTrackDepth>[] = [

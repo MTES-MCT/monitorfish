@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.repositories.AisPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -11,11 +12,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @UseCase
 class GetVesselPositions(
     private val positionRepository: PositionRepository,
+    private val aisPositionRepository: AisPositionRepository,
     private val getDatesFromVesselTrackDepth: GetDatesFromVesselTrackDepth,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVesselPositions::class.java)
@@ -37,8 +40,11 @@ class GetVesselPositions(
                 toDateTime = toDateTime,
             )
 
+        val aisFrom = ZonedDateTime.now(ZoneOffset.UTC).minusHours(12)
+        val aisTo = ZonedDateTime.now(ZoneOffset.UTC)
+
         return coroutineScope {
-            val positionsFuture =
+            val vmsFuture =
                 findPositionsAsync(
                     vesselIdentifier = vesselIdentifier,
                     internalReferenceNumber = internalReferenceNumber,
@@ -47,11 +53,21 @@ class GetVesselPositions(
                     ircs = ircs,
                     externalReferenceNumber = externalReferenceNumber,
                 )
+            val aisFuture =
+                findAisPositionsAsync(
+                    vesselIdentifier = vesselIdentifier,
+                    internalReferenceNumber = internalReferenceNumber,
+                    from = aisFrom,
+                    to = aisTo,
+                    ircs = ircs,
+                    externalReferenceNumber = externalReferenceNumber,
+                )
+            val mergedFuture =
+                async {
+                    (vmsFuture.await() + aisFuture.await()).sortedBy { it.dateTime }
+                }
 
-            Pair(
-                dates.isTrackDepthModified,
-                positionsFuture,
-            )
+            Pair(dates.isTrackDepthModified, mergedFuture)
         }
     }
 
@@ -98,6 +114,41 @@ class GetVesselPositions(
                             from = from!!,
                             to = to!!,
                         ).sortedBy { it.dateTime }
+                }
+        }
+
+    private fun CoroutineScope.findAisPositionsAsync(
+        vesselIdentifier: VesselIdentifier?,
+        internalReferenceNumber: String,
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+        ircs: String,
+        externalReferenceNumber: String,
+    ): Deferred<List<Position>> =
+        when (vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                async {
+                    aisPositionRepository.findVesselLastAisPositionsByCfr(internalReferenceNumber, from, to)
+                }
+            VesselIdentifier.IRCS ->
+                async {
+                    aisPositionRepository.findVesselLastAisPositionsByIrcs(ircs, from, to)
+                }
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                async {
+                    aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(externalReferenceNumber, from, to)
+                }
+            else ->
+                async {
+                    when {
+                        internalReferenceNumber.isNotEmpty() ->
+                            aisPositionRepository.findVesselLastAisPositionsByCfr(internalReferenceNumber, from, to)
+                        ircs.isNotEmpty() ->
+                            aisPositionRepository.findVesselLastAisPositionsByIrcs(ircs, from, to)
+                        externalReferenceNumber.isNotEmpty() ->
+                            aisPositionRepository.findVesselLastAisPositionsByExternalImmatriculation(externalReferenceNumber, from, to)
+                        else -> listOf()
+                    }
                 }
         }
 }

@@ -11,9 +11,7 @@ context('Vessel sidebar controls buttons', () => {
 
   it('Control buttons should be disabled When vessel has no positions', () => {
     // Given
-    cy.get('*[data-cy^="vessel-search-input"]').type('MALOTRU')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+    openVesselBySearch('MALOTRU')
 
     // When
     cy.get('*[data-cy="show-all-fishing-activities-on-map"]').should('have.attr', 'disabled')
@@ -26,9 +24,7 @@ context('Vessel sidebar controls buttons', () => {
   it('Vessel track Should be downloaded', () => {
     // Given
     cy.cleanDownloadedFiles()
-    cy.get('*[data-cy^="vessel-search-input"]', { timeout: 10000 }).type('Pheno')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(200)
+    openVesselBySearch('PHENO')
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
     cy.get('[title="Paramétrer l\'affichage de la piste VMS"]').click()
     cy.fill('Afficher la piste VMS depuis', '3 jours')

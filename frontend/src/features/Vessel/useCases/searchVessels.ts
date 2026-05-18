@@ -14,7 +14,7 @@ export const searchVessel =
     searchQuery: string,
     isVesselIdRequiredFromResults: boolean,
     fuseVesselIdentitiesFromMap: Fuse<Vessel.VesselIdentity> | undefined,
-    displayedErrorKey: DisplayedErrorKey
+    displayedErrorKey: DisplayedErrorKey | undefined
   ): MainAppThunk<Promise<Vessel.VesselIdentity[]>> =>
   async dispatch => {
     try {
@@ -38,7 +38,15 @@ export const searchVessel =
       return filteredVessels
     } catch (err) {
       if (err instanceof FrontendApiError) {
-        dispatch(displayOrLogError(err, undefined, true, displayedErrorKey))
+        const isFromUserAction = displayedErrorKey !== undefined
+        dispatch(
+          displayOrLogError(
+            err,
+            undefined,
+            isFromUserAction,
+            displayedErrorKey ?? DisplayedErrorKey.VESSEL_SIDEBAR_ERROR
+          )
+        )
       } else {
         handleThunkError(err)
       }

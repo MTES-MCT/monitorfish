@@ -41,7 +41,7 @@ function VesselEstimatedPositionOverlay({ feature }) {
 
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
-      if (feature?.getId()?.toString()?.includes(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
+      if (feature?.getId()?.toString()?.startsWith(`${LayerProperties.VESSEL_ESTIMATED_POSITION.code}:circle`)) {
         overlayRef.current.style.display = 'block'
 
         const { latitude } = feature.estimatedPosition

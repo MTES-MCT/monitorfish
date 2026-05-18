@@ -75,7 +75,7 @@ const StyledMapToolBox = styled(MapComponent)<{
 
     const reportingOffset = p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0
 
-    return p.$isRightMenuShrinked ? `right: ${reportingOffset}px;` : `right: ${10 + reportingOffset}px;`
+    return p.$isRightMenuShrinked ? `right: ${0 + reportingOffset}px;` : `right: ${20 + reportingOffset}px;`
   }}
 
   border-radius: 2px;

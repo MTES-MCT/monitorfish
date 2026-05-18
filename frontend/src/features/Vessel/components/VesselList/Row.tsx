@@ -115,11 +115,12 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
               <ExpandedRowValue>{vessel.length ? `${vessel.length} m` : '-'}</ExpandedRowValue>
             </p>
             <p>
-              <ExpandedRowLabel>Dernière position VMS :</ExpandedRowLabel>
+              <ExpandedRowLabel>Dernier signal :</ExpandedRowLabel>
               <ExpandedRowValue>
                 {vessel.activityType === ActivityType.POSITION_BASED
                   ? vessel.lastPositionSentAt && timeago.format(vessel.lastPositionSentAt, 'fr')
                   : undefined}
+                {vessel.activityType === ActivityType.POSITION_BASED ? ` (${vessel.positionType})` : undefined}
               </ExpandedRowValue>
             </p>
             <p>

@@ -6,6 +6,39 @@ import { Vessel } from './Vessel.types'
 import type { VesselGroupDisplayInformation } from '../../workers/types'
 import type { PendingAlert, SilencedAlert } from '@features/Alert/types'
 import type { Reporting } from '@features/Reporting/types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
+
+export function buildAISVesselFeature(vessel: AISVessel.AISVessel): AISVessel.AISVesselLastPositionFeature | undefined {
+  if (!vessel.coordinates) {
+    return undefined
+  }
+
+  /**
+   * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
+   */
+  const feature = new Feature({
+    coordinates: vessel.coordinates,
+    course: vessel.course,
+    dateTime: vessel.dateTime,
+    flagState: vessel.flagState,
+    geometry: new Point(vessel.coordinates),
+    imo: vessel.imo,
+    ircs: vessel.ircs,
+    isAtPort: vessel.isAtPort,
+    lastPositionSentAt: vessel.lastPositionSentAt,
+    latitude: vessel.latitude,
+    length: vessel.length,
+    longitude: vessel.longitude,
+    mmsi: vessel.mmsi,
+    shipType: vessel.shipType,
+    speed: vessel.speed,
+    vesselFeatureId: vessel.vesselFeatureId,
+    vesselName: vessel.vesselName
+  }) as AISVessel.AISVesselLastPositionFeature
+  feature.setId(vessel.vesselFeatureId)
+
+  return feature
+}
 
 export function buildFeature(
   vessel: Vessel.ActiveVesselEmittingPosition,
@@ -53,6 +86,7 @@ export function buildFeature(
     longitude: vessel.longitude,
     mmsi: vessel.mmsi,
     numberOfGroupsHidden: vesselGroupDisplayed.numberOfGroupsHidden,
+    positionType: vessel.positionType,
     probabilityRiskFactor: vessel.probabilityRiskFactor,
     riskFactor: vessel.riskFactor,
     segments: vessel.segments,

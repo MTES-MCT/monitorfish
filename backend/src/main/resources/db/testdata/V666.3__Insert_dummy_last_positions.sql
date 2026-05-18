@@ -1126,3 +1126,5 @@ SET vessel_id = 13 WHERE cfr = 'FR263454484';
 update last_positions
 set last_position_datetime_utc = NOW() - ('2 YEARS')::interval
 where cfr = 'ABC000339263';
+
+UPDATE public.last_positions SET position_type = 'AIS' WHERE cfr IN ('ABC000126173', 'ABC000262563', 'ABC000333370');

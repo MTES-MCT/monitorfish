@@ -57,7 +57,7 @@ export const displayLogbookMessageOverlays = (): MainAppThunk => async (dispatch
 export function getVesselTrackLines(features) {
   return features.filter(
     feature =>
-      feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
+      feature?.getId()?.toString()?.startsWith(LayerProperties.VESSEL_TRACK.code) &&
       feature?.getId()?.toString()?.includes('line')
   )
 }

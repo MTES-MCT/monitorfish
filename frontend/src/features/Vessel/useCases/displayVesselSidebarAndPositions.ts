@@ -1,5 +1,5 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
-import { doNotAnimate } from '@features/Map/slice'
+import { animateToCoordinates } from '@features/Map/slice'
 import { loadingVessel, setSelectedVessel } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -25,7 +25,7 @@ export const displayVesselSidebarAndPositions =
     } = getState()
 
     dispatch(setRightMapBoxDisplayed(undefined))
-    dispatch(doNotAnimate(false))
+    dispatch(animateToCoordinates())
     dispatch(loadingVessel(vesselIdentity))
     const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
 

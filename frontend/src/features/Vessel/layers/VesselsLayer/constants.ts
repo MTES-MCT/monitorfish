@@ -1,8 +1,9 @@
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { webGLVesselRule, getWebGLVesselStyleVariables } from '@features/Vessel/layers/style'
 import WebGLVectorLayer from 'ol/layer/WebGLVector'
 import VectorSource from 'ol/source/Vector'
+
+import { webGLVesselRule, getWebGLVesselStyleVariables } from './style'
 
 export const VESSELS_VECTOR_SOURCE = new VectorSource()
 

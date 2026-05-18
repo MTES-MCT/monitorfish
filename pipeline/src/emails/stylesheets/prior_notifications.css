@@ -289,3 +289,10 @@ footer > p {
     margin-left: 16px;
     width: 126.86px;
 }
+
+#correction {
+    margin-bottom: 0px;
+    margin-top: 16px;
+    color: red;
+    font-family: Marianne, sans-serif;
+}

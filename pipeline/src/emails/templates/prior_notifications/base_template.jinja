@@ -30,7 +30,11 @@
         </header>
 
         <main>
-
+            {% if is_correction %}
+            <p id="correction">
+                Ce préavis remplace celui diffusé précédemment{{ " le {}".format(previous_notification_date_utc) if previous_notification_date_utc else "" }}
+            </p>
+            {% endif %}
             <section>
                 <h2>INFOS DU PRÉAVIS</h2>
                 <hr/>

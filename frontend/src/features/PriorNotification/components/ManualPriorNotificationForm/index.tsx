@@ -84,8 +84,6 @@ export function ManualPriorNotificationForm() {
     // clear hidden LAN-specific fields when other purpose is set
     if (newOrNextPriorNotificationData.purpose !== PriorNotification.PurposeCode.LAN) {
       newOrNextPriorNotificationData.expectedLandingDate = ''
-      newOrNextPriorNotificationData.globalFaoArea = undefined
-      newOrNextPriorNotificationData.fishingCatches = []
     }
 
     await dispatch(

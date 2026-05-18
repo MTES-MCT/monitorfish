@@ -72,12 +72,6 @@ class CreateOrUpdateManualPriorNotification(
                     require(expectedLandingDate == null) {
                         "landing date should be null when purpose is not landing"
                     }
-                    require(globalFaoArea == null) {
-                        "global fao area should be null when purpose is not landing"
-                    }
-                    require(fishingCatches.isEmpty()) {
-                        "no fishing catches should be set when purpose is not landing"
-                    }
 
                     expectedArrivalDate.year
                 }

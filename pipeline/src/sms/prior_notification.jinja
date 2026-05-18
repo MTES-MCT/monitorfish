@@ -1,4 +1,4 @@
-PNO{{ " zéro" if is_zero else "" }} à {{ port_name }}
+PNO{{ " zéro" if is_zero else "" }}{{ " COR" if is_correction else "" }} à {{ port_name }}
 - {{ vessel_name }}{{ " ({})".format(cfr) if cfr }}
 {{ "- Segment(s) {}".format(trip_segments) if trip_segments }}
 - Note de risque {{ "{:.2f}".format(risk_factor) }}

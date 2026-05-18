@@ -339,6 +339,8 @@ def pre_render_pno(
         is_landing=pno.purpose == "LAN",
         purpose_suffix=purpose_suffix,
         is_zero=is_prior_notification_zero(pno),
+        is_correction=pno.is_correction,
+        previous_notification_date_utc=pno.previous_notification_date_utc,
     )
 
 
@@ -493,6 +495,8 @@ def render_pno(
         is_landing=pno.is_landing,
         purpose_suffix=pno.purpose_suffix,
         is_zero=pno.is_zero,
+        is_correction=pno.is_correction,
+        previous_notification_date_utc=format_nullable_datetime(pno.previous_notification_date_utc),
     )
 
     html_email_body = email_body_template.render(
@@ -519,6 +523,8 @@ def render_pno(
         purpose_suffix=pno.purpose_suffix,
         purpose=pno.purpose,
         is_zero=pno.is_zero,
+        is_correction=pno.is_correction,
+        previous_notification_date_utc=format_nullable_datetime(pno.previous_notification_date_utc),
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"
@@ -537,6 +543,7 @@ def render_pno(
         port_name=pno.port_name,
         note=pno.note,
         is_zero=pno.is_zero,
+        is_correction=pno.is_correction,
     )
 
     pdf = weasyprint.HTML(string=html_for_pdf).write_pdf(

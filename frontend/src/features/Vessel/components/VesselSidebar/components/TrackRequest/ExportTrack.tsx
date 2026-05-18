@@ -26,8 +26,9 @@ type VesselPositionWithId = Vessel.VesselPosition & {
 }
 
 export function ExportTrack() {
-  const { coordinatesFormat } = useMainAppSelector(state => state.map)
-  const { selectedVessel, selectedVesselPositions } = useMainAppSelector(state => state.vessel)
+  const coordinatesFormat = useMainAppSelector(state => state.map)
+  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const { trackEvent } = useTracking()
 
   const exportedPositions: VesselPositionWithId[] =
@@ -106,7 +107,7 @@ export function ExportTrack() {
       })
       downloadAsCsv(fileName, positions, csvMap)
     },
-    [trackEvent]
+    [trackEvent, selectedVessel]
   )
 
   return (

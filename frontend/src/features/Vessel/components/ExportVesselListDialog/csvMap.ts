@@ -1,10 +1,8 @@
 import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, getCoordinates } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { sortBy } from 'lodash-es'
-
-import { getCoordinates } from '../../../../coordinates'
 
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 

@@ -110,7 +110,6 @@ context('Reporting map form', () => {
 
     // Display the reporting layer
     cy.clickButton('Afficher les signalements')
-    cy.wait('@displayReportings')
 
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 

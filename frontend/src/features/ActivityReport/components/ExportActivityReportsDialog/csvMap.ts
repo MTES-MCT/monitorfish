@@ -1,8 +1,7 @@
 import { CoordinatesFormat, WSG84_PROJECTION } from '@features/Map/constants'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, getCoordinates } from '@mtes-mct/monitor-ui'
 import { toAlpha3 } from 'i18n-iso-countries'
 
-import { getCoordinates } from '../../../../coordinates'
 import { formatDMDCoordinateForActivityReport, getPatrolType } from '../../utils'
 
 import type { ActivityReportWithId } from '../../types'

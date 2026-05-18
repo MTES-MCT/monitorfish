@@ -2,12 +2,12 @@ import { OverlayTrianglePointer } from '@features/Map/components/Overlay/Overlay
 import { OverlayPosition } from '@features/Map/components/Overlay/types'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 import styled, { useTheme } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AIS_CARD_WIDTH, AIS_VESSEL_OVERLAY_CARD_MARGIN } from './constants'
 import { extractAISVesselPropertiesFromFeature, getAISShipTypeLabel } from './utils'
-import { getCoordinates } from '../../../../coordinates'
 import { timeagoFrenchLocale } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'

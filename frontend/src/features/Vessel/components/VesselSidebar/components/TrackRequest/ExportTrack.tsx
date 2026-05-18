@@ -2,13 +2,13 @@ import { WSG84_PROJECTION } from '@features/Map/constants'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import dayjs from 'dayjs'
 import countries from 'i18n-iso-countries'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { getCoordinates } from '../../../../../../coordinates'
 import { getDate } from '../../../../../../utils'
 import { PrimaryButton } from '../../../../../commonStyles/Buttons.style'
 import ExportSVG from '../../../../../icons/Bouton_exporter_piste_navire.svg?react'
@@ -26,7 +26,7 @@ type VesselPositionWithId = Vessel.VesselPosition & {
 }
 
 export function ExportTrack() {
-  const coordinatesFormat = useMainAppSelector(state => state.map)
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const { trackEvent } = useTracking()

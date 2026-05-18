@@ -8,7 +8,7 @@ import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEdi
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { useField, useFormikContext } from 'formik'
 import Feature from 'ol/Feature'
@@ -16,7 +16,6 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { getCoordinates } from '../../../../../../coordinates'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'

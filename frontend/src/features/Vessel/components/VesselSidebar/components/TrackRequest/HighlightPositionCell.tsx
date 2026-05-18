@@ -2,11 +2,10 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants
 import { animateToVesselCoordinates } from '@features/Map/useCases/animateMap'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, Tag } from '@mtes-mct/monitor-ui'
+import { Accent, getCoordinates, Icon, Tag } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import styled from 'styled-components'
 
-import { getCoordinates } from '../../../../../../coordinates'
 import ManualPositionSVG from '../../../../../icons/Pastille_position_manuelle.svg?react'
 import { highlightVesselTrackPosition } from '../../../../slice'
 

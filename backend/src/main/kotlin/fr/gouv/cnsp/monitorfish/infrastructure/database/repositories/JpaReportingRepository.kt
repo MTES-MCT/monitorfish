@@ -76,11 +76,12 @@ class JpaReportingRepository(
             length = updatedReporting.length,
             gearCode = updatedReporting.gearCode,
             vesselIdentifier = updatedReporting.vesselIdentifier?.name,
-            validityOption = when (updatedReporting) {
-                is Reporting.InfractionSuspicion -> updatedReporting.validityOption?.name
-                is Reporting.Observation -> updatedReporting.validityOption?.name
-                is Reporting.Alert -> null
-            },
+            validityOption =
+                when (updatedReporting) {
+                    is Reporting.InfractionSuspicion -> updatedReporting.validityOption?.name
+                    is Reporting.Observation -> updatedReporting.validityOption?.name
+                    is Reporting.Alert -> null
+                },
             flagState = updatedReporting.flagState.name,
             isFishing = updatedReporting.isFishing,
         )

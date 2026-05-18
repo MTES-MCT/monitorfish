@@ -188,10 +188,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
          */
         val vesselWithRiskFactorNotInProfile =
             lastPositionsWithProfiles.first {
-                it.riskFactor.impactRiskFactor != defaultImpactRiskFactor &&
-                    it.vesselProfile == null
+                it.lastPosition?.internalReferenceNumber == "ABC000661639"
             }
-        assertThat(vesselWithRiskFactorNotInProfile.lastPosition?.internalReferenceNumber).isEqualTo("ABC000661639")
+        assertThat(vesselWithRiskFactorNotInProfile.riskFactor.impactRiskFactor).isNotEqualTo(defaultImpactRiskFactor)
+        assertThat(vesselWithRiskFactorNotInProfile.vesselProfile).isNull()
 
         /**
          * Only a profile without a last position

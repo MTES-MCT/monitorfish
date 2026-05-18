@@ -121,6 +121,6 @@ class SeafrontGroupUTests {
             Seafront.NOUVELLE_CALEDONIE,
             Seafront.CLIPPERTON,
             Seafront.WALLIS_FUTUNA,
-            )
+        )
     }
 }

@@ -1,9 +1,9 @@
 import dataclasses
+import unicodedata
 from datetime import datetime
 from email.policy import EmailPolicy
 from pathlib import Path
 from typing import List, Tuple
-import unicodedata
 
 import numpy as np
 import pandas as pd
@@ -298,7 +298,11 @@ def pre_render_pno(
     ]
 
     # The next line assumes that all H are silent in french, which is wrong in some cases.
-    link = 'd\'' if unicodedata.normalize('NFD', purpose[0].lower())[0] in 'aeiouyh' else 'de '
+    link = (
+        "d'"
+        if unicodedata.normalize("NFD", purpose[0].lower())[0] in "aeiouyh"
+        else "de "
+    )
     purpose_suffix = f"{link}{purpose.lower()}"
 
     return PreRenderedPno(
@@ -334,7 +338,7 @@ def pre_render_pno(
         source=pno.source,
         is_landing=pno.purpose == "LAN",
         purpose_suffix=purpose_suffix,
-        is_zero=is_prior_notification_zero(pno)
+        is_zero=is_prior_notification_zero(pno),
     )
 
 
@@ -514,7 +518,7 @@ def render_pno(
         is_landing=pno.is_landing,
         purpose_suffix=pno.purpose_suffix,
         purpose=pno.purpose,
-        is_zero=pno.is_zero
+        is_zero=pno.is_zero,
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"
@@ -558,6 +562,7 @@ def render_pno(
         html_email_body=html_email_body,
         sms_content=sms_content,
         purpose_suffix=pno.purpose_suffix,
+        is_zero=pno.is_zero,
     )
 
 
@@ -1154,6 +1159,7 @@ def distribute_pnos_flow(
 
     return pnos_to_generate, pnos_to_distribute
 
+
 def is_prior_notification_zero(pno: PnoToRender) -> bool:
     # ported from `isPriorNotificationZero` in /frontend/src/features/PriorNotification/utils.ts
 
@@ -1163,5 +1169,5 @@ def is_prior_notification_zero(pno: PnoToRender) -> bool:
     for c in pno.catch_onboard:
         if c.get("weight") != 0:
             return False
-        
+
     return True

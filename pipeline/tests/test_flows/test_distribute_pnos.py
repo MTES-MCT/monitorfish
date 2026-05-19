@@ -753,6 +753,7 @@ def pno_to_render_1() -> PnoToRender:
         source=PnoSource.LOGBOOK,
     )
 
+
 @pytest.fixture
 def pno_zero_to_render_1() -> PnoToRender:
     return PnoToRender(
@@ -826,6 +827,7 @@ def pno_zero_to_render_1() -> PnoToRender:
         source=PnoSource.LOGBOOK,
     )
 
+
 @pytest.fixture
 def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
     return pd.DataFrame(
@@ -849,6 +851,7 @@ def pre_rendered_pno_1_catch_onboard() -> pd.DataFrame:
         }
     )
 
+
 @pytest.fixture
 def pre_rendered_pno_zero_1_catch_onboard() -> pd.DataFrame:
     return pd.DataFrame(
@@ -863,6 +866,7 @@ def pre_rendered_pno_zero_1_catch_onboard() -> pd.DataFrame:
             "Nb": ["-"],
         }
     )
+
 
 @pytest.fixture
 def pre_rendered_pno_1(pre_rendered_pno_1_catch_onboard) -> PreRenderedPno:
@@ -972,6 +976,7 @@ def pre_rendered_pno_zero_1(pre_rendered_pno_zero_1_catch_onboard) -> PreRendere
         is_landing=True,
         is_zero=True,
     )
+
 
 @pytest.fixture
 def pno_to_render_2() -> PnoToRender:
@@ -1680,6 +1685,7 @@ def test_pre_render_pno_2(
     )
     PreRenderedPno.assert_equal(res, pre_rendered_pno_2)
 
+
 def test_pre_render_pno_zero_1(
     pno_zero_to_render_1, species_names, fishing_gear_names, pre_rendered_pno_zero_1
 ):
@@ -1689,6 +1695,7 @@ def test_pre_render_pno_zero_1(
         fishing_gear_names=fishing_gear_names,
     )
     PreRenderedPno.assert_equal(res, pre_rendered_pno_zero_1)
+
 
 @patch(
     "src.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
@@ -1747,6 +1754,7 @@ def test_render_pno_1(
     assert pno.source == PnoSource.LOGBOOK
     assert pno.sms_content == expected_sms_content
 
+
 @patch(
     "src.flows.distribute_pnos.EMAIL_FONTS_LOCATION",
     Path("/email/fonts/location"),
@@ -1774,7 +1782,8 @@ def test_render_pno_zero_1(
         TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_zero_1.html"
     )
     test_email_body_file_path = (
-        TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_zero_1.html"
+        TEST_DATA_LOCATION
+        / "emails/prior_notifications/expected_email_body_zero_1.html"
     )
 
     if should_generate_snapshots():
@@ -1803,6 +1812,7 @@ def test_render_pno_zero_1(
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK
     assert pno.sms_content == expected_sms_content
+    assert pno.is_zero is True
 
 
 @patch(
@@ -1919,6 +1929,7 @@ def test_render_pno_2_pdf(
     assert pno.source == PnoSource.LOGBOOK
     assert isinstance(pno.generation_datetime_utc, datetime)
 
+
 def test_render_pno_zero_1_pdf(
     html_for_pdf_template, pre_rendered_pno_zero_1, email_body_template, sms_template
 ):
@@ -1930,7 +1941,9 @@ def test_render_pno_zero_1_pdf(
     )
     pdf = pypdf.PdfReader(io.BytesIO(pno.pdf_document))
 
-    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_zero_1.pdf"
+    test_filepath = (
+        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_zero_1.pdf"
+    )
 
     if should_generate_snapshots():
         with open(test_filepath, "wb") as f:
@@ -1978,7 +1991,7 @@ def test_load_pno_pdf_documents(reset_test_data):
                 source=PnoSource.LOGBOOK,
                 generation_datetime_utc=datetime(2020, 5, 6, 8, 52, 42),
                 pdf_document=pdf,
-                purpose_suffix="de débarquement"
+                purpose_suffix="de débarquement",
             )
         )
 
@@ -2152,7 +2165,13 @@ def test_execute_prior_notification_attachments_query_when_result_is_empty(
 
 @pytest.mark.parametrize(
     "test_mode,pno_has_uploaded_attachments,is_zero",
-    [(False, False, False), (False, True, False), (True, False, False), (True, True, False), (False, False, True)],
+    [
+        (False, False, False),
+        (False, True, False),
+        (True, False, False),
+        (True, True, False),
+        (False, False, True),
+    ],
 )
 def test_create_email(
     pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
@@ -2166,7 +2185,9 @@ def test_create_email(
     is_zero,
 ):
     if is_zero:
-        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned.is_zero = True
+        pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned.is_zero = (
+            True
+        )
 
     pno_to_send = create_email(
         pno_pdf_document_to_distribute_targeted_vessel_and_segments_assigned,
@@ -2199,7 +2220,8 @@ def test_create_email(
 
     expected_title_suffix = " - préavis zéro" if is_zero else ""
     assert (
-        pno_to_send.message["Subject"] == "Préavis de débarquement - Le navire 123-abc"+expected_title_suffix
+        pno_to_send.message["Subject"]
+        == "Préavis de débarquement - Le navire 123-abc" + expected_title_suffix
     )
 
     attachments = list(pno_to_send.message.iter_attachments())

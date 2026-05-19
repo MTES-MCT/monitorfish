@@ -45,6 +45,36 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
   })
 
+  it('AIS vessel tracks Should be shown and hidden individually When clicking on AIS vessels', () => {
+    cy.visit('/#@-618500,6399000,5.0')
+    cy.wait(3000)
+
+    cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
+    cy.clickButton('AIS')
+    cy.wait('@aisVessels')
+    cy.wait(1000)
+
+    // Select BELLE ETOILE
+    cy.intercept('GET', '/bff/v1/vessels/ais/positions*').as('belleEtoilePositions')
+    cy.hoverVesselByName('BELLE ETOILE', 'AIS_VESSELS_POINTS', 'click')
+    cy.wait('@belleEtoilePositions')
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
+
+    // Select CAP BRETON alongside BELLE ETOILE
+    cy.intercept('GET', '/bff/v1/vessels/ais/positions*').as('capBretonPositions')
+    cy.hoverVesselByName('CAP BRETON', 'AIS_VESSELS_POINTS', 'click')
+    cy.wait('@capBretonPositions')
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
+
+    // Deselect first track
+    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
+
+    // Deselect last track
+    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })
+    cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
+  })
+
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.log('Show a first vessel with a three day track depth')
     cy.wait(200)

@@ -6,6 +6,38 @@ import type { MonitorFishFeature } from '@features/NewFeatures/types'
 export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
+      /**
+       * TODO Dé-commenter ce bloc lorsque FRONTEND_AIS_VESSELS_ENABLED = 'true'
+       */
+      /*
+      {
+        date: '2026-05-19',
+        description: `Les navires AIS sont désormais affichés sur la carte.
+
+**Affichage sur la carte**
+
+Le bouton **AIS** de la carte permet d'afficher ou de masquer les navires AIS. Les navires dont la dernière position date de plus de **3 heures** sont affichés avec une opacité réduite.
+
+**Recherche d'un navire sous AIS**
+
+Les navires sous AIS peuvent être recherchés depuis la barre de recherche habituelle, comme pour les navires sous VMS. La recherche n'est disponible que lorsque l'affichage AIS est activé.
+
+**Trace d'un navire sous AIS**
+
+Un clic sur un navire sous AIS affiche sa trace sur la carte. La profondeur de trace par défaut est de **12 heures**, modifiable depuis l'onglet "Paramétrer la longueur par défaut des pistes" situé à droite de la carte.
+
+**Navires VMS avec positions AIS**
+
+Pour les navires VMS émettant également en AIS, les positions AIS sont automatiquement fusionnées à leur trace, sur les **12 dernières heures** quelle que soit la profondeur de trace VMS sélectionnée.
+
+**Historique des positions**
+
+L'historique des positions AIS est conservé sur une profondeur maximale d'**1 mois**.`,
+        for: 'ALL',
+        title: 'Affichage des navires AIS sur la carte',
+        type: 'NEW_FEATURE'
+      },
+       */
       {
         date: '2026-04-03',
         description: `Les navires dont la dernière position remonte à plus de **3 heures** sont désormais affichés avec une opacité réduite sur la carte.

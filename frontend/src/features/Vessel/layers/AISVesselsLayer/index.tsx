@@ -5,6 +5,7 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { AIS_VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/AISVesselsLayer/constants'
 import { getWebGLAISVesselStyleVariables } from '@features/Vessel/layers/AISVesselsLayer/style'
 import { VesselFeature } from '@features/Vessel/types/vessel'
+import { hideAISVesselTrack } from '@features/Vessel/useCases/hideAISVesselTrack'
 import { renderAISVesselFeatures } from '@features/Vessel/useCases/rendering/renderAISVesselFeatures'
 import { useGetAISVesselsQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -13,11 +14,13 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { memo, useEffect } from 'react'
 
 import { booleanToInt } from '../../../../utils'
+import { CloseVesselTrackOverlay } from '../../components/CloseVesselTrackOverlay'
 
 function UnmemoizedAISVesselsLayer() {
   const dispatch = useMainAppDispatch()
   const areAISVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areAISVesselsDisplayed)
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
+  const selectedAISVessels = useMainAppSelector(state => state.vessel.selectedAISVessels)
   const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
@@ -35,6 +38,7 @@ function UnmemoizedAISVesselsLayer() {
     pollingInterval: FIVE_MINUTES,
     skip: import.meta.env.FRONTEND_AIS_VESSELS_ENABLED !== 'true' || !areAISVesselsDisplayed
   })
+
   useEffect(() => {
     if (isError || !vessels) {
       if (error) {
@@ -53,7 +57,7 @@ function UnmemoizedAISVesselsLayer() {
       return
     }
 
-    renderAISVesselFeatures(vessels)
+    dispatch(renderAISVesselFeatures(vessels))
   }, [dispatch, isError, error, vessels])
 
   useEffect(() => {
@@ -77,6 +81,16 @@ function UnmemoizedAISVesselsLayer() {
   useWebGLLayerVisibility(AIS_VESSELS_VECTOR_LAYER, areAISVesselsDisplayed)
 
   useEffect(() => {
+    if (areAISVesselsDisplayed) {
+      return
+    }
+
+    Object.values(selectedAISVessels).forEach(vessel => {
+      dispatch(hideAISVesselTrack(vessel))
+    })
+  }, [dispatch, selectedAISVessels, areAISVesselsDisplayed])
+
+  useEffect(() => {
     AIS_VESSELS_VECTOR_LAYER.updateStyleVariables({ hideNonSelectedVessels: booleanToInt(hideNonSelectedVessels) })
   }, [dispatch, hideNonSelectedVessels])
 
@@ -85,7 +99,17 @@ function UnmemoizedAISVesselsLayer() {
     AIS_VESSELS_VECTOR_LAYER.updateStyleVariables({ isLight: booleanToInt(isLight) })
   }, [dispatch, selectedBaseLayer])
 
-  return null
+  return (
+    <>
+      {Object.values(selectedAISVessels).map(vessel => (
+        <CloseVesselTrackOverlay
+          key={vessel.mmsi}
+          coordinates={vessel.coordinates}
+          onClose={() => dispatch(hideAISVesselTrack(vessel))}
+        />
+      ))}
+    </>
+  )
 }
 
 export const AISVesselsLayer = memo(UnmemoizedAISVesselsLayer)

@@ -1,4 +1,4 @@
-import { stateIs } from '@features/Map/layers/styles/utils/webgl'
+import { featureHas, stateIs } from '@features/Map/layers/styles/utils/webgl'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 
 import { booleanToInt } from '../../../../utils'
@@ -9,7 +9,6 @@ const hideNonSelectedVesselsCondition = [
   '!',
   // if hideNonSelectedVessels...
   stateIs('hideNonSelectedVessels')
-  // selectedVessel is in a dedicated layer
 ]
 
 const vesselsGroupsCondition = ['!', stateIs('areVesselsNotInVesselGroupsHidden')]
@@ -22,10 +21,25 @@ export const webGLAISVesselRule: Rule = {
     'icon-offset': [
       'case',
       stateIs('isLight'),
-      ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 92], [0, 0]],
-      ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [92, 92], [92, 0]]
+      [
+        'case',
+        featureHas('isSelected'),
+        [0, 184],
+        ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [0, 92], [0, 0]]
+      ],
+      [
+        'case',
+        featureHas('isSelected'),
+        [92, 184],
+        ['case', ['>', ['get', 'speed'], VesselFeature.vesselIsMovingSpeed], [92, 92], [92, 0]]
+      ]
     ],
-    'icon-opacity': ['case', ['<', ['get', 'lastPositionSentAt'], ['var', 'isOpacityReducedEpochMilli']], 0.2, 1],
+    'icon-opacity': [
+      'case',
+      featureHas('isSelected'),
+      1,
+      ['case', ['<', ['get', 'lastPositionSentAt'], ['var', 'isOpacityReducedEpochMilli']], 0.2, 1]
+    ],
     'icon-rotation': ['*', ['get', 'course'], Math.PI / 180],
     'icon-scale': [
       'array',

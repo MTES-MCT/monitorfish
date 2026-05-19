@@ -19,6 +19,6 @@ export const AIS_VESSELS_VECTOR_LAYER = new WebGLVectorLayer({
 })
 AIS_VESSELS_VECTOR_LAYER.setProperties({
   code: MonitorFishMap.MonitorFishLayer.AIS_VESSELS,
-  isClickable: false,
+  isClickable: true,
   isHoverable: true
 })

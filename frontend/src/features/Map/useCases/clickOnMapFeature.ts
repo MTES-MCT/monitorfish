@@ -9,13 +9,15 @@ import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import { isControl } from 'domain/entities/controls'
 import GeoJSON from 'ol/format/GeoJSON'
 
+import { showAISVesselTrack } from '../../Vessel/useCases/showAISVesselTrack'
 import { LayerProperties, OPENLAYERS_PROJECTION } from '../constants'
 import { MonitorFishMap } from '../Map.types'
 
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppDispatch } from '@store'
 import type { HybridAppThunk } from '@store/types'
-import type { Point, Feature as GeoJSONFeature } from 'geojson'
+import type { Feature as GeoJSONFeature, Point } from 'geojson'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 
@@ -84,7 +86,7 @@ export const clickOnMapFeature =
       return
     }
 
-    if (clickedFeatureId.includes(MonitorFishMap.MonitorFishLayer.VESSELS)) {
+    if (clickedFeatureId.startsWith(MonitorFishMap.MonitorFishLayer.VESSELS)) {
       const clickedVessel = (
         mapClick.feature as Vessel.VesselLastPositionFeature
       ).getProperties() as Vessel.VesselIdentity
@@ -95,5 +97,13 @@ export const clickOnMapFeature =
       } else {
         ;(dispatch as MainAppDispatch)(showVessel(clickedVessel, false))
       }
+    }
+
+    if (clickedFeatureId.startsWith(MonitorFishMap.MonitorFishLayer.AIS_VESSELS)) {
+      const clickedVessel = (
+        mapClick.feature as AISVessel.AISVesselLastPositionFeature
+      ).getProperties() as AISVessel.AISVessel
+
+      ;(dispatch as MainAppDispatch)(showAISVesselTrack(clickedVessel))
     }
   }

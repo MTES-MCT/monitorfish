@@ -2,7 +2,6 @@ import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUURepo
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { setIsFocusedOnVesselSearch } from '@features/Vessel/slice'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
-import { showAISVessel } from '@features/Vessel/useCases/showAISVessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -12,6 +11,7 @@ import styled from 'styled-components'
 
 import { VesselName } from './VesselName'
 import { MapComponent } from '../../../../../commonStyles/MapComponent'
+import { showAISVesselTrack } from '../../../../useCases/showAISVesselTrack'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -49,7 +49,8 @@ export function VesselSidebarHeader() {
       }
 
       if (isAIS) {
-        dispatch(showAISVessel(vessel as AISVessel.AISVessel))
+        dispatch(showAISVesselTrack(vessel as AISVessel.AISVessel))
+        dispatch(setIsFocusedOnVesselSearch(false))
 
         return
       }

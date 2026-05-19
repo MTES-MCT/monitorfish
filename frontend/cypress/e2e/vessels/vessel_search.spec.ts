@@ -38,12 +38,12 @@ context('VesselSearch', () => {
     cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
     cy.clickButton('AIS')
     cy.wait('@aisVessels')
-    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).clear().type('JANET TILLMAN')
+    cy.get('*[data-cy^="VesselSearch-input"]', { timeout: 10000 }).clear().type('BELLE ETOILE')
     cy.wait(500)
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('JANET TILLMAN')
+    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('BELLE ETOILE')
 
     // Clicking an AIS result zooms the map but does not open the sidebar
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('JANET TILLMAN').click()
+    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('BELLE ETOILE').click()
     cy.get('*[data-cy^="vessel-sidebar"]').should('not.exist')
     cy.get('*[data-cy^="VesselSearch-input"]').should('have.value', '')
   })

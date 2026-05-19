@@ -3,6 +3,8 @@
 import { faker } from '@faker-js/faker'
 import { promises as fs } from 'fs'
 import ora from 'ora'
+
+import { generateVesselPositions, VESSELS } from './ais_vessels_shared.js'
 import { join } from 'path'
 
 const VESSEL_COUNT = 10_000
@@ -313,13 +315,40 @@ const VMS_VESSELS = [
   },
 ]
 
+// AIS-only vessels: last position derived from the same deterministic simulation as ais_positions
+const AIS_VESSELS = VESSELS
+  .filter(v => v.cfr === null)
+  .map(vessel => {
+    const positions = generateVesselPositions(vessel, vessel.mmsi)
+    const last = positions[positions.length - 1]
+    return {
+      cfr: null,
+      course: last.course,
+      external_immatriculation: null,
+      flag_state: vessel.flagState,
+      imo: vessel.imo,
+      is_at_port: false,
+      ircs: vessel.ircs,
+      'last_position_datetime_utc:sql': `NOW() - ('${last.minutesAgo} minutes')::interval`,
+      latitude: last.lat,
+      length: null,
+      longitude: last.lon,
+      mmsi: vessel.mmsi,
+      ship_type: vessel.shipType,
+      speed: last.speed,
+      status: last.status,
+      vessel_name: vessel.vesselName,
+    }
+  })
+
 async function run() {
   const spinner = ora(`Generating ${VESSEL_COUNT} AIS last positions...`).start()
   console.info('⚠️  It might break Cypress tests based on vessels names (i.e ais_positions_overlay.spec.ts)\n')
 
   // Generate unique MMSIs: real MMSIs are 9-digit numbers, MMSI 200000000-799999999 are assigned to vessels
-  const usedMmsis = new Set(VMS_VESSELS.map(v => v.mmsi))
-  const vessels = [...VMS_VESSELS]
+  const FIXED_VESSELS = [...VMS_VESSELS, ...AIS_VESSELS]
+  const usedMmsis = new Set(FIXED_VESSELS.map(v => v.mmsi))
+  const vessels = [...FIXED_VESSELS]
 
   for (let i = 0; i < VESSEL_COUNT; i++) {
     let mmsi

@@ -1,5 +1,4 @@
 import { LogbookMessageOverlay } from '@features/Logbook/overlays/LogbookMessageOverlay'
-import CloseVesselTrackOverlay from '@features/Map/components/CloseVesselTrackOverlay'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import {
   VESSEL_TRACK_VECTOR_LAYER,
@@ -11,6 +10,7 @@ import {
   removeVesselTrackFeatures,
   updateTrackCircleStyle
 } from '@features/Vessel/types/track'
+import { hideVesselTrack } from '@features/Vessel/useCases/hideVesselTrack'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -19,6 +19,7 @@ import { memo, useEffect, useMemo } from 'react'
 
 import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../../Map/slice'
 import { animateToVesselCoordinates, fitMapToVesselTrack } from '../../../Map/useCases/animateMap'
+import { CloseVesselTrackOverlay } from '../../components/CloseVesselTrackOverlay'
 import {
   setVesselTrackExtent,
   updateVesselTrackAsHidden,
@@ -173,7 +174,7 @@ function VesselsTracksLayer() {
         <CloseVesselTrackOverlay
           key={vesselTrack?.vesselCompositeIdentifier}
           coordinates={vesselTrack?.coordinates}
-          vesselCompositeIdentifier={vesselTrack?.vesselCompositeIdentifier}
+          onClose={() => dispatch(hideVesselTrack(vesselTrack!.vesselCompositeIdentifier))}
         />
       ))}
       {displayedLogbookOverlays.map(logbookOverlay => (

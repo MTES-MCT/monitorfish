@@ -7,5 +7,8 @@ import type Point from 'ol/geom/Point'
 export namespace AISVessel {
   export type AISVessel = z.infer<typeof AISVesselSchema>
 
-  export type AISVesselLastPositionFeature = Feature<Point> & AISVessel.AISVessel
+  export type AISVesselLastPositionFeature = Feature<Point> &
+    AISVessel.AISVessel & {
+      isSelected: boolean
+    }
 }

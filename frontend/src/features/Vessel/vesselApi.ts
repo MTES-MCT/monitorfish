@@ -59,6 +59,27 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         parseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue, VesselSchema, false)
     }),
 
+    getVesselAISPositions: builder.query<Vessel.VesselPosition[], { mmsi: number; trackRequest: TrackRequest }>({
+      query: ({ mmsi, trackRequest }) => {
+        const trackDepth = trackRequest.trackDepth ?? ''
+        const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+        const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
+
+        return {
+          method: 'GET',
+          params: {
+            afterDateTime,
+            beforeDateTime,
+            mmsi,
+            trackDepth
+          },
+
+          url: `/vessels/ais/positions`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response)
+    }),
+
     /**
      * Get enriched selected vessel and positions.
      *
@@ -118,7 +139,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     }),
 
     /**
-     * Get vessel positions.
+     * Get vessel VMS and AIS positions.
      *
      * Transforms the response by reading the JSON body and setting
      * `isTrackDepthModified` based on the response status.

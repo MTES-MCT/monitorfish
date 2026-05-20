@@ -48,7 +48,7 @@ context('Main Window > Control Unit List Dialog', () => {
     /**
      * Should find control units matching the selected resource type
      */
-    cy.fill('Type de moyen', 'Semi-rigide')
+    cy.fill('Type de moyen', 'Semi-')
 
     cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 4)
     cy.contains('BSL Lorient').should('exist')
@@ -58,7 +58,7 @@ context('Main Window > Control Unit List Dialog', () => {
     /**
      * Should find control units matching the selected base
      */
-    cy.fill('Base du moyen', 'Vannes')
+    cy.fill('Base du moyen', 'Van')
 
     cy.getDataCy('ControlUnitListDialog-control-unit').should('have.length', 6)
     cy.contains('Cultures marines 56').should('exist')

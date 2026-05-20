@@ -28,8 +28,6 @@ declare global {
         }>
       ): void
 
-      hoverVesselByName(vesselName: string, layerName?: string, action?: 'hover' | 'click'): Cypress.Chainable
-
       getComputedStyle(dataCy: string, backUpToParentNumber?: number): Cypress.Chainable<CSSStyleDeclaration>
 
       getDownloadedFileContent(callback: (content: Cypress.Chainable<any>) => void): void
@@ -37,6 +35,8 @@ declare global {
       getFeaturesFromLayer(layerName: string): Cypress.Chainable<Array<FeatureType>>
 
       getViewCenter(): Cypress.Chainable<Coordinate | undefined>
+
+      hoverVesselByName(vesselName: string, layerName?: string, action?: 'hover' | 'click'): Cypress.Chainable
 
       login(user: string): void
 

@@ -31,10 +31,13 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
     // -------------------------------------------------------------------------
     // Should show an error dialog when trying to delete a resource linked to some missions
 
-    cy.intercept({ times: 1, url: `/api/v1/control_unit_resources/553/can_delete` }, {
-      body: { value: false },
-      statusCode: 200
-    }).as('canDeleteControlUnitResource')
+    cy.intercept(
+      { times: 1, url: `/api/v1/control_unit_resources/553/can_delete` },
+      {
+        body: { value: false },
+        statusCode: 200
+      }
+    ).as('canDeleteControlUnitResource')
 
     cy.contains('Vedette').parents('[data-cy="ControlUnitDialog-control-unit-resource"]').clickButton('Éditer ce moyen')
     cy.clickButton('Supprimer ce moyen')
@@ -53,8 +56,8 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
     // On ne met pas de nom de moyen ici
     // pour tester que ce soit bien le type qui soit utilisé comme nom lorsque le nom est vide.
     const createdResourceName = 'Drône'
-    cy.fill('Type de moyen', 'Drône')
-    cy.fill('Base du moyen', 'Auray')
+    cy.fill('Type de moyen', 'Dr')
+    cy.fill('Base du moyen', 'Aur')
     cy.fill('Commentaire', 'Un commentaire sur le moyen.')
 
     cy.clickButton('Ajouter')

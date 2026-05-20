@@ -22,7 +22,7 @@ import { setInteractionType } from '../slice'
 import { addFeatureToDrawedFeature } from '../useCases/addFeatureToDrawedFeature'
 import { closeDraw } from '../useCases/closeDraw'
 import { eraseDrawedGeometries } from '../useCases/eraseDrawedGeometries'
-import { isEchoFromMapClick, swapToLatLon } from '../utils'
+import { isEchoFromMapClick, roundCoordinates, swapToLatLon } from '../utils'
 
 import type { Coordinates } from '@mtes-mct/monitor-ui'
 import type { Point as GeoJSONPoint } from 'geojson'
@@ -77,7 +77,7 @@ export function DrawLayerModal() {
 
     const geometry = (drawedGeometry ?? initialGeometry) as GeoJSONPoint | undefined
 
-    return geometry ? swapToLatLon(geometry) : undefined
+    return geometry ? roundCoordinates(swapToLatLon(geometry)) : undefined
   }, [isPointListener, initialGeometry, drawedGeometry])
 
   useEffect(() => {

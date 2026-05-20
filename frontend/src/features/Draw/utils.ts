@@ -38,3 +38,12 @@ export function swapToLatLon(geometry: GeoJSONPoint): [number, number] {
 
   return [lat, lon]
 }
+
+/**
+ * Rounds [lat, lon] to at most 6 decimal places, eliminating floating-point noise
+ * from the WGS84 ↔ OpenLayers projection round-trip before passing coordinates to
+ * the DD CoordinatesInput (which pads with zeros above 6 decimal places).
+ */
+export function roundCoordinates([lat, lon]: [number, number]): [number, number] {
+  return [parseFloat(lat.toFixed(6)), parseFloat(lon.toFixed(6))]
+}

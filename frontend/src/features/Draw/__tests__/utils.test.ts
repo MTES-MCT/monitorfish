@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals'
 
-import { DMS_ROUNDTRIP_TOLERANCE, isEchoFromMapClick, swapToLatLon } from '../utils'
+import { DMS_ROUNDTRIP_TOLERANCE, isEchoFromMapClick, roundCoordinates, swapToLatLon } from '../utils'
 
 const POINT_GEOMETRY = { coordinates: [-5.2, 47.4], type: 'Point' as const }
 
@@ -43,6 +43,24 @@ describe('Draw/isEchoFromMapClick()', () => {
 
   it('returns false for clearly different coordinates', () => {
     expect(isEchoFromMapClick(POINT_GEOMETRY, 48.85, 2.35)).toBe(false)
+  })
+})
+
+describe('Draw/roundCoordinates()', () => {
+  it('strips floating-point noise from a projection round-trip', () => {
+    expect(roundCoordinates([47.400000000000006, -51.09999999999999])).toStrictEqual([47.4, -51.1])
+  })
+
+  it('preserves meaningful decimals up to 6 places', () => {
+    expect(roundCoordinates([47.123456, -51.654321])).toStrictEqual([47.123456, -51.654321])
+  })
+
+  it('truncates beyond 6 decimal places', () => {
+    expect(roundCoordinates([47.1234567, -51.6543219])).toStrictEqual([47.123457, -51.654322])
+  })
+
+  it('handles integer coordinates without adding decimals', () => {
+    expect(roundCoordinates([47, -51])).toStrictEqual([47, -51])
   })
 })
 

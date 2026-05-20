@@ -57,8 +57,8 @@ class GetReportingWithDMLAndSeaFront(
         seaFront: Seafront?,
     ): Reporting =
         when (reporting) {
-            is Reporting.InfractionSuspicion -> reporting.copy(seaFront = seaFront?.name)
-            is Reporting.Observation -> reporting.copy(seaFront = seaFront?.name)
+            is Reporting.InfractionSuspicion -> reporting.copy(seaFront = seaFront?.toString())
+            is Reporting.Observation -> reporting.copy(seaFront = seaFront?.toString())
             is Reporting.Alert -> reporting
         }
 

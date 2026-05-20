@@ -45,5 +45,5 @@ export function swapToLatLon(geometry: GeoJSONPoint): [number, number] {
  * the DD CoordinatesInput (which pads with zeros above 6 decimal places).
  */
 export function roundCoordinates([lat, lon]: [number, number]): [number, number] {
-  return [parseFloat(lat.toFixed(6)), parseFloat(lon.toFixed(6))]
+  return [Number.parseFloat(lat.toFixed(6)), Number.parseFloat(lon.toFixed(6))]
 }

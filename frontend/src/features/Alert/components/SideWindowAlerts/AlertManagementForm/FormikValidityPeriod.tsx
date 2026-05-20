@@ -36,7 +36,7 @@ export function FormikValidityPeriod() {
         if (label.textContent?.includes('Sur une période donnée') && !label.querySelector('.info-icon')) {
           const iconSpan = document.createElement('span')
           iconSpan.title =
-            "Hors de la période de validité définie, l'alerte ne remontera aucune occurrence mais ne sera pas désactivée ou supprimée."
+            "Hors de la période de validité définie, l'alerte ne remontera aucune occurrence, mais ne sera pas désactivée ou supprimée, sauf si la case \"supprimer l'alerte à la fin de sa période de validité\" est cochée"
           iconSpan.style.marginLeft = '8px'
           iconSpan.style.verticalAlign = 'middle'
           iconSpan.style.display = 'inline-flex'

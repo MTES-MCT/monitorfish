@@ -40,6 +40,8 @@ class GetReportingWithDMLAndSeaFrontUTests {
     private val lorientDistrict = District("LO", "Lorient", "56", "Morbihan", "DML 56", "NAMO")
     private val namoFacadeArea =
         FacadeArea(facade = "NAMO", geometry = GeometryFactory().createPoint(Coordinate(0.0, 0.0)))
+    private val polynesieAlFacadeArea =
+        FacadeArea(facade = "Polynésie Française", geometry = GeometryFactory().createPoint(Coordinate(0.0, 0.0)))
 
     @Test
     fun `execute Should add the dml and seaFront When the vessel and district are found for an InfractionSuspicion`() {
@@ -157,6 +159,36 @@ class GetReportingWithDMLAndSeaFrontUTests {
     }
 
     @Test
+    fun `execute Should return the stored name and not the enum key When the facade is an outre-mer area for an InfractionSuspicion`() {
+        // Given
+        given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf(polynesieAlFacadeArea))
+
+        // When
+        val result =
+            useCase().execute(
+                anInfractionSuspicion(vesselId = null, latitude = -15.0, longitude = -145.0),
+            )
+
+        // Then
+        assertThat(result.seaFront).isEqualTo("Polynésie Française")
+    }
+
+    @Test
+    fun `execute Should return the stored name and not the enum key When the facade is an outre-mer area for an Observation`() {
+        // Given
+        given(facadeAreasRepository.findByIncluding(any())).willReturn(listOf(polynesieAlFacadeArea))
+
+        // When
+        val result =
+            useCase().execute(
+                anObservation(vesselId = null, latitude = -15.0, longitude = -145.0),
+            )
+
+        // Then
+        assertThat(result.seaFront).isEqualTo("Polynésie Française")
+    }
+
+    @Test
     fun `execute Should not throw an exception When the vessel has no district code and no coordinates are given`() {
         // Given
         given(vesselRepository.findVesselById(eq(123))).willReturn(
@@ -208,25 +240,30 @@ class GetReportingWithDMLAndSeaFrontUTests {
         longitude = longitude,
     )
 
-    private fun anObservation(vesselId: Int? = null) =
-        Reporting.Observation(
-            id = 1,
-            vesselId = vesselId,
-            vesselName = "BIDUBULE",
-            cfr = "FR224226850",
-            externalMarker = "1236514",
-            ircs = "IRCS",
-            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-            flagState = CountryCode.FR,
-            creationDate = ZonedDateTime.now(),
-            reportingDate = ZonedDateTime.now(),
-            lastUpdateDate = ZonedDateTime.now(),
-            isArchived = false,
-            isDeleted = false,
-            createdBy = "test@example.gouv.fr",
-            reportingSource = ReportingSource.OPS,
-            title = "Observation test",
-        )
+    private fun anObservation(
+        vesselId: Int? = null,
+        latitude: Double? = null,
+        longitude: Double? = null,
+    ) = Reporting.Observation(
+        id = 1,
+        vesselId = vesselId,
+        vesselName = "BIDUBULE",
+        cfr = "FR224226850",
+        externalMarker = "1236514",
+        ircs = "IRCS",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        flagState = CountryCode.FR,
+        creationDate = ZonedDateTime.now(),
+        reportingDate = ZonedDateTime.now(),
+        lastUpdateDate = ZonedDateTime.now(),
+        isArchived = false,
+        isDeleted = false,
+        createdBy = "test@example.gouv.fr",
+        reportingSource = ReportingSource.OPS,
+        title = "Observation test",
+        latitude = latitude,
+        longitude = longitude,
+    )
 
     private fun anAlert() =
         Reporting.Alert(

@@ -19,7 +19,7 @@ enum class PriorNotificationState {
     /** "Diffusion en cours". */
     PENDING_SEND,
 
-    /** "À vérifier (CNSP)". */
+    /** "À vérifier". */
     PENDING_VERIFICATION,
 
     /** "Vérifié et diffusé". */

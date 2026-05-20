@@ -142,7 +142,7 @@ export function PriorNotificationCard({
 const StyledCard = styled(SideWindowCard)<{
   $isSuperUser: boolean
 }>`
-  left: ${p => (p.$isSuperUser ? '70px' : 0)};
+  left: ${p => (p.$isSuperUser ? '64px' : 0)};
 `
 
 const Body = styled.div`

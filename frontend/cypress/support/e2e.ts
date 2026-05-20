@@ -36,7 +36,7 @@ declare global {
 
       getViewCenter(): Cypress.Chainable<Coordinate | undefined>
 
-      hoverVesselByName(vesselName: string, layerName?: string, action?: 'hover' | 'click'): Cypress.Chainable
+      hoverOrClickVesselByName(vesselName: string, layerName?: string, action?: 'hover' | 'click'): Cypress.Chainable
 
       login(user: string): void
 

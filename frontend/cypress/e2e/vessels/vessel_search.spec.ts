@@ -43,7 +43,7 @@ context('VesselSearch', () => {
     cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('BELLE ETOILE')
 
     // Clicking an AIS result zooms the map but does not open the sidebar
-    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('BELLE ETOILE').click()
+    cy.get('*[data-cy^="VesselSearch-item"]', { timeout: 10000 }).contains('BELLE ETOILE').scrollIntoView().click()
     cy.get('*[data-cy^="vessel-sidebar"]').should('not.exist')
     cy.get('*[data-cy^="VesselSearch-input"]').should('have.value', '')
   })

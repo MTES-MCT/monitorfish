@@ -7,7 +7,7 @@ context('AIS Positions Overlay', () => {
     cy.clickButton('AIS')
     cy.wait(3000)
 
-    cy.hoverVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
+    cy.hoverOrClickVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
 
     cy.wait(50)
     cy.get('*[data-cy="vessel-card-name"]').contains('ETOILE DES ILES')
@@ -18,7 +18,7 @@ context('AIS Positions Overlay', () => {
     cy.clickButton('AIS')
     cy.wait(250)
 
-    cy.hoverVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
+    cy.hoverOrClickVesselByName('ETOILE DES ILES', 'AIS_VESSELS_POINTS')
 
     cy.wait(50)
     cy.get('*[data-cy="vessel-card-name"]').should('not.exist')

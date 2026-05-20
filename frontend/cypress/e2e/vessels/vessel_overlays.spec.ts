@@ -7,7 +7,7 @@ context('Vessels Overlays', () => {
     cy.wait(6000)
 
     // When we hover over the SOCRATE vessel
-    cy.hoverVesselByName('SOCRATE')
+    cy.hoverOrClickVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -20,7 +20,7 @@ context('Vessels Overlays', () => {
     cy.clickButton('Groupes de navires')
     cy.get('[title=\'Afficher le groupe "Mission Thémis – chaluts de fonds"\']').click()
     cy.wait(250)
-    cy.hoverVesselByName('SOCRATE')
+    cy.hoverOrClickVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -38,7 +38,7 @@ context('Vessels Overlays', () => {
      * Alert
      */
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.hoverVesselByName('EN RÉPÉTER PÈRE')
+    cy.hoverOrClickVesselByName('EN RÉPÉTER PÈRE')
 
     // Then
     cy.wait(50)
@@ -55,7 +55,7 @@ context('Vessels Overlays', () => {
     cy.wait(3000)
 
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.hoverVesselByName('EH VOLER MADAME')
+    cy.hoverOrClickVesselByName('EH VOLER MADAME')
 
     // Then
     cy.wait(50)

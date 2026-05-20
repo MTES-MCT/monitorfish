@@ -9,7 +9,14 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
-import type { ApiSearchFilter, DisplayedReporting, FormEditedReporting, Reporting, ReportingCreation } from './types'
+import type {
+  AllReportingsFilter,
+  ApiSearchFilter,
+  DisplayedReporting,
+  FormEditedReporting,
+  Reporting,
+  ReportingCreation
+} from './types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -103,11 +110,11 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       }
     }),
 
-    getReportings: builder.query<Reporting.Reporting[], void>({
+    getReportings: builder.query<Reporting.Reporting[], AllReportingsFilter | void>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
-      query: () => ({
+      query: filters => ({
         method: 'GET',
-        url: '/reportings'
+        url: getUrlOrPathWithQueryParams('/reportings', filters ?? {})
       }),
       transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>

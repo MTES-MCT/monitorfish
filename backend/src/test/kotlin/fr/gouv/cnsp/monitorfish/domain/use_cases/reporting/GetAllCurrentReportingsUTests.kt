@@ -2,8 +2,10 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.verify
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
@@ -18,6 +20,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.BDDMockito
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -138,5 +143,51 @@ class GetAllCurrentReportingsUTests {
 
         // Then
         assertThat(throwable).isNull()
+    }
+
+    @Test
+    fun `execute Should fetch reportings including archived ones when absentVessel is true`() {
+        // Given
+        given(reportingRepository.findAll(any())).willReturn(listOf())
+
+        // When
+        val results =
+            GetAllCurrentReportings(
+                reportingRepository,
+                vesselRepository,
+                infractionRepository,
+                getAllLegacyControlUnits,
+            ).execute(absentVessel = true)
+
+        // Then
+        verify(reportingRepository).findAll(
+            argThat {
+                this.isArchived == null && this.absentVessel == true
+            },
+        )
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(booleans = [false])
+    fun `execute Should not fetch archived reportings when absentVessel is null or false`(absentVessel: Boolean?) {
+        // Given
+        given(reportingRepository.findAll(any())).willReturn(listOf())
+
+        // When
+        val results =
+            GetAllCurrentReportings(
+                reportingRepository,
+                vesselRepository,
+                infractionRepository,
+                getAllLegacyControlUnits,
+            ).execute(absentVessel = absentVessel)
+
+        // Then
+        verify(reportingRepository).findAll(
+            argThat {
+                this.isArchived == false && this.absentVessel == absentVessel
+            },
+        )
     }
 }

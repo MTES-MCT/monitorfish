@@ -13,17 +13,25 @@ import type { InfractionSuspicionReporting, Reporting } from '@features/Reportin
 export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup) => {
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
+  const absentVessel = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
 
-  const { data, error, isError, isLoading } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
+  const { data, error, isError, isLoading } = useGetReportingsQuery(
+    { absentVessel },
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
+  )
 
   useHandleFrontendApiError(DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR, error, RtkCacheTagType.Reportings)
 
   const currentSeafrontReportings = useMemo(() => {
     const currentReportings = data ?? []
 
-    return filterBySeafrontGroup(currentReportings, selectedSeafrontGroup, r => r.value.seaFront).filter(reporting =>
-      reportingTypesDisplayed.includes(reporting.type)
-    )
+    let filtered = filterBySeafrontGroup(currentReportings, selectedSeafrontGroup, r => r.value.seaFront)
+
+    if (reportingTypesDisplayed) {
+      filtered = filtered.filter(reporting => reportingTypesDisplayed.includes(reporting.type))
+    }
+
+    return filtered
   }, [data, selectedSeafrontGroup, reportingTypesDisplayed])
 
   const fuse = useMemo(

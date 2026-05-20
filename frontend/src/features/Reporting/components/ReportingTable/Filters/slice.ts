@@ -2,11 +2,14 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 export type ReportingTableFiltersState = {
-  reportingTypesDisplayed: ReportingType[]
+  absentVessel: true | undefined
+  reportingTypesDisplayed: ReportingType[] | undefined
   searchQuery: string | undefined
 }
+
 const INITIAL_STATE: ReportingTableFiltersState = {
-  reportingTypesDisplayed: [ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION, ReportingType.OBSERVATION],
+  absentVessel: undefined,
+  reportingTypesDisplayed: undefined,
   searchQuery: undefined
 }
 
@@ -14,7 +17,10 @@ const reportingTableFiltersSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reportingTableFilters',
   reducers: {
-    setReportingTypesDisplayed: (state, action: PayloadAction<ReportingType[]>) => {
+    setAbsentVessel: (state, action: PayloadAction<boolean>) => {
+      state.absentVessel = action.payload || undefined
+    },
+    setReportingTypesDisplayed: (state, action: PayloadAction<ReportingType[] | undefined>) => {
       state.reportingTypesDisplayed = action.payload
     },
     setSearchQueryFilter: (state, action: PayloadAction<string | undefined>) => {

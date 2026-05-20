@@ -1,6 +1,6 @@
 SELECT DISTINCT ON (mmsi)
     mmsi,
-    date_time AS last_position_datetime_utc,
+    date_time AT TIME ZONE 'UTC' AS last_position_datetime_utc,
     latitude,
     longitude,
     speed,

@@ -159,6 +159,7 @@ def test_load_last_positions(reset_test_data):
             "reportings": [["ALERT"], None],
             "is_manual": [True, False],
             "beacon_malfunction_id": [1, None],
+            "position_type": ["VMS", "AIS"],
         }
     )
     load_last_positions(last_positions_to_load)
@@ -475,12 +476,15 @@ def test_estimate_current_positions(mock_datetime):
 
 
 def test_join():
+    vms_datetime = datetime(2021, 1, 1, 10, 0, 0)
+
     last_positions = pd.DataFrame(
         {
             "vessel_id": [1, 2, 3, None],
             "cfr": ["A", "B", None, None],
             "ircs": ["aa", "bb", "cc", None],
             "external_immatriculation": ["aaa", None, None, "ddd"],
+            "last_position_datetime_utc": [vms_datetime] * 4,
             "latitude": [45, 45.12, 56.214, 21.325],
             "longitude": [-5.1236, -12.85, 1.01, -1.236],
         }
@@ -536,8 +540,30 @@ def test_join():
         }
     )
 
+    # vessel 1 (cfr="A"): AIS more recent → position and datetime updated, source=AIS
+    # vessel 2 (cfr="B"): AIS less recent → VMS kept, source=VMS
+    # vessel 2 (cfr="C"): Vessel not in VMS last_positions, dropped in left join
+    # vessels 3 and 4: no cfr match → VMS kept, source=VMS
+    ais_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A", "B", "C"],
+            "last_position_datetime_utc": [
+                datetime(2021, 1, 1, 11, 0, 0),
+                datetime(2021, 1, 1, 9, 0, 0),
+                datetime(2021, 1, 1, 9, 0, 0),
+            ],
+            "latitude": [46.0, 44.0, 42.0],
+            "longitude": [-6.0, -11.0, -12.5],
+        }
+    )
+
     res = join(
-        last_positions, risk_factors, pending_alerts, reportings, known_malfunctions
+        last_positions,
+        risk_factors,
+        pending_alerts,
+        reportings,
+        known_malfunctions,
+        ais_last_positions,
     )
 
     res = res.sort_values("vessel_id").reset_index(drop=True)
@@ -548,8 +574,14 @@ def test_join():
             "cfr": ["A", "B", None, "d"],
             "ircs": ["aa", "bb", "cc", None],
             "external_immatriculation": ["aaa", "BB", None, "ddd"],
-            "latitude": [45, 45.12, 56.214, 21.325],
-            "longitude": [-5.1236, -12.85, 1.01, -1.236],
+            "last_position_datetime_utc": [
+                datetime(2021, 1, 1, 11, 0, 0),  # updated from AIS
+                vms_datetime,
+                vms_datetime,
+                vms_datetime,
+            ],
+            "latitude": [46.0, 45.12, 56.214, 21.325],  # vessel 1 updated from AIS
+            "longitude": [-6.0, -12.85, 1.01, -1.236],  # vessel 1 updated from AIS
             "impact_risk_factor": [1.2, None, 3.8, 1.2],
             "probability_risk_factor": [1.3, None, 1.5, 2.1],
             "detectability_risk_factor": [2.1, None, 2.3, 2.3],
@@ -568,6 +600,7 @@ def test_join():
                 float("nan"),
             ],
             "beacon_malfunction_id": [2, 1, None, None],
+            "position_type": ["AIS", "VMS", "VMS", "VMS"],
         }
     ).fillna({**default_risk_factors})
 

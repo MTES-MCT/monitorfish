@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(pipeline/data)",
+      "Read(pipeline/data/*)",
+      "Write(pipeline/data)",
+      "Write(pipeline/data/*)",
+      "Edit(pipeline/data)",
+      "Edit(pipeline/data/*)",
+      "Read(pipeline/notebooks)",
+      "Read(pipeline/notebooks/*)",
+      "Write(pipeline/notebooks)",
+      "Write(pipeline/notebooks/*)",
+      "Edit(pipeline/notebooks)",
+      "Edit(pipeline/notebooks/*)",
+      "Read(.env)",
+      "Write(.env)",
+      "Edit(.env)",
+      "Read(pipeline/.env)",
+      "Write(pipeline/.env)",
+      "Edit(pipeline/.env)"
+    ],
+    "additionalDirectories": []
+  }
+}

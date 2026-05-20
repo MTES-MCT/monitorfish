@@ -19,7 +19,8 @@ SELECT
     last(length, date_time)                       AS length,
     time_bucket(INTERVAL '1 hour', date_time)     AS bucket
 FROM ais_positions
-GROUP BY mmsi, bucket;
+GROUP BY mmsi, bucket
+WITH NO DATA;
 
 SELECT add_continuous_aggregate_policy(
     'ais_positions_hourly',

@@ -114,7 +114,7 @@ export function ReportingList() {
 const StyledCard = styled(SideWindowCard)<{
   $isSuperUser: boolean
 }>`
-  left: ${p => (p.$isSuperUser ? '70px' : 0)};
+  left: ${p => (p.$isSuperUser ? '64px' : 0)};
   z-index: 1001;
 `
 

@@ -35,7 +35,6 @@ data class PriorNotification(
     val updatedAt: ZonedDateTime?,
     val vessel: Vessel?,
     var lastControlDateTime: ZonedDateTime?,
-    var vesselRiskFactor: Double? = null,
 ) {
     /** Each prior notification and each of its updates have a unique fingerprint. */
     val fingerprint: String = listOf(reportId, updatedAt, state).joinToString(separator = ".")
@@ -92,7 +91,7 @@ data class PriorNotification(
                     isManual = isManuallyCreated,
                     port = port,
                     vesselFlagCountryCode = vessel?.flagState,
-                    vesselRiskFactor = vesselRiskFactor,
+                    vesselRiskFactor = logbookMessageAndValue.value.riskFactor,
                     infractionSuspicionsCount = reportingCount ?: 0,
                 )
             }
@@ -128,7 +127,6 @@ data class PriorNotification(
             }
 
         lastControlDateTime = riskFactor?.lastControlDateTime
-        vesselRiskFactor = riskFactor?.riskFactor
     }
 
     fun enrichLogbookMessage(

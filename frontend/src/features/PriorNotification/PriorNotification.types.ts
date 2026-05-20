@@ -217,7 +217,7 @@ export namespace PriorNotification {
     PENDING_AUTO_SEND = 'PENDING_AUTO_SEND',
     /** "Diffusion en cours". */
     PENDING_SEND = 'PENDING_SEND',
-    /** "À vérifier (CNSP)". */
+    /** "À vérifier". */
     PENDING_VERIFICATION = 'PENDING_VERIFICATION',
     /** "Vérifié et diffusé". */
     VERIFIED_AND_SENT = 'VERIFIED_AND_SENT'
@@ -229,7 +229,7 @@ export namespace PriorNotification {
     OUT_OF_VERIFICATION_SCOPE: 'Hors vérification',
     PENDING_AUTO_SEND: 'Envoi auto. en cours',
     PENDING_SEND: 'Diffusion en cours',
-    PENDING_VERIFICATION: 'À vérifier (CNSP)',
+    PENDING_VERIFICATION: 'À vérifier',
     VERIFIED_AND_SENT: 'Vérifié et diffusé'
   }
 

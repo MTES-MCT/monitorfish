@@ -49,6 +49,20 @@ def validate_action(action: str) -> str:
 
 
 @task
+def extract_ais_last_positions() -> pd.DataFrame:
+    """
+    Extracts the last AIS position of each vessel.
+
+    Returns:
+        pd.DataFrame: DataFrame of vessels' last AIS position.
+    """
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/ais_last_positions.sql",
+    )
+
+
+@task
 def extract_last_positions(minutes: int) -> pd.DataFrame:
     """
     Extracts the last position of each vessel over the past `minutes` minutes.
@@ -421,6 +435,20 @@ def load_last_positions(last_positions):
     )
 
 
+@task
+def load_last_positions_ais(ais_last_positions):
+    load(
+        ais_last_positions,
+        table_name="last_positions_ais",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=get_run_logger(),
+        how="replace",
+        replace_with_truncate=True,
+        nullable_integer_columns=["ship_type"],
+    )
+
+
 @flow(name="Monitorfish - Last positions")
 def last_positions_flow(
     current_position_estimation_max_hours: int = CURRENT_POSITION_ESTIMATION_MAX_HOURS,
@@ -438,12 +466,14 @@ def last_positions_flow(
     pending_alerts = extract_pending_alerts.submit()
     reportings = extract_reportings.submit()
     beacon_malfunctions = extract_beacon_malfunctions.submit()
+    ais_last_positions = extract_ais_last_positions.submit()
 
     last_positions = extract_last_positions.submit(minutes=minutes)
     last_positions = add_vessel_id(last_positions, vessels_table)
     last_positions = drop_duplicates(last_positions)
     last_positions = add_vessel_identifier(last_positions)
     last_positions = tag_positions_at_port(last_positions)
+    ais_last_positions = tag_positions_at_port(ais_last_positions)
 
     if action == "update":
         previous_last_positions = extract_previous_last_positions.submit()
@@ -482,3 +512,4 @@ def last_positions_flow(
 
     # Load
     load_last_positions(last_positions)
+    load_last_positions_ais(ais_last_positions)

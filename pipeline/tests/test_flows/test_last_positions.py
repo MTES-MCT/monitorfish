@@ -11,6 +11,7 @@ from src.flows.last_positions import (
     drop_duplicates,
     drop_unchanged_new_last_positions,
     estimate_current_positions,
+    extract_ais_last_positions,
     extract_beacon_malfunctions,
     extract_last_positions,
     extract_previous_last_positions,
@@ -87,6 +88,11 @@ def test_extract_reportings(reset_test_data):
         ),
         expected_reportings,
     )
+
+
+def test_extract_ais_last_positions(reset_test_data):
+    res = extract_ais_last_positions()
+    assert len(res) == 12
 
 
 def test_load_last_positions(reset_test_data):
@@ -574,6 +580,9 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     initial_last_positions = read_query(
         "SELECT * FROM last_positions;", db="monitorfish_remote"
     )
+    initial_last_positions_ais = read_query(
+        "SELECT * FROM last_positions_ais;", db="monitorfish_remote"
+    )
 
     with patch(
         "src.flows.last_positions.get_monitorfish_healthcheck",
@@ -588,6 +597,9 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
 
     final_last_positions = read_query(
         "SELECT * FROM last_positions;", db="monitorfish_remote"
+    )
+    final_last_positions_ais = read_query(
+        "SELECT * FROM last_positions_ais;", db="monitorfish_remote"
     )
 
     assert len(initial_last_positions) == 4
@@ -604,6 +616,8 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "OHMYGOSH",
         "ZZTOPACDC",
     }
+    assert len(initial_last_positions_ais) == 0
+    assert len(final_last_positions_ais) == 12
 
 
 def test_last_positions_flow_updates_last_positions_when_action_is_update(

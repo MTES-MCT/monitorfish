@@ -14,6 +14,7 @@ import styled from 'styled-components'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 export function VesselField() {
@@ -49,8 +50,15 @@ export function VesselField() {
     }
   })()
 
-  const handleVesselSearchChange = (nextVessel: Partial<Vessel.VesselIdentity> | undefined) => {
-    if (!nextVessel) {
+  const handleVesselSearchChange = (
+    nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined,
+    isAIS?: boolean
+  ) => {
+    if (isAIS) {
+      return
+    }
+    const identity = nextVessel as Partial<Vessel.VesselIdentity> | undefined
+    if (!identity) {
       setValues({
         ...values,
         districtCode: undefined,
@@ -66,25 +74,25 @@ export function VesselField() {
     }
 
     // TODO Show an error in this case?
-    if (!nextVessel.vesselId) {
+    if (!identity.vesselId) {
       return
     }
 
     setValues({
       ...values,
-      districtCode: nextVessel.districtCode,
-      externalReferenceNumber: nextVessel.externalReferenceNumber,
-      flagState: nextVessel.flagState,
-      internalReferenceNumber: nextVessel.internalReferenceNumber,
-      ircs: nextVessel.ircs,
-      vesselId: nextVessel.vesselId,
-      vesselName: nextVessel.vesselName
+      districtCode: identity.districtCode,
+      externalReferenceNumber: identity.externalReferenceNumber,
+      flagState: identity.flagState,
+      internalReferenceNumber: identity.internalReferenceNumber,
+      ircs: identity.ircs,
+      vesselId: identity.vesselId,
+      vesselName: identity.vesselName
     })
 
     const valuesWithVessel = {
       ...values,
-      internalReferenceNumber: nextVessel.internalReferenceNumber ?? undefined,
-      vesselId: nextVessel.vesselId ?? undefined
+      internalReferenceNumber: identity.internalReferenceNumber ?? undefined,
+      vesselId: identity.vesselId ?? undefined
     }
     updateFieldsControlledByVessel(valuesWithVessel)
   }

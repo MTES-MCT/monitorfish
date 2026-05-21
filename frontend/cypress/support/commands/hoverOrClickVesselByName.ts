@@ -6,63 +6,61 @@ export function hoverOrClickVesselByName(
 ): Cypress.Chainable {
   return cy.get(`.${layerName}`).then($mapElement =>
     cy.window().then(win => {
-      // Get all vessel features from the layer
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       const features = win.olTestUtils.getFeaturesFromLayer(layerName)
 
-      // Find the first feature with a matching name that is visible in the current map viewport
-      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-      const [mapWidth, mapHeight] = win.olTestUtils.getMapSize() ?? [1280, 1024]
-
-      const vessel = features.find((feature: any) => {
-        if (feature.get('vesselName') !== vesselName) {
-          return false
-        }
-        const coords = feature.getGeometry().getCoordinates()
-        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-        const px = win.olTestUtils.getPixelFromCoordinate(coords)
-        if (!px) {
-          return false
-        }
-
-        return px[0] >= 0 && px[0] <= mapWidth && px[1] >= 0 && px[1] <= mapHeight
-      })
-
+      const vessel = features.find((feature: any) => feature.get('vesselName') === vesselName)
       if (!vessel) {
-        throw new Error(`Vessel with name "${vesselName}" not found (visible) in ${layerName} layer`)
+        throw new Error(`Vessel "${vesselName}" not found in ${layerName} layer`)
       }
 
-      // Get the vessel's coordinates
       const coordinates = vessel.getGeometry().getCoordinates()
-      cy.log(`Found ${vesselName} at coordinates: [${coordinates[0]}, ${coordinates[1]}]`)
 
-      // Convert coordinates to pixel position (relative to map viewport)
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-      const pixel = win.olTestUtils.getPixelFromCoordinate(coordinates)
-      cy.log(`Pixel position (map-relative): [${pixel[0]}, ${pixel[1]}]`)
+      const [mapWidth, mapHeight] = win.olTestUtils.getMapSize() ?? [1280, 1024]
+      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+      let pixel = win.olTestUtils.getPixelFromCoordinate(coordinates)
+      const isVisible =
+        pixel && pixel[0] >= 0 && pixel[0] <= mapWidth && pixel[1] >= 0 && pixel[1] <= mapHeight
+      if (!isVisible) {
+        // Vessel is off-screen (e.g. map panned after a previous click).
+        // Center the map instantly so we can compute a valid click position.
+        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+        win.olTestUtils.monitorfishMap.getView().setCenter(coordinates)
+        // Force a synchronous re-render so the WebGL hit-detection buffer
+        // reflects the new viewport before the click events are triggered.
+        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+        win.olTestUtils.monitorfishMap.renderSync()
+        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+        pixel = win.olTestUtils.getPixelFromCoordinate(coordinates)
+      }
 
-      // Get the map element's offset in the window
       const mapElement = $mapElement[0]
       if (!mapElement) {
         throw new Error('Map element not found')
       }
       const mapRect = mapElement.getBoundingClientRect()
-      cy.log(`Map offset: [${mapRect.left}, ${mapRect.top}]`)
 
-      // Calculate absolute position in the window
       const clientX = Math.round(pixel[0] + mapRect.left)
       const clientY = Math.round(pixel[1] + mapRect.top - topNegativeOffset)
-      cy.log(`Client position (window-relative): [${clientX}, ${clientY}]`)
 
       if (action === 'click') {
-        cy.get(`.${layerName}`).trigger('pointerdown', { clientX, clientY, force: true, pointerId: 1 })
-        cy.wait(20)
-        cy.get(`.${layerName}`).trigger('pointerup', { clientX, clientY, force: true, pointerId: 1 })
-        cy.wait(20)
-        cy.get(`.${layerName}`).trigger('click', { clientX, clientY, force: true, pointerId: 1 })
+        // OL emulates its own 'click' from pointerdown/pointerup — it never reads
+        // the native DOM click event. Two requirements for emulateClick_() to fire:
+        //   • Trigger on map.getViewport(): the exact element OL's listener is on.
+        //   • button: 0 must be explicit: Cypress defaults pointerup to button:-1
+        //     (PointerEvents "no state change" sentinel), which fails OL's
+        //     isMouseActionButton_() check and silently skips click emulation.
+        cy.window().then(win => {
+          // @ts-ignore
+          const viewport = win.olTestUtils.monitorfishMap.getViewport()
+          cy.wrap(viewport).trigger('pointerdown', { button: 0, clientX, clientY, force: true, pointerId: 1 })
+          cy.wait(20)
+          cy.wrap(viewport).trigger('pointerup', { button: 0, clientX, clientY, force: true, pointerId: 1 })
+        })
       } else {
-        // Trigger pointermove events at the vessel's pixel location
-        // Multiple events help ensure the hover is detected
+        // Trigger pointermove events at the vessel's pixel location.
+        // Multiple events help ensure the hover is detected.
         cy.get(`.${layerName}`).trigger('pointermove', {
           clientX,
           clientY,

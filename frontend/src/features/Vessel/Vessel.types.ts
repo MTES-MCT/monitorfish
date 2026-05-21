@@ -33,14 +33,15 @@ export namespace Vessel {
 
   /**
    * The vessel composite key/identifier used to identify all vessels
-   * by concatenating :
-   * - internalReferenceNumber
-   * - ircs
-   * - externalReferenceNumber
+   * **VMS**: by concatenating :
+   *    - internalReferenceNumber
+   *    - ircs
+   *    - externalReferenceNumber
+   * **AIS**: MMSI
    *
    * The result is :`internalReferenceNumber/ircs/externalReferenceNumber`
    *
-   * i.e: "FAK000999999/CALLME/DONTSINK"
+   * i.e: "FAK000999999/CALLME/DONTSINK" or "2231512"
    */
   export type VesselCompositeIdentifier = string
 
@@ -74,11 +75,7 @@ export namespace Vessel {
     course: number
     dateTime: string
     destination: string | undefined
-    externalReferenceNumber: string | undefined
     flagState: string
-    from: string
-    internalReferenceNumber: string | undefined
-    ircs: string | undefined
     isAtPort: boolean | undefined
     isFishing: boolean | undefined
     isManual: boolean | undefined
@@ -88,8 +85,6 @@ export namespace Vessel {
     networkType: NetworkType | undefined
     positionType: string
     speed: number
-    tripNumber: number | undefined
-    vesselName: string
   }
 
   export interface VesselPointFeature extends Feature<Point> {

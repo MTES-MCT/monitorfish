@@ -1,7 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
-import { doNotAnimate } from '@features/Map/slice'
 import { addVesselTrackShowed, resetLoadingVessel } from '@features/Vessel/slice'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { vesselApi } from '@features/Vessel/vesselApi'
@@ -21,7 +20,6 @@ import type { MainAppThunk } from '@store'
 export const showVesselTrack =
   (
     vesselIdentity: Vessel.VesselIdentity,
-    isFromUserAction: boolean,
     trackRequest: TrackRequest | null,
     hasZoom: boolean = false
   ): MainAppThunk<Promise<void>> =>
@@ -29,8 +27,6 @@ export const showVesselTrack =
     try {
       const { defaultVesselTrackDepth } = getState().map
       const nextTrackRequest = getCustomOrDefaultTrackRequest(trackRequest, defaultVesselTrackDepth, true)
-
-      dispatch(doNotAnimate(!isFromUserAction))
 
       const { isTrackDepthModified, positions } = await dispatch(
         vesselApi.endpoints.getVesselPositions.initiate(

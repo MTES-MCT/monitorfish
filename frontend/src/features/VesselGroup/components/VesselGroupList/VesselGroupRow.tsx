@@ -25,6 +25,7 @@ import styled from 'styled-components'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { getDate } from '../../../../utils'
 
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type VesselGroupRowProps = {
@@ -81,12 +82,15 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     dispatch(renderVesselFeatures())
   }
 
-  const addVessel = (nextVessel: Vessel.VesselIdentity | undefined) => {
+  const addVessel = (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+    if (isAIS) {
+      return
+    }
     if (vesselGroupWithVessels.group.type !== GroupType.FIXED) {
       return
     }
 
-    dispatch(addVesselToFixedVesselGroup(nextVessel, vesselGroupWithVessels.group))
+    dispatch(addVesselToFixedVesselGroup(nextVessel as Vessel.VesselIdentity | undefined, vesselGroupWithVessels.group))
   }
 
   const downloadVesselGroup = () => {

@@ -89,7 +89,7 @@ export function FavoriteVessel({
             color={THEME.color.lightGray}
             data-cy="favorite-vessel-show-vessel-track"
             Icon={Icon.Hide}
-            onClick={() => dispatch(showVesselTrack(favorite, true, null, true))}
+            onClick={() => dispatch(showVesselTrack(favorite, null, true))}
           />
         )}
         <IconButton

@@ -2,12 +2,11 @@ import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBo
 import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { CoordinatesInput } from '@mtes-mct/monitor-ui'
+import { coordinatesAreDistinct, CoordinatesInput, getCoordinates } from '@mtes-mct/monitor-ui'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { coordinatesAreDistinct, getCoordinates } from '../../../../coordinates'
 import { setLeftMapBoxDisplayed } from '../../../../domain/use_cases/setLeftMapBoxDisplayed'
 import {
   resetCircleMeasurementInDrawing,

@@ -92,7 +92,7 @@ export function ControlOverlay({ feature, isSelected = false }) {
       return
     }
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED)) {
+    if (!feature?.getId()?.toString()?.startsWith(MonitorFishMap.MonitorFishLayer.MISSION_ACTION_SELECTED)) {
       overlayRef.current.style.display = 'none'
       setControlProperties(undefined)
 

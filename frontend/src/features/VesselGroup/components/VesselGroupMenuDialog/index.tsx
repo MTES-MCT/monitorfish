@@ -196,6 +196,7 @@ const StyledBody = styled(MapMenuDialog.Body)`
 `
 
 const VesselGroupMenuDialogWrapper = styled(MapToolBox)`
+  top: 0;
   width: 400px;
 `
 

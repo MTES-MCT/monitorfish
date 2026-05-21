@@ -120,7 +120,7 @@ export function Account() {
     <>
       <MapToolButton Icon={Icon.Account} isActive={isOpened} onClick={openOrClose} title="Mon compte" />
       {isRendered && (
-        <MapToolBox data-cy="map-account-box" hideBoxShadow isOpen={isOpened}>
+        <StyledToolBox data-cy="map-account-box" hideBoxShadow isOpen={isOpened}>
           <StyledContainer>
             <StyledHeader>
               <MapMenuDialog.Title>Mon compte</MapMenuDialog.Title>
@@ -157,7 +157,7 @@ export function Account() {
               </StyledFooter>
             )}
           </StyledContainer>
-        </MapToolBox>
+        </StyledToolBox>
       )}
       {isUnregisterCacheConfirmationModalOpen && (
         <ConfirmationModal
@@ -200,6 +200,10 @@ export function Account() {
     </>
   )
 }
+
+const StyledToolBox = styled(MapToolBox)`
+  top: 0;
+`
 
 const StyledButton = styled(Button)`
   margin-top: 14px;

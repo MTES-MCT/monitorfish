@@ -36,11 +36,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
-@Import(GetVesselPositions::class, GetDatesFromVesselTrackDepth::class)
+@Import(GetVesselVMSAndAISPositions::class, GetDatesFromVesselTrackDepth::class)
 @ExtendWith(SpringExtension::class)
 class GetVesselUTests {
     @MockitoBean
     private lateinit var positionRepository: PositionRepository
+
+    @MockitoBean
+    private lateinit var aisPositionRepository: AisPositionRepository
 
     @Mock
     private val reportingRepository: ReportingRepository = mock()
@@ -64,7 +67,7 @@ class GetVesselUTests {
     private lateinit var producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository
 
     @Autowired
-    private lateinit var getVesselPositions: GetVesselPositions
+    private lateinit var getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions
 
     @MockitoBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
@@ -122,7 +125,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
@@ -214,7 +217,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
@@ -266,7 +269,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
@@ -321,7 +324,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
@@ -373,7 +376,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
@@ -513,7 +516,7 @@ class GetVesselUTests {
                     vesselRepository = vesselRepository,
                     logbookReportRepository = logbookReportRepository,
                     logbookRawMessageRepository = logbookRawMessageRepository,
-                    getVesselPositions = getVesselPositions,
+                    getVesselVMSAndAISPositions = getVesselVMSAndAISPositions,
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,

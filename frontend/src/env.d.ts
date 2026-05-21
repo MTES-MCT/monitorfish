@@ -1,6 +1,7 @@
 // https://vitejs.dev/guide/env-and-mode#intellisense-for-typescript
 
 interface ImportMetaEnv {
+  readonly FRONTEND_AIS_VESSELS_ENABLED: string
   readonly FRONTEND_GEOSERVER_LOCAL_URL: string
   readonly FRONTEND_GEOSERVER_REMOTE_URL: string
   readonly FRONTEND_KEPLER_ACTIVITY_VISUALIZATION_ENABLED: string

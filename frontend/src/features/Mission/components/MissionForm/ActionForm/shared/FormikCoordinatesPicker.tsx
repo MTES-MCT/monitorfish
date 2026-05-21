@@ -1,5 +1,5 @@
 import { InteractionListener, OpenLayersGeometryType } from '@features/Map/constants'
-import { fitToExtent } from '@features/Map/slice'
+import { fitMapToExtent } from '@features/Map/useCases/animateMap'
 import { getCoordinatesExtent } from '@features/Map/useCases/getCoordinatesExtent'
 import { convertToGeoJSONGeometryObject } from '@features/Map/utils'
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
@@ -8,7 +8,7 @@ import { addOrEditControlCoordinates } from '@features/Mission/useCases/addOrEdi
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { getCoordinates, MultiLocationEditor, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
 import { isCypress } from '@utils/isCypress'
 import { useField, useFormikContext } from 'formik'
 import Feature from 'ol/Feature'
@@ -16,7 +16,6 @@ import Point from 'ol/geom/Point'
 import { transform } from 'ol/proj'
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { getCoordinates } from '../../../../../../coordinates'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
@@ -123,7 +122,7 @@ export function FormikCoordinatesPicker() {
     }
 
     const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
-    dispatch(fitToExtent(bufferedExtent))
+    fitMapToExtent(bufferedExtent)
   }
 
   const addOrEditCoordinates = useCallback(async () => {

@@ -60,7 +60,7 @@ export function MissionsMapMenu() {
         title="Missions et contrôles"
       />
       {isRendered && (
-        <MapToolBox data-cy="missions-menu-box" isLeftBox isOpen={isOpened}>
+        <MissionsMenuBox data-cy="missions-menu-box" isLeftBox isOpen={isOpened}>
           <MissionsMenuWrapper>
             <Header>
               <CloseButton Icon={Icon.Close} onClick={toggleMissionsMenu} title="Fermer" />
@@ -85,11 +85,15 @@ export function MissionsMapMenu() {
               </Section>
             </MissionsMenuBody>
           </MissionsMenuWrapper>
-        </MapToolBox>
+        </MissionsMenuBox>
       )}
     </>
   )
 }
+
+const MissionsMenuBox = styled(MapToolBox)`
+  top: 0;
+`
 
 const MissionsMenuWrapper = styled.div`
   width: 320px;

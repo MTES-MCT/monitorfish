@@ -1,3 +1,5 @@
+import {openVesselBySearch} from "../main_window/utils";
+
 context('Vessels Overlays', () => {
   it('Last position card with vessel groups Should be seen on the map on pointer move', () => {
     cy.login('superuser')
@@ -5,7 +7,7 @@ context('Vessels Overlays', () => {
     cy.wait(6000)
 
     // When we hover over the SOCRATE vessel
-    cy.hoverVesselByName('SOCRATE')
+    cy.hoverOrClickVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -18,7 +20,7 @@ context('Vessels Overlays', () => {
     cy.clickButton('Groupes de navires')
     cy.get('[title=\'Afficher le groupe "Mission Thémis – chaluts de fonds"\']').click()
     cy.wait(250)
-    cy.hoverVesselByName('SOCRATE')
+    cy.hoverOrClickVesselByName('SOCRATE')
 
     // Then
     cy.wait(50)
@@ -36,7 +38,7 @@ context('Vessels Overlays', () => {
      * Alert
      */
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.hoverVesselByName('EN RÉPÉTER PÈRE')
+    cy.hoverOrClickVesselByName('EN RÉPÉTER PÈRE')
 
     // Then
     cy.wait(50)
@@ -49,12 +51,11 @@ context('Vessels Overlays', () => {
     /**
      * Beacon malfunction
      */
-    cy.get('*[data-cy^="vessel-search-input"]').type('EH VOLER MADAME')
-    cy.get('*[data-cy^="vessel-search-item"]').eq(0).click()
-    cy.wait(5000)
+    openVesselBySearch('EH VOLER MADAME')
+    cy.wait(3000)
 
     // When we move the pointer cursor (from one point to another to emit an event)
-    cy.hoverVesselByName('EH VOLER MADAME')
+    cy.hoverOrClickVesselByName('EH VOLER MADAME')
 
     // Then
     cy.wait(50)

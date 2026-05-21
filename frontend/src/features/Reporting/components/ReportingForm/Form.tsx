@@ -50,6 +50,7 @@ import {
 } from '../../types'
 
 import type { FormEditedReporting } from '../../types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -187,7 +188,11 @@ export function Form({
     })
   }
 
-  const handleVesselSelect = (vessel: Vessel.VesselIdentity | undefined) => {
+  const handleVesselSelect = (next: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
+    if (isAIS) {
+      return
+    }
+    const vessel = next as Vessel.VesselIdentity | undefined
     if (!vessel) {
       clearVesselValues()
 

@@ -7,8 +7,8 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
 
+import { getWebGLVesselStyleVariables } from './style'
 import { booleanToInt } from '../../../../utils'
-import { getWebGLVesselStyleVariables } from '../style'
 
 function UnmemoizedVesselsLayer() {
   const dispatch = useMainAppDispatch()

@@ -21,7 +21,7 @@ export function UnmemoizedMissionHoveredLayer({ feature }) {
 
     HOVERED_MISSION_VECTOR_SOURCE.clear(true)
 
-    if (!feature?.getId()?.toString()?.includes(MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT)) {
+    if (!feature?.getId()?.toString()?.startsWith(MonitorFishMap.MonitorFishLayer.MISSION_PIN_POINT)) {
       return
     }
 

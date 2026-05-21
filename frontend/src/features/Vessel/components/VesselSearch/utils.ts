@@ -1,6 +1,8 @@
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
+
 export function enrichWithVesselIdentifierIfUndefined(identity: Vessel.VesselIdentity): Vessel.VesselIdentity {
   if (identity.vesselIdentifier) {
     return identity
@@ -19,4 +21,20 @@ export function enrichWithVesselIdentifierIfUndefined(identity: Vessel.VesselIde
   }
 
   return identity
+}
+
+export function aisVesselToVesselIdentity(vessel: AISVessel.AISVessel): Vessel.VesselIdentity {
+  return {
+    beaconNumber: undefined,
+    districtCode: undefined,
+    externalReferenceNumber: undefined,
+    flagState: vessel.flagState,
+    internalReferenceNumber: undefined,
+    ircs: vessel.ircs,
+    mmsi: String(vessel.mmsi),
+    vesselId: undefined,
+    vesselIdentifier: undefined,
+    vesselLength: undefined,
+    vesselName: vessel.vesselName
+  }
 }

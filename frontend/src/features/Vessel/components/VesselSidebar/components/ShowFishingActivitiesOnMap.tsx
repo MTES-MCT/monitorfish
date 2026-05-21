@@ -29,7 +29,7 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
     <VesselSidebarActionButton
       $backgroundColor={areFishingActivitiesShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
       $isSidebarOpen={isSidebarOpen}
-      $top={223}
+      $top={173}
       data-cy="show-all-fishing-activities-on-map"
       disabled={!selectedVesselPositions?.length}
       isHidden={false}

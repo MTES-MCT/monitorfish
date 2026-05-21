@@ -76,7 +76,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       <VesselSidebarActionButton
         $backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
         $isSidebarOpen={isSidebarOpen}
-        $top={118}
+        $top={68}
         data-cy="vessel-track-depth-selection"
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title="Paramétrer l'affichage de la piste VMS"

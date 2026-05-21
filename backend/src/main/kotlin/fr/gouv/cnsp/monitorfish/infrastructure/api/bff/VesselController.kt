@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
@@ -26,9 +27,11 @@ import java.time.ZonedDateTime
 @Tag(name = "APIs for Vessels")
 class VesselController(
     private val getActiveVessels: GetActiveVessels,
+    private val getLastPositionsAIS: GetLastPositionsAIS,
     private val getVessel: GetVessel,
     private val getVesselById: GetVesselById,
-    private val getVesselPositions: GetVesselPositions,
+    private val getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions,
+    private val getVesselAISPositions: GetVesselAISPositions,
     private val getVesselVoyage: GetVesselVoyage,
     private val getVesselVoyageByDates: GetVesselVoyageByDates,
     private val searchVessels: SearchVessels,
@@ -54,6 +57,46 @@ class VesselController(
             )
         }
     }
+
+    @GetMapping("/ais")
+    @Operation(summary = "Get all AIS last positions")
+    fun getVessels(
+        @RequestParam(required = false) vesselLocation: VesselLocation?,
+    ): List<LastPositionAISDataOutput> {
+        val lastPositionsAIS = getLastPositionsAIS.execute(vesselLocation)
+
+        return lastPositionsAIS.map {
+            LastPositionAISDataOutput.fromLastPositionAIS(it)
+        }
+    }
+
+    @GetMapping("/ais/positions")
+    @Operation(summary = "Get vessel's AIS positions")
+    fun getVesselAISPositions(
+        @Parameter(description = "MMSI")
+        @RequestParam(name = "mmsi")
+        mmsi: Long,
+        @Parameter(description = "Vessel track depth")
+        @RequestParam(name = "trackDepth")
+        trackDepth: VesselTrackDepth,
+        @Parameter(description = "from date")
+        @RequestParam(name = "afterDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        afterDateTime: ZonedDateTime?,
+        @Parameter(description = "to date")
+        @RequestParam(name = "beforeDateTime", required = false)
+        @DateTimeFormat(pattern = zoneDateTimePattern)
+        beforeDateTime: ZonedDateTime?,
+    ): List<PositionDataOutput> =
+        getVesselAISPositions
+            .execute(
+                mmsi = mmsi,
+                trackDepth = trackDepth,
+                fromDateTime = afterDateTime,
+                toDateTime = beforeDateTime,
+            ).map {
+                PositionDataOutput.fromPosition(it)
+            }
 
     @GetMapping("/{vesselId}")
     @Operation(summary = "Get a vessel by its ID")
@@ -168,7 +211,7 @@ class VesselController(
     ): ResponseEntity<List<PositionDataOutput>> =
         runBlocking {
             val (vesselTrackHasBeenModified, positions) =
-                getVesselPositions.execute(
+                getVesselVMSAndAISPositions.execute(
                     internalReferenceNumber = internalReferenceNumber,
                     externalReferenceNumber = externalReferenceNumber,
                     ircs = IRCS,

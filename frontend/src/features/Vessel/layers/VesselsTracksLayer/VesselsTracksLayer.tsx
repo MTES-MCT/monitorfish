@@ -1,5 +1,4 @@
 import { LogbookMessageOverlay } from '@features/Logbook/overlays/LogbookMessageOverlay'
-import CloseVesselTrackOverlay from '@features/Map/components/CloseVesselTrackOverlay'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import {
   VESSEL_TRACK_VECTOR_LAYER,
@@ -11,14 +10,22 @@ import {
   removeVesselTrackFeatures,
   updateTrackCircleStyle
 } from '@features/Vessel/types/track'
+import { hideVesselTrack } from '@features/Vessel/useCases/hideVesselTrack'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import { memo, useEffect, useMemo } from 'react'
 
-import { animateToCoordinates } from '../../../Map/slice'
-import { setVesselTrackExtent, updateVesselTrackAsHidden, updateVesselTrackAsShowedWithExtend } from '../../slice'
+import { resetAnimateToCoordinates, resetAnimateToExtent } from '../../../Map/slice'
+import { animateToVesselCoordinates, fitMapToVesselTrack } from '../../../Map/useCases/animateMap'
+import { CloseVesselTrackOverlay } from '../../components/CloseVesselTrackOverlay'
+import {
+  setVesselTrackExtent,
+  updateVesselTrackAsHidden,
+  updateVesselTrackAsShowedWithExtend,
+  updateVesselTrackAsZoomed
+} from '../../slice'
 
 import type { Coordinate } from 'ol/coordinate'
 
@@ -29,7 +36,9 @@ function VesselsTracksLayer() {
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const displayedLogbookOverlays = useMainAppSelector(state => state.fishingActivities.displayedLogbookOverlays)
-  const doNotAnimate = useMainAppSelector(state => state.map.doNotAnimate)
+  const animateToCoordinates = useMainAppSelector(state => state.map.animateToCoordinates)
+  const animateToExtent = useMainAppSelector(state => state.map.animateToExtent)
+  const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
   const previousHighlightedVesselTrackPosition = usePrevious(highlightedVesselTrackPosition)
   const previousSelectedVessel = usePrevious(selectedVessel)
@@ -61,19 +70,23 @@ function VesselsTracksLayer() {
 
         if (vesselTrackFeatures?.length) {
           VESSEL_TRACK_VECTOR_SOURCE.addFeatures(vesselTrackFeatures)
-          const vesselTrackExtent = getVesselTrackExtent(vesselTrackFeatures, vesselCompositeIdentifier)
+          const extent = getVesselTrackExtent(vesselTrackFeatures, vesselCompositeIdentifier)
 
-          dispatch(setVesselTrackExtent(vesselTrackExtent))
-        }
+          dispatch(setVesselTrackExtent(extent))
 
-        if (!doNotAnimate && lastPositionCoordinates) {
-          dispatch(animateToCoordinates(lastPositionCoordinates))
+          if (animateToExtent) {
+            fitMapToVesselTrack(extent)
+            dispatch(resetAnimateToExtent())
+          } else if (animateToCoordinates && lastPositionCoordinates) {
+            animateToVesselCoordinates(lastPositionCoordinates as [number, number], vesselSidebarIsOpen)
+            dispatch(resetAnimateToCoordinates())
+          }
         }
       }
     }
 
     showSelectedVesselTrack()
-  }, [dispatch, doNotAnimate, selectedVessel, selectedVesselPositions])
+  }, [dispatch, animateToCoordinates, animateToExtent, selectedVessel, selectedVesselPositions, vesselSidebarIsOpen])
 
   useEffect(() => {
     function hidePreviouslySelectedVessel() {
@@ -147,13 +160,21 @@ function VesselsTracksLayer() {
     }
   }, [highlightedVesselTrackPosition, previousHighlightedVesselTrackPosition])
 
+  useEffect(() => {
+    Object.entries(vesselsTracksShowed)
+      .filter(([, track]) => track?.toZoom && track?.extent && !track?.toShow)
+      .forEach(([vesselCompositeIdentifier, track]) => {
+        fitMapToVesselTrack(track!.extent!, () => dispatch(updateVesselTrackAsZoomed(vesselCompositeIdentifier)))
+      })
+  }, [dispatch, vesselsTracksShowed])
+
   return (
     <>
       {vesselsTracksShowedAndDefined.map(vesselTrack => (
         <CloseVesselTrackOverlay
           key={vesselTrack?.vesselCompositeIdentifier}
           coordinates={vesselTrack?.coordinates}
-          vesselCompositeIdentifier={vesselTrack?.vesselCompositeIdentifier}
+          onClose={() => dispatch(hideVesselTrack(vesselTrack!.vesselCompositeIdentifier))}
         />
       ))}
       {displayedLogbookOverlays.map(logbookOverlay => (

@@ -52,10 +52,7 @@ export const getArrowStyle = (trackArrow, course) => {
   if (!trackLineStyleCache.has(trackArrow)) {
     const arrowStyle = new Style({
       image: new Icon({
-        offset: [0, 0],
         rotation: course,
-        scale: 1,
-        size: [15, 20],
         src: trackArrow
       })
     })

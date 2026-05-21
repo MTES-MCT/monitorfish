@@ -53,6 +53,7 @@ export namespace MonitorFishMap {
   }
 
   export enum MonitorFishLayer {
+    AIS_VESSELS = 'AIS_VESSELS_POINTS',
     BASE_LAYER = 'BASE_LAYER',
     CUSTOM = 'CUSTOM',
     DRAW = 'DRAW',

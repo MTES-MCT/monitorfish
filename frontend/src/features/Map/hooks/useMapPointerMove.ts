@@ -25,7 +25,7 @@ export function useMapPointerMove(
       const pixel = map.getEventPixel(event.originalEvent)
       const feature = map.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
-        layerFilter: layer => layer.get('isHoverable') === true
+        layerFilter: layer => layer.get('isHoverable') === true && layer.getOpacity() > 0
       })
 
       if (onPointerMove) {

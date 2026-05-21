@@ -7,6 +7,7 @@ import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
 
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
 
@@ -24,6 +25,7 @@ export type VesselState = {
   listFilterValues: VesselListFilter
   loadingPositions: boolean | null
   loadingVessel: boolean | null
+  selectedAISVessels: Record<string, AISVessel.AISVessel>
   selectedVessel: Vessel.SelectedVessel | undefined
   selectedVesselIdentity: Vessel.VesselIdentity | undefined
   selectedVesselPositions: Vessel.VesselPosition[] | null
@@ -44,6 +46,7 @@ const INITIAL_STATE: VesselState = {
   listFilterValues: DEFAULT_VESSEL_LIST_FILTER_VALUES,
   loadingPositions: null,
   loadingVessel: null,
+  selectedAISVessels: {},
   selectedVessel: undefined,
   selectedVesselIdentity: undefined,
   selectedVesselPositions: null,
@@ -61,6 +64,10 @@ const vesselSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'vessel',
   reducers: {
+    addSelectedAISVessel(state, action: PayloadAction<AISVessel.AISVessel>) {
+      state.selectedAISVessels[action.payload.mmsi.toString(10)] = action.payload
+    },
+
     /**
      * Add a reporting to the vessels array
      * before the /vessels API is fetched from the cron
@@ -143,6 +150,10 @@ const vesselSlice = createSlice({
       state.selectedVessel = undefined
       state.loadingVessel = true
       state.loadingPositions = true
+    },
+
+    removeSelectedAISVessel(state, action: PayloadAction<number>) {
+      delete state.selectedAISVessels[action.payload.toString(10)]
     },
 
     /**
@@ -239,6 +250,7 @@ const vesselSlice = createSlice({
         vesselsAdapter.setOne(state.vessels, nextVessel)
       }
     },
+
     /**
      * Remove multiple reportings from vessels array before the /vessels API is fetched from the cron
      */
@@ -367,9 +379,6 @@ const vesselSlice = createSlice({
       }
     },
 
-    /**
-     * Set the selected vessel and positions
-     */
     setSelectedVessel(
       state,
       action: PayloadAction<{
@@ -517,11 +526,13 @@ function filterFirstFoundReportingTypes(
 }
 
 export const {
+  addSelectedAISVessel,
   addVesselReporting,
   addVesselTrackShowed,
   closeVesselSidebar,
   highlightVesselTrackPosition,
   loadingVessel,
+  removeSelectedAISVessel,
   removeVesselAlertAndUpdateReporting,
   removeVesselReporting,
   removeVesselReportings,

@@ -51,7 +51,7 @@ function VesselTrackOverlay({ feature }) {
     if (overlayRef.current && overlayObjectRef.current) {
       // TODO Refactor: clean nullish checks & useEffect usage
       if (
-        feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) &&
+        feature?.getId()?.toString()?.startsWith(LayerProperties.VESSEL_TRACK.code) &&
         feature?.getId()?.toString()?.includes('position')
       ) {
         setVesselFeatureToShowOnCard(feature)

@@ -1,5 +1,5 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { mapActions } from '@features/Map/slice'
+import { fitMapToExtent } from '@features/Map/useCases/animateMap'
 import { stationActions } from '@features/Station/slice'
 import { FrontendError } from '@libs/FrontendError'
 import { fromLonLat } from 'ol/proj'
@@ -27,7 +27,7 @@ export const centerOnStation = (stations: Station.Station[] | Station.StationDat
     const bufferedHighlightedStationsExtent = getBufferedExtentFromStations(stations, 0.5)
 
     // Move this indirect method to `monitorfishMap` (vanilla).
-    dispatch(mapActions.fitToExtent(bufferedHighlightedStationsExtent))
+    fitMapToExtent(bufferedHighlightedStationsExtent)
   }
 
   dispatch(stationActions.highlightStationIds(highlightedStationIds))

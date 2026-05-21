@@ -1,10 +1,9 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { type Coordinates, MultiRadio, useClickOutsideEffect } from '@mtes-mct/monitor-ui'
+import { type Coordinates, getCoordinates, MultiRadio, useClickOutsideEffect } from '@mtes-mct/monitor-ui'
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { getCoordinates } from '../../../coordinates'
 import { COORDINATES_FORMAT_OPTIONS, CoordinatesFormat, OPENLAYERS_PROJECTION } from '../constants'
 import { setCoordinatesFormat } from '../slice'
 

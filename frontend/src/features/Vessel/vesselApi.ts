@@ -2,6 +2,7 @@ import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -16,7 +17,9 @@ import { Vessel } from './Vessel.types'
 
 import type { Meta } from '@api/BackendApi.types'
 import type { VesselReportings } from '@features/Reporting/types'
+import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
+import type { VesselLocation } from '@features/Vessel/types/vessel'
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -42,12 +45,39 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         parseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
     }),
 
+    getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({
+      query: vesselLocation => getUrlOrPathWithQueryParams('/vessels/ais', { vesselLocation }),
+      transformResponse: (baseQueryReturnValue: AISVessel.AISVessel[]) =>
+        parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
+    }),
+
     getVessel: builder.query<Vessel.SelectedVessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: Vessel.SelectedVessel) =>
         parseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue, VesselSchema, false)
+    }),
+
+    getVesselAISPositions: builder.query<Vessel.VesselPosition[], { mmsi: number; trackRequest: TrackRequest }>({
+      query: ({ mmsi, trackRequest }) => {
+        const trackDepth = trackRequest.trackDepth ?? ''
+        const afterDateTime = trackRequest.afterDateTime?.toISOString() ?? ''
+        const beforeDateTime = trackRequest.beforeDateTime?.toISOString() ?? ''
+
+        return {
+          method: 'GET',
+          params: {
+            afterDateTime,
+            beforeDateTime,
+            mmsi,
+            trackDepth
+          },
+
+          url: `/vessels/ais/positions`
+        }
+      },
+      transformErrorResponse: response => new FrontendApiError(VESSEL_POSITIONS_ERROR_MESSAGE, response)
     }),
 
     /**
@@ -109,7 +139,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     }),
 
     /**
-     * Get vessel positions.
+     * Get vessel VMS and AIS positions.
      *
      * Transforms the response by reading the JSON body and setting
      * `isTrackDepthModified` based on the response status.
@@ -204,6 +234,7 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 export const {
   useCreateVesselContactMethodMutation,
   useGetActiveVesselsQuery,
+  useGetAISVesselsQuery,
   useGetVesselContactToUpdateQuery,
   useGetVesselQuery,
   useGetVesselReportingsByVesselIdentityQuery,

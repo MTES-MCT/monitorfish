@@ -1,25 +1,31 @@
-/* eslint-disable no-nested-ternary */
-
-import { OverlayPosition } from '@features/Map/components/Overlay/types'
+import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
+import { type OverlayCardMargins, OverlayPosition } from '@features/Map/components/Overlay/types'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { Square } from '@features/Regulation/components/ZonePreview'
-import { getOverlayMargins } from '@features/Vessel/components/VesselCardOverlay/utils'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
+import { type Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
+import { getCoordinates, Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
+import styled, { useTheme } from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { marginsWithoutAlert } from './constants'
+import { VESSEL_CARD_WIDTH } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { getCoordinates } from '../../../../coordinates'
 import { timeagoFrenchLocale } from '../../../../utils'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
 
-// @ts-ignore
+// @ts-expect-error — timeago.js ships no locale type definitions
 timeago.register('fr', timeagoFrenchLocale)
 
-export function VesselCard({ feature, overlayPosition, yOffset }) {
+type VesselCardProps = {
+  cardHeight: number
+  cardWidth: number
+  feature: Vessel.VesselLastPositionFeature
+  margins: OverlayCardMargins
+  overlayPosition: OverlayPosition
+}
+export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPosition }: VesselCardProps) {
+  const theme = useTheme()
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
 
@@ -33,134 +39,155 @@ export function VesselCard({ feature, overlayPosition, yOffset }) {
     'hasInfractionSuspicion',
     'hasCurrentTripInfractionSuspicion',
     'lastLogbookMessageDateTime',
+    'positionType',
     'segments',
     'speed',
     'vesselName',
     'groupsDisplayed',
     'numberOfGroupsHidden'
   ])
-  const featureCoordinates = feature.getGeometry().getCoordinates()
+  const featureCoordinates = feature.getGeometry()!.getCoordinates()
 
   return (
     <>
-      <VesselCardHeader>
-        {!!vesselProperties.flagState && (
-          <>
-            <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
-          </>
-        )}
-        <VesselCardTitle data-cy="vessel-card-name">
-          {vesselProperties.vesselName ? vesselProperties.vesselName : 'NOM INCONNU'}{' '}
-          {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
-        </VesselCardTitle>
-        {vesselProperties.lastLogbookMessageDateTime ? (
-          <Logbook>
-            <LogbookOK />
-            <MessageText>JPE</MessageText>
-          </Logbook>
-        ) : (
-          <Logbook>
-            <NoLogbook />
-            <MessageText>JPE</MessageText>
-          </Logbook>
-        )}
-      </VesselCardHeader>
-      {isSuperUser && !!vesselProperties.alerts?.length && (
-        <VesselCardAlert data-cy="vessel-card-alert">
-          <AlertIcon size={17} />
-          {vesselProperties.alerts?.length === 1
-            ? vesselProperties.alerts[0]
-            : `${vesselProperties.alerts?.length} alertes`}
-        </VesselCardAlert>
-      )}
-      {isSuperUser && vesselProperties.hasInfractionSuspicion && (
-        <VesselCardInfractionSuspicion>
-          <AlertIcon size={17} />
-          Suspicion d&apos;infraction {vesselProperties.hasCurrentTripInfractionSuspicion && 'en cours'}
-        </VesselCardInfractionSuspicion>
-      )}
-      {isSuperUser && !!vesselProperties.beaconMalfunctionId && (
-        <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
-          <BeaconMalfunctionIcon />
-          NON-ÉMISSION VMS
-        </VesselCardBeaconMalfunction>
-      )}
-      <ThreeColumnsBody>
-        <LatLon>
-          <FieldName>Latitude</FieldName>
-          <FieldValue data-cy="vessel-card-latitude">
-            {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}
-          </FieldValue>
-          <FieldName>Longitude</FieldName>
-          <FieldValue data-cy="vessel-card-longitude">
-            {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}
-          </FieldValue>
-        </LatLon>
-        <Course>
-          <FieldName>Route</FieldName>
-          <FieldValue>
-            {vesselProperties.course === 0 || vesselProperties.course ? (
-              <>{vesselProperties.course}°</>
-            ) : (
-              <NoValue>-</NoValue>
-            )}
-          </FieldValue>
-          <FieldName>Vitesse</FieldName>
-          <FieldValue>
-            {vesselProperties.speed === 0 || vesselProperties.speed ? (
-              <>{vesselProperties.speed} Nds</>
-            ) : (
-              <NoValue>-</NoValue>
-            )}
-          </FieldValue>
-        </Course>
-        <Position>
-          <FieldName>Dernier signal VMS</FieldName>
-          <FieldValue>
-            {vesselProperties.dateTime ? <>{timeago.format(vesselProperties.dateTime, 'fr')}</> : <NoValue>-</NoValue>}
-          </FieldValue>
-          <FieldName>Cadencement</FieldName>
-          <FieldValue>
-            {vesselProperties.emissionPeriod ? (
-              <>1 signal toutes les {vesselProperties.emissionPeriod / 60} min</>
-            ) : (
-              <NoValue>-</NoValue>
-            )}
-          </FieldValue>
-        </Position>
-      </ThreeColumnsBody>
-      <FleetSegments data-cy="vessel-card-segments">
-        <Key>{pluralize('Segment', vesselProperties.segments.length)} de flotte</Key>
-        <Value>
-          {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
-        </Value>
-      </FleetSegments>
-      {(vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
-        <VesselGroups data-cy="vessel-card-groups">
-          {vesselProperties.groupsDisplayed.map(vesselGroup => (
-            <VesselGroupRow key={vesselGroup.id}>
-              <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
-              {vesselGroup.name}
-            </VesselGroupRow>
-          ))}
-          {vesselProperties.numberOfGroupsHidden > 0 && (
-            <OtherGroupsHidden>
-              {vesselProperties.numberOfGroupsHidden} {pluralize('autre', vesselProperties.numberOfGroupsHidden)}{' '}
-              {pluralize('groupe', vesselProperties.numberOfGroupsHidden)} non{' '}
-              {pluralize('affiché', vesselProperties.numberOfGroupsHidden)} sur la carte
-            </OtherGroupsHidden>
+      <CardWrapper>
+        <VesselCardHeader>
+          {!!vesselProperties.flagState && (
+            <>
+              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
+            </>
           )}
-        </VesselGroups>
-      )}
-      <TrianglePointer>
-        {overlayPosition === OverlayPosition.BOTTOM && <BottomTriangleShadow />}
-        {overlayPosition === OverlayPosition.TOP && <TopTriangleShadow $yOffset={yOffset} />}
-        {overlayPosition === OverlayPosition.RIGHT && <RightTriangleShadow $yOffset={yOffset} />}
-        {overlayPosition === OverlayPosition.LEFT && <LeftTriangleShadow $yOffset={yOffset} />}
-      </TrianglePointer>
+          <VesselCardTitle data-cy="vessel-card-name">
+            {vesselProperties.vesselName ?? 'NOM INCONNU'}{' '}
+            {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
+          </VesselCardTitle>
+          {vesselProperties.lastLogbookMessageDateTime ? (
+            <Logbook>
+              <LogbookOK />
+              <MessageText>JPE</MessageText>
+            </Logbook>
+          ) : (
+            <Logbook>
+              <NoLogbook />
+              <MessageText>JPE</MessageText>
+            </Logbook>
+          )}
+        </VesselCardHeader>
+        {isSuperUser && !!vesselProperties.alerts?.length && (
+          <VesselCardAlert data-cy="vessel-card-alert">
+            <AlertIcon size={17} />
+            {vesselProperties.alerts?.length === 1
+              ? vesselProperties.alerts[0]
+              : `${vesselProperties.alerts?.length} alertes`}
+          </VesselCardAlert>
+        )}
+        {isSuperUser && vesselProperties.hasInfractionSuspicion && (
+          <VesselCardInfractionSuspicion>
+            <AlertIcon size={17} />
+            Suspicion d&apos;infraction {vesselProperties.hasCurrentTripInfractionSuspicion && 'en cours'}
+          </VesselCardInfractionSuspicion>
+        )}
+        {isSuperUser && !!vesselProperties.beaconMalfunctionId && (
+          <VesselCardBeaconMalfunction data-cy="vessel-card-beacon-malfunction">
+            <BeaconMalfunctionIcon />
+            NON-ÉMISSION VMS
+          </VesselCardBeaconMalfunction>
+        )}
+        <ThreeColumnsBody>
+          <LatLon>
+            <FieldName>Latitude</FieldName>
+            <FieldValue data-cy="vessel-card-latitude">
+              {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[0]}
+            </FieldValue>
+            <FieldName>Longitude</FieldName>
+            <FieldValue data-cy="vessel-card-longitude">
+              {getCoordinates(featureCoordinates, OPENLAYERS_PROJECTION, coordinatesFormat)[1]}
+            </FieldValue>
+          </LatLon>
+          <Course>
+            <FieldName>Route</FieldName>
+            <FieldValue>
+              <NumericField suffix="°" value={vesselProperties.course} />
+            </FieldValue>
+            <FieldName>Vitesse</FieldName>
+            <FieldValue>
+              <NumericField suffix=" Nds" value={vesselProperties.speed} />
+            </FieldValue>
+          </Course>
+          <Position>
+            <FieldName>Dernier signal</FieldName>
+            <FieldValue>
+              {vesselProperties.dateTime ? (
+                `${timeago.format(vesselProperties.dateTime, 'fr')} (${vesselProperties.positionType})`
+              ) : (
+                <NoValue>-</NoValue>
+              )}
+            </FieldValue>
+            <FieldName>Cadencement</FieldName>
+            <FieldValue>
+              {vesselProperties.emissionPeriod ? (
+                <>1 signal toutes les {vesselProperties.emissionPeriod / 60} min</>
+              ) : (
+                <NoValue>-</NoValue>
+              )}
+            </FieldValue>
+          </Position>
+        </ThreeColumnsBody>
+        <FleetSegments data-cy="vessel-card-segments">
+          <Key>{pluralize('Segment', vesselProperties.segments.length)} de flotte</Key>
+          <Value>
+            {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
+          </Value>
+        </FleetSegments>
+        {(vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
+          <VesselGroups data-cy="vessel-card-groups">
+            {vesselProperties.groupsDisplayed.map(vesselGroup => (
+              <VesselGroupRow key={vesselGroup.id}>
+                <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
+                {vesselGroup.name}
+              </VesselGroupRow>
+            ))}
+            {vesselProperties.numberOfGroupsHidden > 0 && (
+              <OtherGroupsHidden>
+                {vesselProperties.numberOfGroupsHidden} {pluralize('autre', vesselProperties.numberOfGroupsHidden)}{' '}
+                {pluralize('groupe', vesselProperties.numberOfGroupsHidden)} non{' '}
+                {pluralize('affiché', vesselProperties.numberOfGroupsHidden)} sur la carte
+              </OtherGroupsHidden>
+            )}
+          </VesselGroups>
+        )}
+      </CardWrapper>
+      <OverlayTrianglePointer
+        $color={theme.color.gainsboro}
+        cardHeight={cardHeight}
+        cardWidth={cardWidth}
+        margins={margins}
+        overlayPosition={overlayPosition}
+      />
     </>
   )
 }
+
+function NumericField({ suffix, value }: { suffix: string; value: null | number | undefined }) {
+  if (value === 0 || value != null) {
+    return (
+      <>
+        {value}
+        {suffix}
+      </>
+    )
+  }
+
+  return <NoValue>-</NoValue>
+}
+
+const CardWrapper = styled.div`
+  width: ${VESSEL_CARD_WIDTH}px;
+  text-align: left;
+  background-color: ${p => p.theme.color.gainsboro};
+  border-radius: 2px;
+  overflow: hidden;
+`
 
 const VesselGroupRow = styled.span``
 
@@ -300,71 +327,6 @@ const Value = styled.span`
   overflow: hidden !important;
   white-space: nowrap;
   max-width: 200px;
-`
-
-const TrianglePointer = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  height: auto;
-  width: auto;
-`
-
-const BottomTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 11px 6px 0 6px;
-  border-color: ${p => p.theme.color.gainsboro} transparent transparent transparent;
-  margin-left: ${-marginsWithoutAlert.xMiddle - 6}px;
-  margin-top: -1px;
-  clear: top;
-`
-
-const TopTriangleShadow = styled.div<{
-  $yOffset: number
-}>`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-top: transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 11px solid ${p => p.theme.color.gainsboro};
-  border-left: 6px solid transparent;
-  margin-left: ${-marginsWithoutAlert.xMiddle - 6}px;
-  margin-top: ${p => getOverlayMargins(p.$yOffset).yBottom + 12}px;
-  clear: top;
-`
-
-const RightTriangleShadow = styled.div<{
-  $yOffset: number
-}>`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-right: transparent;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 11px solid ${p => p.theme.color.gainsboro};
-  margin-left: ${-marginsWithoutAlert.xRight - 20}px;
-  margin-top: ${p => getOverlayMargins(p.$yOffset).yMiddle + 12}px;
-  clear: top;
-`
-
-const LeftTriangleShadow = styled.div<{
-  $yOffset: number
-}>`
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-top: 6px solid transparent;
-  border-right: 11px solid ${p => p.theme.color.gainsboro};
-  border-bottom: 6px solid transparent;
-  border-left: transparent;
-  margin-left: -11px;
-  margin-top: ${p => getOverlayMargins(p.$yOffset).yMiddle + 12}px;
-  clear: top;
 `
 
 const NoValue = styled.span`

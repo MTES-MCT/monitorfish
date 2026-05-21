@@ -100,6 +100,9 @@ data class LastPositionEntity(
     val alerts: List<String>? = listOf(),
     @Column(name = "beacon_malfunction_id")
     val beaconMalfunctionId: Int?,
+    @Column(name = "position_type", columnDefinition = "position_type")
+    @Enumerated(EnumType.STRING)
+    val positionType: PositionType,
 ) : Serializable {
     fun toLastPosition(mapper: ObjectMapper) =
         LastPosition(
@@ -125,7 +128,7 @@ data class LastPositionEntity(
                     }
                 } ?: CountryCode.UNDEFINED,
             tripNumber = tripNumber,
-            positionType = PositionType.VMS,
+            positionType = positionType,
             emissionPeriod = emissionPeriod,
             lastLogbookMessageDateTime = lastLogbookMessageDateTime,
             departureDateTime = departureDateTime,

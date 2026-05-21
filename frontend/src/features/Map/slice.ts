@@ -9,7 +9,6 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Coordinate } from 'ol/coordinate'
-import type { Extent } from 'ol/extent'
 
 const vesselLabelsShowedOnMapLocalStorageKey = 'vesselLabelsShowedOnMap'
 export const vesselTrackDepthLocalStorageKey = 'vesselTrackDepth'
@@ -22,8 +21,7 @@ const riskFactorLocalStorageKey = 'riskFactor'
 const coordinatesFormatLocalStorageKey = 'coordinatesFormat'
 
 export type MapState = {
-  /** End of vessels map properties */
-  animateToCoordinates: [number, number] | undefined
+  animateToCoordinates: boolean
   animateToExtent: boolean
   animateToRegulatoryLayer:
     | {
@@ -33,9 +31,7 @@ export type MapState = {
     | undefined
   coordinatesFormat: CoordinatesFormat
   defaultVesselTrackDepth: SelectableVesselTrackDepth
-  doNotAnimate: boolean
   extent: null
-  fitToExtent: Extent | undefined
   riskFactorShowedOnMap: boolean
   selectedBaseLayer: string
   showingVesselsEstimatedPositions: boolean
@@ -47,14 +43,12 @@ export type MapState = {
   }
 }
 const INITIAL_STATE: MapState = {
-  animateToCoordinates: undefined,
+  animateToCoordinates: false,
   animateToExtent: false,
   animateToRegulatoryLayer: undefined,
   coordinatesFormat: getLocalStorageState(CoordinatesFormat.DEGREES_MINUTES_SECONDS, coordinatesFormatLocalStorageKey),
   defaultVesselTrackDepth: getLocalStorageState(VesselTrackDepth.TWELVE_HOURS, vesselTrackDepthLocalStorageKey),
-  doNotAnimate: false,
   extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
-  fitToExtent: undefined,
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayer.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
@@ -74,21 +68,10 @@ const mapSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'map',
   reducers: {
-    /**
-     * Animate map to the specified OpenLayers coordinates
-     * @param {Object} state
-     * @param {{
-     *   payload: import('ol/coordinate').Coordinate
-     * }} action - The OpenLayers internal [longitude, latitude] coordinates
-     */
-    animateToCoordinates(state, action) {
-      state.animateToCoordinates = action.payload
+    animateToCoordinates(state) {
+      state.animateToCoordinates = true
     },
 
-    /**
-     * Animate map to the vessel track extent stored in the Vessel reduced
-     * @param {Object=} state
-     */
     animateToExtent(state) {
       state.animateToExtent = true
     },
@@ -103,27 +86,13 @@ const mapSlice = createSlice({
       state.animateToRegulatoryLayer = action.payload
     },
 
-    /**
-     * Show or hide the vessels current estimated positions
-     * @param {Object} state
-     * @param {{
-     * payload: boolean}} action
-     */
     displayVesselsEstimatedPositions(state, action) {
       window.localStorage.setItem(estimatedPositionsLocalStorageKey, JSON.stringify(action.payload))
       state.showingVesselsEstimatedPositions = action.payload
     },
 
-    doNotAnimate(state, action) {
-      state.doNotAnimate = action.payload
-    },
-
-    fitToExtent(state, action: PayloadAction<Extent>) {
-      state.fitToExtent = action.payload
-    },
-
     resetAnimateToCoordinates(state) {
-      state.animateToCoordinates = undefined
+      state.animateToCoordinates = false
     },
 
     resetAnimateToExtent(state) {
@@ -132,10 +101,6 @@ const mapSlice = createSlice({
 
     resetAnimateToRegulatoryLayer(state) {
       state.animateToRegulatoryLayer = undefined
-    },
-
-    resetFitToExtent(state) {
-      state.fitToExtent = undefined
     },
 
     selectBaseLayer(state, action) {
@@ -180,12 +145,9 @@ export const {
   animateToCoordinates,
   animateToExtent,
   animateToRegulatoryLayer,
-  doNotAnimate,
-  fitToExtent,
   resetAnimateToCoordinates,
   resetAnimateToExtent,
   resetAnimateToRegulatoryLayer,
-  resetFitToExtent,
   selectBaseLayer,
   setCoordinatesFormat,
   setDefaultVesselTrackDepth,

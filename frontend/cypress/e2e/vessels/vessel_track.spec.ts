@@ -2,13 +2,11 @@ import { getLocalizedDayjs } from '../utils/getLocalizedDayjs'
 import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
 context('Vessels Track', () => {
-  beforeEach(() => {
+  it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait(5000)
-  })
 
-  it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     // When
     cy.wait(400)
     cy.get('.VESSELS_POINTS').click(460, 480, { ctrlKey: true, force: true, timeout: 10000 })
@@ -45,7 +43,42 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
   })
 
+  it('AIS vessel tracks Should be shown and hidden individually When clicking on AIS vessels', () => {
+    cy.login('superuser')
+    cy.visit('/#@-1849025.62,4982527.30,8.81')
+    cy.wait(5000)
+
+    cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
+    cy.clickButton('AIS')
+    cy.wait('@aisVessels')
+    cy.wait(1000)
+
+    // Select BELLE ETOILE
+    cy.intercept('GET', '/bff/v1/vessels/ais/positions*').as('belleEtoilePositions')
+    cy.hoverOrClickVesselByName('BELLE ETOILE', 'AIS_VESSELS_POINTS', 'click')
+    cy.wait('@belleEtoilePositions')
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
+
+    // Select VIENTO DEL MAR alongside BELLE ETOILE
+    cy.intercept('GET', '/bff/v1/vessels/ais/positions*').as('vientoDelMarPositions')
+    cy.hoverOrClickVesselByName('VIENTO DEL MAR', 'AIS_VESSELS_POINTS', 'click')
+    cy.wait('@vientoDelMarPositions')
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 2)
+
+    // Deselect first track
+    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })
+    cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
+
+    // Deselect last track
+    cy.get('*[data-cy^="close-vessel-track"]').eq(0).click({ force: true })
+    cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
+  })
+
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
+    cy.login('superuser')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(5000)
+
     cy.log('Show a first vessel with a three day track depth')
     cy.wait(200)
     cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })

@@ -54,7 +54,7 @@ export function TrackTypeOverlay({ feature }: TrackTypeOverlayProps) {
     }
 
     if (
-      !feature?.getId()?.toString()?.includes(LayerProperties.VESSEL_TRACK.code) ||
+      !feature?.getId()?.toString()?.startsWith(LayerProperties.VESSEL_TRACK.code) ||
       !feature?.getId()?.toString()?.includes('line')
     ) {
       setTrackTypeToShowOnCard(null)

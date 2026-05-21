@@ -1,4 +1,4 @@
-import { fitToExtent } from '@features/Map/slice'
+import { fitMapToExtent } from '@features/Map/useCases/animateMap'
 import { flattenDepth } from 'lodash-es'
 import { boundingExtent } from 'ol/extent'
 import { GeoJSON } from 'ol/format'
@@ -9,7 +9,7 @@ import type { MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 import type { MultiPolygon } from 'ol/geom'
 
-export const fitMultiPolygonToExtent = (geometry: GeoJSONMultiPolygon | undefined) => dispatch => {
+export const fitMultiPolygonToExtent = (geometry: GeoJSONMultiPolygon | undefined) => () => {
   if (!geometry?.coordinates?.length) {
     return
   }
@@ -24,5 +24,5 @@ export const fitMultiPolygonToExtent = (geometry: GeoJSONMultiPolygon | undefine
     return
   }
 
-  dispatch(fitToExtent(extent))
+  fitMapToExtent(extent)
 }

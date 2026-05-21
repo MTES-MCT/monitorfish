@@ -265,7 +265,7 @@ const Wrapper = styled.div<{ $isEnvironmentBoxVisible: boolean }>`
   ${p => getEnvironmentBorderStyle(p.$isEnvironmentBoxVisible)}
   background: ${p => p.theme.color.white};
   display: flex;
-  height: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 10px)' : '100%')};
+  height: ${p => (p.$isEnvironmentBoxVisible ? '99%' : '100%')};
   width: ${p => (p.$isEnvironmentBoxVisible ? 'calc(100% - 8px)' : '100%')};
   min-height: 0;
   min-width: 0;

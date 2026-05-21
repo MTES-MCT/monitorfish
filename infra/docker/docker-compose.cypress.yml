@@ -111,6 +111,19 @@ services:
       - FRONTEND_POSITION_ALERT_FORM_ENABLED=true
       - FRONTEND_MATOMO_URL=
       - FRONTEND_MATOMO_ID=
+
+      # Kafka AIS
+      - MONITORFISH_KAFKA_CERTS_FOLDER=./infra/kafka/certs/monitorfish
+      - MONITORFISH_KAFKA_AIS_ENABLED=false
+      - MONITORFISH_KAFKA_AIS_PRODUCER_ENABLED=false
+      - MONITORFISH_KAFKA_AIS_SERVERS=localhost:9093
+      - MONITORFISH_KAFKA_AIS_KEYSTORE=/home/monitorfish/certs/monitorfish.p12
+      - MONITORFISH_KAFKA_AIS_TRUSTSTORE=/home/monitorfish/certs/monitorfish-truststore.p12
+      - MONITORFISH_KAFKA_AIS_KEYSTORE_PASSWORD=changeit
+      - MONITORFISH_KAFKA_AIS_KEY_PASSWORD=changeit
+      - MONITORFISH_KAFKA_AIS_TRUSTSTORE_PASSWORD=changeit
+    volumes:
+      - "${MONITORFISH_KAFKA_CERTS_FOLDER:-./infra/kafka/certs/monitorfish}:/home/monitorfish/certs"
     ports:
       - 8880:8880
       - 8000:8000

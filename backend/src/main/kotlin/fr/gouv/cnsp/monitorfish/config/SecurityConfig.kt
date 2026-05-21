@@ -61,7 +61,9 @@ class SecurityConfig(
                 } catch (e: Exception) {
                     // ProConnect returns userinfo as JWT instead of JSON
                     if (e.message?.contains("application/jwt") == true) {
-                        logger.info("UserInfo endpoint returned JWT content type, decoding JWT response...")
+                        logger.info(
+                            "UserInfo endpoint returned JWT content type, decoding JWT response...",
+                        )
 
                         try {
                             val oidcUser = loadUserFromJwtUserInfo(userRequest)
@@ -91,10 +93,7 @@ class SecurityConfig(
 
                 logger.debug("Fetching JWT userinfo from: $userInfoUri")
 
-                val headers =
-                    HttpHeaders().apply {
-                        setBearerAuth(accessToken)
-                    }
+                val headers = HttpHeaders().apply { setBearerAuth(accessToken) }
 
                 val response =
                     restTemplate.exchange(
@@ -134,7 +133,9 @@ class SecurityConfig(
 
             private fun validateAndProcessUser(oidcUser: OidcUser): OidcUser {
                 logger.debug("========== Email Domain Validation ==========")
-                logger.debug("MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=${oidcProperties.bypassEmailDomainsFilter}")
+                logger.debug(
+                    "MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=${oidcProperties.bypassEmailDomainsFilter}",
+                )
 
                 if (oidcProperties.bypassEmailDomainsFilter == "true") {
                     logger.info("✅ OIDC is bypassing email domain checks.")
@@ -152,7 +153,9 @@ class SecurityConfig(
 
                 val emailDomain = emailClaim.substringAfterLast("@")
                 logger.debug("Extracted email domain: $emailDomain")
-                logger.debug("Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}")
+                logger.debug(
+                    "Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}",
+                )
 
                 val isAuthorized =
                     oidcProperties.authorizedEmailDomains.any { domain ->
@@ -221,6 +224,7 @@ class SecurityConfig(
                             "/error",
                             "/favicon-32.ico",
                             "/favicon.ico",
+                            "/faviconBW.ico",
                             "/flags/**",
                             "/index.html",
                             "/map-icons/**",
@@ -278,8 +282,7 @@ class SecurityConfig(
             ) {
                 val errorMessage =
                     exception.message
-                        ?: exception.cause?.message
-                        ?: exception.javaClass.simpleName
+                        ?: exception.cause?.message ?: exception.javaClass.simpleName
 
                 logger.error("❌ Authentication failed: $errorMessage", exception)
 

@@ -154,11 +154,13 @@ INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES
     ('13', '<ERS>Message ERS xml</ERS>'),
     ('14', '<ERS>Message ERS xml</ERS>'),
     ('15', '<ERS>Message ERS xml</ERS>'),
+    ('15b', '<ERS>Message ERS xml</ERS>'),
     ('16', '<ERS>Message ERS xml</ERS>'),
     ('17', '<ERS>Message ERS xml</ERS>'),
     ('18', '<ERS>Message ERS xml</ERS>'),
     ('19', '<ERS>Message ERS xml</ERS>'),
     ('20', '<ERS>Message ERS xml</ERS>'),
+    ('20b', '<ERS>Message ERS xml</ERS>'),
     ('21', '<ERS>Message ERS xml</ERS>'),
     ('22', '<ERS>Message ERS xml</ERS>');
 
@@ -210,8 +212,17 @@ INSERT INTO logbook_reports (
     '15', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 32 minutes')::TIMESTAMP, 'DAT',
     '15', null, ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 34 minutes')::TIMESTAMP,
     '___TARGET___', 'TRGT', 'TARGET', 'NAVIRE CIBLE', 'FRA', null, 'PNO',
-    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": false}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP, '20510003', 'ERS',
+    true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
+),
+-- CORRECTION PNO - This will set is_correction = true
+(
+    '15b', 'OOF', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 28 minutes')::TIMESTAMP, 'COR',
+    '15b', '15', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 30 minutes')::TIMESTAMP,
+    '___TARGET___', 'TRGT', 'TARGET', 'NAVIRE CIBLE', 'FRA', null, 'PNO',
+    '{"port": "FRDPE", "purpose": "LAN", "catchOnboard": [{"nbFish": null, "faoZone": "27.8.a", "weight": 150.0, "species": "GHL"}, {"nbFish": null, "faoZone": "27.8.a", "weight": 1450.0, "species": "HKE"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 150.0, "species": "BFT"}, {"nbFish": 2, "faoZone": "27.8.a", "weight": 70.0, "species": "SWO"}, {"nbFish": 2, "faoZone": "27.8.b", "weight": 150.0, "species": "BFT"}, {"nbFish": null, "faoZone": "27.8.b", "weight": 250.0, "species": "GHL"}], "tripStartDate": "2020-05-04T19:41:03.340Z", "predictedArrivalDatetimeUtc": "2020-05-06T11:41:03.340Z", "pnoTypes": [], "isInVerificationScope": false, "isVerified": false, "isSent": false, "isBeingSent": true}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 26 minutes')::TIMESTAMP, '20510003', 'ERS',
     true, '[{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}]', '[]'
 ),
 (
@@ -252,6 +263,14 @@ INSERT INTO logbook_reports (
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     '{"returnStatus": "000"}',
     ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 27 minutes')::TIMESTAMP, NULL, 'ERS',
+    false, NULL, NULL
+),
+(
+    '20b', 'OOE', ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 28 minutes')::TIMESTAMP, 'RET',
+    NULL, '15b', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    '{"returnStatus": "000"}',
+    ((now() AT TIME ZONE 'UTC') - INTERVAL '1 month 23 minutes')::TIMESTAMP, NULL, 'ERS',
     false, NULL, NULL
 ),
 (

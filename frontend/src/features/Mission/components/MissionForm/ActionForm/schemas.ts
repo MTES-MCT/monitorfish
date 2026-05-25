@@ -121,8 +121,8 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
     licencesMatchActivity: string().required(HIDDEN_ERROR),
 
     // Espèces à bord
-    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
-    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
+    speciesWeightControlled: string().required(HIDDEN_ERROR),
+    speciesSizeControlled: string().required(HIDDEN_ERROR),
     separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
 
     // Quantités saisies
@@ -168,8 +168,8 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
     licencesMatchActivity: string().required(HIDDEN_ERROR),
 
     // Espèces à bord
-    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
-    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
+    speciesWeightControlled: string().required(HIDDEN_ERROR),
+    speciesSizeControlled: string().required(HIDDEN_ERROR),
     separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
 
     // Engins à bord

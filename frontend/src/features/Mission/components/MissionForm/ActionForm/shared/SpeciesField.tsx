@@ -1,5 +1,4 @@
 import { useGetSpeciesQuery } from '@api/specy'
-import { BOOLEAN_AS_OPTIONS } from '@constants/index'
 import { FrontendError } from '@libs/FrontendError'
 import {
   CustomSearch,
@@ -17,7 +16,7 @@ import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { CONTROL_CHECKS_AS_OPTIONS } from '../../constants'
+import { BOOLEAN_AS_CONTROL_CHECK_OPTIONS, CONTROL_CHECKS_AS_OPTIONS } from '../../constants'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -32,6 +31,9 @@ type SpeciesFieldProps = Readonly<{
 }>
 
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
+  const isSatiEnabled = import.meta.env.FRONTEND_SATI_ENABLED === 'true'
+  const speciesControlOptions = isSatiEnabled ? CONTROL_CHECKS_AS_OPTIONS : BOOLEAN_AS_CONTROL_CHECK_OPTIONS
+
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
@@ -155,14 +157,13 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
   return (
     <FieldsetGroup isLight legend="Espèces à bord">
-      {/* TODO Add a BooleanRadio field in monitor-ui. */}
       <FormikMultiRadio
         isErrorMessageHidden
         isInline
         isRequired
         label="Poids des espèces vérifiés"
         name="speciesWeightControlled"
-        options={BOOLEAN_AS_OPTIONS}
+        options={speciesControlOptions}
       />
       <FormikMultiRadio
         isErrorMessageHidden
@@ -170,7 +171,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         isRequired
         label="Taille des espèces vérifiées"
         name="speciesSizeControlled"
-        options={BOOLEAN_AS_OPTIONS}
+        options={speciesControlOptions}
       />
       <FormikMultiRadio
         isErrorMessageHidden

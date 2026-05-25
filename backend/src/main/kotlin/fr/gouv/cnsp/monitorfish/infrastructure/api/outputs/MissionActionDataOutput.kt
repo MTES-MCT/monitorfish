@@ -59,8 +59,8 @@ data class MissionActionDataOutput(
     val emitsAis: ControlCheck? = null,
     val logbookMatchesActivity: ControlCheck? = null,
     val licencesMatchActivity: ControlCheck? = null,
-    val speciesWeightControlled: Boolean? = null,
-    val speciesSizeControlled: Boolean? = null,
+    val speciesWeightControlled: ControlCheck? = null,
+    val speciesSizeControlled: ControlCheck? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val licencesAndLogbookObservations: String? = null,
     val infractions: List<MissionActionInfractionDataOutput> = listOf(),
@@ -94,6 +94,7 @@ data class MissionActionDataOutput(
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
     val isINNControl: Boolean = false,
+    val isGangwayDeployed: Boolean? = null,
     val observationsByUnit: String? = null,
 ) {
     companion object {
@@ -161,6 +162,7 @@ data class MissionActionDataOutput(
             isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = missionAction.isSeafarersControl,
             isINNControl = missionAction.isINNControl,
+            isGangwayDeployed = missionAction.isGangwayDeployed,
             observationsByUnit = missionAction.observationsByUnit,
         )
     }

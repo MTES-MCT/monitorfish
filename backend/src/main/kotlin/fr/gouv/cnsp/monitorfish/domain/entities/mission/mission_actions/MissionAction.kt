@@ -26,8 +26,8 @@ data class MissionAction(
     val flightGoals: List<FlightGoal> = listOf(),
     val logbookMatchesActivity: ControlCheck? = null,
     val licencesMatchActivity: ControlCheck? = null,
-    val speciesWeightControlled: Boolean? = null,
-    val speciesSizeControlled: Boolean? = null,
+    val speciesWeightControlled: ControlCheck? = null,
+    val speciesSizeControlled: ControlCheck? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val licencesAndLogbookObservations: String? = null,
     val infractions: List<Infraction> = listOf(),
@@ -67,6 +67,7 @@ data class MissionAction(
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
     val isINNControl: Boolean = false,
+    val isGangwayDeployed: Boolean? = null,
     @Patchable
     var observationsByUnit: String? = null,
 ) {

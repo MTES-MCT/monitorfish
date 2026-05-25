@@ -4,7 +4,8 @@ import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionF
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
-import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
+import { BOOLEAN_AS_OPTIONS } from '@constants/index'
+import { FormikCheckbox, FormikEffect, FormikMultiRadio, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash-es'
 import styled from 'styled-components'
@@ -13,6 +14,7 @@ import { SeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './sche
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
+import { FormikGangwayEffect } from './shared/FormikGangwayEffect'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheckboxes'
 import { FormikRevalidationEffect } from './shared/FormikRevalidationEffect'
@@ -34,6 +36,7 @@ type SeaControlFormProps = Readonly<{
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
+  const isSatiEnabled = import.meta.env.FRONTEND_SATI_ENABLED === 'true'
   const validationSchema = isMissionEnded ? SeaControlFormCompletionSchema : SeaControlFormLiveSchema
 
   return (
@@ -43,6 +46,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
           <FormikRevalidationEffect />
           <UpdateMissionActionCompletionEffect />
+          {isSatiEnabled && <FormikGangwayEffect />}
 
           <ActionFormHeader>
             <Icon.FleetSegment />
@@ -55,6 +59,19 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             <DatePickerField />
 
             <FormikCoordinatesPicker />
+
+            {isSatiEnabled && (
+              <FieldsetGroup isLight legend="Échelle de coupée">
+                <FormikMultiRadio
+                  isErrorMessageHidden
+                  isInline
+                  isRequired
+                  label="L'échelle a-t-elle été mise à disposition et est-elle praticable ?"
+                  name="isGangwayDeployed"
+                  options={BOOLEAN_AS_OPTIONS}
+                />
+              </FieldsetGroup>
+            )}
 
             <LicencesAndLogbookField />
 

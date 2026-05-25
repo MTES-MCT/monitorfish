@@ -29,8 +29,8 @@ object TestUtils {
         emitsVms = ControlCheck.YES,
         emitsAis = ControlCheck.NOT_APPLICABLE,
         logbookMatchesActivity = ControlCheck.NO,
-        speciesWeightControlled = true,
-        speciesSizeControlled = true,
+        speciesWeightControlled = ControlCheck.YES,
+        speciesSizeControlled = ControlCheck.YES,
         separateStowageOfPreservedSpecies = ControlCheck.YES,
         infractions =
             listOf(

@@ -63,9 +63,11 @@ class MissionActionEntity(
     @Enumerated(EnumType.STRING)
     val licencesMatchActivity: ControlCheck? = null,
     @Column(name = "species_weight_controlled")
-    val speciesWeightControlled: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    val speciesWeightControlled: ControlCheck? = null,
     @Column(name = "species_size_controlled")
-    val speciesSizeControlled: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    val speciesSizeControlled: ControlCheck? = null,
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
@@ -138,6 +140,8 @@ class MissionActionEntity(
     val isSeafarersControl: Boolean? = null,
     @Column(name = "is_inn_control")
     val isInnControl: Boolean,
+    @Column(name = "is_gangway_deployed")
+    val isGangwayDeployed: Boolean? = null,
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
 ) {
@@ -199,6 +203,7 @@ class MissionActionEntity(
                 isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
                 isSeafarersControl = missionAction.isSeafarersControl,
                 isInnControl = missionAction.isINNControl,
+                isGangwayDeployed = missionAction.isGangwayDeployed,
                 observationsByUnit = missionAction.observationsByUnit,
             )
     }
@@ -272,6 +277,7 @@ class MissionActionEntity(
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
             isINNControl = isInnControl,
+            isGangwayDeployed = isGangwayDeployed,
             observationsByUnit = observationsByUnit,
         )
 

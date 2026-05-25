@@ -48,8 +48,8 @@ data class AddMissionActionDataInput(
     var emitsAis: ControlCheck? = null,
     var logbookMatchesActivity: ControlCheck? = null,
     var licencesMatchActivity: ControlCheck? = null,
-    var speciesWeightControlled: Boolean? = null,
-    var speciesSizeControlled: Boolean? = null,
+    var speciesWeightControlled: ControlCheck? = null,
+    var speciesSizeControlled: ControlCheck? = null,
     var separateStowageOfPreservedSpecies: ControlCheck? = null,
     var licencesAndLogbookObservations: String? = null,
     var infractions: List<MissionActionInfractionDataInput> = listOf(),
@@ -81,6 +81,7 @@ data class AddMissionActionDataInput(
     var isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     var isSeafarersControl: Boolean? = null,
     var isINNControl: Boolean = false,
+    val isGangwayDeployed: Boolean? = null,
 ) {
     fun toMissionAction() =
         MissionAction(
@@ -134,5 +135,6 @@ data class AddMissionActionDataInput(
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
             isINNControl = isINNControl,
+            isGangwayDeployed = isGangwayDeployed,
         )
 }

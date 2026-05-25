@@ -56,8 +56,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.logbookMatchesActivity).isEqualTo(
             ControlCheck.NO,
         )
-        assertThat(firstControl.speciesWeightControlled).isTrue
-        assertThat(firstControl.speciesSizeControlled).isTrue
+        assertThat(firstControl.speciesWeightControlled).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.speciesSizeControlled).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(
             ControlCheck.YES,
         )

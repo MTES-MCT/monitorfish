@@ -42,13 +42,16 @@ export const updateActionGearsOnboard =
         return { ...gearByCode, declaredMesh: gear.mesh }
       })
       .map(gear => ({
+        averageWireThickness: undefined,
         comments: undefined,
         controlledMesh: undefined,
         declaredMesh: gear.declaredMesh,
         gearCode: gear.code,
+        gearMarkingIsCompliant: undefined,
         gearName: gear.name,
         gearWasControlled: undefined,
-        hasUncontrolledMesh: false
+        hasUncontrolledMesh: false,
+        wireType: undefined
       }))
 
     setFieldValue('gearOnboard', nextGears)

@@ -71,6 +71,27 @@ class MissionActionEntity(
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
+    @Column(name = "propulsion_engine_power_control")
+    @Enumerated(EnumType.STRING)
+    val propulsionEnginePowerControl: ControlCheck? = null,
+    @Column(name = "fishing_licences_match_activity")
+    @Enumerated(EnumType.STRING)
+    val fishingLicencesMatchActivity: ControlCheck? = null,
+    @Column(name = "stowage_plan_present")
+    @Enumerated(EnumType.STRING)
+    val stowagePlanPresent: ControlCheck? = null,
+    @Column(name = "onboard_weighing_permit")
+    @Enumerated(EnumType.STRING)
+    val onboardWeighingPermit: ControlCheck? = null,
+    @Column(name = "weighing_certificate_and_systems_valid")
+    @Enumerated(EnumType.STRING)
+    val weighingCertificateAndSystemsValid: ControlCheck? = null,
+    @Column(name = "under_sized_separate_stowage")
+    @Enumerated(EnumType.STRING)
+    val underSizedSeparateStowage: ControlCheck? = null,
+    @Column(name = "under_sized_separate_recording")
+    @Enumerated(EnumType.STRING)
+    val underSizedSeparateRecording: ControlCheck? = null,
     @Column(name = "licences_and_logbook_observations")
     val licencesAndLogbookObservations: String? = null,
     @Type(JsonBinaryType::class)
@@ -172,6 +193,13 @@ class MissionActionEntity(
                 speciesWeightControlled = missionAction.speciesWeightControlled,
                 speciesSizeControlled = missionAction.speciesSizeControlled,
                 separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
+                propulsionEnginePowerControl = missionAction.propulsionEnginePowerControl,
+                fishingLicencesMatchActivity = missionAction.fishingLicencesMatchActivity,
+                stowagePlanPresent = missionAction.stowagePlanPresent,
+                onboardWeighingPermit = missionAction.onboardWeighingPermit,
+                weighingCertificateAndSystemsValid = missionAction.weighingCertificateAndSystemsValid,
+                underSizedSeparateStowage = missionAction.underSizedSeparateStowage,
+                underSizedSeparateRecording = missionAction.underSizedSeparateRecording,
                 infractions = mapper.writeValueAsString(missionAction.infractions),
                 licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
                 speciesObservations = missionAction.speciesObservations,
@@ -236,6 +264,13 @@ class MissionActionEntity(
             speciesWeightControlled = speciesWeightControlled,
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
+            propulsionEnginePowerControl = propulsionEnginePowerControl,
+            fishingLicencesMatchActivity = fishingLicencesMatchActivity,
+            stowagePlanPresent = stowagePlanPresent,
+            onboardWeighingPermit = onboardWeighingPermit,
+            weighingCertificateAndSystemsValid = weighingCertificateAndSystemsValid,
+            underSizedSeparateStowage = underSizedSeparateStowage,
+            underSizedSeparateRecording = underSizedSeparateRecording,
             licencesAndLogbookObservations = licencesAndLogbookObservations,
             infractions = deserializeJSONList(mapper, infractions, Infraction::class.java),
             speciesObservations = speciesObservations,

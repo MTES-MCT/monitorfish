@@ -1,10 +1,31 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { HIDDEN_ERROR, E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
 import { array, boolean, number, object, string } from 'yup'
+
+const eIsrDeclarativeObligationsSchema = E_ISR_ENABLED
+  ? object({
+      propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
+      fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
+      stowagePlanPresent: string().required(HIDDEN_ERROR),
+      onboardWeighingPermit: string().required(HIDDEN_ERROR),
+      weighingCertificateAndSystemsValid: string().when('onboardWeighingPermit', {
+        is: (val?: string) => val === MissionAction.ControlCheck.YES,
+        then: schema => schema.required(HIDDEN_ERROR),
+        otherwise: schema => schema.notRequired()
+      })
+    })
+  : object({})
+
+const eIsrSpeciesSchema = E_ISR_ENABLED
+  ? object({
+      underSizedSeparateStowage: string().required(HIDDEN_ERROR),
+      underSizedSeparateRecording: string().required(HIDDEN_ERROR)
+    })
+  : object({})
 
 // -----------------------------------------------------------------------------
 // Form Schema Validators
@@ -114,7 +135,7 @@ export const LandControlFormLiveSchema = object({
 
 export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
   object({
-    // Obligations déclaratives et autorisations de pêche
+    // Obligations déclaratives et autorisations
     emitsVms: string().required(HIDDEN_ERROR),
     emitsAis: string().required(HIDDEN_ERROR),
     logbookMatchesActivity: string().required(HIDDEN_ERROR),
@@ -147,6 +168,8 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
     completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
+  .concat(eIsrDeclarativeObligationsSchema)
+  .concat(eIsrSpeciesSchema)
 
 // -----------------------------------------------------------------------------
 // Sea Control Action Form
@@ -161,7 +184,7 @@ export const SeaControlFormLiveSchema = object({
 
 export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
   object({
-    // Obligations déclaratives et autorisations de pêche
+    // Obligations déclaratives et autorisations
     emitsVms: string().required(HIDDEN_ERROR),
     emitsAis: string().required(HIDDEN_ERROR),
     logbookMatchesActivity: string().required(HIDDEN_ERROR),
@@ -197,6 +220,8 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
     completedBy: string().trim().required(HIDDEN_ERROR)
   })
 )
+  .concat(eIsrDeclarativeObligationsSchema)
+  .concat(eIsrSpeciesSchema)
 
 // -----------------------------------------------------------------------------
 // Infraction SubForm

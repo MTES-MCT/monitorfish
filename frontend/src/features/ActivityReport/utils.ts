@@ -171,8 +171,10 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
     controlledWeight: undefined,
     declaredWeight: otherSpeciesSummedWeight,
     nbFish: undefined,
+    rejectedWeight: undefined,
     speciesCode: UNTARGETED_SPECIES_CODE,
-    underSized: undefined
+    underSized: undefined,
+    underSizedWeight: undefined
   }
 
   const speciesOnboardWithoutOtherSpecies = speciesOnboard.filter(species => jdpSpecies.includes(species.speciesCode))

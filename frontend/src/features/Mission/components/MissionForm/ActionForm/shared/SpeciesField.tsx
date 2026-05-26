@@ -1,24 +1,32 @@
+import { useGetFaoAreasQuery } from '@api/faoAreas'
 import { useGetSpeciesQuery } from '@api/specy'
+import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
+import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { FrontendError } from '@libs/FrontendError'
 import {
+  Accent,
+  Button,
   CustomSearch,
   FormikCheckbox,
-  FormikMultiRadio,
+  FormikMultiSelect,
   FormikNumberInput,
+  FormikSelect,
   FormikTextarea,
+  Icon,
   Select,
   SingleTag,
+  Size,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
 import { append, remove as ramdaRemove } from 'ramda'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { BOOLEAN_AS_CONTROL_CHECK_OPTIONS, CONTROL_CHECKS_AS_OPTIONS } from '../../constants'
+import { ControlCheckTable } from './ControlCheckTable'
+import { E_ISR_ENABLED } from '../../constants'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
-import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
@@ -30,16 +38,33 @@ type SpeciesFieldProps = Readonly<{
   controlledWeightLabel: string
 }>
 
-export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
-  const isSatiEnabled = import.meta.env.FRONTEND_SATI_ENABLED === 'true'
-  const speciesControlOptions = isSatiEnabled ? CONTROL_CHECKS_AS_OPTIONS : BOOLEAN_AS_CONTROL_CHECK_OPTIONS
+const DISCARD_REASON_OPTIONS: Array<Option<string>> = Object.entries(DISCARD_REASON_LABEL).map(([code, label]) => ({
+  label: `${code} - ${label}`,
+  value: code
+}))
 
+const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpeciesPresentation).map(([code, label]) => ({
+  label: `${code} - ${label}`,
+  value: code
+}))
+
+type VisibilityState = { rejected: boolean; underSized: boolean }
+
+export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
+  const getFaoAreasQuery = useGetFaoAreasQuery()
+
+  const [visibilityByIndex, setVisibilityByIndex] = useState<VisibilityState[]>(() =>
+    (input.value ?? []).map(s => ({
+      rejected: s.rejectedWeight !== undefined && s.rejectedWeight !== null,
+      underSized: s.underSizedWeight !== undefined && s.underSizedWeight !== null
+    }))
+  )
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -75,6 +100,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     [getSpeciesApiQuery.data]
   )
 
+  const faoAreasAsOptions: Array<Option<string>> = useMemo(
+    () => (getFaoAreasQuery.data ? getFaoAreasQuery.data.map(zone => ({ label: zone, value: zone })) : []),
+    [getFaoAreasQuery.data]
+  )
+
   const customSearch = useMemo(
     () =>
       getSpeciesApiQuery.data
@@ -107,13 +137,19 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       {
         controlledWeight: undefined,
         declaredWeight: undefined,
+        discardReason: undefined,
+        faoZones: undefined,
         nbFish: undefined,
+        presentationCode: undefined,
+        rejectedWeight: undefined,
         speciesCode: newSpecy.code,
-        underSized: false
+        underSized: false,
+        underSizedWeight: undefined
       },
       input.value ?? []
     )
 
+    setVisibilityByIndex(prev => [...prev, { rejected: false, underSized: false }])
     updateSegments({
       ...values,
       speciesOnboard: nextSpeciesOnboard
@@ -144,6 +180,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
     const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
 
+    setVisibilityByIndex(prev => {
+      const next = [...prev]
+      next.splice(index, 1)
+
+      return next
+    })
     updateSegments({
       ...values,
       speciesOnboard: nextSpeciesOnboard
@@ -151,36 +193,73 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     helper.setValue(nextSpeciesOnboard)
   }
 
+  const openUnderSized = (index: number) => {
+    setVisibilityByIndex(prev => {
+      const next = [...prev]
+      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), underSized: true }
+
+      return next
+    })
+  }
+
+  const openRejected = (index: number) => {
+    setVisibilityByIndex(prev => {
+      const next = [...prev]
+      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), rejected: true }
+
+      return next
+    })
+  }
+
+  const isUnderSizedShown = (index: number): boolean => {
+    const species = input.value?.[index]
+    if (species?.underSizedWeight !== undefined && species?.underSizedWeight !== null) {
+      return true
+    }
+
+    return visibilityByIndex[index]?.underSized ?? false
+  }
+
+  const isRejectedShown = (index: number): boolean => {
+    const species = input.value?.[index]
+    if (species?.rejectedWeight !== undefined && species?.rejectedWeight !== null) {
+      return true
+    }
+
+    return visibilityByIndex[index]?.rejected ?? false
+  }
+
   if (!speciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
   }
 
+  const controlCheckRows = [
+    { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
+    { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
+    {
+      isRequired: true,
+      label: 'Arrimage séparé des espèces soumises à plan',
+      name: 'separateStowageOfPreservedSpecies'
+    },
+    ...(E_ISR_ENABLED
+      ? [
+          {
+            isRequired: true,
+            label: "Arrimage séparé des poissons n'ayant pas la taille requise",
+            name: 'underSizedSeparateStowage'
+          },
+          {
+            isRequired: true,
+            label: "Enregistrement séparé des poissons n'ayant pas la taille requise",
+            name: 'underSizedSeparateRecording'
+          }
+        ]
+      : [])
+  ]
+
   return (
     <FieldsetGroup isLight legend="Espèces à bord">
-      <FormikMultiRadio
-        isErrorMessageHidden
-        isInline
-        isRequired
-        label="Poids des espèces vérifiés"
-        name="speciesWeightControlled"
-        options={speciesControlOptions}
-      />
-      <FormikMultiRadio
-        isErrorMessageHidden
-        isInline
-        isRequired
-        label="Taille des espèces vérifiées"
-        name="speciesSizeControlled"
-        options={speciesControlOptions}
-      />
-      <FormikMultiRadio
-        isErrorMessageHidden
-        isInline
-        isRequired
-        label="Arrimage séparé des espèces soumises à plan"
-        name="separateStowageOfPreservedSpecies"
-        options={CONTROL_CHECKS_AS_OPTIONS}
-      />
+      <ControlCheckTable rows={controlCheckRows} />
 
       {input.value && input.value.length > 0 && (
         <>
@@ -190,17 +269,70 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
               style={{ marginTop: index === 0 ? '16px' : 0 }}
             >
-              <RowInnerWrapper>
-                <StyledSingleTag onDelete={() => remove(index)}>{`${
-                  specyOnboard.speciesCode
-                } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
+              <StyledSingleTag onDelete={() => remove(index)}>{`${
+                specyOnboard.speciesCode
+              } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
 
-                <StyledFieldGroup isInline>
-                  <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                  <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
+              <WeightsRow>
+                <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
+                <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
+                {E_ISR_ENABLED ? (
+                  <>
+                    {isUnderSizedShown(index) ? (
+                      <FormikNumberInput label="Qté sous-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
+                    ) : (
+                      <AddButton
+                        accent={Accent.SECONDARY}
+                        Icon={Icon.Plus}
+                        onClick={() => openUnderSized(index)}
+                        size={Size.SMALL}
+                      >
+                        Ajouter sous-taille
+                      </AddButton>
+                    )}
+                    {isRejectedShown(index) ? (
+                      <>
+                        <FormikNumberInput label="Qté rejetée" name={`speciesOnboard[${index}].rejectedWeight`} />
+                        <FormikSelect
+                          isLight
+                          label="Nature du rejet"
+                          name={`speciesOnboard[${index}].discardReason`}
+                          options={DISCARD_REASON_OPTIONS}
+                        />
+                      </>
+                    ) : (
+                      <AddButton
+                        accent={Accent.SECONDARY}
+                        Icon={Icon.Plus}
+                        onClick={() => openRejected(index)}
+                        size={Size.SMALL}
+                      >
+                        Ajouter rejet
+                      </AddButton>
+                    )}
+                  </>
+                ) : (
                   <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
-                </StyledFieldGroup>
-              </RowInnerWrapper>
+                )}
+              </WeightsRow>
+
+              {E_ISR_ENABLED && (
+                <PresentationFaoRow>
+                  <FormikSelect
+                    isLight
+                    label="Présentation du poisson"
+                    name={`speciesOnboard[${index}].presentationCode`}
+                    options={PRESENTATION_OPTIONS}
+                    searchable
+                  />
+                  <FormikMultiSelect
+                    isLight
+                    label="Zone de pêche"
+                    name={`speciesOnboard[${index}].faoZones`}
+                    options={faoAreasAsOptions}
+                  />
+                </PresentationFaoRow>
+              )}
             </Row>
           ))}
         </>
@@ -245,24 +377,28 @@ const Row = styled.div`
   }
 `
 
-const RowInnerWrapper = styled.div`
+const WeightsRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
   margin-top: 8px;
-`
-
-const StyledFieldGroup = styled(FieldGroup)`
-  margin-left: 16px;
 
   > .Field-NumberInput {
-    margin-top: -16px !important;
-    margin-right: 16px;
-
     input {
       height: 30px;
     }
   }
+`
 
-  > .Field-Checkbox {
-    margin-bottom: 8px !important;
-  }
+const PresentationFaoRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+`
+
+const AddButton = styled(Button)`
+  align-self: flex-end;
+  margin-bottom: 4px;
 `

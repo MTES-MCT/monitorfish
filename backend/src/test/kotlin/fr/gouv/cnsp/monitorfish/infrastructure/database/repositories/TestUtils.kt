@@ -32,6 +32,13 @@ object TestUtils {
         speciesWeightControlled = ControlCheck.YES,
         speciesSizeControlled = ControlCheck.YES,
         separateStowageOfPreservedSpecies = ControlCheck.YES,
+        propulsionEnginePowerControl = ControlCheck.YES,
+        fishingLicencesMatchActivity = ControlCheck.NO,
+        stowagePlanPresent = ControlCheck.YES,
+        onboardWeighingPermit = ControlCheck.YES,
+        weighingCertificateAndSystemsValid = ControlCheck.NOT_APPLICABLE,
+        underSizedSeparateStowage = ControlCheck.YES,
+        underSizedSeparateRecording = ControlCheck.NO,
         infractions =
             listOf(
                 Infraction(

@@ -42,5 +42,10 @@ export namespace MissionAction {
     COMPLETED = 'COMPLETED',
     TO_COMPLETE = 'TO_COMPLETE'
   }
+
+  export enum WireType {
+    SINGLE = 'SINGLE',
+    THICK = 'THICK'
+  }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */

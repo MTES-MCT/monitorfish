@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly FRONTEND_AIS_VESSELS_ENABLED: string
+  readonly FRONTEND_E_ISR_ENABLED: string
   readonly FRONTEND_GEOSERVER_LOCAL_URL: string
   readonly FRONTEND_GEOSERVER_REMOTE_URL: string
   readonly FRONTEND_KEPLER_ACTIVITY_VISUALIZATION_ENABLED: string
@@ -16,7 +17,6 @@ interface ImportMetaEnv {
   readonly FRONTEND_OIDC_LOGIN_BUTTON_PROVIDER: 'proconnect' | 'cerbere'
   readonly FRONTEND_POSITION_ALERT_FORM_ENABLED: string
   readonly FRONTEND_PRIOR_NOTIFICATION_LIST_ENABLED: string
-  readonly FRONTEND_SATI_ENABLED: string
   readonly FRONTEND_SENTRY_DSN?: string
   readonly FRONTEND_SENTRY_ENV?: string
   readonly FRONTEND_SENTRY_TRACING_ORIGINS?: string

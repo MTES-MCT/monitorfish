@@ -7,4 +7,9 @@ class SpeciesControl {
     var declaredWeight: Double? = null
     var controlledWeight: Double? = null
     var underSized: Boolean? = null
+    var underSizedWeight: Double? = null
+    var rejectedWeight: Double? = null
+    var discardReason: DiscardReason? = null
+    var presentationCode: String? = null
+    var faoZones: List<String>? = null
 }

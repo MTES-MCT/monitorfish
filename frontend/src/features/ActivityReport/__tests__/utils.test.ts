@@ -36,11 +36,51 @@ describe('utils', () => {
   it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should return untargeted species grouped as OTH', async () => {
     // Given
     const speciesOnboard = [
-      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
-      { controlledWeight: undefined, declaredWeight: 13.46, nbFish: undefined, speciesCode: 'BLI', underSized: false },
-      { controlledWeight: 123.6, declaredWeight: undefined, nbFish: undefined, speciesCode: 'COD', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 45.5, nbFish: undefined, speciesCode: 'FMI', underSized: false }
+      {
+        controlledWeight: 500,
+        declaredWeight: 471.2,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'HKE',
+        underSized: true,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 13.46,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'BLI',
+        underSized: false,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: 123.6,
+        declaredWeight: undefined,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'COD',
+        underSized: false,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 12.6,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'ANZ',
+        underSized: false,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 45.5,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'FMI',
+        underSized: false,
+        underSizedWeight: undefined
+      }
     ]
 
     // When
@@ -59,9 +99,33 @@ describe('utils', () => {
   it('getSpeciesOnboardWithUntargetedSpeciesGrouped Should not return untargeted species grouped as OTH When the weight is 0', async () => {
     // Given
     const speciesOnboard = [
-      { controlledWeight: 500, declaredWeight: 471.2, nbFish: undefined, speciesCode: 'HKE', underSized: true },
-      { controlledWeight: undefined, declaredWeight: 0, nbFish: undefined, speciesCode: 'BLI', underSized: false },
-      { controlledWeight: undefined, declaredWeight: 12.6, nbFish: undefined, speciesCode: 'ANZ', underSized: false }
+      {
+        controlledWeight: 500,
+        declaredWeight: 471.2,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'HKE',
+        underSized: true,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 0,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'BLI',
+        underSized: false,
+        underSizedWeight: undefined
+      },
+      {
+        controlledWeight: undefined,
+        declaredWeight: 12.6,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: 'ANZ',
+        underSized: false,
+        underSizedWeight: undefined
+      }
     ]
 
     // When

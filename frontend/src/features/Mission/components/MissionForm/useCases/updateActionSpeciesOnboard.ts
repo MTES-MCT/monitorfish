@@ -32,8 +32,10 @@ export const updateActionSpeciesOnboard =
         controlledWeight: undefined,
         declaredWeight: specy.weight,
         nbFish: undefined,
+        rejectedWeight: undefined,
         speciesCode: specy.species,
-        underSized: false
+        underSized: false,
+        underSizedWeight: undefined
       }))
 
     setFieldValue('speciesOnboard', nextSpeciesOnboard)

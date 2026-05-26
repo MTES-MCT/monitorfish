@@ -111,7 +111,9 @@ USER monitorfish
 
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
-CMD exec java -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
+CMD exec java -Dlogging.level.org.apache.kafka=DEBUG  -Dlogging.level.org.apache.kafka.clients.NetworkClient=DEBUG \
+              -Dlogging.level.org.apache.kafka.clients.Metadata=DEBUG -Dlogging.level.org.apache.kafka.clients.consumer=Debug \
+              -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttps.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttps.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
               -Dhttp.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} -Dhttps.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} \
               -jar "monitorfish-${VERSION}.jar"

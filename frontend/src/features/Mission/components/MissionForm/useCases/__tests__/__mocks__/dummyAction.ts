@@ -17,17 +17,21 @@ export const dummyAction = {
   externalReferenceNumber: 'DONTSINK',
   facade: 'NAMO',
   faoAreas: ['27.8.b', '27.8.c'],
+  fishingLicencesMatchActivity: undefined,
   flagState: 'FR',
   flightGoals: [],
   gearOnboard: [
     {
+      averageWireThickness: undefined,
       comments: undefined,
       controlledMesh: undefined,
       declaredMesh: 70.0,
       gearCode: 'OTB',
+      gearMarkingIsCompliant: undefined,
       gearName: 'Chaluts de fond à panneaux',
       gearWasControlled: undefined,
-      hasUncontrolledMesh: false
+      hasUncontrolledMesh: false,
+      wireType: undefined
     }
   ],
   hasSomeGearsSeized: false,
@@ -53,9 +57,11 @@ export const dummyAction = {
   missionId: 123,
   numberOfVesselsFlownOver: undefined,
   observationsByUnit: undefined,
+  onboardWeighingPermit: undefined,
   otherComments: undefined,
   portLocode: undefined,
   portName: undefined,
+  propulsionEnginePowerControl: undefined,
   segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
   seizureAndDiversion: false,
   seizureAndDiversionComments: undefined,
@@ -66,23 +72,31 @@ export const dummyAction = {
       controlledWeight: undefined,
       declaredWeight: 471.2,
       nbFish: undefined,
+      rejectedWeight: undefined,
       speciesCode: 'HKE',
-      underSized: false
+      underSized: false,
+      underSizedWeight: undefined
     },
     {
       controlledWeight: undefined,
       declaredWeight: 13.46,
       nbFish: undefined,
+      rejectedWeight: undefined,
       speciesCode: 'BLI',
-      underSized: false
+      underSized: false,
+      underSizedWeight: undefined
     }
   ],
   speciesQuantitySeized: undefined,
   speciesSizeControlled: undefined,
   speciesWeightControlled: undefined,
+  stowagePlanPresent: undefined,
+  underSizedSeparateRecording: undefined,
+  underSizedSeparateStowage: undefined,
   unitWithoutOmegaGauge: false,
   userTrigram: 'LT',
   vesselId: 1,
   vesselName: 'PHENOMENE',
-  vesselTargeted: undefined
+  vesselTargeted: undefined,
+  weighingCertificateAndSystemsValid: undefined
 }

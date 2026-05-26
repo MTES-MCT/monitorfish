@@ -82,7 +82,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('13 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -106,23 +106,29 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
-    // Obligations déclaratives et autorisations de pêche
+    // Obligations déclaratives et autorisations
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
-    cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
+    cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
+    cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
+    cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
+    cy.fill("Plan d’arrimage présent et valide", "Non concerné")
+    cy.fill("Autorisation pour la pesée à bord", "Non concerné")
     cy.fill(
-      'Observations (hors infractions) sur les obligations déclaratives / autorisations',
-      'Une observation hors infraction sur les obligations déclaaratives.'
+      "Observations (hors infractions) sur les obligations déclaratives / autorisations",
+      "Une observation hors infraction sur les obligations déclaaratives."
     )
 
     // Engins à bord
     // OTB
     cy.fill('Engin contrôlé', 'Non')
+    cy.fill("Marquage de l'engin conforme", 'Non')
     cy.fill('Maillage déclaré', 50)
 
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui', { index: 1 })
+    cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
     cy.fill('Maillage déclaré', 10, { index: 1 })
     cy.fill('Maillage mesuré', 20, { index: 1 })
     // This will modify the "Maillage mesuré" input as `undefined`
@@ -133,10 +139,18 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
+    cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
+    cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Qté déclarée', 10, { index: 2 })
     cy.fill('Qté estimée', 20, { index: 2 })
-    cy.fill('Sous-taille', true, { index: 2 })
+    cy.clickButton('Ajouter sous-taille', { index: 2 })
+    cy.fill('Qté sous-taille', 5)
+    cy.clickButton('Ajouter rejet', { index: 2 })
+    cy.fill('Qté rejetée', 2)
+    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    cy.fill('Présentation du poisson', 'FIL - En filets', { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
@@ -212,6 +226,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               // controlledMesh: undefined,
               declaredMesh: 10,
               gearCode: 'MIS',
+              gearMarkingIsCompliant: 'YES',
               gearName: 'Engin divers',
               gearWasControlled: true,
               hasUncontrolledMesh: true
@@ -221,6 +236,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               controlledMesh: null,
               declaredMesh: 50,
               gearCode: 'OTB',
+              gearMarkingIsCompliant: 'NO',
               gearName: 'Chaluts de fond à panneaux',
               gearWasControlled: false,
               hasUncontrolledMesh: false
@@ -263,15 +279,22 @@ context('Side Window > Mission Form > Sea Control', () => {
           seizureAndDiversion: true,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'YES',
+          propulsionEnginePowerControl: 'YES',
+          fishingLicencesMatchActivity: 'NO',
+          stowagePlanPresent: 'NOT_APPLICABLE',
+          onboardWeighingPermit: 'NOT_APPLICABLE',
+          weighingCertificateAndSystemsValid: null,
+          underSizedSeparateStowage: 'YES',
+          underSizedSeparateRecording: 'NO',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
-            { controlledWeight: 20, declaredWeight: 10, nbFish: null, speciesCode: 'COD', underSized: true }
+            { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'FIL', rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
           ],
           speciesQuantitySeized: 6289.5,
-          speciesSizeControlled: false,
-          speciesWeightControlled: true,
+          speciesSizeControlled: 'NO',
+          speciesWeightControlled: 'YES',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 2,
@@ -375,6 +398,13 @@ context('Side Window > Mission Form > Sea Control', () => {
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,
+          propulsionEnginePowerControl: null,
+          fishingLicencesMatchActivity: null,
+          stowagePlanPresent: null,
+          onboardWeighingPermit: null,
+          weighingCertificateAndSystemsValid: null,
+          underSizedSeparateStowage: null,
+          underSizedSeparateRecording: null,
           infractions: [],
           speciesObservations: null,
           speciesOnboard: [
@@ -826,6 +856,32 @@ context('Side Window > Mission Form > Sea Control', () => {
     })
   })
 
+  it('Should show weighing certificate field only when onboard weighing permit is Yes', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    // The weighing certificate field should not be visible initially
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Non should NOT show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'Non')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Non concerné should NOT show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'Non concerné')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Oui SHOULD show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'Oui')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('exist')
+
+    // Changing back to Non should hide the cert field again
+    cy.fill('Autorisation pour la pesée à bord', 'Non')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+  })
+
   it('Should display the expected vessel details', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
@@ -848,4 +904,91 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.contains('12.89m (Taille)').should('exist')
     })
   })
+
+  it('Should show wire fields only for Lignes et hameçons gears and send the expected data to the API', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: { id: 2 },
+      statusCode: 201
+    })
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
+      body: { id: 2 },
+      statusCode: 201
+    }).as('updateMissionAction')
+
+    // Add an LLS gear (Lignes et hameçons category) — wire fields should appear
+    cy.fill('Ajouter un engin', 'LLS')
+    cy.get('[name="gearOnboard[0].averageWireThickness"]').should('exist')
+    cy.get('[name="gearOnboard[0].wireType"]').should('exist')
+
+    cy.fill('Engin contrôlé', 'Oui')
+    cy.fill("Marquage de l'engin conforme", 'Oui')
+    cy.fill('Epaisseur moyenne de fil', 1.5)
+    cy.fill('Type de fil', 'Simple')
+
+    // Add a non-line gear (OTB) — wire fields should NOT appear
+    cy.fill('Ajouter un engin', 'OTB')
+    cy.get('[name="gearOnboard[1].averageWireThickness"]').should('not.exist')
+    cy.get('[name="gearOnboard[1].wireType"]').should('not.exist')
+
+    cy.fill('Engin contrôlé', 'Non', { index: 1 })
+    cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
+    cy.fill('Maillage déclaré', 60, { index: 1 })
+
+    cy.fill('Saisi par', 'Marlin')
+
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          gearOnboard: [
+            {
+              averageWireThickness: 1.5,
+              gearCode: 'LLS',
+              gearMarkingIsCompliant: 'YES',
+              gearWasControlled: true,
+              wireType: 'SINGLE'
+            },
+            {
+              averageWireThickness: null,
+              gearCode: 'OTB',
+              gearMarkingIsCompliant: 'NO',
+              gearWasControlled: false,
+              wireType: null
+            }
+          ]
+        }
+      },
+      5
+    )
+  })
+
+  it(
+    'Should not display e-ISR-specific fields when e-ISR feature flag is disabled',
+    { env: { FRONTEND_E_ISR_ENABLED: false } },
+    () => {
+      fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+      cy.clickButton('Ajouter')
+      cy.clickButton('Ajouter un contrôle en mer')
+
+      // Gangway field
+      cy.contains('Echelle de coupée').should('not.exist')
+
+      // "Obligations déclaratives et autorisations de pêche" e-ISR fields
+      cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
+      cy.contains("Licence de pêche conformes à l'activité du navire").should('not.exist')
+      cy.contains("Plan d'arrimage présent et valide").should('not.exist')
+      cy.contains('Autorisation pour la pesée à bord').should('not.exist')
+      cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+      // "Espèces à bord" e-ISR fields
+      cy.contains("Arrimage séparé des poissons n'ayant pas la taille requise").should('not.exist')
+      cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
+    }
+  )
 })

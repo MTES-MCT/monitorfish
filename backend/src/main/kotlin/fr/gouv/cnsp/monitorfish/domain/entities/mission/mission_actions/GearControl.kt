@@ -7,5 +7,8 @@ class GearControl {
     var controlledMesh: Double? = null
     var hasUncontrolledMesh: Boolean = false
     var gearWasControlled: Boolean? = null
+    var gearMarkingIsCompliant: ControlCheck? = null
+    var averageWireThickness: Double? = null
+    var wireType: WireType? = null
     var comments: String? = null
 }

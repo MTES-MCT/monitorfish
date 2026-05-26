@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
 
 data class SpeciesControlDataInput(
@@ -8,6 +9,11 @@ data class SpeciesControlDataInput(
     val declaredWeight: Double?,
     val controlledWeight: Double?,
     val underSized: Boolean?,
+    val underSizedWeight: Double?,
+    val rejectedWeight: Double?,
+    val discardReason: DiscardReason?,
+    val presentationCode: String?,
+    val faoZones: List<String>?,
 ) {
     fun toSpeciesControl() =
         SpeciesControl().also { speciesControl ->
@@ -16,5 +22,10 @@ data class SpeciesControlDataInput(
             speciesControl.declaredWeight = declaredWeight
             speciesControl.controlledWeight = controlledWeight
             speciesControl.underSized = underSized
+            speciesControl.underSizedWeight = underSizedWeight
+            speciesControl.rejectedWeight = rejectedWeight
+            speciesControl.discardReason = discardReason
+            speciesControl.presentationCode = presentationCode
+            speciesControl.faoZones = faoZones
         }
 }

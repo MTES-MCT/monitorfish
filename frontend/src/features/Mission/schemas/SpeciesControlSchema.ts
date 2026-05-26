@@ -5,7 +5,12 @@ import { booleanOrUndefined, numberOrUndefined } from '../../../types'
 export const SpeciesControlSchema = z.strictObject({
   controlledWeight: numberOrUndefined,
   declaredWeight: numberOrUndefined,
+  discardReason: z.enum(['DIM', 'RET', 'DIS']).nullable().optional(),
+  faoZones: z.array(z.string()).optional(),
   nbFish: numberOrUndefined,
+  presentationCode: z.string().nullable().optional(),
+  rejectedWeight: numberOrUndefined,
   speciesCode: z.string(),
-  underSized: booleanOrUndefined
+  underSized: booleanOrUndefined,
+  underSizedWeight: numberOrUndefined
 })

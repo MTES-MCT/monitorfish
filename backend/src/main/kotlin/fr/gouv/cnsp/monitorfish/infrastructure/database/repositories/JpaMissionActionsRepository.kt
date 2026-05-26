@@ -19,7 +19,7 @@ class JpaMissionActionsRepository(
         afterDateTime: ZonedDateTime,
     ): List<MissionAction> =
         dbMissionActionsRepository
-            .findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
+            .findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalseOrderByActionDatetimeUtcDesc(
                 vesselId,
                 afterDateTime.toInstant(),
             ).map { control -> control.toMissionAction(mapper) }

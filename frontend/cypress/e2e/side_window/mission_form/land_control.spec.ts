@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('14 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -53,28 +53,42 @@ context('Side Window > Mission Form > Land Control', () => {
     // Get the actual port for this test case
     cy.fill('Port de contrôle', 'Auray')
 
-    // Obligations déclaratives et autorisations de pêche
+    // Obligations déclaratives et autorisations
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
-    cy.fill('Autorisations de pêche conformes à l’activité du navire (zone, engins, espèces)', 'Non')
+    cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
+    cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
+    cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
+    cy.fill("Plan d’arrimage présent et valide", "Non concerné")
+    cy.fill("Autorisation pour la pesée à bord", "Non concerné")
     cy.fill(
-      'Observations (hors infractions) sur les obligations déclaratives / autorisations',
-      'Une observation hors infraction sur les obligations déclaaratives.'
+      "Observations (hors infractions) sur les obligations déclaratives / autorisations",
+      "Une observation hors infraction sur les obligations déclaaratives."
     )
 
     // Engins à bord
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Engin contrôlé', 'Oui')
+    cy.fill("Marquage de l'engin conforme", 'Oui')
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
+    cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
     // Espèces à bord
     cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
+    cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
+    cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     cy.fill('Qté pesée', 500)
-    cy.fill('Sous-taille', true)
+    cy.clickButton('Ajouter sous-taille')
+    cy.fill('Qté sous-taille', 10)
+    cy.clickButton('Ajouter rejet')
+    cy.fill('Qté rejetée', 3)
+    cy.fill('Nature du rejet', 'DIS - autres rejets')
+    cy.fill('Présentation du poisson', 'WHL - Entier')
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -144,6 +158,7 @@ context('Side Window > Mission Form > Land Control', () => {
               controlledMesh: null,
               declaredMesh: 70,
               gearCode: 'OTB',
+              gearMarkingIsCompliant: 'YES',
               gearName: 'Chaluts de fond à panneaux',
               gearWasControlled: true,
               hasUncontrolledMesh: false
@@ -153,6 +168,7 @@ context('Side Window > Mission Form > Land Control', () => {
               controlledMesh: null,
               declaredMesh: null,
               gearCode: 'MIS',
+              gearMarkingIsCompliant: 'NO',
               gearName: 'Engin divers',
               gearWasControlled: false,
               hasUncontrolledMesh: false
@@ -177,6 +193,13 @@ context('Side Window > Mission Form > Land Control', () => {
           seizureAndDiversion: true,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'YES',
+          propulsionEnginePowerControl: 'YES',
+          fishingLicencesMatchActivity: 'NO',
+          stowagePlanPresent: 'NOT_APPLICABLE',
+          onboardWeighingPermit: 'NOT_APPLICABLE',
+          weighingCertificateAndSystemsValid: null,
+          underSizedSeparateStowage: 'YES',
+          underSizedSeparateRecording: 'NO',
           infractions: [
             {
               comments: 'Une observation sur l’infraction déclarative.',
@@ -196,14 +219,14 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
-            { controlledWeight: 500, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: true },
+            { controlledWeight: 500, declaredWeight: 471.2, discardReason: 'DIS', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'WHL', rejectedWeight: 3, speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
             { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false },
             {controlledWeight:null,declaredWeight:235.6,nbFish:null,speciesCode:"NEP",underSized:false}
           ],
           speciesQuantitySeized: 6289.5,
-          speciesSizeControlled: false,
-          speciesWeightControlled: true,
+          speciesSizeControlled: 'NO',
+          speciesWeightControlled: 'YES',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 1,

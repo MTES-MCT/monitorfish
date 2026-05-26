@@ -1,6 +1,7 @@
 import { useGetGearsQuery } from '@api/gear'
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
-import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { HIDDEN_ERROR, E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import {
   FieldError,
   FormikCheckbox,
@@ -23,10 +24,20 @@ import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../types'
-import type { MissionAction } from '@features/Mission/missionAction.types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Gear } from 'domain/types/Gear'
 import type { PartialDeep } from 'type-fest'
+
+const CONTROL_CHECK_OPTIONS = [
+  { label: 'Oui', value: MissionAction.ControlCheck.YES },
+  { label: 'Non', value: MissionAction.ControlCheck.NO },
+  { label: 'N/A', value: MissionAction.ControlCheck.NOT_APPLICABLE }
+]
+
+const WIRE_TYPE_OPTIONS = [
+  { label: 'Simple', value: MissionAction.WireType.SINGLE },
+  { label: 'Epais', value: MissionAction.WireType.THICK }
+]
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
@@ -80,13 +91,16 @@ export function GearsField() {
     const nextGears: MissionAction.GearControl[] = [
       ...(input.value ?? []),
       {
+        averageWireThickness: undefined,
         comments: undefined,
         controlledMesh: undefined,
         declaredMesh: undefined,
         gearCode: newGear.code,
+        gearMarkingIsCompliant: undefined,
         gearName: newGear.name,
         gearWasControlled: undefined,
-        hasUncontrolledMesh: false
+        hasUncontrolledMesh: false,
+        wireType: undefined
       }
     ]
 
@@ -141,6 +155,16 @@ export function GearsField() {
                   options={BOOLEAN_AS_OPTIONS}
                 />
 
+                {E_ISR_ENABLED && (
+                  <FormikMultiRadio
+                    isErrorMessageHidden
+                    isInline
+                    label="Marquage de l'engin conforme"
+                    name={`gearOnboard[${index}].gearMarkingIsCompliant`}
+                    options={CONTROL_CHECK_OPTIONS}
+                  />
+                )}
+
                 <StyledFieldGroup isInline>
                   <FormikNumberInput
                     isErrorMessageHidden
@@ -169,6 +193,25 @@ export function GearsField() {
                 {typedError && typedError[index]?.controlledMesh && (
                   <FieldError>{typedError[index]?.controlledMesh}</FieldError>
                 )}
+
+                {E_ISR_ENABLED &&
+                  gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ===
+                    'Lignes et hameçons' && (
+                    <StyledFieldGroup isInline>
+                      <FormikNumberInput
+                        isErrorMessageHidden
+                        label="Epaisseur moyenne de fil"
+                        name={`gearOnboard[${index}].averageWireThickness`}
+                      />
+                      <FormikMultiRadio
+                        isErrorMessageHidden
+                        isInline
+                        label="Type de fil"
+                        name={`gearOnboard[${index}].wireType`}
+                        options={WIRE_TYPE_OPTIONS}
+                      />
+                    </StyledFieldGroup>
+                  )}
 
                 <FormikTextarea
                   label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}

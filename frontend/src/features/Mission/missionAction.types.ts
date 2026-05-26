@@ -21,6 +21,7 @@ export namespace MissionAction {
   export import INFRACTION_TYPE_LABEL = MissionActionConstants.INFRACTION_TYPE_LABEL
   export import MissionActionType = MissionActionConstants.MissionActionType
   export import CompletionStatus = MissionActionConstants.CompletionStatus
+  export import WireType = MissionActionConstants.WireType
 
   export type FleetSegment = z.infer<typeof FleetSegmentSchema>
   export type GearControl = z.infer<typeof GearControlSchema>

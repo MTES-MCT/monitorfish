@@ -22,6 +22,7 @@ export const MissionActionSchema = z.strictObject({
   externalReferenceNumber: stringOrUndefined,
   facade: stringOrUndefined,
   faoAreas: z.array(z.string()),
+  fishingLicencesMatchActivity: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   flagState: stringOrUndefined,
   flightGoals: z.array(z.enum(MissionAction.FlightGoal)),
   gearOnboard: z.array(GearControlSchema),
@@ -47,10 +48,14 @@ export const MissionActionSchema = z.strictObject({
   missionId: z.number(),
   numberOfVesselsFlownOver: numberOrUndefined,
   observationsByUnit: stringOrUndefined,
+  onboardWeighingPermit: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+
   otherComments: stringOrUndefined,
+
   portLocode: stringOrUndefined,
   // This field is added by the API
   portName: stringOrUndefined,
+  propulsionEnginePowerControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   segments: z.array(FleetSegmentSchema),
   seizureAndDiversion: booleanOrUndefined,
   seizureAndDiversionComments: stringOrUndefined,
@@ -60,9 +65,13 @@ export const MissionActionSchema = z.strictObject({
   speciesQuantitySeized: numberOrUndefined,
   speciesSizeControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   speciesWeightControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  stowagePlanPresent: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  underSizedSeparateRecording: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  underSizedSeparateStowage: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   unitWithoutOmegaGauge: booleanOrUndefined,
   userTrigram: stringOrUndefined,
   vesselId: numberOrUndefined,
   vesselName: stringOrUndefined,
-  vesselTargeted: z.union([z.enum(MissionAction.ControlCheck), z.undefined()])
+  vesselTargeted: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  weighingCertificateAndSystemsValid: z.union([z.enum(MissionAction.ControlCheck), z.undefined()])
 })

@@ -1,5 +1,6 @@
 import { Flag } from '@features/commonComponents/Flag'
 import { getFlatInfractionFromThreatsHierarchy } from '@features/Mission/components/MissionForm/ActionForm/utils'
+import { E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
 import styled from 'styled-components'
@@ -84,6 +85,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionDatetimeUtc,
     actionType: type,
     completion: CompletionStatus.TO_COMPLETE,
+    isGangwayDeployed: E_ISR_ENABLED && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
     isValid: false
   }
 }

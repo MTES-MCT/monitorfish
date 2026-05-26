@@ -26,6 +26,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   emitsAis: undefined,
   emitsVms: undefined,
   facade: undefined,
+  fishingLicencesMatchActivity: undefined,
   gearOnboard: [],
   id: undefined,
   infractions: [],
@@ -42,8 +43,10 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   logbookMatchesActivity: undefined,
   longitude: undefined,
   numberOfVesselsFlownOver: undefined,
+  onboardWeighingPermit: undefined,
   otherComments: undefined,
   portLocode: undefined,
+  propulsionEnginePowerControl: undefined,
   segments: [],
   seizureAndDiversion: undefined,
   seizureAndDiversionComments: undefined,
@@ -52,11 +55,15 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   speciesOnboard: [],
   speciesSizeControlled: undefined,
   speciesWeightControlled: undefined,
+  stowagePlanPresent: undefined,
+  underSizedSeparateRecording: undefined,
+  underSizedSeparateStowage: undefined,
   unitWithoutOmegaGauge: undefined,
   userTrigram: undefined,
   vesselId: undefined,
   vesselName: undefined,
-  vesselTargeted: undefined
+  vesselTargeted: undefined,
+  weighingCertificateAndSystemsValid: undefined
 }
 
 export const CONTROL_CHECKS_AS_OPTIONS: Option[] = [
@@ -80,5 +87,16 @@ export const AUTO_SAVE_ENABLED = isCypress()
   ? // @ts-ignore
     window.Cypress.env().FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED
   : import.meta.env.FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED === 'true'
+
+/**
+ * Is the e-ISR feature enabled.
+ *
+ * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * instead of `import.meta.env`.
+ */
+export const E_ISR_ENABLED = isCypress()
+  ? // @ts-ignore
+    window.Cypress.env().FRONTEND_E_ISR_ENABLED
+  : import.meta.env.FRONTEND_E_ISR_ENABLED === 'true'
 
 export const HIDDEN_ERROR = 'HIDDEN_ERROR'

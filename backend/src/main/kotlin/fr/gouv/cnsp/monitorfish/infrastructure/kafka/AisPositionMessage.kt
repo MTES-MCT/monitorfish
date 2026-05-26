@@ -39,10 +39,14 @@ data class AisPositionMessage(
 
     private fun parseCoord(coord: String?): Pair<Double, Double> {
         if (coord == null) return Pair(0.0, 0.0)
-        // WKT format: "POINT(longitude latitude)"
-        val content = coord.removePrefix("POINT(").removeSuffix(")")
-        val parts = content.trim().split(" ")
+        val content = WKT_POINT_CONTENT.find(coord)?.groupValues?.get(1) ?: return Pair(0.0, 0.0)
+        val parts = content.trim().split(Regex("\\s+"))
+        if (parts.size < 2) return Pair(0.0, 0.0)
         return Pair(parts[0].toDouble(), parts[1].toDouble())
+    }
+
+    companion object {
+        private val WKT_POINT_CONTENT = Regex("""POINT\s*\(([^)]+)\)""", RegexOption.IGNORE_CASE)
     }
 }
 

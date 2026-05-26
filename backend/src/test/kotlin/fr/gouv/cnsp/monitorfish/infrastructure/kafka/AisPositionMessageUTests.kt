@@ -200,6 +200,60 @@ class AisPositionMessageUTests {
     }
 
     @Test
+    fun `toAisPosition Should parse WKT coord with space before parenthesis`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 1L,
+                coord = "POINT (-2.7335 47.6078)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.longitude).isEqualTo(-2.7335)
+        assertThat(position.latitude).isEqualTo(47.6078)
+    }
+
+    @Test
+    fun `toAisPosition Should parse WKT coord with multiple spaces between coordinates`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 1L,
+                coord = "POINT(-2.7335  47.6078)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.longitude).isEqualTo(-2.7335)
+        assertThat(position.latitude).isEqualTo(47.6078)
+    }
+
+    @Test
+    fun `toAisPosition Should return zero coordinates When coord is malformed`() {
+        // Given
+        val message =
+            AisPositionMessage(
+                mmsi = 1L,
+                coord = "POINT(1.0)",
+                ts = ZonedDateTime.parse("2025-01-01T00:00:00Z"),
+            )
+
+        // When
+        val position = message.toAisPosition()
+
+        // Then
+        assertThat(position.longitude).isEqualTo(0.0)
+        assertThat(position.latitude).isEqualTo(0.0)
+    }
+
+    @Test
     fun `toAisPosition Should fall back to navpro ircs When ais callsign is null`() {
         // Given
         val message =

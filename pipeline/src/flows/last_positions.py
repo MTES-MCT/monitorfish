@@ -49,6 +49,20 @@ def validate_action(action: str) -> str:
 
 
 @task
+def extract_ais_last_positions() -> pd.DataFrame:
+    """
+    Extracts the last AIS position of each vessel.
+
+    Returns:
+        pd.DataFrame: DataFrame of vessels' last AIS position.
+    """
+    return extract(
+        db_name="monitorfish_remote",
+        query_filepath="monitorfish/ais_last_positions.sql",
+    )
+
+
+@task
 def extract_last_positions(minutes: int) -> pd.DataFrame:
     """
     Extracts the last position of each vessel over the past `minutes` minutes.
@@ -360,11 +374,16 @@ def join(
     pending_alerts: pd.DataFrame,
     reportings: pd.DataFrame,
     beacon_malfunctions: pd.DataFrame,
+    ais_last_positions: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Performs a left join on last_positions, risk_factors, pending_alerts, reportings and
     beacon_malfunctions using vessel_id cfr, ircs and external_immatriculation as join
     keys.
+
+    Also updates last_position_datetime_utc, latitude and longitude with the most recent
+    position between last_positions (VMS) and ais_last_positions (AIS), matched on cfr.
+    Sets position_type to 'AIS' or 'VMS' accordingly.
     """
     join_keys = ["vessel_id", "cfr", "ircs", "external_immatriculation"]
 
@@ -400,6 +419,44 @@ def join(
         {**default_risk_factors, "total_weight_onboard": 0.0}
     ).astype({"vessel_id": float})
 
+    last_positions = last_positions.merge(
+        ais_last_positions[
+            ["cfr", "last_position_datetime_utc", "latitude", "longitude"]
+        ]
+        .rename(
+            columns={
+                "last_position_datetime_utc": "ais_last_position_datetime_utc",
+                "latitude": "ais_latitude",
+                "longitude": "ais_longitude",
+            }
+        )
+        .dropna(subset=["cfr"]),
+        on="cfr",
+        how="left",
+    )
+
+    ais_is_more_recent = last_positions["ais_last_position_datetime_utc"].notna() & (
+        last_positions["ais_last_position_datetime_utc"]
+        > last_positions["last_position_datetime_utc"]
+    )
+
+    last_positions.loc[
+        ais_is_more_recent, "last_position_datetime_utc"
+    ] = last_positions.loc[ais_is_more_recent, "ais_last_position_datetime_utc"]
+    last_positions.loc[ais_is_more_recent, "latitude"] = last_positions.loc[
+        ais_is_more_recent, "ais_latitude"
+    ]
+    last_positions.loc[ais_is_more_recent, "longitude"] = last_positions.loc[
+        ais_is_more_recent, "ais_longitude"
+    ]
+
+    last_positions["position_type"] = "VMS"
+    last_positions.loc[ais_is_more_recent, "position_type"] = "AIS"
+
+    last_positions = last_positions.drop(
+        columns=["ais_last_position_datetime_utc", "ais_latitude", "ais_longitude"]
+    )
+
     return last_positions
 
 
@@ -421,6 +478,20 @@ def load_last_positions(last_positions):
     )
 
 
+@task
+def load_last_positions_ais(ais_last_positions):
+    load(
+        ais_last_positions,
+        table_name="last_positions_ais",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=get_run_logger(),
+        how="replace",
+        replace_with_truncate=True,
+        nullable_integer_columns=["ship_type"],
+    )
+
+
 @flow(name="Monitorfish - Last positions")
 def last_positions_flow(
     current_position_estimation_max_hours: int = CURRENT_POSITION_ESTIMATION_MAX_HOURS,
@@ -438,12 +509,14 @@ def last_positions_flow(
     pending_alerts = extract_pending_alerts.submit()
     reportings = extract_reportings.submit()
     beacon_malfunctions = extract_beacon_malfunctions.submit()
+    ais_last_positions = extract_ais_last_positions.submit()
 
     last_positions = extract_last_positions.submit(minutes=minutes)
     last_positions = add_vessel_id(last_positions, vessels_table)
     last_positions = drop_duplicates(last_positions)
     last_positions = add_vessel_identifier(last_positions)
     last_positions = tag_positions_at_port(last_positions)
+    ais_last_positions = tag_positions_at_port(ais_last_positions)
 
     if action == "update":
         previous_last_positions = extract_previous_last_positions.submit()
@@ -476,9 +549,11 @@ def last_positions_flow(
         pending_alerts,
         reportings,
         beacon_malfunctions,
+        ais_last_positions,
     )
 
     last_positions = drop_duplicates(last_positions)
 
     # Load
     load_last_positions(last_positions)
+    load_last_positions_ais(ais_last_positions)

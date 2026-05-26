@@ -175,6 +175,14 @@ class JpaReportingRepository(
                     ),
                 )
             }
+            it.ids?.let { ids ->
+                predicates.add(
+                    getIdsPredicate(
+                        ids = ids,
+                        reportingEntity = reportingEntity,
+                    ),
+                )
+            }
         }
 
         criteriaQuery.select(reportingEntity).where(*predicates.toTypedArray())
@@ -376,4 +384,9 @@ class JpaReportingRepository(
                 criteriaBuilder.isNotNull(reportingEntity.get<String>("vesselName")),
             ),
         )
+
+    private fun getIdsPredicate(
+        ids: List<Int>,
+        reportingEntity: Root<ReportingEntity>,
+    ): Predicate = reportingEntity.get<ReportingType>("id").`in`(*ids.toTypedArray())
 }

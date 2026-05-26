@@ -9,20 +9,13 @@ import { REPORTINGS_LINE_VECTOR_SOURCE, REPORTINGS_VECTOR_SOURCE } from '../../l
 import { ReportingOverlay } from '../ReportingOverlay'
 
 export function SelectedReportingOverlay() {
-  const selectedReportingFeatureIds = useMainAppSelector(store => store.reporting.selectedReportingFeatureIds)
-  const isReportingLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isReportingLayerDisplayed)
+  const featureId = useMainAppSelector(store => store.reporting.selectedReportingFeatureId)
 
-  if (!isReportingLayerDisplayed) {
+  if (!featureId) {
     return null
   }
 
-  return (
-    <>
-      {selectedReportingFeatureIds.map(featureId => (
-        <SelectedReportingItem key={featureId} featureId={featureId} />
-      ))}
-    </>
-  )
+  return <SelectedReportingItem key={featureId} featureId={featureId} />
 }
 
 type SelectedReportingItemProps = {

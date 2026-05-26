@@ -1,3 +1,4 @@
+import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
@@ -9,47 +10,117 @@ import {
 import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingSearchPeriod } from '@features/Reporting/types'
-import { buildReportingFeature } from '@features/Reporting/utils'
+import { buildReportingFeature, getDefaultReportingsStartDate } from '@features/Reporting/utils'
+import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
+import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Level } from '@mtes-mct/monitor-ui'
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 function UnmemoizedReportingLayer() {
   const dispatch = useMainAppDispatch()
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
   const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
-  const selectedReportingFeatureIds = useMainAppSelector(state => state.reporting.selectedReportingFeatureIds)
+  const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
+  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
 
-  const selectedReportingFeatureIdsRef = useRef(selectedReportingFeatureIds)
+  const selectedReportingFeatureIdRef = useRef(selectedReportingFeatureId)
   useEffect(() => {
-    selectedReportingFeatureIdsRef.current = selectedReportingFeatureIds
-  }, [selectedReportingFeatureIds])
+    const previousSelectedReportingFeatureId = selectedReportingFeatureIdRef.current
+    selectedReportingFeatureIdRef.current = selectedReportingFeatureId
+
+    trySetFeatureSelected(previousSelectedReportingFeatureId, false)
+    trySetFeatureSelected(selectedReportingFeatureId, true)
+  }, [selectedReportingFeatureId])
 
   const skipQuery =
     displayFilters.reportingPeriod === ReportingSearchPeriod.CUSTOM &&
     (!displayFilters.startDate || !displayFilters.endDate)
 
-  const { data, error } = useDisplayReportingsQuery(displayFilters, { skip: skipQuery })
+  const { data: filterData, error } = useDisplayReportingsQuery(displayFilters, { skip: skipQuery })
+
+  // XXX: missing archived??
+
+  // XXX: lot of codedup
+  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+
+  const selectedLegacyVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+
+  const selectedVesselIdentity = useMemo(
+    () =>
+      selectedLegacyVesselIdentity
+        ? getVesselIdentityFromLegacyVesselIdentity(selectedLegacyVesselIdentity)
+        : undefined,
+    [selectedLegacyVesselIdentity]
+  )
+
+  // XXX: this is assumed when it can differ in the sidebar
+  const startDate = getDefaultReportingsStartDate()
+
+  const showSelectedVesselReportings = !!(selectedVesselIdentity && isVesselSidebarOpen)
+
+  const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
+    showSelectedVesselReportings
+      ? {
+          fromDate: startDate.toISOString(),
+          vesselIdentity: selectedVesselIdentity
+        }
+      : skipToken,
+    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
+  )
+  const vesselReportingIds = showSelectedVesselReportings ? vesselReportings?.current.map(vr => vr.reporting.id) : []
+
+  const extraIds: number[] = []
+  if (editedReporting?.id !== undefined) {
+    extraIds.push(editedReporting.id)
+  }
+  if (vesselReportingIds !== undefined) {
+    extraIds.push(...vesselReportingIds.filter(id => !extraIds.find(eid => eid === id)))
+  }
+
+  const { data: extraData, error: extraError } = useDisplayReportingsQuery({
+    endDate: undefined,
+    ids: extraIds,
+    isArchived: undefined,
+    isIUU: undefined,
+    reportingPeriod: ReportingSearchPeriod.CUSTOM,
+    reportingType: undefined,
+    startDate: undefined
+  })
+
+  // FIXME: this has a lot of cpu complexity
+  const data = useMemo(
+    () => [
+      ...(isReportingLayerDisplayed ? (filterData ?? []) : []),
+      ...(isReportingLayerDisplayed
+        ? (extraData ?? []).filter(d => !filterData?.find(fd => fd.id === d.id))
+        : (extraData ?? []))
+    ],
+    [extraData, filterData, isReportingLayerDisplayed]
+  )
 
   useMapLayer(REPORTINGS_VECTOR_LAYER)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
-  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed)
-  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed)
+  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!extraData?.length)
+  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!extraData?.length)
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
-    if (selectedReportingFeatureIdsRef.current.length > 0) {
-      selectedReportingFeatureIdsRef.current
-        .filter(id => !REPORTINGS_VECTOR_SOURCE.getFeatureById(id))
-        .forEach(id => dispatch(reportingActions.toggleSelectedReportingFeatureId(id)))
-    }
-  }, [dispatch])
+    const id = selectedReportingFeatureIdRef.current
 
-  useEffect(() => {
-    if (!data) {
+    if (id === undefined) {
       return
     }
 
+    if (!REPORTINGS_VECTOR_SOURCE.getFeatureById(id)) {
+      return
+    }
+
+    dispatch(reportingActions.toggleSelectedReportingFeatureId(id))
+  }, [dispatch])
+
+  useEffect(() => {
     const features = data
       // If the coordinates is a a valid WGS84, the backend return an empty list,
       // we need to filter them as we can't display them on map
@@ -62,22 +133,36 @@ function UnmemoizedReportingLayer() {
   }, [data, dispatch, hideDisplayedOverlaysWhenFeatureFiltered])
 
   useEffect(() => {
-    if (!error) {
+    if (!error && !extraError) {
       return
     }
 
     dispatch(
       addMainWindowBanner({
-        children: (error as Error).message,
+        // TODO: better formating if two errors
+        children: [((error as Error | undefined)?.message, (extraError as Error | undefined)?.message)]
+          .filter(d => !!d)
+          .join('\n'),
         closingDelay: 6000,
         isClosable: true,
         level: Level.ERROR,
         withAutomaticClosing: true
       })
     )
-  }, [dispatch, error])
+  }, [dispatch, error, extraError])
 
   return null
+}
+
+function trySetFeatureSelected(featureId: string | undefined, value: boolean) {
+  if (featureId === undefined) {
+    return
+  }
+  const previousFeatureId = REPORTINGS_VECTOR_SOURCE.getFeatureById(featureId)
+  if (previousFeatureId === null) {
+    return
+  }
+  previousFeatureId.set('isSelected', value)
 }
 
 export const ReportingLayer = memo(UnmemoizedReportingLayer)

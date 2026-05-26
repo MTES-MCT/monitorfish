@@ -26,6 +26,7 @@ class GetReportings(
         reportingPeriod: ReportingPeriod,
         startDate: ZonedDateTime?,
         endDate: ZonedDateTime?,
+        ids: List<Int>?,
     ): List<Pair<Reporting, LegacyControlUnit?>> {
         val now = ZonedDateTime.now()
         val (afterCreationDate, beforeCreationDate) =
@@ -69,6 +70,7 @@ class GetReportings(
                 afterCreationDate = afterCreationDate,
                 beforeCreationDate = beforeCreationDate,
                 hasPosition = true,
+                ids = ids,
             )
 
         val reportings = reportingRepository.findAll(filter)

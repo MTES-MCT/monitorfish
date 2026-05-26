@@ -1,12 +1,11 @@
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { extractVesselIdentityProps } from '@features/Vessel/utils'
+import { showReporting } from '@features/Vessel/useCases/showReporting'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
+import { setDisplayedComponents } from 'domain/shared_slices/DisplayedComponent'
 import { type CSSProperties, useCallback } from 'react'
 import styled from 'styled-components'
-
-import { showVessel } from '../../../../Vessel/useCases/showVessel'
 
 import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
 
@@ -25,14 +24,14 @@ export function ActionButtonsCell({ reporting }: ActionButtonsCellProps) {
       }
 
       dispatch(reportingActions.setEditedReporting(editedReporting))
+      dispatch(setDisplayedComponents({ isReportingListFormDisplayed: true }))
     },
     [dispatch]
   )
 
   const focusOnMap = useCallback(
     (focusedReporting: Reporting.Reporting) => {
-      const identity = extractVesselIdentityProps(focusedReporting)
-      dispatch(showVessel(identity, false))
+      dispatch(showReporting(focusedReporting))
     },
     [dispatch]
   )

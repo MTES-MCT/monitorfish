@@ -86,7 +86,7 @@ export function ReportingMapMenuDialog() {
     dispatch(
       displayedComponentActions.setDisplayedComponents({ isReportingLayerDisplayed: !isReportingLayerDisplayed })
     )
-    dispatch(reportingActions.unsetSelectedReportingFeatureIds())
+    dispatch(reportingActions.unsetSelectedReportingFeatureId())
   }
   const toggleCreateReporting = () => {
     dispatch(setRightMapBoxDisplayed(undefined))

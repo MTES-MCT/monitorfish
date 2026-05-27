@@ -109,12 +109,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Obligations déclaratives et autorisations
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
-    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
+    cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
     cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
     cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
     cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
-    cy.fill("Plan d’arrimage présent et valide", "Non concerné")
-    cy.fill("Autorisation pour la pesée à bord", "Non concerné")
+    cy.fill("Plan d’arrimage présent et valide", "N/A")
+    cy.fill("Autorisation pour la pesée à bord", "N/A")
     cy.fill(
       "Observations (hors infractions) sur les obligations déclaratives / autorisations",
       "Une observation hors infraction sur les obligations déclaaratives."
@@ -141,6 +141,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 0 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Qté déclarée', 10, { index: 2 })
     cy.fill('Qté estimée', 20, { index: 2 })
@@ -288,8 +290,8 @@ context('Side Window > Mission Form > Sea Control', () => {
           underSizedSeparateRecording: 'NO',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
-            { controlledWeight: null, declaredWeight: 235.6, nbFish: null, speciesCode: 'HKE', underSized: false },
-            { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
+            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'HKE', underSized: false },
+            { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'FIL', rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
           ],
           speciesQuantitySeized: 6289.5,
@@ -981,8 +983,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
       // "Obligations déclaratives et autorisations de pêche" e-ISR fields
       cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
-      cy.contains("Licence de pêche conformes à l'activité du navire").should('not.exist')
-      cy.contains("Plan d'arrimage présent et valide").should('not.exist')
+      cy.contains("Licence de pêche conformes à l’activité du navire").should('not.exist')
+      cy.contains("Plan d’arrimage présent et valide").should('not.exist')
       cy.contains('Autorisation pour la pesée à bord').should('not.exist')
       cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 

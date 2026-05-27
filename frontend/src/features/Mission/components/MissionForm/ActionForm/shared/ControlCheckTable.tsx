@@ -26,14 +26,17 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
       <ColumnHeader>Non</ColumnHeader>
       <ColumnHeader>N/A</ColumnHeader>
       {rows.map(({ disabled, hasBorderBottom, isRequired, label, name }, index) => (
-        <RowGroup key={name}>
-          <RowLabel $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+        <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
+          <RowLegend
+            $disabled={!!disabled}
+            $hasBorderBottom={!!hasBorderBottom}
+            $isFirst={index === 0}
+            $isRequired={!!isRequired}
+          >
             {label}
-            {isRequired && <Required> *</Required>}
-          </RowLabel>
+          </RowLegend>
           {CONTROL_CHECK_AS_OPTIONS.map(opt => (
             <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
-              {/* Zero-width space forces rsuite to render the <label> wrapper that monitor-ui CSS targets */}
               <Radio
                 checked={(values as Record<string, unknown>)[name] === opt.value}
                 disabled={!!disabled}
@@ -41,11 +44,11 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
                 name={name}
                 onChange={() => setFieldValue(name, opt.value)}
               >
-                {' '}
+                {opt.label}
               </Radio>
             </RadioCell>
           ))}
-        </RowGroup>
+        </RowFieldset>
       ))}
     </TableGrid>
   )
@@ -77,7 +80,7 @@ const ColumnHeader = styled.div`
   ${borderBottom}
 `
 
-const RowGroup = styled.div`
+const RowFieldset = styled.fieldset`
   display: contents;
 
   &:hover > * {
@@ -85,13 +88,28 @@ const RowGroup = styled.div`
   }
 `
 
-const RowLabel = styled.div<{ $disabled: boolean; $hasBorderBottom: boolean; $isFirst: boolean }>`
+const RowLegend = styled.legend<{
+  $disabled: boolean
+  $hasBorderBottom: boolean
+  $isFirst: boolean
+  $isRequired: boolean
+}>`
+  float: none;
   font-size: 13px;
   color: ${p => (p.$disabled ? p.theme.color.lightGray : p.theme.color.gunMetal)};
   margin-top: ${p => (p.$isFirst ? 8 : 0)}px;
   padding: 4px 0 ${p => (p.$hasBorderBottom ? 12 : 4)}px 8px;
   height: 18px;
   ${p => p.$hasBorderBottom && borderBottom}
+  ${p =>
+    p.$isRequired &&
+    css`
+      &::after {
+        content: ' *';
+        color: ${p.theme.color.maximumRed};
+        margin-left: 2px;
+      }
+    `}
 `
 
 const RadioCell = styled.div<{ $hasBorderBottom: boolean; $isFirst: boolean }>`
@@ -108,11 +126,14 @@ const RadioCell = styled.div<{ $hasBorderBottom: boolean; $isFirst: boolean }>`
   }
 
   .rs-radio-label {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
-`
-
-const Required = styled.span`
-  color: ${p => p.theme.color.maximumRed};
-  margin-left: 2px;
 `

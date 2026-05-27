@@ -56,12 +56,12 @@ context('Side Window > Mission Form > Land Control', () => {
     // Obligations déclaratives et autorisations
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
-    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'Non concerné')
+    cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
     cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
     cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
     cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
-    cy.fill("Plan d’arrimage présent et valide", "Non concerné")
-    cy.fill("Autorisation pour la pesée à bord", "Non concerné")
+    cy.fill("Plan d’arrimage présent et valide", "N/A")
+    cy.fill("Autorisation pour la pesée à bord", "N/A")
     cy.fill(
       "Observations (hors infractions) sur les obligations déclaratives / autorisations",
       "Une observation hors infraction sur les obligations déclaaratives."

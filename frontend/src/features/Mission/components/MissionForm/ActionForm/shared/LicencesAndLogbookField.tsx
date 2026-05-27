@@ -27,25 +27,25 @@ export function LicencesAndLogbookField() {
     { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
     {
       isRequired: true,
-      label: "Déclarations journal de pêche conformes à l'activité du navire",
+      label: 'Déclarations journal de pêche conformes à l’activité du navire',
       name: 'logbookMatchesActivity'
     },
     {
       isRequired: true,
-      label: "Autorisations de pêche (AEP) conformes à l'activité du navire",
+      label: 'Autorisations de pêche (AEP) conformes à l’activité du navire',
       name: 'licencesMatchActivity'
     },
     ...(E_ISR_ENABLED
       ? [
           {
             isRequired: true,
-            label: "Licence de pêche conformes à l'activité du navire",
+            label: 'Licence de pêche conformes à l’activité du navire',
             name: 'fishingLicencesMatchActivity'
           },
           {
             hasBorderBottom: true,
             isRequired: true,
-            label: "Plan d'arrimage présent et valide",
+            label: 'Plan d’arrimage présent et valide',
             name: 'stowagePlanPresent'
           },
           { isRequired: true, label: 'Autorisation pour la pesée à bord', name: 'onboardWeighingPermit' },

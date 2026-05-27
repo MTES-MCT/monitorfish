@@ -263,6 +263,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
       {input.value && input.value.length > 0 && (
         <>
+          <FieldsetGroupSeparator marginBottom={12} />
           {input.value.map((specyOnboard, index) => (
             <Row
               // eslint-disable-next-line react/no-array-index-key
@@ -274,8 +275,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
 
               <WeightsRow>
-                <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
+                <FormikNumberInput isRequired label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
+                <FormikNumberInput
+                  isRequired
+                  label={controlledWeightLabel}
+                  name={`speciesOnboard[${index}].controlledWeight`}
+                />
                 {E_ISR_ENABLED ? (
                   <>
                     {isUnderSizedShown(index) ? (
@@ -294,7 +299,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                       <>
                         <FormikNumberInput label="Qté rejetée" name={`speciesOnboard[${index}].rejectedWeight`} />
                         <FormikSelect
-                          isLight
                           label="Nature du rejet"
                           name={`speciesOnboard[${index}].discardReason`}
                           options={DISCARD_REASON_OPTIONS}
@@ -319,17 +323,18 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               {E_ISR_ENABLED && (
                 <PresentationFaoRow>
                   <FormikSelect
-                    isLight
+                    isRequired
                     label="Présentation du poisson"
                     name={`speciesOnboard[${index}].presentationCode`}
                     options={PRESENTATION_OPTIONS}
                     searchable
                   />
-                  <FormikMultiSelect
-                    isLight
+                  <StyledFaoZones
+                    isRequired
                     label="Zone de pêche"
                     name={`speciesOnboard[${index}].faoZones`}
                     options={faoAreasAsOptions}
+                    searchable
                   />
                 </PresentationFaoRow>
               )}
@@ -355,6 +360,10 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     </FieldsetGroup>
   )
 }
+
+const StyledFaoZones = styled(FormikMultiSelect)`
+  width: 250px;
+`
 
 const StyledSingleTag = styled(SingleTag)`
   width: 280px;

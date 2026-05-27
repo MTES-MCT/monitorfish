@@ -65,6 +65,10 @@ const actionDatetimeUtcValidator = string()
     }
   })
 
+export const SpeciesOnboardSchema = object({
+  faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
+})
+
 export const GearOnboardSchema = object({
   gearWasControlled: boolean().required(HIDDEN_ERROR),
   declaredMesh: number().when(['gearCode', 'controlledMesh'], {
@@ -145,6 +149,7 @@ export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
     speciesWeightControlled: string().required(HIDDEN_ERROR),
     speciesSizeControlled: string().required(HIDDEN_ERROR),
     separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+    speciesOnboard: array().of(SpeciesOnboardSchema),
 
     // Quantités saisies
     speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
@@ -194,6 +199,7 @@ export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
     speciesWeightControlled: string().required(HIDDEN_ERROR),
     speciesSizeControlled: string().required(HIDDEN_ERROR),
     separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+    speciesOnboard: array().of(SpeciesOnboardSchema),
 
     // Engins à bord
     gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),

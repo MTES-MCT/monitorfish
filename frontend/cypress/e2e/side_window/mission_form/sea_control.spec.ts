@@ -79,6 +79,8 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
+    cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*').as('speciesPrefill')
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -91,6 +93,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('mark', 'MALOT').click()
 
     cy.wait(500)
+    cy.wait('@speciesPrefill')
 
     cy.intercept(
       'GET',
@@ -874,7 +877,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Non concerné should NOT show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'Non concerné')
+    cy.fill('Autorisation pour la pesée à bord', 'N/A')
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Oui SHOULD show the cert field
@@ -923,6 +926,8 @@ context('Side Window > Mission Form > Sea Control', () => {
       body: { id: 2 },
       statusCode: 201
     }).as('updateMissionAction')
+
+    cy.wait(500)
 
     // Add an LLS gear (Lignes et hameçons category) — wire fields should appear
     cy.fill('Ajouter un engin', 'LLS')
@@ -1002,8 +1007,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 3 }, statusCode: 201 })
-    cy.intercept('PUT', '/bff/v1/mission_actions/3', { body: { id: 3 }, statusCode: 201 }).as('updateMissionAction3')
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 2 }, statusCode: 201 })
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', { body: { id: 2 }, statusCode: 201 }).as('updateMissionAction3')
 
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
       body: [

@@ -69,7 +69,7 @@ context('Side Window > Reporting List > Actions', () => {
     })
   })
 
-  it.only('A Reporting Should be edited', () => {
+  it('A Reporting Should be edited', () => {
     cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
 
     // Given
@@ -108,7 +108,6 @@ context('Side Window > Reporting List > Actions', () => {
         withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
       })
 
-      cy.fill('Type de signalement', "Suspicion d'infraction")
       cy.fill('Type d’infraction et NATINF 1', ['27717'])
       cy.clickButton('Ajouter une infraction')
       cy.fill('Type d’infraction et NATINF 2', ['27689'])
@@ -155,7 +154,9 @@ context('Side Window > Reporting List > Actions', () => {
       })
 
       // When
-      cy.fill('Type de signalement', 'Observation')
+      // cy.fill() cannot target this field: the "Type de signalement" filter (CheckPicker)
+      // has an identical <label> and is matched first, before the form's MultiRadio <legend>.
+      cy.get('input[name="type"][value="OBSERVATION"]').click({ force: true })
       cy.clickButton('Valider')
 
       // Then

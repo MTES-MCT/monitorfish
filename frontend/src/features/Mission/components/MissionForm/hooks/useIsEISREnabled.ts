@@ -7,6 +7,7 @@ export function computeIsEISREnabled(controlUnitIds: (number | undefined)[]): bo
   if (!E_ISR_ENABLED) {
     return false
   }
+
   if (E_ISR_CONTROL_UNITS_FOR_TEST.length === 0) {
     return true
   }

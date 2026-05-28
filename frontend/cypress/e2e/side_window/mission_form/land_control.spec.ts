@@ -93,6 +93,9 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Nature du rejet', 'DIS - autres rejets')
     cy.fill('Présentation du poisson', 'WHL - Entier')
     cy.fill('Zone de pêche', ['27.8.b'])
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -224,9 +227,9 @@ context('Side Window > Mission Form > Land Control', () => {
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
             { controlledWeight: 500, declaredWeight: 471.2, discardReason: 'DIS', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'WHL', rejectedWeight: 3, speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
-            { controlledWeight: null, declaredWeight: 13.46, nbFish: null, speciesCode: 'BLI', underSized: false },
-            { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false },
-            {controlledWeight:null,declaredWeight:235.6,nbFish:null,speciesCode:"NEP",underSized:false}
+            { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
+            { controlledWeight: null, declaredWeight: null, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'COD', underSized: false },
+            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false }
           ],
           speciesQuantitySeized: 6289.5,
           speciesSizeControlled: 'NO',

@@ -31,6 +31,8 @@ context('Side Window > Mission Form > Land Control', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
+    cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*').as('speciesPrefill')
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -39,6 +41,8 @@ context('Side Window > Mission Form > Land Control', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     cy.get('input[placeholder="Rechercher un navire..."]').type('pheno').wait(250)
     cy.contains('mark', 'PHENO').click()
+    cy.wait('@speciesPrefill')
+    cy.wait(500)
 
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)

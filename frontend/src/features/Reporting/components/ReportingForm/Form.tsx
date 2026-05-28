@@ -404,6 +404,7 @@ export function Form({
           <VesselSearch
             disabled={isVesselAbsent}
             displayedErrorKey={displayedErrorKey}
+            isVesselIdRequiredFromResults
             onChange={handleVesselSelect}
             shouldCloseOnClickOutside
             value={selectedVessel}
@@ -413,7 +414,7 @@ export function Form({
             <StyledCheckbox
               checked={isVesselAbsent}
               isLight
-              label={isPlural ? 'Navires absents de la base de données' : 'Navire absent de la base de données'}
+              label={isPlural ? 'Navires sans fiche' : 'Navire sans fiche'}
               name="isVesselAbsent"
               onChange={handleAbsentToggle}
             />
@@ -508,7 +509,7 @@ export function Form({
         <FieldError>
           {isVesselAbsent
             ? 'Veuillez renseigner au moins un identifiant (nom, MMSI, IMO ou marquage extérieur) ou cocher la case "navire inconnu"'
-            : 'Veuillez renseigner un navire ou cocher la case "navire absent de la base de données"'}
+            : 'Veuillez renseigner un navire ou cocher la case "navire sans fiche"'}
         </FieldError>
       )}
       {!hideVesselSection && <StyledHr $isLight={isLight} />}

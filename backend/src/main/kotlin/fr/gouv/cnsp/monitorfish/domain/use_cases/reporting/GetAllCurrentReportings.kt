@@ -24,10 +24,11 @@ class GetAllCurrentReportings(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllCurrentReportings::class.java)
 
-    fun execute(): List<Pair<Reporting, LegacyControlUnit?>> {
+    fun execute(absentVessel: Boolean? = null): List<Pair<Reporting, LegacyControlUnit?>> {
         val filter =
             ReportingFilter(
-                isArchived = false,
+                absentVessel = absentVessel,
+                isArchived = false.takeIf { absentVessel != true },
                 isDeleted = false,
                 types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION, ReportingType.OBSERVATION),
             )
@@ -57,8 +58,10 @@ class GetAllCurrentReportings(
                             infraction = getInfraction(reporting),
                             underCharter = underCharter,
                         )
+
                     is Reporting.InfractionSuspicion ->
                         enrichInfractions(reporting).copy(underCharter = underCharter)
+
                     is Reporting.Observation -> reporting.copy(underCharter = underCharter)
                 }
             }

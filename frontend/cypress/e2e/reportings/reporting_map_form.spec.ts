@@ -1,5 +1,5 @@
 import { hoverOrClickVesselByName } from '../../support/commands/hoverOrClickVesselByName'
-import {openVesselBySearch} from "../main_window/utils";
+import { openVesselBySearch } from '../main_window/utils'
 
 context('Reporting map form', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ context('Reporting map form', () => {
 
     cy.get('input[name="reportingSource"][value="OTHER"]').click()
     cy.fill('Autres types de source', 'DIRM')
-    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
 
     cy.clickButton('Ajouter un point')
     cy.wait(250)
@@ -37,7 +37,7 @@ context('Reporting map form', () => {
     cy.clickButton('Valider le point de signalement')
     cy.fill('Nombre de navires', 2)
     // When numberOfVessels > 1, "navire absent" and "navire inconnu" are auto-checked and labels become plural
-    cy.contains('Navires absents de la base de données').should('be.visible')
+    cy.contains('Navires sans fiche').should('be.visible')
     cy.get('[id="isVesselAbsent"]').should('have.attr', 'aria-checked', 'true')
     cy.contains('Navires inconnus').should('be.visible')
     cy.get('[id="isUnknownVessel"]').should('have.attr', 'aria-checked', 'true')
@@ -61,7 +61,7 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
     cy.getDataCy('reporting-overlay').contains('Type inconnu / NATINF 27689')
-    cy.getDataCy('reporting-overlay').contains('Suspicion d\'infraction (BSL Lorient)')
+    cy.getDataCy('reporting-overlay').contains("Suspicion d'infraction (BSL Lorient)")
     cy.getDataCy('reporting-overlay').contains('Pêche sans VMS')
     cy.getDataCy('reporting-overlay').contains('Pêche thon rouge sans VMS détecté ni JPE')
 
@@ -71,8 +71,7 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay-close').click({ force: true })
 
     cy.clickButton('Modifier cette zone')
-    cy.getDataCy("dms-coordinates-input")
-      .should('have.value', '48° 06′ 00″ N 004° 54′ 00″ W')
+    cy.getDataCy('dms-coordinates-input').should('have.value', '48° 06′ 00″ N 004° 54′ 00″ W')
     cy.clickButton('Valider le point de signalement')
     cy.fill('Titre', 'Mise à jour du titre depuis le test cypress')
     cy.fill('Navire en action de pêche', true)
@@ -122,7 +121,7 @@ context('Reporting map form', () => {
     cy.clickButton('Supprimer ce signalement')
 
     // Confirm modal
-    cy.get('.Component-Dialog').contains('Suppression d\'un signalement').should('be.visible')
+    cy.get('.Component-Dialog').contains("Suppression d'un signalement").should('be.visible')
     cy.get('.Component-Dialog').contains('Êtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
     cy.clickButton('Supprimer')
 

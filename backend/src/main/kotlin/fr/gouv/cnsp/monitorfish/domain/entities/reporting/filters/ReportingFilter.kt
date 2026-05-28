@@ -13,4 +13,5 @@ data class ReportingFilter(
     val afterCreationDate: ZonedDateTime? = null,
     val beforeCreationDate: ZonedDateTime? = null,
     val hasPosition: Boolean? = null,
+    val absentVessel: Boolean? = null,
 )

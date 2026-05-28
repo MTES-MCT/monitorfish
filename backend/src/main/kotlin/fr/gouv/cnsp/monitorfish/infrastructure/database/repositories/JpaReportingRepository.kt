@@ -167,6 +167,14 @@ class JpaReportingRepository(
                     ),
                 )
             }
+            if (it.absentVessel == true) {
+                predicates.add(
+                    getAbsentVesselPredicate(
+                        reportingEntity = reportingEntity,
+                        criteriaBuilder = criteriaBuilder,
+                    ),
+                )
+            }
         }
 
         criteriaQuery.select(reportingEntity).where(*predicates.toTypedArray())
@@ -347,4 +355,25 @@ class JpaReportingRepository(
                 criteriaBuilder.isNull(reportingEntity.get<Double>("longitude")),
             )
         }
+
+    /**
+     * Reporting's vessel is absent, meaning the reporting has no `vesselId` but at least one vessel identifier (one of `mmsi`, `ircs`, `imo`, `externalMarker` or `vesselName`).
+     *
+     * The CFR is ignored here because the absent vessel feature is intended for overseas territories,
+     * and vessels in these waters do not have a CFR (an identifier used only for EU vessels).
+     */
+    private fun getAbsentVesselPredicate(
+        reportingEntity: Root<ReportingEntity>,
+        criteriaBuilder: CriteriaBuilder,
+    ): Predicate =
+        criteriaBuilder.and(
+            criteriaBuilder.isNull(reportingEntity.get<Int>("vesselId")),
+            criteriaBuilder.or(
+                criteriaBuilder.isNotNull(reportingEntity.get<String>("mmsi")),
+                criteriaBuilder.isNotNull(reportingEntity.get<String>("ircs")),
+                criteriaBuilder.isNotNull(reportingEntity.get<String>("imo")),
+                criteriaBuilder.isNotNull(reportingEntity.get<String>("externalMarker")),
+                criteriaBuilder.isNotNull(reportingEntity.get<String>("vesselName")),
+            ),
+        )
 }

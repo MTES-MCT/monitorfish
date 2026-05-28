@@ -26,8 +26,9 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
   const subMenu = useMainAppSelector(state => state.alert.subMenu)
   const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
+  const absentVessel = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
 
-  const { data: currentReportings } = useGetReportingsQuery(undefined, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
+  const { data: currentReportings } = useGetReportingsQuery({ absentVessel }, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
 
   const handleSubMenuChange = useCallback(
     (nextSubMenu: AlertSubMenu) => {
@@ -48,9 +49,13 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        return filterBySeafrontGroup(currentReportings ?? [], group, r => r.value.seaFront).filter(reporting =>
-          reportingTypesDisplayed.includes(reporting.type)
-        ).length
+        let filtered = filterBySeafrontGroup(currentReportings ?? [], group, r => r.value.seaFront)
+
+        if (reportingTypesDisplayed) {
+          filtered = filtered.filter(reporting => reportingTypesDisplayed.includes(reporting.type))
+        }
+
+        return filtered.length
       }
 
       return 0

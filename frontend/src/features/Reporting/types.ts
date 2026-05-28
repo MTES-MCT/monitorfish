@@ -187,3 +187,7 @@ export enum ReportingSearchPeriod {
   LAST_WEEK = 'LAST_WEEK',
   TODAY = 'TODAY'
 }
+
+export type AllReportingsFilter = {
+  absentVessel: true | undefined
+}

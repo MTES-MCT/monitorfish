@@ -2,17 +2,19 @@ import { reportingTableFiltersActions } from '@features/Reporting/components/Rep
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Checkbox, CheckPicker, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
+
+import { REPORTING_TYPE_FILTER_OPTIONS } from './constants'
 
 export function Filters() {
   const dispatch = useMainAppDispatch()
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
+  const absentVesselChecked = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
   const [searchText, setSearchText] = useState(searchQuery)
-  const infractionSuspicionTypes = [ReportingType.INFRACTION_SUSPICION, ReportingType.ALERT]
 
   const debouncedHandleChange = useDebouncedCallback(
     (value: string | undefined) => {
@@ -22,28 +24,16 @@ export function Filters() {
     { leading: true, maxWait: 250 }
   )
 
-  const handleCheckInfractionSuspicion = (isChecked: boolean | undefined) => {
-    if (isChecked) {
-      const nextValue = reportingTypesDisplayed.concat(infractionSuspicionTypes)
-      dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
-
-      return
+  const updateReportingTypes = (nextValue: ReportingType[] | undefined) => {
+    let enrichedNextValue = nextValue
+    if (nextValue?.includes(ReportingType.INFRACTION_SUSPICION)) {
+      enrichedNextValue = [...nextValue, ReportingType.ALERT]
     }
-
-    const nextValue = reportingTypesDisplayed.filter(type => !infractionSuspicionTypes.includes(type))
-    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
+    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(enrichedNextValue))
   }
 
-  const handleCheckObservation = (isChecked: boolean | undefined) => {
-    if (isChecked) {
-      const nextValue = reportingTypesDisplayed.concat(ReportingType.OBSERVATION)
-      dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
-
-      return
-    }
-
-    const nextValue = reportingTypesDisplayed.filter(type => type !== ReportingType.OBSERVATION)
-    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
+  const handleCheckAbsentVessel = (isChecked: boolean | undefined) => {
+    dispatch(reportingTableFiltersActions.setAbsentVessel(!!isChecked))
   }
 
   return (
@@ -63,17 +53,24 @@ export function Filters() {
         size={Size.LARGE}
         value={searchText}
       />
-      <StyledCheckbox
-        checked={reportingTypesDisplayed.includes(ReportingType.INFRACTION_SUSPICION)}
-        label="Suspicions d'infraction"
-        name="infractionSuspicion"
-        onChange={handleCheckInfractionSuspicion}
+      <StyledCheckPicker
+        isLabelHidden
+        isTransparent
+        label="Type de signalement"
+        name="reportingType"
+        onChange={updateReportingTypes}
+        options={REPORTING_TYPE_FILTER_OPTIONS}
+        placeholder="Type de signalement"
+        renderValue={(_: unknown, items: unknown[]) =>
+          items.length > 0 ? <OptionValue>Type de signalement ({items.length}) </OptionValue> : <></>
+        }
+        value={reportingTypesDisplayed}
       />
       <StyledCheckbox
-        checked={reportingTypesDisplayed.includes(ReportingType.OBSERVATION)}
-        label="Observations"
-        name="observation"
-        onChange={handleCheckObservation}
+        checked={absentVesselChecked}
+        label="Navires sans fiche"
+        name="absentVessel"
+        onChange={handleCheckAbsentVessel}
       />
     </Wrapper>
   )
@@ -89,6 +86,17 @@ const StyledSearch = styled(TextInput)`
   width: 300px;
 `
 
+const StyledCheckPicker = styled(CheckPicker)`
+  margin-left: 24px;
+`
+
 const StyledCheckbox = styled(Checkbox)`
-  margin-left: 16px;
+  margin-left: 24px;
+`
+
+const OptionValue = styled.span`
+  display: flex;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

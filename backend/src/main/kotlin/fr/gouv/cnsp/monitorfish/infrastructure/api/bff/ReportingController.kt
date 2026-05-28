@@ -86,8 +86,11 @@ class ReportingController(
 
     @GetMapping(value = [""])
     @Operation(summary = "Get all current reportings")
-    fun getAllReportings(): List<ReportingDataOutput> =
-        getAllCurrentReportings.execute().map {
+    fun getAllReportings(
+        @RequestParam(required = false)
+        absentVessel: Boolean?,
+    ): List<ReportingDataOutput> =
+        getAllCurrentReportings.execute(absentVessel).map {
             ReportingDataOutput.fromReporting(
                 reporting = it.first,
                 controlUnit = it.second,

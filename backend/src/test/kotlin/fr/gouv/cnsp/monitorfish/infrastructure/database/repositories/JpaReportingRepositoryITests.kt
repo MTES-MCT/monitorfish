@@ -11,6 +11,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilte
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
@@ -644,5 +647,39 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
         // All test-data reportings have a position, so none match hasPosition = false
         assertThat(result).isEmpty()
+    }
+
+    @Test
+    @Transactional
+    fun `findAll Should return only reportings with absent vessel when absentVessel is true`() {
+        val filter = ReportingFilter(absentVessel = true)
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        assertThat(result).hasSize(3)
+        result.forEach {
+            assert(
+                it.vesselId == null &&
+                    (
+                        it.mmsi != null ||
+                            it.ircs != null ||
+                            it.imo != null ||
+                            it.externalMarker != null ||
+                            it.vesselName != null
+                    ),
+            )
+        }
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(booleans = [false])
+    @Transactional
+    fun `findAll Should return all reportings when absentVessel is null or false`(absentVessel: Boolean?) {
+        val filter = ReportingFilter(absentVessel = absentVessel)
+
+        val result = jpaReportingRepository.findAll(filter)
+
+        assertThat(result).hasSize(815)
     }
 }

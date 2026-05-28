@@ -5,9 +5,9 @@ import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks
 import { MissionAction } from '@features/Mission/missionAction.types'
 import {
   FieldError,
-  FormikCheckbox,
   FormikMultiRadio,
   FormikNumberInput,
+  FormikSelect,
   FormikTextarea,
   Select,
   SingleTag,
@@ -181,13 +181,23 @@ export function GearsField() {
                     label="Maillage mesuré"
                     name={`gearOnboard[${index}].controlledMesh`}
                   />
-
-                  <FormikCheckbox
-                    disabled={!gearOnboard.gearWasControlled}
-                    isUndefinedWhenDisabled
-                    label="Maillage non mesuré"
-                    name={`gearOnboard[${index}].hasUncontrolledMesh`}
-                  />
+                  {isEISREnabled &&
+                    gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ===
+                      'Lignes et hameçons' && (
+                      <>
+                        <FormikNumberInput
+                          isErrorMessageHidden
+                          label="Epaisseur moyenne de fil"
+                          name={`gearOnboard[${index}].averageWireThickness`}
+                        />
+                        <FormikSelect
+                          isErrorMessageHidden
+                          label="Type de fil"
+                          name={`gearOnboard[${index}].wireType`}
+                          options={WIRE_TYPE_OPTIONS}
+                        />
+                      </>
+                    )}
                 </StyledFieldGroup>
                 {typedError && typedError[index]?.declaredMesh && (
                   <FieldError>{typedError[index]?.declaredMesh}</FieldError>
@@ -195,25 +205,6 @@ export function GearsField() {
                 {typedError && typedError[index]?.controlledMesh && (
                   <FieldError>{typedError[index]?.controlledMesh}</FieldError>
                 )}
-
-                {isEISREnabled &&
-                  gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ===
-                    'Lignes et hameçons' && (
-                    <StyledFieldGroup isInline>
-                      <FormikNumberInput
-                        isErrorMessageHidden
-                        label="Epaisseur moyenne de fil"
-                        name={`gearOnboard[${index}].averageWireThickness`}
-                      />
-                      <FormikMultiRadio
-                        isErrorMessageHidden
-                        isInline
-                        label="Type de fil"
-                        name={`gearOnboard[${index}].wireType`}
-                        options={WIRE_TYPE_OPTIONS}
-                      />
-                    </StyledFieldGroup>
-                  )}
 
                 <FormikTextarea
                   label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
@@ -277,6 +268,15 @@ const StyledFieldGroup = styled(FieldGroup)`
 
   > .Field-NumberInput {
     margin-right: 16px;
+
+    > input {
+      width: 150px;
+    }
+  }
+
+  > div:last-child {
+    margin-bottom: 0;
+    width: 150px;
   }
 `
 

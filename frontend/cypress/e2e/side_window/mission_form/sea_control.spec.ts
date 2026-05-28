@@ -118,6 +118,24 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
     cy.fill("Plan d’arrimage présent et valide", "N/A")
     cy.fill("Autorisation pour la pesée à bord", "N/A")
+    // The weighing certificate field should not be visible initially
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Non should NOT show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'Non')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Non concerné should NOT show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'N/A')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
+
+    // Setting onboard weighing permit to Oui SHOULD show the cert field
+    cy.fill('Autorisation pour la pesée à bord', 'Oui')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('exist')
+
+    // Changing back to Non should hide the cert field again
+    cy.fill('Autorisation pour la pesée à bord', 'Non')
+    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
     cy.fill(
       "Observations (hors infractions) sur les obligations déclaratives / autorisations",
       "Une observation hors infraction sur les obligations déclaaratives."
@@ -150,8 +168,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Qté déclarée', 10, { index: 2 })
     cy.fill('Qté estimée', 20, { index: 2 })
     cy.clickButton('Ajouter sous-taille', { index: 2 })
+    cy.wait(200)
     cy.fill('Qté sous-taille', 5)
     cy.clickButton('Ajouter rejet', { index: 2 })
+    cy.wait(200)
     cy.fill('Qté rejetée', 2)
     cy.fill('Nature du rejet', 'RET - espèces protégées')
     cy.fill('Présentation du poisson', 'FIL - En filets', { index: 2 })
@@ -863,31 +883,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     })
   })
 
-  it('Should show weighing certificate field only when onboard weighing permit is Yes', () => {
-    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
-
-    cy.clickButton('Ajouter')
-    cy.clickButton('Ajouter un contrôle en mer')
-
-    // The weighing certificate field should not be visible initially
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-
-    // Setting onboard weighing permit to Non should NOT show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'Non')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-
-    // Setting onboard weighing permit to Non concerné should NOT show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-
-    // Setting onboard weighing permit to Oui SHOULD show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'Oui')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('exist')
-
-    // Changing back to Non should hide the cert field again
-    cy.fill('Autorisation pour la pesée à bord', 'Non')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-  })
 
   it('Should display the expected vessel details', () => {
     cy.clickButton('Ajouter')
@@ -918,40 +913,41 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    cy.intercept('POST', '/bff/v1/mission_actions', {
-      body: { id: 2 },
-      statusCode: 201
-    })
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', {
-      body: { id: 2 },
-      statusCode: 201
-    }).as('updateMissionAction')
+    cy.get('input[placeholder="Rechercher un navire..."]').type('mal')
+    cy.contains('mark', 'MAL').click().wait(500)
 
     cy.wait(500)
 
+    cy.intercept('POST', '/bff/v1/mission_actions', {
+      body: { id: 2 },
+      statusCode: 201
+    }).as('postMissionAction')
+
+    cy.wait(500)
+
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('not.exist')
+    cy.get('[name="gearOnboard[0].wireType"]').should('not.exist')
+
+    cy.fill('Engin contrôlé', 'Non', { index: 0 })
+    cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
+    cy.fill('Maillage déclaré', 60, { index: 0 })
+
     // Add an LLS gear (Lignes et hameçons category) — wire fields should appear
     cy.fill('Ajouter un engin', 'LLS')
-    cy.get('[name="gearOnboard[0].averageWireThickness"]').should('exist')
-    cy.get('[name="gearOnboard[0].wireType"]').should('exist')
+    cy.wait(250)
+    cy.get('[id="gearOnboard[1].averageWireThickness"]').should('exist')
+    cy.get('[name="gearOnboard[1].wireType"]').should('exist')
 
-    cy.fill('Engin contrôlé', 'Oui')
-    cy.fill("Marquage de l'engin conforme", 'Oui')
+    cy.fill('Engin contrôlé', 'Oui', { index: 1 })
+    cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
     cy.fill('Epaisseur moyenne de fil', 1.5)
     cy.fill('Type de fil', 'Simple')
 
-    // Add a non-line gear (OTB) — wire fields should NOT appear
-    cy.fill('Ajouter un engin', 'OTB')
-    cy.get('[name="gearOnboard[1].averageWireThickness"]').should('not.exist')
-    cy.get('[name="gearOnboard[1].wireType"]').should('not.exist')
-
-    cy.fill('Engin contrôlé', 'Non', { index: 1 })
-    cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
-    cy.fill('Maillage déclaré', 60, { index: 1 })
 
     cy.fill('Saisi par', 'Marlin')
 
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@postMissionAction',
       {
         body: {
           gearOnboard: [
@@ -1007,8 +1003,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
-    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 2 }, statusCode: 201 })
-    cy.intercept('PUT', '/bff/v1/mission_actions/2', { body: { id: 2 }, statusCode: 201 }).as('updateMissionAction3')
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 2 }, statusCode: 201 }).as('postMissionAction3')
 
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
       body: [
@@ -1050,7 +1045,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
 
     cy.waitForLastRequest(
-      '@updateMissionAction3',
+      '@postMissionAction3',
       {
         body: {
           speciesOnboard: [

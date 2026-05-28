@@ -1,3 +1,6 @@
+import { SpeciesControlPrefillSchema } from '@features/Logbook/schemas/SpeciesControlPrefillSchema'
+import { z } from 'zod'
+
 import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
@@ -589,4 +592,6 @@ export namespace Logbook {
     VESSEL_NAME = 'VESSEL_NAME',
     VESSEL_RISK_FACTOR = 'VESSEL_RISK_FACTOR'
   }
+
+  export type SpeciesControlPrefill = z.infer<typeof SpeciesControlPrefillSchema>
 }

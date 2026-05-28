@@ -338,6 +338,8 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
+    cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', { body: [], statusCode: 200 })
+
     // -------------------------------------------------------------------------
     // Form
 
@@ -993,4 +995,106 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     }
   )
+
+  it('Should prefill speciesOnboard with FAR and DIS logbook data (faoZones, presentationCode, rejectedWeight, discardReason)', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 3 }, statusCode: 201 })
+    cy.intercept('PUT', '/bff/v1/mission_actions/3', { body: { id: 3 }, statusCode: 201 }).as('updateMissionAction3')
+
+    cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
+      body: [
+        {
+          discardReason: 'DIS',
+          faoZones: ['27.8.a', '27.8.b'],
+          presentationCode: 'GUT',
+          rejectedWeight: 50.0,
+          speciesCode: 'HKE'
+        },
+        {
+          discardReason: 'DIM',
+          faoZones: ['27.8.c'],
+          presentationCode: 'WHL',
+          rejectedWeight: 5.0,
+          speciesCode: 'BLI'
+        }
+      ],
+      statusCode: 200
+    })
+
+    // -------------------------------------------------------------------------
+    // Select vessel
+
+    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
+    cy.contains('mark', 'PHENO').click()
+
+    cy.wait(500)
+
+    // -------------------------------------------------------------------------
+    // Verify pre-filled values visible in the form
+
+    // HKE species row: rejected weight should be visible (replaces the "Ajouter rejet" button)
+    cy.contains('Qté rejetée').should('exist')
+    cy.contains('Nature du rejet').should('exist')
+
+    // Verify the request body includes all new pre-filled fields
+    cy.fill('Saisi par', 'Gaumont')
+    cy.wait(500)
+
+    cy.waitForLastRequest(
+      '@updateMissionAction3',
+      {
+        body: {
+          speciesOnboard: [
+            {
+              declaredWeight: 471.2,
+              discardReason: 'DIS',
+              faoZones: ['27.8.a', '27.8.b'],
+              presentationCode: 'GUT',
+              rejectedWeight: 50.0,
+              speciesCode: 'HKE'
+            },
+            {
+              declaredWeight: 13.46,
+              discardReason: 'DIM',
+              faoZones: ['27.8.c'],
+              presentationCode: 'WHL',
+              rejectedWeight: 5.0,
+              speciesCode: 'BLI'
+            }
+          ]
+        }
+      },
+      10
+    )
+      .its('response.statusCode')
+      .should('eq', 201)
+  })
+
+  it('Should dismiss sous-taille and rejet fields and restore add-buttons when delete buttons are clicked', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+    cy.fill('Ajouter une espèce', 'COD')
+
+    // Show under-sized field, fill it, then dismiss it
+    cy.clickButton('Ajouter sous-taille')
+    cy.fill('Qté sous-taille', 5)
+    cy.clickButton('Retirer la sous-taille')
+    cy.contains('Qté sous-taille').should('not.exist')
+    cy.contains('Ajouter sous-taille').should('be.visible')
+
+    // Show rejected field, fill it, then dismiss it
+    cy.clickButton('Ajouter rejet')
+    cy.fill('Qté rejetée', 2)
+    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    cy.clickButton('Retirer le rejet')
+    cy.contains('Qté rejetée').should('not.exist')
+    cy.contains('Nature du rejet').should('not.exist')
+    cy.contains('Ajouter rejet').should('be.visible')
+  })
 })

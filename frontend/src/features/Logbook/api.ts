@@ -30,6 +30,10 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       query: internalReferenceNumber => `/vessels/logbook/trips?internalReferenceNumber=${internalReferenceNumber}`,
       transformErrorResponse: response => new FrontendApiError(LOGBOOK_TRIPS_ERROR_MESSAGE, response)
     }),
+    getSpeciesControlPrefill: builder.query<Logbook.SpeciesControlPrefill[], string>({
+      keepUnusedDataFor: 30,
+      query: cfr => `/vessels/logbook/species-control-prefill?cfr=${cfr}`
+    }),
     getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>({
       query: (params: GetVesselLogbookParams) => {
         const { internalReferenceNumber } = params.vesselIdentity

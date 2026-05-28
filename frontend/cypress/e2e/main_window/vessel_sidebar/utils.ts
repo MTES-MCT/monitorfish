@@ -1,6 +1,8 @@
-import {faker} from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 
-import type {Reporting} from '@features/Reporting/types'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
+
+import type { Reporting } from '@features/Reporting/types'
 
 /**
  * @returns Created reporting ID.
@@ -26,6 +28,8 @@ export const createReportingFromVesselSidebar = (vesselName: string) => {
   cy.fill('Titre', faker.word.words(3))
   cy.fill('Type d’infraction et NATINF 1', ['27717'])
 
+  const date = getUtcDateInMultipleFormats('2166-06-08T13:54')
+  cy.fill('Fin de validité', date.utcDateTuple)
   cy.clickButton('Valider')
 
   return cy.wait('@createReporting').then(createInterception => {
@@ -53,7 +57,7 @@ export function addAndCreateReportingWithinVesselSidebar() {
 
   cy.fill('Source', 'Unité')
   cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-  cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+  cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
   cy.fill('Titre', 'Sortie non autorisée')
   cy.fill('Description', "Ce navire ne devrait pas être en mer, il n'a plus de points sur son permis")
   cy.fill('Type d’infraction et NATINF 1', ['27717'])

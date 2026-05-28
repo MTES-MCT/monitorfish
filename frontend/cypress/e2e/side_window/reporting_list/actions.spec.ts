@@ -1,3 +1,5 @@
+import { ReportingType } from '@features/Reporting/types/ReportingType'
+
 import { createReportingFromVesselSidebar } from '../../main_window/vessel_sidebar/utils'
 
 context('Side Window > Reporting List > Actions', () => {
@@ -13,7 +15,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Observations', false)
+      cy.fill('Type de signalement', ["Suspicions d'infraction"])
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -45,7 +47,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Observations', false)
+      cy.fill('Type de signalement', ["Suspicions d'infraction"])
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -84,6 +86,9 @@ context('Side Window > Reporting List > Actions', () => {
       withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
     })
     cy.fill('Titre', 'Suspicion de chalutage dans les 3 km')
+    // cy.fill() cannot target this field: the "Type de signalement" filter (CheckPicker)
+    // has an identical <label> and is matched first, before the form's MultiRadio <legend>.
+    cy.get(`input[name="type"][value="${ReportingType.INFRACTION_SUSPICION}"]`).click({ force: true })
     cy.fill('Type d’infraction et NATINF 1', ['27717'])
     cy.clickButton('Valider')
 
@@ -156,7 +161,7 @@ context('Side Window > Reporting List > Actions', () => {
       // When
       // cy.fill() cannot target this field: the "Type de signalement" filter (CheckPicker)
       // has an identical <label> and is matched first, before the form's MultiRadio <legend>.
-      cy.get('input[name="type"][value="OBSERVATION"]').click({ force: true })
+      cy.get(`input[name="type"][value="${ReportingType.OBSERVATION}"]`).click({ force: true })
       cy.clickButton('Valider')
 
       // Then
@@ -199,7 +204,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
-    cy.fill('Observations', false)
+    cy.fill('Type de signalement', ["Suspicions d'infraction"])
     cy.get('table .rs-checkbox-control').eq(0).click({ force: true })
 
     // When

@@ -3,7 +3,7 @@ import { FormikTextarea } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 
 import { ControlCheckTable } from './ControlCheckTable'
-import { E_ISR_ENABLED } from '../../constants'
+import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
@@ -12,9 +12,10 @@ import type { MissionActionFormValues } from '../../types'
 
 export function LicencesAndLogbookField() {
   const { values } = useFormikContext<MissionActionFormValues>()
+  const isEISREnabled = useIsEISREnabled()
 
   const rows: ControlCheckRow[] = [
-    ...(E_ISR_ENABLED
+    ...(isEISREnabled
       ? [
           {
             isRequired: true,
@@ -35,7 +36,7 @@ export function LicencesAndLogbookField() {
       label: 'Autorisations de pêche (AEP) conformes à l’activité du navire',
       name: 'licencesMatchActivity'
     },
-    ...(E_ISR_ENABLED
+    ...(isEISREnabled
       ? [
           {
             isRequired: true,

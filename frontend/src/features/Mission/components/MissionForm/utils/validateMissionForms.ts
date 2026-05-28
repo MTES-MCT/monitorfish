@@ -6,6 +6,7 @@ import { logSoftError } from '@utils/logSoftError'
 
 import { areMissionFormsValuesValid } from './areMissionFormsValuesValid'
 import * as ActionSchemas from '../ActionForm/schemas'
+import { computeIsEISREnabled } from '../hooks/useIsEISREnabled'
 import { MainFormLiveSchema } from '../MainForm/schemas'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
@@ -28,6 +29,8 @@ export function validateMissionForms(
     // There is no closure validation schema for the main form
     isValid: MainFormLiveSchema.isValidSync(mainFormValues)
   }
+
+  const isEISR = computeIsEISREnabled(mainFormValues.controlUnits?.map(cu => cu.id) ?? [])
 
   // eslint-disable-next-line no-restricted-syntax
   const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
@@ -52,7 +55,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isCompletionValidation
-            ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.getLandControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
             : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
@@ -67,7 +70,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isCompletionValidation
-            ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.getSeaControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
             : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
         }
 

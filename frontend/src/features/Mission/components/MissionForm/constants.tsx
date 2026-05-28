@@ -99,4 +99,17 @@ export const E_ISR_ENABLED = isCypress()
     window.Cypress.env().FRONTEND_E_ISR_ENABLED
   : import.meta.env.FRONTEND_E_ISR_ENABLED === 'true'
 
+const rawEIsrControlUnits: string = isCypress()
+  ? // @ts-ignore
+    (window.Cypress.env().FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST ?? '')
+  : (import.meta.env.FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST ?? '')
+
+/**
+ * Control unit IDs allowed to see e-ISR fields.
+ * Empty array = no restriction (all units see e-ISR fields when E_ISR_ENABLED is true).
+ */
+export const E_ISR_CONTROL_UNITS_FOR_TEST: number[] = rawEIsrControlUnits
+  ? String(rawEIsrControlUnits).split(',').map(Number).filter(Boolean)
+  : []
+
 export const HIDDEN_ERROR = 'HIDDEN_ERROR'

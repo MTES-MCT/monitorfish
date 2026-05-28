@@ -1,31 +1,35 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { HIDDEN_ERROR, E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
 import { array, boolean, number, object, string } from 'yup'
 
-const eIsrDeclarativeObligationsSchema = E_ISR_ENABLED
-  ? object({
-      propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
-      fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
-      stowagePlanPresent: string().required(HIDDEN_ERROR),
-      onboardWeighingPermit: string().required(HIDDEN_ERROR),
-      weighingCertificateAndSystemsValid: string().when('onboardWeighingPermit', {
-        is: (val?: string) => val === MissionAction.ControlCheck.YES,
-        then: schema => schema.required(HIDDEN_ERROR),
-        otherwise: schema => schema.notRequired()
+function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
+        fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
+        stowagePlanPresent: string().required(HIDDEN_ERROR),
+        onboardWeighingPermit: string().required(HIDDEN_ERROR),
+        weighingCertificateAndSystemsValid: string().when('onboardWeighingPermit', {
+          is: (val?: string) => val === MissionAction.ControlCheck.YES,
+          then: schema => schema.required(HIDDEN_ERROR),
+          otherwise: schema => schema.notRequired()
+        })
       })
-    })
-  : object({})
+    : object({})
+}
 
-const eIsrSpeciesSchema = E_ISR_ENABLED
-  ? object({
-      underSizedSeparateStowage: string().required(HIDDEN_ERROR),
-      underSizedSeparateRecording: string().required(HIDDEN_ERROR)
-    })
-  : object({})
+function makeEIsrSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        underSizedSeparateStowage: string().required(HIDDEN_ERROR),
+        underSizedSeparateRecording: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
 
 // -----------------------------------------------------------------------------
 // Form Schema Validators
@@ -137,44 +141,46 @@ export const LandControlFormLiveSchema = object({
   userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
-export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
-  object({
-    // Obligations déclaratives et autorisations
-    emitsVms: string().required(HIDDEN_ERROR),
-    emitsAis: string().required(HIDDEN_ERROR),
-    logbookMatchesActivity: string().required(HIDDEN_ERROR),
-    licencesMatchActivity: string().required(HIDDEN_ERROR),
+export function getLandControlFormCompletionSchema(isEISR: boolean) {
+  return LandControlFormLiveSchema.concat(
+    object({
+      // Obligations déclaratives et autorisations
+      emitsVms: string().required(HIDDEN_ERROR),
+      emitsAis: string().required(HIDDEN_ERROR),
+      logbookMatchesActivity: string().required(HIDDEN_ERROR),
+      licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-    // Espèces à bord
-    speciesWeightControlled: string().required(HIDDEN_ERROR),
-    speciesSizeControlled: string().required(HIDDEN_ERROR),
-    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
-    speciesOnboard: array().of(SpeciesOnboardSchema),
+      // Espèces à bord
+      speciesWeightControlled: string().required(HIDDEN_ERROR),
+      speciesSizeControlled: string().required(HIDDEN_ERROR),
+      separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      speciesOnboard: array().of(SpeciesOnboardSchema),
 
-    // Quantités saisies
-    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
-      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
-      then: schema => schema.required(HIDDEN_ERROR)
-    }),
+      // Quantités saisies
+      speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+        is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+        then: schema => schema.required(HIDDEN_ERROR)
+      }),
 
-    infractions: array().of(
-      object({
-        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
-      })
-    ),
-    // Engins à bord
-    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      infractions: array().of(
+        object({
+          infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+        })
+      ),
+      // Engins à bord
+      gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
-    // Qualité du contrôle
-    vesselTargeted: string().required(HIDDEN_ERROR),
-    isLastHaul: boolean().required(HIDDEN_ERROR),
+      // Qualité du contrôle
+      vesselTargeted: string().required(HIDDEN_ERROR),
+      isLastHaul: boolean().required(HIDDEN_ERROR),
 
-    // Saisi par / Complété par
-    completedBy: string().trim().required(HIDDEN_ERROR)
-  })
-)
-  .concat(eIsrDeclarativeObligationsSchema)
-  .concat(eIsrSpeciesSchema)
+      // Saisi par / Complété par
+      completedBy: string().trim().required(HIDDEN_ERROR)
+    })
+  )
+    .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
+    .concat(makeEIsrSpeciesSchema(isEISR))
+}
 
 // -----------------------------------------------------------------------------
 // Sea Control Action Form
@@ -187,47 +193,49 @@ export const SeaControlFormLiveSchema = object({
   userTrigram: string().required(HIDDEN_ERROR)
 })
 
-export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
-  object({
-    // Obligations déclaratives et autorisations
-    emitsVms: string().required(HIDDEN_ERROR),
-    emitsAis: string().required(HIDDEN_ERROR),
-    logbookMatchesActivity: string().required(HIDDEN_ERROR),
-    licencesMatchActivity: string().required(HIDDEN_ERROR),
+export function getSeaControlFormCompletionSchema(isEISR: boolean) {
+  return SeaControlFormLiveSchema.concat(
+    object({
+      // Obligations déclaratives et autorisations
+      emitsVms: string().required(HIDDEN_ERROR),
+      emitsAis: string().required(HIDDEN_ERROR),
+      logbookMatchesActivity: string().required(HIDDEN_ERROR),
+      licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-    // Espèces à bord
-    speciesWeightControlled: string().required(HIDDEN_ERROR),
-    speciesSizeControlled: string().required(HIDDEN_ERROR),
-    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
-    speciesOnboard: array().of(SpeciesOnboardSchema),
+      // Espèces à bord
+      speciesWeightControlled: string().required(HIDDEN_ERROR),
+      speciesSizeControlled: string().required(HIDDEN_ERROR),
+      separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      speciesOnboard: array().of(SpeciesOnboardSchema),
 
-    // Engins à bord
-    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      // Engins à bord
+      gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
-    // Quantités saisies
-    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
-      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
-      then: schema => schema.required(HIDDEN_ERROR)
-    }),
+      // Quantités saisies
+      speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+        is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+        then: schema => schema.required(HIDDEN_ERROR)
+      }),
 
-    isINNControl: boolean().required(HIDDEN_ERROR),
+      isINNControl: boolean().required(HIDDEN_ERROR),
 
-    infractions: array().of(
-      object({
-        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
-      })
-    ),
+      infractions: array().of(
+        object({
+          infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+        })
+      ),
 
-    // Qualité du contrôle
-    vesselTargeted: string().required(HIDDEN_ERROR),
-    isLastHaul: boolean().required(HIDDEN_ERROR),
+      // Qualité du contrôle
+      vesselTargeted: string().required(HIDDEN_ERROR),
+      isLastHaul: boolean().required(HIDDEN_ERROR),
 
-    // Saisi par / Complété par
-    completedBy: string().trim().required(HIDDEN_ERROR)
-  })
-)
-  .concat(eIsrDeclarativeObligationsSchema)
-  .concat(eIsrSpeciesSchema)
+      // Saisi par / Complété par
+      completedBy: string().trim().required(HIDDEN_ERROR)
+    })
+  )
+    .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
+    .concat(makeEIsrSpeciesSchema(isEISR))
+}
 
 // -----------------------------------------------------------------------------
 // Infraction SubForm

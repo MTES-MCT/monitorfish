@@ -13,9 +13,9 @@ import {
   FormikSelect,
   FormikTextarea,
   Icon,
+  IconButton,
   Select,
   SingleTag,
-  Size,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
@@ -51,7 +51,7 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
 type VisibilityState = { rejected: boolean; underSized: boolean }
 
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -211,6 +211,27 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     })
   }
 
+  const closeUnderSized = (index: number) => {
+    setVisibilityByIndex(prev => {
+      const next = [...prev]
+      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), underSized: false }
+
+      return next
+    })
+    setFieldValue(`speciesOnboard[${index}].underSizedWeight`, undefined)
+  }
+
+  const closeRejected = (index: number) => {
+    setVisibilityByIndex(prev => {
+      const next = [...prev]
+      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), rejected: false }
+
+      return next
+    })
+    setFieldValue(`speciesOnboard[${index}].rejectedWeight`, undefined)
+    setFieldValue(`speciesOnboard[${index}].discardReason`, undefined)
+  }
+
   const isUnderSizedShown = (index: number): boolean => {
     const species = input.value?.[index]
     if (species?.underSizedWeight !== undefined && species?.underSizedWeight !== null) {
@@ -275,29 +296,34 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
 
               <WeightsRow>
-                <FormikNumberInput isRequired label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                <FormikNumberInput
-                  isRequired
-                  label={controlledWeightLabel}
-                  name={`speciesOnboard[${index}].controlledWeight`}
-                />
+                <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
+                <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
                 {E_ISR_ENABLED ? (
                   <>
                     {isUnderSizedShown(index) ? (
-                      <FormikNumberInput label="Qté sous-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
+                      <>
+                        <FormikNumberInput label="Qté sous-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
+                        <DeleteButton
+                          accent={Accent.SECONDARY}
+                          Icon={Icon.Delete}
+                          onClick={() => closeUnderSized(index)}
+                          title="Retirer la sous-taille"
+                        />
+                      </>
                     ) : (
-                      <AddButton
-                        accent={Accent.SECONDARY}
-                        Icon={Icon.Plus}
-                        onClick={() => openUnderSized(index)}
-                        size={Size.SMALL}
-                      >
+                      <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
                         Ajouter sous-taille
                       </AddButton>
                     )}
                     {isRejectedShown(index) ? (
                       <>
                         <FormikNumberInput label="Qté rejetée" name={`speciesOnboard[${index}].rejectedWeight`} />
+                        <DeleteButton
+                          accent={Accent.SECONDARY}
+                          Icon={Icon.Delete}
+                          onClick={() => closeRejected(index)}
+                          title="Retirer le rejet"
+                        />
                         <FormikSelect
                           label="Nature du rejet"
                           name={`speciesOnboard[${index}].discardReason`}
@@ -305,12 +331,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                         />
                       </>
                     ) : (
-                      <AddButton
-                        accent={Accent.SECONDARY}
-                        Icon={Icon.Plus}
-                        onClick={() => openRejected(index)}
-                        size={Size.SMALL}
-                      >
+                      <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openRejected(index)}>
                         Ajouter rejet
                       </AddButton>
                     )}
@@ -323,7 +344,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               {E_ISR_ENABLED && (
                 <PresentationFaoRow>
                   <FormikSelect
-                    isRequired
                     label="Présentation du poisson"
                     name={`speciesOnboard[${index}].presentationCode`}
                     options={PRESENTATION_OPTIONS}
@@ -409,5 +429,12 @@ const PresentationFaoRow = styled.div`
 
 const AddButton = styled(Button)`
   align-self: flex-end;
-  margin-bottom: 4px;
+  height: 30px;
+`
+
+const DeleteButton = styled(IconButton)`
+  align-self: flex-end;
+  margin-left: -6px;
+  width: 30px;
+  height: 30px;
 `

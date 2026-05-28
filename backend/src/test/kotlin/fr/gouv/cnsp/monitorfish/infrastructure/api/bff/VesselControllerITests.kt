@@ -117,6 +117,9 @@ class VesselControllerITests {
     @MockitoBean
     private lateinit var getVesselAISPositions: GetVesselAISPositions
 
+    @MockitoBean
+    private lateinit var getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
@@ -1259,5 +1262,50 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should return species control prefill data from logbook`() {
+        // Given
+        val speciesControl =
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl().apply {
+                speciesCode = "HKE"
+                faoZones = listOf("27.8.a", "27.8.b")
+                presentationCode = "GUT"
+                rejectedWeight = 50.0
+                discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
+            }
+        given(getSpeciesControlPrefillFromLogbook.execute(any())).willReturn(listOf(speciesControl))
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/species-control-prefill?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].speciesCode", equalTo("HKE")))
+            .andExpect(jsonPath("$[0].faoZones.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].presentationCode", equalTo("GUT")))
+            .andExpect(jsonPath("$[0].rejectedWeight", equalTo(50.0)))
+            .andExpect(jsonPath("$[0].discardReason", equalTo("DIS")))
+    }
+
+    @Test
+    fun `Should return empty list for species control prefill when vessel has no logbook`() {
+        // Given
+        given(getSpeciesControlPrefillFromLogbook.execute(any())).willReturn(emptyList())
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/species-control-prefill?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(0)))
     }
 }

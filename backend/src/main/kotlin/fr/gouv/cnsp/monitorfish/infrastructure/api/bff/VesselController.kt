@@ -39,6 +39,7 @@ class VesselController(
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
     private val getVesselTripNumbers: GetVesselTripNumbers,
+    private val getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook,
     private val getVesselContactToUpdateByVesselId: GetVesselContactToUpdateByVesselId,
     private val saveVesselContactToUpdate: SaveVesselContactToUpdate,
 ) {
@@ -347,6 +348,17 @@ class VesselController(
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
     ): List<String> = getVesselTripNumbers.execute(internalReferenceNumber)
+
+    @GetMapping("/logbook/species-control-prefill")
+    @Operation(summary = "Get species control pre-fill data from the last logbook trip (FAR and DIS messages)")
+    fun getSpeciesControlPrefill(
+        @Parameter(description = "Vessel CFR (internal reference number)", required = true)
+        @RequestParam(name = "cfr")
+        cfr: String,
+    ): List<SpeciesControlPrefillDataOutput> =
+        getSpeciesControlPrefillFromLogbook.execute(cfr).map {
+            SpeciesControlPrefillDataOutput.fromSpeciesControl(it)
+        }
 
     @GetMapping("/risk_factor")
     @Operation(summary = "Get vessel risk factor")

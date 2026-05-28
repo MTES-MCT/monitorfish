@@ -10,8 +10,8 @@ import { Formik } from 'formik'
 import { noop } from 'lodash-es'
 import styled from 'styled-components'
 
-import { E_ISR_ENABLED } from '../constants'
-import { SeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
+import { getSeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
+import { useIsEISREnabled } from '../hooks/useIsEISREnabled'
 import { ControlQualityField } from './shared/ControlQualityField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
@@ -36,7 +36,8 @@ type SeaControlFormProps = Readonly<{
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const validationSchema = isMissionEnded ? SeaControlFormCompletionSchema : SeaControlFormLiveSchema
+  const isEISREnabled = useIsEISREnabled()
+  const validationSchema = isMissionEnded ? getSeaControlFormCompletionSchema(isEISREnabled) : SeaControlFormLiveSchema
 
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
@@ -57,7 +58,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <FormikCoordinatesPicker />
 
-            {E_ISR_ENABLED && <FormikGangwayField />}
+            {isEISREnabled && <FormikGangwayField />}
 
             <LicencesAndLogbookField />
 

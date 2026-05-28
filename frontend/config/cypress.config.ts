@@ -13,6 +13,7 @@ export default defineConfig({
      * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
      * instead of `import.meta.env` in application code.
      */
+    FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST: '10499',
     FRONTEND_E_ISR_ENABLED: true,
     FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true,
   },

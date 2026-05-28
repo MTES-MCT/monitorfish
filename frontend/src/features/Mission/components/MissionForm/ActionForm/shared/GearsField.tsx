@@ -1,6 +1,7 @@
 import { useGetGearsQuery } from '@api/gear'
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
-import { HIDDEN_ERROR, E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import {
   FieldError,
@@ -41,6 +42,7 @@ const WIRE_TYPE_OPTIONS = [
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
+  const isEISREnabled = useIsEISREnabled()
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -155,7 +157,7 @@ export function GearsField() {
                   options={BOOLEAN_AS_OPTIONS}
                 />
 
-                {E_ISR_ENABLED && (
+                {isEISREnabled && (
                   <FormikMultiRadio
                     isErrorMessageHidden
                     isInline
@@ -194,7 +196,7 @@ export function GearsField() {
                   <FieldError>{typedError[index]?.controlledMesh}</FieldError>
                 )}
 
-                {E_ISR_ENABLED &&
+                {isEISREnabled &&
                   gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ===
                     'Lignes et hameçons' && (
                     <StyledFieldGroup isInline>

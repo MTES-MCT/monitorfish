@@ -25,8 +25,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ControlCheckTable } from './ControlCheckTable'
-import { E_ISR_ENABLED } from '../../constants'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
+import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
@@ -55,6 +55,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
+  const isEISREnabled = useIsEISREnabled()
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
   const getFaoAreasQuery = useGetFaoAreasQuery()
@@ -262,7 +263,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       label: 'Arrimage séparé des espèces soumises à plan',
       name: 'separateStowageOfPreservedSpecies'
     },
-    ...(E_ISR_ENABLED
+    ...(isEISREnabled
       ? [
           {
             isRequired: true,
@@ -298,7 +299,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               <WeightsRow>
                 <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
                 <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
-                {E_ISR_ENABLED ? (
+                {isEISREnabled ? (
                   <>
                     {isUnderSizedShown(index) ? (
                       <>
@@ -341,7 +342,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 )}
               </WeightsRow>
 
-              {E_ISR_ENABLED && (
+              {isEISREnabled && (
                 <PresentationFaoRow>
                   <FormikSelect
                     label="Présentation du poisson"

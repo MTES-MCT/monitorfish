@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-val springBootVersion = "3.5.8"
+val springBootVersion = "4.0.6"
 val kotlinVersion = "2.3.21"
 val springSecurityVersion = "6.5.6"
 

@@ -110,8 +110,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.4.3")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:11.18.0")
-    implementation("org.flywaydb:flyway-database-postgresql:11.18.0")
+    implementation("org.flywaydb:flyway-core:12.5.0")
+    implementation("org.flywaydb:flyway-database-postgresql:12.5.0")
     implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
     implementation("org.hibernate:hibernate-spatial:7.3.2.Final")
     implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")

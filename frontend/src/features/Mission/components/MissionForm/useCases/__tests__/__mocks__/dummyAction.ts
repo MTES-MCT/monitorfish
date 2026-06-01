@@ -52,6 +52,7 @@ export const dummyAction = {
   latitude: 47.648401281163814,
   licencesAndLogbookObservations: undefined,
   licencesMatchActivity: undefined,
+  logbookFilledPriorToControl: undefined,
   logbookMatchesActivity: undefined,
   longitude: -4.281934312813745,
   missionId: 123,

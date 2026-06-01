@@ -9,6 +9,7 @@ import { array, boolean, number, object, string } from 'yup'
 function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
   return isEISR
     ? object({
+        logbookFilledPriorToControl: string().required(HIDDEN_ERROR),
         propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
         fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
         stowagePlanPresent: string().required(HIDDEN_ERROR),

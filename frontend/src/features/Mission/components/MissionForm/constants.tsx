@@ -40,6 +40,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   latitude: undefined,
   licencesAndLogbookObservations: undefined,
   licencesMatchActivity: undefined,
+  logbookFilledPriorToControl: undefined,
   logbookMatchesActivity: undefined,
   longitude: undefined,
   numberOfVesselsFlownOver: undefined,

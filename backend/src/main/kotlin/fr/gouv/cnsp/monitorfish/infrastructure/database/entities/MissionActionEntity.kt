@@ -56,6 +56,9 @@ class MissionActionEntity(
     @Column(name = "emits_ais")
     @Enumerated(EnumType.STRING)
     val emitsAis: ControlCheck? = null,
+    @Column(name = "logbook_filled_prior_to_control")
+    @Enumerated(EnumType.STRING)
+    val logbookFilledPriorToControl: ControlCheck? = null,
     @Column(name = "logbook_matches_activity")
     @Enumerated(EnumType.STRING)
     val logbookMatchesActivity: ControlCheck? = null,
@@ -188,6 +191,7 @@ class MissionActionEntity(
                 actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc?.let { it.toInstant() },
                 emitsVms = missionAction.emitsVms,
                 emitsAis = missionAction.emitsAis,
+                logbookFilledPriorToControl = missionAction.logbookFilledPriorToControl,
                 logbookMatchesActivity = missionAction.logbookMatchesActivity,
                 licencesMatchActivity = missionAction.licencesMatchActivity,
                 speciesWeightControlled = missionAction.speciesWeightControlled,
@@ -259,6 +263,7 @@ class MissionActionEntity(
             actionEndDatetimeUtc = actionEndDatetimeUtc?.atZone(ZoneOffset.UTC),
             emitsVms = emitsVms,
             emitsAis = emitsAis,
+            logbookFilledPriorToControl = logbookFilledPriorToControl,
             logbookMatchesActivity = logbookMatchesActivity,
             licencesMatchActivity = licencesMatchActivity,
             speciesWeightControlled = speciesWeightControlled,

@@ -24,6 +24,7 @@ data class MissionAction(
     val emitsVms: ControlCheck? = null,
     val emitsAis: ControlCheck? = null,
     val flightGoals: List<FlightGoal> = listOf(),
+    val logbookFilledPriorToControl: ControlCheck? = null,
     val logbookMatchesActivity: ControlCheck? = null,
     val licencesMatchActivity: ControlCheck? = null,
     val speciesWeightControlled: ControlCheck? = null,

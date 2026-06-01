@@ -27,13 +27,8 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
       <ColumnHeader>N/A</ColumnHeader>
       {rows.map(({ disabled, hasBorderBottom, isRequired, label, name }, index) => (
         <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
-          <RowLegend
-            $disabled={!!disabled}
-            $hasBorderBottom={!!hasBorderBottom}
-            $isFirst={index === 0}
-            $isRequired={!!isRequired}
-          >
-            {label}
+          <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+            <LabelText $isRequired={!!isRequired}>{label}</LabelText>
           </RowLegend>
           {CONTROL_CHECK_AS_OPTIONS.map(opt => (
             <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
@@ -61,7 +56,7 @@ const borderBottom = css`
 const TableGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 100px 100px 100px;
-  align-items: center;
+  align-items: stretch;
   row-gap: 4px;
 `
 
@@ -92,22 +87,24 @@ const RowLegend = styled.legend<{
   $disabled: boolean
   $hasBorderBottom: boolean
   $isFirst: boolean
-  $isRequired: boolean
 }>`
+  display: flex;
+  align-items: center;
   float: none;
   font-size: 13px;
   color: ${p => (p.$disabled ? p.theme.color.lightGray : p.theme.color.gunMetal)};
   margin-top: ${p => (p.$isFirst ? 8 : 0)}px;
   padding: 4px 0 ${p => (p.$hasBorderBottom ? 12 : 4)}px 8px;
-  height: 18px;
   ${p => p.$hasBorderBottom && borderBottom}
+`
+
+const LabelText = styled.span<{ $isRequired: boolean }>`
   ${p =>
     p.$isRequired &&
     css`
       &::after {
         content: ' *';
         color: ${p.theme.color.maximumRed};
-        margin-left: 2px;
       }
     `}
 `
@@ -118,7 +115,6 @@ const RadioCell = styled.div<{ $hasBorderBottom: boolean; $isFirst: boolean }>`
   align-items: center;
   margin-top: ${p => (p.$isFirst ? 8 : 0)}px;
   padding: 4px 0 ${p => (p.$hasBorderBottom ? 12 : 4)}px 0;
-  height: 18px;
   ${p => p.$hasBorderBottom && borderBottom}
 
   .Field-Radio {

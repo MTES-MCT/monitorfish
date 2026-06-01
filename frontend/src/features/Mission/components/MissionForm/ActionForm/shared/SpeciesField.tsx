@@ -2,6 +2,7 @@ import { useGetFaoAreasQuery } from '@api/faoAreas'
 import { useGetSpeciesQuery } from '@api/specy'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
 import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
+import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
 import {
   Accent,
@@ -18,12 +19,14 @@ import {
   SingleTag,
   usePrevious
 } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
 import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { getDefaultPresentationCode } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
@@ -56,6 +59,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
   const isEISREnabled = useIsEISREnabled()
+  const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
   const getFaoAreasQuery = useGetFaoAreasQuery()
@@ -141,7 +145,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         discardReason: undefined,
         faoZones: undefined,
         nbFish: undefined,
-        presentationCode: undefined,
+        presentationCode: getDefaultPresentationCode(isEISREnabled, vessel?.length),
         rejectedWeight: undefined,
         speciesCode: newSpecy.code,
         underSized: false,

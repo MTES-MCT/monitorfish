@@ -4,7 +4,7 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 val springBootVersion = "3.5.8"
 val kotlinVersion = "2.3.21"
-val springSecurityVersion = "6.5.6"
+val springSecurityVersion = "7.0.5"
 
 plugins {
     `java-library`

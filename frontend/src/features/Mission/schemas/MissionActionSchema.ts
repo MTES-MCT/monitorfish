@@ -43,6 +43,7 @@ export const MissionActionSchema = z.strictObject({
   latitude: numberOrUndefined,
   licencesAndLogbookObservations: stringOrUndefined,
   licencesMatchActivity: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  logbookFilledPriorToControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   logbookMatchesActivity: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   longitude: numberOrUndefined,
   missionId: z.number(),

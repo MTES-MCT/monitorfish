@@ -17,4 +17,5 @@ ALTER TABLE mission_actions
   ADD COLUMN onboard_weighing_permit                VARCHAR(20),
   ADD COLUMN weighing_certificate_and_systems_valid VARCHAR(20),
   ADD COLUMN under_sized_separate_stowage           VARCHAR(20),
-  ADD COLUMN under_sized_separate_recording         VARCHAR(20);
+  ADD COLUMN under_sized_separate_recording         VARCHAR(20),
+  ADD COLUMN logbook_filled_prior_to_control        VARCHAR(20);

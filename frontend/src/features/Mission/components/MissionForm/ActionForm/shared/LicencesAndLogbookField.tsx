@@ -1,6 +1,10 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
+import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FormikTextarea } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
+import { useEffect } from 'react'
 
 import { ControlCheckTable } from './ControlCheckTable'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
@@ -11,8 +15,19 @@ import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 
 export function LicencesAndLogbookField() {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const isEISREnabled = useIsEISREnabled()
+
+  const { data: vessel } = useGetVesselQuery(
+    values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId ? values.vesselId : skipToken
+  )
+  const isVesselUnder10m = !!vessel?.length && vessel.length <= 10
+
+  useEffect(() => {
+    if (isVesselUnder10m && values.logbookFilledPriorToControl !== MissionAction.ControlCheck.NOT_APPLICABLE) {
+      setFieldValue('logbookFilledPriorToControl', MissionAction.ControlCheck.NOT_APPLICABLE)
+    }
+  }, [isVesselUnder10m, values.logbookFilledPriorToControl, setFieldValue])
 
   const rows: ControlCheckRow[] = [
     ...(isEISREnabled
@@ -26,6 +41,15 @@ export function LicencesAndLogbookField() {
       : []),
     { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
     { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
+    ...(isEISREnabled
+      ? [
+          {
+            isRequired: true,
+            label: 'Journal de pêche complété avant le contrôle',
+            name: 'logbookFilledPriorToControl'
+          }
+        ]
+      : []),
     {
       isRequired: true,
       label: 'Déclarations journal de pêche conformes à l’activité du navire',

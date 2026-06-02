@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroupCommands
@@ -34,7 +34,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
     SecurityConfig::class,
-    OIDCProperties::class,MapperConfiguration::class)
+    OIDCProperties::class,
+    MapperConfiguration::class,
+)
 @WebMvcTest(value = [(VesselGroupController::class)])
 class VesselGroupControllerITests {
     @Autowired

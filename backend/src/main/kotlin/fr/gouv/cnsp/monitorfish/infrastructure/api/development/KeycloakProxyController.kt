@@ -61,7 +61,7 @@ class KeycloakProxyController(
     @GetMapping("/realms/**")
     @Throws(Exception::class)
     fun get(
-        proxy: ProxyExchange<ByteArray?>,
+        proxy: ProxyExchange<ByteArray>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val targetUri = StringBuilder("${oidcProperties.proxyUrl}${request.requestURI}?${request.queryString}")
@@ -111,7 +111,7 @@ class KeycloakProxyController(
     @GetMapping("/resources/**")
     @Throws(Exception::class)
     fun getResources(
-        proxy: ProxyExchange<ByteArray?>,
+        proxy: ProxyExchange<ByteArray>,
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): Void? {
@@ -167,7 +167,7 @@ class KeycloakProxyController(
     )
     @Throws(Exception::class)
     fun post(
-        proxy: ProxyExchange<ByteArray?>,
+        proxy: ProxyExchange<ByteArray>,
         request: HttpServletRequest,
     ): ResponseEntity<*> {
         val params = request.parameterMap

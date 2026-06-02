@@ -104,12 +104,15 @@ dependencies {
     api("org.springframework.security:spring-security-oauth2-resource-server:$springSecurityVersion")
     api("org.springframework.security:spring-security-oauth2-jose:$springSecurityVersion")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.4")
+    // Renamed from spring-cloud-gateway-mvc in Spring Cloud 2025.x; version managed by the BOM so it
+    // stays compatible with Spring Boot 4. Keeps the org.springframework.cloud.gateway.mvc.* package.
+    implementation("org.springframework.cloud:spring-cloud-gateway-proxyexchange-webmvc")
     implementation("org.springframework.kafka:spring-kafka")
     // Spring Boot 4 split several pieces out of spring-boot / spring-boot-autoconfigure into
     // dedicated modules that are no longer pulled transitively by the web starter.
     implementation("org.springframework.boot:spring-boot-restclient:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-kafka:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-flyway:$springBootVersion")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
@@ -127,8 +130,10 @@ dependencies {
     implementation("org.flywaydb:flyway-core:12.5.0")
     implementation("org.flywaydb:flyway-database-postgresql:12.5.0")
     implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
-    implementation("org.hibernate:hibernate-spatial:7.3.6.Final")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")
+    // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
+    // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).
+    implementation("org.hibernate.orm:hibernate-spatial")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.15.2")
     api("org.locationtech.jts:jts-core:1.20.0")
     implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
     implementation("org.locationtech.proj4j:proj4j:1.4.2")

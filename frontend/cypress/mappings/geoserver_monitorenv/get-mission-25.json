@@ -21,7 +21,8 @@
           "resources": [
             {
               "id": 553,
-              "name": "DF 36 Kan An Avel"
+              "name": "DF 36 Kan An Avel",
+              "type": "PATROL_BOAT"
             }
           ],
           "contact": null,

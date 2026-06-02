@@ -78,25 +78,28 @@ const actionDatetimeUtcValidator = string()
     }
   })
 
-export const GearOnboardSchema = object({
-  gearWasControlled: boolean().required(HIDDEN_ERROR),
-  declaredMesh: number().when(['gearCode', 'controlledMesh'], {
-    is: (gearCode, controlledMesh, context) => {
-      const { gears } = mainStore.getState().gear
-      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
-      const declaredMesh = context?.parent?.declaredMesh
+export function makeGearOnboardSchema(isEISR: boolean) {
+  return object({
+    gearWasControlled: boolean().required(HIDDEN_ERROR),
+    declaredMesh: number().when(['gearCode', 'controlledMesh'], {
+      is: (gearCode, controlledMesh, context) => {
+        const { gears } = mainStore.getState().gear
+        const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
+        const declaredMesh = context?.parent?.declaredMesh
 
-      if (isMeshRequiredForSegment) {
-        return controlledMesh === undefined && declaredMesh === undefined
-      }
+        if (isMeshRequiredForSegment) {
+          return controlledMesh === undefined && declaredMesh === undefined
+        }
 
-      return false
-    },
-    then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
-    otherwise: schema => schema.notRequired()
-  }),
-  controlledMesh: number()
-})
+        return false
+      },
+      then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
+      otherwise: schema => schema.notRequired()
+    }),
+    controlledMesh: number(),
+    gearMarkingIsCompliant: isEISR ? string().required(HIDDEN_ERROR) : string().notRequired()
+  })
+}
 
 // -----------------------------------------------------------------------------
 // Air Control Action Form
@@ -173,7 +176,7 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
         })
       ),
       // Engins à bord
-      gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Qualité du contrôle
       vesselTargeted: string().required(HIDDEN_ERROR),
@@ -214,7 +217,7 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
 
       // Engins à bord
-      gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Quantités saisies
       speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {

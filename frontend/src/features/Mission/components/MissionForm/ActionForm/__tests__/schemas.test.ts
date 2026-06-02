@@ -162,9 +162,23 @@ describe('ActionForm/schemas', () => {
       expect(
         getSeaControlFormCompletionSchema(true).isValidSync({
           ...completionValuesWithoutEISR,
-          ...eisrFields
+          ...eisrFields,
+          gearOnboard: [{ gearMarkingIsCompliant: MissionAction.ControlCheck.YES, gearWasControlled: true }]
         })
       ).toBe(true)
+    })
+
+    it('should fail validation When e-ISR is enabled and a gear is missing gearMarkingIsCompliant', () => {
+      expect(
+        getSeaControlFormCompletionSchema(true).isValidSync({
+          ...completionValuesWithoutEISR,
+          ...eisrFields
+        })
+      ).toBe(false)
+    })
+
+    it('should pass validation When e-ISR is disabled and a gear is missing gearMarkingIsCompliant', () => {
+      expect(getSeaControlFormCompletionSchema(false).isValidSync(completionValuesWithoutEISR)).toBe(true)
     })
   })
 })

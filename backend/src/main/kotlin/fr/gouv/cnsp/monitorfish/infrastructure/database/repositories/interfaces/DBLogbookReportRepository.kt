@@ -198,4 +198,38 @@ interface DBLogbookReportRepository :
         nativeQuery = true,
     )
     fun getActiveTrips(cfrsAsString: String): List<Array<Any>>
+
+    @Query(
+        value = """
+            WITH detected_recent_deps AS (
+                SELECT
+                    p.internal_reference_number AS cfr,
+                    p.date_time,
+                    p.latitude,
+                    p.longitude,
+                    ROW_NUMBER() OVER (PARTITION BY p.internal_reference_number ORDER BY date_time DESC) AS dep_rank
+                FROM positions p
+                WHERE
+                    p.date_time >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - make_interval(hours => :hoursFromNow)
+                    AND p.date_time < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 hours'
+                    AND p.is_at_port = false
+                    AND time_emitting_at_sea = 0
+                    AND p.flag_state IN ('FR', 'VE')
+                    AND p.internal_reference_number = :cfr
+            )
+
+            SELECT
+                gat.last_dep_datetime,
+                drd.date_time as trip_first_position_at_sea_datetime
+            FROM get_active_trips(string_to_array(:cfr, ',')) gat
+            LEFT JOIN detected_recent_deps drd ON
+                drd.cfr = gat.cfr AND
+                drd.dep_rank = 1
+        """,
+        nativeQuery = true,
+    )
+    fun getCurrentTripDepAndPositionAtSeaDateTime(
+        cfr: String,
+        hoursFromNow: Int,
+    ): List<Array<Any>>
 }

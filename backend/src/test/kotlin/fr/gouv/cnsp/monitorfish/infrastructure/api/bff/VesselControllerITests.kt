@@ -27,6 +27,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.fakers.VesselContactToUpdateFaker
@@ -113,6 +114,9 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook
+
+    @MockitoBean
+    private lateinit var getHasFilledLogbookForCurrentTrip: GetHasFilledLogbookForCurrentTrip
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -1301,5 +1305,21 @@ class VesselControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(0)))
+    }
+
+    @Test
+    fun `Should return boolean when logbook filled`() {
+        // Given
+        given(getHasFilledLogbookForCurrentTrip.execute(any())).willReturn(true)
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/has-filled-logbook-for-current-trip?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$", equalTo(true)))
     }
 }

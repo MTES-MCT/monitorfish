@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

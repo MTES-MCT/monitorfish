@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
 
 @UseCase
 class GetSpeciesControlPrefillFromLogbook(
@@ -24,7 +25,10 @@ class GetSpeciesControlPrefillFromLogbook(
             )
 
         // From FAR messages: collect faoZones and presentationCode per species
-        data class FarData(val faoZones: MutableSet<String>, var presentationCode: String?)
+        data class FarData(
+            val faoZones: MutableSet<String>,
+            var presentationCode: String?,
+        )
 
         val farBySpecies = mutableMapOf<String, FarData>()
         messages
@@ -42,7 +46,10 @@ class GetSpeciesControlPrefillFromLogbook(
             }
 
         // From DIS messages: sum rejectedWeight and determine discardReason per species
-        data class DisData(var rejectedWeight: Double, var hasDim: Boolean)
+        data class DisData(
+            var rejectedWeight: Double,
+            var hasDim: Boolean,
+        )
 
         val disBySpecies = mutableMapOf<String, DisData>()
         messages

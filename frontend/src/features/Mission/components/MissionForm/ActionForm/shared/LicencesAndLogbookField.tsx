@@ -1,10 +1,6 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
-import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
-import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FormikTextarea } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
-import { useEffect } from 'react'
 
 import { ControlCheckTable } from './ControlCheckTable'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
@@ -15,19 +11,8 @@ import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 
 export function LicencesAndLogbookField() {
-  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { values } = useFormikContext<MissionActionFormValues>()
   const isEISREnabled = useIsEISREnabled()
-
-  const { data: vessel } = useGetVesselQuery(
-    values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId ? values.vesselId : skipToken
-  )
-  const isVesselUnder10m = !!vessel?.length && vessel.length <= 10
-
-  useEffect(() => {
-    if (isVesselUnder10m && values.logbookFilledPriorToControl !== MissionAction.ControlCheck.NOT_APPLICABLE) {
-      setFieldValue('logbookFilledPriorToControl', MissionAction.ControlCheck.NOT_APPLICABLE)
-    }
-  }, [isVesselUnder10m, values.logbookFilledPriorToControl, setFieldValue])
 
   const rows: ControlCheckRow[] = [
     ...(isEISREnabled

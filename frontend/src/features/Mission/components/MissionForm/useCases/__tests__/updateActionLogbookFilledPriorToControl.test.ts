@@ -2,10 +2,15 @@ import { dummyAction } from '@features/Mission/components/MissionForm/useCases/_
 import { updateActionLogbookFilledPriorToControl } from '@features/Mission/components/MissionForm/useCases/updateActionLogbookFilledPriorToControl'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it } from '@jest/globals'
 
-// `E_ISR_ENABLED` resolves to `false` under Jest (it reads `import.meta.env`), which would make
-// the use-case return early. We force it on so the branches under test actually run.
+// `E_ISR_ENABLED` is derived from `import.meta.env` and resolves to `false` under Jest (CI has no
+// `.env`), which would otherwise make the use-case return early. We force it on so the branches
+// under test run.
+//
+// IMPORTANT: do NOT import `jest` from `@jest/globals` in this file. swc only hoists `jest.mock`
+// above the imports when it references the *global* `jest`; with an imported binding the mock runs
+// after the use-case module (and the real `constants`) is loaded, so it would have no effect.
 jest.mock('@features/Mission/components/MissionForm/constants', () => ({ E_ISR_ENABLED: true }))
 
 const mockDispatch = jest.fn()

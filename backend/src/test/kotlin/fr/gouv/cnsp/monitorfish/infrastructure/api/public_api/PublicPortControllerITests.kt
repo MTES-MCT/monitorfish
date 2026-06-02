@@ -22,7 +22,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class, CaffeineConfiguration::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+    CaffeineConfiguration::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [PublicPortController::class])
 class PublicPortControllerITests {

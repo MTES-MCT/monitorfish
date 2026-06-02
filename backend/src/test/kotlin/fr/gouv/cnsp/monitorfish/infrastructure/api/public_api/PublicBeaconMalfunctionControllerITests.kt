@@ -1,10 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -29,7 +29,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PublicBeaconMalfunctionController::class)])
 class PublicBeaconMalfunctionControllerITests {

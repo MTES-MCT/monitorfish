@@ -5,6 +5,8 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
@@ -58,7 +60,9 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @WebMvcTest(value = [VesselController::class])
-@Import(MapperConfiguration::class)
+@Import(
+    SecurityConfig::class,
+    OIDCProperties::class,MapperConfiguration::class)
 class VesselControllerITests {
     @Autowired
     private lateinit var api: MockMvc

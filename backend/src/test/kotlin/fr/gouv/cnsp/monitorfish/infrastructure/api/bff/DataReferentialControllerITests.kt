@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
@@ -24,7 +24,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(DataReferentialController::class)])
 class DataReferentialControllerITests {

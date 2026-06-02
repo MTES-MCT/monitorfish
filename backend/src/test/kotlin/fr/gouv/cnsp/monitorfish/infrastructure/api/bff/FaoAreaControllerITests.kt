@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.ComputeVesselFaoAreas
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fao_areas.GetFaoAreas
@@ -21,7 +21,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(FaoAreaController::class)])
 class FaoAreaControllerITests {

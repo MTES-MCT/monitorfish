@@ -1,9 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
@@ -30,7 +30,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [(PublicMissionActionsController::class)])
 class PublicMissionActionsControllerITests {

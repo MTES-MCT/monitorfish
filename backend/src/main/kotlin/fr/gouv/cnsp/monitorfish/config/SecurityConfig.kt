@@ -256,8 +256,7 @@ class SecurityConfig(
                         .logoutSuccessHandler(oidcLogoutSuccessHandler())
                         .logoutRequestMatcher(
                             PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"),
-                        )
-                        .invalidateHttpSession(true)
+                        ).invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                 }

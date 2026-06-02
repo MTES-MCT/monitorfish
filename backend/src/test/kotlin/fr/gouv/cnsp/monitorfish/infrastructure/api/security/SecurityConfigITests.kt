@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.KeycloakProxyProperties
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
@@ -32,7 +32,7 @@ class SecurityConfigITests {
      */
     @Nested
     @Import(
-    MapperConfiguration::class,
+        MapperConfiguration::class,
         SecurityConfig::class,
         OIDCProperties::class,
         KeycloakProxyProperties::class,
@@ -156,7 +156,7 @@ class SecurityConfigITests {
      */
     @Nested
     @Import(
-    MapperConfiguration::class,
+        MapperConfiguration::class,
         SecurityConfig::class,
         OIDCProperties::class,
         KeycloakProxyProperties::class,

@@ -17,7 +17,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
-    MapperConfiguration::class,SentryConfig::class, ControllersExceptionHandler::class)
+    MapperConfiguration::class,
+    SentryConfig::class,
+    ControllersExceptionHandler::class,
+)
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [ActivityVisualizationController::class])
 class ActivityVisualizationControllerITests {

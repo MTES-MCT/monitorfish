@@ -32,6 +32,14 @@ function makeEIsrSpeciesSchema(isEISR: boolean) {
     : object({})
 }
 
+function makeEIsrSpeciesOnboardSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
+      })
+    : object({})
+}
+
 // -----------------------------------------------------------------------------
 // Form Schema Validators
 
@@ -69,10 +77,6 @@ const actionDatetimeUtcValidator = string()
       return customDayjs(actionDatetimeUtc).isSameOrBefore(mission.endDateTimeUtc)
     }
   })
-
-export const SpeciesOnboardSchema = object({
-  faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
-})
 
 export const GearOnboardSchema = object({
   gearWasControlled: boolean().required(HIDDEN_ERROR),
@@ -155,7 +159,7 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
       speciesWeightControlled: string().required(HIDDEN_ERROR),
       speciesSizeControlled: string().required(HIDDEN_ERROR),
       separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
-      speciesOnboard: array().of(SpeciesOnboardSchema),
+      speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
 
       // Quantités saisies
       speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
@@ -207,7 +211,7 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
       speciesWeightControlled: string().required(HIDDEN_ERROR),
       speciesSizeControlled: string().required(HIDDEN_ERROR),
       separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
-      speciesOnboard: array().of(SpeciesOnboardSchema),
+      speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
 
       // Engins à bord
       gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),

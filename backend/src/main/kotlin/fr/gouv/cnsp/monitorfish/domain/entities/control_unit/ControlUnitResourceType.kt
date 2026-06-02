@@ -9,7 +9,7 @@ enum class ControlUnitResourceType(
     AIRPLANE("Avion"),
     BARGE("Barge"),
     CAR("Voiture"),
-    DRONE("Drône"),
+    DRONE("Drone"),
     EQUESTRIAN("Équestre"),
     FAST_BOAT("Vedette"),
     FRIGATE("Frégate"),

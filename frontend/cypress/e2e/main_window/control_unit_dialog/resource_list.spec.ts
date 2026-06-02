@@ -55,7 +55,7 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
 
     // On ne met pas de nom de moyen ici
     // pour tester que ce soit bien le type qui soit utilisé comme nom lorsque le nom est vide.
-    const createdResourceName = 'Drône'
+    const createdResourceName = 'Drone'
     cy.fill('Type de moyen', 'Dr')
     cy.fill('Base du moyen', 'Aur')
     cy.fill('Commentaire', 'Un commentaire sur le moyen.')

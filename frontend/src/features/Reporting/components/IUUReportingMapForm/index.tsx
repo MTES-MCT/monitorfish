@@ -1,5 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AutoSaveTag } from '@features/Mission/components/MissionForm/shared/AutoSaveTag'
 import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
@@ -188,32 +189,30 @@ export function IUUReportingMapForm() {
           </Wrapper>
           {isDraftCancellationConfirmationDialogOpen && (
             <ConfirmationModal
-              cancelButtonLabel="Retourner à l’édition"
-              color={THEME.color.maximumRed}
               confirmationButtonLabel="Quitter sans enregistrer"
               message={
                 <>
-                  <p>Vous êtes en train d’abandonner l’édition d’un signalement.</p>
-                  <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
+                  <p>Vous êtes en train d’abandonner</p>
+                  <Bold>l’édition d’un signalement.</Bold>
                 </>
               }
               onCancel={() => setIsDraftCancellationConfirmationDialogOpen(false)}
               onConfirm={handleClose}
-              title="Abandon des modifications"
+              title="Quitter sans enregistrer"
             />
           )}
           {isDeletionConfirmationDialogOpen && (
             <ConfirmationModal
-              color={THEME.color.maximumRed}
-              confirmationButtonLabel="Supprimer"
+              confirmationButtonLabel="Confirmer la suppression"
               message={
                 <>
-                  <p>Êtes-vous sûr de vouloir supprimer ce signalement ?</p>
+                  <p>Êtes-vous sûr de vouloir</p>
+                  <Bold>supprimer ce signalement ?</Bold>
                 </>
               }
               onCancel={() => setIsDeletionConfirmationDialogOpen(false)}
               onConfirm={handleDelete}
-              title="Suppression d'un signalement"
+              title="Supprimer le signalement"
             />
           )}
         </>

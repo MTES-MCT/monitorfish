@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { DataTable, Select } from '@mtes-mct/monitor-ui'
@@ -91,10 +92,8 @@ export function SegmentSubscriptionsField({
           confirmationButtonLabel="Confirmer la suppression"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir supprimer ce segment des diffusions ?</b>
-              </p>
-              <p>L’unité ne recevra plus les préavis de ce segment qui sont hors de la diffusion de base.</p>
+              <p>Êtes-vous sûr de vouloir supprimer ce segment des diffusions ?</p>
+              <Bold>L’unité ne recevra plus les préavis de ce segment qui sont hors de la diffusion de base.</Bold>
             </>
           }
           onCancel={closeRemovalConfirmationModal}

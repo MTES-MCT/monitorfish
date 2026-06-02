@@ -1,6 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { SideWindowCard } from '@components/SideWindowCard'
+import { Bold } from '@components/style'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
@@ -261,12 +262,15 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
       {isCancellationConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Quitter sans enregistrer"
-          message={`Vous êtes en train d’abandonner ${
-            isNewPriorNotification ? 'la création' : 'l’édition'
-          } d’un préavis.`}
+          message={
+            <>
+              <p>Vous êtes en train d’abandonner</p>
+              <Bold>{isNewPriorNotification ? "la création d'un préavis" : "l'édition d’un préavis"}</Bold>
+            </>
+          }
           onCancel={closeCancellationConfirmationModal}
           onConfirm={onClose}
-          title="Abandon de préavis"
+          title="Quitter sans enregistrer"
         />
       )}
 
@@ -275,10 +279,10 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
           confirmationButtonLabel="Confirmer l’invalidation"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir invalider ce préavis ?</b>
-              </p>
-              <p>Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.</p>
+              <p>Êtes-vous sûr de vouloir invalider ce préavis ?</p>
+              <Bold>
+                Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.
+              </Bold>
             </>
           }
           onCancel={closeInvalidationConfirmationModal}

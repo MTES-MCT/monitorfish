@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { useInterval } from '@features/PriorNotification/hooks/useInterval'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
@@ -131,10 +132,15 @@ export function LogbookPriorNotificationForm() {
       {isCancellationConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Quitter sans enregistrer"
-          message="Vous êtes en train d’abandonner l’édition d’un préavis."
+          message={
+            <>
+              <p>Vous êtes en train d’abandonner</p>
+              <Bold>l’édition d’un préavis.</Bold>
+            </>
+          }
           onCancel={closeCancellationConfirmationModal}
           onConfirm={close}
-          title="Abandon de préavis"
+          title="Quitter sans enregistrer"
         />
       )}
     </>

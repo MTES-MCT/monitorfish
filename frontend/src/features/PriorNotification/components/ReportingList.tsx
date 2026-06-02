@@ -1,6 +1,7 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { SideWindowCard } from '@components/SideWindowCard'
+import { Bold } from '@components/style'
 import { CurrentReportingList } from '@features/Reporting/components/VesselReportings/CurrentReportingList'
 import { getDefaultReportingsStartDate } from '@features/Reporting/utils'
 import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
@@ -101,10 +102,15 @@ export function ReportingList() {
       {isCancellationConfirmationModalOpen && (
         <ConfirmationModal
           confirmationButtonLabel="Quitter sans enregistrer"
-          message="Vous êtes en train d’abandonner la création ou l’édition d’un signalement."
+          message={
+            <>
+              <p>Vous êtes en train d’abandonner la création ou l’édition d’un signalement.</p>
+              <Bold>Cette action est irréversible.</Bold>
+            </>
+          }
           onCancel={closeCancellationConfirmationModal}
           onConfirm={close}
-          title="Abandon de signalement"
+          title="Quitter sans enregistrer"
         />
       )}
     </>

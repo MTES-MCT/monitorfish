@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { FrontendError } from '@libs/FrontendError'
@@ -170,10 +171,13 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
       {isDeletionConfirmationModalOpen &&
         createPortal(
           <ConfirmationModal
-            color={THEME.color.maximumRed}
-            confirmationButtonLabel="Supprimer"
-            iconName="Delete"
-            message="Êtes-vous sûr de vouloir supprimer cette action ?"
+            confirmationButtonLabel="Confirmer la suppression"
+            message={
+              <>
+                <p>Êtes-vous sûr de vouloir supprimer</p>
+                <Bold>cette action ?</Bold>
+              </>
+            }
             onCancel={() => setIsDeletionConfirmationModalOpen(false)}
             onConfirm={confirmDeletion}
             title="Suppression de l'action"

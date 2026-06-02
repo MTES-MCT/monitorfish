@@ -1,5 +1,6 @@
 // import styled from 'styled-components'
 
+import { Bold } from '@components/style'
 import { Accent, Button, ControlUnit, Icon, THEME, isEmptyish } from '@mtes-mct/monitor-ui'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -187,8 +188,13 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isArchivingConfirmationModalOpen && editedControlUnitResource && (
         <ConfirmationModal
-          confirmationButtonLabel="Archiver"
-          message={`Êtes-vous sûr de vouloir archiver le moyen "${editedControlUnitResource.name}" ?`}
+          confirmationButtonLabel="Confirmer l'archivage"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir archiver</p>
+              <Bold>{`le moyen "${editedControlUnitResource.name}" ?`}</Bold>
+            </>
+          }
           onCancel={closeDialogsAndModals}
           onConfirm={confirmArchiving}
           title="Archivage du moyen"
@@ -197,8 +203,13 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isDeletionConfirmationModalOpen && editedControlUnitResource && (
         <ConfirmationModal
-          confirmationButtonLabel="Supprimer"
-          message={`Êtes-vous sûr de vouloir supprimer le moyen "${editedControlUnitResource.name}" ?`}
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer</p>
+              <Bold>{`le moyen "${editedControlUnitResource.name}" ?`}</Bold>
+            </>
+          }
           onCancel={closeDialogsAndModals}
           onConfirm={confirmDeletion}
           title="Suppression du moyen"

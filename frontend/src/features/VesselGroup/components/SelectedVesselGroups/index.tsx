@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
 import { addVesselToGroupFromDropdown } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/addVesselToGroupFromDropdown'
@@ -82,32 +83,27 @@ export function SelectedVesselGroups() {
         <ConfirmationModal
           confirmationButtonLabel="Confirmer la suppression"
           message={
-            <ConfirmDeletionBody>
-              <b>Êtes-vous sûr de vouloir retirer le navire de ce groupe ? </b>
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer le navire de ce groupe ? </p>
               {isDeleteConfirmationModalOpenForGroup?.sharing === Sharing.SHARED && (
-                <span>
-                  Attention, il sera également retiré du groupe pour les autres utilisateurs avec lesquels ce dernier
+                <StyledBold>
+                  Attention, il sera également supprimé du groupe pour les autres utilisateurs avec lesquels ce dernier
                   est partagé.
-                </span>
+                </StyledBold>
               )}
-            </ConfirmDeletionBody>
+            </>
           }
           onCancel={() => setIsDeleteConfirmationModalOpenForGroup(undefined)}
           onConfirm={() => dispatch(removeVesselFromGroup(isDeleteConfirmationModalOpenForGroup))}
-          title="Retirer le navire du groupe"
+          title="Supprimer le navire du groupe"
         />
       )}
     </Wrapper>
   )
 }
 
-const ConfirmDeletionBody = styled.p`
-  span {
-    margin-top: 24px;
-    display: block;
-    font-size: 16px;
-    color: ${p => p.theme.color.maximumRed};
-  }
+const StyledBold = styled(Bold)`
+  color: ${p => p.theme.color.maximumRed};
 `
 
 const DropdownWrapper = styled.div`

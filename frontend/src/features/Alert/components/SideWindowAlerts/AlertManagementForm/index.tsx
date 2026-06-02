@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import {
   CREATE_ALERT_ERROR_MESSAGE,
   DELETE_ALERT_ERROR_MESSAGE,
@@ -36,8 +37,7 @@ import {
   FormikTextarea,
   FormikTextInput,
   Icon,
-  Level,
-  THEME
+  Level
 } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
@@ -421,37 +421,28 @@ export function AlertManagementForm() {
       </Formik>
       {isDraftCancellationConfirmationDialogOpen && (
         <ConfirmationModal
-          cancelButtonLabel="Retourner à l’édition"
-          color={THEME.color.maximumRed}
           confirmationButtonLabel="Quitter sans enregistrer"
           message={
             <>
-              <p>Vous êtes en train d’abandonner l’édition de l’alerte.</p>
-              <p>Voulez-vous enregistrer les modifications avant de quitter ?</p>
+              <p>Vous êtes en train d’abandonner</p>
+              <Bold>l’édition de l’alerte.</Bold>
             </>
           }
           onCancel={() => setIsDraftCancellationConfirmationDialogOpen(false)}
           onConfirm={handleConfirmCancelDraft}
-          title="Retour à la liste des alertes"
+          title="Quitter sans enregistrer"
         />
       )}
       {isDeleteConfirmationDialogOpen && (
         <ConfirmationModal
-          color={THEME.color.maximumRed}
           confirmationButtonLabel="Confirmer la suppression"
-          iconName="Delete"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir supprimer l&apos;alerte </b>
-                <p>
-                  <b>&quot;{editedAlertSpecification.name}&quot; ?</b>
-                </p>
-                <p>
-                  Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
-                  cours et futures.
-                </p>
-              </p>
+              <p>{`Êtes-vous sûr de vouloir supprimer l'alerte "${editedAlertSpecification.name}" ?`}</p>
+              <Bold>
+                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
+                cours et futures.
+              </Bold>
             </>
           }
           onCancel={handleCancelDelete}

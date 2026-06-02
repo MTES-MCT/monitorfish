@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { BackOfficeSubtitle } from '@features/BackOffice/components/BackOfficeSubtitle'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -97,10 +98,8 @@ export function VesselSubscriptionsField({
           confirmationButtonLabel="Confirmer la suppression"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir supprimer ce navire des diffusions ?</b>
-              </p>
-              <p>L’unité ne recevra plus les préavis de ce navire qui sont hors de la diffusion de base.</p>
+              <p>Êtes-vous sûr de vouloir supprimer ce navire des diffusions ?</p>
+              <Bold>L’unité ne recevra plus les préavis de ce navire qui sont hors de la diffusion de base.</Bold>
             </>
           }
           onCancel={closeRemovalConfirmationModal}

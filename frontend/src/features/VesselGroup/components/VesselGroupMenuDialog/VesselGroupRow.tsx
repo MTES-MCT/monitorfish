@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
@@ -228,14 +229,14 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
         <ConfirmationModal
           confirmationButtonLabel="Confirmer la suppression"
           message={
-            <ConfirmDeletionBody>
-              <b>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</b>
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</p>
               {vesselGroup.sharing === Sharing.SHARED && (
-                <span>
+                <StyledBold>
                   Attention, il sera également supprimé pour les autres utilisateurs avec lesquels il est partagé.
-                </span>
+                </StyledBold>
               )}
-            </ConfirmDeletionBody>
+            </>
           }
           onCancel={() => setIsDeleteConfirmationModalOpen(false)}
           onConfirm={handleDeleteVesselGroup}
@@ -246,13 +247,8 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
   )
 }
 
-const ConfirmDeletionBody = styled.p`
-  span {
-    margin-top: 24px;
-    display: block;
-    font-size: 16px;
-    color: ${p => p.theme.color.maximumRed};
-  }
+const StyledBold = styled(Bold)`
+  color: ${p => p.theme.color.maximumRed};
 `
 
 const StyledLink = styled(Link)<{

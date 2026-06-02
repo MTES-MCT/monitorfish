@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.repositories
 
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.CurrentTripDepAndPositionAtSea
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.VoyageDatesAndTripNumber
@@ -39,6 +40,11 @@ interface LogbookReportRepository {
     fun findAllCfrWithVisioCaptures(): List<String>
 
     fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime>
+
+    fun getCurrentTripDepAndPositionAtSeaDateTime(
+        cfr: String,
+        hoursFromNow: Int,
+    ): CurrentTripDepAndPositionAtSea?
 
     // Only used in tests
     fun save(message: LogbookMessage)

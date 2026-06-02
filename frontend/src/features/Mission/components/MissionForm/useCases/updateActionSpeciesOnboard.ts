@@ -8,6 +8,52 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 import type { RiskFactor } from '@features/RiskFactor/types'
 
+export const updateActionSpeciesOnboard =
+  (dispatch, setFieldValue: (field: string, value: any) => void) =>
+  async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesControl[]> => {
+    if (!missionAction.internalReferenceNumber) {
+      return []
+    }
+
+    const cfr = missionAction.internalReferenceNumber
+
+    const [{ data: riskFactor }, prefillResult] = await Promise.all([
+      dispatch(riskFactorApi.endpoints.getRiskFactor.initiate(cfr)),
+      E_ISR_ENABLED ? dispatch(logbookApi.endpoints.getSpeciesControlPrefill.initiate(cfr)) : Promise.resolve(undefined)
+    ])
+
+    if (!riskFactor) {
+      return []
+    }
+
+    const { speciesOnboard } = riskFactor as RiskFactor
+    if (!speciesOnboard?.length) {
+      return []
+    }
+
+    const summedSpeciesOnboard = getSummedSpeciesOnBoard(speciesOnboard)
+    const baseSpecies = summedSpeciesOnboard
+      .filter(specy => !!specy.weight)
+      .sort((a, b) => (b.weight as number) - (a.weight as number))
+      .map(specy => ({
+        controlledWeight: undefined,
+        declaredWeight: specy.weight,
+        nbFish: undefined,
+        rejectedWeight: undefined,
+        speciesCode: specy.species,
+        underSized: false,
+        underSizedWeight: undefined
+      }))
+
+    const nextSpeciesOnboard = E_ISR_ENABLED
+      ? mergeSpeciesOnboardWithPrefill(baseSpecies, prefillResult?.data ?? [])
+      : baseSpecies
+
+    setFieldValue('speciesOnboard', nextSpeciesOnboard)
+
+    return nextSpeciesOnboard
+  }
+
 export function mergeSpeciesOnboardWithPrefill(
   riskFactorSpecies: MissionAction.SpeciesControl[],
   prefillData: Logbook.SpeciesControlPrefill[]
@@ -48,49 +94,3 @@ export function mergeSpeciesOnboardWithPrefill(
 
   return [...merged, ...disOnlySpecies]
 }
-
-export const updateActionSpeciesOnboard =
-  (dispatch, setFieldValue: (field: string, value: any) => void) =>
-  async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesControl[]> => {
-    if (!missionAction.internalReferenceNumber) {
-      return []
-    }
-
-    const cfr = missionAction.internalReferenceNumber
-
-    const [{ data: riskFactor }, prefillResult] = await Promise.all([
-      dispatch(riskFactorApi.endpoints.getRiskFactor.initiate(cfr)),
-      E_ISR_ENABLED ? dispatch(logbookApi.endpoints.getSpeciesControlPrefill.initiate(cfr)) : Promise.resolve(null)
-    ])
-
-    if (!riskFactor) {
-      return []
-    }
-
-    const { speciesOnboard } = riskFactor as RiskFactor
-    if (!speciesOnboard?.length) {
-      return []
-    }
-
-    const summedSpeciesOnboard = getSummedSpeciesOnBoard(speciesOnboard)
-    const baseSpecies = summedSpeciesOnboard
-      .filter(specy => !!specy.weight)
-      .sort((a, b) => (b.weight as number) - (a.weight as number))
-      .map(specy => ({
-        controlledWeight: undefined,
-        declaredWeight: specy.weight,
-        nbFish: undefined,
-        rejectedWeight: undefined,
-        speciesCode: specy.species,
-        underSized: false,
-        underSizedWeight: undefined
-      }))
-
-    const nextSpeciesOnboard = E_ISR_ENABLED
-      ? mergeSpeciesOnboardWithPrefill(baseSpecies, prefillResult?.data ?? [])
-      : baseSpecies
-
-    setFieldValue('speciesOnboard', nextSpeciesOnboard)
-
-    return nextSpeciesOnboard
-  }

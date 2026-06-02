@@ -2,6 +2,7 @@ import { useGetPortsQuery } from '@api/port'
 import { initMissionGeometry } from '@features/Mission/components/MissionForm/useCases/initMissionGeometry'
 import { updateActionFAOAreas } from '@features/Mission/components/MissionForm/useCases/updateActionFAOAreas'
 import { updateActionGearsOnboard } from '@features/Mission/components/MissionForm/useCases/updateActionGearsOnboard'
+import { updateActionLogbookFilledPriorToControl } from '@features/Mission/components/MissionForm/useCases/updateActionLogbookFilledPriorToControl'
 import { updateActionSegments } from '@features/Mission/components/MissionForm/useCases/updateActionSegments'
 import { updateActionSpeciesOnboard } from '@features/Mission/components/MissionForm/useCases/updateActionSpeciesOnboard'
 import { updateMissionGeometry } from '@features/Mission/components/MissionForm/useCases/updateMissionGeometry'
@@ -54,6 +55,8 @@ export function useGetMissionActionFormikUsecases() {
     if (missionActionValues.actionType === MissionActionType.AIR_CONTROL) {
       return
     }
+
+    await updateActionLogbookFilledPriorToControl(dispatch, setMissionActionFieldValue)(missionActionValues)
 
     const gearOnboard = await updateActionGearsOnboard(
       dispatch,

@@ -25,6 +25,10 @@ export type GetVesselLogbookByDatesParams = {
 
 export const logbookApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
+    getHasFilledLogbookForCurrentTrip: builder.query<boolean, string>({
+      keepUnusedDataFor: 30,
+      query: cfr => `/vessels/logbook/has-filled-logbook-for-current-trip?cfr=${cfr}`
+    }),
     getLogbookTrips: builder.query<string[], string>({
       keepUnusedDataFor: 30,
       query: internalReferenceNumber => `/vessels/logbook/trips?internalReferenceNumber=${internalReferenceNumber}`,

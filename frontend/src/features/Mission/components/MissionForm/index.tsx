@@ -532,7 +532,7 @@ export function MissionForm() {
         />
       )}
       {isDraftCancellationConfirmationDialogOpen && (
-        <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} />
+        <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} isNew={!missionIdRef.current} />
       )}
       {isExternalActionsDialogOpen && (
         <ExternalActionsDialog onClose={() => setIsExternalActionsDialogOpen(false)} sources={actionsSources} />

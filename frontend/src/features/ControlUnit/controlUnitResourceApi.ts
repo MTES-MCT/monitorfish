@@ -12,8 +12,10 @@ const GET_CONTROL_UNIT_RESOURCE_ERROR_MESSAGE = "Nous n'avons pas pu récupérer
 const GET_CONTROL_UNIT_RESOURCES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des moyens."
 const UPDATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE = "Nous n'avons pas pu mettre à jour ce moyen."
 
-export const IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE =
-  "Ce moyen est rattaché à des missions. Veuillez l'en détacher avant de le supprimer."
+export const IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE = [
+  'Ce moyen est rattaché à des missions.',
+  "Veuillez l'en détacher avant de le supprimer."
+]
 
 export const monitorenvControlUnitResourceApi = monitorenvApi.injectEndpoints({
   endpoints: builder => ({

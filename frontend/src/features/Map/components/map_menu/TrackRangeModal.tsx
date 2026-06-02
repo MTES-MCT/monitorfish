@@ -1,4 +1,5 @@
 import { Button, DateRangePicker, Dialog, type DateRange } from '@mtes-mct/monitor-ui'
+import styled from 'styled-components'
 
 type TrackRangeModalProps = {
   onChange: (dateRange?: DateRange | undefined) => void
@@ -9,8 +10,8 @@ type TrackRangeModalProps = {
 export function TrackRangeModal({ onChange, onClose, selectedDates }: TrackRangeModalProps) {
   return (
     <Dialog>
-      <Dialog.Title>Afficher la piste VMS sur une période précise</Dialog.Title>
-      <Dialog.Body>
+      <Dialog.Title onClose={onClose}>Afficher la piste VMS sur une période précise</Dialog.Title>
+      <StyledDialogBody>
         <DateRangePicker
           defaultValue={selectedDates}
           isHistorical
@@ -19,10 +20,15 @@ export function TrackRangeModal({ onChange, onClose, selectedDates }: TrackRange
           name="customPeriod"
           onChange={onChange}
         />
-      </Dialog.Body>
+      </StyledDialogBody>
       <Dialog.Action>
         <Button onClick={onClose}>Fermer</Button>
       </Dialog.Action>
     </Dialog>
   )
 }
+
+const StyledDialogBody = styled(Dialog.Body)`
+  padding-bottom: 24px;
+  overflow-y: inherit;
+`

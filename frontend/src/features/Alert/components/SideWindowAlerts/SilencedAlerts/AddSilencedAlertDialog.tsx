@@ -32,26 +32,23 @@ export function AddSilencedAlertDialog({ onCancel, onConfirm }: DeletionConfirma
     >
       {({ handleSubmit }) => (
         <Dialog isAbsolute>
-          <StyledDialogTitle>Suspendre une alerte</StyledDialogTitle>
+          <Dialog.Title onClose={onCancel}>Suspendre une alerte</Dialog.Title>
           <StyledBody>
-            <>
-              <VesselField />
-              <AlertNameField />
-              <StyledFormikDatePicker
-                baseContainer={newWindowContainerRef.current}
-                isStringDate
-                label="Date de reprise"
-                name="silencedBeforeDate"
-              />
-            </>
+            <VesselField />
+            <AlertNameField />
+            <FormikDatePicker
+              baseContainer={newWindowContainerRef.current}
+              isStringDate
+              label="Date de reprise"
+              name="silencedBeforeDate"
+            />
           </StyledBody>
 
           <Dialog.Action>
-            <Button accent={Accent.TERTIARY} onClick={onCancel}>
+            <Button accent={Accent.SECONDARY} onClick={onCancel}>
               Annuler
             </Button>
             <Button
-              accent={Accent.PRIMARY}
               Icon={Icon.Save}
               onClick={() => {
                 handleSubmit()
@@ -69,24 +66,9 @@ export function AddSilencedAlertDialog({ onCancel, onConfirm }: DeletionConfirma
 }
 
 const StyledBody = styled(Dialog.Body)`
-  padding: 20px 20px;
-  text-align: left;
-
+  overflow-y: inherit;
+  gap: 16px;
   .Element-FieldError {
     color: ${p => p.theme.color.maximumRed};
   }
-`
-
-const StyledFormikDatePicker = styled(FormikDatePicker)`
-  margin-top: 30px;
-
-  > legend {
-    font-weight: 400;
-  }
-`
-
-// TODO Remove that once we get rid of global legacy CSS.
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
 `

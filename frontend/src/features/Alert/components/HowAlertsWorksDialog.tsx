@@ -18,8 +18,8 @@ export function HowAlertsWorksDialog({ onClose }: HowAlertsWorksDialogProps) {
 
   return (
     <StyledDialog isAbsolute>
-      <Dialog.Title>Fonctionnement des alertes</Dialog.Title>
-      <StyledBody>
+      <Dialog.Title onClose={onClose}>Fonctionnement des alertes</Dialog.Title>
+      <StyledDialogBody>
         <Title>PRINCIPE D’UNE ALERTE</Title>
         <Line />
         <Text>
@@ -51,43 +51,34 @@ export function HowAlertsWorksDialog({ onClose }: HowAlertsWorksDialogProps) {
         </Text>
         <Block>
           <Columns>
-            <FirstColumn>
-              <Icon.FleetSegment />
-            </FirstColumn>
-            <SecondColumn>
+            <Icon.FleetSegment />
+            <p>
               <b>Un navire est en mer</b> s’il émet des positions <b>hors d’un port ou d’une zone de mouillage</b> et{' '}
               <b>hors d’une zone considérée comme terrestre</b>.
-            </SecondColumn>
+            </p>
           </Columns>
           <br />
           <Columns>
-            <FirstColumn>
-              <Icon.FishingEngine />
-            </FirstColumn>
-            <SecondColumn>
+            <Icon.FishingEngine />
+            <p>
               <b>Un navire est en pêche</b> s’il est en mer depuis au moins 1h, et si sa vitesse moyenne est comprise
               entre <b>0,025 nds et 5,5 nds sur 3 positions consécutives</b> (donc sur au moins deux segments de
               trajectoire). <br />
               Ce seuil de 5,5 nds a été déterminé par l’analyse de données VMS de navires mettant en œuvre tous les
               types d’engins. Il constitue le meilleur compromis entre sensibilité (&quot;ne pas rater d’activité de
               pêche&quot;) et spécificité (&quot;ne pas détecter d’activité de pêche là où il n’y en a pas&quot;).
-            </SecondColumn>
+            </p>
           </Columns>
         </Block>
-      </StyledBody>
-      <StyledAction>
+      </StyledDialogBody>
+      <Dialog.Action>
         <Button accent={Accent.SECONDARY} onClick={onClose}>
           Fermer
         </Button>
-      </StyledAction>
+      </Dialog.Action>
     </StyledDialog>
   )
 }
-
-const StyledAction = styled(Dialog.Action)`
-  padding-top: 40px;
-  padding-bottom: 40px;
-`
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -95,18 +86,11 @@ const StyledDialog = styled(Dialog)`
       max-width: 1224px;
     }
   }
-
-  p {
-    color: ${p => p.theme.color.gunMetal};
-  }
 `
-
-const StyledBody = styled(Dialog.Body)`
-  padding: 8px 64px 0 64px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+const StyledDialogBody = styled(Dialog.Body)`
+  > * {
+    font-size: 13px !important;
+  }
 `
 
 const Text = styled.p`
@@ -117,7 +101,6 @@ const Text = styled.p`
 
 const Title = styled.div`
   margin-top: 32px;
-  font-size: 16px;
   color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   text-transform: uppercase;
@@ -125,27 +108,19 @@ const Title = styled.div`
 
 const Line = styled.div`
   margin-top: 5px;
-  width: 100%;
   border-bottom: 2px solid ${p => p.theme.color.lightGray};
 `
 
 const Block = styled.div`
   background: ${p => p.theme.color.gainsboro};
+  font-size: 16px !important;
   padding: 16px 16px;
+  margin-bottom: 16px;
   margin-top: 16px;
   max-width: 950px;
-  flex-direction: row;
 `
 
 const Columns = styled.div`
   display: flex;
   gap: 8px;
-`
-
-const FirstColumn = styled.div`
-  width: 20px;
-`
-
-const SecondColumn = styled.div`
-  width: 850px;
 `

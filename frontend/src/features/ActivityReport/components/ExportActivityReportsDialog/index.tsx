@@ -65,12 +65,12 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
 
   return (
     <Dialog isAbsolute>
-      <StyledDialogTitle>Exporter les ACT-REP</StyledDialogTitle>
+      <Dialog.Title onClose={onExit}>Exporter les ACT-REP</Dialog.Title>
       <StyledDialogBody>
-        <StyledParagraph>
+        <p>
           Exporter les <i>Activity Report</i> (ACT-REP) avec les codes ISR au format CSV.
-        </StyledParagraph>
-        <div>
+        </p>
+        <DatePickerWrapper>
           Du
           <DatePicker
             baseContainer={newWindowContainerRef.current}
@@ -93,8 +93,8 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
             name="beforeDateTimeUtc"
             onChange={nextDate => setBeforeDateTimeUtc(nextDate)}
           />
-        </div>
-        <StyledSelect
+        </DatePickerWrapper>
+        <Select
           isCleanable
           isLabelHidden
           label="JDP"
@@ -110,72 +110,35 @@ export function ExportActivityReportsDialog({ onExit }: ExportActivityReportsDia
           }}
           options={jdpOptions}
           placeholder="JDP"
+          style={{ width: '270px' }}
           value={jdp}
         />
+        {!!error && <StyledFieldError>{error}</StyledFieldError>}
       </StyledDialogBody>
-      {!!error && (
-        <StyledDialogErrorAction>
-          <FieldError>{error}</FieldError>
-        </StyledDialogErrorAction>
-      )}
-      <StyledDialogAction>
-        <Button accent={Accent.TERTIARY} onClick={onExit}>
+
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={onExit}>
           Annuler
         </Button>
-        <Button
-          accent={Accent.PRIMARY}
-          disabled={!afterDateTimeUtc || !beforeDateTimeUtc || !jdp}
-          onClick={handleOnConfirm}
-        >
+        <Button disabled={!afterDateTimeUtc || !beforeDateTimeUtc || !jdp} onClick={handleOnConfirm}>
           Exporter
         </Button>
-      </StyledDialogAction>
+      </Dialog.Action>
     </Dialog>
   )
 }
 
-// TODO Remove that once we get rid of global legacy CSS.
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
-`
-
-const StyledDialogAction = styled(Dialog.Action)`
-  padding: 24px 8px;
-`
-
-const StyledDialogErrorAction = styled(Dialog.Action)`
-  padding: 8px 0px 0px 0px;
-`
-
 const StyledDialogBody = styled(Dialog.Body)`
-  padding-top: 24px;
-
-  > div {
-    align-items: center;
-    display: flex;
-    margin-right: auto;
-    margin-left: auto;
-
-    > .Field-DatePicker {
-      margin-left: 12px;
-
-      &:first-child {
-        margin-right: 12px;
-      }
-    }
-  }
+  overflow-y: inherit;
 `
 
-const StyledSelect = styled(Select)`
-  margin-top: 24px;
-  margin-left: calc(36%);
-
-  .rs-picker-select-menu {
-    min-width: 270px !important;
-  }
-`
-
-const StyledParagraph = styled.p`
+const DatePickerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 24px;
+  margin-top: 24px;
+`
+const StyledFieldError = styled(FieldError)`
+  color: ${p => p.theme.color.maximumRed} !important;
 `

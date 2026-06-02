@@ -218,11 +218,14 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isImpossibleDeletionDialogOpen && (
         <Dialog
-          color={THEME.color.maximumRed}
-          message={IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE}
+          message={
+            <>
+              <p>{IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE[0]}</p>
+              <RedText>{IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE[1]}</RedText>
+            </>
+          }
           onClose={closeDialogsAndModals}
           title="Suppression impossible"
-          titleBackgroundColor={THEME.color.maximumRed}
         />
       )}
     </Section>
@@ -250,4 +253,8 @@ const StyledEditionForm = styled(Form)<{
 
 const StyledCreationForm = styled(Form)`
   margin-top: 16px;
+`
+
+const RedText = styled(Bold)`
+  color: ${THEME.color.maximumRed};
 `

@@ -42,7 +42,7 @@ const WIRE_TYPE_OPTIONS = [
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
-  const isEISREnabled = useIsEISREnabled()
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()

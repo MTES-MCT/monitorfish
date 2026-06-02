@@ -36,7 +36,7 @@ type SeaControlFormProps = Readonly<{
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const isEISREnabled = useIsEISREnabled()
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
   const validationSchema = isMissionEnded ? getSeaControlFormCompletionSchema(isEISREnabled) : SeaControlFormLiveSchema
 
   return (

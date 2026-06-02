@@ -143,7 +143,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         controlledWeight: undefined,
         declaredWeight: undefined,
         discardReason: undefined,
-        faoZones: undefined,
+        faoZones: isEISREnabled ? values.faoAreas : undefined,
         nbFish: undefined,
         presentationCode: getDefaultPresentationCode(isEISREnabled, vessel?.length),
         rejectedWeight: undefined,

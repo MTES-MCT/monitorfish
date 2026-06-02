@@ -153,7 +153,7 @@ module.exports = {
         // swc only hoists `jest.mock()` above the file imports when the call references the GLOBAL
         // `jest`. When `jest` is imported from `@jest/globals`, the hoist does not happen, so
         // `jest.mock()` runs only after the mocked module has already been imported — the mock then
-        // silently has no effect. See updateActionLogbookFilledPriorToControl.test.ts.
+        // silently has no effect.
         '@typescript-eslint/no-restricted-imports': [
           'error',
           {

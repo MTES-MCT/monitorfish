@@ -4,14 +4,9 @@ import { MissionAction } from '@features/Mission/missionAction.types'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { beforeEach, describe, expect, it } from '@jest/globals'
 
-// `E_ISR_ENABLED` is derived from `import.meta.env` and resolves to `false` under Jest (CI has no
-// `.env`), which would otherwise make the use-case return early. We force it on so the branches
-// under test run.
-//
-// IMPORTANT: do NOT import `jest` from `@jest/globals` in this file. swc only hoists `jest.mock`
-// above the imports when it references the *global* `jest`; with an imported binding the mock runs
-// after the use-case module (and the real `constants`) is loaded, so it would have no effect.
-jest.mock('@features/Mission/components/MissionForm/constants', () => ({ E_ISR_ENABLED: true }))
+// The use-case early-returns unless the e-ISR feature flag is on. `FRONTEND_E_ISR_ENABLED` is
+// forced to `'true'` for all unit tests in `config/jest.setup.js`, so the branches under test run
+// regardless of any local `.env`.
 
 const mockDispatch = jest.fn()
 const mockSetFieldValue = jest.fn()

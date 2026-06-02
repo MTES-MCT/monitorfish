@@ -23,7 +23,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
-import java.sql.Timestamp
+import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
@@ -139,10 +139,10 @@ class JpaLogbookReportRepository(
             dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
                 VoyageDatesAndTripNumber(
                     tripNumber = it[0] as String,
-                    startDateTime = (it[1] as Timestamp).toInstant().atZone(UTC),
-                    endDateTime = (it[2] as Timestamp).toInstant().atZone(UTC),
-                    firstOperationDateTime = (it[3] as Timestamp).toInstant().atZone(UTC),
-                    lastOperationDateTime = (it[4] as Timestamp).toInstant().atZone(UTC),
+                    startDateTime = (it[1] as LocalDateTime).atZone(UTC),
+                    endDateTime = (it[2] as LocalDateTime).atZone(UTC),
+                    firstOperationDateTime = (it[3] as LocalDateTime).atZone(UTC),
+                    lastOperationDateTime = (it[4] as LocalDateTime).atZone(UTC),
                 )
             }
         } catch (e: RuntimeException) {
@@ -213,7 +213,7 @@ class JpaLogbookReportRepository(
         }
 
         return dbLogbookReportRepository.getActiveTrips(cfrs.joinToString(",")).associate { row ->
-            (row[0] as String) to (row[1] as Timestamp).toInstant().atZone(UTC)
+            (row[0] as String) to (row[1] as LocalDateTime).atZone(UTC)
         }
     }
 

@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
@@ -123,5 +123,5 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
         """,
         nativeQuery = true,
     )
-    fun findLastPositionDateTime(): Instant
+    fun findLastPositionDateTime(): LocalDateTime
 }

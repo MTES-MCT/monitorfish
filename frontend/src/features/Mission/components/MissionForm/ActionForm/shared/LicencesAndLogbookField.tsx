@@ -12,7 +12,7 @@ import type { MissionActionFormValues } from '../../types'
 
 export function LicencesAndLogbookField() {
   const { values } = useFormikContext<MissionActionFormValues>()
-  const isEISREnabled = useIsEISREnabled()
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
 
   const rows: ControlCheckRow[] = [
     ...(isEISREnabled

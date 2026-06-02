@@ -58,7 +58,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
-  const isEISREnabled = useIsEISREnabled()
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
 
   const getSpeciesApiQuery = useGetSpeciesQuery()

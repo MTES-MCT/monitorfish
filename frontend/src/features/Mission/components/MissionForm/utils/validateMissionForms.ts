@@ -30,10 +30,12 @@ export function validateMissionForms(
     isValid: MainFormLiveSchema.isValidSync(mainFormValues)
   }
 
-  const isEISR = computeIsEISREnabled(mainFormValues.controlUnits?.map(cu => cu.id) ?? [])
+  const controlUnitIds = mainFormValues.controlUnits?.map(cu => cu.id) ?? []
 
   // eslint-disable-next-line no-restricted-syntax
   const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
+    const isEISR = computeIsEISREnabled(controlUnitIds, actionFormValues.actionDatetimeUtc)
+
     switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return {

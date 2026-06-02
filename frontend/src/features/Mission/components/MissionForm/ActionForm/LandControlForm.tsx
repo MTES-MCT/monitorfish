@@ -34,7 +34,7 @@ type LandControlFormProps = Readonly<{
 }>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const isEISREnabled = useIsEISREnabled()
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
   const validationSchema = isMissionEnded
     ? getLandControlFormCompletionSchema(isEISREnabled)
     : LandControlFormLiveSchema

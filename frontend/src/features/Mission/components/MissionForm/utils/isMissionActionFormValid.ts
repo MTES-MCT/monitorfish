@@ -16,7 +16,10 @@ export function isMissionActionFormValid(
   dispatch: MainAppDispatch
 ): boolean {
   const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
-  const isEISR = computeIsEISREnabled(controlUnits.map(cu => cu.id))
+  const isEISR = computeIsEISREnabled(
+    controlUnits.map(cu => cu.id),
+    actionFormValues.actionDatetimeUtc
+  )
 
   switch (actionFormValues.actionType) {
     case MissionAction.MissionActionType.AIR_CONTROL:

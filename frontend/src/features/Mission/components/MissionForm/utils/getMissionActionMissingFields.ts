@@ -15,7 +15,10 @@ export function getMissionActionMissingFields(
   dispatch: MainAppDispatch
 ): number {
   const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
-  const isEISR = computeIsEISREnabled(controlUnits.map(cu => cu.id))
+  const isEISR = computeIsEISREnabled(
+    controlUnits.map(cu => cu.id),
+    actionFormValues.actionDatetimeUtc
+  )
 
   try {
     switch (actionFormValues.actionType) {

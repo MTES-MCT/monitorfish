@@ -70,7 +70,7 @@ export function EditFixedVesselGroupDialog({
 
   return (
     <StyledDialog isAbsolute>
-      <StyledDialogTitle>{createOrModifyText} un groupe de navires fixe</StyledDialogTitle>
+      <Dialog.Title onClose={onExit}>{`${createOrModifyText} un groupe de navires fixe`}</Dialog.Title>
       <StyledDialogBody>
         <Row>
           <VesselsCount>
@@ -99,25 +99,26 @@ export function EditFixedVesselGroupDialog({
           vesselIdentities={vesselsIdentities}
         />
       </StyledDialogBody>
-      <StyledDialogAction>
-        <Button accent={Accent.PRIMARY} onClick={() => formRef.current?.handleSubmit()}>
-          {String(`${createOrModifyText} le groupe`)}
-        </Button>
-        <Button accent={Accent.TERTIARY} onClick={onExit}>
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={onExit}>
           Annuler
         </Button>
-      </StyledDialogAction>
+        <Button onClick={() => formRef.current?.handleSubmit()}>{String(`${createOrModifyText} le groupe`)}</Button>
+      </Dialog.Action>
     </StyledDialog>
   )
 }
 
 const StyledDialog = styled(Dialog)`
-  > div:last-child {
-    min-width: 1224px;
-    max-width: 1224px;
+  > div:not(:first-child) {
+    width: 1224px;
   }
 `
-
+const StyledDialogBody = styled(Dialog.Body)`
+  > * {
+    font-size: 13px !important;
+  }
+`
 const VesselsCount = styled.div`
   text-align: left;
   font-weight: 500;
@@ -131,19 +132,6 @@ const Example = styled.div`
   span {
     vertical-align: bottom;
   }
-`
-
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
-`
-
-const StyledDialogAction = styled(Dialog.Action)`
-  padding: 24px 8px;
-`
-
-const StyledDialogBody = styled(Dialog.Body)`
-  padding: 45px 80px;
 `
 
 const Row = styled.div`

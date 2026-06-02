@@ -56,6 +56,7 @@ const Wrapper = styled.div`
   .rs-uploader-trigger-btn {
     border: 1px dashed #3b4559 !important;
     cursor: pointer;
+    text-align: center;
   }
 `
 const StyledUploader = styled(Uploader)`

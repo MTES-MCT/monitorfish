@@ -286,14 +286,15 @@ export function EditDynamicVesselGroupDialog({
 
   return (
     <StyledDialog isAbsolute>
-      <StyledDialogTitle>{createOrModifyText} un groupe de navires dynamique</StyledDialogTitle>
+      <Dialog.Title onClose={onExit}>{`${createOrModifyText} un groupe de navires dynamique`}</Dialog.Title>
       <StyledDialogBody>
         <VesselsCount>
           Actuellement,{' '}
           <b>{vesselsFound !== undefined ? `${vesselsFound} ${pluralize('navire', vesselsFound)}` : '... navires'}</b>{' '}
           {vesselsFound === 1 ? 'correspond' : 'correspondent'} aux filtres sélectionnés.
         </VesselsCount>
-        <Row>
+
+        <FiltersLine>
           <CheckPicker
             isLabelHidden
             isTransparent
@@ -307,6 +308,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Nationalités ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.countryCodes}
             virtualized
           />
@@ -323,6 +325,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Notes de risque ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.riskFactors}
             virtualized
           />
@@ -340,6 +343,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.fleetSegments}
             virtualized
           />
@@ -357,6 +361,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Engins utilisés ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.gearCodes}
           />
           <CheckPicker
@@ -373,9 +378,12 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Espèces à bord ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.specyCodes}
             virtualized
           />
+        </FiltersLine>
+        <FiltersLine>
           <MultiCascader
             disabled={!portsAsTreeOptions}
             isLabelHidden
@@ -390,6 +398,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Ports de débarque ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.landingPortLocodes}
           />
           <Select
@@ -401,6 +410,7 @@ export function EditDynamicVesselGroupDialog({
             options={LAST_CONTROL_PERIODS_AS_OPTIONS}
             placeholder="Dernier contrôle mer"
             popupWidth={224}
+            style={{ width: 200 }}
             value={listFilterValues.lastControlAtSeaPeriod}
           />
           <Select
@@ -412,6 +422,7 @@ export function EditDynamicVesselGroupDialog({
             options={LAST_CONTROL_PERIODS_AS_OPTIONS}
             placeholder="Dernier contrôle quai"
             popupWidth={224}
+            style={{ width: 200 }}
             value={listFilterValues.lastControlAtQuayPeriod}
           />
           <CheckPicker
@@ -425,6 +436,7 @@ export function EditDynamicVesselGroupDialog({
             popupWidth={320}
             renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.producerOrganizations}
           />
           <MultiCascader
@@ -448,9 +460,12 @@ export function EditDynamicVesselGroupDialog({
               )
             }}
             searchable
+            style={{ width: 200 }}
             uncheckableItemValues={['0', '1', '2', '3']}
             value={listFilterValues.zones?.map(zone => zone.value)}
           />
+        </FiltersLine>
+        <FiltersLine>
           <MultiCascader
             isLabelHidden
             isTransparent
@@ -464,6 +479,7 @@ export function EditDynamicVesselGroupDialog({
               items.length > 0 ? <SelectValue>Quartier ({items.length})</SelectValue> : <></>
             }
             searchable
+            style={{ width: 200 }}
             value={listFilterValues.districtCodes}
           />
           <Select
@@ -474,6 +490,7 @@ export function EditDynamicVesselGroupDialog({
             onChange={updateVesselSize}
             options={VESSEL_SIZE_AS_OPTIONS}
             placeholder="Longueur du navire"
+            style={{ width: 200 }}
             value={listFilterValues.vesselSize}
           />
           <Select
@@ -484,6 +501,7 @@ export function EditDynamicVesselGroupDialog({
             onChange={updateLastPositionHoursAgo}
             options={LAST_POSITION_AS_OPTIONS}
             placeholder="Dernière position VMS"
+            style={{ width: 200 }}
             value={listFilterValues.lastPositionHoursAgo}
           />
           <Select
@@ -494,9 +512,13 @@ export function EditDynamicVesselGroupDialog({
             onChange={updateHasLogbook}
             options={HAS_LOGBOOK_AS_OPTIONS}
             placeholder="Equipé JPE"
+            style={{ width: 200 }}
             value={listFilterValues.hasLogbook}
           />
           <div style={{ width: 200 }} />
+        </FiltersLine>
+
+        <FiltersLine>
           <Checkbox checked={emitsPositions} label="Équipé VMS" name="emitsPositions" onChange={updateEmitsPositions} />
           <Checkbox
             checked={emitsNoPositions}
@@ -507,7 +529,8 @@ export function EditDynamicVesselGroupDialog({
           <VerticalBar />
           <Checkbox checked={isAtSea} label="En mer" name="always" onChange={updateVesselLocationAtSea} />
           <Checkbox checked={isAtPort} label="À quai" name="always" onChange={updateVesselLocationAtPort} />
-        </Row>
+        </FiltersLine>
+
         <StyledFilterTags
           listFilterValues={listFilterValues as VesselListFilter}
           onFilter={nextListFilterValues => updateListFilterValuesAndCountVessels(nextListFilterValues)}
@@ -525,17 +548,23 @@ export function EditDynamicVesselGroupDialog({
           onExit={onExit}
         />
       </StyledDialogBody>
-      <StyledDialogAction>
-        <Button accent={Accent.PRIMARY} disabled={areFiltersEmpty} onClick={() => formRef.current?.handleSubmit()}>
-          {String(`${createOrModifyText} le groupe`)}
-        </Button>
-        <Button accent={Accent.TERTIARY} onClick={onExit}>
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={onExit}>
           Annuler
         </Button>
-      </StyledDialogAction>
+        <Button disabled={areFiltersEmpty} onClick={() => formRef.current?.handleSubmit()}>
+          {String(`${createOrModifyText} le groupe`)}
+        </Button>
+      </Dialog.Action>
     </StyledDialog>
   )
 }
+
+const StyledDialog = styled(Dialog)`
+  > div:not(:first-child) {
+    width: 1224px;
+  }
+`
 
 const MultiCascaderCustomZone = styled.div`
   border-top: 1px solid ${p => p.theme.color.lightGray};
@@ -546,7 +575,7 @@ const VerticalBar = styled.span`
   background: ${p => p.theme.color.lightGray};
   height: 20px;
   width: 2px;
-  margin-top: 16px;
+  margin-left: 16px;
   margin-right: 16px;
 `
 
@@ -555,56 +584,19 @@ const StyledFilterTags = styled(FilterTags)`
   margin-bottom: 16px;
 `
 
-const VesselsCount = styled.div`
-  text-align: left;
+const VesselsCount = styled.p`
   margin-bottom: 8px;
 `
 
-const StyledDialog = styled(Dialog)`
-  > div:last-child {
-    min-width: 1224px;
-    max-width: 1224px;
-  }
-`
-
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
-`
-
-const StyledDialogAction = styled(Dialog.Action)`
-  padding: 24px 8px;
-`
-
 const StyledDialogBody = styled(Dialog.Body)`
-  padding: 45px 80px;
+  > * {
+    font-size: 13px !important;
+  }
 `
-
-const Row = styled.div`
-  align-items: center;
+const FiltersLine = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 16px;
-
-  > .Element-Field:not(:nth-child(-n + 5)) {
-    margin-top: 16px;
-  }
-
-  > .Element-Field:not(:nth-child(5)):not(:nth-child(10)) {
-    margin-right: 16px;
-  }
-
-  > .Field-MultiCascader,
-  > .Field-CheckPicker,
-  > .Field-Select,
-  > .Element-Fieldset {
-    min-width: 200px;
-    width: 160px;
-  }
-
-  > .Field-MultiCheckbox {
-    min-width: 320px;
-  }
 `
 
 const SelectValue = styled.span`

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -20,7 +21,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -32,7 +33,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.ZonedDateTime
 import kotlin.text.Charsets.UTF_8
 
-@Import(SentryConfig::class)
+@Import(
+    MapperConfiguration::class,SentryConfig::class)
 @WebMvcTest(value = [(PriorNotificationController::class)])
 class PriorNotificationControllerUTests {
     @Autowired

@@ -130,7 +130,7 @@ class KeycloakProxyController(
         response.status = cleanedResponse.statusCode.value()
 
         // Copy headers, excluding problematic ones that cause chunked encoding issues
-        cleanedResponse.headers.forEach { (name, values) ->
+        cleanedResponse.headers.forEach { name, values ->
             if (name.lowercase() !in
                 setOf(
                     "transfer-encoding",
@@ -230,7 +230,7 @@ class KeycloakProxyController(
     private fun removeCorsHeader(response: ResponseEntity<*>): ResponseEntity<*> {
         // In Spring Boot 3.4+, headers are ReadOnlyHttpHeaders and cannot be modified
         // We need to create a new ResponseEntity with filtered headers
-        val newHeaders = response.headers.toMutableMap()
+        val newHeaders = response.headers.asMultiValueMap().toMutableMap()
         newHeaders.remove("Access-Control-Allow-Origin")
 
         return ResponseEntity
@@ -271,7 +271,7 @@ class KeycloakProxyController(
             val rewrittenBody = rewrittenHtml.toByteArray(StandardCharsets.UTF_8)
 
             // Create new headers without Content-Length (Spring will set it automatically)
-            val newHeaders = response.headers.toMutableMap()
+            val newHeaders = response.headers.asMultiValueMap().toMutableMap()
             newHeaders.remove("Content-Length")
 
             return ResponseEntity

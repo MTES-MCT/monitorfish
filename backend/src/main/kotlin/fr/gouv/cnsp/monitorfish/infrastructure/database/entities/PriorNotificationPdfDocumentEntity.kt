@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PdfDocument
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSource
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcType
-import org.hibernate.dialect.PostgreSQLEnumJdbcType
+import org.hibernate.dialect.type.PostgreSQLEnumJdbcType
 import org.hibernate.type.descriptor.jdbc.BinaryJdbcType
 import java.time.ZonedDateTime
 

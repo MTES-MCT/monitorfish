@@ -315,10 +315,10 @@ class PriorNotificationController(
         @PathParam("Logbook message `reportId`")
         @PathVariable(name = "reportId")
         reportId: String,
-    ): ResponseEntity<ByteArray?> {
+    ): ResponseEntity<ByteArray> {
         val pdfDocument =
             getPriorNotificationPdfDocument.execute(reportId = reportId, isVerifyingExistence = false)
-                ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
 
         val fileName = "preavis_debarquement_${pdfDocument.generationDatetimeUtc.format(ISO_DATE_TIME)}.pdf"
         val headers =

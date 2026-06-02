@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.config
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.ClientHttpRequestInterceptor
@@ -47,7 +47,7 @@ class RestTemplateConfig {
 
         val restTemplate =
             restTemplateBuilder
-                .requestFactoryBuilder { requestFactory }
+                .requestFactory { requestFactory }
                 .build()
 
         restTemplate.interceptors.add(

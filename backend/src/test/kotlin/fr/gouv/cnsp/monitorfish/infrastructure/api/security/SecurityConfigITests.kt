@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.KeycloakProxyProperties
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
@@ -31,6 +32,7 @@ class SecurityConfigITests {
      */
     @Nested
     @Import(
+    MapperConfiguration::class,
         SecurityConfig::class,
         OIDCProperties::class,
         KeycloakProxyProperties::class,
@@ -154,6 +156,7 @@ class SecurityConfigITests {
      */
     @Nested
     @Import(
+    MapperConfiguration::class,
         SecurityConfig::class,
         OIDCProperties::class,
         KeycloakProxyProperties::class,

@@ -143,15 +143,26 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Engins à bord
     // OTB
+    // Each gear/species change triggers an async `fleet_segments/compute` request whose response
+    // re-renders the form (via `setFieldValue('segments', …)`). We wait between mutating fills so the
+    // re-render settles before the next `cy.fill()` traversal, avoiding detached-DOM errors.
     cy.fill('Engin contrôlé', 'Non')
+    cy.wait(250)
     cy.fill("Marquage de l'engin conforme", 'Non')
+    cy.wait(250)
     cy.fill('Maillage déclaré', 50)
+    cy.wait(250)
 
     cy.fill('Ajouter un engin', 'MIS')
+    cy.wait(250)
     cy.fill('Engin contrôlé', 'Oui', { index: 1 })
+    cy.wait(250)
     cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
+    cy.wait(250)
     cy.fill('Maillage déclaré', 10, { index: 1 })
+    cy.wait(250)
     cy.fill('Maillage mesuré', 20, { index: 1 })
+    cy.wait(250)
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
@@ -161,7 +172,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     cy.fill('Zone de pêche', ['27.8.b'], { index: 0 })
+    cy.wait(250)
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
+    cy.wait(250)
     cy.fill('Ajouter une espèce', 'COD')
     cy.fill('Qté déclarée', 10, { index: 2 })
     cy.fill('Qté estimée', 20, { index: 2 })
@@ -174,6 +187,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Nature du rejet', 'RET - espèces protégées')
     cy.fill('Présentation du poisson', 'FIL - En filets', { index: 2 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+    cy.wait(250)
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment

@@ -79,6 +79,9 @@ context('Side Window > Mission Form > Sea Control', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
+    // Use the real species-control-prefill endpoint: for this vessel it injects the logbook discard
+    // species NEP and BIB after the logbook FAR species (HKE, BLI). The onboard species are therefore
+    // [HKE, BLI, NEP, BIB] before adding COD (which lands at index 4).
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*').as('speciesPrefill')
 
     // -------------------------------------------------------------------------
@@ -143,26 +146,15 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Engins à bord
     // OTB
-    // Each gear/species change triggers an async `fleet_segments/compute` request whose response
-    // re-renders the form (via `setFieldValue('segments', …)`). We wait between mutating fills so the
-    // re-render settles before the next `cy.fill()` traversal, avoiding detached-DOM errors.
     cy.fill('Engin contrôlé', 'Non')
-    cy.wait(250)
     cy.fill("Marquage de l'engin conforme", 'Non')
-    cy.wait(250)
     cy.fill('Maillage déclaré', 50)
-    cy.wait(250)
 
     cy.fill('Ajouter un engin', 'MIS')
-    cy.wait(250)
     cy.fill('Engin contrôlé', 'Oui', { index: 1 })
-    cy.wait(250)
     cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
-    cy.wait(250)
     cy.fill('Maillage déclaré', 10, { index: 1 })
-    cy.wait(250)
     cy.fill('Maillage mesuré', 20, { index: 1 })
-    cy.wait(250)
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
@@ -171,23 +163,35 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
+    // FAO zones are required on every species for completion, including the prefilled discard species
+    // NEP (index 2) and BIB (index 3) — otherwise the action stays "À compléter".
     cy.fill('Zone de pêche', ['27.8.b'], { index: 0 })
-    cy.wait(250)
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
-    cy.wait(250)
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
     cy.fill('Ajouter une espèce', 'COD')
-    cy.fill('Qté déclarée', 10, { index: 2 })
-    cy.fill('Qté estimée', 20, { index: 2 })
-    cy.clickButton('Ajouter sous-taille', { index: 2 })
+    // COD is added after the 4 prefilled species [HKE, BLI, NEP, BIB], so it is species index 4.
+    // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[4]…"]').type()`
+    // instead of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` request whose
+    // response re-renders and remounts the field; `cy.fill()` caches the field element and detaches
+    // between its internal `.clear()` and `.type()`, whereas `cy.get()` re-queries the input fresh.
+    // The fields are freshly added/opened (empty), so no `.clear()` is needed.
+    // Label-based `{ index }` values differ per field: "Ajouter sous-taille", "Présentation du poisson"
+    // and "Zone de pêche" render for every species (COD = index 4), whereas "Ajouter rejet" and
+    // "Nature du rejet" only render for species without a prefilled rejet — NEP/BIB already show a
+    // rejet input — so among HKE, BLI, COD, COD is index 2.
+    cy.get('[id="speciesOnboard[4].declaredWeight"]').type('10', { force: true })
+    cy.get('[id="speciesOnboard[4].controlledWeight"]').type('20', { force: true })
+    cy.clickButton('Ajouter sous-taille', { index: 4 })
     cy.wait(200)
-    cy.fill('Qté sous-taille', 5)
+    cy.get('[id="speciesOnboard[4].underSizedWeight"]').type('5', { force: true })
     cy.clickButton('Ajouter rejet', { index: 2 })
     cy.wait(200)
-    cy.fill('Qté rejetée', 2)
-    cy.fill('Nature du rejet', 'RET - espèces protégées')
-    cy.fill('Présentation du poisson', 'FIL - En filets', { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+    cy.get('[id="speciesOnboard[4].rejectedWeight"]').type('2', { force: true })
     cy.wait(250)
+    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 2 })
+    cy.fill('Présentation du poisson', 'FIL - En filets', { index: 4 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 4 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
@@ -259,16 +263,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           flagState: 'UNDEFINED',
           gearOnboard: [
             {
-              comments: 'Autres mesures.',
-              controlledMesh: 20,
-              declaredMesh: 10,
-              gearCode: 'MIS',
-              gearMarkingIsCompliant: 'YES',
-              gearName: 'Engin divers',
-              gearWasControlled: true,
-              hasUncontrolledMesh: true
-            },
-            {
               comments: null,
               controlledMesh: null,
               declaredMesh: 50,
@@ -276,6 +270,16 @@ context('Side Window > Mission Form > Sea Control', () => {
               gearMarkingIsCompliant: 'NO',
               gearName: 'Chaluts de fond à panneaux',
               gearWasControlled: false,
+              hasUncontrolledMesh: false
+            },
+            {
+              comments: 'Autres mesures.',
+              controlledMesh: 20,
+              declaredMesh: 10,
+              gearCode: 'MIS',
+              gearMarkingIsCompliant: 'YES',
+              gearName: 'Engin divers',
+              gearWasControlled: true,
               hasUncontrolledMesh: false
             }
           ],
@@ -319,7 +323,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           propulsionEnginePowerControl: 'YES',
           fishingLicencesMatchActivity: 'NO',
           stowagePlanPresent: 'NOT_APPLICABLE',
-          onboardWeighingPermit: 'NOT_APPLICABLE',
+          onboardWeighingPermit: 'NO',
           weighingCertificateAndSystemsValid: null,
           underSizedSeparateStowage: 'YES',
           underSizedSeparateRecording: 'NO',
@@ -327,6 +331,11 @@ context('Side Window > Mission Form > Sea Control', () => {
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'HKE', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
+            // NEP and BIB are injected by the real species-control-prefill endpoint (logbook discards).
+            // We assert their presence/position here; their exact prefilled discard values are covered
+            // by the dedicated "FAR and DIS logbook data" prefill test.
+            { faoZones: ['27.8.b'], speciesCode: 'NEP', underSized: false },
+            { discardReason: 'DIM', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'BIB', underSized: false },
             { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'FIL', rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
           ],
           speciesQuantitySeized: 6289.5,

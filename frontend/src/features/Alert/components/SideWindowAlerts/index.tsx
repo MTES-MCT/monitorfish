@@ -1,5 +1,5 @@
 import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { filterBySeafrontGroup, SeafrontGroup, seafrontGroupSupportsAbsentVesselFilter } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { AlertManagementForm } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm'
 import { AlertsManagementList } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList'
@@ -49,6 +49,10 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
+        if (absentVessel && !seafrontGroupSupportsAbsentVesselFilter(group)) {
+          return 0
+        }
+
         let filtered = filterBySeafrontGroup(currentReportings ?? [], group, r => r.value.seaFront)
 
         if (reportingTypesDisplayed) {
@@ -60,7 +64,7 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
 
       return 0
     },
-    [currentReportings, pendingAlerts, reportingTypesDisplayed, selectedTab]
+    [absentVessel, currentReportings, pendingAlerts, reportingTypesDisplayed, selectedTab]
   )
 
   return (

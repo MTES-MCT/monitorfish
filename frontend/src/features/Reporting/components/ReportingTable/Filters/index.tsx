@@ -1,15 +1,19 @@
+import { SeafrontGroup, seafrontGroupSupportsAbsentVesselFilter } from '@constants/seafront'
 import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, CheckPicker, Size, TextInput } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
+import { Checkbox, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { REPORTING_TYPE_FILTER_OPTIONS } from './constants'
 
-export function Filters() {
+type FiltersProps = Readonly<{
+  selectedSeafrontGroup: SeafrontGroup
+}>
+export function Filters({ selectedSeafrontGroup }: FiltersProps) {
   const dispatch = useMainAppDispatch()
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
   const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
@@ -25,16 +29,21 @@ export function Filters() {
   )
 
   const updateReportingTypes = (nextValue: ReportingType[] | undefined) => {
-    let enrichedNextValue = nextValue
-    if (nextValue?.includes(ReportingType.INFRACTION_SUSPICION)) {
-      enrichedNextValue = [...nextValue, ReportingType.ALERT]
-    }
-    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(enrichedNextValue))
+    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
   }
 
   const handleCheckAbsentVessel = (isChecked: boolean | undefined) => {
     dispatch(reportingTableFiltersActions.setAbsentVessel(!!isChecked))
   }
+
+  const showAbsentVesselToggle = seafrontGroupSupportsAbsentVesselFilter(selectedSeafrontGroup)
+
+  // uncheck absent vessel filter if on a tab that do not supports it
+  useEffect(() => {
+    if (!showAbsentVesselToggle && absentVesselChecked) {
+      dispatch(reportingTableFiltersActions.setAbsentVessel(false))
+    }
+  }, [absentVesselChecked, dispatch, showAbsentVesselToggle])
 
   return (
     <Wrapper>
@@ -53,25 +62,26 @@ export function Filters() {
         size={Size.LARGE}
         value={searchText}
       />
-      <StyledCheckPicker
+      <Select
         isLabelHidden
         isTransparent
         label="Type de signalement"
         name="reportingType"
         onChange={updateReportingTypes}
         options={REPORTING_TYPE_FILTER_OPTIONS}
+        // @ts-expect-error: using the number 0 as key is ignored, see https://github.com/MTES-MCT/monitor-ui/issues/2068
+        optionValueKey="0"
         placeholder="Type de signalement"
-        renderValue={(_: unknown, items: unknown[]) =>
-          items.length > 0 ? <OptionValue>Type de signalement ({items.length}) </OptionValue> : <></>
-        }
         value={reportingTypesDisplayed}
       />
-      <StyledCheckbox
-        checked={absentVesselChecked}
-        label="Navires sans fiche"
-        name="absentVessel"
-        onChange={handleCheckAbsentVessel}
-      />
+      {showAbsentVesselToggle && (
+        <Checkbox
+          checked={absentVesselChecked}
+          label="Navires sans fiche"
+          name="absentVessel"
+          onChange={handleCheckAbsentVessel}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -79,24 +89,10 @@ export function Filters() {
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 24px;
 `
 
 const StyledSearch = styled(TextInput)`
   border: 1px solid ${p => p.theme.color.lightGray};
   width: 300px;
-`
-
-const StyledCheckPicker = styled(CheckPicker)`
-  margin-left: 24px;
-`
-
-const StyledCheckbox = styled(Checkbox)`
-  margin-left: 24px;
-`
-
-const OptionValue = styled.span`
-  display: flex;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `

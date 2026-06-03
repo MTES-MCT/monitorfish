@@ -14,6 +14,8 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.ZoneOffset.UTC
+import java.time.ZonedDateTime
 
 @UseCase
 class GetAllCurrentReportings(
@@ -31,6 +33,7 @@ class GetAllCurrentReportings(
                 isArchived = false.takeIf { absentVessel != true },
                 isDeleted = false,
                 types = listOf(ReportingType.ALERT, ReportingType.INFRACTION_SUSPICION, ReportingType.OBSERVATION),
+                afterCreationDate = ZonedDateTime.of(2025, 1, 1, 0, 0, 0, 0, UTC).takeIf { absentVessel == true },
             )
 
         val currentReportings = reportingRepository.findAll(filter)

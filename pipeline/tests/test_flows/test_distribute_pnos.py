@@ -678,7 +678,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
-                now - relativedelta(days=30, minutes=35),
+                now - relativedelta(months=1, minutes=35),
                 None,
                 None,
                 None,

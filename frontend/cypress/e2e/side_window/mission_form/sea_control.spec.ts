@@ -152,8 +152,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
     cy.fill('Maillage déclaré', 10, { index: 1 })
     cy.fill('Maillage mesuré', 20, { index: 1 })
-    // This will modify the "Maillage mesuré" input as `undefined`
-    cy.fill('Maillage non mesuré', true, { index: 1 })
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
     // Espèces à bord
@@ -248,7 +246,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           gearOnboard: [
             {
               comments: 'Autres mesures.',
-              // controlledMesh: undefined,
+              controlledMesh: 20,
               declaredMesh: 10,
               gearCode: 'MIS',
               gearMarkingIsCompliant: 'YES',

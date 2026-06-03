@@ -159,9 +159,9 @@ export function GearsField() {
 
                 {isEISREnabled && (
                   <FormikMultiRadio
-                    isRequired
                     isErrorMessageHidden
                     isInline
+                    isRequired
                     label="Marquage de l'engin conforme"
                     name={`gearOnboard[${index}].gearMarkingIsCompliant`}
                     options={CONTROL_CHECK_OPTIONS}

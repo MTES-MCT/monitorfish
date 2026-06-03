@@ -21,7 +21,8 @@
           "resources": [
             {
               "id": 90,
-              "name": "Voiture"
+              "name": "Voiture",
+              "type": "CAR"
             }
           ],
           "contact": null,

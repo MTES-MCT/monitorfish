@@ -386,7 +386,8 @@ describe('features/Mission/components/MissionForm/utils', () => {
           resources: [
             {
               id: 314,
-              name: 'Brezel - FAH 7185'
+              name: 'Brezel - FAH 7185',
+              type: 'CAR'
             }
           ]
         }

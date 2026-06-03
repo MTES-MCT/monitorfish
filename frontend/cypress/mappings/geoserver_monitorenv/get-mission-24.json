@@ -21,7 +21,8 @@
           "resources": [
             {
               "id": 1,
-              "name": "Semi-rigide 1"
+              "name": "Semi-rigide 1",
+              "type": "SEMI_RIGID"
             }
           ],
           "contact": null,

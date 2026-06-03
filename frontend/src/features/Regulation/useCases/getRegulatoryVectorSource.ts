@@ -40,29 +40,31 @@ export const getRegulatoryVectorSource =
         dataProjection: WSG84_PROJECTION,
         featureProjection: OPENLAYERS_PROJECTION
       }),
-      loader: async extent => {
-        try {
-          const regulatoryZone = await getRegulatoryZoneFromAPI(
-            LayerProperties.REGULATORY.code,
-            regulatoryZoneProperties,
-            getState().global.isBackoffice
-          )
+      loader: extent => {
+        ;(async () => {
+          try {
+            const regulatoryZone = await getRegulatoryZoneFromAPI(
+              LayerProperties.REGULATORY.code,
+              regulatoryZoneProperties,
+              getState().global.isBackoffice
+            )
 
-          if (!regulatoryZone.geometry) {
-            vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
+            if (!regulatoryZone.geometry) {
+              vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))
+              vectorSource.removeLoadedExtent(extent)
+
+              return
+            }
+
+            const simplifiedRegulatoryZone = trySimplifyRegulatoryZone(regulatoryZone)
+            const geoJsonToLoad = resolveGeoJsonForCurrentZoom(regulatoryZone, simplifiedRegulatoryZone)
+            loadFeaturesIntoSource(vectorSource, geoJsonToLoad)
+            dispatchLayerLoadedActions(dispatch, vectorSource, zoneName, regulatoryZone, simplifiedRegulatoryZone)
+          } catch (err) {
+            vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(err))
             vectorSource.removeLoadedExtent(extent)
-
-            return
           }
-
-          const simplifiedRegulatoryZone = trySimplifyRegulatoryZone(regulatoryZone)
-          const geoJsonToLoad = resolveGeoJsonForCurrentZoom(regulatoryZone, simplifiedRegulatoryZone)
-          loadFeaturesIntoSource(vectorSource, geoJsonToLoad)
-          dispatchLayerLoadedActions(dispatch, vectorSource, zoneName, regulatoryZone, simplifiedRegulatoryZone)
-        } catch (err) {
-          vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(err))
-          vectorSource.removeLoadedExtent(extent)
-        }
+        })()
       },
       strategy: all
     })

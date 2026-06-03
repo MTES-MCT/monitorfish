@@ -125,9 +125,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   const filteredAndSearchedTableData = useMemo(() => {
     const normalizedSearchQuery = normalizeSearchQuery(searchQuery)
 
-    return normalizedSearchQuery
-      ? fuse.search<TableItem<T>>(normalizedSearchQuery).map(({ item }) => item)
-      : filteredTableData
+    return normalizedSearchQuery ? fuse.search(normalizedSearchQuery).map(({ item }) => item) : filteredTableData
   }, [filteredTableData, fuse, searchQuery])
 
   const filteredCheckedIds = useMemo(() => {

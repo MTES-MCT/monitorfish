@@ -5,7 +5,7 @@ import { getExtentFromGeoJSON } from '../../../utils'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { REGULATION_SEARCH_OPTIONS } from '../components/RegulationSearch/constants'
 
-import type { RegulatoryLawTypes, RegulatoryZone } from '../types'
+import type { RegulatoryLawTypes } from '../types'
 import type { MainAppThunk } from '@store'
 
 export const MINIMUM_SEARCH_CHARACTERS_NUMBER = 2
@@ -33,7 +33,7 @@ export const searchRegulatoryLayers =
             }
 
             const fuse = new Fuse(filteredRegulatoryZones, REGULATION_SEARCH_OPTIONS)
-            const items = fuse.search<RegulatoryZone>(searchQuery).map(result => result.item)
+            const items = fuse.search(searchQuery).map(result => result.item)
 
             return monitorFishWorker.getStructuredRegulationLawTypes(items)
           })
@@ -46,7 +46,7 @@ export const searchRegulatoryLayers =
 
     // TODO Cache that somewhere rather than re-creating it every time.
     const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
-    const items = fuse.search<RegulatoryZone>(searchQuery).map(result => result.item)
+    const items = fuse.search(searchQuery).map(result => result.item)
 
     return monitorFishWorker.getStructuredRegulationLawTypes(items)
   }

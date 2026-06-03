@@ -289,6 +289,8 @@ jobs:
     name: Generate and upload source maps to Sentry
     needs: [version, build, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
+	# Allow continuing if fail because of sentry issue
+    continue-on-error: true
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     env:
@@ -331,12 +333,7 @@ jobs:
   push_to_registry:
     name: Push to registry
     needs:
-      [
-        version,
-        unit_test_backend,
-        unit_test_frontend,
-	    e2e_multi_windows_test
-      ]
+      [version, unit_test_backend, unit_test_frontend, e2e_multi_windows_test]
     runs-on: ubuntu-22.04
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
     env:

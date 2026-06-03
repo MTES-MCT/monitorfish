@@ -11,26 +11,26 @@ import { numberOrUndefined, stringOrUndefined } from '../../../types'
 import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 
 export const InfractionSuspicionThreatSchema = z.object({
-  infraction: InfractionSchema.or(z.undefined()),
+  infraction: InfractionSchema.optional(),
   natinfCode: z.number(),
   threat: z.string(),
   threatCharacterization: z.string(),
-  threatHierarchy: ThreatSchema.or(z.undefined())
+  threatHierarchy: ThreatSchema.optional()
 })
 
 export const InfractionSuspicionSchema = z.strictObject({
   authorContact: stringOrUndefined,
   /** @deprecated Use createdBy instead */
   authorTrigram: stringOrUndefined,
-  controlUnit: z.union([z.custom<LegacyControlUnit.LegacyControlUnit>(), z.undefined()]),
+  controlUnit: z.custom<LegacyControlUnit.LegacyControlUnit>().optional(),
   controlUnitId: numberOrUndefined,
   description: stringOrUndefined,
   dml: stringOrUndefined,
   infractions: z.array(InfractionSuspicionThreatSchema),
   numberOfVessels: numberOrUndefined,
-  otherSourceType: z.enum(OtherSourceType).or(z.undefined()),
-  reportingSource: z.enum(ReportingOriginSource).or(z.undefined()),
-  satelliteType: z.enum(SatelliteSource).or(z.undefined()),
-  seaFront: z.union([z.enum(Seafront), z.undefined()]),
+  otherSourceType: z.enum(OtherSourceType).optional(),
+  reportingSource: z.enum(ReportingOriginSource).optional(),
+  satelliteType: z.enum(SatelliteSource).optional(),
+  seaFront: z.enum(Seafront).optional(),
   title: z.string()
 })

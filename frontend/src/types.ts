@@ -39,9 +39,9 @@ export type PickStringKeysWithNativeValues<T extends Record<any, any>> = Exact<
   T
 >
 
-export const stringOrUndefined = z.union([z.string(), z.undefined()])
-export const numberOrUndefined = z.union([z.number(), z.undefined()])
-export const booleanOrUndefined = z.union([z.boolean(), z.undefined()])
+export const stringOrUndefined = z.string().optional()
+export const numberOrUndefined = z.number().optional()
+export const booleanOrUndefined = z.boolean().optional()
 
 export type BannerStackItem = {
   id: number

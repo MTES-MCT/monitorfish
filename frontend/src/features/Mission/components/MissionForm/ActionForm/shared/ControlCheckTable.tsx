@@ -4,12 +4,15 @@ import { useFormikContext } from 'formik'
 import styled, { css } from 'styled-components'
 
 import type { MissionActionFormValues } from '../../types'
+import type { ReactNode } from 'react'
 
 export type ControlCheckRow = Readonly<{
   disabled?: boolean
   hasBorderBottom?: boolean
   isRequired?: boolean
-  label: string
+  // When true, the row is rendered as a subsection title spanning the whole width (no radios).
+  isSectionHeader?: boolean
+  label: string | ReactNode
   name: string
 }>
 
@@ -25,26 +28,32 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
       <ColumnHeader>Oui</ColumnHeader>
       <ColumnHeader>Non</ColumnHeader>
       <ColumnHeader>N/A</ColumnHeader>
-      {rows.map(({ disabled, hasBorderBottom, isRequired, label, name }, index) => (
-        <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
-          <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
-            <LabelText $isRequired={!!isRequired}>{label}</LabelText>
-          </RowLegend>
-          {CONTROL_CHECK_AS_OPTIONS.map(opt => (
-            <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
-              <Radio
-                checked={(values as Record<string, unknown>)[name] === opt.value}
-                disabled={!!disabled}
-                labelPosition="left"
-                name={name}
-                onChange={() => setFieldValue(name, opt.value)}
-              >
-                {opt.label}
-              </Radio>
-            </RadioCell>
-          ))}
-        </RowFieldset>
-      ))}
+      {rows.map(({ disabled, hasBorderBottom, isRequired, isSectionHeader, label, name }, index) =>
+        isSectionHeader ? (
+          <SectionHeader key={name} $isFirst={index === 0}>
+            {label}
+          </SectionHeader>
+        ) : (
+          <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
+            <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+              <LabelText $isRequired={!!isRequired}>{label}</LabelText>
+            </RowLegend>
+            {CONTROL_CHECK_AS_OPTIONS.map(opt => (
+              <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+                <Radio
+                  checked={(values as Record<string, unknown>)[name] === opt.value}
+                  disabled={!!disabled}
+                  labelPosition="left"
+                  name={name}
+                  onChange={() => setFieldValue(name, opt.value)}
+                >
+                  {opt.label}
+                </Radio>
+              </RadioCell>
+            ))}
+          </RowFieldset>
+        )
+      )}
     </TableGrid>
   )
 }
@@ -55,7 +64,7 @@ const borderBottom = css`
 
 const TableGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 100px 100px 100px;
+  grid-template-columns: 1fr 0.18fr 0.18fr 0.18fr;
   align-items: stretch;
   row-gap: 4px;
 `
@@ -72,7 +81,17 @@ const ColumnHeader = styled.div`
   color: ${p => p.theme.color.gunMetal};
   text-align: center;
   padding-bottom: 12px;
+  margin-left: -8px;
   ${borderBottom}
+`
+
+const SectionHeader = styled.div<{ $isFirst: boolean }>`
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: ${p => p.theme.color.slateGray};
+  padding: ${p => (p.$isFirst ? 4 : 12)}px 0 4px 0px;
+  margin-top: ${p => (p.$isFirst ? 8 : 16)}px;
+  ${p => !p.$isFirst && `border-top: 1px solid ${p.theme.color.lightGray};`}
 `
 
 const RowFieldset = styled.fieldset`

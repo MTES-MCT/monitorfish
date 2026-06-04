@@ -2,6 +2,7 @@ import { useGetFaoAreasQuery } from '@api/faoAreas'
 import { useGetSpeciesQuery } from '@api/specy'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
 import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
 import {
@@ -33,13 +34,10 @@ import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
+import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Specy } from 'domain/types/specy'
-
-type SpeciesFieldProps = Readonly<{
-  controlledWeightLabel: string
-}>
 
 const DISCARD_REASON_OPTIONS: Array<Option<string>> = Object.entries(DISCARD_REASON_LABEL).map(([code, label]) => ({
   label: `${code} - ${label}`,
@@ -53,6 +51,9 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
 
 type VisibilityState = { rejected: boolean; underSized: boolean }
 
+type SpeciesFieldProps = Readonly<{
+  controlledWeightLabel: string
+}>
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
@@ -60,6 +61,9 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const { updateSegments } = useGetMissionActionFormikUsecases()
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
+
+  const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
+  const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
 
   const getSpeciesApiQuery = useGetSpeciesQuery()
   const getFaoAreasQuery = useGetFaoAreasQuery()
@@ -256,23 +260,57 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   }
 
   if (!speciesAsOptions.length || !customSearch) {
-    return <FieldsetGroupSpinner isLight legend="Espèces à bord" />
+    return <FieldsetGroupSpinner isLight legend={legend} />
   }
 
-  const controlCheckRows = [
+  const baseSpeciesCheckRows: ControlCheckRow[] = [
     { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
     { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
     {
       isRequired: true,
       label: 'Arrimage séparé des espèces soumises à plan',
       name: 'separateStowageOfPreservedSpecies'
-    },
-    ...(isEISREnabled
+    }
+  ]
+
+  let controlCheckRows: ControlCheckRow[]
+  if (isLandControl) {
+    controlCheckRows = isEISREnabled
       ? [
           {
+            isSectionHeader: true,
+            label: (
+              <>
+                Pour les captures <u>déchargées</u>
+              </>
+            ),
+            name: 'unloadedSection'
+          },
+          {
             isRequired: true,
-            label: "Arrimage séparé des poissons n'ayant pas la taille requise",
-            name: 'underSizedSeparateStowage'
+            label: 'Taille minimale de référence de conservation contrôlée',
+            name: 'minimumConservationReferenceSizeControlled'
+          },
+          {
+            isRequired: true,
+            label: 'Contrôle de pesée - des caisses/conteneurs - échantillonnage',
+            name: 'cratesWeighingSamplingControl'
+          },
+          {
+            isRequired: true,
+            label: "Informations sur l'opérateur de pesée agréé",
+            name: 'approvedWeighingOperatorInformation'
+          },
+          { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
+          { isRequired: true, label: 'Pesée des captures lors du débarquement', name: 'catchesWeighedAtLanding' },
+          {
+            isSectionHeader: true,
+            label: (
+              <>
+                Pour les captures <u>détenues à bord</u>
+              </>
+            ),
+            name: 'heldOnboardSection'
           },
           {
             isRequired: true,
@@ -280,11 +318,29 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
             name: 'underSizedSeparateRecording'
           }
         ]
-      : [])
-  ]
+      : baseSpeciesCheckRows
+  } else {
+    controlCheckRows = [
+      ...baseSpeciesCheckRows,
+      ...(isEISREnabled
+        ? [
+            {
+              isRequired: true,
+              label: "Arrimage séparé des poissons n'ayant pas la taille requise",
+              name: 'underSizedSeparateStowage'
+            },
+            {
+              isRequired: true,
+              label: "Enregistrement séparé des poissons n'ayant pas la taille requise",
+              name: 'underSizedSeparateRecording'
+            }
+          ]
+        : [])
+    ]
+  }
 
   return (
-    <FieldsetGroup isLight legend="Espèces à bord">
+    <FieldsetGroup isLight legend={legend}>
       <ControlCheckTable rows={controlCheckRows} />
 
       {input.value && input.value.length > 0 && (

@@ -28,6 +28,8 @@ object TestUtils {
             ),
         emitsVms = ControlCheck.YES,
         emitsAis = ControlCheck.NOT_APPLICABLE,
+        vmsEmissionControlBeforeArrival = ControlCheck.YES,
+        portEntranceAndLandingAuthorized = ControlCheck.NO,
         logbookMatchesActivity = ControlCheck.NO,
         speciesWeightControlled = ControlCheck.YES,
         speciesSizeControlled = ControlCheck.YES,
@@ -39,6 +41,11 @@ object TestUtils {
         weighingCertificateAndSystemsValid = ControlCheck.NOT_APPLICABLE,
         underSizedSeparateStowage = ControlCheck.YES,
         underSizedSeparateRecording = ControlCheck.NO,
+        minimumConservationReferenceSizeControlled = ControlCheck.YES,
+        cratesWeighingSamplingControl = ControlCheck.NO,
+        approvedWeighingOperatorInformation = ControlCheck.NOT_APPLICABLE,
+        holdControlledAfterUnloading = ControlCheck.YES,
+        catchesWeighedAtLanding = ControlCheck.NO,
         infractions =
             listOf(
                 Infraction(

@@ -12,10 +12,13 @@ export const MissionActionSchema = z.strictObject({
   actionDatetimeUtc: z.string(),
   actionEndDatetimeUtc: stringOrUndefined,
   actionType: z.enum(MissionAction.MissionActionType),
+  approvedWeighingOperatorInformation: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  catchesWeighedAtLanding: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   completedBy: stringOrUndefined,
   completion: z.enum(MissionAction.CompletionStatus),
   controlQualityComments: stringOrUndefined,
   controlUnits: z.array(LegacyControlUnitSchema),
+  cratesWeighingSamplingControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   districtCode: stringOrUndefined,
   emitsAis: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   emitsVms: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
@@ -28,6 +31,7 @@ export const MissionActionSchema = z.strictObject({
   gearOnboard: z.array(GearControlSchema),
   hasSomeGearsSeized: z.boolean(),
   hasSomeSpeciesSeized: z.boolean(),
+  holdControlledAfterUnloading: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   id: z.number(),
   infractions: z.array(InfractionSchema),
   internalReferenceNumber: stringOrUndefined,
@@ -46,6 +50,7 @@ export const MissionActionSchema = z.strictObject({
   logbookFilledPriorToControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   logbookMatchesActivity: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   longitude: numberOrUndefined,
+  minimumConservationReferenceSizeControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   missionId: z.number(),
   numberOfVesselsFlownOver: numberOrUndefined,
   observationsByUnit: stringOrUndefined,
@@ -53,6 +58,7 @@ export const MissionActionSchema = z.strictObject({
 
   otherComments: stringOrUndefined,
 
+  portEntranceAndLandingAuthorized: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   portLocode: stringOrUndefined,
   // This field is added by the API
   portName: stringOrUndefined,
@@ -74,5 +80,6 @@ export const MissionActionSchema = z.strictObject({
   vesselId: numberOrUndefined,
   vesselName: stringOrUndefined,
   vesselTargeted: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  vmsEmissionControlBeforeArrival: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   weighingCertificateAndSystemsValid: z.union([z.enum(MissionAction.ControlCheck), z.undefined()])
 })

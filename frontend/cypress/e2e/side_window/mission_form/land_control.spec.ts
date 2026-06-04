@@ -58,11 +58,11 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Auray')
 
     // Obligations déclaratives et autorisations
-    cy.fill('Bonne émission VMS', 'Oui')
-    cy.fill('Bonne émission AIS', 'Non')
+    // VMS / AIS / propulsion power checks are not displayed on land controls (forced to N/A)
+    cy.fill("Contrôle de l’émission VMS avant l’arrivée à terre", "Oui")
+    cy.fill("Accès au port / autorisation de débarquement conformes", "Non")
     cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
     cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
-    cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
     cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
     cy.fill("Plan d’arrimage présent et valide", "N/A")
     cy.fill("Autorisation pour la pesée à bord", "N/A")
@@ -78,13 +78,16 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
-    // Espèces à bord
+    // Inspection des captures
     cy.fill('Ajouter une espèce', 'COD')
-    cy.fill('Poids des espèces vérifiés', 'Oui')
-    cy.fill('Taille des espèces vérifiées', 'Non')
-    cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
-    cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
+    // Pour les captures détenues à bord
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
+    // Pour les captures déchargées
+    cy.fill('Taille minimale de référence de conservation contrôlée', 'Oui')
+    cy.fill('Contrôle de pesée - des caisses/conteneurs - échantillonnage', 'Non')
+    cy.fill("Informations sur l'opérateur de pesée agréé", 'Oui')
+    cy.fill('Cale contrôlée après déchargement', 'Oui')
+    cy.fill('Pesée des captures lors du débarquement', 'Non')
     cy.fill('Qté pesée', 500)
     cy.clickButton('Ajouter sous-taille')
     cy.fill('Qté sous-taille', 10)
@@ -154,8 +157,10 @@ context('Side Window > Mission Form > Land Control', () => {
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
           districtCode: 'AY',
-          emitsAis: 'NO',
-          emitsVms: 'YES',
+          emitsAis: 'NOT_APPLICABLE',
+          emitsVms: 'NOT_APPLICABLE',
+          vmsEmissionControlBeforeArrival: 'YES',
+          portEntranceAndLandingAuthorized: 'NO',
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
@@ -200,14 +205,17 @@ context('Side Window > Mission Form > Land Control', () => {
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: true,
           seizureAndDiversionComments: null,
-          separateStowageOfPreservedSpecies: 'YES',
-          propulsionEnginePowerControl: 'YES',
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
           fishingLicencesMatchActivity: 'NO',
           stowagePlanPresent: 'NOT_APPLICABLE',
           onboardWeighingPermit: 'NOT_APPLICABLE',
           weighingCertificateAndSystemsValid: null,
-          underSizedSeparateStowage: 'YES',
           underSizedSeparateRecording: 'NO',
+          minimumConservationReferenceSizeControlled: 'YES',
+          cratesWeighingSamplingControl: 'NO',
+          approvedWeighingOperatorInformation: 'YES',
+          holdControlledAfterUnloading: 'YES',
+          catchesWeighedAtLanding: 'NO',
           infractions: [
             {
               comments: 'Une observation sur l’infraction déclarative.',
@@ -233,8 +241,6 @@ context('Side Window > Mission Form > Land Control', () => {
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false }
           ],
           speciesQuantitySeized: 6289.5,
-          speciesSizeControlled: 'NO',
-          speciesWeightControlled: 'YES',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 1,

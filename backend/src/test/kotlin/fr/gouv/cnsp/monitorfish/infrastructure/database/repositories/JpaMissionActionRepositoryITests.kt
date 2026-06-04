@@ -156,11 +156,21 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
         // When
         val missionAction = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(missionAction.id!!)
 
         // Then
         assertThat(missionAction.id).isNotNull()
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
         assertThat(missionAction.userTrigram).isEqualTo("DEF")
+        // The land control obligation checks round-trip correctly
+        assertThat(loaded.vmsEmissionControlBeforeArrival).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.portEntranceAndLandingAuthorized).isEqualTo(ControlCheck.NO)
+        // The land control species checks round-trip correctly
+        assertThat(loaded.minimumConservationReferenceSizeControlled).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.cratesWeighingSamplingControl).isEqualTo(ControlCheck.NO)
+        assertThat(loaded.approvedWeighingOperatorInformation).isEqualTo(ControlCheck.NOT_APPLICABLE)
+        assertThat(loaded.holdControlledAfterUnloading).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.catchesWeighedAtLanding).isEqualTo(ControlCheck.NO)
     }
 
     @Test

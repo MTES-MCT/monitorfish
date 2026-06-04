@@ -20,14 +20,18 @@ export const INITIAL_MISSION_CONTROL_UNIT: LegacyControlUnit.LegacyControlUnitDr
 export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValues> = {
   actionDatetimeUtc: undefined,
   actionType: undefined,
+  approvedWeighingOperatorInformation: undefined,
+  catchesWeighedAtLanding: undefined,
   completion: CompletionStatus.TO_COMPLETE,
   controlQualityComments: undefined,
   controlUnits: [],
+  cratesWeighingSamplingControl: undefined,
   emitsAis: undefined,
   emitsVms: undefined,
   facade: undefined,
   fishingLicencesMatchActivity: undefined,
   gearOnboard: [],
+  holdControlledAfterUnloading: undefined,
   id: undefined,
   infractions: [],
   isAdministrativeControl: undefined,
@@ -43,9 +47,11 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   logbookFilledPriorToControl: undefined,
   logbookMatchesActivity: undefined,
   longitude: undefined,
+  minimumConservationReferenceSizeControlled: undefined,
   numberOfVesselsFlownOver: undefined,
   onboardWeighingPermit: undefined,
   otherComments: undefined,
+  portEntranceAndLandingAuthorized: undefined,
   portLocode: undefined,
   propulsionEnginePowerControl: undefined,
   segments: [],
@@ -64,6 +70,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   vesselId: undefined,
   vesselName: undefined,
   vesselTargeted: undefined,
+  vmsEmissionControlBeforeArrival: undefined,
   weighingCertificateAndSystemsValid: undefined
 }
 

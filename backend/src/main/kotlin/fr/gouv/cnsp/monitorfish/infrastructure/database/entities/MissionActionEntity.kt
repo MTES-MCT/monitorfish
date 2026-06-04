@@ -56,6 +56,12 @@ class MissionActionEntity(
     @Column(name = "emits_ais")
     @Enumerated(EnumType.STRING)
     val emitsAis: ControlCheck? = null,
+    @Column(name = "vms_emission_control_before_arrival")
+    @Enumerated(EnumType.STRING)
+    val vmsEmissionControlBeforeArrival: ControlCheck? = null,
+    @Column(name = "port_entrance_and_landing_authorized")
+    @Enumerated(EnumType.STRING)
+    val portEntranceAndLandingAuthorized: ControlCheck? = null,
     @Column(name = "logbook_filled_prior_to_control")
     @Enumerated(EnumType.STRING)
     val logbookFilledPriorToControl: ControlCheck? = null,
@@ -95,6 +101,21 @@ class MissionActionEntity(
     @Column(name = "under_sized_separate_recording")
     @Enumerated(EnumType.STRING)
     val underSizedSeparateRecording: ControlCheck? = null,
+    @Column(name = "minimum_conservation_reference_size_controlled")
+    @Enumerated(EnumType.STRING)
+    val minimumConservationReferenceSizeControlled: ControlCheck? = null,
+    @Column(name = "crates_weighing_sampling_control")
+    @Enumerated(EnumType.STRING)
+    val cratesWeighingSamplingControl: ControlCheck? = null,
+    @Column(name = "approved_weighing_operator_information")
+    @Enumerated(EnumType.STRING)
+    val approvedWeighingOperatorInformation: ControlCheck? = null,
+    @Column(name = "hold_controlled_after_unloading")
+    @Enumerated(EnumType.STRING)
+    val holdControlledAfterUnloading: ControlCheck? = null,
+    @Column(name = "catches_weighed_at_landing")
+    @Enumerated(EnumType.STRING)
+    val catchesWeighedAtLanding: ControlCheck? = null,
     @Column(name = "licences_and_logbook_observations")
     val licencesAndLogbookObservations: String? = null,
     @Type(JsonBinaryType::class)
@@ -191,6 +212,8 @@ class MissionActionEntity(
                 actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc?.let { it.toInstant() },
                 emitsVms = missionAction.emitsVms,
                 emitsAis = missionAction.emitsAis,
+                vmsEmissionControlBeforeArrival = missionAction.vmsEmissionControlBeforeArrival,
+                portEntranceAndLandingAuthorized = missionAction.portEntranceAndLandingAuthorized,
                 logbookFilledPriorToControl = missionAction.logbookFilledPriorToControl,
                 logbookMatchesActivity = missionAction.logbookMatchesActivity,
                 licencesMatchActivity = missionAction.licencesMatchActivity,
@@ -204,6 +227,11 @@ class MissionActionEntity(
                 weighingCertificateAndSystemsValid = missionAction.weighingCertificateAndSystemsValid,
                 underSizedSeparateStowage = missionAction.underSizedSeparateStowage,
                 underSizedSeparateRecording = missionAction.underSizedSeparateRecording,
+                minimumConservationReferenceSizeControlled = missionAction.minimumConservationReferenceSizeControlled,
+                cratesWeighingSamplingControl = missionAction.cratesWeighingSamplingControl,
+                approvedWeighingOperatorInformation = missionAction.approvedWeighingOperatorInformation,
+                holdControlledAfterUnloading = missionAction.holdControlledAfterUnloading,
+                catchesWeighedAtLanding = missionAction.catchesWeighedAtLanding,
                 infractions = mapper.writeValueAsString(missionAction.infractions),
                 licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
                 speciesObservations = missionAction.speciesObservations,
@@ -263,6 +291,8 @@ class MissionActionEntity(
             actionEndDatetimeUtc = actionEndDatetimeUtc?.atZone(ZoneOffset.UTC),
             emitsVms = emitsVms,
             emitsAis = emitsAis,
+            vmsEmissionControlBeforeArrival = vmsEmissionControlBeforeArrival,
+            portEntranceAndLandingAuthorized = portEntranceAndLandingAuthorized,
             logbookFilledPriorToControl = logbookFilledPriorToControl,
             logbookMatchesActivity = logbookMatchesActivity,
             licencesMatchActivity = licencesMatchActivity,
@@ -276,6 +306,11 @@ class MissionActionEntity(
             weighingCertificateAndSystemsValid = weighingCertificateAndSystemsValid,
             underSizedSeparateStowage = underSizedSeparateStowage,
             underSizedSeparateRecording = underSizedSeparateRecording,
+            minimumConservationReferenceSizeControlled = minimumConservationReferenceSizeControlled,
+            cratesWeighingSamplingControl = cratesWeighingSamplingControl,
+            approvedWeighingOperatorInformation = approvedWeighingOperatorInformation,
+            holdControlledAfterUnloading = holdControlledAfterUnloading,
+            catchesWeighedAtLanding = catchesWeighedAtLanding,
             licencesAndLogbookObservations = licencesAndLogbookObservations,
             infractions = deserializeJSONList(mapper, infractions, Infraction::class.java),
             speciesObservations = speciesObservations,

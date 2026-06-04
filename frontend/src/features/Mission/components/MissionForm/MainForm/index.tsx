@@ -85,7 +85,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
             <CustomFormBodyInnerWrapper>
               <FormikDoubleDatePicker />
 
-              <MultiCheckColumns>
+              <MultiCheck>
                 <FormikMultiCheckbox
                   isErrorMessageHidden
                   isInline
@@ -96,7 +96,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
                 />
 
                 <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
-              </MultiCheckColumns>
+              </MultiCheck>
 
               <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
             </CustomFormBodyInnerWrapper>
@@ -136,20 +136,17 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
 export const MainForm = memo(UnmemoizedMainForm, () => true)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
-  margin-left: 48px;
-  margin-top: 20px;
+  margin-top: 24px;
 `
 
-const MultiCheckColumns = styled.div`
-  display: flex;
-`
+const MultiCheck = styled.div``
 
 // TODO Why is there a `font-weight: 700` for legends in mini.css?
 const Wrapper = styled.div`
   background-color: ${p => p.theme.color.white};
   display: flex;
   flex-direction: column;
-  width: 465px;
+  width: 404px;
   overflow-y: auto;
 
   /* TODO Handle that in @mtes-mct/monitor-ui. */
@@ -163,12 +160,16 @@ const CustomFormBodyInnerWrapper = styled(FormBodyInnerWrapper)`
   > fieldset:not(:first-child) {
     margin-top: 24px;
   }
+  .Field-MultiRadio {
+    margin-bottom: 8px;
+  }
 `
 
 const RelatedFieldGroupWrapper = styled.div`
   > div:not(:first-child) {
     margin-top: 8px;
   }
+  width: 324px;
 `
 
 const InlineFieldGroupWrapper = styled.div`
@@ -176,11 +177,11 @@ const InlineFieldGroupWrapper = styled.div`
 
   > div:first-child {
     margin-right: 8px;
-    width: 50%;
+    width: 120px;
   }
 
   > div:last-child {
     margin-left: 8px;
-    width: 50%;
+    width: 120px;
   }
 `

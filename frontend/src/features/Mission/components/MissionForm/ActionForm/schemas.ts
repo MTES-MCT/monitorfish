@@ -23,6 +23,15 @@ function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
     : object({})
 }
 
+function makeLandControlEIsrObligationsSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        vmsEmissionControlBeforeArrival: string().required(HIDDEN_ERROR),
+        portEntranceAndLandingAuthorized: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
+
 function makeEIsrSpeciesSchema(isEISR: boolean) {
   return isEISR
     ? object({
@@ -30,6 +39,31 @@ function makeEIsrSpeciesSchema(isEISR: boolean) {
         underSizedSeparateRecording: string().required(HIDDEN_ERROR)
       })
     : object({})
+}
+
+// On land controls under e-ISR, the sea species checks are replaced by these subsection fields.
+function makeLandControlEIsrSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        underSizedSeparateRecording: string().required(HIDDEN_ERROR),
+        minimumConservationReferenceSizeControlled: string().required(HIDDEN_ERROR),
+        cratesWeighingSamplingControl: string().required(HIDDEN_ERROR),
+        approvedWeighingOperatorInformation: string().required(HIDDEN_ERROR),
+        holdControlledAfterUnloading: string().required(HIDDEN_ERROR),
+        catchesWeighedAtLanding: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
+
+// On non-e-ISR land controls, the legacy species checks are still required.
+function makeNonEIsrLandSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({})
+    : object({
+        speciesWeightControlled: string().required(HIDDEN_ERROR),
+        speciesSizeControlled: string().required(HIDDEN_ERROR),
+        separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR)
+      })
 }
 
 function makeEIsrSpeciesOnboardSchema(isEISR: boolean) {
@@ -158,10 +192,7 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
       logbookMatchesActivity: string().required(HIDDEN_ERROR),
       licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-      // Espèces à bord
-      speciesWeightControlled: string().required(HIDDEN_ERROR),
-      speciesSizeControlled: string().required(HIDDEN_ERROR),
-      separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      // Inspection des captures (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
 
       // Quantités saisies
@@ -187,7 +218,9 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
     })
   )
     .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
-    .concat(makeEIsrSpeciesSchema(isEISR))
+    .concat(makeLandControlEIsrObligationsSchema(isEISR))
+    .concat(makeLandControlEIsrSpeciesSchema(isEISR))
+    .concat(makeNonEIsrLandSpeciesSchema(isEISR))
 }
 
 // -----------------------------------------------------------------------------

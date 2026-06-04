@@ -315,9 +315,9 @@ const UnitWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  min-width: 384px;
-  max-width: 384px;
-  width: 384px;
+  min-width: 324px;
+  max-width: 324px;
+  width: 324px;
 
   > div:not(:first-child) {
     margin-top: 8px;

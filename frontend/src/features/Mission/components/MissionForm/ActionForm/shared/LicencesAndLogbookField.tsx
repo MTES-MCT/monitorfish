@@ -1,6 +1,7 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { FormikTextarea } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { useEffect } from 'react'
 
 import { ControlCheckTable } from './ControlCheckTable'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
@@ -10,22 +11,63 @@ import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 
+// On land controls these checks are not relevant: they are hidden and forced to N/A.
+const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = [
+  'propulsionEnginePowerControl',
+  'emitsVms',
+  'emitsAis'
+]
+
 export function LicencesAndLogbookField() {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
+
+  useEffect(() => {
+    if (!isLandControl) {
+      return
+    }
+
+    LAND_CONTROL_NOT_APPLICABLE_FIELDS.forEach(field => {
+      if (values[field] !== MissionAction.ControlCheck.NOT_APPLICABLE) {
+        setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
+      }
+    })
+    // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLandControl, setFieldValue, values.propulsionEnginePowerControl, values.emitsVms, values.emitsAis])
+
+  const landControlFields = isEISREnabled
+    ? [
+        {
+          isRequired: true,
+          label: 'Contrôle de l’émission VMS avant l’arrivée à terre',
+          name: 'vmsEmissionControlBeforeArrival'
+        },
+        {
+          isRequired: true,
+          label: 'Accès au port / autorisation de débarquement conformes',
+          name: 'portEntranceAndLandingAuthorized'
+        }
+      ]
+    : []
 
   const rows: ControlCheckRow[] = [
-    ...(isEISREnabled
-      ? [
-          {
-            isRequired: true,
-            label: 'Contrôle de la puissance du moteur de propulsion',
-            name: 'propulsionEnginePowerControl'
-          }
-        ]
-      : []),
-    { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
-    { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
+    ...(isLandControl
+      ? landControlFields
+      : [
+          ...(isEISREnabled
+            ? [
+                {
+                  isRequired: true,
+                  label: 'Contrôle de la puissance du moteur de propulsion',
+                  name: 'propulsionEnginePowerControl'
+                }
+              ]
+            : []),
+          { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
+          { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' }
+        ]),
     ...(isEISREnabled
       ? [
           {

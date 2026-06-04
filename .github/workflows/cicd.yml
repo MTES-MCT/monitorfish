@@ -289,8 +289,6 @@ jobs:
     name: Generate and upload source maps to Sentry
     needs: [version, build, unit_test_backend, unit_test_frontend, e2e_test, e2e_multi_windows_test]
     if: needs.version.outputs.IS_RELEASE && !contains(github.ref, 'dependabot')
-	# Allow continuing if fail because of sentry issue
-    continue-on-error: true
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     env:
@@ -317,6 +315,7 @@ jobs:
           docker rm monitorfish-temp
       - name: Generate and upload source maps to Sentry
         uses: getsentry/action-release@v3
+        continue-on-error: true
         with:
           environment: ${{ env.ENV_PROFILE }}
           release: ${{ env.VERSION }}

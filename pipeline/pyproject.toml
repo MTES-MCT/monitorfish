@@ -34,7 +34,7 @@ clickhouse-connect = "^0.14.1"
 pyarrow = "^22.0.0"
 prefect = {version = "3.6.9", extras = ["docker"]}
 duckdb = "^1.5.1"
-oracledb = "^3.4.2"
+oracledb = "^4.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -54,6 +54,7 @@ missions_df = pd.DataFrame(
             "MONITORFISH",
         ],
         "mission_order": [True, True, None, False],
+        "is_under_jdp": [True, False, False, False],
     }
 )
 

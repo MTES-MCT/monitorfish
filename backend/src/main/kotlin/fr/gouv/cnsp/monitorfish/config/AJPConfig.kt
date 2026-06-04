@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.config
 import org.apache.catalina.connector.Connector
 import org.apache.coyote.ajp.AbstractAjpProtocol
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,14 +15,12 @@ class AJPConfig {
     private val AJPProperties: AJPProperties? = null
 
     @Bean
-    fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory?>? =
-        WebServerFactoryCustomizer { server: TomcatServletWebServerFactory? ->
-            if (server is TomcatServletWebServerFactory) {
-                server.addAdditionalTomcatConnectors(redirectConnector())
-            }
+    fun servletContainer(): WebServerFactoryCustomizer<TomcatServletWebServerFactory> =
+        WebServerFactoryCustomizer { server: TomcatServletWebServerFactory ->
+            server.addAdditionalConnectors(redirectConnector())
         }
 
-    private fun redirectConnector(): Connector? {
+    private fun redirectConnector(): Connector {
         val connector = Connector("AJP/1.3")
         connector.scheme = "http"
         connector.port = AJPProperties?.port?.toInt() ?: 8000

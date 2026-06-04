@@ -6,6 +6,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
@@ -40,7 +42,7 @@ import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -58,7 +60,11 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @WebMvcTest(value = [VesselController::class])
-@Import(MapperConfiguration::class)
+@Import(
+    SecurityConfig::class,
+    OIDCProperties::class,
+    MapperConfiguration::class,
+)
 class VesselControllerITests {
     @Autowired
     private lateinit var api: MockMvc

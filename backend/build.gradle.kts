@@ -2,15 +2,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-val springBootVersion = "3.5.8"
+val springBootVersion = "4.0.6"
 val kotlinVersion = "2.3.21"
-val springSecurityVersion = "6.5.6"
+val springSecurityVersion = "7.0.5"
 
 plugins {
     `java-library`
     `maven-publish`
 
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jetbrains.kotlin.plugin.spring") version "2.3.21"
     id("org.jetbrains.kotlin.plugin.allopen") version "2.3.21"
@@ -56,6 +56,16 @@ dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.1")
     }
+
+    // Ktor 3.5 is compiled against kotlinx-coroutines 1.11. An imported BOM otherwise pins the
+    // *-jvm coroutines artifacts to 1.8.1, causing a java.lang.NoSuchMethodError at runtime in the
+    // Ktor HTTP client. Override the managed version so every coroutines artifact stays aligned.
+    dependencies {
+        dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
+        dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0")
+        dependency("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.11.0")
+        dependency("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.11.0")
+    }
 }
 
 repositories {
@@ -94,49 +104,58 @@ dependencies {
     api("org.springframework.security:spring-security-oauth2-resource-server:$springSecurityVersion")
     api("org.springframework.security:spring-security-oauth2-jose:$springSecurityVersion")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation("org.springframework.cloud:spring-cloud-gateway-mvc:4.3.4")
+    // Renamed from spring-cloud-gateway-mvc in Spring Cloud 2025.x; version managed by the BOM so it
+    // stays compatible with Spring Boot 4. Keeps the org.springframework.cloud.gateway.mvc.* package.
+    implementation("org.springframework.cloud:spring-cloud-gateway-proxyexchange-webmvc")
     implementation("org.springframework.kafka:spring-kafka")
+    // Spring Boot 4 split several pieces out of spring-boot / spring-boot-autoconfigure into
+    // dedicated modules that are no longer pulled transitively by the web starter.
+    implementation("org.springframework.boot:spring-boot-restclient:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-kafka:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-flyway:$springBootVersion")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 
     // HTTP client
-    implementation("io.ktor:ktor-client-core-jvm:3.4.3")
-    implementation("io.ktor:ktor-client-java-jvm:3.4.3")
-    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.4.3")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.4.3")
+    implementation("io.ktor:ktor-client-core-jvm:3.5.0")
+    implementation("io.ktor:ktor-client-java-jvm:3.5.0")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.5.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.5.0")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:11.18.0")
-    implementation("org.flywaydb:flyway-database-postgresql:11.18.0")
+    implementation("org.flywaydb:flyway-core:12.5.0")
+    implementation("org.flywaydb:flyway-database-postgresql:12.5.0")
     implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
-    implementation("org.hibernate:hibernate-spatial:7.3.2.Final")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")
+    // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
+    // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).
+    implementation("org.hibernate.orm:hibernate-spatial")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.15.2")
     api("org.locationtech.jts:jts-core:1.20.0")
     implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
-    implementation("org.locationtech.proj4j:proj4j:1.4.1")
-    implementation("org.locationtech.proj4j:proj4j-epsg:1.4.1")
-    runtimeOnly("org.postgresql:postgresql:42.7.10")
+    implementation("org.locationtech.proj4j:proj4j:1.4.2")
+    implementation("org.locationtech.proj4j:proj4j-epsg:1.4.2")
+    runtimeOnly("org.postgresql:postgresql:42.7.11")
 
     // Serialization / API
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.2")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.3")
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
-    api("org.springdoc:springdoc-openapi-ui:1.8.0")
+    api("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
 
     // Utilities
     api("com.neovisionaries:nv-i18n:1.29")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
-    implementation("io.sentry:sentry:8.40.0")
-    implementation("io.sentry:sentry-log4j2:8.40.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
+    implementation("io.sentry:sentry:8.42.0")
+    implementation("io.sentry:sentry-log4j2:8.42.0")
 
     // Runtime
     runtimeOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")
 
     // Test
-    testImplementation("io.ktor:ktor-client-mock-jvm:3.4.3")
+    testImplementation("io.ktor:ktor-client-mock-jvm:3.5.0")
     testImplementation("org.springframework.kafka:spring-kafka-test") {
         exclude(group = "ch.qos.logback", module = "logback-classic")
     }
@@ -150,6 +169,7 @@ dependencies {
     testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+    testImplementation("org.springframework.boot:spring-boot-webmvc-test:$springBootVersion")
     testImplementation("org.springframework.security:spring-security-test:$springSecurityVersion")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
 }

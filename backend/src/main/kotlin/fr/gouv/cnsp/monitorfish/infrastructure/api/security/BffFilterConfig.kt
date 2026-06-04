@@ -20,18 +20,21 @@ class BffFilterConfig(
 
     @Bean(name = ["userAuthorizationCheckFilter"])
     fun userAuthorizationCheckFilter(): FilterRegistrationBean<UserAuthorizationCheckFilter> {
-        val registrationBean = FilterRegistrationBean<UserAuthorizationCheckFilter>()
+        val registrationBean =
+            FilterRegistrationBean(
+                UserAuthorizationCheckFilter(
+                    oidcProperties = oidcProperties,
+                    protectedPathsAPIProperties = protectedPathsAPIProperties,
+                    getIsAuthorizedUser = getIsAuthorizedUser,
+                ),
+            )
 
         registrationBean.order = USER_AUTH_FILTER_PRECEDENCE
-        registrationBean.filter =
-            UserAuthorizationCheckFilter(
-                oidcProperties = oidcProperties,
-                protectedPathsAPIProperties = protectedPathsAPIProperties,
-                getIsAuthorizedUser = getIsAuthorizedUser,
-            )
-        registrationBean.urlPatterns = protectedPathsAPIProperties.paths
 
-        if (registrationBean.urlPatterns == null) {
+        val paths = protectedPathsAPIProperties.paths
+        if (paths != null) {
+            registrationBean.setUrlPatterns(paths)
+        } else {
             logger.warn(
                 "WARNING: No user authentication path given." +
                     "See `monitorfish.api.protected.paths` application property.",
@@ -46,15 +49,19 @@ class BffFilterConfig(
 
     @Bean(name = ["publicPathsApiKeyCheckFilter"])
     fun publicPathsApiKeyCheckFilter(): FilterRegistrationBean<ApiKeyCheckFilter> {
-        val registrationBean = FilterRegistrationBean<ApiKeyCheckFilter>()
+        val registrationBean =
+            FilterRegistrationBean(
+                ApiKeyCheckFilter(
+                    protectedPathsAPIProperties,
+                ),
+            )
 
         registrationBean.order = API_KEY_FILTER_PRECEDENCE
-        registrationBean.filter =
-            ApiKeyCheckFilter(
-                protectedPathsAPIProperties,
-            )
-        registrationBean.urlPatterns = protectedPathsAPIProperties.publicPaths
-        if (registrationBean.urlPatterns == null) {
+
+        val publicPaths = protectedPathsAPIProperties.publicPaths
+        if (publicPaths != null) {
+            registrationBean.setUrlPatterns(publicPaths)
+        } else {
             logger.warn(
                 "WARNING: Public paths are not protected." +
                     "See `monitorfish.api.protected.public-paths` application property.",

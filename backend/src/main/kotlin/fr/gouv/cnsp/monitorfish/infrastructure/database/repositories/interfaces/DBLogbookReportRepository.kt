@@ -5,7 +5,7 @@ import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
-import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @DynamicUpdate
@@ -147,7 +147,7 @@ interface DBLogbookReportRepository :
         """,
         nativeQuery = true,
     )
-    fun findLastOperationDateTime(): Instant
+    fun findLastOperationDateTime(): LocalDateTime
 
     @Query(
         """

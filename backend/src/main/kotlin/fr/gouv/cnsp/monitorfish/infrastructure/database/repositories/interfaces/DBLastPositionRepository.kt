@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @DynamicUpdate
@@ -23,7 +23,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
         "select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1",
         nativeQuery = true,
     )
-    fun findLastPositionDateTime(): Instant
+    fun findLastPositionDateTime(): LocalDateTime
 
     @Query(
         """

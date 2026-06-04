@@ -59,6 +59,11 @@ logging:
         org.springframework.security.web.authentication.logout: DEBUG
 
 spring:
+    # The application's API contract relies on the Jackson 2 ObjectMapper (see MapperConfiguration).
+    # Spring Boot 4 defaults to Jackson 3 for HTTP message conversion, so opt back into Jackson 2.
+    http:
+        converters:
+            preferred-json-mapper: jackson2
     threads:
         virtual:
             enabled: false

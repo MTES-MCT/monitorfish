@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 @ControllerAdvice
 class LogResponseWithBody(
     val mapper: ObjectMapper,
-) : ResponseBodyAdvice<Any?> {
+) : ResponseBodyAdvice<Any> {
     private val logger = LoggerFactory.getLogger(LogGETRequests::class.java)
 
     override fun supports(

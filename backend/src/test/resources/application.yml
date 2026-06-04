@@ -41,6 +41,9 @@ logging:
     org.hybernate.type.descriptor.sql.BasicBinder: TRACE
 
 spring:
+  http:
+    converters:
+      preferred-json-mapper: jackson2
   jmx:
     enabled: false
   mvc:

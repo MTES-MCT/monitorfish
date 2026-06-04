@@ -31,7 +31,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -254,8 +254,9 @@ class SecurityConfig(
                 }.logout { logout ->
                     logout
                         .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                        .logoutRequestMatcher(AntPathRequestMatcher("/logout", "GET"))
-                        .invalidateHttpSession(true)
+                        .logoutRequestMatcher(
+                            PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"),
+                        ).invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
                 }

@@ -1,13 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
 import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
+    MapperConfiguration::class,
     SecurityConfig::class,
     OIDCProperties::class,
     ProtectedPathsAPIProperties::class,
@@ -56,12 +58,14 @@ class BffFilterConfigITests {
     private lateinit var buildProperties: BuildProperties
 
     @Test
-    fun `Should return 302 redirect for all user authorization protected paths`() {
+    fun `Should return 401 for all user authorization protected paths without authentication`() {
         // When
-        /**
-         * This test returns a 302 redirect to the login page when no valid OIDC authentication is provided.
-         * With OIDC enabled, these paths require proper authentication and redirect to login.
-         */
+        // Without a valid OIDC authentication, the user authorization filter rejects protected /bff
+        // paths with a 401.
+        // Note: in production the Spring Security filter chain (order -100) runs before this custom
+        // filter (order 1) and redirects unauthenticated browser requests to the login page (302);
+        // that behaviour is covered by SecurityConfigITests. In the @WebMvcTest MockMvc harness the
+        // registered servlet filter runs first, so the authorization filter's own 401 is observed here.
         listOf(
             "/bff/v1/vessels",
             "/bff/v1/beacon_malfunctions",
@@ -73,7 +77,7 @@ class BffFilterConfigITests {
             mockMvc
                 .perform(get(it))
                 // Then
-                .andExpect(status().isFound)
+                .andExpect(status().isUnauthorized)
         }
     }
 

@@ -1,0 +1,1 @@
+ALTER TABLE analytics_missions ADD COLUMN is_under_jdp BOOLEAN NOT NULL DEFAULT false;

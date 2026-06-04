@@ -125,7 +125,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     <Page>
       <Body>
         <TableOuterWrapper>
-          <Filters />
+          <Filters selectedSeafrontGroup={selectedSeafrontGroup} />
           <TableTop $isFromUrl={isFromUrl}>
             <TableLegend>
               {reportings.length} {pluralize('signalement', reportings.length)} en cours

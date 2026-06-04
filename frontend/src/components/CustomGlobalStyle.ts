@@ -401,4 +401,10 @@ export const CustomGlobalStyle = createGlobalStyle`
       max-width: 600px;
     }
   }
+  
+  .Component-Dialog {
+    div:nth-child(2) > div:nth-child(2) > *, b, p, span {
+      font-size: inherit;
+    }
+  }
 `

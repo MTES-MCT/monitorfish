@@ -15,7 +15,7 @@ describe('features/ControlUnit/components/ControlUnitListDialog/utils > displayC
 
     const result = displayControlUnitResourcesFromControlUnit(controlUnit)
 
-    expect(result).toEqual('2 Voitures, 1 Drône')
+    expect(result).toEqual('2 Voitures, 1 Drone')
   })
 
   it('should handle empty resource list', () => {
@@ -37,6 +37,6 @@ describe('features/ControlUnit/components/ControlUnitListDialog/utils > displayC
     } as unknown as ControlUnit.ControlUnit
 
     const result = displayControlUnitResourcesFromControlUnit(controlUnit)
-    expect(result).toEqual('1 Drône')
+    expect(result).toEqual('1 Drone')
   })
 })

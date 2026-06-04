@@ -20,10 +20,10 @@ export function EditDialog({ initialName, onCancel, onConfirm }: EditDialogProps
       </StyledBody>
 
       <Dialog.Action>
-        <Button accent={Accent.TERTIARY} onClick={onCancel}>
+        <Button accent={Accent.SECONDARY} onClick={onCancel}>
           Annuler
         </Button>
-        <Button accent={Accent.PRIMARY} disabled={!name} Icon={Icon.Save} onClick={() => onConfirm(name)}>
+        <Button disabled={!name} Icon={Icon.Save} onClick={() => onConfirm(name)}>
           Enregistrer
         </Button>
       </Dialog.Action>

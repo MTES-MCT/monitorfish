@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
+import { Bold } from '@components/style'
 import { useActivateAlertMutation, useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { HowAlertsWorksDialog } from '@features/Alert/components/HowAlertsWorksDialog'
 import { getTableColumns } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList/columns'
@@ -284,20 +285,16 @@ export function AlertsManagementList() {
       {isHowAlertsWorksDialogOpen && <HowAlertsWorksDialog onClose={() => setIsHowAlertsWorksDialogOpen(false)} />}
       {deactivateConfirmationModal.isOpen && deactivateConfirmationModal.alertSpecification && (
         <ConfirmationModal
-          color={THEME.color.maximumRed}
           confirmationButtonLabel="Confirmer la désactivation"
           message={
             <>
               <p>
-                <b>Êtes-vous sûr de vouloir désactiver l&apos;alerte</b>
-                <p>
-                  <b>&quot;{deactivateConfirmationModal.alertSpecification.name}&quot; ?</b>
-                </p>
-                <p>
-                  Cela supprimera toutes les occurrences en cours de l&apos;alerte et stoppera toutes ses occurences
-                  futures.
-                </p>
+                {`Êtes-vous sûr de vouloir désactiver l'alerte "${deactivateConfirmationModal.alertSpecification.name}" ?`}
               </p>
+              <Bold>
+                Cela supprimera toutes les occurrences en cours de l&apos;alerte et stoppera toutes ses occurences
+                futures.
+              </Bold>
             </>
           }
           onCancel={handleCancelToggle}
@@ -307,21 +304,14 @@ export function AlertsManagementList() {
       )}
       {deleteConfirmationModal.isOpen && deleteConfirmationModal.alertSpecification && (
         <ConfirmationModal
-          color={THEME.color.maximumRed}
           confirmationButtonLabel="Confirmer la suppression"
-          iconName="Delete"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir supprimer l&apos;alerte </b>
-                <p>
-                  <b>&quot;{deleteConfirmationModal.alertSpecification.name}&quot; ?</b>
-                </p>
-                <p>
-                  Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
-                  cours et futures.
-                </p>
-              </p>
+              <p>{`Êtes-vous sûr de vouloir supprimer l'alerte "${deleteConfirmationModal.alertSpecification.name}" ?`}</p>
+              <Bold>
+                Cela supprimera la définition et les critères de l&apos;alerte, ainsi que toutes les occurrences en
+                cours et futures.
+              </Bold>
             </>
           }
           onCancel={handleCancelDelete}

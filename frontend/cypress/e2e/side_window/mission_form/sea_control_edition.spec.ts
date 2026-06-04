@@ -67,6 +67,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
           id: 4,
+          infractions: [],
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: null,
           latitude: 53.35,
@@ -82,7 +83,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
-          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'SPR', underSized: false }
@@ -158,6 +158,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
             }
           ],
           id: 4,
+          infractions: [],
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 53.35,
@@ -173,7 +174,6 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: 'NO',
-          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             {
@@ -386,7 +386,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       statusCode: 201
     }).as('updateAction')
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
     cy.wait(500)
 
     // When
@@ -421,7 +421,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('input[name="mission_control_unit_administration_0"]').should('have.value', 'DREAL')
     cy.get('input[name="mission_control_unit_name_0"]').should('have.value', 10019)
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
     cy.wait(500)
     cy.get('button:contains("Enregistrer")').should('not.be.disabled')
 

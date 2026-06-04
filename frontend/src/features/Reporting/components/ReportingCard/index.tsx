@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
@@ -297,10 +298,13 @@ export function ReportingCard({
 
       {isDeletionConfirmationModalOpen && (
         <ConfirmationModal
-          color={THEME.color.maximumRed}
-          confirmationButtonLabel="Supprimer"
-          iconName="Delete"
-          message="Êtes-vous sûr de vouloir supprimer ce signalement ?"
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir </p>
+              <Bold>supprimer ce signalement ?</Bold>
+            </>
+          }
           onCancel={closeDeletionConfirmationModal}
           onConfirm={confirmDeletion}
           title="Suppression du signalement"
@@ -308,9 +312,13 @@ export function ReportingCard({
       )}
       {isArchivingConfirmationModalOpen && (
         <ConfirmationModal
-          confirmationButtonLabel="Archiver"
-          iconName="Archive"
-          message="Êtes-vous sûr de vouloir archiver ce signalement ?"
+          confirmationButtonLabel="Confirmer l'archivage"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir </p>
+              <Bold>archiver ce signalement ?</Bold>
+            </>
+          }
           onCancel={closeArchivingConfirmationModal}
           onConfirm={confirmArchive}
           title="Archivage du signalement"

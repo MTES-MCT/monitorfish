@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { duplicateLogbookPriorNotification } from '@features/PriorNotification/useCases/duplicateLogbookPriorNotification'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
@@ -113,10 +114,10 @@ export function Form({ detail }: FormProps) {
           confirmationButtonLabel="Confirmer l’invalidation"
           message={
             <>
-              <p>
-                <b>Êtes-vous sûr de vouloir invalider ce préavis ?</b>
-              </p>
-              <p>Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.</p>
+              <p>Êtes-vous sûr de vouloir invalider ce préavis ?</p>
+              <Bold>
+                Vous ne pourrez plus le modifier ni le diffuser aux unités. Vous pourrez toujours le consulter.
+              </Bold>
             </>
           }
           onCancel={closeInvalidationConfirmationModal}

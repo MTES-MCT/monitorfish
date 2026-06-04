@@ -1,5 +1,6 @@
+import { Bold } from '@components/style'
 import { Mission } from '@features/Mission/mission.types'
-import { Button, Dialog, Icon, THEME } from '@mtes-mct/monitor-ui'
+import { Button, Dialog } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type ExternalActionsModalProps = {
@@ -12,50 +13,44 @@ export function ExternalActionsDialog({ onClose, sources }: ExternalActionsModal
   const isRapportNav = sources.includes(Mission.MissionSource.RAPPORT_NAV)
 
   const getPersonToContact = () => {
-    if (isCACEM) {
+    if (isCACEM && !isRapportNav) {
       return 'le CACEM'
     }
-    if (isRapportNav) {
+
+    if (!isCACEM && isRapportNav) {
       return "l'unité"
     }
 
-    return ''
+    return "le CACEM et l'unité"
   }
 
   return (
     <Dialog data-cy="external-actions-modal" isAbsolute>
-      <Dialog.Title>Suppression impossible</Dialog.Title>
+      <Dialog.Title onClose={onClose}>Suppression impossible</Dialog.Title>
       <Dialog.Body>
-        <Alert>
-          <Icon.Attention color={THEME.color.maximumRed} size={30} />
-        </Alert>
-        <Text>{`La mission ne peut pas être supprimée, car elle comporte des événements ajoutés par ${getPersonToContact()}.`}</Text>
-        <Bold>
-          {`Si vous souhaitez tout de même la supprimer, veuillez contacter ${getPersonToContact()} pour qu'il supprime d'abord
-            ses événements.`}
-        </Bold>
+        <p>
+          {`La mission ne peut pas être supprimée, car elle comporte des `}
+          <br />
+          {`événements ajoutés par `}
+          <Bold>{getPersonToContact()} </Bold>.
+        </p>
+
+        <p>
+          <RedText>
+            {`Si vous souhaitez tout de même la supprimer, veuillez contacter `}
+            <br />
+            {getPersonToContact()} {`pour qu'il supprime d'abord ses événements.`}
+          </RedText>
+        </p>
       </Dialog.Body>
 
       <Dialog.Action>
-        <Button data-cy="external-actions-modal-close" onClick={onClose}>
-          Fermer
-        </Button>
+        <Button onClick={onClose}>Fermer</Button>
       </Dialog.Action>
     </Dialog>
   )
 }
 
-const Alert = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-`
-const Text = styled.p`
+const RedText = styled(Bold)`
   color: ${props => props.theme.color.maximumRed} !important;
-  padding: 2px 40px;
-`
-const Bold = styled.p`
-  color: ${props => props.theme.color.maximumRed} !important;
-  font-weight: bold;
-  padding: 2px 40px;
 `

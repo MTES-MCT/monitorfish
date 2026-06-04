@@ -84,7 +84,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
       cy.fill("Points d'attention identifiés par le CNSP", "Un nouveau point d'attention.")
 
       cy.clickButton('Fermer')
-      cy.contains('Abandon de préavis').should('be.visible')
+      cy.contains('Quitter sans enregistrer').should('be.visible')
     })
   })
 

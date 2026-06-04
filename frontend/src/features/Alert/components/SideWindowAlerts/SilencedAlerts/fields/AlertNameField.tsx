@@ -1,7 +1,6 @@
 import { useGetAllAlertSpecificationsQuery } from '@features/Alert/apis'
 import { FieldError, Select } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import styled from 'styled-components'
 
 import type { SilencedAlertFormValues } from '../types'
 
@@ -39,12 +38,13 @@ export function AlertNameField() {
 
   return (
     <>
-      <StyledSelect
+      <Select
         label="Alerte suspendue"
         name="alertName"
         onChange={nextValue => add(nextValue as string | undefined)}
         options={alertsAsOptions}
         searchable
+        style={{ width: '495px' }}
         value={input.value?.name}
       />
 
@@ -53,8 +53,3 @@ export function AlertNameField() {
     </>
   )
 }
-
-const StyledSelect = styled(Select)`
-  margin-top: 30px;
-  width: 495px;
-`

@@ -147,7 +147,7 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Ajouter un critère de déclenchement')
     cy.clickButton('Espèces à bord')
     cy.fill("Espèce déclenchant l'alerte", 'MORUE COMMUNE (CABILLAUD)')
-    cy.fill('Quantité pour l\'espèce COD', '500')
+    cy.fill("Quantité pour l'espèce COD", '500')
     cy.fill('Zones de capture (FAR)', ['27.5.b'])
     cy.contains('ESPÈCES À BORD').click()
 
@@ -157,20 +157,21 @@ context('Side Window > Alert Management', () => {
       expect(interception.request.body.name).to.equal('Test Alert Cypress')
       expect(interception.request.body.description).to.equal("Description de test pour l'alerte Cypress")
       expect(interception.request.body.threatHierarchy).to.deep.equal({
-        "children": [
+        children: [
           {
-            "children": [
+            children: [
               {
-                "label": "2608 - Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
-                "value": 2608
+                label:
+                  "2608 - Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+                value: 2608
               }
             ],
-            "label": "Pêche sans autorisation par navire tiers",
-            "value": "Pêche sans autorisation par navire tiers"
+            label: 'Pêche sans autorisation par navire tiers',
+            value: 'Pêche sans autorisation par navire tiers'
           }
         ],
-        "label": "Activités INN",
-        "value": "Activités INN"
+        label: 'Activités INN',
+        value: 'Activités INN'
       })
       expect(interception.request.body.validityStartDatetimeUtc).to.equal('2024-01-15T00:00:00.000Z')
       expect(interception.request.body.validityEndDatetimeUtc).to.equal('2024-01-30T23:59:59.000Z')
@@ -204,8 +205,8 @@ context('Side Window > Alert Management', () => {
       ])
       expect(interception.request.body.species).to.deep.equal([
         {
-          species: 'COD',
           minWeight: 500,
+          species: 'COD'
         }
       ])
     })

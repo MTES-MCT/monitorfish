@@ -55,7 +55,7 @@ context('Side Window > Reporting List > Actions', () => {
         // When
         cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
         cy.getDataCy('delete-reporting-cards').click({ force: true })
-        cy.clickButton('Supprimer')
+        cy.clickButton('Confirmer la suppression')
 
         cy.wait('@deleteReportings').then(archiveInterception => {
           if (!archiveInterception.request) {
@@ -137,7 +137,7 @@ context('Side Window > Reporting List > Actions', () => {
         withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
       })
 
-      cy.clickButton('Supprimer')
+      cy.clickButton('Confirmer la suppression')
       cy.clickButton('Valider')
 
       cy.wait('@updateReporting').then(({ response }) => {

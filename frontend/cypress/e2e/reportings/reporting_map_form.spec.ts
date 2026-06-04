@@ -123,7 +123,7 @@ context('Reporting map form', () => {
     // Confirm modal
     cy.get('.Component-Dialog').contains("Suppression d'un signalement").should('be.visible')
     cy.get('.Component-Dialog').contains('Êtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     cy.wait('@deleteReporting')
     cy.get('*[data-cy="map-reporting-form"]').should('not.exist')

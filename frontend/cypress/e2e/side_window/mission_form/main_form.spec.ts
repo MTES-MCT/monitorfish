@@ -1,4 +1,5 @@
 import { Mission } from '@features/Mission/mission.types'
+import { SideWindowMenuLabel } from '@features/SideWindow/constants'
 
 import { openSideWindowNewMission } from './utils'
 import { SeafrontGroup } from '../../../../src/constants/seafront'
@@ -6,7 +7,6 @@ import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIO
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
-import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 context('Side Window > Mission Form > Main Form', () => {
   it('Should add and remove a control unit', () => {
@@ -408,7 +408,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('.Component-Dialog').should('be.visible')
 
-    cy.clickButton('Retourner à l’édition')
+    cy.clickButton('Annuler')
 
     cy.get('.Component-Dialog').should('not.exist')
 
@@ -578,7 +578,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],
@@ -699,7 +699,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.wait(500)
 
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
     // We stub the response as the DELETE request was mocked
     cy.intercept('GET', '/bff/v1/mission_actions?missionId=43', {
       body: [],

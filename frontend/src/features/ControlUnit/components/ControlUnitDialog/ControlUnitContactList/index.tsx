@@ -1,4 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
+import { Bold } from '@components/style'
 import { createOrUpdateControlUnitContact } from '@features/ControlUnit/useCases/createOrUpdateControlUnitContact'
 import { mainWindowBannerActions } from '@features/MainWindow/slice'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
@@ -194,8 +195,13 @@ export function ControlUnitContactList({ controlUnit, onSubmit }: ControlUnitCon
 
       {isDeletionConfirmationModalOpen && editedControlUnitContact && (
         <ConfirmationModal
-          confirmationButtonLabel="Supprimer"
-          message={`Êtes-vous sûr de vouloir supprimer le contact "${editedControlUnitContact.name}" ?`}
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer</p>
+              <Bold>{`le contact "${editedControlUnitContact.name}" ?`}</Bold>
+            </>
+          }
           onCancel={closeDialogsAndModals}
           onConfirm={confirmDeletion}
           title="Suppression du contact"

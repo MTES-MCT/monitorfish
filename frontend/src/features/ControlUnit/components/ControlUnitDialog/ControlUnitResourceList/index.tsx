@@ -1,5 +1,6 @@
 // import styled from 'styled-components'
 
+import { Bold } from '@components/style'
 import { Accent, Button, ControlUnit, Icon, THEME, isEmptyish } from '@mtes-mct/monitor-ui'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -187,8 +188,13 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isArchivingConfirmationModalOpen && editedControlUnitResource && (
         <ConfirmationModal
-          confirmationButtonLabel="Archiver"
-          message={`Êtes-vous sûr de vouloir archiver le moyen "${editedControlUnitResource.name}" ?`}
+          confirmationButtonLabel="Confirmer l'archivage"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir archiver</p>
+              <Bold>{`le moyen "${editedControlUnitResource.name}" ?`}</Bold>
+            </>
+          }
           onCancel={closeDialogsAndModals}
           onConfirm={confirmArchiving}
           title="Archivage du moyen"
@@ -197,8 +203,13 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isDeletionConfirmationModalOpen && editedControlUnitResource && (
         <ConfirmationModal
-          confirmationButtonLabel="Supprimer"
-          message={`Êtes-vous sûr de vouloir supprimer le moyen "${editedControlUnitResource.name}" ?`}
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer</p>
+              <Bold>{`le moyen "${editedControlUnitResource.name}" ?`}</Bold>
+            </>
+          }
           onCancel={closeDialogsAndModals}
           onConfirm={confirmDeletion}
           title="Suppression du moyen"
@@ -207,11 +218,14 @@ export function ControlUnitResourceList({ controlUnit }: ControlUnitResourceList
 
       {isImpossibleDeletionDialogOpen && (
         <Dialog
-          color={THEME.color.maximumRed}
-          message={IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE}
+          message={
+            <>
+              <p>{IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE[0]}</p>
+              <RedText>{IMPOSSIBLE_CONTROL_UNIT_RESOURCE_DELETION_ERROR_MESSAGE[1]}</RedText>
+            </>
+          }
           onClose={closeDialogsAndModals}
           title="Suppression impossible"
-          titleBackgroundColor={THEME.color.maximumRed}
         />
       )}
     </Section>
@@ -239,4 +253,8 @@ const StyledEditionForm = styled(Form)<{
 
 const StyledCreationForm = styled(Form)`
   margin-top: 16px;
+`
+
+const RedText = styled(Bold)`
+  color: ${THEME.color.maximumRed};
 `

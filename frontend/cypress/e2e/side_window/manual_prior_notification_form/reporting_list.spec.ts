@@ -20,7 +20,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
     // When
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
     cy.fill('Titre', 'Sortie non autorisée')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
     cy.fill('Type d’infraction et NATINF 1', ['27717'])
@@ -60,7 +60,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
 
         cy.fill('Source', 'Unité')
         cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-        cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+        cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
         cy.fill('Titre', 'Sortie non autorisée')
         cy.fill('Description', 'Ce navire ne devrait pas être en mer.')
         cy.fill('Type d’infraction et NATINF 1', ['27717'])
@@ -119,7 +119,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
         cy.contains('Êtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
 
         // When
-        cy.clickButton('Supprimer')
+        cy.clickButton('Confirmer la suppression')
 
         cy.wait('@deleteReporting')
 

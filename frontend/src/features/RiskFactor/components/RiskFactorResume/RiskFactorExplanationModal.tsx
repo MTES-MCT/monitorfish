@@ -21,8 +21,8 @@ type RiskFactorExplanationModalProps = Readonly<{
 }>
 export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationModalProps) {
   return (
-    <StyledDialog>
-      <Dialog.Title>Explication de la note de risque des navires</Dialog.Title>
+    <Dialog>
+      <Dialog.Title onClose={() => setIsOpen(false)}>Explication de la note de risque des navires</Dialog.Title>
 
       <StyledDialogBody>
         <Title>principe du facteur de risque</Title>
@@ -147,40 +147,27 @@ export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationM
           {getDetectabilityRiskFactorText(4)}
         </RiskFactorLegend>
       </StyledDialogBody>
-      <StyledDialogAction>
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={() => setIsOpen(false)}>
+          Fermer
+        </Button>
         <DocumentationLink
           href="https://monitorfish.readthedocs.io/fr/latest/risk-factor.html#risk-factor"
           target="_blank"
         >
           Consulter la documentation de MonitorFish
         </DocumentationLink>
-        <CloseButton accent={Accent.SECONDARY} onClick={() => setIsOpen(false)}>
-          Fermer
-        </CloseButton>
-      </StyledDialogAction>
-    </StyledDialog>
+      </Dialog.Action>
+    </Dialog>
   )
 }
 
-const StyledDialog = styled(Dialog)`
-  > div {
-    &:not(:first-child) {
-      max-width: fit-content;
-    }
-  }
-`
 const DocumentationLink = styled.a<{
   $width?: string
 }>`
   ${basePrimaryButton}
   color: ${p => p.theme.color.gainsboro} !important;
-  font-size: 13px;
   padding: 6px 12px;
-  margin: 20px 0 20px 10px;
-`
-
-const CloseButton = styled(Button)`
-  margin-right: 20px;
 `
 
 const RiskFactorLegend = styled.div<{
@@ -216,12 +203,9 @@ const RiskFactorInfractions = styled(RiskFactorInfractionsSVG)`
 `
 
 const StyledDialogBody = styled(Dialog.Body)`
-  padding: 50px 60px !important;
-  max-height: 500px !important;
-  text-align: left !important;
-  max-width: inherit !important;
-  overflow: hidden;
-  overflow-y: scroll;
+  > * {
+    font-size: 13px !important;
+  }
 `
 
 const Text = styled.p`
@@ -255,9 +239,4 @@ const SubTitle = styled.div`
   color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   margin-top: 20px;
-`
-
-const StyledDialogAction = styled(Dialog.Action)`
-  justify-content: end;
-  padding: 8px;
 `

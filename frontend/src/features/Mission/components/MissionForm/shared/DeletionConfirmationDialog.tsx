@@ -1,5 +1,5 @@
+import { Bold } from '@components/style'
 import { Accent, Button, Dialog } from '@mtes-mct/monitor-ui'
-import styled from 'styled-components'
 
 import type { Promisable } from 'type-fest'
 
@@ -10,25 +10,20 @@ type DeletionConfirmationDialogProps = Readonly<{
 export function DeletionConfirmationDialog({ onCancel, onConfirm }: DeletionConfirmationDialogProps) {
   return (
     <Dialog isAbsolute>
-      <StyledDialogTitle>Confirmation de suppression</StyledDialogTitle>
+      <Dialog.Title onClose={onCancel}>Supprimer la mission</Dialog.Title>
       <Dialog.Body>
-        <p>Êtes-vous sûr de vouloir supprimer cette mission ?</p>
+        <p>Êtes-vous sûr de vouloir</p>
+        <Bold>supprimer cette mission ?</Bold>
       </Dialog.Body>
 
       <Dialog.Action>
-        <Button accent={Accent.TERTIARY} onClick={onCancel}>
-          Retourner à l’édition
+        <Button accent={Accent.SECONDARY} onClick={onCancel}>
+          Annuler
         </Button>
-        <Button accent={Accent.SECONDARY} onClick={onConfirm}>
+        <Button accent={Accent.CAUTION} onClick={onConfirm}>
           Confirmer la suppression
         </Button>
       </Dialog.Action>
     </Dialog>
   )
 }
-
-// TODO Remove that once we get rid of global legacy CSS.
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
-`

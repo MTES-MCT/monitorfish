@@ -1,6 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
+import { Bold } from '@components/style'
 import { SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
@@ -15,7 +16,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Icon, IconButton, TableWithSelectableRows, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { notUndefined } from '@tanstack/react-virtual'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
@@ -212,10 +213,13 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
       <EditReporting />
       {isDeletionConfirmationDialogOpen && (
         <ConfirmationModal
-          color={THEME.color.maximumRed}
-          confirmationButtonLabel="Supprimer"
-          iconName="Delete"
-          message={`Êtes-vous sûr de vouloir supprimer ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir </p>
+              <Bold>{`supprimer ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}</Bold>
+            </>
+          }
           onCancel={() => {
             setIsDeletionConfirmationDialogOpen(false)
           }}
@@ -225,9 +229,13 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
       )}
       {isArchivingConfirmationDialogOpen && (
         <ConfirmationModal
-          confirmationButtonLabel="Archiver"
-          iconName="Archive"
-          message={`Êtes-vous sûr de vouloir archiver ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}
+          confirmationButtonLabel="Confirmer l'archivage"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir </p>
+              <Bold>{`archiver ${pluralize('ce', rowSelectionAsArray.length)} ${rowSelectionAsArray.length > 1 ? rowSelectionAsArray.length : ''} ${pluralize('signalement', rowSelectionAsArray.length)} ?`}</Bold>
+            </>
+          }
           onCancel={() => {
             setIsArchivingConfirmationDialogOpen(false)
           }}

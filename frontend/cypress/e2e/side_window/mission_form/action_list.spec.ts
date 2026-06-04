@@ -72,17 +72,17 @@ context('Side Window > Mission Form > Action List', () => {
           faoAreas: ['27.8.a'],
           flagState: 'FR',
           flightGoals: [],
-          infractions: [],
           gearOnboard: [],
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
           id: null,
+          infractions: [],
           internalReferenceNumber: 'U_W0NTFINDME',
           ircs: null,
           isAdministrativeControl: null,
-          isINNControl: false,
           isComplianceWithWaterRegulationsControl: null,
           isFromPoseidon: false,
+          isINNControl: false,
           isSafetyEquipmentAndStandardsComplianceControl: null,
           isSeafarersControl: null,
           latitude: 53.35,
@@ -119,7 +119,7 @@ context('Side Window > Mission Form > Action List', () => {
     editSideWindowMissionListMissionWithId(4, SeafrontGroup.MEMN)
 
     cy.clickButton('Supprimer l’action', { index: 1 })
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     cy.wait(250)
   })
@@ -143,7 +143,7 @@ context('Side Window > Mission Form > Action List', () => {
     cy.wait(250)
 
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     cy.wait(250)
 
@@ -189,15 +189,15 @@ context('Side Window > Mission Form > Action List', () => {
     // The infractions label from natinfs should be rendered
     cy.get(
       '[title="Mesures techniques et de conservation - Transbordement\n' +
-      '27717 - TRANSBORDEMENT HORS D\'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L\'AQUACULTURE MARINE D\'ESPECES SOUMISES A UN PLAN PLURIANNUEL"]'
+        "27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL\"]"
     ).should('exist')
     cy.get(
       '[title="Entrave au contrôle - Interférence\n' +
-      '4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES"]'
+        '4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES"]'
     ).should('exist')
     cy.get(
-      '[title="Entrave au contrôle - Interférence\n' +
-      '2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME"]'
+      // eslint-disable-next-line no-useless-concat
+      '[title="Entrave au contrôle - Interférence\n' + '2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME"]'
     ).should('exist')
   })
 
@@ -237,12 +237,10 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(500)
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     // There is still a valid control with a geometry that could be used for the mission zone
-    cy.get('.Component-Banner').contains(
-      'Une zone de mission a été modifiée à partir des contrôles de la mission'
-    )
+    cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',
       'Actuellement, la zone de mission ' +
@@ -251,7 +249,7 @@ context('Side Window > Mission Form > Action List', () => {
 
     cy.wait(250)
     cy.clickButton('Supprimer l’action')
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'not.contain',
@@ -263,7 +261,7 @@ context('Side Window > Mission Form > Action List', () => {
   it('Should show Env actions on the actions timeline and display rapportnav text', () => {
     editSideWindowMissionListMissionWithId(34, SeafrontGroup.MEMN)
 
-    cy.getDataCy("mission-form-action-list").contains("Des données ont été ajoutées par l'unité dans la mission.")
+    cy.getDataCy('mission-form-action-list').contains("Des données ont été ajoutées par l'unité dans la mission.")
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(1).contains('28 Nov à 13:59')
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(1).contains('Surveillance')
     cy.get('[data-cy="mission-form-action-list"] > div').children().eq(2).contains('Action CACEM')

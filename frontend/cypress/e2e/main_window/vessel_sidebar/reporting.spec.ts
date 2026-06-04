@@ -1,10 +1,10 @@
 /* eslint-disable no-undef */
 
 import { addAndCreateReportingWithinVesselSidebar } from './utils'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
+import { openVesselBySearch } from '../utils'
 
 import type { Reporting } from '@features/Reporting/types'
-import {getUtcDateInMultipleFormats} from "../../utils/getUtcDateInMultipleFormats";
-import {openVesselBySearch} from "../utils";
 
 context('Vessel sidebar reporting tab', () => {
   beforeEach(() => {
@@ -69,7 +69,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.fill('Type de signalement', 'Observation')
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
     cy.fill('Type', 'Suspensions administratives')
     cy.fill('Description', 'Ce navire ne devrait pas être en mer, mais ceci est une observation.')
     cy.fill('Fin de validité', date.utcDateTuple)
@@ -87,7 +87,7 @@ context('Vessel sidebar reporting tab', () => {
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2166')
 
       cy.get('*[data-cy^="edit-reporting-card"]').first().scrollIntoView().click({ timeout: 10000 })
-      cy.fill('Type de signalement', 'Suspicion d\'infraction')
+      cy.fill('Type de signalement', "Suspicion d'infraction")
       cy.fill('Type d’infraction et NATINF 1', ['27717'])
       const nextDate = getUtcDateInMultipleFormats('2200-06-08T13:54')
       cy.fill('Fin de validité', nextDate.utcDateTuple)
@@ -99,7 +99,7 @@ context('Vessel sidebar reporting tab', () => {
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le 08/06/2200')
       cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
       // Then, we confirm the reporting deletion
-      cy.clickButton('Supprimer')
+      cy.clickButton('Confirmer la suppression')
     })
   })
 
@@ -152,13 +152,9 @@ context('Vessel sidebar reporting tab', () => {
     // Summary
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Dernières suspicions d’infractions (12 derniers mois)')
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Famille inconnue')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains(
-      "Type inconnu / NATINF 7059"
-    )
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Type inconnu / NATINF 7059')
     cy.get('[data-cy="vessel-reporting-summary"]').contains('Mesures techniques et de conservation')
-    cy.get('[data-cy="vessel-reporting-summary"]').contains(
-      "Transbordement / NATINF 27717"
-    )
+    cy.get('[data-cy="vessel-reporting-summary"]').contains('Transbordement / NATINF 27717')
 
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()
   })
@@ -203,14 +199,17 @@ context('Vessel sidebar reporting tab', () => {
     cy.contains('label', /^Type$/)
       .next()
       .click()
-    cy.get('.rs-picker-popup').find('[role="option"]').contains(/^Autre$/).click({ force: true })
+    cy.get('.rs-picker-popup')
+      .find('[role="option"]')
+      .contains(/^Autre$/)
+      .click({ force: true })
 
     cy.get('input[name="title"]').should('be.visible')
     cy.fill('Titre', 'Dérogation temporaire licence')
 
     cy.fill('Source', 'Unité')
     cy.fill("Choisir l'unité", 'OFB SD 56 (Office Français de la Biodiversité)')
-    cy.fill("Identité de l’émetteur", 'Jean Bon (0612365896)')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
     cy.fill('Choisir une échéance', 'dans 1 mois')
     cy.clickButton('Valider')
 
@@ -221,7 +220,7 @@ context('Vessel sidebar reporting tab', () => {
       cy.get('*[data-cy="reporting-card"]').first().contains('Dérogation temporaire licence')
 
       cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
-      cy.clickButton('Supprimer')
+      cy.clickButton('Confirmer la suppression')
       cy.wait('@deleteReporting')
     })
   })
@@ -244,11 +243,13 @@ context('Vessel sidebar reporting tab', () => {
 
     cy.clickButton('Valider')
     cy.wait('@createReporting').then(createInterception => {
-      if (!createInterception.response) assert.fail('No response')
+      if (!createInterception.response) {
+        assert.fail('No response')
+      }
 
       cy.get('*[data-cy="reporting-card"]').first().contains('Fin de validité le')
       cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
-      cy.clickButton('Supprimer')
+      cy.clickButton('Confirmer la suppression')
       cy.wait('@deleteReporting')
     })
   })
@@ -271,11 +272,13 @@ context('Vessel sidebar reporting tab', () => {
 
     cy.clickButton('Valider')
     cy.wait('@createReporting').then(createInterception => {
-      if (!createInterception.response) assert.fail('No response')
+      if (!createInterception.response) {
+        assert.fail('No response')
+      }
 
       cy.get('*[data-cy="reporting-card"]').first().contains("Jusqu'à nouvel ordre")
       cy.get('*[data-cy="delete-reporting-card"]').first().scrollIntoView().click()
-      cy.clickButton('Supprimer')
+      cy.clickButton('Confirmer la suppression')
       cy.wait('@deleteReporting')
     })
   })
@@ -317,7 +320,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.clickButton('Annuler', { withinSelector: '.Component-Dialog' })
     cy.get('*[data-cy="delete-reporting-card"]').eq(0).scrollIntoView().click()
     // Then, we confirm the reporting deletion
-    cy.clickButton('Supprimer')
+    cy.clickButton('Confirmer la suppression')
 
     // Then
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()

@@ -45,9 +45,7 @@ export function ExternalActionsDialog({ onClose, sources }: ExternalActionsModal
       </Dialog.Body>
 
       <Dialog.Action>
-        <Button data-cy="external-actions-modal-close" onClick={onClose}>
-          Fermer
-        </Button>
+        <Button onClick={onClose}>Fermer</Button>
       </Dialog.Action>
     </Dialog>
   )

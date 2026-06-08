@@ -307,7 +307,7 @@ export function ReportingCard({
           }
           onCancel={closeDeletionConfirmationModal}
           onConfirm={confirmDeletion}
-          title="Suppression du signalement"
+          title="Supprimer le signalement"
         />
       )}
       {isArchivingConfirmationModalOpen && (
@@ -321,7 +321,7 @@ export function ReportingCard({
           }
           onCancel={closeArchivingConfirmationModal}
           onConfirm={confirmArchive}
-          title="Archivage du signalement"
+          title="Archiver le signalement"
         />
       )}
     </>

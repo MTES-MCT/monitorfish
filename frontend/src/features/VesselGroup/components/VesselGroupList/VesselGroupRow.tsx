@@ -252,7 +252,8 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
           confirmationButtonLabel="Confirmer la suppression"
           message={
             <>
-              <p>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</p>
+              <p>Êtes-vous sûr de vouloir</p>
+              <Bold>supprimer ce groupe de navires ?</Bold>
               {vesselGroupWithVessels.group.sharing === Sharing.SHARED && (
                 <StyledBold>
                   Attention, il sera également supprimé pour les autres utilisateurs avec lesquels il est partagé.

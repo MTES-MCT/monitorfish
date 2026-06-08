@@ -28,15 +28,15 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.wait(500)
 
     cy.clickButton('Fermer')
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     cy.clickButton('Fermer le formulaire')
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     cy.getDataCy('SideWindowCard-overlay').click()
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     // Opening another side window menu and coming back to the prior notification list
@@ -52,15 +52,15 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.getDataCy('VesselSearch-input').should('have.value', 'PAGEOT JO')
 
     cy.clickButton('Fermer')
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     cy.clickButton('Fermer le formulaire')
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     cy.getDataCy('SideWindowCard-overlay').click()
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     // Saving the form should reset the dirty state (creation):
@@ -93,15 +93,15 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
       cy.fill('Engins utilisés', ['TBN'], { index: 1 })
 
       cy.clickButton('Fermer')
-      cy.contains('Abandon de préavis').should('be.visible')
+      cy.contains('Quitter sans enregistrer').should('be.visible')
       cy.clickButton('Annuler')
 
       cy.clickButton('Fermer le formulaire')
-      cy.contains('Abandon de préavis').should('be.visible')
+      cy.contains('Quitter sans enregistrer').should('be.visible')
       cy.clickButton('Annuler')
 
       cy.getDataCy('SideWindowCard-overlay').click()
-      cy.contains('Abandon de préavis').should('be.visible')
+      cy.contains('Quitter sans enregistrer').should('be.visible')
       cy.clickButton('Annuler')
 
       // Saving the form should reset the dirty state (edition):

@@ -39,7 +39,7 @@ context('Side Window > Alert Management', () => {
     cy.clickButton('Fermer')
     cy.clickButton('Annuler')
     cy.getDataCy('go-back-alerts-management-list').click()
-    cy.contains('Retour à la liste des alertes').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Quitter sans enregistrer')
 
     // Should go back to list

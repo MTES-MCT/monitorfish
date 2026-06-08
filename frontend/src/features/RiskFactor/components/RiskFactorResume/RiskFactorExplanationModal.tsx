@@ -21,7 +21,7 @@ type RiskFactorExplanationModalProps = Readonly<{
 }>
 export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationModalProps) {
   return (
-    <Dialog>
+    <StyledDialog>
       <Dialog.Title onClose={() => setIsOpen(false)}>Explication de la note de risque des navires</Dialog.Title>
 
       <StyledDialogBody>
@@ -158,9 +158,15 @@ export function RiskFactorExplanationModal({ setIsOpen }: RiskFactorExplanationM
           Consulter la documentation de MonitorFish
         </DocumentationLink>
       </Dialog.Action>
-    </Dialog>
+    </StyledDialog>
   )
 }
+
+const StyledDialog = styled(Dialog)`
+  > div:nth-child(2) {
+    width: 1200px;
+  }
+`
 
 const DocumentationLink = styled.a<{
   $width?: string

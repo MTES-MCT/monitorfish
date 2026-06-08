@@ -128,7 +128,7 @@ context('Main Window > Control Unit Dialog > Resource List', () => {
 
     cy.contains('Vedette').parents('[data-cy="ControlUnitDialog-control-unit-resource"]').clickButton('Éditer ce moyen')
     cy.clickButton('Archiver ce moyen')
-    cy.clickButton('Archiver')
+    cy.clickButton("Confirmer l'archivage")
 
     cy.wait('@archiveControlUnitResource')
   })

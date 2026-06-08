@@ -35,4 +35,5 @@ const StyledFormikMultiSelect = styled(FormikMultiSelect)`
 
 const Wrapper = styled.div`
   margin-top: 24px;
+  margin-bottom: 24px;
 `

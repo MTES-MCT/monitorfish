@@ -24,7 +24,7 @@ export function DraftCancellationConfirmationDialog({
   }
 
   return (
-    <Dialog isAbsolute>
+    <StyledDialog isAbsolute>
       <Dialog.Title onClose={cancel}>Quitter sans enregistrer</Dialog.Title>
       <Dialog.Body>
         <p>
@@ -54,10 +54,15 @@ export function DraftCancellationConfirmationDialog({
           Quitter sans enregistrer
         </Button>
       </Dialog.Action>
-    </Dialog>
+    </StyledDialog>
   )
 }
 
+const StyledDialog = styled(Dialog)`
+  > div:nth-child(2) {
+    width: 580px;
+  }
+`
 const StyledBold = styled(Bold)`
   font-size: 16px;
 `

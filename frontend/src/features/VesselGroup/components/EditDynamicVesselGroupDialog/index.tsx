@@ -562,7 +562,7 @@ export function EditDynamicVesselGroupDialog({
 
 const StyledDialog = styled(Dialog)`
   > div:not(:first-child) {
-    width: 1224px;
+    width: 1200px;
   }
 `
 

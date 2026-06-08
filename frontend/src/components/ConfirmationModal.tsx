@@ -40,6 +40,7 @@ export function ConfirmationModal({
 const StyledBody = styled(Dialog.Body)`
   > p,
   span {
+    color: ${p => p.theme.color.charcoal};
     font-size: 16px !important;
   }
 `

@@ -43,7 +43,7 @@ export function HowAlertsWorksDialog({ onClose }: HowAlertsWorksDialogProps) {
           <br />- <b>4 alertes concernant les obligations déclaratives</b> : absence de message DEP, absence de message
           FAR en 24h et en 48h, suspicion de sous-déclaration.
         </Text>
-        <Title>DÉTAIL DU FONCTIONNEMENT DES ALERTES</Title>
+        <Title $hasMarginTop>DÉTAIL DU FONCTIONNEMENT DES ALERTES</Title>
         <Line />
         <Text>
           Plusieurs alertes s’appuient sur le fait de savoir <b>si un navire est ou non en mer</b>, et{' '}
@@ -81,16 +81,15 @@ export function HowAlertsWorksDialog({ onClose }: HowAlertsWorksDialogProps) {
 }
 
 const StyledDialog = styled(Dialog)`
-  > div {
-    &:not(:first-child) {
-      max-width: 1224px;
-    }
+  > div:nth-child(2) {
+    max-width: 1200px;
   }
 `
 const StyledDialogBody = styled(Dialog.Body)`
   > * {
     font-size: 13px !important;
   }
+  overflow-y: unset;
 `
 
 const Text = styled.p`
@@ -99,8 +98,8 @@ const Text = styled.p`
   width: 950px;
 `
 
-const Title = styled.div`
-  margin-top: 32px;
+const Title = styled.div<{ $hasMarginTop?: boolean }>`
+  margin-top: ${p => (p.$hasMarginTop ? 24 : 8)}px;
   color: ${p => p.theme.color.slateGray};
   font-weight: 700;
   text-transform: uppercase;

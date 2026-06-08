@@ -72,9 +72,9 @@ export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityR
       )
 
   return (
-    <StyledDialog isAbsolute>
-      <StyledDialogTitle>Télécharger la liste des navires</StyledDialogTitle>
-      <StyledDialogBody>
+    <Dialog isAbsolute>
+      <Dialog.Title onClose={onExit}>Télécharger la liste des navires</Dialog.Title>
+      <Dialog.Body>
         <MultiRadio
           isInline
           isLabelHidden
@@ -117,16 +117,14 @@ export function ExportVesselListDialog({ onExit, selectedRows }: ExportActivityR
             value={thirdColumnsCsv}
           />
         </Columns>
-      </StyledDialogBody>
-      <StyledDialogAction>
-        <Button accent={Accent.PRIMARY} onClick={handleOnDownload}>
-          Télécharger le tableau
-        </Button>
-        <Button accent={Accent.TERTIARY} onClick={onExit}>
+      </Dialog.Body>
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={onExit}>
           Annuler
         </Button>
-      </StyledDialogAction>
-    </StyledDialog>
+        <Button onClick={handleOnDownload}>Télécharger le tableau</Button>
+      </Dialog.Action>
+    </Dialog>
   )
 }
 
@@ -134,19 +132,6 @@ const Columns = styled.div`
   display: flex;
   flex-direction: row;
 `
-
-const StyledDialog = styled(Dialog)`
-  > div:last-child {
-    min-width: 800px;
-    max-width: 800px;
-  }
-`
-
-const StyledDialogTitle = styled(Dialog.Title)`
-  line-height: 48px;
-  margin: 0;
-`
-
 const StyledMultiCheckbox = styled(MultiCheckbox)<{
   $width: number
 }>`
@@ -155,12 +140,4 @@ const StyledMultiCheckbox = styled(MultiCheckbox)<{
   .Field-Checkbox {
     margin-bottom: 12px !important;
   }
-`
-
-const StyledDialogAction = styled(Dialog.Action)`
-  padding: 24px 8px;
-`
-
-const StyledDialogBody = styled(Dialog.Body)`
-  padding: 45px 80px;
 `

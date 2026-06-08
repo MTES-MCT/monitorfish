@@ -99,6 +99,6 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.get('th > div').filter(':contains("Depuis...")').click({ force: true })
 
-    cy.get('.Table-SimpleTable tr').eq(1).contains("Suspicion d'infraction 212")
+    cy.get('.Table-SimpleTable tr').eq(2).contains("Suspicion d'infraction 212")
   })
 })

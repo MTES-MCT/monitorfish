@@ -134,14 +134,19 @@ context('Axe core RGAA check that ', () => {
 const injectAndRunRGAACheck = (disableLabelRule = false) => {
   cy.injectAxe()
   // @ts-ignore
-  cy.checkA11y(null, {
-    rules: {
-      'color-contrast': { enabled: false },
-      ...(disableLabelRule && { 'label': { enabled: false } })
+  cy.checkA11y(
+    undefined,
+    {
+      rules: {
+        'color-contrast': { enabled: false },
+        ...(disableLabelRule && { label: { enabled: false } })
+      },
+      runOnly: {
+        type: 'tag',
+
+        values: ['wcag2a', 'wcag2aa']
+      }
     },
-    runOnly: {
-      type: 'tag',
-      values: ['wcag2a', 'wcag2aa']
-    }
-  }, result => cy.log(JSON.stringify(result)))
+    result => cy.log(JSON.stringify(result))
+  )
 }

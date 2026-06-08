@@ -182,15 +182,15 @@ context('Side Window > Mission Form > Sea Control', () => {
     // rejet input — so among HKE, BLI, COD, COD is index 2.
     cy.get('[id="speciesOnboard[4].declaredWeight"]').type('10', { force: true })
     cy.get('[id="speciesOnboard[4].controlledWeight"]').type('20', { force: true })
-    cy.clickButton('Ajouter sous-taille', { index: 4 })
+    cy.clickButton('Sous-taille', { index: 4 })
     cy.wait(200)
     cy.get('[id="speciesOnboard[4].underSizedWeight"]').type('5', { force: true })
-    cy.clickButton('Ajouter rejet', { index: 2 })
+    cy.clickButton('Rejet', { index: 2 })
     cy.wait(200)
     cy.get('[id="speciesOnboard[4].rejectedWeight"]').type('2', { force: true })
     cy.wait(250)
     cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 2 })
-    cy.fill('Présentation du poisson', 'FIL - En filets', { index: 4 })
+    cy.fill('Présentation du poisson', ['FIL - En filets'], { index: 4 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 4 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
@@ -336,7 +336,7 @@ context('Side Window > Mission Form > Sea Control', () => {
             // by the dedicated "FAR and DIS logbook data" prefill test.
             { faoZones: ['27.8.b'], speciesCode: 'NEP', underSized: false },
             { discardReason: 'DIM', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'BIB', underSized: false },
-            { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'FIL', rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
+            { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCodes: ['FIL'], rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
           ],
           speciesQuantitySeized: 6289.5,
           speciesSizeControlled: 'NO',
@@ -1018,7 +1018,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     }
   )
 
-  it('Should prefill speciesOnboard with FAR and DIS logbook data (faoZones, presentationCode, rejectedWeight, discardReason)', () => {
+  it('Should prefill speciesOnboard with FAR and DIS logbook data (faoZones, presentationCodes, rejectedWeight, discardReason)', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1031,14 +1031,14 @@ context('Side Window > Mission Form > Sea Control', () => {
         {
           discardReason: 'DIS',
           faoZones: ['27.8.a', '27.8.b'],
-          presentationCode: 'GUT',
+          presentationCodes: ['WHL', 'GUT'],
           rejectedWeight: 50.0,
           speciesCode: 'HKE'
         },
         {
           discardReason: 'DIM',
           faoZones: ['27.8.c'],
-          presentationCode: 'WHL',
+          presentationCodes: ['WHL'],
           rejectedWeight: 5.0,
           speciesCode: 'BLI'
         }
@@ -1074,7 +1074,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               declaredWeight: 471.2,
               discardReason: 'DIS',
               faoZones: ['27.8.a', '27.8.b'],
-              presentationCode: 'GUT',
+              presentationCodes: ['WHL', 'GUT'],
               rejectedWeight: 50.0,
               speciesCode: 'HKE'
             },
@@ -1082,7 +1082,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               declaredWeight: 13.46,
               discardReason: 'DIM',
               faoZones: ['27.8.c'],
-              presentationCode: 'WHL',
+              presentationCodes: ['WHL'],
               rejectedWeight: 5.0,
               speciesCode: 'BLI'
             }
@@ -1103,19 +1103,19 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Ajouter une espèce', 'COD')
 
     // Show under-sized field, fill it, then dismiss it
-    cy.clickButton('Ajouter sous-taille')
-    cy.fill('Qté sous-taille', 5)
+    cy.clickButton('Sous-taille')
+    cy.fill('Qté ss-taille', 5)
     cy.clickButton('Retirer la sous-taille')
-    cy.contains('Qté sous-taille').should('not.exist')
-    cy.contains('Ajouter sous-taille').should('be.visible')
+    cy.contains('Qté ss-taille').should('not.exist')
+    cy.contains('Sous-taille').should('be.visible')
 
     // Show rejected field, fill it, then dismiss it
-    cy.clickButton('Ajouter rejet')
+    cy.clickButton('Rejet')
     cy.fill('Qté rejetée', 2)
     cy.fill('Nature du rejet', 'RET - espèces protégées')
     cy.clickButton('Retirer le rejet')
     cy.contains('Qté rejetée').should('not.exist')
     cy.contains('Nature du rejet').should('not.exist')
-    cy.contains('Ajouter rejet').should('be.visible')
+    cy.contains('Rejet').should('be.visible')
   })
 })

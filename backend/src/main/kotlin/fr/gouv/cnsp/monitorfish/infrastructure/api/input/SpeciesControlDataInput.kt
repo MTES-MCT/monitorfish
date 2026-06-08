@@ -13,7 +13,7 @@ data class SpeciesControlDataInput(
     val underSizedWeight: Double?,
     val rejectedWeight: Double?,
     val discardReason: DiscardReason?,
-    val presentationCode: String?,
+    val presentationCodes: List<String>?,
     val faoZones: List<String>?,
 ) {
     fun toSpeciesControl() =
@@ -27,7 +27,7 @@ data class SpeciesControlDataInput(
             speciesControl.underSizedWeight = underSizedWeight
             speciesControl.rejectedWeight = rejectedWeight
             speciesControl.discardReason = discardReason
-            speciesControl.presentationCode = presentationCode
+            speciesControl.presentationCodes = presentationCodes
             speciesControl.faoZones = faoZones
         }
 }

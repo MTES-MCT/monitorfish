@@ -134,7 +134,7 @@ class FleetSegmentControllerITests {
                                             underSizedWeight = null,
                                             rejectedWeight = null,
                                             discardReason = null,
-                                            presentationCode = null,
+                                            presentationCodes = null,
                                             faoZones = null,
                                         ),
                                         SpeciesControlDataInput(
@@ -146,7 +146,7 @@ class FleetSegmentControllerITests {
                                             underSizedWeight = null,
                                             rejectedWeight = null,
                                             discardReason = null,
-                                            presentationCode = null,
+                                            presentationCodes = null,
                                             faoZones = null,
                                         ),
                                     ),

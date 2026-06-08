@@ -10,7 +10,7 @@ const makeSpecies = (speciesCode: string, overrides: Partial<MissionAction.Speci
   discardReason: undefined,
   faoZones: undefined,
   nbFish: undefined,
-  presentationCode: undefined,
+  presentationCodes: undefined,
   rejectedWeight: undefined,
   speciesCode,
   underSized: false,
@@ -24,7 +24,7 @@ const makePrefill = (
 ): Logbook.SpeciesControlPrefill => ({
   discardReason: undefined,
   faoZones: undefined,
-  presentationCode: undefined,
+  presentationCodes: undefined,
   rejectedWeight: undefined,
   speciesCode,
   ...overrides
@@ -43,14 +43,14 @@ describe('mergeSpeciesOnboardWithPrefill()', () => {
     expect(result[0]!.rejectedWeight).toBeUndefined()
   })
 
-  it('should merge faoZones and presentationCode from prefill into matching species', () => {
+  it('should merge faoZones and presentationCodes from prefill into matching species', () => {
     const base = [makeSpecies('HKE')]
-    const prefill = [makePrefill('HKE', { faoZones: ['27.8.a', '27.8.b'], presentationCode: 'GUT' })]
+    const prefill = [makePrefill('HKE', { faoZones: ['27.8.a', '27.8.b'], presentationCodes: ['WHL', 'GUT'] })]
 
     const result = mergeSpeciesOnboardWithPrefill(base, prefill)
 
     expect(result[0]!.faoZones).toEqual(['27.8.a', '27.8.b'])
-    expect(result[0]!.presentationCode).toBe('GUT')
+    expect(result[0]!.presentationCodes).toEqual(['WHL', 'GUT'])
     expect(result[0]!.declaredWeight).toBe(100)
   })
 

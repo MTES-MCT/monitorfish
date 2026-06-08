@@ -24,10 +24,9 @@ class GetSpeciesControlPrefillFromLogbook(
                 tripNumber = trip.tripNumber,
             )
 
-        // From FAR messages: collect faoZones and presentationCode per species
         data class FarData(
             val faoZones: MutableSet<String>,
-            var presentationCode: String?,
+            val presentationCodes: MutableSet<String>,
         )
 
         val farBySpecies = mutableMapOf<String, FarData>()
@@ -38,11 +37,9 @@ class GetSpeciesControlPrefillFromLogbook(
             .flatMap { it.catches }
             .forEach { catch ->
                 val species = catch.species ?: return@forEach
-                val data = farBySpecies.getOrPut(species) { FarData(mutableSetOf(), null) }
+                val data = farBySpecies.getOrPut(species) { FarData(mutableSetOf(), mutableSetOf()) }
                 catch.faoZone?.let { data.faoZones.add(it) }
-                if (data.presentationCode == null && catch.presentation != null && catch.presentation != "DIM") {
-                    data.presentationCode = catch.presentation
-                }
+                catch.presentation?.let { data.presentationCodes.add(it) }
             }
 
         // From DIS messages: sum rejectedWeight and determine discardReason per species
@@ -74,7 +71,7 @@ class GetSpeciesControlPrefillFromLogbook(
             SpeciesControl().apply {
                 speciesCode = species
                 faoZones = farData?.faoZones?.toList()?.takeIf { it.isNotEmpty() }
-                presentationCode = farData?.presentationCode
+                presentationCodes = farData?.presentationCodes?.toList()?.takeIf { it.isNotEmpty() }
                 rejectedWeight = disData?.rejectedWeight?.takeIf { it > 0.0 }
                 discardReason =
                     disData?.let {

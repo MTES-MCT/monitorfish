@@ -70,7 +70,7 @@ export function mergeSpeciesOnboardWithPrefill(
       ...specy,
       discardReason: prefill.discardReason ?? specy.discardReason,
       faoZones: prefill.faoZones ?? specy.faoZones,
-      presentationCode: prefill.presentationCode ?? specy.presentationCode,
+      presentationCodes: prefill.presentationCodes ?? specy.presentationCodes,
       rejectedWeight: prefill.rejectedWeight ?? specy.rejectedWeight
     }
   })
@@ -85,7 +85,7 @@ export function mergeSpeciesOnboardWithPrefill(
       discardReason: p.discardReason,
       faoZones: p.faoZones,
       nbFish: undefined,
-      presentationCode: p.presentationCode,
+      presentationCodes: p.presentationCodes,
       rejectedWeight: p.rejectedWeight,
       speciesCode: p.speciesCode as string,
       underSized: false,

@@ -132,3 +132,9 @@ export const E_ISR_APPLICATION_DATE: string = isCypress()
   : (import.meta.env.FRONTEND_E_ISR_APPLICATION_DATE ?? '')
 
 export const HIDDEN_ERROR = 'HIDDEN_ERROR'
+
+/**
+ * Gear categories for which the e-ISR "Marquage de l'engin conforme" check does not apply:
+ * the field is hidden and the value is recorded as N/A (ControlCheck.NOT_APPLICABLE).
+ */
+export const GEAR_MARKING_NOT_APPLICABLE_CATEGORIES = ['Lignes et hameçons', 'Engins de récolte', 'Engins divers']

@@ -10,7 +10,7 @@ import {
   Button,
   CustomSearch,
   FormikCheckbox,
-  FormikMultiSelect,
+  FormikCheckPicker,
   FormikNumberInput,
   FormikSelect,
   FormikTextarea,
@@ -27,7 +27,7 @@ import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { getDefaultPresentationCode } from '../utils'
+import { getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
@@ -149,7 +149,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         discardReason: undefined,
         faoZones: isEISREnabled ? values.faoAreas : undefined,
         nbFish: undefined,
-        presentationCode: getDefaultPresentationCode(isEISREnabled, vessel?.length),
+        presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
         rejectedWeight: undefined,
         speciesCode: newSpecy.code,
         underSized: false,
@@ -356,19 +356,25 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 <StyledSingleTag onDelete={() => remove(index)}>{`${
                   specyOnboard.speciesCode
                 } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
+                {isEISREnabled && !isUnderSizedShown(index) && <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
+                  Sous-taille
+                </AddButton>}
+                {isEISREnabled && !isRejectedShown(index) && <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openRejected(index)}>
+                  Rejet
+                </AddButton>}
                 {isLandControl && isEISREnabled && (
                   <FormikCheckbox label="Espèce non débarquée" name={`speciesOnboard[${index}].isNotLanded`} />
                 )}
               </TagRow>
 
-              <WeightsRow>
+              <FieldsRow>
                 <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
                 <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
                 {isEISREnabled ? (
                   <>
-                    {isUnderSizedShown(index) ? (
+                    {isUnderSizedShown(index) && (
                       <>
-                        <FormikNumberInput label="Qté sous-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
+                        <FormikNumberInput label="Qté ss-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
                         <DeleteButton
                           accent={Accent.SECONDARY}
                           Icon={Icon.Delete}
@@ -376,12 +382,8 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                           title="Retirer la sous-taille"
                         />
                       </>
-                    ) : (
-                      <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
-                        Ajouter sous-taille
-                      </AddButton>
                     )}
-                    {isRejectedShown(index) ? (
+                    {isRejectedShown(index) && (
                       <>
                         <FormikNumberInput label="Qté rejetée" name={`speciesOnboard[${index}].rejectedWeight`} />
                         <DeleteButton
@@ -396,34 +398,25 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                           options={DISCARD_REASON_OPTIONS}
                         />
                       </>
-                    ) : (
-                      <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openRejected(index)}>
-                        Ajouter rejet
-                      </AddButton>
                     )}
+                    <StyledCheckPicker
+                      label="Présentation"
+                      name={`speciesOnboard[${index}].presentationCodes`}
+                      options={PRESENTATION_OPTIONS}
+                      searchable
+                    />
+                    <StyledCheckPicker
+                      isRequired
+                      label="Zone de pêche"
+                      name={`speciesOnboard[${index}].faoZones`}
+                      options={faoAreasAsOptions}
+                      searchable
+                    />
                   </>
                 ) : (
                   <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
                 )}
-              </WeightsRow>
-
-              {isEISREnabled && (
-                <PresentationFaoRow>
-                  <FormikSelect
-                    label="Présentation du poisson"
-                    name={`speciesOnboard[${index}].presentationCode`}
-                    options={PRESENTATION_OPTIONS}
-                    searchable
-                  />
-                  <StyledFaoZones
-                    isRequired
-                    label="Zone de pêche"
-                    name={`speciesOnboard[${index}].faoZones`}
-                    options={faoAreasAsOptions}
-                    searchable
-                  />
-                </PresentationFaoRow>
-              )}
+              </FieldsRow>
             </Row>
           ))}
         </>
@@ -447,8 +440,19 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   )
 }
 
-const StyledFaoZones = styled(FormikMultiSelect)`
-  width: 250px;
+const StyledCheckPicker = styled(FormikCheckPicker)`
+  flex: 1;
+  min-width: 150px;
+  max-width: 250px;
+
+  .rs-picker-value-count {
+    margin-top: 2px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    height: 16px !important;
+    background-color: ${p => p.theme.color.white} !important;
+    color: ${p => p.theme.color.gunMetal};
+  }
 `
 
 const StyledSingleTag = styled(SingleTag)`
@@ -463,7 +467,7 @@ const TagRow = styled.div`
 `
 
 const Row = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 40px;
 
   > legend {
     margin: 24px 0 8px;
@@ -478,25 +482,20 @@ const Row = styled.div`
   }
 `
 
-const WeightsRow = styled.div`
+const FieldsRow = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   gap: 8px;
   margin-top: 8px;
+  width: 100%;
 
   > .Field-NumberInput {
     input {
       height: 30px;
+      width: 85px;
     }
   }
-`
-
-const PresentationFaoRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
 `
 
 const AddButton = styled(Button)`

@@ -77,7 +77,7 @@ class GetSpeciesControlPrefillFromLogbookUTests {
     }
 
     @Test
-    fun `execute Should return faoZones and presentationCode from FAR catches`() {
+    fun `execute Should return faoZones and presentationCodes from FAR catches`() {
         given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
         val catch =
             LogbookFishingCatch().also {
@@ -94,9 +94,42 @@ class GetSpeciesControlPrefillFromLogbookUTests {
         val species = result.first()
         assertThat(species.speciesCode).isEqualTo("HKE")
         assertThat(species.faoZones).containsExactly("27.8.a")
-        assertThat(species.presentationCode).isEqualTo("GUT")
+        assertThat(species.presentationCodes).containsExactly("GUT")
         assertThat(species.rejectedWeight).isNull()
         assertThat(species.discardReason).isNull()
+    }
+
+    @Test
+    fun `execute Should collect distinct presentationCodes across multiple FAR catches`() {
+        given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
+        val catchWhole =
+            LogbookFishingCatch().also {
+                it.species = "HKE"
+                it.presentation = "WHL"
+                it.weight = 200.0
+            }
+        val catchGutted =
+            LogbookFishingCatch().also {
+                it.species = "HKE"
+                it.presentation = "GUT"
+                it.weight = 300.0
+            }
+        val catchWholeAgain =
+            LogbookFishingCatch().also {
+                it.species = "HKE"
+                it.presentation = "WHL"
+                it.weight = 100.0
+            }
+        val haul1 = Haul().also { it.catches = listOf(catchWhole, catchGutted) }
+        val haul2 = Haul().also { it.catches = listOf(catchWholeAgain) }
+        val far = FAR().also { it.hauls = listOf(haul1, haul2) }
+        given(getLogbookMessages.execute(any(), any(), any(), any()))
+            .willReturn(listOf(makeLogbookMessage("FAR", far)))
+
+        val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
+
+        assertThat(result).hasSize(1)
+        assertThat(result.first().presentationCodes).containsExactlyInAnyOrder("WHL", "GUT")
     }
 
     @Test
@@ -157,7 +190,7 @@ class GetSpeciesControlPrefillFromLogbookUTests {
         assertThat(species.rejectedWeight).isEqualTo(80.0)
         assertThat(species.discardReason).isEqualTo(DiscardReason.DIS)
         assertThat(species.faoZones).isNull()
-        assertThat(species.presentationCode).isNull()
+        assertThat(species.presentationCodes).isNull()
     }
 
     @Test
@@ -207,7 +240,7 @@ class GetSpeciesControlPrefillFromLogbookUTests {
         val species = result.first()
         assertThat(species.speciesCode).isEqualTo("HKE")
         assertThat(species.faoZones).containsExactly("27.8.a")
-        assertThat(species.presentationCode).isEqualTo("GUT")
+        assertThat(species.presentationCodes).containsExactly("GUT")
         assertThat(species.rejectedWeight).isEqualTo(50.0)
         assertThat(species.discardReason).isEqualTo(DiscardReason.DIS)
     }
@@ -238,21 +271,5 @@ class GetSpeciesControlPrefillFromLogbookUTests {
         val hke = result.first { it.speciesCode == "HKE" }
         assertThat(hke.rejectedWeight).isEqualTo(30.0)
         assertThat(hke.faoZones).isNull()
-    }
-
-    @Test
-    fun `execute Should not use DIM presentation as presentationCode for FAR catches`() {
-        given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
-        val catch =
-            LogbookFishingCatch().also {
-                it.species = "HKE"
-                it.presentation = "DIM"
-                it.weight = 100.0
-            }
-        given(getLogbookMessages.execute(any(), any(), any(), any())).willReturn(listOf(makeFarMessage(listOf(catch))))
-
-        val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
-
-        assertThat(result.first().presentationCode).isNull()
     }
 }

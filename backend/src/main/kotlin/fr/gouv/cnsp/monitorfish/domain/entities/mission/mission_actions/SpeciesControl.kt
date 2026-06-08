@@ -11,6 +11,6 @@ class SpeciesControl {
     var underSizedWeight: Double? = null
     var rejectedWeight: Double? = null
     var discardReason: DiscardReason? = null
-    var presentationCode: String? = null
+    var presentationCodes: List<String>? = null
     var faoZones: List<String>? = null
 }

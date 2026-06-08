@@ -9,7 +9,7 @@ export const SpeciesControlSchema = z.strictObject({
   faoZones: z.array(z.string()).optional(),
   isNotLanded: z.boolean().optional(),
   nbFish: numberOrUndefined,
-  presentationCode: z.string().nullable().optional(),
+  presentationCodes: z.array(z.string()).optional(),
   rejectedWeight: numberOrUndefined,
   speciesCode: z.string(),
   underSized: booleanOrUndefined,

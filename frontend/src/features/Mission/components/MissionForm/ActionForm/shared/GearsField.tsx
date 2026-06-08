@@ -1,6 +1,9 @@
 import { useGetGearsQuery } from '@api/gear'
 import { BOOLEAN_AS_OPTIONS } from '@constants/index'
-import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import {
+  GEAR_MARKING_NOT_APPLICABLE_CATEGORIES,
+  HIDDEN_ERROR
+} from '@features/Mission/components/MissionForm/constants'
 import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import {
@@ -39,6 +42,8 @@ const WIRE_TYPE_OPTIONS = [
   { label: 'Simple', value: MissionAction.WireType.SINGLE },
   { label: 'Epais', value: MissionAction.WireType.THICK }
 ]
+
+const WIRE_FIELDS_GEAR_CATEGORIES = ['Chaluts', 'Sennes traînantes']
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
@@ -98,7 +103,9 @@ export function GearsField() {
         controlledMesh: undefined,
         declaredMesh: undefined,
         gearCode: newGear.code,
-        gearMarkingIsCompliant: undefined,
+        gearMarkingIsCompliant: GEAR_MARKING_NOT_APPLICABLE_CATEGORIES.includes(newGear.category)
+          ? MissionAction.ControlCheck.NOT_APPLICABLE
+          : undefined,
         gearName: newGear.name,
         gearWasControlled: undefined,
         hasUncontrolledMesh: false,
@@ -136,55 +143,56 @@ export function GearsField() {
     <FieldsetGroup isLight legend="Engins à bord">
       {input.value && input.value.length > 0 && (
         <>
-          {input.value.map((gearOnboard, index) => (
-            <Row
-              // eslint-disable-next-line react/no-array-index-key
-              key={`gearOnboard-${gearOnboard.gearCode}-${index}`}
-              $isFirst={index === 0}
-              style={{ marginTop: index > 0 ? '24px' : 0 }}
-            >
-              <RowInnerWrapper>
-                <SingleTag
-                  onDelete={() => remove(index)}
-                >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
+          {input.value.map((gearOnboard, index) => {
+            const gearCategory = gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ?? ''
 
-                <FormikMultiRadio
-                  isErrorMessageHidden
-                  isInline
-                  isRequired
-                  label="Engin contrôlé"
-                  name={`gearOnboard[${index}].gearWasControlled`}
-                  options={BOOLEAN_AS_OPTIONS}
-                />
+            return (
+              <Row
+                // eslint-disable-next-line react/no-array-index-key
+                key={`gearOnboard-${gearOnboard.gearCode}-${index}`}
+                $isFirst={index === 0}
+                style={{ marginTop: index > 0 ? '24px' : 0 }}
+              >
+                <RowInnerWrapper>
+                  <SingleTag
+                    onDelete={() => remove(index)}
+                  >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
-                {isEISREnabled && (
                   <FormikMultiRadio
                     isErrorMessageHidden
                     isInline
                     isRequired
-                    label="Marquage de l'engin conforme"
-                    name={`gearOnboard[${index}].gearMarkingIsCompliant`}
-                    options={CONTROL_CHECK_OPTIONS}
+                    label="Engin contrôlé"
+                    name={`gearOnboard[${index}].gearWasControlled`}
+                    options={BOOLEAN_AS_OPTIONS}
                   />
-                )}
 
-                <StyledFieldGroup isInline>
-                  <FormikNumberInput
-                    isErrorMessageHidden
-                    isRequired
-                    label="Maillage déclaré"
-                    name={`gearOnboard[${index}].declaredMesh`}
-                  />
-                  <FormikNumberInput
-                    disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
-                    isErrorMessageHidden
-                    isUndefinedWhenDisabled
-                    label="Maillage mesuré"
-                    name={`gearOnboard[${index}].controlledMesh`}
-                  />
-                  {isEISREnabled &&
-                    gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ===
-                      'Lignes et hameçons' && (
+                  {isEISREnabled && !GEAR_MARKING_NOT_APPLICABLE_CATEGORIES.includes(gearCategory) && (
+                    <FormikMultiRadio
+                      isErrorMessageHidden
+                      isInline
+                      isRequired
+                      label="Marquage de l'engin conforme"
+                      name={`gearOnboard[${index}].gearMarkingIsCompliant`}
+                      options={CONTROL_CHECK_OPTIONS}
+                    />
+                  )}
+
+                  <StyledFieldGroup isInline>
+                    <FormikNumberInput
+                      isErrorMessageHidden
+                      isRequired
+                      label="Maillage déclaré"
+                      name={`gearOnboard[${index}].declaredMesh`}
+                    />
+                    <FormikNumberInput
+                      disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
+                      isErrorMessageHidden
+                      isUndefinedWhenDisabled
+                      label="Maillage mesuré"
+                      name={`gearOnboard[${index}].controlledMesh`}
+                    />
+                    {isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.includes(gearCategory) && (
                       <>
                         <FormikNumberInput
                           isErrorMessageHidden
@@ -199,22 +207,23 @@ export function GearsField() {
                         />
                       </>
                     )}
-                </StyledFieldGroup>
-                {typedError && typedError[index]?.declaredMesh && (
-                  <FieldError>{typedError[index]?.declaredMesh}</FieldError>
-                )}
-                {typedError && typedError[index]?.controlledMesh && (
-                  <FieldError>{typedError[index]?.controlledMesh}</FieldError>
-                )}
+                  </StyledFieldGroup>
+                  {typedError && typedError[index]?.declaredMesh && (
+                    <FieldError>{typedError[index]?.declaredMesh}</FieldError>
+                  )}
+                  {typedError && typedError[index]?.controlledMesh && (
+                    <FieldError>{typedError[index]?.controlledMesh}</FieldError>
+                  )}
 
-                <FormikTextarea
-                  label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
-                  name={`gearOnboard[${index}].comments`}
-                  rows={2}
-                />
-              </RowInnerWrapper>
-            </Row>
-          ))}
+                  <FormikTextarea
+                    label={`${gearOnboard.gearCode} : autres mesures et dispositifs`}
+                    name={`gearOnboard[${index}].comments`}
+                    rows={2}
+                  />
+                </RowInnerWrapper>
+              </Row>
+            )
+          })}
           <FieldsetGroupSeparator marginBottom={12} />
         </>
       )}

@@ -1,29 +1,29 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { getDefaultPresentationCode } from '../utils'
+import { getDefaultPresentationCodes } from '../utils'
 
-describe('getDefaultPresentationCode()', () => {
-  it('should return WHL when EISR is enabled and vessel is below 12m', () => {
-    expect(getDefaultPresentationCode(true, 8)).toBe('WHL')
+describe('getDefaultPresentationCodes()', () => {
+  it('should return [WHL] when EISR is enabled and vessel is below 12m', () => {
+    expect(getDefaultPresentationCodes(true, 8)).toEqual(['WHL'])
   })
 
-  it('should return WHL when vessel length is just below 12m', () => {
-    expect(getDefaultPresentationCode(true, 11.9)).toBe('WHL')
+  it('should return [WHL] when vessel length is just below 12m', () => {
+    expect(getDefaultPresentationCodes(true, 11.9)).toEqual(['WHL'])
   })
 
   it('should return undefined when vessel is exactly 12m', () => {
-    expect(getDefaultPresentationCode(true, 12)).toBeUndefined()
+    expect(getDefaultPresentationCodes(true, 12)).toBeUndefined()
   })
 
   it('should return undefined when vessel is above 12m', () => {
-    expect(getDefaultPresentationCode(true, 15)).toBeUndefined()
+    expect(getDefaultPresentationCodes(true, 15)).toBeUndefined()
   })
 
   it('should return undefined when EISR is disabled even if vessel is below 12m', () => {
-    expect(getDefaultPresentationCode(false, 8)).toBeUndefined()
+    expect(getDefaultPresentationCodes(false, 8)).toBeUndefined()
   })
 
   it('should return undefined when vessel length is unknown', () => {
-    expect(getDefaultPresentationCode(true, undefined)).toBeUndefined()
+    expect(getDefaultPresentationCodes(true, undefined)).toBeUndefined()
   })
 })

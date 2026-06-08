@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesC
 data class SpeciesControlPrefillDataOutput(
     val speciesCode: String?,
     val faoZones: List<String>?,
-    val presentationCode: String?,
+    val presentationCodes: List<String>?,
     val rejectedWeight: Double?,
     val discardReason: DiscardReason?,
 ) {
@@ -15,7 +15,7 @@ data class SpeciesControlPrefillDataOutput(
             SpeciesControlPrefillDataOutput(
                 speciesCode = sc.speciesCode,
                 faoZones = sc.faoZones,
-                presentationCode = sc.presentationCode,
+                presentationCodes = sc.presentationCodes,
                 rejectedWeight = sc.rejectedWeight,
                 discardReason = sc.discardReason,
             )

@@ -1,3 +1,4 @@
+import { GEAR_MARKING_NOT_APPLICABLE_CATEGORIES } from '@features/Mission/components/MissionForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { riskFactorApi } from '@features/RiskFactor/apis'
 import { FrontendError } from '@libs/FrontendError'
@@ -47,7 +48,9 @@ export const updateActionGearsOnboard =
         controlledMesh: undefined,
         declaredMesh: gear.declaredMesh,
         gearCode: gear.code,
-        gearMarkingIsCompliant: undefined,
+        gearMarkingIsCompliant: GEAR_MARKING_NOT_APPLICABLE_CATEGORIES.includes(gear.category)
+          ? MissionAction.ControlCheck.NOT_APPLICABLE
+          : undefined,
         gearName: gear.name,
         gearWasControlled: undefined,
         hasUncontrolledMesh: false,

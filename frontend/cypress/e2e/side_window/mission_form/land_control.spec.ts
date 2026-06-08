@@ -92,15 +92,22 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Qté pesée', 500)
     cy.clickButton('Sous-taille')
     cy.fill('Qté ss-taille', 10)
-    cy.clickButton('Rejet')
-    cy.fill('Qté rejetée', 3)
-    cy.fill('Nature du rejet', 'DIS - autres rejets')
     cy.fill('Présentation du poisson', ['WHL - Entier'])
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
     cy.fill('Zone de pêche', ['27.8.a'], { index: 16 })
+
+    // Rejets — the HKE discard is no longer an inline field on the catch row; it is declared in the
+    // dedicated "Rejets" card. "Nature du rejet" / "Qté rejetée" only render there (HKE = index 0).
+    // "Zone de pêche" spans both cards (the catches card holds indices 0..16), so the HKE discard zone
+    // is the next index, 17.
+    cy.fill('Ajouter une espèce rejetée', 'HKE')
+    cy.wait(200)
+    cy.fill('Nature du rejet', 'DIS - autres rejets', { index: 0 })
+    cy.fill('Qté rejetée', 3, { index: 0 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 17 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -235,12 +242,16 @@ context('Side Window > Mission Form > Land Control', () => {
             }
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
+          // Catches only — the HKE discard now lives in `discardedSpecies` (it keeps isNotLanded /
+          // underSizedWeight / presentationCodes as a landed catch, but no longer discardReason /
+          // rejectedWeight here).
           speciesOnboard: [
-            { controlledWeight: 500, declaredWeight: 471.2, discardReason: 'DIS', faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCodes: ['WHL'], rejectedWeight: 3, speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
+            { controlledWeight: 500, declaredWeight: 471.2, faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCodes: ['WHL'], speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: null, declaredWeight: null, faoZones: ['27.8.b', '27.8.c'], nbFish: null, speciesCode: 'COD', underSized: false },
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false }
           ],
+          discardedSpecies: [{ discardReason: 'DIS', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'HKE' }],
           speciesQuantitySeized: 6289.5,
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',

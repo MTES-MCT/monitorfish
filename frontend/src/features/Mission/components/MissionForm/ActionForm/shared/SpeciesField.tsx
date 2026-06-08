@@ -281,7 +281,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
             isSectionHeader: true,
             label: (
               <>
-                Pour les captures <u>déchargées</u>
+                Pour les captures <u>débarquées</u>
               </>
             ),
             name: 'unloadedSection'
@@ -307,7 +307,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
             isSectionHeader: true,
             label: (
               <>
-                Pour les captures <u>détenues à bord</u>
+                Pour les captures <u>non débarquées</u>
               </>
             ),
             name: 'heldOnboardSection'
@@ -352,9 +352,14 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
               style={{ marginTop: index === 0 ? '16px' : 0 }}
             >
-              <StyledSingleTag onDelete={() => remove(index)}>{`${
-                specyOnboard.speciesCode
-              } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
+              <TagRow>
+                <StyledSingleTag onDelete={() => remove(index)}>{`${
+                  specyOnboard.speciesCode
+                } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
+                {isLandControl && isEISREnabled && (
+                  <FormikCheckbox label="Espèce non débarquée" name={`speciesOnboard[${index}].isNotLanded`} />
+                )}
+              </TagRow>
 
               <WeightsRow>
                 <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
@@ -447,7 +452,13 @@ const StyledFaoZones = styled(FormikMultiSelect)`
 `
 
 const StyledSingleTag = styled(SingleTag)`
-  width: 280px;
+  max-width: 280px;
+`
+
+const TagRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 8px;
 `
 

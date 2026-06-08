@@ -88,6 +88,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill("Informations sur l'opérateur de pesée agréé", 'Oui')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Pesée des captures lors du débarquement', 'Non')
+    cy.fill('Espèce non débarquée', true)
     cy.fill('Qté pesée', 500)
     cy.clickButton('Ajouter sous-taille')
     cy.fill('Qté sous-taille', 10)
@@ -235,7 +236,7 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           speciesOnboard: [
-            { controlledWeight: 500, declaredWeight: 471.2, discardReason: 'DIS', faoZones: ['27.8.b'], nbFish: null, presentationCode: 'WHL', rejectedWeight: 3, speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
+            { controlledWeight: 500, declaredWeight: 471.2, discardReason: 'DIS', faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCode: 'WHL', rejectedWeight: 3, speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: null, declaredWeight: null, faoZones: ['27.8.b', '27.8.c'], nbFish: null, speciesCode: 'COD', underSized: false },
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false }

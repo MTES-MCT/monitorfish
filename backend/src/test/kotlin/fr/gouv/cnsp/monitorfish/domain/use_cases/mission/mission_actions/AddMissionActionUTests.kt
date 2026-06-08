@@ -123,10 +123,12 @@ class AddMissionActionUTests {
         val speciesControl = SpeciesControl()
         speciesControl.speciesCode = speciesCode
         speciesControl.speciesName = null // Initially null
+        speciesControl.isNotLanded = true
 
         val expectedSpeciesControl = SpeciesControl()
         expectedSpeciesControl.speciesCode = speciesCode
         expectedSpeciesControl.speciesName = expectedSpeciesName
+        expectedSpeciesControl.isNotLanded = true
 
         val action =
             MissionAction(
@@ -174,6 +176,7 @@ class AddMissionActionUTests {
         assertThat(returnedAction).isNotNull
         assertThat(returnedAction.speciesOnboard).hasSize(1)
         assertThat(returnedAction.speciesOnboard.first().speciesName).isEqualTo(expectedSpeciesName)
+        assertThat(returnedAction.speciesOnboard.first().isNotLanded).isTrue()
 
         // Verify that getSpeciesFromCode was called with the correct species code
         verify(getSpeciesFromCode).execute(speciesCode)

@@ -7,6 +7,7 @@ export const SpeciesControlSchema = z.strictObject({
   declaredWeight: numberOrUndefined,
   discardReason: z.enum(['DIM', 'RET', 'DIS']).nullable().optional(),
   faoZones: z.array(z.string()).optional(),
+  isNotLanded: z.boolean().optional(),
   nbFish: numberOrUndefined,
   presentationCode: z.string().nullable().optional(),
   rejectedWeight: numberOrUndefined,

@@ -92,7 +92,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Qté pesée', 500)
     cy.clickButton('Sous-taille')
     cy.fill('Qté ss-taille', 10)
-    cy.fill('Présentation du poisson', ['WHL - Entier'])
+    cy.fill('Présentation', ['WHL - Entier'])
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })

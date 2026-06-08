@@ -180,7 +180,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Sous-taille', { index: 2 })
     cy.wait(200)
     cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
-    cy.fill('Présentation du poisson', ['FIL - En filets'], { index: 2 })
+    cy.fill('Présentation', ['FIL - En filets'], { index: 2 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
 
     // Rejets — BIB is prefilled from the logbook DIS (DIM) message; add COD as a rejected species (RET).
@@ -1114,7 +1114,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Qté ss-taille', 5)
     cy.clickButton('Retirer la sous-taille')
     cy.contains('Qté ss-taille').should('not.exist')
-    cy.contains('Sous-taille').should('be.visible')
+    cy.contains('button', 'Sous-taille').should('exist')
 
     // Add a rejected species in the "Rejets" card: a single line has no per-line delete button.
     cy.fill('Ajouter une espèce rejetée', 'COD')

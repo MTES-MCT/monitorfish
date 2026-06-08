@@ -132,9 +132,9 @@ context('Side Window > Mission Form > Main Form', () => {
 
       cy.get('.Component-Dialog').should('be.visible')
 
-      cy.contains('Voulez-vous enregistrer les modifications avant de quitter')
+      cy.contains('Quitter sans enregistrer')
 
-      cy.clickButton('Retourner à l’édition')
+      cy.clickButton('Annuler')
 
       cy.get('.Element-Tag').contains('Enregistrement auto. inactif')
       cy.clickButton('Enregistrer')
@@ -349,7 +349,7 @@ context('Side Window > Mission Form > Main Form', () => {
 
     cy.get('.Component-Dialog').should('be.visible')
 
-    cy.clickButton('Retourner à l’édition')
+    cy.clickButton('Annuler')
 
     cy.get('h1').should('contain.text', 'Mission Mer –')
 

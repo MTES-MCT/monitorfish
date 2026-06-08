@@ -90,7 +90,7 @@ context('Side Window > Logbook Prior Notification Form  > Reporting List', () =>
 
         // When
         cy.clickButton('Archiver ce signalement')
-        cy.clickButton('Archiver')
+        cy.clickButton('Confirmer l’archivage')
         cy.wait('@archiveReporting')
 
         // Then

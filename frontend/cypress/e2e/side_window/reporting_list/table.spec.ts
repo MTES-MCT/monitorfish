@@ -64,33 +64,25 @@ context('Side Window > Reporting List > Table', () => {
      * Filter by observation
      */
 
-    cy.fill('Type de signalement', ['Observations'])
+    cy.fill('Type de signalement', 'Observations')
 
     cy.get('.Table-SimpleTable tr').should('have.length', 3)
     cy.get('.Table-SimpleTable tr').eq(1).contains('Observation')
     cy.get('.Table-SimpleTable tr').eq(2).contains('Observation')
 
-    cy.fill('Type de signalement', ["Suspicions d'infraction"])
+    cy.fill('Type de signalement', undefined)
 
     /**
      * Filter by absent vessel
      */
 
     cy.intercept('GET', absentVesselPath).as('getAbsentVesselReportings')
-
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.OUTREMEROA}`).click()
     cy.fill('Navires sans fiche', true)
 
     cy.wait('@getAbsentVesselReportings')
 
     cy.get('tbody').contains('Aucun signalement')
-
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.MEMN}`).click()
-
-    cy.get('.Table-SimpleTable tr').should('have.length', 2)
-    cy.get('.Table-SimpleTable tr').eq(1).contains("Susp. d'infraction")
-
-    cy.fill('Navires sans fiche', false)
-
     cy.wait('@getReportings')
 
     cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()

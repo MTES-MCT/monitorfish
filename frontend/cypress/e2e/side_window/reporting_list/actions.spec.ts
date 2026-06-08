@@ -137,7 +137,7 @@ context('Side Window > Reporting List > Actions', () => {
         withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
       })
 
-      cy.clickButton('Confirmer la suppression')
+      cy.clickButton('Supprimer')
       cy.clickButton('Valider')
 
       cy.wait('@updateReporting').then(({ response }) => {

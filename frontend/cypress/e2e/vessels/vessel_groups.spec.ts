@@ -240,7 +240,6 @@ context('Vessel groups', () => {
       .first()
       .within(() => {
         cy.get('button').click()
-        cy.get('button').click()
       })
     cy.get('.Component-SingleTag').within(() => {
       cy.get('button').click()

@@ -19,6 +19,7 @@ export const MissionActionSchema = z.strictObject({
   controlQualityComments: stringOrUndefined,
   controlUnits: z.array(LegacyControlUnitSchema),
   cratesWeighingSamplingControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  discardedSpecies: z.array(SpeciesControlSchema),
   districtCode: stringOrUndefined,
   emitsAis: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   emitsVms: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),

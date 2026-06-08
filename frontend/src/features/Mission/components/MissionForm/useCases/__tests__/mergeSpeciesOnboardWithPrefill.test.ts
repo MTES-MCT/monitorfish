@@ -35,80 +35,94 @@ describe('mergeSpeciesOnboardWithPrefill()', () => {
     const base = [makeSpecies('COD')]
     const prefill: Logbook.SpeciesControlPrefill[] = []
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result).toHaveLength(1)
-    expect(result[0]!.speciesCode).toBe('COD')
-    expect(result[0]!.faoZones).toBeUndefined()
-    expect(result[0]!.rejectedWeight).toBeUndefined()
+    expect(nextSpeciesOnboard).toHaveLength(1)
+    expect(nextSpeciesOnboard[0]!.speciesCode).toBe('COD')
+    expect(nextSpeciesOnboard[0]!.faoZones).toBeUndefined()
+    expect(discardedSpecies).toEqual([])
   })
 
-  it('should merge faoZones and presentationCodes from prefill into matching species', () => {
+  it('should merge faoZones and presentationCodes from catch prefill into matching species', () => {
     const base = [makeSpecies('HKE')]
     const prefill = [makePrefill('HKE', { faoZones: ['27.8.a', '27.8.b'], presentationCodes: ['WHL', 'GUT'] })]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result[0]!.faoZones).toEqual(['27.8.a', '27.8.b'])
-    expect(result[0]!.presentationCodes).toEqual(['WHL', 'GUT'])
-    expect(result[0]!.declaredWeight).toBe(100)
+    expect(nextSpeciesOnboard[0]!.faoZones).toEqual(['27.8.a', '27.8.b'])
+    expect(nextSpeciesOnboard[0]!.presentationCodes).toEqual(['WHL', 'GUT'])
+    expect(nextSpeciesOnboard[0]!.declaredWeight).toBe(100)
+    expect(discardedSpecies).toEqual([])
   })
 
-  it('should merge rejectedWeight and discardReason DIS from prefill', () => {
+  it('should put DIS prefill into discardedSpecies and leave the catch unchanged', () => {
     const base = [makeSpecies('HKE')]
-    const prefill = [makePrefill('HKE', { discardReason: 'DIS', rejectedWeight: 50 })]
+    const prefill = [makePrefill('HKE', { discardReason: 'DIS', faoZones: ['27.8.b'], rejectedWeight: 50 })]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result[0]!.rejectedWeight).toBe(50)
-    expect(result[0]!.discardReason).toBe('DIS')
+    expect(nextSpeciesOnboard[0]!.rejectedWeight).toBeUndefined()
+    expect(nextSpeciesOnboard[0]!.discardReason).toBeUndefined()
+    expect(discardedSpecies).toHaveLength(1)
+    expect(discardedSpecies[0]!.speciesCode).toBe('HKE')
+    expect(discardedSpecies[0]!.rejectedWeight).toBe(50)
+    expect(discardedSpecies[0]!.discardReason).toBe('DIS')
+    expect(discardedSpecies[0]!.faoZones).toEqual(['27.8.b'])
   })
 
-  it('should merge discardReason DIM from prefill', () => {
-    const base = [makeSpecies('HKE')]
-    const prefill = [makePrefill('HKE', { discardReason: 'DIM', rejectedWeight: 20 })]
+  it('should split DIS and DIM prefill of the same species into two discard entries', () => {
+    const base = [makeSpecies('NCA')]
+    const prefill = [
+      makePrefill('NCA', { discardReason: 'DIS', rejectedWeight: 300 }),
+      makePrefill('NCA', { discardReason: 'DIM', rejectedWeight: 2 })
+    ]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result[0]!.discardReason).toBe('DIM')
+    expect(nextSpeciesOnboard).toHaveLength(1)
+    expect(discardedSpecies).toHaveLength(2)
+    expect(discardedSpecies.find(s => s.discardReason === 'DIS')!.rejectedWeight).toBe(300)
+    expect(discardedSpecies.find(s => s.discardReason === 'DIM')!.rejectedWeight).toBe(2)
   })
 
-  it('should not override existing values with undefined from prefill', () => {
+  it('should not override existing values with undefined from catch prefill', () => {
     const base = [makeSpecies('HKE', { faoZones: ['27.4'] })]
     const prefill = [makePrefill('HKE', { faoZones: undefined })]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result[0]!.faoZones).toEqual(['27.4'])
+    expect(nextSpeciesOnboard[0]!.faoZones).toEqual(['27.4'])
   })
 
-  it('should add DIS-only species (in prefill but not in risk factor) with undefined declaredWeight', () => {
+  it('should keep DIS-only species out of the catches and in discardedSpecies', () => {
     const base = [makeSpecies('COD')]
     const prefill = [
       makePrefill('COD', { faoZones: ['27.4'] }),
       makePrefill('HKE', { discardReason: 'DIS', rejectedWeight: 30 })
     ]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result).toHaveLength(2)
-    const hke = result.find(s => s.speciesCode === 'HKE')
-    expect(hke).toBeDefined()
-    expect(hke!.declaredWeight).toBeUndefined()
-    expect(hke!.rejectedWeight).toBe(30)
-    expect(hke!.discardReason).toBe('DIS')
+    expect(nextSpeciesOnboard).toHaveLength(1)
+    expect(nextSpeciesOnboard[0]!.speciesCode).toBe('COD')
+    expect(discardedSpecies).toHaveLength(1)
+    const hke = discardedSpecies[0]!
+    expect(hke.speciesCode).toBe('HKE')
+    expect(hke.declaredWeight).toBeUndefined()
+    expect(hke.rejectedWeight).toBe(30)
+    expect(hke.discardReason).toBe('DIS')
   })
 
   it('should preserve declaredWeight from base species after merge', () => {
     const base = [makeSpecies('HKE', { declaredWeight: 500 })]
-    const prefill = [makePrefill('HKE', { faoZones: ['27.8.a'], rejectedWeight: 50 })]
+    const prefill = [makePrefill('HKE', { faoZones: ['27.8.a'] })]
 
-    const result = mergeSpeciesOnboardWithPrefill(base, prefill)
+    const { nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(result[0]!.declaredWeight).toBe(500)
+    expect(nextSpeciesOnboard[0]!.declaredWeight).toBe(500)
   })
 
   it('should handle empty inputs', () => {
-    expect(mergeSpeciesOnboardWithPrefill([], [])).toEqual([])
+    expect(mergeSpeciesOnboardWithPrefill([], [])).toEqual({ discardedSpecies: [], nextSpeciesOnboard: [] })
   })
 })

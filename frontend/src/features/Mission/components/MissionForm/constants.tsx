@@ -26,6 +26,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   controlQualityComments: undefined,
   controlUnits: [],
   cratesWeighingSamplingControl: undefined,
+  discardedSpecies: [],
   emitsAis: undefined,
   emitsVms: undefined,
   facade: undefined,

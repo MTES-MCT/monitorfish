@@ -14,6 +14,7 @@ export const dummyAction = {
   controlQualityComments: undefined,
   controlUnits: [],
   cratesWeighingSamplingControl: undefined,
+  discardedSpecies: [],
   districtCode: 'AY',
   emitsAis: undefined,
   emitsVms: undefined,

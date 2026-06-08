@@ -42,42 +42,48 @@ class GetSpeciesControlPrefillFromLogbook(
                 catch.presentation?.let { data.presentationCodes.add(it) }
             }
 
-        // From DIS messages: sum rejectedWeight and determine discardReason per species
+        // From DIS messages: one discard entry per (species, nature), where nature is DIM when the
+        // catch presentation is "DIM", otherwise DIS. RET (protected species) has no logbook signal.
         data class DisData(
             var rejectedWeight: Double,
-            var hasDim: Boolean,
+            val faoZones: MutableSet<String>,
         )
 
-        val disBySpecies = mutableMapOf<String, DisData>()
+        val disBySpeciesAndReason = mutableMapOf<Pair<String, DiscardReason>, DisData>()
         messages
             .filter { it.messageType == "DIS" }
             .mapNotNull { it.message as? DIS }
             .flatMap { it.catches }
             .forEach { catch ->
                 val species = catch.species ?: return@forEach
-                val data = disBySpecies.getOrPut(species) { DisData(0.0, false) }
+                val discardReason = if (catch.presentation == "DIM") DiscardReason.DIM else DiscardReason.DIS
+                val data = disBySpeciesAndReason.getOrPut(species to discardReason) { DisData(0.0, mutableSetOf()) }
                 data.rejectedWeight += catch.weight ?: 0.0
-                if (catch.presentation == "DIM") {
-                    data.hasDim = true
+                catch.faoZone?.let { data.faoZones.add(it) }
+            }
+
+        // Catch entries from FAR (no discardReason).
+        val catches =
+            farBySpecies.map { (species, farData) ->
+                SpeciesControl().apply {
+                    speciesCode = species
+                    faoZones = farData.faoZones.toList().takeIf { it.isNotEmpty() }
+                    presentationCodes = farData.presentationCodes.toList().takeIf { it.isNotEmpty() }
                 }
             }
 
-        // Merge FAR and DIS into SpeciesControl list
-        val allSpecies = farBySpecies.keys + disBySpecies.keys
-        return allSpecies.distinct().map { species ->
-            val farData = farBySpecies[species]
-            val disData = disBySpecies[species]
-
-            SpeciesControl().apply {
-                speciesCode = species
-                faoZones = farData?.faoZones?.toList()?.takeIf { it.isNotEmpty() }
-                presentationCodes = farData?.presentationCodes?.toList()?.takeIf { it.isNotEmpty() }
-                rejectedWeight = disData?.rejectedWeight?.takeIf { it > 0.0 }
-                discardReason =
-                    disData?.let {
-                        if (it.hasDim) DiscardReason.DIM else DiscardReason.DIS
-                    }
+        // Discard entries from DIS (one per species + nature).
+        val discards =
+            disBySpeciesAndReason.map { (key, disData) ->
+                val (species, reason) = key
+                SpeciesControl().apply {
+                    speciesCode = species
+                    rejectedWeight = disData.rejectedWeight.takeIf { it > 0.0 }
+                    discardReason = reason
+                    faoZones = disData.faoZones.toList().takeIf { it.isNotEmpty() }
+                }
             }
-        }
+
+        return catches + discards
     }
 }

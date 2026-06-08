@@ -159,6 +159,9 @@ class MissionActionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "discarded_species", columnDefinition = "jsonb")
+    val discardedSpecies: String? = null,
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
     @Column(name = "has_some_gears_seized")
@@ -250,6 +253,7 @@ class MissionActionEntity(
                 otherComments = missionAction.otherComments,
                 gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
+                discardedSpecies = mapper.writeValueAsString(missionAction.discardedSpecies),
                 isFromPoseidon = missionAction.isFromPoseidon,
                 isDeleted = missionAction.isDeleted,
                 isLastHaul = missionAction.isLastHaul,
@@ -339,6 +343,7 @@ class MissionActionEntity(
                     GearControl::class.java,
                 ),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+            discardedSpecies = deserializeJSONList(mapper, discardedSpecies, SpeciesControl::class.java),
             isDeleted = isDeleted,
             isLastHaul = isLastHaul ?: false,
             hasSomeGearsSeized = hasSomeGearsSeized,

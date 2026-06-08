@@ -194,7 +194,7 @@ class GetSpeciesControlPrefillFromLogbookUTests {
     }
 
     @Test
-    fun `execute Should set discardReason to DIM When at least one DIS catch has presentation DIM`() {
+    fun `execute Should split DIS catches into separate DIM and DIS discard entries`() {
         given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
         val catchDim =
             LogbookFishingCatch().also {
@@ -212,12 +212,44 @@ class GetSpeciesControlPrefillFromLogbookUTests {
 
         val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
 
-        assertThat(result.first().discardReason).isEqualTo(DiscardReason.DIM)
-        assertThat(result.first().rejectedWeight).isEqualTo(30.0)
+        assertThat(result).hasSize(2)
+        val dim = result.first { it.discardReason == DiscardReason.DIM }
+        assertThat(dim.speciesCode).isEqualTo("HKE")
+        assertThat(dim.rejectedWeight).isEqualTo(20.0)
+        val dis = result.first { it.discardReason == DiscardReason.DIS }
+        assertThat(dis.speciesCode).isEqualTo("HKE")
+        assertThat(dis.rejectedWeight).isEqualTo(10.0)
     }
 
     @Test
-    fun `execute Should merge FAR and DIS data for same species`() {
+    fun `execute Should collect faoZones on DIS discard entries`() {
+        given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
+        val catchA =
+            LogbookFishingCatch().also {
+                it.species = "NCA"
+                it.faoZone = "27.7.b"
+                it.weight = 200.0
+            }
+        val catchB =
+            LogbookFishingCatch().also {
+                it.species = "NCA"
+                it.faoZone = "27.7.c"
+                it.weight = 100.0
+            }
+        given(getLogbookMessages.execute(any(), any(), any(), any()))
+            .willReturn(listOf(makeDisMessage(listOf(catchA, catchB))))
+
+        val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
+
+        assertThat(result).hasSize(1)
+        val species = result.first()
+        assertThat(species.discardReason).isEqualTo(DiscardReason.DIS)
+        assertThat(species.rejectedWeight).isEqualTo(300.0)
+        assertThat(species.faoZones).containsExactlyInAnyOrder("27.7.b", "27.7.c")
+    }
+
+    @Test
+    fun `execute Should return separate catch and discard entries for the same species`() {
         given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
         val farCatch =
             LogbookFishingCatch().also {
@@ -236,13 +268,15 @@ class GetSpeciesControlPrefillFromLogbookUTests {
 
         val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
 
-        assertThat(result).hasSize(1)
-        val species = result.first()
-        assertThat(species.speciesCode).isEqualTo("HKE")
-        assertThat(species.faoZones).containsExactly("27.8.a")
-        assertThat(species.presentationCodes).containsExactly("GUT")
-        assertThat(species.rejectedWeight).isEqualTo(50.0)
-        assertThat(species.discardReason).isEqualTo(DiscardReason.DIS)
+        assertThat(result).hasSize(2)
+        val catch = result.first { it.discardReason == null }
+        assertThat(catch.speciesCode).isEqualTo("HKE")
+        assertThat(catch.faoZones).containsExactly("27.8.a")
+        assertThat(catch.presentationCodes).containsExactly("GUT")
+        assertThat(catch.rejectedWeight).isNull()
+        val discard = result.first { it.discardReason == DiscardReason.DIS }
+        assertThat(discard.speciesCode).isEqualTo("HKE")
+        assertThat(discard.rejectedWeight).isEqualTo(50.0)
     }
 
     @Test

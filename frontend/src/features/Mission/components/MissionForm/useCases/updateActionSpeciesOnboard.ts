@@ -45,52 +45,56 @@ export const updateActionSpeciesOnboard =
         underSizedWeight: undefined
       }))
 
-    const nextSpeciesOnboard = E_ISR_ENABLED
+    const { discardedSpecies, nextSpeciesOnboard } = E_ISR_ENABLED
       ? mergeSpeciesOnboardWithPrefill(baseSpecies, prefillResult?.data ?? [])
-      : baseSpecies
+      : { discardedSpecies: [], nextSpeciesOnboard: baseSpecies }
 
     setFieldValue('speciesOnboard', nextSpeciesOnboard)
+    setFieldValue('discardedSpecies', discardedSpecies)
 
     return nextSpeciesOnboard
   }
 
+/**
+ * Splits the logbook prefill into:
+ * - `nextSpeciesOnboard`: the risk factor catches enriched with FAR metadata (faoZones, presentationCodes).
+ * - `discardedSpecies`: one entry per logbook discard (DIS/DIM), kept separate from the catches.
+ */
 export function mergeSpeciesOnboardWithPrefill(
   riskFactorSpecies: MissionAction.SpeciesControl[],
   prefillData: Logbook.SpeciesControlPrefill[]
-): MissionAction.SpeciesControl[] {
-  const prefillBySpecies = new Map(prefillData.map(p => [p.speciesCode, p]))
+): { discardedSpecies: MissionAction.SpeciesControl[]; nextSpeciesOnboard: MissionAction.SpeciesControl[] } {
+  // Catch prefill entries (no discardReason) carry the FAR metadata to merge into the risk factor catches.
+  const catchPrefillBySpecies = new Map(prefillData.filter(p => !p.discardReason).map(p => [p.speciesCode, p]))
 
-  const merged = riskFactorSpecies.map(specy => {
-    const prefill = prefillBySpecies.get(specy.speciesCode)
+  const nextSpeciesOnboard = riskFactorSpecies.map(specy => {
+    const prefill = catchPrefillBySpecies.get(specy.speciesCode)
     if (!prefill) {
       return specy
     }
 
     return {
       ...specy,
-      discardReason: prefill.discardReason ?? specy.discardReason,
       faoZones: prefill.faoZones ?? specy.faoZones,
-      presentationCodes: prefill.presentationCodes ?? specy.presentationCodes,
-      rejectedWeight: prefill.rejectedWeight ?? specy.rejectedWeight
+      presentationCodes: prefill.presentationCodes ?? specy.presentationCodes
     }
   })
 
-  // Add species from prefill that are not in the risk factor list (DIS-only species)
-  const riskFactorCodes = new Set(riskFactorSpecies.map(s => s.speciesCode))
-  const disOnlySpecies = prefillData
-    .filter(p => p.speciesCode && !riskFactorCodes.has(p.speciesCode))
+  // Discard prefill entries (with a discardReason) become standalone discard entries.
+  const discardedSpecies = prefillData
+    .filter(p => !!p.discardReason && !!p.speciesCode)
     .map(p => ({
       controlledWeight: undefined,
       declaredWeight: undefined,
       discardReason: p.discardReason,
       faoZones: p.faoZones,
       nbFish: undefined,
-      presentationCodes: p.presentationCodes,
+      presentationCodes: undefined,
       rejectedWeight: p.rejectedWeight,
       speciesCode: p.speciesCode as string,
       underSized: false,
       underSizedWeight: undefined
     }))
 
-  return [...merged, ...disOnlySpecies]
+  return { discardedSpecies, nextSpeciesOnboard }
 }

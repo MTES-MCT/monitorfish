@@ -163,34 +163,34 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
-    // FAO zones are required on every species for completion, including the prefilled discard species
-    // NEP (index 2) and BIB (index 3) — otherwise the action stays "À compléter".
+    // FAO zones are required on every catch for completion. The risk factor prefills two catches
+    // HKE (index 0) and BLI (index 1); logbook discards now live in the dedicated "Rejets" card,
+    // so NEP/BIB are no longer rows in "Espèces à bord".
     cy.fill('Zone de pêche', ['27.8.b'], { index: 0 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
     cy.fill('Ajouter une espèce', 'COD')
-    // COD is added after the 4 prefilled species [HKE, BLI, NEP, BIB], so it is species index 4.
-    // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[4]…"]').type()`
+    // COD is added after the 2 prefilled catches [HKE, BLI], so it is species index 2.
+    // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()`
     // instead of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` request whose
     // response re-renders and remounts the field; `cy.fill()` caches the field element and detaches
     // between its internal `.clear()` and `.type()`, whereas `cy.get()` re-queries the input fresh.
     // The fields are freshly added/opened (empty), so no `.clear()` is needed.
-    // Label-based `{ index }` values differ per field: "Ajouter sous-taille", "Présentation du poisson"
-    // and "Zone de pêche" render for every species (COD = index 4), whereas "Ajouter rejet" and
-    // "Nature du rejet" only render for species without a prefilled rejet — NEP/BIB already show a
-    // rejet input — so among HKE, BLI, COD, COD is index 2.
-    cy.get('[id="speciesOnboard[4].declaredWeight"]').type('10', { force: true })
-    cy.get('[id="speciesOnboard[4].controlledWeight"]').type('20', { force: true })
-    cy.clickButton('Sous-taille', { index: 4 })
+    cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
+    cy.get('[id="speciesOnboard[2].controlledWeight"]').type('20', { force: true })
+    cy.clickButton('Sous-taille', { index: 2 })
     cy.wait(200)
-    cy.get('[id="speciesOnboard[4].underSizedWeight"]').type('5', { force: true })
-    cy.clickButton('Rejet', { index: 2 })
+    cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
+    cy.fill('Présentation du poisson', ['FIL - En filets'], { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+
+    // Rejets — BIB is prefilled from the logbook DIS (DIM) message; add COD as a rejected species (RET).
+    // "Qté rejetée" / "Nature du rejet" only render in the "Rejets" card (BIB index 0, COD index 1).
+    // "Zone de pêche" appears in both cards (HKE 0, BLI 1, COD 2 in "Espèces à bord"; BIB 3, COD 4 in
+    // "Rejets"), so the COD discard zone is index 4.
+    cy.fill('Ajouter une espèce rejetée', 'COD')
     cy.wait(200)
-    cy.get('[id="speciesOnboard[4].rejectedWeight"]').type('2', { force: true })
-    cy.wait(250)
-    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 2 })
-    cy.fill('Présentation du poisson', ['FIL - En filets'], { index: 4 })
+    cy.fill('Qté rejetée', 2, { index: 1 })
+    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 1 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 4 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
@@ -328,15 +328,19 @@ context('Side Window > Mission Form > Sea Control', () => {
           underSizedSeparateStowage: 'YES',
           underSizedSeparateRecording: 'NO',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
+          // Catches only — logbook discards are no longer merged here, they live in `discardedSpecies`.
+          // HKE and BLI are risk factor catches; the FAR-only NEP catch is dropped (not in the risk
+          // factor) and the BIB discard moves to `discardedSpecies`.
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'HKE', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
-            // NEP and BIB are injected by the real species-control-prefill endpoint (logbook discards).
-            // We assert their presence/position here; their exact prefilled discard values are covered
-            // by the dedicated "FAR and DIS logbook data" prefill test.
-            { faoZones: ['27.8.b'], speciesCode: 'NEP', underSized: false },
-            { discardReason: 'DIM', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'BIB', underSized: false },
-            { controlledWeight: 20, declaredWeight: 10, discardReason: 'RET', faoZones: ['27.8.b'], nbFish: null, presentationCodes: ['FIL'], rejectedWeight: 2, speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
+            { controlledWeight: 20, declaredWeight: 10, faoZones: ['27.8.b'], nbFish: null, presentationCodes: ['FIL'], speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
+          ],
+          // BIB is prefilled from the real species-control-prefill endpoint (logbook DIM discard);
+          // COD (RET) is added manually in the "Rejets" card.
+          discardedSpecies: [
+            { discardReason: 'DIM', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'BIB' },
+            { discardReason: 'RET', faoZones: ['27.8.b'], rejectedWeight: 2, speciesCode: 'COD' }
           ],
           speciesQuantitySeized: 6289.5,
           speciesSizeControlled: 'NO',
@@ -1018,7 +1022,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     }
   )
 
-  it('Should prefill speciesOnboard with FAR and DIS logbook data (faoZones, presentationCodes, rejectedWeight, discardReason)', () => {
+  it('Should prefill speciesOnboard catches and the "Rejets" card from FAR and DIS logbook data', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1026,22 +1030,14 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 2 }, statusCode: 201 }).as('postMissionAction3')
 
+    // The prefill endpoint now returns catch entries (FAR metadata, no discardReason) merged into the
+    // risk factor catches, and discard entries (one per species + nature) that feed the "Rejets" card.
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
       body: [
-        {
-          discardReason: 'DIS',
-          faoZones: ['27.8.a', '27.8.b'],
-          presentationCodes: ['WHL', 'GUT'],
-          rejectedWeight: 50.0,
-          speciesCode: 'HKE'
-        },
-        {
-          discardReason: 'DIM',
-          faoZones: ['27.8.c'],
-          presentationCodes: ['WHL'],
-          rejectedWeight: 5.0,
-          speciesCode: 'BLI'
-        }
+        { faoZones: ['27.8.a', '27.8.b'], presentationCodes: ['WHL', 'GUT'], speciesCode: 'HKE' },
+        { faoZones: ['27.8.c'], presentationCodes: ['WHL'], speciesCode: 'BLI' },
+        { discardReason: 'DIS', faoZones: ['27.8.a', '27.8.b'], rejectedWeight: 50.0, speciesCode: 'HKE' },
+        { discardReason: 'DIM', faoZones: ['27.8.c'], rejectedWeight: 5.0, speciesCode: 'BLI' }
       ],
       statusCode: 200
     })
@@ -1057,11 +1053,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Verify pre-filled values visible in the form
 
-    // HKE species row: rejected weight should be visible (replaces the "Ajouter rejet" button)
+    // The discards are now displayed in the dedicated "Rejets" card.
+    cy.contains('Rejets').should('exist')
     cy.contains('Qté rejetée').should('exist')
     cy.contains('Nature du rejet').should('exist')
 
-    // Verify the request body includes all new pre-filled fields
+    // Verify the request body includes the split catches / discards
     cy.fill('Saisi par', 'Gaumont')
     cy.wait(500)
 
@@ -1072,17 +1069,27 @@ context('Side Window > Mission Form > Sea Control', () => {
           speciesOnboard: [
             {
               declaredWeight: 471.2,
-              discardReason: 'DIS',
               faoZones: ['27.8.a', '27.8.b'],
               presentationCodes: ['WHL', 'GUT'],
-              rejectedWeight: 50.0,
               speciesCode: 'HKE'
             },
             {
               declaredWeight: 13.46,
-              discardReason: 'DIM',
               faoZones: ['27.8.c'],
               presentationCodes: ['WHL'],
+              speciesCode: 'BLI'
+            }
+          ],
+          discardedSpecies: [
+            {
+              discardReason: 'DIS',
+              faoZones: ['27.8.a', '27.8.b'],
+              rejectedWeight: 50.0,
+              speciesCode: 'HKE'
+            },
+            {
+              discardReason: 'DIM',
+              faoZones: ['27.8.c'],
               rejectedWeight: 5.0,
               speciesCode: 'BLI'
             }
@@ -1095,7 +1102,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('eq', 201)
   })
 
-  it('Should dismiss sous-taille and rejet fields and restore add-buttons when delete buttons are clicked', () => {
+  it('Should dismiss the sous-taille field and remove extra rejet lines when delete buttons are clicked', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1109,13 +1116,17 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.contains('Qté ss-taille').should('not.exist')
     cy.contains('Sous-taille').should('be.visible')
 
-    // Show rejected field, fill it, then dismiss it
-    cy.clickButton('Rejet')
-    cy.fill('Qté rejetée', 2)
-    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    // Add a rejected species in the "Rejets" card: a single line has no per-line delete button.
+    cy.fill('Ajouter une espèce rejetée', 'COD')
+    cy.contains('Qté rejetée').should('exist')
+    cy.contains('Nature du rejet').should('exist')
+    cy.contains('Retirer le rejet').should('not.exist')
+
+    // "Ajouter rejet" adds a second line, which makes the per-line delete buttons appear.
+    cy.clickButton('Ajouter rejet')
+    cy.get('[id="discardedSpecies[1].rejectedWeight"]').should('exist')
     cy.clickButton('Retirer le rejet')
-    cy.contains('Qté rejetée').should('not.exist')
-    cy.contains('Nature du rejet').should('not.exist')
-    cy.contains('Rejet').should('be.visible')
+    cy.get('[id="discardedSpecies[1].rejectedWeight"]').should('not.exist')
+    cy.contains('Qté rejetée').should('exist')
   })
 })

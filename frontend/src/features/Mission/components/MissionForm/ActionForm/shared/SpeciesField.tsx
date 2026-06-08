@@ -1,7 +1,6 @@
 import { useGetFaoAreasQuery } from '@api/faoAreas'
 import { useGetSpeciesQuery } from '@api/specy'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
-import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
@@ -12,7 +11,6 @@ import {
   FormikCheckbox,
   FormikCheckPicker,
   FormikNumberInput,
-  FormikSelect,
   FormikTextarea,
   Icon,
   IconButton,
@@ -23,7 +21,6 @@ import {
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
-import { append, remove as ramdaRemove } from 'ramda'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -39,17 +36,12 @@ import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Specy } from 'domain/types/specy'
 
-const DISCARD_REASON_OPTIONS: Array<Option<string>> = Object.entries(DISCARD_REASON_LABEL).map(([code, label]) => ({
-  label: `${code} - ${label}`,
-  value: code
-}))
-
 const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpeciesPresentation).map(([code, label]) => ({
   label: `${code} - ${label}`,
   value: code
 }))
 
-type VisibilityState = { rejected: boolean; underSized: boolean }
+type VisibilityState = { underSized: boolean }
 
 type SpeciesFieldProps = Readonly<{
   controlledWeightLabel: string
@@ -70,7 +62,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
   const [visibilityByIndex, setVisibilityByIndex] = useState<VisibilityState[]>(() =>
     (input.value ?? []).map(s => ({
-      rejected: s.rejectedWeight !== undefined && s.rejectedWeight !== null,
       underSized: s.underSizedWeight !== undefined && s.underSizedWeight !== null
     }))
   )
@@ -142,23 +133,20 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       return
     }
 
-    const nextSpeciesOnboard = append(
-      {
-        controlledWeight: undefined,
-        declaredWeight: undefined,
-        discardReason: undefined,
-        faoZones: isEISREnabled ? values.faoAreas : undefined,
-        nbFish: undefined,
-        presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
-        rejectedWeight: undefined,
-        speciesCode: newSpecy.code,
-        underSized: false,
-        underSizedWeight: undefined
-      },
-      input.value ?? []
-    )
+    const newSpecies: MissionAction.SpeciesControl = {
+      controlledWeight: undefined,
+      declaredWeight: undefined,
+      faoZones: isEISREnabled ? values.faoAreas : undefined,
+      nbFish: undefined,
+      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+      rejectedWeight: undefined,
+      speciesCode: newSpecy.code,
+      underSized: false,
+      underSizedWeight: undefined
+    }
+    const nextSpeciesOnboard = [...(input.value ?? []), newSpecies]
 
-    setVisibilityByIndex(prev => [...prev, { rejected: false, underSized: false }])
+    setVisibilityByIndex(prev => [...prev, { underSized: false }])
     updateSegments({
       ...values,
       speciesOnboard: nextSpeciesOnboard
@@ -187,7 +175,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       throw new FrontendError('`input.value` is undefined')
     }
 
-    const nextSpeciesOnboard = ramdaRemove(index, 1, input.value)
+    const nextSpeciesOnboard = input.value.filter((_, currentIndex) => currentIndex !== index)
 
     setVisibilityByIndex(prev => {
       const next = [...prev]
@@ -205,16 +193,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const openUnderSized = (index: number) => {
     setVisibilityByIndex(prev => {
       const next = [...prev]
-      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), underSized: true }
-
-      return next
-    })
-  }
-
-  const openRejected = (index: number) => {
-    setVisibilityByIndex(prev => {
-      const next = [...prev]
-      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), rejected: true }
+      next[index] = { ...(next[index] ?? { underSized: false }), underSized: true }
 
       return next
     })
@@ -223,22 +202,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const closeUnderSized = (index: number) => {
     setVisibilityByIndex(prev => {
       const next = [...prev]
-      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), underSized: false }
+      next[index] = { ...(next[index] ?? { underSized: false }), underSized: false }
 
       return next
     })
     setFieldValue(`speciesOnboard[${index}].underSizedWeight`, undefined)
-  }
-
-  const closeRejected = (index: number) => {
-    setVisibilityByIndex(prev => {
-      const next = [...prev]
-      next[index] = { ...(next[index] ?? { rejected: false, underSized: false }), rejected: false }
-
-      return next
-    })
-    setFieldValue(`speciesOnboard[${index}].rejectedWeight`, undefined)
-    setFieldValue(`speciesOnboard[${index}].discardReason`, undefined)
   }
 
   const isUnderSizedShown = (index: number): boolean => {
@@ -248,15 +216,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     }
 
     return visibilityByIndex[index]?.underSized ?? false
-  }
-
-  const isRejectedShown = (index: number): boolean => {
-    const species = input.value?.[index]
-    if (species?.rejectedWeight !== undefined && species?.rejectedWeight !== null) {
-      return true
-    }
-
-    return visibilityByIndex[index]?.rejected ?? false
   }
 
   if (!speciesAsOptions.length || !customSearch) {
@@ -356,12 +315,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 <StyledSingleTag onDelete={() => remove(index)}>{`${
                   specyOnboard.speciesCode
                 } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
-                {isEISREnabled && !isUnderSizedShown(index) && <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
-                  Sous-taille
-                </AddButton>}
-                {isEISREnabled && !isRejectedShown(index) && <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openRejected(index)}>
-                  Rejet
-                </AddButton>}
+                {isEISREnabled && !isUnderSizedShown(index) && (
+                  <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
+                    Sous-taille
+                  </AddButton>
+                )}
                 {isLandControl && isEISREnabled && (
                   <FormikCheckbox label="Espèce non débarquée" name={`speciesOnboard[${index}].isNotLanded`} />
                 )}
@@ -380,22 +338,6 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                           Icon={Icon.Delete}
                           onClick={() => closeUnderSized(index)}
                           title="Retirer la sous-taille"
-                        />
-                      </>
-                    )}
-                    {isRejectedShown(index) && (
-                      <>
-                        <FormikNumberInput label="Qté rejetée" name={`speciesOnboard[${index}].rejectedWeight`} />
-                        <DeleteButton
-                          accent={Accent.SECONDARY}
-                          Icon={Icon.Delete}
-                          onClick={() => closeRejected(index)}
-                          title="Retirer le rejet"
-                        />
-                        <FormikSelect
-                          label="Nature du rejet"
-                          name={`speciesOnboard[${index}].discardReason`}
-                          options={DISCARD_REASON_OPTIONS}
                         />
                       </>
                     )}

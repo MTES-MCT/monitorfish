@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import { getSeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
 import { useIsEISREnabled } from '../hooks/useIsEISREnabled'
 import { ControlQualityField } from './shared/ControlQualityField'
+import { DiscardedSpeciesField } from './shared/DiscardedSpeciesField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -65,6 +66,8 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
             <GearsField />
 
             <SpeciesField controlledWeightLabel="Qté estimée" />
+
+            {isEISREnabled && <DiscardedSpeciesField />}
 
             <SeizureFieldsetGroup isLight legend="Appréhension et déroutement">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />

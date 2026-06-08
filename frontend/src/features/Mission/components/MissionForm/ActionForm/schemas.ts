@@ -74,6 +74,16 @@ function makeEIsrSpeciesOnboardSchema(isEISR: boolean) {
     : object({})
 }
 
+function makeDiscardedSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        discardReason: string().required(HIDDEN_ERROR),
+        rejectedWeight: number().required(HIDDEN_ERROR),
+        faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
+      })
+    : object({})
+}
+
 // -----------------------------------------------------------------------------
 // Form Schema Validators
 
@@ -194,6 +204,7 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
 
       // Inspection des captures (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
+      discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
       // Quantités saisies
       speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
@@ -248,6 +259,7 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
       speciesSizeControlled: string().required(HIDDEN_ERROR),
       separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
+      discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
       // Engins à bord
       gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),

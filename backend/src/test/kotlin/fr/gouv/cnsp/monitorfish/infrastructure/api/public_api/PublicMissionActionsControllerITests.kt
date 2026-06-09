@@ -7,9 +7,13 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichPublicMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichedMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
@@ -50,6 +54,9 @@ class PublicMissionActionsControllerITests {
     @MockitoBean
     private lateinit var patchMissionAction: PatchMissionAction
 
+    @MockitoBean
+    private lateinit var enrichPublicMissionAction: EnrichPublicMissionAction
+
     private fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!
 
     @Test
@@ -73,6 +80,26 @@ class PublicMissionActionsControllerITests {
                 ),
             ),
         )
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(
+                missionAction = invocation.getArgument(0),
+                vessel =
+                    Vessel(
+                        id = 1,
+                        flagState = CountryCode.FR,
+                        hasLogbookEsacapt = false,
+                        length = 24.0,
+                        vesselType = "Chalutier",
+                        imo = "1234567",
+                    ),
+                tripNumber = "20210001",
+                pnoReportId = "FAKE_PNO_REPORT_ID",
+                pnoPurpose = LogbookMessagePurpose.LAN,
+                lastDeparturePortLocode = "FRLEH",
+                lastDeparturePortName = "Le Havre",
+                lastDepartureDateTime = ZonedDateTime.parse("2020-10-01T08:00Z"),
+            )
+        }
 
         // When
         api
@@ -80,7 +107,19 @@ class PublicMissionActionsControllerITests {
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(1)))
+            // Flattened (`@JsonUnwrapped`) base mission action fields
             .andExpect(jsonPath("$[0].actionDatetimeUtc", equalTo("2020-10-06T16:25:00Z")))
+            // Vessel fields
+            .andExpect(jsonPath("$[0].vesselLength", equalTo(24.0)))
+            .andExpect(jsonPath("$[0].vesselType", equalTo("Chalutier")))
+            .andExpect(jsonPath("$[0].imo", equalTo("1234567")))
+            // JPE fields
+            .andExpect(jsonPath("$[0].tripNumber", equalTo("20210001")))
+            .andExpect(jsonPath("$[0].pnoReportId", equalTo("FAKE_PNO_REPORT_ID")))
+            .andExpect(jsonPath("$[0].pnoPurpose", equalTo("LAN")))
+            .andExpect(jsonPath("$[0].lastDeparturePortLocode", equalTo("FRLEH")))
+            .andExpect(jsonPath("$[0].lastDeparturePortName", equalTo("Le Havre")))
+            .andExpect(jsonPath("$[0].lastDepartureDateTime", equalTo("2020-10-01T08:00:00Z")))
 
         runBlocking {
             Mockito.verify(getMissionActions).execute(123)
@@ -93,6 +132,12 @@ class PublicMissionActionsControllerITests {
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
         val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
         given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(
+                missionAction = invocation.getArgument(0),
+                tripNumber = "20210001",
+            )
+        }
 
         // When
         api
@@ -109,6 +154,7 @@ class PublicMissionActionsControllerITests {
             )
             // Then
             .andExpect(status().isOk)
+            .andExpect(jsonPath("$.tripNumber", equalTo("20210001")))
     }
 
     @Test

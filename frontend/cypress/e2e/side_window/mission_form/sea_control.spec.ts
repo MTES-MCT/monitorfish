@@ -967,8 +967,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[id="gearOnboard[1].averageWireThickness"]').should('not.exist')
     cy.get('[name="gearOnboard[1].wireType"]').should('not.exist')
 
+    // LLS (Lignes et hameçons) is a marking-not-applicable category, so it shows no marking field
+    // and defaults gearMarkingIsCompliant to NOT_APPLICABLE.
     cy.fill('Engin contrôlé', 'Oui', { index: 1 })
-    cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
 
     cy.fill('Saisi par', 'Marlin')
 
@@ -980,7 +981,7 @@ context('Side Window > Mission Form > Sea Control', () => {
             {
               averageWireThickness: null,
               gearCode: 'LLS',
-              gearMarkingIsCompliant: 'YES',
+              gearMarkingIsCompliant: 'NOT_APPLICABLE',
               gearWasControlled: true,
               wireType: null
             },

@@ -149,7 +149,8 @@ INSERT INTO infractions (
     (     34314, 'Reg test',   'Cat test', 'Infraction test'),
     (     31117, 'Reg test',   'Cat test', 'Infraction test'),
     (     4789, 'Reg test',   'Cat test', 'Infraction test'),
-    (     30047, 'Reg test',   'Cat test', 'Infraction test');
+    (     30047, 'Reg test',   'Cat test', 'Infraction test'),
+    (     30013, 'Reg test',   'Cat test', 'Infraction test');
 
 INSERT INTO public.threats (
      id,                                    name) VALUES

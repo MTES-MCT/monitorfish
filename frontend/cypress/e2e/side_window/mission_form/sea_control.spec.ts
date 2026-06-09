@@ -932,7 +932,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     })
   })
 
-  it('Should show wire fields only for Lignes et hameçons gears and send the expected data to the API', () => {
+  it('Should show wire fields only for Chaluts and Sennes traînantes gears and send the expected data to the API', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -950,24 +950,24 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.wait(500)
 
-    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('not.exist')
-    cy.get('[name="gearOnboard[0].wireType"]').should('not.exist')
+    // OTB (Chaluts category) is prefilled at index 0 — wire fields should be shown.
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('exist')
+    cy.get('[name="gearOnboard[0].wireType"]').should('exist')
 
     cy.fill('Engin contrôlé', 'Non', { index: 0 })
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Maillage déclaré', 60, { index: 0 })
-
-    // Add an LLS gear (Lignes et hameçons category) — wire fields should appear
-    cy.fill('Ajouter un engin', 'LLS')
-    cy.wait(250)
-    cy.get('[id="gearOnboard[1].averageWireThickness"]').should('exist')
-    cy.get('[name="gearOnboard[1].wireType"]').should('exist')
-
-    cy.fill('Engin contrôlé', 'Oui', { index: 1 })
-    cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
     cy.fill('Epaisseur moyenne de fil', 1.5)
     cy.fill('Type de fil', 'Simple')
 
+    // Add an LLS gear (Lignes et hameçons category) — wire fields should NOT appear
+    cy.fill('Ajouter un engin', 'LLS')
+    cy.wait(250)
+    cy.get('[id="gearOnboard[1].averageWireThickness"]').should('not.exist')
+    cy.get('[name="gearOnboard[1].wireType"]').should('not.exist')
+
+    cy.fill('Engin contrôlé', 'Oui', { index: 1 })
+    cy.fill("Marquage de l'engin conforme", 'Oui', { index: 1 })
 
     cy.fill('Saisi par', 'Marlin')
 
@@ -977,18 +977,18 @@ context('Side Window > Mission Form > Sea Control', () => {
         body: {
           gearOnboard: [
             {
-              averageWireThickness: 1.5,
+              averageWireThickness: null,
               gearCode: 'LLS',
               gearMarkingIsCompliant: 'YES',
               gearWasControlled: true,
-              wireType: 'SINGLE'
+              wireType: null
             },
             {
-              averageWireThickness: null,
+              averageWireThickness: 1.5,
               gearCode: 'OTB',
               gearMarkingIsCompliant: 'NO',
               gearWasControlled: false,
-              wireType: null
+              wireType: 'SINGLE'
             }
           ]
         }

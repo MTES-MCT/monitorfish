@@ -1,4 +1,3 @@
-
 context('Vessel groups', () => {
   it('A dynamic vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
@@ -129,7 +128,7 @@ context('Vessel groups', () => {
       cy.get('.Component-SingleTag')
         .eq(3)
         .within(() => {
-          cy.get('button').click()
+          cy.get('button').click({ force: true })
         })
     })
 
@@ -237,9 +236,11 @@ context('Vessel groups', () => {
      * Select vessels
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
-    cy.get('.Component-SingleTag').first().within(() => {
-      cy.get('button').click()
-    })
+    cy.get('.Component-SingleTag')
+      .first()
+      .within(() => {
+        cy.get('button').click()
+      })
     cy.get('.Component-SingleTag').within(() => {
       cy.get('button').click()
     })

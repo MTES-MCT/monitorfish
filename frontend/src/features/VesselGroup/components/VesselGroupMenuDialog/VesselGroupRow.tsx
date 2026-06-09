@@ -230,10 +230,13 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
           confirmationButtonLabel="Confirmer la suppression"
           message={
             <>
-              <p>Êtes-vous sûr de vouloir supprimer ce groupe de navires ?</p>
+              <p>Êtes-vous sûr de vouloir</p>
+              <Bold>supprimer ce groupe de navires ?</Bold>
               {vesselGroup.sharing === Sharing.SHARED && (
                 <StyledBold>
-                  Attention, il sera également supprimé pour les autres utilisateurs avec lesquels il est partagé.
+                  Attention, il sera également supprimé pour
+                  <br />
+                  les autres utilisateurs avec lesquels il est partagé.
                 </StyledBold>
               )}
             </>
@@ -249,6 +252,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
 const StyledBold = styled(Bold)`
   color: ${p => p.theme.color.maximumRed};
+  margin-top: 4px;
 `
 
 const StyledLink = styled(Link)<{

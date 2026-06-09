@@ -63,7 +63,7 @@ context('Side Window > Logbook Prior Notification Form > Behavior', () => {
     cy.fill("Points d'attention identifiés par le CNSP", "Un point d'attention.")
 
     cy.clickButton('Fermer')
-    cy.contains('Abandon de préavis').should('be.visible')
+    cy.contains('Quitter sans enregistrer').should('be.visible')
     cy.clickButton('Annuler')
 
     cy.log('Saving the form should reset the dirty state')

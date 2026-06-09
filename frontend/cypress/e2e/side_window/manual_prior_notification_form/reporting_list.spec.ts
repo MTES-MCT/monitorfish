@@ -92,7 +92,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
 
         // When
         cy.clickButton('Archiver ce signalement')
-        cy.clickButton('Archiver')
+        cy.clickButton("Confirmer l'archivage")
         cy.wait('@archiveReporting')
 
         // Then
@@ -116,7 +116,7 @@ context('Side Window > Manual Prior Notification Form  > Reporting List', () => 
         cy.clickButton('Supprimer ce signalement')
 
         // Then
-        cy.contains('Êtes-vous sûr de vouloir supprimer ce signalement ?').should('be.visible')
+        cy.contains('Supprimer le signalement').should('be.visible')
 
         // When
         cy.clickButton('Confirmer la suppression')

@@ -47,7 +47,7 @@ context('Vessel sidebar reporting tab', () => {
     // Archive the newly created reporting
     cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
     cy.clickButton('Archiver 1 signalement')
-    cy.clickButton('Archiver')
+    cy.clickButton("Confirmer l'archivage")
   })
 
   it('An observation reporting should be modified to an Infraction suspicion', () => {
@@ -120,7 +120,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.getDataCy('reporting-card').eq(0).contains('Transbordement / NATINF 27717').should('be.visible')
     cy.get('*[data-cy="archive-reporting-card"]').eq(0).click()
     // Then, we confirm the reporting deletion
-    cy.clickButton('Archiver')
+    cy.clickButton("Confirmer l'archivage")
 
     // Then
     cy.get('*[data-cy="reporting-card"]').should('not.exist')
@@ -145,7 +145,7 @@ context('Vessel sidebar reporting tab', () => {
     cy.wait(200)
     cy.get('[data-cy="archive-reporting-card"]').eq(0).click()
     // Then, we confirm the reporting deletion
-    cy.clickButton('Archiver')
+    cy.clickButton("Confirmer l'archivage")
     cy.get('*[data-cy="vessel-sidebar-archived-reporting"]').should('exist')
 
     // Then

@@ -15,7 +15,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Type de signalement', ["Suspicions d'infraction"])
+      cy.fill('Type de signalement', "Suspicions d'infraction")
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -23,7 +23,7 @@ context('Side Window > Reporting List > Actions', () => {
         // When
         cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
         cy.getDataCy('archive-reporting-cards').click({ force: true })
-        cy.clickButton('Archiver')
+        cy.clickButton("Confirmer l'archivage")
 
         cy.wait('@archiveReportings').then(archiveInterception => {
           if (!archiveInterception.request) {
@@ -47,7 +47,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Type de signalement', ["Suspicions d'infraction"])
+      cy.fill('Type de signalement', "Suspicions d'infraction")
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -137,7 +137,7 @@ context('Side Window > Reporting List > Actions', () => {
         withinSelector: 'tr:contains("COURANT MAIN PROFESSEUR")'
       })
 
-      cy.clickButton('Confirmer la suppression')
+      cy.clickButton('Supprimer')
       cy.clickButton('Valider')
 
       cy.wait('@updateReporting').then(({ response }) => {
@@ -204,7 +204,7 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
-    cy.fill('Type de signalement', ["Suspicions d'infraction"])
+    cy.fill('Type de signalement', "Suspicions d'infraction")
     cy.get('table .rs-checkbox-control').eq(0).click({ force: true })
 
     // When

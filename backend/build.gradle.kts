@@ -192,6 +192,11 @@ configure<KtlintExtension> {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 
+    // Run tests in UTC, matching the production runtime. Without this, timestamps read from
+    // `timestamp without time zone` columns are materialized in the host's default timezone,
+    // which breaks time-sensitive assertions on developer machines outside UTC.
+    systemProperty("user.timezone", "UTC")
+
     testLogging {
         events("passed")
     }

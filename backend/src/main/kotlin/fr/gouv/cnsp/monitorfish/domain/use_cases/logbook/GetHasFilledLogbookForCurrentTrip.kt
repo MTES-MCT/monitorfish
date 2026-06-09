@@ -22,7 +22,8 @@ class GetHasFilledLogbookForCurrentTrip(
                 hoursFromNow = sevenDaysInHours,
             )?.let {
                 it.firstPositionAtSeaOfLastTripDateTime?.let { firstPositionAtSeaOfLastTripDateTime ->
-                    it.departureDateTime >= firstPositionAtSeaOfLastTripDateTime
+                    // We substract 6 hours to avoid missing DEP sent before first position at sea
+                    it.departureDateTime >= firstPositionAtSeaOfLastTripDateTime.minusHours(6)
                 } ?: false
             } ?: false
     }

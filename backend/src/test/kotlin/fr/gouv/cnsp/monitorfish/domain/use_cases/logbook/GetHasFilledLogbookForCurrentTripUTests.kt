@@ -50,7 +50,7 @@ class GetHasFilledLogbookForCurrentTripUTests {
             ),
         ).willReturn(
             CurrentTripDepAndPositionAtSea(
-                departureDateTime = ZonedDateTime.now().minusHours(1),
+                departureDateTime = ZonedDateTime.now().minusHours(9),
                 firstPositionAtSeaOfLastTripDateTime = ZonedDateTime.now(),
             ),
         )

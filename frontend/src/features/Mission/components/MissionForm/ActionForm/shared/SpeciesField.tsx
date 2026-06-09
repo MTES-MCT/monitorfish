@@ -309,7 +309,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
             <Row
               // eslint-disable-next-line react/no-array-index-key
               key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
-              style={{ marginTop: index === 0 ? '16px' : 0 }}
+              $isLast={index + 1 === input.value?.length}
             >
               <TagRow>
                 <StyledSingleTag onDelete={() => remove(index)}>{`${
@@ -408,8 +408,10 @@ const TagRow = styled.div`
   margin-top: 8px;
 `
 
-const Row = styled.div`
-  margin-bottom: 40px;
+const Row = styled.div<{
+  $isLast: boolean
+}>`
+  margin-bottom: ${p => (p.$isLast ? 0 : 40)}px;
 
   > legend {
     margin: 24px 0 8px;

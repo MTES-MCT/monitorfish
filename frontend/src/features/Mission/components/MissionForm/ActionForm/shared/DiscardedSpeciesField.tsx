@@ -136,7 +136,7 @@ export function DiscardedSpeciesField() {
       {groups.length > 0 && (
         <>
           {groups.map(([speciesCode, indices], groupIndex) => (
-            <Row key={`discardedSpecies-${speciesCode}`} style={{ marginTop: groupIndex === 0 ? '8px' : 0 }}>
+            <Row key={`discardedSpecies-${speciesCode}`} $isLast={groupIndex + 1 === groups.length}>
               <TagRow>
                 <StyledSingleTag onDelete={() => removeSpecies(speciesCode)}>
                   {`${speciesCode} - ${getSpecyNameFromSpecyCode(speciesCode)}`}
@@ -222,8 +222,10 @@ const TagRow = styled.div`
   margin-top: 8px;
 `
 
-const Row = styled.div`
-  margin-bottom: 24px;
+const Row = styled.div<{
+  $isLast: boolean
+}>`
+  margin-bottom: ${p => (p.$isLast ? 0 : 40)}px;
 
   input[type='number'] {
     width: 112px;

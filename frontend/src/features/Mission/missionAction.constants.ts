@@ -45,7 +45,7 @@ export namespace MissionAction {
 
   export enum WireType {
     SINGLE = 'SINGLE',
-    THICK = 'THICK'
+    MANY = 'MANY'
   }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */

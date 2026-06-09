@@ -2,12 +2,12 @@ import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const FormHead = styled.div<{
+  $marginBottom?: number | undefined
   isAction?: boolean
-  marginBottom?: number | undefined
 }>`
   align-items: end;
   display: flex;
-  margin: ${p => (p.isAction ? '0px' : `24px 40px ${p.marginBottom ? p.marginBottom : '32'}px 40px`)};
+  margin: ${p => (p.isAction ? '0px' : `24px 40px ${p.$marginBottom ? p.$marginBottom : '32'}px 40px`)};
   padding-bottom: 8px;
   height: 32px;
   border-bottom: 1px solid ${THEME.color.slateGray};

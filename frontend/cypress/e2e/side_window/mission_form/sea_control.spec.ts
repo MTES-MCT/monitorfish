@@ -958,7 +958,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Engin contrôlé', 'Non', { index: 0 })
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Maillage déclaré', 60, { index: 0 })
-    cy.fill('Epaisseur moyenne de fil', 1.5)
+    cy.fill('Epaisseur moy. de fil  ', 1.5)
     cy.fill('Type de fil', 'Simple')
 
     // Add an LLS gear (Lignes et hameçons category) — wire fields should NOT appear

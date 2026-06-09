@@ -227,8 +227,8 @@ class JpaLogbookReportRepository(
             .firstOrNull()
             ?.let { row ->
                 CurrentTripDepAndPositionAtSea(
-                    departureDateTime = (row[0] as Timestamp).toInstant().atZone(UTC),
-                    firstPositionAtSeaOfLastTripDateTime = (row[1] as? Timestamp)?.toInstant()?.atZone(UTC),
+                    departureDateTime = (row[0] as LocalDateTime).atZone(UTC),
+                    firstPositionAtSeaOfLastTripDateTime = (row[1] as? LocalDateTime)?.atZone(UTC),
                 )
             }
 

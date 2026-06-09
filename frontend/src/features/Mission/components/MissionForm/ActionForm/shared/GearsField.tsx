@@ -40,7 +40,7 @@ const CONTROL_CHECK_OPTIONS = [
 
 const WIRE_TYPE_OPTIONS = [
   { label: 'Simple', value: MissionAction.WireType.SINGLE },
-  { label: 'Epais', value: MissionAction.WireType.THICK }
+  { label: 'Multiple', value: MissionAction.WireType.MANY }
 ]
 
 const WIRE_FIELDS_GEAR_CATEGORIES = ['Chaluts', 'Sennes traînantes']
@@ -196,7 +196,7 @@ export function GearsField() {
                       <>
                         <FormikNumberInput
                           isErrorMessageHidden
-                          label="Epaisseur moyenne de fil"
+                          label="Epaisseur moy. de fil"
                           name={`gearOnboard[${index}].averageWireThickness`}
                         />
                         <FormikSelect

@@ -8,18 +8,18 @@ type FieldsetGroupSeparatorType = Readonly<{
 }>
 export function FieldsetGroupSeparator({ className, marginBottom }: FieldsetGroupSeparatorType) {
   return (
-    <Wrapper className={className} marginBottom={marginBottom}>
+    <Wrapper $marginBottom={marginBottom} className={className}>
       <HorizontalRule />
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div<{
-  marginBottom?: number | undefined
+  $marginBottom?: number | undefined
 }>`
   height: 4px;
   margin-top: 16px;
-  margin-bottom: ${p => p.marginBottom ?? 0}px;
+  margin-bottom: ${p => p.$marginBottom ?? 0}px;
   position: relative;
 `
 

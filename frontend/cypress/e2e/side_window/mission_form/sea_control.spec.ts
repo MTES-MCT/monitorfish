@@ -183,15 +183,15 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Présentation', ['FIL - En filets'], { index: 2 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
 
-    // Rejets — BIB is prefilled from the logbook DIS (DIM) message; add COD as a rejected species (RET).
-    // "Qté rejetée" / "Nature du rejet" only render in the "Rejets" card (BIB index 0, COD index 1).
-    // "Zone de pêche" appears in both cards (HKE 0, BLI 1, COD 2 in "Espèces à bord"; BIB 3, COD 4 in
-    // "Rejets"), so the COD discard zone is index 4.
+    // Rejets — NEP and BIB are prefilled from the logbook DIS message (both DIM); add COD (RET).
+    // "Qté rejetée" / "Nature du rejet" only render in the "Rejets" card (NEP 0, BIB 1, COD 2).
+    // "Zone de pêche" appears in both cards (HKE 0, BLI 1, COD 2 in "Espèces à bord"; NEP 3, BIB 4,
+    // COD 5 in "Rejets"), so the COD discard zone is index 5. NEP/BIB already carry prefilled zones.
     cy.fill('Ajouter une espèce rejetée', 'COD')
     cy.wait(200)
-    cy.fill('Qté rejetée', 2, { index: 1 })
-    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 1 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 4 })
+    cy.fill('Qté rejetée', 2, { index: 2 })
+    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 5 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
@@ -329,17 +329,18 @@ context('Side Window > Mission Form > Sea Control', () => {
           underSizedSeparateRecording: 'NO',
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           // Catches only — logbook discards are no longer merged here, they live in `discardedSpecies`.
-          // HKE and BLI are risk factor catches; the FAR-only NEP catch is dropped (not in the risk
-          // factor) and the BIB discard moves to `discardedSpecies`.
+          // HKE and BLI are the risk factor catches (MALOTRU's FAR has no catches, so no prefilled
+          // zones); the DIS species NEP and BIB move to `discardedSpecies`.
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'HKE', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: 20, declaredWeight: 10, faoZones: ['27.8.b'], nbFish: null, presentationCodes: ['FIL'], speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
           ],
-          // BIB is prefilled from the real species-control-prefill endpoint (logbook DIM discard);
-          // COD (RET) is added manually in the "Rejets" card.
+          // NEP and BIB are prefilled from the real species-control-prefill endpoint (logbook DIM
+          // discards at 27.8.a); COD (RET) is added manually in the "Rejets" card.
           discardedSpecies: [
-            { discardReason: 'DIM', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'BIB' },
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' },
             { discardReason: 'RET', faoZones: ['27.8.b'], rejectedWeight: 2, speciesCode: 'COD' }
           ],
           speciesQuantitySeized: 6289.5,

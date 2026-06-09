@@ -97,17 +97,16 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
-    cy.fill('Zone de pêche', ['27.8.a'], { index: 16 })
 
-    // Rejets — the HKE discard is no longer an inline field on the catch row; it is declared in the
-    // dedicated "Rejets" card. "Nature du rejet" / "Qté rejetée" only render there (HKE = index 0).
-    // "Zone de pêche" spans both cards (the catches card holds indices 0..16), so the HKE discard zone
-    // is the next index, 17.
+    // Rejets — NEP and BIB are prefilled (DIM discards from the logbook DIS); add the HKE discard (DIS).
+    // "Nature du rejet" / "Qté rejetée" only render in the "Rejets" card (NEP 0, BIB 1, HKE 2).
+    // "Zone de pêche" spans both cards (catches HKE 0, NEP 1, BLI 2, COD 3; rejets NEP 4, BIB 5, HKE 6),
+    // so the HKE discard zone is index 6. NEP/BIB already carry prefilled zones.
     cy.fill('Ajouter une espèce rejetée', 'HKE')
     cy.wait(200)
-    cy.fill('Nature du rejet', 'DIS - autres rejets', { index: 0 })
-    cy.fill('Qté rejetée', 3, { index: 0 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 17 })
+    cy.fill('Nature du rejet', 'DIS - autres rejets', { index: 2 })
+    cy.fill('Qté rejetée', 3, { index: 2 })
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 6 })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -242,16 +241,23 @@ context('Side Window > Mission Form > Land Control', () => {
             }
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
-          // Catches only — the HKE discard now lives in `discardedSpecies` (it keeps isNotLanded /
-          // underSizedWeight / presentationCodes as a landed catch, but no longer discardReason /
-          // rejectedWeight here).
+          // Catches are the risk factor species sorted by weight: HKE (471.2), NEP (235.6), BLI (13.46),
+          // then the manually added COD. NEP is both a catch and a logbook discard. The HKE discard now
+          // lives in `discardedSpecies` (HKE keeps isNotLanded / underSizedWeight / presentationCodes as
+          // a landed catch, but no longer discardReason / rejectedWeight here).
           speciesOnboard: [
             { controlledWeight: 500, declaredWeight: 471.2, faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCodes: ['WHL'], speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
+            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
-            { controlledWeight: null, declaredWeight: null, faoZones: ['27.8.b', '27.8.c'], nbFish: null, speciesCode: 'COD', underSized: false },
-            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false }
+            { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
           ],
-          discardedSpecies: [{ discardReason: 'DIS', faoZones: ['27.8.b'], rejectedWeight: 3, speciesCode: 'HKE' }],
+          // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a); HKE (DIS) is added in
+          // the "Rejets" card.
+          discardedSpecies: [
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' },
+            { discardReason: 'DIS', rejectedWeight: 3, speciesCode: 'HKE' }
+          ],
           speciesQuantitySeized: 6289.5,
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',

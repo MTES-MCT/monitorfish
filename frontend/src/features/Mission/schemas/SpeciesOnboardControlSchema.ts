@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { booleanOrUndefined, numberOrUndefined } from '../../../types'
+import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const SpeciesOnboardControlSchema = z.strictObject({
   controlledWeight: numberOrUndefined,
@@ -10,6 +10,7 @@ export const SpeciesOnboardControlSchema = z.strictObject({
   nbFish: numberOrUndefined,
   presentationCodes: z.array(z.string()).optional(),
   speciesCode: z.string(),
+  speciesName: stringOrUndefined,
   underSized: booleanOrUndefined,
   underSizedWeight: numberOrUndefined
 })

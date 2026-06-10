@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
+package fr.gouv.cnsp.monitorfish.domain.use_cases.logbook
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
@@ -8,7 +8,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 

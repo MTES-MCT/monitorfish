@@ -155,9 +155,9 @@ export function getJDPCsvMap(baseCsvMap: DownloadAsCsvMap<ActivityReportWithId>,
 }
 
 export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
-  speciesOnboard: MissionAction.SpeciesControl[],
+  speciesOnboard: MissionAction.SpeciesOnboardControl[],
   jdpSpecies: string[]
-): MissionAction.SpeciesControl[] {
+): MissionAction.SpeciesOnboardControl[] {
   const otherSpeciesSummedWeight = Number(
     speciesOnboard
       .filter(species => !jdpSpecies.includes(species.speciesCode))
@@ -172,7 +172,8 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
     declaredWeight: otherSpeciesSummedWeight,
     nbFish: undefined,
     speciesCode: UNTARGETED_SPECIES_CODE,
-    underSized: undefined
+    underSized: undefined,
+    underSizedWeight: undefined
   }
 
   const speciesOnboardWithoutOtherSpecies = speciesOnboard.filter(species => jdpSpecies.includes(species.speciesCode))

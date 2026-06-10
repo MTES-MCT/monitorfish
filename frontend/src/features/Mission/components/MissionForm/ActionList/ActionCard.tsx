@@ -74,7 +74,7 @@ const Wrapper = styled.div<{
 const DateLabel = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 65px;
+  min-width: 53px;
   padding: 4px 16px 4px 0;
   background: ${p => p.theme.color.cultured};
 `

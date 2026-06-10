@@ -4,7 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -315,9 +315,9 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val firstSpecy = SpeciesControl()
+        val firstSpecy = SpeciesOnboardControl()
         firstSpecy.speciesCode = "BFT"
-        val secondSpecy = SpeciesControl()
+        val secondSpecy = SpeciesOnboardControl()
         secondSpecy.speciesCode = "HKE"
         val control =
             MissionAction(
@@ -356,7 +356,7 @@ class JointDeploymentPlanUTests {
         jdp: JointDeploymentPlan,
     ) {
         // Given
-        val specy = SpeciesControl()
+        val specy = SpeciesOnboardControl()
         specy.speciesCode = "HKE"
         val control =
             MissionAction(
@@ -424,9 +424,9 @@ class JointDeploymentPlanUTests {
         }
     }
 
-    private fun getSpecies(species: List<String>): List<SpeciesControl> {
+    private fun getSpecies(species: List<String>): List<SpeciesOnboardControl> {
         return species.map {
-            val specy = SpeciesControl()
+            val specy = SpeciesOnboardControl()
             specy.speciesCode = it
 
             return@map specy

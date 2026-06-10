@@ -1,5 +1,5 @@
 import { BackendApi } from '@api/BackendApi.types'
-import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals'
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
 import { renderHook, act } from '@testing-library/react'
 
 import { useListSorting } from '../useListSorting'

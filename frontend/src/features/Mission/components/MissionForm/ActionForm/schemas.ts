@@ -6,6 +6,84 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
 import { array, boolean, number, object, string } from 'yup'
 
+function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        logbookFilledPriorToControl: string().required(HIDDEN_ERROR),
+        propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
+        fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
+        stowagePlanPresent: string().required(HIDDEN_ERROR),
+        onboardWeighingPermit: string().required(HIDDEN_ERROR),
+        weighingCertificateAndSystemsValid: string().when('onboardWeighingPermit', {
+          is: (val?: string) => val === MissionAction.ControlCheck.YES,
+          then: schema => schema.required(HIDDEN_ERROR),
+          otherwise: schema => schema.notRequired()
+        })
+      })
+    : object({})
+}
+
+function makeLandControlEIsrObligationsSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        vmsEmissionControlBeforeArrival: string().required(HIDDEN_ERROR),
+        portEntranceAndLandingAuthorized: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
+
+function makeEIsrSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        underSizedSeparateStowage: string().required(HIDDEN_ERROR),
+        underSizedSeparateRecording: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
+
+// On land controls under e-ISR, the sea species checks are replaced by these subsection fields.
+function makeLandControlEIsrSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        underSizedSeparateRecording: string().required(HIDDEN_ERROR),
+        minimumConservationReferenceSizeControlled: string().required(HIDDEN_ERROR),
+        cratesWeighingSamplingControl: string().required(HIDDEN_ERROR),
+        approvedWeighingOperatorInformation: string().required(HIDDEN_ERROR),
+        holdControlledAfterUnloading: string().required(HIDDEN_ERROR),
+        catchesWeighedAtLanding: string().required(HIDDEN_ERROR)
+      })
+    : object({})
+}
+
+// On non-e-ISR land controls, the legacy species checks are still required.
+function makeNonEIsrLandSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({})
+    : object({
+        speciesWeightControlled: string().required(HIDDEN_ERROR),
+        speciesSizeControlled: string().required(HIDDEN_ERROR),
+        separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR)
+      })
+}
+
+function makeEIsrSpeciesOnboardSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
+      })
+    : object({})
+}
+
+function makeDiscardedSpeciesSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        discardReason: string().required(HIDDEN_ERROR),
+        rejectedWeight: number().required(HIDDEN_ERROR),
+        faoZones: array().of(string()).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR)
+      })
+    : object({})
+}
+
 // -----------------------------------------------------------------------------
 // Form Schema Validators
 
@@ -44,25 +122,28 @@ const actionDatetimeUtcValidator = string()
     }
   })
 
-export const GearOnboardSchema = object({
-  gearWasControlled: boolean().required(HIDDEN_ERROR),
-  declaredMesh: number().when(['gearCode', 'controlledMesh'], {
-    is: (gearCode, controlledMesh, context) => {
-      const { gears } = mainStore.getState().gear
-      const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
-      const declaredMesh = context?.parent?.declaredMesh
+export function makeGearOnboardSchema(isEISR: boolean) {
+  return object({
+    gearWasControlled: boolean().required(HIDDEN_ERROR),
+    declaredMesh: number().when(['gearCode', 'controlledMesh'], {
+      is: (gearCode, controlledMesh, context) => {
+        const { gears } = mainStore.getState().gear
+        const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
+        const declaredMesh = context?.parent?.declaredMesh
 
-      if (isMeshRequiredForSegment) {
-        return controlledMesh === undefined && declaredMesh === undefined
-      }
+        if (isMeshRequiredForSegment) {
+          return controlledMesh === undefined && declaredMesh === undefined
+        }
 
-      return false
-    },
-    then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
-    otherwise: schema => schema.notRequired()
-  }),
-  controlledMesh: number()
-})
+        return false
+      },
+      then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
+      otherwise: schema => schema.notRequired()
+    }),
+    controlledMesh: number(),
+    gearMarkingIsCompliant: isEISR ? string().required(HIDDEN_ERROR) : string().notRequired()
+  })
+}
 
 // -----------------------------------------------------------------------------
 // Air Control Action Form
@@ -112,41 +193,46 @@ export const LandControlFormLiveSchema = object({
   userTrigram: string().trim().required(HIDDEN_ERROR)
 })
 
-export const LandControlFormCompletionSchema = LandControlFormLiveSchema.concat(
-  object({
-    // Obligations déclaratives et autorisations de pêche
-    emitsVms: string().required(HIDDEN_ERROR),
-    emitsAis: string().required(HIDDEN_ERROR),
-    logbookMatchesActivity: string().required(HIDDEN_ERROR),
-    licencesMatchActivity: string().required(HIDDEN_ERROR),
+export function getLandControlFormCompletionSchema(isEISR: boolean) {
+  return LandControlFormLiveSchema.concat(
+    object({
+      // Obligations déclaratives et autorisations
+      emitsVms: string().required(HIDDEN_ERROR),
+      emitsAis: string().required(HIDDEN_ERROR),
+      logbookMatchesActivity: string().required(HIDDEN_ERROR),
+      licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-    // Espèces à bord
-    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
-    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
-    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      // Inspection des captures (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
+      speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
+      discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
-    // Quantités saisies
-    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
-      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
-      then: schema => schema.required(HIDDEN_ERROR)
-    }),
+      // Quantités saisies
+      speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+        is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+        then: schema => schema.required(HIDDEN_ERROR)
+      }),
 
-    infractions: array().of(
-      object({
-        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
-      })
-    ),
-    // Engins à bord
-    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      infractions: array().of(
+        object({
+          infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+        })
+      ),
+      // Engins à bord
+      gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
-    // Qualité du contrôle
-    vesselTargeted: string().required(HIDDEN_ERROR),
-    isLastHaul: boolean().required(HIDDEN_ERROR),
+      // Qualité du contrôle
+      vesselTargeted: string().required(HIDDEN_ERROR),
+      isLastHaul: boolean().required(HIDDEN_ERROR),
 
-    // Saisi par / Complété par
-    completedBy: string().trim().required(HIDDEN_ERROR)
-  })
-)
+      // Saisi par / Complété par
+      completedBy: string().trim().required(HIDDEN_ERROR)
+    })
+  )
+    .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
+    .concat(makeLandControlEIsrObligationsSchema(isEISR))
+    .concat(makeLandControlEIsrSpeciesSchema(isEISR))
+    .concat(makeNonEIsrLandSpeciesSchema(isEISR))
+}
 
 // -----------------------------------------------------------------------------
 // Sea Control Action Form
@@ -159,44 +245,50 @@ export const SeaControlFormLiveSchema = object({
   userTrigram: string().required(HIDDEN_ERROR)
 })
 
-export const SeaControlFormCompletionSchema = SeaControlFormLiveSchema.concat(
-  object({
-    // Obligations déclaratives et autorisations de pêche
-    emitsVms: string().required(HIDDEN_ERROR),
-    emitsAis: string().required(HIDDEN_ERROR),
-    logbookMatchesActivity: string().required(HIDDEN_ERROR),
-    licencesMatchActivity: string().required(HIDDEN_ERROR),
+export function getSeaControlFormCompletionSchema(isEISR: boolean) {
+  return SeaControlFormLiveSchema.concat(
+    object({
+      // Obligations déclaratives et autorisations
+      emitsVms: string().required(HIDDEN_ERROR),
+      emitsAis: string().required(HIDDEN_ERROR),
+      logbookMatchesActivity: string().required(HIDDEN_ERROR),
+      licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-    // Espèces à bord
-    speciesWeightControlled: boolean().required(HIDDEN_ERROR),
-    speciesSizeControlled: boolean().required(HIDDEN_ERROR),
-    separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      // Espèces à bord
+      speciesWeightControlled: string().required(HIDDEN_ERROR),
+      speciesSizeControlled: string().required(HIDDEN_ERROR),
+      separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
+      speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
+      discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
-    // Engins à bord
-    gearOnboard: array().of(GearOnboardSchema).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
+      // Engins à bord
+      gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
-    // Quantités saisies
-    speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
-      is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
-      then: schema => schema.required(HIDDEN_ERROR)
-    }),
+      // Quantités saisies
+      speciesQuantitySeized: number().when('hasSomeSpeciesSeized', {
+        is: (hasSomeSpeciesSeized?: boolean) => hasSomeSpeciesSeized === true,
+        then: schema => schema.required(HIDDEN_ERROR)
+      }),
 
-    isINNControl: boolean().required(HIDDEN_ERROR),
+      isINNControl: boolean().required(HIDDEN_ERROR),
 
-    infractions: array().of(
-      object({
-        infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
-      })
-    ),
+      infractions: array().of(
+        object({
+          infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
+        })
+      ),
 
-    // Qualité du contrôle
-    vesselTargeted: string().required(HIDDEN_ERROR),
-    isLastHaul: boolean().required(HIDDEN_ERROR),
+      // Qualité du contrôle
+      vesselTargeted: string().required(HIDDEN_ERROR),
+      isLastHaul: boolean().required(HIDDEN_ERROR),
 
-    // Saisi par / Complété par
-    completedBy: string().trim().required(HIDDEN_ERROR)
-  })
-)
+      // Saisi par / Complété par
+      completedBy: string().trim().required(HIDDEN_ERROR)
+    })
+  )
+    .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
+    .concat(makeEIsrSpeciesSchema(isEISR))
+}
 
 // -----------------------------------------------------------------------------
 // Infraction SubForm

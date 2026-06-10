@@ -38,7 +38,7 @@ class FleetSegmentController(
                 computeFleetSegmentsDataInput.vesselId,
                 computeFleetSegmentsDataInput.faoAreas,
                 computeFleetSegmentsDataInput.gears.map { it.toGearControl() },
-                computeFleetSegmentsDataInput.species.map { it.toSpeciesControl() },
+                computeFleetSegmentsDataInput.species.map { it.toSpeciesOnboardControl() },
                 computeFleetSegmentsDataInput.year,
             )
         return fleetSegments.map {

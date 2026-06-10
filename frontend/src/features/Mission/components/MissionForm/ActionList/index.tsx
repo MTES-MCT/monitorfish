@@ -87,7 +87,7 @@ export function ActionList({
 
   return (
     <Wrapper>
-      <FormHead marginBottom={hasRapportNavActions ? 8 : undefined}>
+      <FormHead $marginBottom={hasRapportNavActions ? 8 : 22}>
         <h2>Actions réalisées en mission</h2>
 
         <Dropdown Icon={Icon.Plus} placement="bottomEnd" title="Ajouter">

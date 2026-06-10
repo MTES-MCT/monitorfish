@@ -1,5 +1,5 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { describe, expect, it, jest } from '@jest/globals'
+import { describe, expect, it } from '@jest/globals'
 import { Geometry } from 'ol/geom'
 import Map from 'ol/Map'
 

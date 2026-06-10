@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository
 import java.time.Instant
 
 interface DBMissionActionsRepository : CrudRepository<MissionActionEntity, Int> {
-    fun findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalse(
+    fun findAllByVesselIdEqualsAndActionDatetimeUtcAfterAndIsDeletedIsFalseOrderByActionDatetimeUtcDesc(
         vesselId: Int,
         afterDateTime: Instant,
     ): List<MissionActionEntity>

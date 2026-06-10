@@ -2,6 +2,9 @@
 
 interface ImportMetaEnv {
   readonly FRONTEND_AIS_VESSELS_ENABLED: string
+  readonly FRONTEND_E_ISR_APPLICATION_DATE: string
+  readonly FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST: string
+  readonly FRONTEND_E_ISR_ENABLED: string
   readonly FRONTEND_GEOSERVER_LOCAL_URL: string
   readonly FRONTEND_GEOSERVER_REMOTE_URL: string
   readonly FRONTEND_KEPLER_ACTIVITY_VISUALIZATION_ENABLED: string

@@ -56,6 +56,15 @@ class MissionActionEntity(
     @Column(name = "emits_ais")
     @Enumerated(EnumType.STRING)
     val emitsAis: ControlCheck? = null,
+    @Column(name = "vms_emission_control_before_arrival")
+    @Enumerated(EnumType.STRING)
+    val vmsEmissionControlBeforeArrival: ControlCheck? = null,
+    @Column(name = "port_entrance_and_landing_authorized")
+    @Enumerated(EnumType.STRING)
+    val portEntranceAndLandingAuthorized: ControlCheck? = null,
+    @Column(name = "logbook_filled_prior_to_control")
+    @Enumerated(EnumType.STRING)
+    val logbookFilledPriorToControl: ControlCheck? = null,
     @Column(name = "logbook_matches_activity")
     @Enumerated(EnumType.STRING)
     val logbookMatchesActivity: ControlCheck? = null,
@@ -63,12 +72,50 @@ class MissionActionEntity(
     @Enumerated(EnumType.STRING)
     val licencesMatchActivity: ControlCheck? = null,
     @Column(name = "species_weight_controlled")
-    val speciesWeightControlled: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    val speciesWeightControlled: ControlCheck? = null,
     @Column(name = "species_size_controlled")
-    val speciesSizeControlled: Boolean? = null,
+    @Enumerated(EnumType.STRING)
+    val speciesSizeControlled: ControlCheck? = null,
     @Column(name = "separate_stowage_of_preserved_species")
     @Enumerated(EnumType.STRING)
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
+    @Column(name = "propulsion_engine_power_control")
+    @Enumerated(EnumType.STRING)
+    val propulsionEnginePowerControl: ControlCheck? = null,
+    @Column(name = "fishing_licences_match_activity")
+    @Enumerated(EnumType.STRING)
+    val fishingLicencesMatchActivity: ControlCheck? = null,
+    @Column(name = "stowage_plan_present")
+    @Enumerated(EnumType.STRING)
+    val stowagePlanPresent: ControlCheck? = null,
+    @Column(name = "onboard_weighing_permit")
+    @Enumerated(EnumType.STRING)
+    val onboardWeighingPermit: ControlCheck? = null,
+    @Column(name = "weighing_certificate_and_systems_valid")
+    @Enumerated(EnumType.STRING)
+    val weighingCertificateAndSystemsValid: ControlCheck? = null,
+    @Column(name = "under_sized_separate_stowage")
+    @Enumerated(EnumType.STRING)
+    val underSizedSeparateStowage: ControlCheck? = null,
+    @Column(name = "under_sized_separate_recording")
+    @Enumerated(EnumType.STRING)
+    val underSizedSeparateRecording: ControlCheck? = null,
+    @Column(name = "minimum_conservation_reference_size_controlled")
+    @Enumerated(EnumType.STRING)
+    val minimumConservationReferenceSizeControlled: ControlCheck? = null,
+    @Column(name = "crates_weighing_sampling_control")
+    @Enumerated(EnumType.STRING)
+    val cratesWeighingSamplingControl: ControlCheck? = null,
+    @Column(name = "approved_weighing_operator_information")
+    @Enumerated(EnumType.STRING)
+    val approvedWeighingOperatorInformation: ControlCheck? = null,
+    @Column(name = "hold_controlled_after_unloading")
+    @Enumerated(EnumType.STRING)
+    val holdControlledAfterUnloading: ControlCheck? = null,
+    @Column(name = "catches_weighed_at_landing")
+    @Enumerated(EnumType.STRING)
+    val catchesWeighedAtLanding: ControlCheck? = null,
     @Column(name = "licences_and_logbook_observations")
     val licencesAndLogbookObservations: String? = null,
     @Type(JsonBinaryType::class)
@@ -112,6 +159,9 @@ class MissionActionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "species_onboard", columnDefinition = "jsonb")
     val speciesOnboard: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "discarded_species", columnDefinition = "jsonb")
+    val discardedSpecies: String? = null,
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
     @Column(name = "has_some_gears_seized")
@@ -138,6 +188,8 @@ class MissionActionEntity(
     val isSeafarersControl: Boolean? = null,
     @Column(name = "is_inn_control")
     val isInnControl: Boolean,
+    @Column(name = "is_gangway_deployed")
+    val isGangwayDeployed: Boolean? = null,
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
 ) {
@@ -163,11 +215,26 @@ class MissionActionEntity(
                 actionEndDatetimeUtc = missionAction.actionEndDatetimeUtc?.let { it.toInstant() },
                 emitsVms = missionAction.emitsVms,
                 emitsAis = missionAction.emitsAis,
+                vmsEmissionControlBeforeArrival = missionAction.vmsEmissionControlBeforeArrival,
+                portEntranceAndLandingAuthorized = missionAction.portEntranceAndLandingAuthorized,
+                logbookFilledPriorToControl = missionAction.logbookFilledPriorToControl,
                 logbookMatchesActivity = missionAction.logbookMatchesActivity,
                 licencesMatchActivity = missionAction.licencesMatchActivity,
                 speciesWeightControlled = missionAction.speciesWeightControlled,
                 speciesSizeControlled = missionAction.speciesSizeControlled,
                 separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
+                propulsionEnginePowerControl = missionAction.propulsionEnginePowerControl,
+                fishingLicencesMatchActivity = missionAction.fishingLicencesMatchActivity,
+                stowagePlanPresent = missionAction.stowagePlanPresent,
+                onboardWeighingPermit = missionAction.onboardWeighingPermit,
+                weighingCertificateAndSystemsValid = missionAction.weighingCertificateAndSystemsValid,
+                underSizedSeparateStowage = missionAction.underSizedSeparateStowage,
+                underSizedSeparateRecording = missionAction.underSizedSeparateRecording,
+                minimumConservationReferenceSizeControlled = missionAction.minimumConservationReferenceSizeControlled,
+                cratesWeighingSamplingControl = missionAction.cratesWeighingSamplingControl,
+                approvedWeighingOperatorInformation = missionAction.approvedWeighingOperatorInformation,
+                holdControlledAfterUnloading = missionAction.holdControlledAfterUnloading,
+                catchesWeighedAtLanding = missionAction.catchesWeighedAtLanding,
                 infractions = mapper.writeValueAsString(missionAction.infractions),
                 licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
                 speciesObservations = missionAction.speciesObservations,
@@ -186,6 +253,7 @@ class MissionActionEntity(
                 otherComments = missionAction.otherComments,
                 gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
+                discardedSpecies = mapper.writeValueAsString(missionAction.discardedSpecies),
                 isFromPoseidon = missionAction.isFromPoseidon,
                 isDeleted = missionAction.isDeleted,
                 isLastHaul = missionAction.isLastHaul,
@@ -199,6 +267,7 @@ class MissionActionEntity(
                 isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
                 isSeafarersControl = missionAction.isSeafarersControl,
                 isInnControl = missionAction.isINNControl,
+                isGangwayDeployed = missionAction.isGangwayDeployed,
                 observationsByUnit = missionAction.observationsByUnit,
             )
     }
@@ -226,11 +295,26 @@ class MissionActionEntity(
             actionEndDatetimeUtc = actionEndDatetimeUtc?.atZone(ZoneOffset.UTC),
             emitsVms = emitsVms,
             emitsAis = emitsAis,
+            vmsEmissionControlBeforeArrival = vmsEmissionControlBeforeArrival,
+            portEntranceAndLandingAuthorized = portEntranceAndLandingAuthorized,
+            logbookFilledPriorToControl = logbookFilledPriorToControl,
             logbookMatchesActivity = logbookMatchesActivity,
             licencesMatchActivity = licencesMatchActivity,
             speciesWeightControlled = speciesWeightControlled,
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
+            propulsionEnginePowerControl = propulsionEnginePowerControl,
+            fishingLicencesMatchActivity = fishingLicencesMatchActivity,
+            stowagePlanPresent = stowagePlanPresent,
+            onboardWeighingPermit = onboardWeighingPermit,
+            weighingCertificateAndSystemsValid = weighingCertificateAndSystemsValid,
+            underSizedSeparateStowage = underSizedSeparateStowage,
+            underSizedSeparateRecording = underSizedSeparateRecording,
+            minimumConservationReferenceSizeControlled = minimumConservationReferenceSizeControlled,
+            cratesWeighingSamplingControl = cratesWeighingSamplingControl,
+            approvedWeighingOperatorInformation = approvedWeighingOperatorInformation,
+            holdControlledAfterUnloading = holdControlledAfterUnloading,
+            catchesWeighedAtLanding = catchesWeighedAtLanding,
             licencesAndLogbookObservations = licencesAndLogbookObservations,
             infractions = deserializeJSONList(mapper, infractions, Infraction::class.java),
             speciesObservations = speciesObservations,
@@ -258,7 +342,8 @@ class MissionActionEntity(
                     gearOnboard,
                     GearControl::class.java,
                 ),
-            speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesControl::class.java),
+            speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesOnboardControl::class.java),
+            discardedSpecies = deserializeJSONList(mapper, discardedSpecies, DiscardedSpeciesControl::class.java),
             isDeleted = isDeleted,
             isLastHaul = isLastHaul ?: false,
             hasSomeGearsSeized = hasSomeGearsSeized,
@@ -272,6 +357,7 @@ class MissionActionEntity(
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
             isINNControl = isInnControl,
+            isGangwayDeployed = isGangwayDeployed,
             observationsByUnit = observationsByUnit,
         )
 

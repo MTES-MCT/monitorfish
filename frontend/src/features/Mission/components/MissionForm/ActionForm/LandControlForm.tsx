@@ -1,15 +1,17 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
+import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash-es'
 import styled from 'styled-components'
 
-import { LandControlFormCompletionSchema, LandControlFormLiveSchema } from './schemas'
+import { getLandControlFormCompletionSchema, LandControlFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { ControlQualityField } from './shared/ControlQualityField'
+import { DiscardedSpeciesField } from './shared/DiscardedSpeciesField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheckboxes'
@@ -33,7 +35,10 @@ type LandControlFormProps = Readonly<{
 }>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const validationSchema = isMissionEnded ? LandControlFormCompletionSchema : LandControlFormLiveSchema
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
+  const validationSchema = isMissionEnded
+    ? getLandControlFormCompletionSchema(isEISREnabled)
+    : LandControlFormLiveSchema
 
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
@@ -60,6 +65,8 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
             <GearsField />
 
             <SpeciesField controlledWeightLabel="Qté pesée" />
+
+            {isEISREnabled && <DiscardedSpeciesField />}
 
             <SeizureFieldsetGroup isLight legend="Appréhensions">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />

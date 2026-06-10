@@ -1,7 +1,7 @@
 import { dummyAction } from '@features/Mission/components/MissionForm/useCases/__tests__/__mocks__/dummyAction'
 import { updateMissionGeometry } from '@features/Mission/components/MissionForm/useCases/updateMissionGeometry'
 import { EnvMissionAction } from '@features/Mission/envMissionAction.types'
-import { expect, jest } from '@jest/globals'
+import { expect } from '@jest/globals'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 const mockDispatch = jest.fn()

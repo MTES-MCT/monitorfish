@@ -56,11 +56,18 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.logbookMatchesActivity).isEqualTo(
             ControlCheck.NO,
         )
-        assertThat(firstControl.speciesWeightControlled).isTrue
-        assertThat(firstControl.speciesSizeControlled).isTrue
+        assertThat(firstControl.speciesWeightControlled).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.speciesSizeControlled).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.separateStowageOfPreservedSpecies).isEqualTo(
             ControlCheck.YES,
         )
+        assertThat(firstControl.propulsionEnginePowerControl).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.fishingLicencesMatchActivity).isEqualTo(ControlCheck.NO)
+        assertThat(firstControl.stowagePlanPresent).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.onboardWeighingPermit).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.weighingCertificateAndSystemsValid).isEqualTo(ControlCheck.NOT_APPLICABLE)
+        assertThat(firstControl.underSizedSeparateStowage).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.underSizedSeparateRecording).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.faoAreas).hasSize(2)
         assertThat(firstControl.faoAreas.first()).isEqualTo("27.7.d")
         assertThat(firstControl.faoAreas.last()).isEqualTo("27.7.e")
@@ -114,6 +121,9 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.gearOnboard.first().controlledMesh).isNull()
         assertThat(firstControl.gearOnboard.first().hasUncontrolledMesh).isTrue
         assertThat(firstControl.gearOnboard.first().gearWasControlled).isFalse
+        assertThat(firstControl.gearOnboard.first().gearMarkingIsCompliant).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.gearOnboard.first().averageWireThickness).isNull()
+        assertThat(firstControl.gearOnboard.first().wireType).isNull()
         assertThat(firstControl.speciesOnboard).hasSize(2)
         assertThat(firstControl.speciesOnboard.first().speciesCode).isEqualTo("MNZ")
         assertThat(firstControl.speciesOnboard.first().declaredWeight).isEqualTo(302.5)
@@ -146,11 +156,51 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
         // When
         val missionAction = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(missionAction.id!!)
 
         // Then
-        assertThat(missionAction.id).isEqualTo(11)
+        assertThat(missionAction.id).isNotNull()
         assertThat(missionAction.actionDatetimeUtc).isEqualTo(dateTime)
         assertThat(missionAction.userTrigram).isEqualTo("DEF")
+        // The land control obligation checks round-trip correctly
+        assertThat(loaded.vmsEmissionControlBeforeArrival).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.portEntranceAndLandingAuthorized).isEqualTo(ControlCheck.NO)
+        // The land control species checks round-trip correctly
+        assertThat(loaded.minimumConservationReferenceSizeControlled).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.cratesWeighingSamplingControl).isEqualTo(ControlCheck.NO)
+        assertThat(loaded.approvedWeighingOperatorInformation).isEqualTo(ControlCheck.NOT_APPLICABLE)
+        assertThat(loaded.holdControlledAfterUnloading).isEqualTo(ControlCheck.YES)
+        assertThat(loaded.catchesWeighedAtLanding).isEqualTo(ControlCheck.NO)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should persist GearControl wire fields and round-trip them correctly`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val gearControl =
+            GearControl().also {
+                it.gearCode = "LLS"
+                it.gearName = "Palangres calées"
+                it.gearWasControlled = true
+                it.hasUncontrolledMesh = false
+                it.gearMarkingIsCompliant = ControlCheck.YES
+                it.averageWireThickness = 1.5
+                it.wireType = WireType.SINGLE
+            }
+        val newMission = getDummyMissionAction(dateTime).copy(gearOnboard = listOf(gearControl))
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.gearOnboard).hasSize(1)
+        val loadedGear = loaded.gearOnboard.first()
+        assertThat(loadedGear.gearCode).isEqualTo("LLS")
+        assertThat(loadedGear.gearMarkingIsCompliant).isEqualTo(ControlCheck.YES)
+        assertThat(loadedGear.averageWireThickness).isEqualTo(1.5)
+        assertThat(loadedGear.wireType).isEqualTo(WireType.SINGLE)
     }
 
     @Test

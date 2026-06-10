@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.Utils
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.CurrentTripDepAndPositionAtSea
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
@@ -216,6 +217,20 @@ class JpaLogbookReportRepository(
             (row[0] as String) to (row[1] as LocalDateTime).atZone(UTC)
         }
     }
+
+    override fun getCurrentTripDepAndPositionAtSeaDateTime(
+        cfr: String,
+        hoursFromNow: Int,
+    ): CurrentTripDepAndPositionAtSea? =
+        dbLogbookReportRepository
+            .getCurrentTripDepAndPositionAtSeaDateTime(cfr, hoursFromNow)
+            .firstOrNull()
+            ?.let { row ->
+                CurrentTripDepAndPositionAtSea(
+                    departureDateTime = (row[0] as LocalDateTime).atZone(UTC),
+                    firstPositionAtSeaOfLastTripDateTime = (row[1] as? LocalDateTime)?.atZone(UTC),
+                )
+            }
 
     // For test purpose
     @Modifying

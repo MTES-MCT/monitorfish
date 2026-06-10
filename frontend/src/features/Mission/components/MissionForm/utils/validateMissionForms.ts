@@ -6,6 +6,7 @@ import { logSoftError } from '@utils/logSoftError'
 
 import { areMissionFormsValuesValid } from './areMissionFormsValuesValid'
 import * as ActionSchemas from '../ActionForm/schemas'
+import { computeIsEISREnabled } from '../hooks/useIsEISREnabled'
 import { MainFormLiveSchema } from '../MainForm/schemas'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '../types'
@@ -29,8 +30,12 @@ export function validateMissionForms(
     isValid: MainFormLiveSchema.isValidSync(mainFormValues)
   }
 
+  const controlUnitIds = mainFormValues.controlUnits?.map(cu => cu.id) ?? []
+
   // eslint-disable-next-line no-restricted-syntax
   const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
+    const isEISR = computeIsEISREnabled(controlUnitIds, actionFormValues.actionDatetimeUtc)
+
     switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:
         return {
@@ -52,7 +57,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isCompletionValidation
-            ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.getLandControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
             : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
         }
 
@@ -67,7 +72,7 @@ export function validateMissionForms(
         return {
           ...actionFormValues,
           isValid: isCompletionValidation
-            ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
+            ? ActionSchemas.getSeaControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
             : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
         }
 

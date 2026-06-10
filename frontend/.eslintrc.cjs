@@ -149,6 +149,25 @@ module.exports = {
         jest: true
       },
       rules: {
+        // Use the global `jest` (enabled above via `env: { jest: true }`), never the import.
+        // swc only hoists `jest.mock()` above the file imports when the call references the GLOBAL
+        // `jest`. When `jest` is imported from `@jest/globals`, the hoist does not happen, so
+        // `jest.mock()` runs only after the mocked module has already been imported — the mock then
+        // silently has no effect.
+        '@typescript-eslint/no-restricted-imports': [
+          'error',
+          {
+            name: 'react-redux',
+            importNames: ['useSelector', 'useDispatch'],
+            message: 'Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead.'
+          },
+          {
+            name: '@jest/globals',
+            importNames: ['jest'],
+            message:
+              'Do not import `jest` from `@jest/globals`; use the global `jest`. An imported binding breaks swc `jest.mock()` hoisting, so mocks may silently have no effect.'
+          }
+        ],
         'jest/no-disabled-tests': 'error',
         'jest/no-focused-tests': 'error',
         'jest/no-identical-title': 'error',

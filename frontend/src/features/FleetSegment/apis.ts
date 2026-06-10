@@ -10,7 +10,7 @@ import type { FleetSegment } from '@features/FleetSegment/types'
 export type ComputeFleetSegmentsParams = {
   faoAreas: string[]
   gears: MissionAction.GearControl[]
-  species: MissionAction.SpeciesControl[]
+  species: MissionAction.SpeciesOnboardControl[]
   vesselId: number
   year: number
 }

@@ -29,6 +29,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.fakers.VesselContactToUpdateFaker
@@ -116,6 +117,12 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getVesselAISPositions: GetVesselAISPositions
+
+    @MockitoBean
+    private lateinit var getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook
+
+    @MockitoBean
+    private lateinit var getHasFilledLogbookForCurrentTrip: GetHasFilledLogbookForCurrentTrip
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -1259,5 +1266,65 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should return species control prefill data from logbook`() {
+        // Given
+        val speciesControl =
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControlPrefill(speciesCode = "HKE").apply {
+                faoZones = listOf("27.8.a", "27.8.b")
+                presentationCodes = listOf("GUT")
+                rejectedWeight = 50.0
+                discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
+            }
+        given(getSpeciesControlPrefillFromLogbook.execute(any())).willReturn(listOf(speciesControl))
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/species-control-prefill?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].speciesCode", equalTo("HKE")))
+            .andExpect(jsonPath("$[0].faoZones.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].presentationCodes[0]", equalTo("GUT")))
+            .andExpect(jsonPath("$[0].rejectedWeight", equalTo(50.0)))
+            .andExpect(jsonPath("$[0].discardReason", equalTo("DIS")))
+    }
+
+    @Test
+    fun `Should return empty list for species control prefill when vessel has no logbook`() {
+        // Given
+        given(getSpeciesControlPrefillFromLogbook.execute(any())).willReturn(emptyList())
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/species-control-prefill?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(0)))
+    }
+
+    @Test
+    fun `Should return boolean when logbook filled`() {
+        // Given
+        given(getHasFilledLogbookForCurrentTrip.execute(any())).willReturn(true)
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/logbook/has-filled-logbook-for-current-trip?cfr=FR224226850")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$", equalTo(true)))
     }
 }

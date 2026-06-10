@@ -1,5 +1,6 @@
 import { ActionFormHeader } from '@features/Mission/components/MissionForm/ActionForm/shared/ActionFormHeader'
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikGangwayField } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikGangwayField'
 import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
@@ -9,8 +10,10 @@ import { Formik } from 'formik'
 import { noop } from 'lodash-es'
 import styled from 'styled-components'
 
-import { SeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
+import { getSeaControlFormCompletionSchema, SeaControlFormLiveSchema } from './schemas'
+import { useIsEISREnabled } from '../hooks/useIsEISREnabled'
 import { ControlQualityField } from './shared/ControlQualityField'
+import { DiscardedSpeciesField } from './shared/DiscardedSpeciesField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikCoordinatesPicker } from './shared/FormikCoordinatesPicker'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
@@ -34,7 +37,8 @@ type SeaControlFormProps = Readonly<{
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const validationSchema = isMissionEnded ? SeaControlFormCompletionSchema : SeaControlFormLiveSchema
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
+  const validationSchema = isMissionEnded ? getSeaControlFormCompletionSchema(isEISREnabled) : SeaControlFormLiveSchema
 
   return (
     <Formik initialValues={initialValues} onSubmit={noop} validationSchema={validationSchema}>
@@ -43,7 +47,6 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
           <FormikRevalidationEffect />
           <UpdateMissionActionCompletionEffect />
-
           <ActionFormHeader>
             <Icon.FleetSegment />
             Contrôle en mer {values.vesselName && `– ${getVesselName(values.vesselName)}`}
@@ -56,11 +59,15 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <FormikCoordinatesPicker />
 
+            {isEISREnabled && <FormikGangwayField />}
+
             <LicencesAndLogbookField />
 
             <GearsField />
 
             <SpeciesField controlledWeightLabel="Qté estimée" />
+
+            {isEISREnabled && <DiscardedSpeciesField />}
 
             <SeizureFieldsetGroup isLight legend="Appréhension et déroutement">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />

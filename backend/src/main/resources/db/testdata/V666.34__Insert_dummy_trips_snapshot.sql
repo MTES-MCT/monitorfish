@@ -9,4 +9,5 @@ INSERT INTO trips_snapshot(
     (     'SOCR4T3', 'SRC-TRP-TTT20200506194051795',            '2020-05-06 18:41:49',            '2020-05-06 18:41:49',                   '2020-05-06 18:39:33',                            '2020-05-06 18:41:49'),
     ( 'FR263454484',                     '20230086', CURRENT_DATE - INTERVAL '5 days', CURRENT_DATE - INTERVAL '5 days',        CURRENT_DATE - INTERVAL '5 days',                 CURRENT_DATE - INTERVAL '5 days'),
     ( 'FR263454484',                     '20230087', CURRENT_DATE - INTERVAL '3 days', CURRENT_DATE - INTERVAL '3 days',        CURRENT_DATE - INTERVAL '4 days',                 CURRENT_DATE - INTERVAL '3 days'),
-    ( 'FR263454484', 'SRC-TRP-TTT20200506194051795', CURRENT_DATE - INTERVAL '2 days', CURRENT_DATE - INTERVAL '2 days',        CURRENT_DATE - INTERVAL '2 days',                 CURRENT_DATE - INTERVAL '2 days');
+    ( 'FR263454484', 'SRC-TRP-TTT20200506194051795', CURRENT_DATE - INTERVAL '2 days', CURRENT_DATE - INTERVAL '2 days',        CURRENT_DATE - INTERVAL '2 days',                 CURRENT_DATE - INTERVAL '2 days'),
+    ('FR_ATSEA_TST',                     'AT-SEA-01', NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours', NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours', NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours', NOW() AT TIME ZONE 'UTC' - INTERVAL '25 hours');

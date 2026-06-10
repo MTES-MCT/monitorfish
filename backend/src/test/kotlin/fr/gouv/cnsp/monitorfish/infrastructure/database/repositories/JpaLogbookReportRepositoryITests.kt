@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.within
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 @Import(MapperConfiguration::class)
 @SpringBootTest
@@ -1000,5 +1002,50 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         assertThat(result).hasSize(1)
         assertThat(result).containsKey("FR263454484")
         assertThat(result).doesNotContainKey("UNKNOWN_CFR_X")
+    }
+
+    @Test
+    @Transactional
+    fun `getCurrentTripDepAndPositionAtSeaDateTime Should return the trip departure and the latest at-sea position before the cutoff`() {
+        // Given: FR_ATSEA_TST has a trips_snapshot trip started ~25h ago and FR at-sea positions
+        // at -24h, -23h, -3h and -1h (see V666.1 & V666.34 test data). The -1h position is after
+        // the `NOW - 2h` cutoff and must be excluded.
+        val now = ZonedDateTime.now(UTC)
+
+        // When
+        val result = jpaLogbookReportRepository.getCurrentTripDepAndPositionAtSeaDateTime("FR_ATSEA_TST", 48)
+
+        // Then
+        assertThat(result).isNotNull
+        // Trip departure ≈ NOW - 25h
+        assertThat(result!!.departureDateTime).isCloseTo(now.minusHours(25), within(5, ChronoUnit.MINUTES))
+        // Latest qualifying at-sea position ≈ NOW - 3h (the -1h one is excluded by the cutoff)
+        assertThat(
+            result.firstPositionAtSeaOfLastTripDateTime,
+        ).isCloseTo(now.minusHours(3), within(5, ChronoUnit.MINUTES))
+    }
+
+    @Test
+    @Transactional
+    fun `getCurrentTripDepAndPositionAtSeaDateTime Should return a null position When the vessel has an active trip but no qualifying at-sea position`() {
+        // Given: SOCR4T3 has a trips_snapshot trip but its recent positions have a null time_emitting_at_sea
+
+        // When
+        val result = jpaLogbookReportRepository.getCurrentTripDepAndPositionAtSeaDateTime("SOCR4T3", 48)
+
+        // Then
+        assertThat(result).isNotNull
+        assertThat(result!!.departureDateTime).isNotNull
+        assertThat(result.firstPositionAtSeaOfLastTripDateTime).isNull()
+    }
+
+    @Test
+    @Transactional
+    fun `getCurrentTripDepAndPositionAtSeaDateTime Should return null When the CFR has no active trip`() {
+        // When
+        val result = jpaLogbookReportRepository.getCurrentTripDepAndPositionAtSeaDateTime("DOES_NOT_EXIST", 48)
+
+        // Then
+        assertThat(result).isNull()
     }
 }

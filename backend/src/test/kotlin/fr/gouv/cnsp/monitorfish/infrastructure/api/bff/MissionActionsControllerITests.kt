@@ -214,6 +214,13 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.isComplianceWithWaterRegulationsControl", equalTo(true)))
             .andExpect(jsonPath("$.isSafetyEquipmentAndStandardsComplianceControl", equalTo(true)))
             .andExpect(jsonPath("$.isSeafarersControl", equalTo(true)))
+            .andExpect(jsonPath("$.vmsEmissionControlBeforeArrival", equalTo("YES")))
+            .andExpect(jsonPath("$.portEntranceAndLandingAuthorized", equalTo("NO")))
+            .andExpect(jsonPath("$.minimumConservationReferenceSizeControlled", equalTo("YES")))
+            .andExpect(jsonPath("$.cratesWeighingSamplingControl", equalTo("NO")))
+            .andExpect(jsonPath("$.approvedWeighingOperatorInformation", equalTo("NOT_APPLICABLE")))
+            .andExpect(jsonPath("$.holdControlledAfterUnloading", equalTo("YES")))
+            .andExpect(jsonPath("$.catchesWeighedAtLanding", equalTo("NO")))
             .andExpect(
                 jsonPath(
                     "$.infractions[0].comments",

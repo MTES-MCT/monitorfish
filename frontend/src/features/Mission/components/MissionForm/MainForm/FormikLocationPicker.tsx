@@ -196,6 +196,7 @@ const StyledFieldSet = styled(Fieldset)`
   .Field-Checkbox {
     margin-top: 8px;
   }
+  width: 324px;
 `
 
 const Row = styled.div`

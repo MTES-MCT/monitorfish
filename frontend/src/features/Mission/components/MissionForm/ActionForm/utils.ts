@@ -37,6 +37,13 @@ export function getVesselName(vesselName: string | undefined) {
   return vesselName
 }
 
+export function getDefaultPresentationCodes(
+  isEISREnabled: boolean,
+  vesselLength: number | undefined
+): string[] | undefined {
+  return isEISREnabled && !!vesselLength && vesselLength < 12 ? ['WHL'] : undefined
+}
+
 export function getFlatInfractionFromThreatsHierarchy(
   infraction: MissionAction.Infraction,
   natinfsAsOptions?: Option<number>[]

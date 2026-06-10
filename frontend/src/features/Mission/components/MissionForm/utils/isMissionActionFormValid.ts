@@ -1,9 +1,11 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
+import { mainStore } from '@store'
 import { logSoftError } from '@utils/logSoftError'
 
 import * as ActionSchemas from '../ActionForm/schemas'
+import { computeIsEISREnabled } from '../hooks/useIsEISREnabled'
 
 import type { MissionActionFormValues } from '../types'
 import type { MainAppDispatch } from '@store'
@@ -13,6 +15,12 @@ export function isMissionActionFormValid(
   isCompletionValidation: boolean,
   dispatch: MainAppDispatch
 ): boolean {
+  const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
+  const isEISR = computeIsEISREnabled(
+    controlUnits.map(cu => cu.id),
+    actionFormValues.actionDatetimeUtc
+  )
+
   switch (actionFormValues.actionType) {
     case MissionAction.MissionActionType.AIR_CONTROL:
       return isCompletionValidation
@@ -26,7 +34,7 @@ export function isMissionActionFormValid(
 
     case MissionAction.MissionActionType.LAND_CONTROL:
       return isCompletionValidation
-        ? ActionSchemas.LandControlFormCompletionSchema.isValidSync(actionFormValues)
+        ? ActionSchemas.getLandControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
         : ActionSchemas.LandControlFormLiveSchema.isValidSync(actionFormValues)
 
     case MissionAction.MissionActionType.OBSERVATION:
@@ -35,7 +43,7 @@ export function isMissionActionFormValid(
 
     case MissionAction.MissionActionType.SEA_CONTROL:
       return isCompletionValidation
-        ? ActionSchemas.SeaControlFormCompletionSchema.isValidSync(actionFormValues)
+        ? ActionSchemas.getSeaControlFormCompletionSchema(isEISR).isValidSync(actionFormValues)
         : ActionSchemas.SeaControlFormLiveSchema.isValidSync(actionFormValues)
 
     default:

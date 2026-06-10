@@ -21,6 +21,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         completedBy: undefined,
         controlQualityComments: undefined,
         controlUnits: [],
+        discardedSpecies: [],
         districtCode: 'AY',
         emitsAis: undefined,
         emitsVms: undefined,
@@ -31,13 +32,16 @@ describe('features/Mission/components/MissionForm/utils', () => {
         flightGoals: [],
         gearOnboard: [
           {
+            averageWireThickness: undefined,
             comments: undefined,
             controlledMesh: undefined,
             declaredMesh: 70.0,
             gearCode: 'OTB',
+            gearMarkingIsCompliant: undefined,
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: undefined,
-            hasUncontrolledMesh: false
+            hasUncontrolledMesh: false,
+            wireType: undefined
           }
         ],
         hasSomeGearsSeized: false,
@@ -48,6 +52,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isAdministrativeControl: undefined,
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
+        isGangwayDeployed: undefined,
         isINNControl: false,
         isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
@@ -56,6 +61,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         latitude: 47.648401281163814,
         licencesAndLogbookObservations: undefined,
         licencesMatchActivity: undefined,
+        logbookFilledPriorToControl: undefined,
         logbookMatchesActivity: undefined,
         longitude: -4.281934312813745,
         numberOfVesselsFlownOver: undefined,
@@ -72,15 +78,19 @@ describe('features/Mission/components/MissionForm/utils', () => {
             controlledWeight: undefined,
             declaredWeight: 471.2,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'HKE',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           },
           {
             controlledWeight: undefined,
             declaredWeight: 13.46,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'BLI',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           }
         ],
         speciesSizeControlled: undefined,
@@ -97,31 +107,40 @@ describe('features/Mission/components/MissionForm/utils', () => {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
+        approvedWeighingOperatorInformation: undefined,
+        catchesWeighedAtLanding: undefined,
         completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],
+        cratesWeighingSamplingControl: undefined,
+        discardedSpecies: [],
         districtCode: 'AY',
         emitsAis: undefined,
         emitsVms: undefined,
         externalReferenceNumber: 'DONTSINK',
         facade: 'NAMO',
         faoAreas: ['27.8.b', '27.8.c'],
+        fishingLicencesMatchActivity: undefined,
         flagState: 'FR',
         flightGoals: [],
         gearOnboard: [
           {
+            averageWireThickness: undefined,
             comments: undefined,
             controlledMesh: undefined,
             declaredMesh: 70.0,
             gearCode: 'OTB',
+            gearMarkingIsCompliant: undefined,
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: undefined,
-            hasUncontrolledMesh: false
+            hasUncontrolledMesh: false,
+            wireType: undefined
           }
         ],
         hasSomeGearsSeized: false,
         hasSomeSpeciesSeized: false,
+        holdControlledAfterUnloading: undefined,
         id: 20,
         infractions: [],
         internalReferenceNumber: 'FAK000999999',
@@ -129,6 +148,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isAdministrativeControl: undefined,
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
+        isGangwayDeployed: undefined,
         isINNControl: false,
         isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
@@ -136,14 +156,19 @@ describe('features/Mission/components/MissionForm/utils', () => {
         latitude: 47.648401281163814,
         licencesAndLogbookObservations: undefined,
         licencesMatchActivity: undefined,
+        logbookFilledPriorToControl: undefined,
         logbookMatchesActivity: undefined,
         longitude: -4.281934312813745,
+        minimumConservationReferenceSizeControlled: undefined,
         missionId: 43,
         numberOfVesselsFlownOver: undefined,
         observationsByUnit: undefined,
+        onboardWeighingPermit: undefined,
         otherComments: undefined,
+        portEntranceAndLandingAuthorized: undefined,
         portLocode: undefined,
         portName: undefined,
+        propulsionEnginePowerControl: undefined,
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: false,
         seizureAndDiversionComments: undefined,
@@ -154,25 +179,34 @@ describe('features/Mission/components/MissionForm/utils', () => {
             controlledWeight: undefined,
             declaredWeight: 471.2,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'HKE',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           },
           {
             controlledWeight: undefined,
             declaredWeight: 13.46,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'BLI',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           }
         ],
         speciesQuantitySeized: undefined,
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
+        stowagePlanPresent: undefined,
+        underSizedSeparateRecording: undefined,
+        underSizedSeparateStowage: undefined,
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: undefined
+        vesselTargeted: undefined,
+        vmsEmissionControlBeforeArrival: undefined,
+        weighingCertificateAndSystemsValid: undefined
       }
     ]
 
@@ -201,6 +235,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         completedBy: undefined,
         controlQualityComments: undefined,
         controlUnits: [],
+        discardedSpecies: [],
         districtCode: 'AY',
         emitsAis: undefined,
         emitsVms: undefined,
@@ -211,13 +246,16 @@ describe('features/Mission/components/MissionForm/utils', () => {
         flightGoals: [],
         gearOnboard: [
           {
+            averageWireThickness: undefined,
             comments: undefined,
             controlledMesh: undefined,
             declaredMesh: 70.0,
             gearCode: 'OTB',
+            gearMarkingIsCompliant: undefined,
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: undefined,
-            hasUncontrolledMesh: false
+            hasUncontrolledMesh: false,
+            wireType: undefined
           }
         ],
         hasSomeGearsSeized: false,
@@ -229,6 +267,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isAdministrativeControl: undefined,
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
+        isGangwayDeployed: undefined,
         isINNControl: false,
         isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
@@ -237,6 +276,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         latitude: 47.648401281163814,
         licencesAndLogbookObservations: undefined,
         licencesMatchActivity: undefined,
+        logbookFilledPriorToControl: undefined,
         logbookMatchesActivity: undefined,
         longitude: -4.281934312813745,
         missionId: 43,
@@ -255,15 +295,19 @@ describe('features/Mission/components/MissionForm/utils', () => {
             controlledWeight: undefined,
             declaredWeight: 471.2,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'HKE',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           },
           {
             controlledWeight: undefined,
             declaredWeight: 13.46,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'BLI',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           }
         ],
         speciesQuantitySeized: undefined,
@@ -281,31 +325,40 @@ describe('features/Mission/components/MissionForm/utils', () => {
         actionDatetimeUtc: '2023-12-08T08:27:00Z',
         actionEndDatetimeUtc: undefined,
         actionType: MissionActionType.SEA_CONTROL,
+        approvedWeighingOperatorInformation: undefined,
+        catchesWeighedAtLanding: undefined,
         completedBy: undefined,
         completion: CompletionStatus.TO_COMPLETE,
         controlQualityComments: undefined,
         controlUnits: [],
+        cratesWeighingSamplingControl: undefined,
+        discardedSpecies: [],
         districtCode: 'AY',
         emitsAis: undefined,
         emitsVms: undefined,
         externalReferenceNumber: 'DONTSINK',
         facade: 'NAMO',
         faoAreas: ['27.8.b', '27.8.c'],
+        fishingLicencesMatchActivity: undefined,
         flagState: 'FR',
         flightGoals: [],
         gearOnboard: [
           {
+            averageWireThickness: undefined,
             comments: undefined,
             controlledMesh: undefined,
             declaredMesh: 70.0,
             gearCode: 'OTB',
+            gearMarkingIsCompliant: undefined,
             gearName: 'Chaluts de fond à panneaux',
             gearWasControlled: undefined,
-            hasUncontrolledMesh: false
+            hasUncontrolledMesh: false,
+            wireType: undefined
           }
         ],
         hasSomeGearsSeized: false,
         hasSomeSpeciesSeized: false,
+        holdControlledAfterUnloading: undefined,
         id: 20,
         infractions: [],
         internalReferenceNumber: 'FAK000999999',
@@ -313,6 +366,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isAdministrativeControl: undefined,
         isComplianceWithWaterRegulationsControl: undefined,
         isFromPoseidon: false,
+        isGangwayDeployed: undefined,
         isINNControl: false,
         isLastHaul: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
@@ -320,14 +374,19 @@ describe('features/Mission/components/MissionForm/utils', () => {
         latitude: 47.648401281163814,
         licencesAndLogbookObservations: undefined,
         licencesMatchActivity: undefined,
+        logbookFilledPriorToControl: undefined,
         logbookMatchesActivity: undefined,
         longitude: -4.281934312813745,
+        minimumConservationReferenceSizeControlled: undefined,
         missionId: 43,
         numberOfVesselsFlownOver: undefined,
         observationsByUnit: undefined,
+        onboardWeighingPermit: undefined,
         otherComments: undefined,
+        portEntranceAndLandingAuthorized: undefined,
         portLocode: undefined,
         portName: undefined,
+        propulsionEnginePowerControl: undefined,
         segments: [{ segment: 'SWW01/02/03', segmentName: 'Bottom trawls' }],
         seizureAndDiversion: false,
         seizureAndDiversionComments: undefined,
@@ -338,25 +397,34 @@ describe('features/Mission/components/MissionForm/utils', () => {
             controlledWeight: undefined,
             declaredWeight: 471.2,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'HKE',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           },
           {
             controlledWeight: undefined,
             declaredWeight: 13.46,
             nbFish: undefined,
+            rejectedWeight: undefined,
             speciesCode: 'BLI',
-            underSized: false
+            underSized: false,
+            underSizedWeight: undefined
           }
         ],
         speciesQuantitySeized: undefined,
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
+        stowagePlanPresent: undefined,
+        underSizedSeparateRecording: undefined,
+        underSizedSeparateStowage: undefined,
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: undefined
+        vesselTargeted: undefined,
+        vmsEmissionControlBeforeArrival: undefined,
+        weighingCertificateAndSystemsValid: undefined
       }
     ]
 

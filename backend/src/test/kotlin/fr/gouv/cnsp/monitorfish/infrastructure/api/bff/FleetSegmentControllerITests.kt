@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.ComputeFleetSegme
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.GetAllFleetSegmentsByYear
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ComputeFleetSegmentsDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.GearControlDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SpeciesControlDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SpeciesOnboardControlDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -125,19 +125,25 @@ class FleetSegmentControllerITests {
                                     ),
                                 species =
                                     listOf(
-                                        SpeciesControlDataInput(
+                                        SpeciesOnboardControlDataInput(
                                             speciesCode = "HKE",
                                             nbFish = null,
                                             declaredWeight = null,
                                             controlledWeight = null,
                                             underSized = null,
+                                            underSizedWeight = null,
+                                            presentationCodes = null,
+                                            faoZones = null,
                                         ),
-                                        SpeciesControlDataInput(
+                                        SpeciesOnboardControlDataInput(
                                             speciesCode = "BFT",
                                             nbFish = null,
                                             declaredWeight = null,
                                             controlledWeight = null,
                                             underSized = null,
+                                            underSizedWeight = null,
+                                            presentationCodes = null,
+                                            faoZones = null,
                                         ),
                                     ),
                             ),

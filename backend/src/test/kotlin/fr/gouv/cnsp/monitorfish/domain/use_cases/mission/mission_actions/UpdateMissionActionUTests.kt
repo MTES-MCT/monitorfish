@@ -11,7 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetSpeciesFromCode
 import fr.gouv.cnsp.monitorfish.fakers.SpeciesFaker
@@ -109,13 +109,13 @@ class UpdateMissionActionUTests {
         val expectedSpeciesName = "Atlantic cod"
         val species = SpeciesFaker.fakeSpecies(code = speciesCode, name = expectedSpeciesName)
 
-        val speciesControl = SpeciesControl()
+        val speciesControl = SpeciesOnboardControl()
         speciesControl.speciesCode = speciesCode
         speciesControl.speciesName = null // Initially null
 
-        val expectedSpeciesControl = SpeciesControl()
-        expectedSpeciesControl.speciesCode = speciesCode
-        expectedSpeciesControl.speciesName = expectedSpeciesName
+        val expectedSpeciesOnboardControl = SpeciesOnboardControl()
+        expectedSpeciesOnboardControl.speciesCode = speciesCode
+        expectedSpeciesOnboardControl.speciesName = expectedSpeciesName
 
         val action =
             MissionAction(
@@ -144,7 +144,7 @@ class UpdateMissionActionUTests {
         val expectedActionWithSpeciesName =
             action.copy(
                 facade = "NAMO",
-                speciesOnboard = listOf(expectedSpeciesControl),
+                speciesOnboard = listOf(expectedSpeciesOnboardControl),
             )
         given(missionActionsRepository.findById(anyOrNull())).willReturn(action)
         given(missionActionsRepository.save(anyOrNull())).willReturn(expectedActionWithSpeciesName)

@@ -1,9 +1,11 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
+import { mainStore } from '@store'
 import { logSoftError } from '@utils/logSoftError'
 
 import * as ActionSchemas from '../ActionForm/schemas'
+import { computeIsEISREnabled } from '../hooks/useIsEISREnabled'
 
 import type { MissionActionFormValues } from '../types'
 import type { MainAppDispatch } from '@store'
@@ -12,6 +14,12 @@ export function getMissionActionMissingFields(
   actionFormValues: MissionActionFormValues | MissionAction.MissionAction,
   dispatch: MainAppDispatch
 ): number {
+  const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
+  const isEISR = computeIsEISREnabled(
+    controlUnits.map(cu => cu.id),
+    actionFormValues.actionDatetimeUtc
+  )
+
   try {
     switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL: {
@@ -27,7 +35,7 @@ export function getMissionActionMissingFields(
       }
 
       case MissionAction.MissionActionType.LAND_CONTROL: {
-        ActionSchemas.LandControlFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.getLandControlFormCompletionSchema(isEISR).validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }
@@ -40,7 +48,7 @@ export function getMissionActionMissingFields(
       }
 
       case MissionAction.MissionActionType.SEA_CONTROL: {
-        ActionSchemas.SeaControlFormCompletionSchema.validateSync(actionFormValues, { abortEarly: false })
+        ActionSchemas.getSeaControlFormCompletionSchema(isEISR).validateSync(actionFormValues, { abortEarly: false })
 
         return 0
       }

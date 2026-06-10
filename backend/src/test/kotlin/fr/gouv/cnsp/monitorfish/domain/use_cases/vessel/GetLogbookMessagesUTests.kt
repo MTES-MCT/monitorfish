@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessag
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessagesFromFlagStatesWithoutRET
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getTrip9463715LogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
+import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.VesselContactToUpdateDataInput
@@ -39,6 +40,8 @@ class VesselController(
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
     private val getVesselTripNumbers: GetVesselTripNumbers,
+    private val getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook,
+    private val getHasFilledLogbookForCurrentTrip: GetHasFilledLogbookForCurrentTrip,
     private val getVesselContactToUpdateByVesselId: GetVesselContactToUpdateByVesselId,
     private val saveVesselContactToUpdate: SaveVesselContactToUpdate,
 ) {
@@ -347,6 +350,25 @@ class VesselController(
         @RequestParam(name = "internalReferenceNumber")
         internalReferenceNumber: String,
     ): List<String> = getVesselTripNumbers.execute(internalReferenceNumber)
+
+    @GetMapping("/logbook/species-control-prefill")
+    @Operation(summary = "Get species control pre-fill data from the last logbook trip (FAR and DIS messages)")
+    fun getSpeciesControlPrefill(
+        @Parameter(description = "Vessel CFR (internal reference number)", required = true)
+        @RequestParam(name = "cfr")
+        cfr: String,
+    ): List<SpeciesControlPrefillDataOutput> =
+        getSpeciesControlPrefillFromLogbook.execute(cfr).map {
+            SpeciesControlPrefillDataOutput.fromSpeciesControlPrefill(it)
+        }
+
+    @GetMapping("/logbook/has-filled-logbook-for-current-trip")
+    @Operation(summary = "Has filled logbook for current trip")
+    fun getHasFilledLogbookForCurrentTrip(
+        @Parameter(description = "Vessel CFR (internal reference number)", required = true)
+        @RequestParam(name = "cfr")
+        cfr: String,
+    ): Boolean = getHasFilledLogbookForCurrentTrip.execute(cfr)
 
     @GetMapping("/risk_factor")
     @Operation(summary = "Get vessel risk factor")

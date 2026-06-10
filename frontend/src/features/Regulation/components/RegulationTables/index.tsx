@@ -221,6 +221,10 @@ const BackofficeContainer = styled.div`
   background-color: ${p => p.theme.color.white};
   width: 100%;
   height: 100%;
+
+  > div:nth-child(2) {
+    width: 50%;
+  }
 `
 
 const RegulatoryZonePanel = styled.div`

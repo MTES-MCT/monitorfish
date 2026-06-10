@@ -12,7 +12,7 @@ export const VesselIdentitySchema = z.strictObject({
   ircs: stringOrUndefined,
   mmsi: stringOrUndefined,
   vesselId: numberOrUndefined,
-  vesselIdentifier: z.union([z.nativeEnum(VesselIdentifier), z.undefined()]),
+  vesselIdentifier: z.enum(VesselIdentifier).optional(),
   vesselLength: numberOrUndefined,
   vesselName: stringOrUndefined
 })

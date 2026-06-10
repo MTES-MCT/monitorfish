@@ -114,7 +114,7 @@ def parse_css(css):
         "fishSize": css.get("SF"),
         "productDestination": css.get("PP"),
         "withdrawn": css.get("WD"),
-        "producerOrganizationUse": css.get("OP"),
+        "producerOrganization": css.get("OP"),
     }
 
     assert "SPE" in children

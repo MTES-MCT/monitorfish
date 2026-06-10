@@ -75,7 +75,7 @@ def parse_sales_document(
         (value_dict, vessel_dict, trip_number, sales_datetime_utc_str)
     """
 
-    currency = (_get(doc, './ram:CurrencyCode[@listID="TERRITORY_CURR"]'),)
+    currency = _get(doc, './ram:CurrencyCode[@listID="TERRITORY_CURR"]')
     products = [
         parse_product(p, currency=currency)
         for p in _findall(doc, "./ram:SpecifiedSalesBatch/ram:SpecifiedAAPProduct")

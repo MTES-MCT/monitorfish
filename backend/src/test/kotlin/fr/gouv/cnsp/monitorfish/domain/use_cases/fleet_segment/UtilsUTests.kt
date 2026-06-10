@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.dtos.SpeciesCatchForSegmentCalculation
 import org.assertj.core.api.Assertions.assertThat
@@ -107,23 +107,23 @@ class UtilsUTests {
             )
         val species =
             listOf(
-                SpeciesControl().also {
+                SpeciesOnboardControl().also {
                     it.speciesCode = "BSS"
                     it.declaredWeight = 200.0
                 },
-                SpeciesControl().also {
+                SpeciesOnboardControl().also {
                     it.speciesCode = "HKE"
                     it.declaredWeight = 100.0
                 },
-                SpeciesControl().also {
+                SpeciesOnboardControl().also {
                     it.speciesCode = "NEP"
                     it.declaredWeight = 250.0
                 },
-                SpeciesControl().also {
+                SpeciesOnboardControl().also {
                     it.speciesCode = "SOL"
                     it.declaredWeight = 100.0
                 },
-                SpeciesControl().also {
+                SpeciesOnboardControl().also {
                     it.speciesCode = "SWO"
                     it.declaredWeight = 80.0
                 },

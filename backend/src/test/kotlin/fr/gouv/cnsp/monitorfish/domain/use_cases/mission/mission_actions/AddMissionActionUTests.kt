@@ -9,7 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetSpeciesFromCode
 import fr.gouv.cnsp.monitorfish.fakers.SpeciesFaker
@@ -120,15 +120,15 @@ class AddMissionActionUTests {
         val expectedSpeciesName = "Atlantic cod"
         val species = SpeciesFaker.fakeSpecies(code = speciesCode, name = expectedSpeciesName)
 
-        val speciesControl = SpeciesControl()
+        val speciesControl = SpeciesOnboardControl()
         speciesControl.speciesCode = speciesCode
         speciesControl.speciesName = null // Initially null
         speciesControl.isNotLanded = true
 
-        val expectedSpeciesControl = SpeciesControl()
-        expectedSpeciesControl.speciesCode = speciesCode
-        expectedSpeciesControl.speciesName = expectedSpeciesName
-        expectedSpeciesControl.isNotLanded = true
+        val expectedSpeciesOnboardControl = SpeciesOnboardControl()
+        expectedSpeciesOnboardControl.speciesCode = speciesCode
+        expectedSpeciesOnboardControl.speciesName = expectedSpeciesName
+        expectedSpeciesOnboardControl.isNotLanded = true
 
         val action =
             MissionAction(
@@ -157,7 +157,7 @@ class AddMissionActionUTests {
         val expectedActionWithSpeciesName =
             action.copy(
                 facade = "NAMO",
-                speciesOnboard = listOf(expectedSpeciesControl),
+                speciesOnboard = listOf(expectedSpeciesOnboardControl),
             )
 
         given(missionActionsRepository.save(anyOrNull())).willReturn(expectedActionWithSpeciesName)

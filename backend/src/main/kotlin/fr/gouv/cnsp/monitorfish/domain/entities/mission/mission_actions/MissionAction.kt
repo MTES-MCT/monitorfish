@@ -63,8 +63,8 @@ data class MissionAction(
     val seizureAndDiversionComments: String? = null,
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
-    val speciesOnboard: List<SpeciesControl> = listOf(),
-    val discardedSpecies: List<SpeciesControl> = listOf(),
+    val speciesOnboard: List<SpeciesOnboardControl> = listOf(),
+    val discardedSpecies: List<DiscardedSpeciesControl> = listOf(),
     val isFromPoseidon: Boolean,
     val isLastHaul: Boolean = false,
     /**

@@ -1,12 +1,13 @@
 import { z } from 'zod'
 
 import { MissionAction as MissionActionConstants } from './missionAction.constants'
+import { DiscardedSpeciesControlSchema } from './schemas/DiscardedSpeciesControlSchema'
 import { FleetSegmentSchema } from './schemas/FleetSegmentSchema'
 import { GearControlSchema } from './schemas/GearControlSchema'
 import { InfractionSchema } from './schemas/InfractionSchema'
 import { MissionActionSchema } from './schemas/MissionActionSchema'
 import { NatinfSchema } from './schemas/NatinfSchema'
-import { SpeciesControlSchema } from './schemas/SpeciesControlSchema'
+import { SpeciesOnboardControlSchema } from './schemas/SpeciesOnboardControlSchema'
 import { ThreatSchema } from './schemas/ThreatSchema'
 
 import type { ThreatCharacterizationSchema } from '@features/Mission/schemas/ThreatCharacterizationSchema'
@@ -28,7 +29,8 @@ export namespace MissionAction {
   export type Infraction = z.infer<typeof InfractionSchema>
   export type MissionAction = z.infer<typeof MissionActionSchema>
   export type Natinf = z.infer<typeof NatinfSchema>
-  export type SpeciesControl = z.infer<typeof SpeciesControlSchema>
+  export type SpeciesOnboardControl = z.infer<typeof SpeciesOnboardControlSchema>
+  export type DiscardedSpeciesControl = z.infer<typeof DiscardedSpeciesControlSchema>
   export type Threat = z.infer<typeof ThreatSchema>
   export type ThreatCharacterization = z.infer<typeof ThreatCharacterizationSchema>
 

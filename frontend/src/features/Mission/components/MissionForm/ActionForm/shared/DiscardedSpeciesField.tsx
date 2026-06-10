@@ -86,17 +86,11 @@ export function DiscardedSpeciesField() {
     return Array.from(indicesBySpecies.entries())
   }, [input.value])
 
-  const makeEmptyDiscard = (speciesCode: string): MissionAction.SpeciesControl => ({
-    controlledWeight: undefined,
-    declaredWeight: undefined,
+  const makeEmptyDiscard = (speciesCode: string): MissionAction.DiscardedSpeciesControl => ({
     discardReason: undefined,
     faoZones: values.faoAreas,
-    nbFish: undefined,
-    presentationCodes: undefined,
     rejectedWeight: undefined,
-    speciesCode,
-    underSized: false,
-    underSizedWeight: undefined
+    speciesCode
   })
 
   const addSpecies = (newSpecy: Specy | undefined) => {

@@ -10,7 +10,7 @@ import type { RiskFactor } from '@features/RiskFactor/types'
 
 export const updateActionSpeciesOnboard =
   (dispatch, setFieldValue: (field: string, value: any) => void) =>
-  async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesControl[]> => {
+  async (missionAction: MissionActionFormValues): Promise<MissionAction.SpeciesOnboardControl[]> => {
     if (!missionAction.internalReferenceNumber) {
       return []
     }
@@ -39,7 +39,6 @@ export const updateActionSpeciesOnboard =
         controlledWeight: undefined,
         declaredWeight: specy.weight,
         nbFish: undefined,
-        rejectedWeight: undefined,
         speciesCode: specy.species,
         underSized: false,
         underSizedWeight: undefined
@@ -61,9 +60,12 @@ export const updateActionSpeciesOnboard =
  * - `discardedSpecies`: one entry per logbook discard (DIS/DIM), kept separate from the catches.
  */
 export function mergeSpeciesOnboardWithPrefill(
-  riskFactorSpecies: MissionAction.SpeciesControl[],
+  riskFactorSpecies: MissionAction.SpeciesOnboardControl[],
   prefillData: Logbook.SpeciesControlPrefill[]
-): { discardedSpecies: MissionAction.SpeciesControl[]; nextSpeciesOnboard: MissionAction.SpeciesControl[] } {
+): {
+  discardedSpecies: MissionAction.DiscardedSpeciesControl[]
+  nextSpeciesOnboard: MissionAction.SpeciesOnboardControl[]
+} {
   // Catch prefill entries (no discardReason) carry the FAR metadata to merge into the risk factor catches.
   const catchPrefillBySpecies = new Map(prefillData.filter(p => !p.discardReason).map(p => [p.speciesCode, p]))
 
@@ -82,18 +84,12 @@ export function mergeSpeciesOnboardWithPrefill(
 
   // Discard prefill entries (with a discardReason) become standalone discard entries.
   const discardedSpecies = prefillData
-    .filter(p => !!p.discardReason && !!p.speciesCode)
+    .filter(p => !!p.discardReason)
     .map(p => ({
-      controlledWeight: undefined,
-      declaredWeight: undefined,
       discardReason: p.discardReason,
       faoZones: p.faoZones,
-      nbFish: undefined,
-      presentationCodes: undefined,
       rejectedWeight: p.rejectedWeight,
-      speciesCode: p.speciesCode as string,
-      underSized: false,
-      underSizedWeight: undefined
+      speciesCode: p.speciesCode
     }))
 
   return { discardedSpecies, nextSpeciesOnboard }

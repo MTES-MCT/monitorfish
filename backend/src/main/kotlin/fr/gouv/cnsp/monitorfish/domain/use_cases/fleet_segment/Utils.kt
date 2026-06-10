@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment
 import fr.gouv.cnsp.monitorfish.domain.entities.fao_area.FaoArea
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.dtos.SpeciesCatchForSegmentCalculation
 
@@ -58,7 +58,7 @@ fun FaoArea.hasFaoCodeIncludedIn(faoCode: String?): Boolean {
 fun getSpeciesCatchesForSegmentCalculation(
     faoAreas: List<String>,
     gears: List<GearControl>,
-    species: List<SpeciesControl>,
+    species: List<SpeciesOnboardControl>,
     allSpecies: List<Species>,
 ): List<SpeciesCatchForSegmentCalculation> =
     faoAreas.flatMap { faoArea ->

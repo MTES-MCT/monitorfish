@@ -4,14 +4,12 @@ import { describe, expect, it } from '@jest/globals'
 import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
-const makeSpecies = (speciesCode: string, overrides: Partial<MissionAction.SpeciesControl> = {}): any => ({
+const makeSpecies = (speciesCode: string, overrides: Partial<MissionAction.SpeciesOnboardControl> = {}): any => ({
   controlledWeight: undefined,
   declaredWeight: 100,
-  discardReason: undefined,
   faoZones: undefined,
   nbFish: undefined,
   presentationCodes: undefined,
-  rejectedWeight: undefined,
   speciesCode,
   underSized: false,
   underSizedWeight: undefined,
@@ -61,8 +59,8 @@ describe('mergeSpeciesOnboardWithPrefill()', () => {
 
     const { discardedSpecies, nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
-    expect(nextSpeciesOnboard[0]!.rejectedWeight).toBeUndefined()
-    expect(nextSpeciesOnboard[0]!.discardReason).toBeUndefined()
+    expect(nextSpeciesOnboard).toHaveLength(1)
+    expect(nextSpeciesOnboard[0]!.speciesCode).toBe('HKE')
     expect(discardedSpecies).toHaveLength(1)
     expect(discardedSpecies[0]!.speciesCode).toBe('HKE')
     expect(discardedSpecies[0]!.rejectedWeight).toBe(50)
@@ -108,7 +106,6 @@ describe('mergeSpeciesOnboardWithPrefill()', () => {
     expect(discardedSpecies).toHaveLength(1)
     const hke = discardedSpecies[0]!
     expect(hke.speciesCode).toBe('HKE')
-    expect(hke.declaredWeight).toBeUndefined()
     expect(hke.rejectedWeight).toBe(30)
     expect(hke.discardReason).toBe('DIS')
   })

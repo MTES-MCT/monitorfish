@@ -4,8 +4,9 @@ import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../
 import { MissionAction } from '../missionAction.constants'
 import { FleetSegmentSchema } from './FleetSegmentSchema'
 import { GearControlSchema } from './GearControlSchema'
+import { DiscardedSpeciesControlSchema } from './DiscardedSpeciesControlSchema'
 import { InfractionSchema } from './InfractionSchema'
-import { SpeciesControlSchema } from './SpeciesControlSchema'
+import { SpeciesOnboardControlSchema } from './SpeciesOnboardControlSchema'
 import { LegacyControlUnitSchema } from '../../ControlUnit/schemas/LegacyControlUnitSchema'
 
 export const MissionActionSchema = z.strictObject({
@@ -19,7 +20,7 @@ export const MissionActionSchema = z.strictObject({
   controlQualityComments: stringOrUndefined,
   controlUnits: z.array(LegacyControlUnitSchema),
   cratesWeighingSamplingControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
-  discardedSpecies: z.array(SpeciesControlSchema),
+  discardedSpecies: z.array(DiscardedSpeciesControlSchema),
   districtCode: stringOrUndefined,
   emitsAis: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   emitsVms: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
@@ -69,7 +70,7 @@ export const MissionActionSchema = z.strictObject({
   seizureAndDiversionComments: stringOrUndefined,
   separateStowageOfPreservedSpecies: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   speciesObservations: stringOrUndefined,
-  speciesOnboard: z.array(SpeciesControlSchema),
+  speciesOnboard: z.array(SpeciesOnboardControlSchema),
   speciesQuantitySeized: numberOrUndefined,
   speciesSizeControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   speciesWeightControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),

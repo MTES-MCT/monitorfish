@@ -133,13 +133,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       return
     }
 
-    const newSpecies: MissionAction.SpeciesControl = {
+    const newSpecies: MissionAction.SpeciesOnboardControl = {
       controlledWeight: undefined,
       declaredWeight: undefined,
       faoZones: isEISREnabled ? values.faoAreas : undefined,
       nbFish: undefined,
       presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
-      rejectedWeight: undefined,
       speciesCode: newSpecy.code,
       underSized: false,
       underSizedWeight: undefined

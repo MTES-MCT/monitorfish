@@ -76,7 +76,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -232,7 +232,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -399,7 +399,7 @@ class GetActivityReportsUTests {
     fun `execute Should add the fao area for a LAND control`() {
         runBlocking {
             // Given
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             given(fleetSegmentRepository.findAllByYear(any())).willReturn(
@@ -539,7 +539,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -622,7 +622,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -787,7 +787,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -932,7 +932,7 @@ class GetActivityReportsUTests {
                 TestUtils.getDummyFleetSegments(),
             )
 
-            val species = SpeciesControl()
+            val species = SpeciesOnboardControl()
             species.speciesCode = "HKE"
 
             val controls =
@@ -1148,11 +1148,11 @@ class GetActivityReportsUTests {
                         actionType = actionType,
                         speciesOnboard =
                             listOf(
-                                SpeciesControl().apply {
+                                SpeciesOnboardControl().apply {
                                     speciesCode = "ALB"
                                     declaredWeight = 23750.0
                                 },
-                                SpeciesControl().apply {
+                                SpeciesOnboardControl().apply {
                                     speciesCode = "BFT"
                                     declaredWeight = 7845.0
                                 },

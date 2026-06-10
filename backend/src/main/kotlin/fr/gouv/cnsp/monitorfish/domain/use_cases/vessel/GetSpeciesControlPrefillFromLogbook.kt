@@ -4,7 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControlPrefill
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
 
@@ -13,7 +13,7 @@ class GetSpeciesControlPrefillFromLogbook(
     private val logbookReportRepository: LogbookReportRepository,
     private val getLogbookMessages: GetLogbookMessages,
 ) {
-    fun execute(cfr: String): List<SpeciesControl> {
+    fun execute(cfr: String): List<SpeciesControlPrefill> {
         val trip = logbookReportRepository.findAllTrips(cfr).lastOrNull() ?: return emptyList()
 
         val messages =
@@ -42,8 +42,8 @@ class GetSpeciesControlPrefillFromLogbook(
                 catch.presentation?.let { data.presentationCodes.add(it) }
             }
 
-        // From DIS messages: one discard entry per (species, nature), where nature is DIM when the
-        // catch presentation is "DIM", otherwise DIS. RET (protected species) has no logbook signal.
+        // From DIS messages: one discard entry per (species, DiscardReason), where DiscardReason is DIM when the
+        // catch presentation is "DIM", otherwise DIS.
         data class DisData(
             var rejectedWeight: Double,
             val faoZones: MutableSet<String>,
@@ -62,22 +62,20 @@ class GetSpeciesControlPrefillFromLogbook(
                 catch.faoZone?.let { data.faoZones.add(it) }
             }
 
-        // Catch entries from FAR (no discardReason).
+        // Catch entries from FAR
         val catches =
             farBySpecies.map { (species, farData) ->
-                SpeciesControl().apply {
-                    speciesCode = species
+                SpeciesControlPrefill(speciesCode = species).apply {
                     faoZones = farData.faoZones.toList().takeIf { it.isNotEmpty() }
                     presentationCodes = farData.presentationCodes.toList().takeIf { it.isNotEmpty() }
                 }
             }
 
-        // Discard entries from DIS (one per species + nature).
+        // Discard entries from DIS.
         val discards =
             disBySpeciesAndReason.map { (key, disData) ->
                 val (species, reason) = key
-                SpeciesControl().apply {
-                    speciesCode = species
+                SpeciesControlPrefill(speciesCode = species).apply {
                     rejectedWeight = disData.rejectedWeight.takeIf { it > 0.0 }
                     discardReason = reason
                     faoZones = disData.faoZones.toList().takeIf { it.isNotEmpty() }

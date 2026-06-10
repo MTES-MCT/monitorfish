@@ -359,7 +359,7 @@ class VesselController(
         cfr: String,
     ): List<SpeciesControlPrefillDataOutput> =
         getSpeciesControlPrefillFromLogbook.execute(cfr).map {
-            SpeciesControlPrefillDataOutput.fromSpeciesControl(it)
+            SpeciesControlPrefillDataOutput.fromSpeciesControlPrefill(it)
         }
 
     @GetMapping("/logbook/has-filled-logbook-for-current-trip")

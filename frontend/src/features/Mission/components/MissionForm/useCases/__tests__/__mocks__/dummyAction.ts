@@ -80,7 +80,6 @@ export const dummyAction = {
       controlledWeight: undefined,
       declaredWeight: 471.2,
       nbFish: undefined,
-      rejectedWeight: undefined,
       speciesCode: 'HKE',
       underSized: false,
       underSizedWeight: undefined
@@ -89,7 +88,6 @@ export const dummyAction = {
       controlledWeight: undefined,
       declaredWeight: 13.46,
       nbFish: undefined,
-      rejectedWeight: undefined,
       speciesCode: 'BLI',
       underSized: false,
       underSizedWeight: undefined

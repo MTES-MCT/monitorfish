@@ -142,6 +142,9 @@ dependencies {
 
     // Serialization / API
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.3")
+    // Required to (de)serialize java.util.Optional (e.g. PatchableMissionActionDataInput): since the
+    // Spring Boot 4 upgrade the starters ship Jackson 3 and no longer pull this Jackson 2 module.
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.21.3")
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
     api("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
 

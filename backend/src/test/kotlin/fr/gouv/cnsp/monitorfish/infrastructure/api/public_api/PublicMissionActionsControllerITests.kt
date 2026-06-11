@@ -2,16 +2,20 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -28,6 +32,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
+import java.util.Optional
 
 @Import(
     MapperConfiguration::class,
@@ -104,5 +109,38 @@ class PublicMissionActionsControllerITests {
             )
             // Then
             .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `Should patch a mission action with both datetimes set and observationsByUnit erased`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
+        given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+
+        // When
+        api
+            .perform(
+                patch("/api/v1/mission_actions/123")
+                    .content(
+                        """
+                        {
+                            "observationsByUnit": null,
+                            "actionDatetimeUtc": "2026-06-10T08:42:00Z",
+                            "actionEndDatetimeUtc": "2026-06-10T09:30:59Z"
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+
+        val patchCaptor = argumentCaptor<PatchableMissionAction>()
+        Mockito.verify(patchMissionAction).execute(eq(123), patchCaptor.capture())
+        assertThat(patchCaptor.firstValue.actionDatetimeUtc)
+            .isEqualTo(Optional.of(ZonedDateTime.parse("2026-06-10T08:42:00Z")))
+        assertThat(patchCaptor.firstValue.actionEndDatetimeUtc)
+            .isEqualTo(Optional.of(ZonedDateTime.parse("2026-06-10T09:30:59Z")))
+        assertThat(patchCaptor.firstValue.observationsByUnit).isEqualTo(Optional.empty<String>())
     }
 }

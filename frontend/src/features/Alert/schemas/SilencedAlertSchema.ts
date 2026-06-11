@@ -2,7 +2,7 @@ import { PendingAlertValueSchema } from '@features/Alert/schemas/PendingAlertVal
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import z from 'zod'
 
-import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from '../../../types'
+import { booleanOptional, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const SilencedAlertSchema = z.strictObject({
   externalReferenceNumber: stringOrUndefined,
@@ -10,10 +10,10 @@ export const SilencedAlertSchema = z.strictObject({
   id: z.number(),
   internalReferenceNumber: stringOrUndefined,
   ircs: stringOrUndefined,
-  isReactivated: booleanOrUndefined,
+  isReactivated: booleanOptional,
   silencedBeforeDate: z.string(),
   value: PendingAlertValueSchema,
   vesselId: numberOrUndefined,
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()]),
-  vesselName: z.string()
+  vesselName: stringOrUndefined
 })

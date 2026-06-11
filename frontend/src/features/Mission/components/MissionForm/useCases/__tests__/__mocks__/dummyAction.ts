@@ -81,6 +81,7 @@ export const dummyAction = {
       declaredWeight: 471.2,
       nbFish: undefined,
       speciesCode: 'HKE',
+      speciesName: undefined,
       underSized: false,
       underSizedWeight: undefined
     },
@@ -89,6 +90,7 @@ export const dummyAction = {
       declaredWeight: 13.46,
       nbFish: undefined,
       speciesCode: 'BLI',
+      speciesName: undefined,
       underSized: false,
       underSizedWeight: undefined
     }

@@ -43,6 +43,10 @@ export const stringOrUndefined = z.union([z.string(), z.undefined()])
 export const numberOrUndefined = z.union([z.number(), z.undefined()])
 export const booleanOrUndefined = z.union([z.boolean(), z.undefined()])
 
+export const stringOptional = z.string().optional()
+export const numberOptional = z.number().optional()
+export const booleanOptional = z.boolean().optional()
+
 export type BannerStackItem = {
   id: number
   props: BannerStackItemProps

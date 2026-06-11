@@ -70,7 +70,7 @@ export function MapSettings({ isOpened, onClose }) {
       )}
       <MapPropertyTrigger
         booleanProperty={showingVesselsEstimatedPositions}
-        IconSVG={EstimatedPosition}
+        IconSVG={EstimatedPosition as typeof EstimatedPositionSVG}
         text="les positions estimées des navires"
         updateBooleanProperty={isShowed => dispatch(displayVesselsEstimatedPositions(isShowed))}
       />

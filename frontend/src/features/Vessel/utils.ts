@@ -111,20 +111,26 @@ export const extractVesselIdentityProps = (
     | PendingAlert
     | SilencedAlert
     | Vessel.VesselIdentity
-): Vessel.VesselIdentity => ({
-  beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : undefined,
-  districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : undefined,
-  externalReferenceNumber:
-    ('externalMarker' in vessel ? vessel.externalMarker : vessel.externalReferenceNumber) ?? undefined,
-  flagState: vessel.flagState,
-  internalReferenceNumber: ('cfr' in vessel ? vessel.cfr : vessel.internalReferenceNumber) ?? undefined,
-  ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : undefined,
-  mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : undefined,
-  vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : undefined,
-  vesselIdentifier: 'vesselIdentifier' in vessel && !!vessel.vesselIdentifier ? vessel.vesselIdentifier : undefined,
-  vesselLength: undefined,
-  vesselName: vessel.vesselName ?? undefined
-})
+): Vessel.VesselIdentity => {
+  const externalReferenceNumber = 'externalReferenceNumber' in vessel ? vessel.externalReferenceNumber : undefined
+  const externalMarker = 'externalMarker' in vessel ? vessel.externalMarker : undefined
+  const internalReferenceNumber = 'internalReferenceNumber' in vessel ? vessel.internalReferenceNumber : undefined
+  const cfr = 'cfr' in vessel ? vessel.cfr : undefined
+
+  return {
+    beaconNumber: 'beaconNumber' in vessel && !!vessel.beaconNumber ? vessel.beaconNumber : undefined,
+    districtCode: 'districtCode' in vessel && !!vessel.districtCode ? vessel.districtCode : undefined,
+    externalReferenceNumber: externalReferenceNumber ?? externalMarker ?? undefined,
+    flagState: vessel.flagState,
+    internalReferenceNumber: internalReferenceNumber ?? cfr ?? undefined,
+    ircs: 'ircs' in vessel && !!vessel.ircs ? vessel.ircs : undefined,
+    mmsi: 'mmsi' in vessel && !!vessel.mmsi ? vessel.mmsi : undefined,
+    vesselId: 'vesselId' in vessel && !!vessel.vesselId ? vessel.vesselId : undefined,
+    vesselIdentifier: 'vesselIdentifier' in vessel && !!vessel.vesselIdentifier ? vessel.vesselIdentifier : undefined,
+    vesselLength: undefined,
+    vesselName: vessel.vesselName ?? undefined
+  }
+}
 
 // Type to enforce strong typing: properties specified in `K` will be required, others will remain optional
 type VesselProperties<K extends keyof Vessel.VesselLastPositionFeature> = Required<

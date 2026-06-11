@@ -95,7 +95,7 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
                   options={MISSION_TYPES_AS_OPTIONS}
                 />
 
-                <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Mission sous JDP" name="isUnderJdp" />
+                <IsUnderJdpFormikCheckbox isUndefinedWhenDisabled label="Sous JDP" name="isUnderJdp" />
               </MultiCheck>
 
               <FormikMultiRadio isInline label="Ordre de mission" name="hasMissionOrder" options={BOOLEAN_AS_OPTIONS} />
@@ -136,10 +136,13 @@ function UnmemoizedMainForm({ initialValues, missionId, onChange }: MainFormProp
 export const MainForm = memo(UnmemoizedMainForm, () => true)
 
 const IsUnderJdpFormikCheckbox = styled(FormikCheckbox)`
-  margin-top: 24px;
+  margin-top: 22px;
+  margin-left: 46px;
 `
 
-const MultiCheck = styled.div``
+const MultiCheck = styled.div`
+  display: flex;
+`
 
 // TODO Why is there a `font-weight: 700` for legends in mini.css?
 const Wrapper = styled.div`

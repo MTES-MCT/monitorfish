@@ -252,7 +252,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
           },
           {
             isRequired: true,
-            label: 'Contrôle de pesée - des caisses/conteneurs - échantillonnage',
+            label: 'Contrôle de pesée / décompte des caisses / échantillonnage',
             name: 'cratesWeighingSamplingControl'
           },
           {
@@ -316,7 +316,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                   specyOnboard.speciesCode
                 } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
                 {isEISREnabled && !isUnderSizedShown(index) && (
-                  <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => openUnderSized(index)}>
+                  <AddButton
+                    accent={Accent.SECONDARY}
+                    disabled={!values.isGangwayDeployed}
+                    Icon={Icon.Plus}
+                    onClick={() => openUnderSized(index)}
+                  >
                     Sous-taille
                   </AddButton>
                 )}
@@ -326,13 +331,25 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               </TagRow>
 
               <FieldsRow>
-                <FormikNumberInput label="Qté déclarée" name={`speciesOnboard[${index}].declaredWeight`} />
-                <FormikNumberInput label={controlledWeightLabel} name={`speciesOnboard[${index}].controlledWeight`} />
+                <FormikNumberInput
+                  disabled={!values.isGangwayDeployed}
+                  label="Qté déclarée"
+                  name={`speciesOnboard[${index}].declaredWeight`}
+                />
+                <FormikNumberInput
+                  disabled={!values.isGangwayDeployed}
+                  label={controlledWeightLabel}
+                  name={`speciesOnboard[${index}].controlledWeight`}
+                />
                 {isEISREnabled ? (
                   <>
                     {isUnderSizedShown(index) && (
                       <>
-                        <FormikNumberInput label="Qté ss-taille" name={`speciesOnboard[${index}].underSizedWeight`} />
+                        <FormikNumberInput
+                          disabled={!values.isGangwayDeployed}
+                          label="Qté ss-taille"
+                          name={`speciesOnboard[${index}].underSizedWeight`}
+                        />
                         <DeleteButton
                           accent={Accent.SECONDARY}
                           Icon={Icon.Delete}
@@ -342,12 +359,14 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                       </>
                     )}
                     <StyledCheckPicker
+                      disabled={!values.isGangwayDeployed}
                       label="Présentation"
                       name={`speciesOnboard[${index}].presentationCodes`}
                       options={PRESENTATION_OPTIONS}
                       searchable
                     />
                     <StyledCheckPicker
+                      disabled={!values.isGangwayDeployed}
                       isRequired
                       label="Zone de pêche"
                       name={`speciesOnboard[${index}].faoZones`}

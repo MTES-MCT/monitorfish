@@ -22,7 +22,7 @@ export const updateActionLogbookFilledPriorToControl =
     ])
 
     const vessel = vesselResult?.data
-    const isVesselUnder10m = !!vessel?.length && vessel.length <= 10
+    const isVesselUnder10m = !!vessel?.length && vessel.length < 12
     if (isVesselUnder10m) {
       setFieldValue('logbookFilledPriorToControl', MissionAction.ControlCheck.NOT_APPLICABLE)
 

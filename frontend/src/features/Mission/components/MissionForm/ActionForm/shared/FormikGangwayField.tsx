@@ -6,6 +6,8 @@ import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '../../types'
 
+import ControlCheck = MissionAction.ControlCheck
+
 const GANGWAY_DEPENDENT_FIELDS: Array<keyof MissionActionFormValues> = [
   'propulsionEnginePowerControl',
   'fishingLicencesMatchActivity',
@@ -50,6 +52,7 @@ export function FormikGangwayField() {
 
       values.gearOnboard?.forEach((_, index) => {
         setFieldValue(`gearOnboard[${index}].gearWasControlled`, false)
+        setFieldValue(`gearOnboard[${index}].gearMarkingIsCompliant`, ControlCheck.NOT_APPLICABLE)
       })
     } else if (values.isGangwayDeployed === true) {
       GANGWAY_DEPENDENT_FIELDS.forEach(field => setFieldValue(field, undefined))

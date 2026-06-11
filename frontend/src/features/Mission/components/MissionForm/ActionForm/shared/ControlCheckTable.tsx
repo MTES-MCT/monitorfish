@@ -64,7 +64,7 @@ const borderBottom = css`
 
 const TableGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.18fr 0.18fr 0.18fr;
+  grid-template-columns: 1fr 0.17fr 0.17fr 0.17fr;
   align-items: stretch;
   row-gap: 4px;
 `

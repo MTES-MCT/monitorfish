@@ -955,9 +955,24 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[id="gearOnboard[0].averageWireThickness"]').should('exist')
     cy.get('[name="gearOnboard[0].wireType"]').should('exist')
 
-    cy.fill('Engin contrôlé', 'Non', { index: 0 })
+    cy.fill('Engin contrôlé', 'Oui', { index: 0 })
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Maillage déclaré', 60, { index: 0 })
+    cy.fill('Epaisseur moy. de fil  ', 1.5)
+    cy.fill('Type de fil', 'Simple')
+
+    // Switching "Engin contrôlé" to "Non" auto-sets the gear marking compliance to N/A
+    // and disables (and clears) the wire fields
+    cy.fill('Engin contrôlé', 'Non', { index: 0 })
+    cy.get('[name="gearOnboard[0].gearMarkingIsCompliant"][value="NOT_APPLICABLE"]').should('be.checked')
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('be.disabled').should('have.value', '')
+    cy.get('[name="gearOnboard[0].wireType"]').should('have.class', 'rs-picker-disabled')
+
+    // Switching back to "Oui" re-enables the wire fields; the marking compliance can be overridden
+    cy.fill('Engin contrôlé', 'Oui', { index: 0 })
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('not.be.disabled')
+    cy.get('[name="gearOnboard[0].wireType"]').should('not.have.class', 'rs-picker-disabled')
+    cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Epaisseur moy. de fil  ', 1.5)
     cy.fill('Type de fil', 'Simple')
 
@@ -989,7 +1004,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               averageWireThickness: 1.5,
               gearCode: 'OTB',
               gearMarkingIsCompliant: 'NO',
-              gearWasControlled: false,
+              gearWasControlled: true,
               wireType: 'SINGLE'
             }
           ]

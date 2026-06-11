@@ -37,7 +37,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     (newInfractionFormValues: MissionAction.Infraction) => {
       const newInfractionWithComments: MissionAction.Infraction = {
         ...newInfractionFormValues,
-        comments: newInfractionFormValues.comments || ''
+        comments: newInfractionFormValues.comments ?? ''
       }
 
       const nextInfractions = [...(values.infractions ?? []), newInfractionWithComments]
@@ -80,7 +80,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
 
       const updatedInfractionWithComments: MissionAction.Infraction = {
         ...nextInfractionFormValues,
-        comments: nextInfractionFormValues.comments || ''
+        comments: nextInfractionFormValues.comments ?? ''
       }
 
       const previousInfractions = values.infractions ?? []

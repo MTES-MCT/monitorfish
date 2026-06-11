@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const VesselIdentitySchema = z.strictObject({
-  beaconNumber: numberOrUndefined,
+  beaconNumber: stringOrUndefined,
   districtCode: stringOrUndefined,
   externalReferenceNumber: stringOrUndefined,
   flagState: z.string(),

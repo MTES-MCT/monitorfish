@@ -60,7 +60,7 @@ export function Infraction({ data, hasError, hasMultipleInfraction, index, onDel
           </TagGroup>
         </div>
 
-        {data.comments?.trim().length > 0 && (
+        {!!data.comments && data.comments.trim().length > 0 && (
           <article>
             <ReactMarkdown>{data.comments}</ReactMarkdown>
           </article>

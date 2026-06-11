@@ -19,7 +19,7 @@ export const ReportingCreationSchema = BaseReportingSchema.omit({
   underCharter: true
 })
   .extend(InfractionSuspicionOrObservationCreation.shape)
-  .omit({ authorTrigram: true, controlUnit: true, infractions: true })
+  .omit({ controlUnit: true, infractions: true })
   .extend({
     threatHierarchies: z.array(ThreatSchema),
     validityOption: z.nativeEnum(ReportingValidityOption).optional()

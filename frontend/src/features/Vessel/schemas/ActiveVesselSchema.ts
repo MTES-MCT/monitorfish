@@ -1,11 +1,10 @@
 import { z } from 'zod'
 
-import { numberOrUndefined, stringOrUndefined } from '../../../types'
+import { numberOptional, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const DeclaredLogbookSpeciesSchema = z.strictObject({
   faoZone: z.string(),
   gear: stringOrUndefined,
-  mesh: numberOrUndefined,
   species: z.string(),
   weight: numberOrUndefined
 })
@@ -73,9 +72,9 @@ const ActiveVesselBaseSchema = z.strictObject({
 export const ActiveVesselEmittingPositionSchema = ActiveVesselBaseSchema.extend({
   activityType: z.literal('POSITION_BASED'),
   alerts: z.array(z.string()),
-  beaconMalfunctionId: numberOrUndefined,
+  beaconMalfunctionId: numberOptional,
   coordinates: z.array(z.number()).nullable(), // OPENLAYERS_PROJECTION
-  course: numberOrUndefined,
+  course: numberOptional,
   dateTime: z.string(),
   emissionPeriod: z.number().optional(),
   emitsPositions: z.boolean(),

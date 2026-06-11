@@ -4,7 +4,7 @@ import { ThreatSchema } from './ThreatSchema'
 import { MissionAction } from '../missionAction.constants'
 
 export const InfractionSchema = z.strictObject({
-  comments: z.string(),
+  comments: z.string().optional(),
   infractionType: z.enum(MissionAction.InfractionType),
   natinf: z.number().optional(),
   natinfDescription: z.string().optional(),

@@ -80,6 +80,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'HKE',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           },
@@ -89,6 +90,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           }
@@ -181,6 +183,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'HKE',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           },
@@ -190,6 +193,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           }
@@ -297,6 +301,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'HKE',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           },
@@ -306,6 +311,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           }
@@ -399,6 +405,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'HKE',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           },
@@ -408,6 +415,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
             nbFish: undefined,
             rejectedWeight: undefined,
             speciesCode: 'BLI',
+            speciesName: undefined,
             underSized: false,
             underSizedWeight: undefined
           }

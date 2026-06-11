@@ -40,6 +40,7 @@ export const updateActionSpeciesOnboard =
         declaredWeight: specy.weight,
         nbFish: undefined,
         speciesCode: specy.species,
+        speciesName: undefined,
         underSized: false,
         underSizedWeight: undefined
       }))

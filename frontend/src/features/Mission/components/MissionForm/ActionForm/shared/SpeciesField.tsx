@@ -140,6 +140,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       nbFish: undefined,
       presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
       speciesCode: newSpecy.code,
+      speciesName: newSpecy.name,
       underSized: false,
       underSizedWeight: undefined
     }

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.jsontype.NamedType
 import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
@@ -44,6 +45,9 @@ class MapperConfiguration {
 
         // needed to handle java.time.ZonedDateTime serialization
         mapper.registerModule(JavaTimeModule())
+        // needed to handle java.util.Optional deserialization (registered explicitly: the
+        // Jackson2ObjectMapperBuilder classpath scanning must not be relied upon)
+        mapper.registerModule(Jdk8Module())
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         mapper.propertyNamingStrategy = PropertyNamingStrategies.LOWER_CAMEL_CASE
 

@@ -2,16 +2,16 @@ import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { Button } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
+const onConnect = () => {
+  window.location.href = '/oauth2/authorization/proconnect'
+}
+
 export function Login() {
   const oidcEnabled = import.meta.env.FRONTEND_OIDC_ENABLED
   const oidcProvider = import.meta.env.FRONTEND_OIDC_LOGIN_BUTTON_PROVIDER
 
   if (!oidcEnabled) {
     return <div>OIDC is disabled</div>
-  }
-
-  const onConnect = () => {
-    window.location.href = '/oauth2/authorization/proconnect'
   }
 
   return (

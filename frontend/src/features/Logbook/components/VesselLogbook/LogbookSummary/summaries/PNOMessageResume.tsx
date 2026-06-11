@@ -11,6 +11,9 @@ import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 
 import type { SpeciesInsight, SpeciesToSpeciesInsight } from '../../../../types'
 
+const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) =>
+  parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
+
 type PNOMessageResumeProps = Readonly<{
   hasNoMessage?: boolean
   id: string
@@ -76,10 +79,6 @@ export function PNOMessageResume({
       firstUpdate.current = false
     }
   }, [isOpen])
-
-  // TODO Move that to a utils file.
-  const getPercentOfTotalWeight = (speciesAndWeightNotLanded, speciesAndWeightTotal) =>
-    parseFloat(((speciesAndWeightNotLanded * 100) / speciesAndWeightTotal).toFixed(1))
 
   // TODO Move that to a utils file.
   const getPNOMessageResumeTitleText = () =>

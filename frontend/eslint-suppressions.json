@@ -922,7 +922,7 @@
       "count": 1
     }
   },
-  "src/features/commonStyles/Backoffice.style.tsx": {
+  "src/features/commonStyles/Backoffice.style.ts": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     }

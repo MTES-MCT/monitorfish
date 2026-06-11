@@ -13,7 +13,7 @@ import DeleteSVG from '../../icons/Suppression.svg?react'
 
 import type { InterestPoint } from '../types'
 
-export const initialOffsetValue = [-90, 60]
+const initialOffsetValue = [-90, 60]
 const MIN_ZOOM = 7
 
 function coordinatesAreModified(_coordinates, _previousCoordinates) {

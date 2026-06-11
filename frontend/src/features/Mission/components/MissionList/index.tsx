@@ -28,6 +28,23 @@ import type { Feature } from 'ol'
 
 import FrontCompletionStatus = MissionAction.FrontCompletionStatus
 
+const handleZoomToMission = (geometry: MultiPolygon | undefined) => {
+  if (!geometry) {
+    return
+  }
+
+  const feature = new GeoJSON({
+    featureProjection: OPENLAYERS_PROJECTION
+  }).readFeature(geometry) as Feature
+
+  const extent = feature?.getGeometry()?.getExtent()
+  if (!extent) {
+    return
+  }
+
+  fitMapToExtent(extent)
+}
+
 export function MissionList() {
   const listSeafrontGroup = useMainAppSelector(store => store.missionList.listSeafrontGroup)
 
@@ -74,23 +91,6 @@ export function MissionList() {
     },
     [dispatch]
   )
-
-  const handleZoomToMission = (geometry: MultiPolygon | undefined) => {
-    if (!geometry) {
-      return
-    }
-
-    const feature = new GeoJSON({
-      featureProjection: OPENLAYERS_PROJECTION
-    }).readFeature(geometry) as Feature
-
-    const extent = feature?.getGeometry()?.getExtent()
-    if (!extent) {
-      return
-    }
-
-    fitMapToExtent(extent)
-  }
 
   return (
     <>

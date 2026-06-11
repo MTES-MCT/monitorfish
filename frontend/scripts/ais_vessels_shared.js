@@ -11,19 +11,19 @@ export const LON_MIN = -20
 export const LON_MAX = 15
 
 export const VESSELS = [
-  { cfr: null, mmsi: 227123001, vesselName: 'BELLE ETOILE',      ircs: 'FZAB1',  flagState: 'FR', imo: '9123001', shipType: 30, startLat: 47.5,  startLon:  -5.0,  startCourse: 220 },
-  { cfr: null, mmsi: 227123002, vesselName: 'CAP BRETON',         ircs: 'FZAC2',  flagState: 'FR', imo: '9123002', shipType: 30, startLat: 50.2,  startLon:  -7.3,  startCourse: 145 },
-  { cfr: null, mmsi: 227123003, vesselName: 'NORD ATLANTIQUE',    ircs: 'FZAD3',  flagState: 'FR', imo: '9123003', shipType: 30, startLat: 49.5,  startLon:  -2.1,  startCourse:  90 },
-  { cfr: null, mmsi: 224123001, vesselName: 'VIENTO DEL MAR',     ircs: 'EBVD1',  flagState: 'ES', imo: '9124001', shipType: 30, startLat: 44.1,  startLon:  -3.4,  startCourse: 180 },
-  { cfr: null, mmsi: 227123004, vesselName: 'MER DU LARGE',       ircs: 'FZAE4',  flagState: 'FR', imo: '9123004', shipType: 30, startLat: 46.0,  startLon:  -9.2,  startCourse: 310 },
-  { cfr: null, mmsi: 227123005, vesselName: 'SAINT PIERRE',       ircs: 'FZAF5',  flagState: 'FR', imo: '9123005', shipType: 30, startLat: 43.2,  startLon:   4.1,  startCourse:  60 },
-  { cfr: null, mmsi: 244123001, vesselName: 'NOORDZEE',           ircs: 'PBNO1',  flagState: 'NL', imo: '9244001', shipType: 30, startLat: 52.1,  startLon:   3.2,  startCourse:  15 },
-  { cfr: null, mmsi: 263123001, vesselName: 'ATLANTICO SUL',      ircs: 'CTAS1',  flagState: 'PT', imo: '9263001', shipType: 30, startLat: 40.3,  startLon: -11.0,  startCourse: 270 },
-  { cfr: null, mmsi: 232123001, vesselName: 'CELTIC DAWN',        ircs: 'GBCD1',  flagState: 'GB', imo: '9232001', shipType: 30, startLat: 50.5,  startLon:   0.1,  startCourse: 200 },
-  { cfr: null, mmsi: 227123006, vesselName: 'GOLFE DE GASCOGNE',  ircs: 'FZAG6',  flagState: 'FR', imo: '9123006', shipType: 30, startLat: 46.3,  startLon:  -7.1,  startCourse: 190 },
+  { cfr: null, mmsi: 227123001, vesselName: 'BELLE ETOILE',      ircs: 'FZAB1',  flagState: 'FR', imo: '9123001', shipType: 30, startLat: 47.5,  startLon:  -5.0,  startCourse: 220, destination: 'FR LEH' },
+  { cfr: null, mmsi: 227123002, vesselName: 'CAP BRETON',         ircs: 'FZAC2',  flagState: 'FR', imo: '9123002', shipType: 30, startLat: 50.2,  startLon:  -7.3,  startCourse: 145, destination: 'OOSTENDE' },
+  { cfr: null, mmsi: 227123003, vesselName: 'NORD ATLANTIQUE',    ircs: 'FZAD3',  flagState: 'FR', imo: '9123003', shipType: 30, startLat: 49.5,  startLon:  -2.1,  startCourse:  90, destination: 'NIEUWPOORT' },
+  { cfr: null, mmsi: 224123001, vesselName: 'VIENTO DEL MAR',     ircs: 'EBVD1',  flagState: 'ES', imo: '9124001', shipType: 30, startLat: 44.1,  startLon:  -3.4,  startCourse: 180, destination: 'ESAVS>FRSML' },
+  { cfr: null, mmsi: 227123004, vesselName: 'MER DU LARGE',       ircs: 'FZAE4',  flagState: 'FR', imo: '9123004', shipType: 30, startLat: 46.0,  startLon:  -9.2,  startCourse: 310, destination: 'WARRENPOINT' },
+  { cfr: null, mmsi: 227123005, vesselName: 'SAINT PIERRE',       ircs: 'FZAF5',  flagState: 'FR', imo: '9123005', shipType: 30, startLat: 43.2,  startLon:   4.1,  startCourse:  60, destination: 'FRSET' },
+  { cfr: null, mmsi: 244123001, vesselName: 'NOORDZEE',           ircs: 'PBNO1',  flagState: 'NL', imo: '9244001', shipType: 30, startLat: 52.1,  startLon:   3.2,  startCourse:  15, destination: 'SCHEVENINGEN' },
+  { cfr: null, mmsi: 263123001, vesselName: 'ATLANTICO SUL',      ircs: 'CTAS1',  flagState: 'PT', imo: '9263001', shipType: 30, startLat: 40.3,  startLon: -11.0,  startCourse: 270, destination: 'PTLEI>PTLIS' },
+  { cfr: null, mmsi: 232123001, vesselName: 'CELTIC DAWN',        ircs: 'GBCD1',  flagState: 'GB', imo: '9232001', shipType: 30, startLat: 50.5,  startLon:   0.1,  startCourse: 200, destination: 'GB BRX' },
+  { cfr: null, mmsi: 227123006, vesselName: 'GOLFE DE GASCOGNE',  ircs: 'FZAG6',  flagState: 'FR', imo: '9123006', shipType: 30, startLat: 46.3,  startLon:  -7.1,  startCourse: 190, destination: 'LA ROCHELLE' },
   // VMS vessels: 12 h of AIS positions at 10-minute intervals, starting from last_positions coordinates
-  { cfr: 'ABC000339263', mmsi: 23858744,  vesselName: 'PAYSAGE ROMAN LIER',  ircs: 'YHIZ',   flagState: 'FR', imo: null, shipType: 30, startLat: 48.097, startLon: -4.323, startCourse: 351, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES },
-  { cfr: 'ABC000570464', mmsi: 819527780, vesselName: 'POÉSIE POUVOIR RESTE', ircs: 'QO0830', flagState: 'FR', imo: null, shipType: 30, startLat: 45.468, startLon: -1.551, startCourse:  90, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES },
+  { cfr: 'ABC000339263', mmsi: 23858744,  vesselName: 'PAYSAGE ROMAN LIER',  ircs: 'YHIZ',   flagState: 'FR', imo: null, shipType: 30, startLat: 48.097, startLon: -4.323, startCourse: 351, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES, destination: 'FR DRZ' },
+  { cfr: 'ABC000570464', mmsi: 819527780, vesselName: 'POÉSIE POUVOIR RESTE', ircs: 'QO0830', flagState: 'FR', imo: null, shipType: 30, startLat: 45.468, startLon: -1.551, startCourse:  90, intervalMinutes: 10, totalMinutes: DURATION_12H_MINUTES, destination: 'ROYAN' },
 ]
 
 export const MODES = {

@@ -32,6 +32,34 @@ const NAV_STATUSES = [
   'Under way sailing',
 ]
 
+// Free-text AIS destinations as broadcast by crews — mix of UN/LOCODEs, plain port
+// names and "FROM>TO" routes, intentionally inconsistent like real AIS data
+const DESTINATIONS = [
+  'FR LEH',
+  'OOSTENDE',
+  'NIEUWPOORT',
+  'WARRENPOINT',
+  'ESAVS>FRSML',
+  'FRBOL',
+  'FR BES',
+  'BOULOGNE SUR MER',
+  'LORIENT',
+  'CONCARNEAU',
+  'LA TURBALLE',
+  'FRLRH',
+  'ESVGO',
+  'ES PAS',
+  'PTLIS',
+  'GBPLY',
+  'GB BRX',
+  'NLRTM',
+  'BEZEE>GBHUL',
+  'IEDUB',
+  'FISHING GROUNDS',
+  'PECHE',
+  'AT SEA',
+]
+
 // Three zone types:
 //   'lane' — polyline + perpendicular width; mimics shipping-lane traffic
 //   'port' — circular cluster around a major port
@@ -252,6 +280,7 @@ function generateVessel(mmsi) {
   return {
     cfr: faker.datatype.boolean(0.02) ? `${flagState}${faker.string.numeric(9)}` : null,
     course,
+    destination: faker.datatype.boolean(0.65) ? faker.helpers.arrayElement(DESTINATIONS) : null,
     external_immatriculation: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: 8 }) : null,
     flag_state: flagState,
     imo: faker.datatype.boolean(0.6) ? `${faker.number.int({ max: 9999999, min: 1000000 })}` : null,
@@ -280,6 +309,7 @@ const VMS_VESSELS = [
   {
     cfr: 'ABC000339263',
     course: 351,
+    destination: 'FR DRZ',
     external_immatriculation: 'CN775734',
     flag_state: 'FR',
     imo: null,
@@ -298,6 +328,7 @@ const VMS_VESSELS = [
   {
     cfr: 'ABC000570464',
     course: 90,
+    destination: 'ROYAN',
     external_immatriculation: 'ZP350150',
     flag_state: 'FR',
     imo: null,
@@ -324,6 +355,7 @@ const AIS_VESSELS = VESSELS
     return {
       cfr: null,
       course: last.course,
+      destination: vessel.destination ?? null,
       external_immatriculation: null,
       flag_state: vessel.flagState,
       imo: vessel.imo,

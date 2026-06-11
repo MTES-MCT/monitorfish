@@ -179,6 +179,76 @@ describe('vessel/track', () => {
     })
   })
 
+  it('getFeaturesFromPositions Should split a track line crossing the antimeridian', async () => {
+    // Given
+    const basePosition = {
+      course: 90,
+      destination: undefined,
+      externalReferenceNumber: 'SE457432',
+      flagState: 'FR',
+      from: 'FR',
+      internalReferenceNumber: 'ABC000898396',
+      ircs: 'ZBRI',
+      isAtPort: undefined,
+      isFishing: false,
+      isManual: undefined,
+      mmsi: undefined,
+      networkType: Vessel.NetworkType.SATELLITE,
+      positionType: 'VMS',
+      speed: 2.8,
+      tripNumber: undefined,
+      vesselName: 'CE DEVANT ÉLEVER'
+    }
+    const positions = [
+      { ...basePosition, dateTime: '2022-10-27T16:10:20.4564+02:00', latitude: 10, longitude: 179.9 },
+      { ...basePosition, dateTime: '2022-10-27T17:10:20.4564+02:00', latitude: 11, longitude: -179.9 }
+    ]
+    const vesselCompositeIdentifier = 'VESSEL_ID'
+
+    // When
+    const features = getFeaturesFromPositions(positions, vesselCompositeIdentifier)
+
+    // Then
+    const lineFeatures = features.filter(feature =>
+      feature.getId()?.toString().includes('line')
+    ) as Vessel.VesselLineFeature[]
+
+    // The crossing segment is split into two lines, one on each side of the antimeridian
+    expect(lineFeatures).toHaveLength(2)
+    expect(lineFeatures[0]!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:0')
+    expect(lineFeatures[1]!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:0:wrapped')
+
+    const WORLD_EDGE_X = 20037508.342789244
+    const firstLineCoordinates = lineFeatures[0]!.getGeometry()!.getCoordinates()
+    const secondLineCoordinates = lineFeatures[1]!.getGeometry()!.getCoordinates()
+
+    // The first line ends at the eastern world edge, the second one starts at the western world edge
+    expect(firstLineCoordinates[1]![0]).toBeCloseTo(WORLD_EDGE_X, 5)
+    expect(secondLineCoordinates[0]![0]).toBeCloseTo(-WORLD_EDGE_X, 5)
+    // Both halves meet at the same latitude
+    expect(firstLineCoordinates[1]![1]).toEqual(secondLineCoordinates[0]![1])
+
+    // No line spans the world width
+    const WORLD_WIDTH = 2 * WORLD_EDGE_X
+    lineFeatures.forEach(lineFeature => {
+      const extent = lineFeature.getGeometry()!.getExtent()
+      expect(extent[2]! - extent[0]!).toBeLessThan(WORLD_WIDTH / 100)
+    })
+  })
+
+  it('getFeaturesFromPositions Should not split a track line not crossing the antimeridian', async () => {
+    // Given
+    const positions = DUMMY_VESSEL_TRACK
+
+    // When
+    const features = getFeaturesFromPositions(positions, 'VESSEL_ID')
+
+    // Then, one line per consecutive positions pair (no extra `wrapped` lines)
+    const lineFeatures = features.filter(feature => feature.getId()?.toString().includes('line'))
+    expect(lineFeatures).toHaveLength(5)
+    expect(lineFeatures.some(feature => feature.getId()?.toString().includes('wrapped'))).toBeFalsy()
+  })
+
   it('getTrackType Should return FISHING When two positions have the isFishing property set as true', async () => {
     // Given
     const firstPosition = DUMMY_VESSEL_TRACK[0] as Vessel.VesselPosition

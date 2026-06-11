@@ -23,6 +23,7 @@ import { useMainAppSelector } from '../hooks/useMainAppSelector'
 import type { MainAppAsyncThunk } from '@store'
 
 export const FIVE_MINUTES = 5 * 60 * 1000
+export const TWO_MINUTES = 2 * 60 * 1000
 export const TWENTY_MINUTES = 20 * 60 * 1000
 
 // TODO Move these `useEffect`s to dispatchers, in order to remove logic from this component

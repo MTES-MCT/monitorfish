@@ -9,9 +9,7 @@ export default async () => {
 
   // Keep browser windows open in non-headless mode for debugging
   if (IS_HEADLESS) {
-    for (const browser of global.__BROWSERS__) {
-      await browser.close()
-    }
+    await Promise.all(global.__BROWSERS__.map(browser => browser.close()))
   }
 
   // clean-up the temporary file used to write the browsers wsEndpoints

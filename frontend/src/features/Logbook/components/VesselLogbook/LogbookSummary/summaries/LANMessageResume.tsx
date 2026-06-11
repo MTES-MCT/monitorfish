@@ -10,6 +10,17 @@ import { LogbookMessageResumeHeader } from '../LogbookMessageResumeHeader'
 import type { SpeciesToSpeciesInsight } from '@features/Logbook/types'
 import type { Promisable } from 'type-fest'
 
+function filterDuplicateSpecies() {
+  return (acc, current) => {
+    const x = acc.find(item => item.species === current.species)
+    if (!x) {
+      return acc.concat([current])
+    }
+
+    return acc
+  }
+}
+
 type LANMessageResumeProps = {
   hasNoMessage?: boolean
   isDeleted: boolean
@@ -43,17 +54,6 @@ export function LANMessageResume({
       firstUpdate.current = false
     }
   }, [isOpen])
-
-  function filterDuplicateSpecies() {
-    return (acc, current) => {
-      const x = acc.find(item => item.species === current.species)
-      if (!x) {
-        return acc.concat([current])
-      }
-
-      return acc
-    }
-  }
 
   const catchLandedWithMissingCatchesFromPno = (() => {
     const speciesFromPno = (speciesToWeightOfPNO ? Object.keys(speciesToWeightOfPNO) : []).map(specy => {

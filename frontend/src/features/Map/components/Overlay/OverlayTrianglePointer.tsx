@@ -27,7 +27,7 @@ export function OverlayTrianglePointer({
   return <Triangle $color={resolvedColor} $marginLeft={marginLeft} $marginTop={marginTop} $position={overlayPosition} />
 }
 
-export function computeTriangleMargins(
+function computeTriangleMargins(
   position: OverlayPosition,
   margins: OverlayCardMargins,
   cardHeight: number,

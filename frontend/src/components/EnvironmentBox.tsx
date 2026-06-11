@@ -1,4 +1,3 @@
-import { THEME } from '@mtes-mct/monitor-ui'
 import { getEnvironmentData } from '@utils/getEnvironmentData'
 import styled from 'styled-components'
 
@@ -31,10 +30,3 @@ const Wrapper = styled.div`
   width: 99%;
   z-index: 10000;
 `
-
-export function getEnvironmentBorderStyle(isEnvironmentBoxVisible: boolean) {
-  return `
-   border: ${isEnvironmentBoxVisible ? '4px' : '0'} solid ${THEME.color.goldenPoppy};
-   border-top: ${isEnvironmentBoxVisible ? '6px' : '0'} solid ${THEME.color.goldenPoppy};
-  `
-}

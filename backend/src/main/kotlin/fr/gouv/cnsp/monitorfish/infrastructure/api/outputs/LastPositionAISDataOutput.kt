@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPositionAIS
 import java.time.ZonedDateTime
@@ -15,7 +14,6 @@ class LastPositionAISDataOutput(
     val externalMarker: String? = null,
     val vesselName: String? = null,
     val vesselFeatureId: String,
-    val flagState: CountryCode = CountryCode.UNDEFINED,
     val latitude: Double,
     val longitude: Double,
     val speed: Double? = null,
@@ -41,7 +39,6 @@ class LastPositionAISDataOutput(
                 externalMarker = lastPosition.externalMarker,
                 vesselName = lastPosition.vesselName,
                 vesselFeatureId = getVesselFeatureId(lastPosition),
-                flagState = lastPosition.flagState,
                 latitude = lastPosition.latitude,
                 longitude = lastPosition.longitude,
                 coordinates =

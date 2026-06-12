@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionAisRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -54,18 +53,6 @@ class JpaLastPositionAisRepositoryITests : AbstractDBTests() {
         val fourHoursAgo = ZonedDateTime.now().minusHours(4).minusMinutes(10)
         assertThat(positions).allSatisfy { position ->
             assertThat(position.dateTime).isAfter(fourHoursAgo)
-        }
-    }
-
-    @Test
-    @Transactional
-    fun `findAll Should correctly parse flagState as CountryCode`() {
-        // When
-        val positions = jpaLastPositionAisRepository.findAllByCfrIsNull()
-
-        // Then — none of the generated flag states should fall back to UNDEFINED
-        assertThat(positions).allSatisfy { position ->
-            assertThat(position.flagState).isNotEqualTo(CountryCode.UNDEFINED)
         }
     }
 

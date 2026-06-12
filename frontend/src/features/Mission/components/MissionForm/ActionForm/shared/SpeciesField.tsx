@@ -318,7 +318,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 {isEISREnabled && !isUnderSizedShown(index) && (
                   <AddButton
                     accent={Accent.SECONDARY}
-                    disabled={!values.isGangwayDeployed}
+                    disabled={values.isGangwayDeployed === false}
                     Icon={Icon.Plus}
                     onClick={() => openUnderSized(index)}
                   >
@@ -332,12 +332,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
               <FieldsRow>
                 <FormikNumberInput
-                  disabled={!values.isGangwayDeployed}
+                  disabled={values.isGangwayDeployed === false}
                   label="Qté déclarée"
                   name={`speciesOnboard[${index}].declaredWeight`}
                 />
                 <FormikNumberInput
-                  disabled={!values.isGangwayDeployed}
+                  disabled={values.isGangwayDeployed === false}
                   label={controlledWeightLabel}
                   name={`speciesOnboard[${index}].controlledWeight`}
                 />
@@ -346,7 +346,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                     {isUnderSizedShown(index) && (
                       <>
                         <FormikNumberInput
-                          disabled={!values.isGangwayDeployed}
+                          disabled={values.isGangwayDeployed === false}
                           label="Qté ss-taille"
                           name={`speciesOnboard[${index}].underSizedWeight`}
                         />
@@ -359,14 +359,14 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                       </>
                     )}
                     <StyledCheckPicker
-                      disabled={!values.isGangwayDeployed}
+                      disabled={values.isGangwayDeployed === false}
                       label="Présentation"
                       name={`speciesOnboard[${index}].presentationCodes`}
                       options={PRESENTATION_OPTIONS}
                       searchable
                     />
                     <StyledCheckPicker
-                      disabled={!values.isGangwayDeployed}
+                      disabled={values.isGangwayDeployed === false}
                       isRequired
                       label="Zone de pêche"
                       name={`speciesOnboard[${index}].faoZones`}

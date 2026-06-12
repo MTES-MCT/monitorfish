@@ -1,8 +1,9 @@
+import { SideWindowMenuLabel } from '@features/SideWindow/constants'
+
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 import type { Mission } from '@features/Mission/mission.types'
-import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 export const openSideWindowNewMission = () => {
   cy.viewport(1920, 1080)
@@ -87,7 +88,7 @@ export const fillSideWindowMissionFormBase = (
 
   cy.fill('Types de mission', [missionTypeLabel])
 
-  cy.fill('Mission sous JDP', true)
+  cy.fill('Sous JDP', true)
 
   cy.fill('Administration 1', 'DDTM')
   cy.fill('Unité 1', 'Cultures marines 56')

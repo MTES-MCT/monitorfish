@@ -200,7 +200,7 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.fill('Fin de mission', endDate.utcDateTupleWithTime)
 
     cy.fill('Types de mission', ['Air'])
-    cy.fill('Mission sous JDP', true)
+    cy.fill('Sous JDP', true)
 
     cy.fill('Ordre de mission', 'Oui')
 

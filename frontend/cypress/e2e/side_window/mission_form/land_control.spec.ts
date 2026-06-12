@@ -89,7 +89,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Pesée des captures lors du débarquement', 'Non')
     cy.fill('Espèce non débarquée', true)
-    cy.fill('Qté pesée', 500)
+    cy.fill('Qté estimée', 500)
     cy.clickButton('Sous-taille')
     cy.fill('Qté ss-taille', 10)
     cy.fill('Présentation', ['WHL - Entier'])

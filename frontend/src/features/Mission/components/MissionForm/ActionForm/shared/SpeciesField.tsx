@@ -338,7 +338,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 />
                 <FormikNumberInput
                   disabled={values.isGangwayDeployed === false}
-                  label={controlledWeightLabel}
+                  label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
                   name={`speciesOnboard[${index}].controlledWeight`}
                 />
                 {isEISREnabled ? (

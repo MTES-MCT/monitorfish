@@ -5,6 +5,7 @@ import {
   getLineStyle
 } from '@features/Vessel/layers/VesselsTracksLayer/vesselTrack.style'
 import { type Coordinates, customDayjs } from '@mtes-mct/monitor-ui'
+import { splitSegmentAtAntimeridian } from '@utils/splitSegmentAtAntimeridian'
 import { isEqual, uniqWith } from 'lodash-es'
 import { extend } from 'ol/extent'
 import Feature from 'ol/Feature'
@@ -154,7 +155,7 @@ function buildLineStringFeatures(
 ): Vessel.VesselLineFeature[] {
   return positions
     .filter(position => position)
-    .map((firstPosition, index) => {
+    .flatMap((firstPosition, index) => {
       const lastPointIndex = index + 1
       if (positions.length === lastPointIndex) {
         return null
@@ -164,45 +165,59 @@ function buildLineStringFeatures(
       if (!secondPosition) {
         return null
       }
-      const firstPoint = transform(
+
+      const segments = splitSegmentAtAntimeridian(
         [firstPosition.longitude, firstPosition.latitude],
-        WSG84_PROJECTION,
-        OPENLAYERS_PROJECTION
-      )
-      const secondPoint = transform(
-        [secondPosition.longitude, secondPosition.latitude],
-        WSG84_PROJECTION,
-        OPENLAYERS_PROJECTION
+        [secondPosition.longitude, secondPosition.latitude]
       )
 
-      if (isEqual(firstPoint, secondPoint)) {
-        return null
-      }
+      return segments.map(([start, end], segmentIndex) => {
+        const firstPoint = transform(start, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+        const secondPoint = transform(end, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
 
-      const rotation = calculateCourse(secondPoint, firstPoint)
-      const firstPositionDate = new Date(firstPosition.dateTime)
-      const secondPositionDate = new Date(secondPosition.dateTime)
-      const isTimeEllipsis = isTimeEllipsisBetweenPositions(firstPositionDate, secondPositionDate)
+        if (isEqual(firstPoint, secondPoint)) {
+          return null
+        }
 
-      const feature = new Feature({
-        geometry: new LineString([firstPoint, secondPoint])
-      }) as Vessel.VesselLineFeature
-      // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
-      feature.firstPositionDate = firstPositionDate
-      feature.secondPositionDate = secondPositionDate
-      feature.isTimeEllipsis = isTimeEllipsis
-      feature.trackType = getTrackType([firstPosition, secondPosition], isTimeEllipsis)
-      if (rotation) {
-        feature.course = -rotation
-      }
-      feature.speed = firstPosition.speed
+        const featureId = `${LayerProperties.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}${
+          segmentIndex > 0 ? ':wrapped' : ''
+        }`
 
-      feature.setId(`${LayerProperties.VESSEL_TRACK.code}:${vesselCompositeIdentifier}:line:${index}`)
-      feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
-
-      return feature
+        return buildLineStringFeature(firstPoint, secondPoint, firstPosition, secondPosition, featureId)
+      })
     })
-    .filter((lineString): lineString is Vessel.VesselLineFeature => lineString !== null)
+    .filter((lineString): lineString is Vessel.VesselLineFeature => !!lineString)
+}
+
+function buildLineStringFeature(
+  firstPoint: number[],
+  secondPoint: number[],
+  firstPosition: Vessel.VesselPosition,
+  secondPosition: Vessel.VesselPosition,
+  featureId: string
+): Vessel.VesselLineFeature {
+  const rotation = calculateCourse(secondPoint, firstPoint)
+  const firstPositionDate = new Date(firstPosition.dateTime)
+  const secondPositionDate = new Date(secondPosition.dateTime)
+  const isTimeEllipsis = isTimeEllipsisBetweenPositions(firstPositionDate, secondPositionDate)
+
+  const feature = new Feature({
+    geometry: new LineString([firstPoint, secondPoint])
+  }) as Vessel.VesselLineFeature
+  // TODO Properties are removed when included directly in the `geometryOrProperties` of the Feature instantiation
+  feature.firstPositionDate = firstPositionDate
+  feature.secondPositionDate = secondPositionDate
+  feature.isTimeEllipsis = isTimeEllipsis
+  feature.trackType = getTrackType([firstPosition, secondPosition], isTimeEllipsis)
+  if (rotation) {
+    feature.course = -rotation
+  }
+  feature.speed = firstPosition.speed
+
+  feature.setId(featureId)
+  feature.setStyle(getLineStyle(feature.isTimeEllipsis, feature.trackType))
+
+  return feature
 }
 
 export function getTrackType(positions: Vessel.VesselPosition[], isTimeEllipsis) {

@@ -20,7 +20,7 @@ export function buildAISVesselFeature(vessel: AISVessel.AISVessel): AISVessel.AI
     coordinates: vessel.coordinates,
     course: vessel.course,
     dateTime: vessel.dateTime,
-    flagState: vessel.flagState,
+    destination: vessel.destination,
     geometry: new Point(vessel.coordinates),
     imo: vessel.imo,
     ircs: vessel.ircs,

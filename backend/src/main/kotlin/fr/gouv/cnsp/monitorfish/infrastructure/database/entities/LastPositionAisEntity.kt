@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPositionAIS
 import jakarta.persistence.*
 import java.io.Serializable
@@ -18,8 +17,6 @@ data class LastPositionAisEntity(
     val externalReferenceNumber: String? = null,
     @Column(name = "vessel_name")
     val vesselName: String? = null,
-    @Column(name = "flag_state")
-    val flagState: String? = null,
     @Column(name = "latitude")
     val latitude: Double,
     @Column(name = "longitude")
@@ -49,14 +46,6 @@ data class LastPositionAisEntity(
             ircs = ircs,
             externalMarker = externalReferenceNumber,
             vesselName = vesselName,
-            flagState =
-                flagState?.let {
-                    try {
-                        CountryCode.valueOf(it)
-                    } catch (e: IllegalArgumentException) {
-                        CountryCode.UNDEFINED
-                    }
-                } ?: CountryCode.UNDEFINED,
             latitude = latitude,
             longitude = longitude,
             speed = speed,

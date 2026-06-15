@@ -1186,7 +1186,6 @@ class VesselControllerITests {
                 ircs = "ABCD",
                 externalMarker = "EXT01",
                 vesselName = "BELLE DU NORD",
-                flagState = CountryCode.FR,
                 latitude = 47.5,
                 longitude = -2.3,
                 speed = 8.5,
@@ -1212,7 +1211,6 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].imo", equalTo(aisPosition.imo)))
             .andExpect(jsonPath("$[0].ircs", equalTo(aisPosition.ircs)))
             .andExpect(jsonPath("$[0].vesselName", equalTo(aisPosition.vesselName)))
-            .andExpect(jsonPath("$[0].flagState", equalTo(aisPosition.flagState.toString())))
             .andExpect(jsonPath("$[0].latitude", equalTo(aisPosition.latitude)))
             .andExpect(jsonPath("$[0].longitude", equalTo(aisPosition.longitude)))
             .andExpect(jsonPath("$[0].speed", equalTo(aisPosition.speed)))
@@ -1231,7 +1229,6 @@ class VesselControllerITests {
                 longitude = -2.3,
                 dateTime = ZonedDateTime.now(),
                 isAtPort = true,
-                flagState = CountryCode.FR,
             )
         given(getLastPositionsAIS.execute(VesselLocation.PORT)).willReturn(listOf(aisPosition))
 

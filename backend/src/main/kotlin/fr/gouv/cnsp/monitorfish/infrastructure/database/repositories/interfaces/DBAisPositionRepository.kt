@@ -21,7 +21,7 @@ interface DBAisPositionRepository : JpaRepository<AisPositionEntity, AisPosition
         WHERE a.pk.mmsi = :mmsi AND
             a.pk.dateTime >= :from AND
             a.pk.dateTime <= :to
-        ORDER BY a.pk.dateTime DESC
+        ORDER BY a.pk.dateTime ASC
     """,
     )
     fun findLastByMmsi(

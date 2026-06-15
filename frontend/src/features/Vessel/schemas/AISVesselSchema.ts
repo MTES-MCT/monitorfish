@@ -6,7 +6,6 @@ export const AISVesselSchema = z.strictObject({
   dateTime: z.string(),
   destination: z.string().optional(),
   externalMarker: z.string().optional(),
-  flagState: z.string(),
   imo: z.string().optional(),
   ircs: z.string().optional(),
   isAtPort: z.boolean(),

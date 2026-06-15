@@ -32,6 +32,34 @@ const NAV_STATUSES = [
   'Under way sailing',
 ]
 
+// Free-text AIS destinations as broadcast by crews — mix of UN/LOCODEs, plain port
+// names and "FROM>TO" routes, intentionally inconsistent like real AIS data
+const DESTINATIONS = [
+  'FR LEH',
+  'OOSTENDE',
+  'NIEUWPOORT',
+  'WARRENPOINT',
+  'ESAVS>FRSML',
+  'FRBOL',
+  'FR BES',
+  'BOULOGNE SUR MER',
+  'LORIENT',
+  'CONCARNEAU',
+  'LA TURBALLE',
+  'FRLRH',
+  'ESVGO',
+  'ES PAS',
+  'PTLIS',
+  'GBPLY',
+  'GB BRX',
+  'NLRTM',
+  'BEZEE>GBHUL',
+  'IEDUB',
+  'FISHING GROUNDS',
+  'PECHE',
+  'AT SEA',
+]
+
 // Three zone types:
 //   'lane' — polyline + perpendicular width; mimics shipping-lane traffic
 //   'port' — circular cluster around a major port
@@ -217,23 +245,6 @@ function randomVesselName() {
 
 
 function generateVessel(mmsi) {
-  const flagState = faker.helpers.weightedArrayElement([
-    { value: 'FR', weight: 30 },
-    { value: 'ES', weight: 15 },
-    { value: 'PT', weight: 8 },
-    { value: 'GB', weight: 10 },
-    { value: 'IT', weight: 10 },
-    { value: 'NL', weight: 5 },
-    { value: 'BE', weight: 3 },
-    { value: 'DE', weight: 4 },
-    { value: 'IE', weight: 3 },
-    { value: 'DK', weight: 2 },
-    { value: 'NO', weight: 2 },
-    { value: 'MT', weight: 1 },
-    { value: 'GR', weight: 3 },
-    ...FLAG_STATES.slice(12).map(v => ({ value: v, weight: 1 })),
-  ])
-
   const isAtPort = faker.datatype.boolean(0.05)
   const { latitude, longitude } = randomRegionCoord()
   const isFast = faker.datatype.boolean(0.90)
@@ -250,10 +261,10 @@ function generateVessel(mmsi) {
   const minutesAgo = faker.number.int({ max: 240, min: 1 })
 
   return {
-    cfr: faker.datatype.boolean(0.02) ? `${flagState}${faker.string.numeric(9)}` : null,
+    cfr: faker.datatype.boolean(0.02) ? `${faker.helpers.arrayElement(FLAG_STATES)}${faker.string.numeric(9)}` : null,
     course,
+    destination: faker.datatype.boolean(0.65) ? faker.helpers.arrayElement(DESTINATIONS) : null,
     external_immatriculation: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: 8 }) : null,
-    flag_state: flagState,
     imo: faker.datatype.boolean(0.6) ? `${faker.number.int({ max: 9999999, min: 1000000 })}` : null,
     is_at_port: isAtPort,
     ircs: hasNavpro ? faker.string.alphanumeric({ casing: 'upper', length: { max: 5, min: 4 } }) : null,
@@ -280,8 +291,8 @@ const VMS_VESSELS = [
   {
     cfr: 'ABC000339263',
     course: 351,
+    destination: 'FR DRZ',
     external_immatriculation: 'CN775734',
-    flag_state: 'FR',
     imo: null,
     is_at_port: false,
     ircs: 'YHIZ',
@@ -298,8 +309,8 @@ const VMS_VESSELS = [
   {
     cfr: 'ABC000570464',
     course: 90,
+    destination: 'ROYAN',
     external_immatriculation: 'ZP350150',
-    flag_state: 'FR',
     imo: null,
     is_at_port: false,
     ircs: 'QO0830',
@@ -324,8 +335,8 @@ const AIS_VESSELS = VESSELS
     return {
       cfr: null,
       course: last.course,
+      destination: vessel.destination ?? null,
       external_immatriculation: null,
-      flag_state: vessel.flagState,
       imo: vessel.imo,
       is_at_port: false,
       ircs: vessel.ircs,

@@ -28,7 +28,8 @@ export function aisVesselToVesselIdentity(vessel: AISVessel.AISVessel): Vessel.V
     beaconNumber: undefined,
     districtCode: undefined,
     externalReferenceNumber: undefined,
-    flagState: vessel.flagState,
+    // AIS position messages carry no flag state; an empty string skips the flag icon rendering
+    flagState: '',
     internalReferenceNumber: undefined,
     ircs: vessel.ircs,
     mmsi: String(vessel.mmsi),

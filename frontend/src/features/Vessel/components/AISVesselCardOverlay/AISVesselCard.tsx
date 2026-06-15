@@ -29,7 +29,6 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
     'course',
     'dateTime',
     'destination',
-    'flagState',
     'mmsi',
     'imo',
     'ircs',
@@ -43,15 +42,7 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
     <>
       <CardWrapper>
         <VesselCardHeader>
-          {!!vesselProperties.flagState && (
-            <>
-              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
-            </>
-          )}
-          <VesselCardTitle data-cy="vessel-card-name">
-            {vesselProperties.vesselName ?? 'NOM INCONNU'}{' '}
-            {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
-          </VesselCardTitle>
+          <VesselCardTitle data-cy="vessel-card-name">{vesselProperties.vesselName ?? 'NOM INCONNU'}</VesselCardTitle>
         </VesselCardHeader>
         <ThreeColumnsBody>
           <LatLon>
@@ -140,14 +131,6 @@ const CardWrapper = styled.div`
   background-color: ${p => p.theme.color.gainsboro};
   border-radius: 2px;
   overflow: hidden;
-`
-
-const Flag = styled.img<{
-  rel?: 'preload'
-}>`
-  display: inline-block;
-  height: 20px;
-  vertical-align: middle;
 `
 
 const NoValue = styled.span`

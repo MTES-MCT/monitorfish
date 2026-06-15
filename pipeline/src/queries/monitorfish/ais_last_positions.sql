@@ -13,7 +13,6 @@ SELECT DISTINCT ON (mmsi)
     external_immatriculation,
     vessel_name,
     ircs,
-    flag_state,
     length
 FROM ais_positions_hourly
 WHERE date_time >= NOW() - INTERVAL '6 hours'

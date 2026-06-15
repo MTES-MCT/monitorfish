@@ -1,4 +1,4 @@
-import { FIVE_MINUTES } from '@api/APIWorker'
+import { TWO_MINUTES } from '@api/APIWorker'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
@@ -35,7 +35,7 @@ function UnmemoizedAISVesselsLayer() {
     error,
     isError
   } = useGetAISVesselsQuery(vesselLocation, {
-    pollingInterval: FIVE_MINUTES,
+    pollingInterval: TWO_MINUTES,
     skip: import.meta.env.FRONTEND_AIS_VESSELS_ENABLED !== 'true' || !areAISVesselsDisplayed
   })
 

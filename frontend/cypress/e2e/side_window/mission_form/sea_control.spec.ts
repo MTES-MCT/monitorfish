@@ -1148,7 +1148,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     // row is hovered, and reverts to text once the cursor leaves.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('5', { force: true })
-    // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
+    // The row stays in edit mode while the input is focused, so blur it AND stop hovering before asserting
+    // it collapses. React derives `onMouseLeave` from the native `mouseout` event (not `mouseleave`).
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').blur({ force: true })
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').should('not.exist')
 

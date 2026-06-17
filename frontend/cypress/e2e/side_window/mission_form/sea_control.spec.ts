@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control', () => {
@@ -165,31 +165,30 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     // FAO zones are required on every catch for completion. The risk factor prefills two catches HKE (row 0)
     // and BLI (row 1); logbook discards live in the dedicated "Rejets" card, so NEP/BIB are not rows in
-    // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row before filling,
-    // then `mouseout` afterwards so its editors collapse (only one row should be active at a time).
+    // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row, then wait for
+    // its editors to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
+    // debounced (hover-intent delay), so without this wait `cy.fill` runs before the row activates and fills
+    // whichever row is still active. `mouseout` afterwards so its editors collapse (only one row active at a time).
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
     // Add COD: click the in-table "Ajouter une espèce" row to append an empty species (index 2), then pick
-    // the species in that row's Select — it is the only "Espèce" Select rendered, since the other rows show
-    // their species as text once collapsed. Picking a species collapses the row, so hover it to fill the rest.
+    // the species in that row's Select. Picking a species collapses the row, so hover it again to fill the rest.
     cy.clickButton('Ajouter une espèce')
-    // Hover the new empty row before picking its species: a single `hoveredIndex` makes it the active row
-    // and collapses any catch row the preceding zone fills left active, so the new row's Select is the only
-    // "Espèce" Select. Wait out the ~60 ms hover-intent delay so the activation lands before `cy.fill`.
-    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
-    cy.wait(100)
-    cy.fill('Espèce', 'COD')
+    pickHoverEditSpecies('species-onboard-row-2', 'COD')
     // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()` instead
     // of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field, and
     // `cy.fill()` caches the element and detaches between its internal `.clear()` and `.type()`. The fields
     // are freshly opened (empty), so no `.clear()` is needed. Présentation/Zone are filled by label while
     // only the hovered row's editor is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
     cy.get('[id="speciesOnboard[2].controlledWeight"]').type('20', { force: true })
     cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
@@ -204,9 +203,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     // discard (index 2), pick its species, then fill its editors on hover. Editors only render for the
     // hovered row, so each field label is unambiguous (no index needed).
     cy.clickButton('Ajouter une espèce rejetée')
+    pickHoverEditSpecies('discarded-species-row-2', 'COD')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
-    cy.fill('Espèce', 'COD')
-    cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Nature du rejet', 'RET - espèces protégées')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
     cy.fill('Zone de pêche', ['27.8.b'])
@@ -1147,7 +1146,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Adding a species is a two-step in-table flow: click the "Ajouter une espèce" row to append an empty
     // row, then pick the species in that row's Select.
     cy.clickButton('Ajouter une espèce')
-    cy.fill('Espèce', 'COD')
+    pickHoverEditSpecies('species-onboard-row-0', 'COD')
 
     // The Ss-taille weight is now an always-available inline cell: its input only renders while the
     // row is hovered, and reverts to text once the cursor leaves.

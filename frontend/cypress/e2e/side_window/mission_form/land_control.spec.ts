@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Land Control', () => {
@@ -79,11 +79,9 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
     // Inspection des captures — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
-    // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select on
-    // hover (it is the only "Espèce" Select rendered, since the prefilled rows show their species as text).
+    // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select.
     cy.clickButton('Ajouter une espèce')
-    cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
-    cy.fill('Espèce', 'COD')
+    pickHoverEditSpecies('species-onboard-row-3', 'COD')
     // Pour les captures détenues à bord
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     // Pour les captures déchargées
@@ -93,11 +91,14 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Pesée des captures lors du débarquement', 'Non')
     // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their editors on row hover; non-hovered rows
-    // show plain text. Hover a row, then fill its fields. Weight inputs are queried by id (not `cy.fill`)
-    // because each edit fires an async fleet-segment recompute that remounts the field and detaches a
-    // cached `cy.fill` element. Présentation/Zone are filled by label while only the hovered row's editor
-    // is mounted, so no index is needed.
+    // show plain text. Hover a row, then wait for its editors to actually mount (`.Field-CheckPicker`
+    // should('exist')) before filling: row activation is debounced (hover-intent delay), so without this
+    // wait `cy.fill` runs before the row activates and fills whichever row is still active. Weight inputs
+    // are queried by id (not `cy.fill`) because each edit fires an async fleet-segment recompute that
+    // remounts the field and detaches a cached `cy.fill` element. Présentation/Zone are filled by label
+    // while only the hovered row's editor is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
     // HKE is a landed catch, so its controlled-weight field is labelled "Pesée". Fill it, then mark the
     // species as not landed via the "Espèce débarquée" toggle (the weight value is kept).
     cy.fill('Pesée', '500')
@@ -108,14 +109,17 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-3"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Zone de pêche', ['27.8.b'])
     // Stop hovering so the catch-row editors collapse.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).

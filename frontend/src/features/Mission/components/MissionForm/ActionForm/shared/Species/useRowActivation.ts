@@ -42,10 +42,12 @@ export function useRowActivation() {
 
   const handleRowMouseEnter = (index: number) => {
     clearTimeout(hoverTimerRef.current)
-    // Hovering a new row makes it the sole active row: drop any focus/picker activation still pinned to a
-    // different row. This self-heals the case where a CheckPicker's `onClose` never fired — an async
-    // re-render (e.g. a fleet-segment recompute) remounted the picker, so the close event was lost — which
-    // would otherwise keep the previous row expanded and mount two editors for the same field.
+    // Hovering a new row makes it the sole active row: drop any hover/focus/picker activation still pinned
+    // to a different row. This self-heals two cases: a `mouseleave` that never fired (so a previous row
+    // stayed hovered), and a CheckPicker's `onClose` that was lost because an async re-render (e.g. a
+    // fleet-segment recompute) remounted the picker. Either would otherwise keep the previous row expanded
+    // and mount two editors for the same field.
+    setHoveredIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     setFocusedIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     hoverTimerRef.current = setTimeout(() => setHoveredIndex(index), HOVER_INTENT_DELAY_MS)

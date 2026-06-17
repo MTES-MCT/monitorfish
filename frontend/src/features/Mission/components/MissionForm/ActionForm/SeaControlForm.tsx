@@ -65,7 +65,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
 
             <GearsField />
 
-            <SpeciesField controlledWeightLabel="Qté estimée" />
+            <SpeciesField />
 
             {isEISREnabled && <DiscardedSpeciesField />}
 

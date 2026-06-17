@@ -1084,10 +1084,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Verify pre-filled values visible in the form
 
-    // The discards are now displayed in the dedicated "Rejets" card.
+    // The discards are now displayed in the dedicated "Rejets" card (a flat table whose column headers are
+    // "Espèce(s) rejetées" / "Qté" / "Nature rejet" / "Zone"; the per-field labels only exist on row hover).
     cy.contains('Rejets').should('exist')
-    cy.contains('Qté rejetée').should('exist')
-    cy.contains('Nature du rejet').should('exist')
+    cy.contains('Espèce(s) rejetées').should('exist')
+    cy.contains('Nature rejet').should('exist')
 
     // Verify the request body includes the split catches / discards
     cy.fill('Saisi par', 'Gaumont')

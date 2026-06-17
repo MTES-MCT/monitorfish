@@ -63,7 +63,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
             <GearsField />
 
-            <SpeciesField controlledWeightLabel="Qté pesée" />
+            <SpeciesField />
 
             <SeizureFieldsetGroup isLight legend="Appréhensions">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />

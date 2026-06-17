@@ -98,8 +98,10 @@ context('Side Window > Mission Form > Land Control', () => {
     // cached `cy.fill` element. Présentation/Zone are filled by label while only the hovered row's editor
     // is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    // HKE is a landed catch, so its controlled-weight field is labelled "Pesée". Fill it, then mark the
+    // species as not landed via the "Espèce débarquée" toggle (the weight value is kept).
+    cy.fill('Pesée', 500)
     cy.clickButton('Espèce débarquée')
-    cy.get('[id="speciesOnboard[0].controlledWeight"]').type('500', { force: true })
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('10', { force: true })
     cy.fill('Présentation', ['WHL - Entier'])
     cy.fill('Zone de pêche', ['27.8.b'])

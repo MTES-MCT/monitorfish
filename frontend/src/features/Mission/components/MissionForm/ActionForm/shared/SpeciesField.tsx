@@ -53,10 +53,7 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
   value: code
 }))
 
-type SpeciesFieldProps = Readonly<{
-  controlledWeightLabel: string
-}>
-export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
+export function SpeciesField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
@@ -264,6 +261,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   }
   const isDisabled = values.isGangwayDeployed === false
   const actionColumnWidthWithEISREnabled = isLandControl ? 52 : 21
+  const controlledWeightLabel = isLandControl ? 'Pesée' : 'Estimé'
 
   return (
     <FieldsetGroup isLight legend={legend}>
@@ -279,7 +277,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                 {isEISREnabled ? 'Déclaré' : 'Qté déclarée'}
               </SimpleTable.Th>
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
-                {isEISREnabled ? 'Estimé' : 'Qté estimée'}
+                {isEISREnabled ? controlledWeightLabel : `Qté ${controlledWeightLabel}`}
               </SimpleTable.Th>
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
                 {isEISREnabled ? 'Ss-taille' : 'Sous-taille'}
@@ -309,7 +307,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                   onMouseLeave={() => handleRowMouseLeave(index)}
                 >
                   <StyledPickerTd $isActive={isActive}>
-                    {!isActive ? (
+                    {specyOnboard.speciesCode && !isActive ? (
                       <SpeciesName>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
                         specyOnboard.speciesCode
                       )}`}</SpeciesName>

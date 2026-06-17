@@ -27,7 +27,10 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
 
     // Espèces à bord
     cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegment')
-    cy.fill('Ajouter une espèce', 'SPR')
+    // Adding a species is now a two-step in-table flow: click the "Ajouter une espèce" row to append an
+    // empty row (its species Select renders immediately), then pick the species in that Select.
+    cy.clickButton('Ajouter une espèce')
+    cy.fill('Espèce', 'SPR')
     cy.wait('@computeFleetSegment')
 
     cy.wait(500)

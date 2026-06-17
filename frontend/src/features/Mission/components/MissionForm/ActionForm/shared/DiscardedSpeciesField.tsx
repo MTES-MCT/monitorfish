@@ -123,7 +123,7 @@ export function DiscardedSpeciesField() {
                   onMouseLeave={() => handleRowMouseLeave(index)}
                 >
                   <StyledPickerTd $isActive={isActive}>
-                    {!isActive ? (
+                    {discard.speciesCode && !isActive ? (
                       <SpeciesName>{`${discard.speciesCode} - ${getSpecyNameFromSpecyCode(
                         discard.speciesCode
                       )}`}</SpeciesName>

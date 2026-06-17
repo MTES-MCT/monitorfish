@@ -51,6 +51,8 @@ updates:
     commit-message:
       prefix: "[Tech] Frontend - "
     labels: ["tech. enhancement", "dependencies"]
+    exclude-paths:
+      - "frontend/package-lock.json"
     ignore:
       - dependency-name: "rsuite"
     groups:

@@ -105,10 +105,16 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('10', { force: true })
     cy.fill('Présentation', ['WHL - Entier'])
     cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
+
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
     cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
+
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
     cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
+
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
     cy.fill('Zone de pêche', ['27.8.b'])
     // Stop hovering so the catch-row editors collapse.

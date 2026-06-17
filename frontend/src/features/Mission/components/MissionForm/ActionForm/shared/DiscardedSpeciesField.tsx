@@ -10,22 +10,13 @@ import styled from 'styled-components'
 import {
   AddSpeciesButton,
   DeleteCell,
-  Kg,
-  QuantityWrapper,
-  SelectValue,
   selectFieldCss,
-  SpeciesName,
-  SpeciesRow,
   SpeciesTableWrapper,
-  StyledCheckPicker,
-  StyledFormikTextInput,
-  StyledPickerTd,
-  StyledSpeciesSelect,
-  TdWithoutPaddingWhenActive,
-  useRowActivation,
-  useSpeciesAndFaoOptions,
-  Weight
-} from './speciesTable'
+  StyledPickerTd
+} from './Species/speciesTable.styles'
+import { FaoZonesCell, SpeciesSelectCell, SpeciesTableRow, WeightCell } from './Species/SpeciesTableRow'
+import { useRowActivation } from './Species/useRowActivation'
+import { useSpeciesAndFaoOptions } from './Species/useSpeciesAndFaoOptions'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
@@ -37,17 +28,8 @@ export function DiscardedSpeciesField() {
 
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
-  const {
-    deactivate,
-    handlePickerClose,
-    handlePickerOpen,
-    handleRowBlur,
-    handleRowFocus,
-    handleRowMouseEnter,
-    handleRowMouseLeave,
-    hoveredIndex,
-    isRowActive
-  } = useRowActivation()
+  const activation = useRowActivation()
+  const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
 
   const addEmptyDiscard = () => {
     const newDiscard: MissionAction.DiscardedSpeciesControl = {
@@ -106,76 +88,48 @@ export function DiscardedSpeciesField() {
           <tbody>
             {(input.value ?? []).map((discard, index) => {
               const isActive = isRowActive(index)
-              const faoZonesDisplay = discard.faoZones?.length ? discard.faoZones.join(', ') : '-'
+              const isHovered = hoveredIndex === index
               const discardReasonDisplay = discard.discardReason
                 ? `${discard.discardReason} - ${DISCARD_REASON_LABEL[discard.discardReason]}`
                 : '-'
 
               return (
-                <SpeciesRow
+                <SpeciesTableRow
                   // eslint-disable-next-line react/no-array-index-key
                   key={`discardedSpecies-${discard.speciesCode}-${index}`}
-                  $isHovered={hoveredIndex === index}
-                  data-cy={`discarded-species-row-${index}`}
-                  onBlurCapture={event => handleRowBlur(index, event)}
-                  onFocusCapture={event => handleRowFocus(index, event)}
-                  onMouseEnter={() => handleRowMouseEnter(index)}
-                  onMouseLeave={() => handleRowMouseLeave(index)}
+                  activation={activation}
+                  dataCy={`discarded-species-row-${index}`}
+                  index={index}
+                  isHovered={isHovered}
                 >
-                  <StyledPickerTd $isActive={isActive}>
-                    {discard.speciesCode && !isActive ? (
-                      <SpeciesName>{`${discard.speciesCode} - ${getSpecyNameFromSpecyCode(
-                        discard.speciesCode
-                      )}`}</SpeciesName>
-                    ) : (
-                      <StyledSpeciesSelect
-                        $isHovered={hoveredIndex === index}
-                        className="Field-SpeciesSelect"
-                        cleanable={false}
-                        customSearch={customSearch}
-                        disabled={isDisabled}
-                        isLabelHidden
-                        isLight
-                        label="Espèce"
-                        name={`discardedSpecies[${index}].speciesCode`}
-                        onChange={newSpecy => setSpecies(index, newSpecy)}
-                        onClose={() => handlePickerClose(index)}
-                        onOpen={() => handlePickerOpen(index)}
-                        options={speciesAsOptions}
-                        optionValueKey="code"
-                        popupWidth={280}
-                        searchable
-                        value={speciesAsOptions.find(option => option.value.code === discard.speciesCode)?.value}
-                        virtualized
-                      />
-                    )}
-                  </StyledPickerTd>
+                  <SpeciesSelectCell
+                    customSearch={customSearch}
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    name={`discardedSpecies[${index}].speciesCode`}
+                    onChange={newSpecy => setSpecies(index, newSpecy)}
+                    onPickerClose={() => handlePickerClose(index)}
+                    onPickerOpen={() => handlePickerOpen(index)}
+                    options={speciesAsOptions}
+                    popupWidth={280}
+                    speciesCode={discard.speciesCode}
+                    speciesLabel={`${discard.speciesCode} - ${getSpecyNameFromSpecyCode(discard.speciesCode)}`}
+                  />
 
-                  <TdWithoutPaddingWhenActive $isActive={isActive}>
-                    {isActive ? (
-                      <QuantityWrapper>
-                        <StyledFormikTextInput
-                          $isHovered={hoveredIndex === index}
-                          disabled={isDisabled}
-                          isLabelHidden
-                          isLight
-                          label="Qté rejetée"
-                          name={`discardedSpecies[${index}].rejectedWeight`}
-                        />
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    ) : (
-                      <QuantityWrapper>
-                        <Weight>{discard.rejectedWeight ?? '-'}</Weight>
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    )}
-                  </TdWithoutPaddingWhenActive>
+                  <WeightCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    label="Qté rejetée"
+                    name={`discardedSpecies[${index}].rejectedWeight`}
+                    value={discard.rejectedWeight}
+                  />
 
                   <StyledPickerTd $isActive={isActive}>
                     {isActive ? (
                       <StyledReasonSelect
-                        $isHovered={hoveredIndex === index}
+                        $isHovered={isHovered}
                         cleanable={false}
                         disabled={isDisabled}
                         isLabelHidden
@@ -192,33 +146,16 @@ export function DiscardedSpeciesField() {
                     )}
                   </StyledPickerTd>
 
-                  <StyledPickerTd $isActive={isActive}>
-                    {isActive ? (
-                      <StyledCheckPicker
-                        $isHovered={hoveredIndex === index}
-                        cleanable={false}
-                        disabled={isDisabled}
-                        isLabelHidden
-                        isRequired
-                        label="Zone de pêche"
-                        name={`discardedSpecies[${index}].faoZones`}
-                        onClose={() => handlePickerClose(index)}
-                        onOpen={() => handlePickerOpen(index)}
-                        options={faoAreasAsOptions}
-                        popupWidth={150}
-                        renderValue={(_, items) =>
-                          items.length > 0 ? (
-                            <SelectValue>{items.map(item => item.label).join(', ')}</SelectValue>
-                          ) : (
-                            <></>
-                          )
-                        }
-                        searchable
-                      />
-                    ) : (
-                      <Ellipsised>{faoZonesDisplay}</Ellipsised>
-                    )}
-                  </StyledPickerTd>
+                  <FaoZonesCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    name={`discardedSpecies[${index}].faoZones`}
+                    onPickerClose={() => handlePickerClose(index)}
+                    onPickerOpen={() => handlePickerOpen(index)}
+                    options={faoAreasAsOptions}
+                    value={discard.faoZones}
+                  />
 
                   <DeleteCell $isCenter>
                     <IconButton
@@ -229,7 +166,7 @@ export function DiscardedSpeciesField() {
                       title="Retirer le rejet"
                     />
                   </DeleteCell>
-                </SpeciesRow>
+                </SpeciesTableRow>
               )
             })}
             <SimpleTable.BodyTr>

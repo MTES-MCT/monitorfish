@@ -20,30 +20,24 @@ import { useEffect } from 'react'
 
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
+import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
   DeleteCell,
-  Kg,
-  QuantityWrapper,
   SelectValue,
-  SpeciesName,
-  SpeciesRow,
   SpeciesTableWrapper,
   StyledCheckPicker,
-  StyledFormikTextInput,
   StyledPickerTd,
-  StyledSpeciesSelect,
-  TdWithoutPaddingWhenActive,
-  useRowActivation,
-  useSpeciesAndFaoOptions,
-  Weight
-} from './speciesTable'
+  TdWithoutPaddingWhenActive
+} from './Species/speciesTable.styles'
+import { FaoZonesCell, SpeciesSelectCell, SpeciesTableRow, WeightCell } from './Species/SpeciesTableRow'
+import { useRowActivation } from './Species/useRowActivation'
+import { useSpeciesAndFaoOptions } from './Species/useSpeciesAndFaoOptions'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
-import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
 import type { Specy } from 'domain/types/specy'
@@ -66,17 +60,8 @@ export function SpeciesField() {
 
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
-  const {
-    deactivate,
-    handlePickerClose,
-    handlePickerOpen,
-    handleRowBlur,
-    handleRowFocus,
-    handleRowMouseEnter,
-    handleRowMouseLeave,
-    hoveredIndex,
-    isRowActive
-  } = useRowActivation()
+  const activation = useRowActivation()
+  const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -184,88 +169,13 @@ export function SpeciesField() {
     return <FieldsetGroupSpinner isLight legend={legend} />
   }
 
-  const baseSpeciesCheckRows: ControlCheckRow[] = [
-    { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
-    { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
-    {
-      isRequired: true,
-      label: 'Arrimage séparé des espèces soumises à plan',
-      name: 'separateStowageOfPreservedSpecies'
-    }
-  ]
-
-  let controlCheckRows: ControlCheckRow[]
-  if (isLandControl) {
-    controlCheckRows = isEISREnabled
-      ? [
-          {
-            isSectionHeader: true,
-            label: (
-              <>
-                Pour les captures <u>débarquées</u>
-              </>
-            ),
-            name: 'unloadedSection'
-          },
-          {
-            isRequired: true,
-            label: 'Taille minimale de référence de conservation contrôlée',
-            name: 'minimumConservationReferenceSizeControlled'
-          },
-          {
-            isRequired: true,
-            label: 'Contrôle de pesée / décompte des caisses / échantillonnage',
-            name: 'cratesWeighingSamplingControl'
-          },
-          {
-            isRequired: true,
-            label: "Informations sur l'opérateur de pesée agréé",
-            name: 'approvedWeighingOperatorInformation'
-          },
-          { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
-          { isRequired: true, label: 'Pesée des captures lors du débarquement', name: 'catchesWeighedAtLanding' },
-          {
-            isSectionHeader: true,
-            label: (
-              <>
-                Pour les captures <u>non débarquées</u>
-              </>
-            ),
-            name: 'heldOnboardSection'
-          },
-          {
-            isRequired: true,
-            label: "Enregistrement séparé des poissons n'ayant pas la taille requise",
-            name: 'underSizedSeparateRecording'
-          }
-        ]
-      : baseSpeciesCheckRows
-  } else {
-    controlCheckRows = [
-      ...baseSpeciesCheckRows,
-      ...(isEISREnabled
-        ? [
-            {
-              isRequired: true,
-              label: "Arrimage séparé des poissons n'ayant pas la taille requise",
-              name: 'underSizedSeparateStowage'
-            },
-            {
-              isRequired: true,
-              label: "Enregistrement séparé des poissons n'ayant pas la taille requise",
-              name: 'underSizedSeparateRecording'
-            }
-          ]
-        : [])
-    ]
-  }
   const isDisabled = values.isGangwayDeployed === false
-  const actionColumnWidthWithEISREnabled = isLandControl ? 52 : 21
+  const actionColumnWidth = isLandControl ? 52 : 21
   const controlledWeightLabel = isLandControl ? 'Pesée' : 'Estimé'
 
   return (
     <FieldsetGroup isLight legend={legend}>
-      <ControlCheckTable rows={controlCheckRows} />
+      <ControlCheckTable rows={getSpeciesControlCheckRows(isLandControl, isEISREnabled)} />
 
       <FieldsetGroupSeparator marginBottom={12} />
       <SpeciesTableWrapper>
@@ -284,129 +194,76 @@ export function SpeciesField() {
               </SimpleTable.Th>
               {isEISREnabled && <SimpleTable.Th $width={70}>Présentation</SimpleTable.Th>}
               {isEISREnabled && <SimpleTable.Th $width={70}>Zone</SimpleTable.Th>}
-              <SimpleTable.Th $width={isEISREnabled ? actionColumnWidthWithEISREnabled : 25} aria-label="Retirer" />
+              <SimpleTable.Th $width={isEISREnabled ? actionColumnWidth : 25} aria-label="Retirer" />
             </tr>
           </SimpleTable.Head>
           <tbody>
             {(input.value ?? []).map((specyOnboard, index) => {
               const isActive = isRowActive(index)
-              const presentationDisplay = specyOnboard.presentationCodes?.length
-                ? specyOnboard.presentationCodes.join(', ')
-                : '-'
-              const faoZonesDisplay = specyOnboard.faoZones?.length ? specyOnboard.faoZones.join(', ') : '-'
+              const isHovered = hoveredIndex === index
 
               return (
-                <SpeciesRow
+                <SpeciesTableRow
                   // eslint-disable-next-line react/no-array-index-key
                   key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
-                  $isHovered={hoveredIndex === index}
-                  data-cy={`species-onboard-row-${index}`}
-                  onBlurCapture={event => handleRowBlur(index, event)}
-                  onFocusCapture={event => handleRowFocus(index, event)}
-                  onMouseEnter={() => handleRowMouseEnter(index)}
-                  onMouseLeave={() => handleRowMouseLeave(index)}
+                  activation={activation}
+                  dataCy={`species-onboard-row-${index}`}
+                  index={index}
+                  isHovered={isHovered}
                 >
-                  <StyledPickerTd $isActive={isActive}>
-                    {specyOnboard.speciesCode && !isActive ? (
-                      <SpeciesName>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
-                        specyOnboard.speciesCode
-                      )}`}</SpeciesName>
-                    ) : (
-                      <StyledSpeciesSelect
-                        $isHovered={hoveredIndex === index}
-                        className="Field-SpeciesSelect"
-                        cleanable={false}
-                        customSearch={customSearch}
-                        disabled={isDisabled}
-                        isLabelHidden
-                        isLight
-                        label="Espèce"
-                        name={`speciesOnboard[${index}].speciesCode`}
-                        onChange={newSpecy => setSpecies(index, newSpecy)}
-                        onClose={() => handlePickerClose(index)}
-                        onOpen={() => handlePickerOpen(index)}
-                        options={speciesAsOptions}
-                        optionValueKey="code"
-                        popupWidth={isEISREnabled ? 280 : undefined}
-                        searchable
-                        value={speciesAsOptions.find(option => option.value.code === specyOnboard.speciesCode)?.value}
-                        virtualized
-                      />
-                    )}
-                  </StyledPickerTd>
+                  <SpeciesSelectCell
+                    customSearch={customSearch}
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    name={`speciesOnboard[${index}].speciesCode`}
+                    onChange={newSpecy => setSpecies(index, newSpecy)}
+                    onPickerClose={() => handlePickerClose(index)}
+                    onPickerOpen={() => handlePickerOpen(index)}
+                    options={speciesAsOptions}
+                    popupWidth={isEISREnabled ? 280 : undefined}
+                    speciesCode={specyOnboard.speciesCode}
+                    speciesLabel={`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}
+                  />
 
-                  <TdWithoutPaddingWhenActive $isActive={isActive}>
-                    {isActive ? (
-                      <QuantityWrapper>
-                        <StyledFormikTextInput
-                          $isHovered={hoveredIndex === index}
-                          disabled={isDisabled}
-                          isLabelHidden
-                          isLight
-                          label="Qté déclarée"
-                          name={`speciesOnboard[${index}].declaredWeight`}
-                        />
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    ) : (
-                      <QuantityWrapper>
-                        <Weight>{specyOnboard.declaredWeight ?? '-'}</Weight>
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    )}
-                  </TdWithoutPaddingWhenActive>
+                  <WeightCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    label="Qté déclarée"
+                    name={`speciesOnboard[${index}].declaredWeight`}
+                    value={specyOnboard.declaredWeight}
+                  />
 
-                  <TdWithoutPaddingWhenActive $isActive={isActive}>
-                    {isActive ? (
-                      <QuantityWrapper>
-                        <StyledFormikTextInput
-                          $isHovered={hoveredIndex === index}
-                          disabled={isDisabled}
-                          isLabelHidden
-                          isLight
-                          label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
-                          name={`speciesOnboard[${index}].controlledWeight`}
-                        />
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    ) : (
-                      <QuantityWrapper>
-                        <Weight>{specyOnboard.controlledWeight ?? '-'}</Weight>
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    )}
-                  </TdWithoutPaddingWhenActive>
+                  <WeightCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
+                    name={`speciesOnboard[${index}].controlledWeight`}
+                    value={specyOnboard.controlledWeight}
+                  />
 
-                  <TdWithoutPaddingWhenActive $isActive={isEISREnabled && isActive}>
-                    {!isEISREnabled && (
+                  {isEISREnabled ? (
+                    <WeightCell
+                      isActive={isActive}
+                      isDisabled={isDisabled}
+                      isHovered={isHovered}
+                      label="Qté ss-taille"
+                      name={`speciesOnboard[${index}].underSizedWeight`}
+                      value={specyOnboard.underSizedWeight}
+                    />
+                  ) : (
+                    <TdWithoutPaddingWhenActive $isActive={false}>
                       <FormikCheckbox disabled={isDisabled} label="" name={`speciesOnboard[${index}].underSized`} />
-                    )}
-                    {isEISREnabled && isActive && (
-                      <QuantityWrapper>
-                        <StyledFormikTextInput
-                          $isHovered={hoveredIndex === index}
-                          disabled={isDisabled}
-                          isLabelHidden
-                          isLight
-                          label="Qté ss-taille"
-                          name={`speciesOnboard[${index}].underSizedWeight`}
-                        />
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    )}
-                    {isEISREnabled && !isActive && (
-                      <QuantityWrapper>
-                        <Weight>{specyOnboard.underSizedWeight ?? '-'}</Weight>
-                        <Kg>kg</Kg>
-                      </QuantityWrapper>
-                    )}
-                  </TdWithoutPaddingWhenActive>
+                    </TdWithoutPaddingWhenActive>
+                  )}
 
                   {isEISREnabled && (
                     <StyledPickerTd $isActive={isActive}>
                       {isActive ? (
                         <StyledCheckPicker
-                          $isHovered={hoveredIndex === index}
+                          $isHovered={isHovered}
                           cleanable={false}
                           disabled={isDisabled}
                           isLabelHidden
@@ -426,61 +283,36 @@ export function SpeciesField() {
                           searchable
                         />
                       ) : (
-                        <Ellipsised>{presentationDisplay}</Ellipsised>
+                        <Ellipsised>
+                          {specyOnboard.presentationCodes?.length ? specyOnboard.presentationCodes.join(', ') : '-'}
+                        </Ellipsised>
                       )}
                     </StyledPickerTd>
                   )}
 
                   {isEISREnabled && (
-                    <StyledPickerTd $isActive={isActive}>
-                      {isActive ? (
-                        <StyledCheckPicker
-                          $isHovered={hoveredIndex === index}
-                          cleanable={false}
-                          disabled={isDisabled}
-                          isLabelHidden
-                          isRequired
-                          label="Zone de pêche"
-                          name={`speciesOnboard[${index}].faoZones`}
-                          onClose={() => handlePickerClose(index)}
-                          onOpen={() => handlePickerOpen(index)}
-                          options={faoAreasAsOptions}
-                          popupWidth={150}
-                          renderValue={(_, items) =>
-                            items.length > 0 ? (
-                              <SelectValue>{items.map(item => item.label).join(', ')}</SelectValue>
-                            ) : (
-                              <></>
-                            )
-                          }
-                          searchable
-                        />
-                      ) : (
-                        <Ellipsised>{faoZonesDisplay}</Ellipsised>
-                      )}
-                    </StyledPickerTd>
+                    <FaoZonesCell
+                      isActive={isActive}
+                      isDisabled={isDisabled}
+                      isHovered={isHovered}
+                      name={`speciesOnboard[${index}].faoZones`}
+                      onPickerClose={() => handlePickerClose(index)}
+                      onPickerOpen={() => handlePickerOpen(index)}
+                      options={faoAreasAsOptions}
+                      value={specyOnboard.faoZones}
+                    />
                   )}
 
                   <DeleteCell $isCenter>
-                    {isLandControl &&
-                      isEISREnabled &&
-                      (specyOnboard.isNotLanded ? (
-                        <IconButton
-                          accent={Accent.TERTIARY}
-                          color={THEME.color.blueGray}
-                          Icon={Icon.CrossedFishery}
-                          onClick={() => updateNotLandedSpecy(index)}
-                          title="Espèce non débarquée"
-                        />
-                      ) : (
-                        <IconButton
-                          accent={Accent.TERTIARY}
-                          color={THEME.color.lightGray}
-                          Icon={Icon.CrossedFishery}
-                          onClick={() => updateNotLandedSpecy(index)}
-                          title="Espèce débarquée"
-                        />
-                      ))}
+                    {isLandControl && isEISREnabled && (
+                      <IconButton
+                        accent={Accent.TERTIARY}
+                        color={specyOnboard.isNotLanded ? THEME.color.blueGray : THEME.color.lightGray}
+                        Icon={Icon.CrossedFishery}
+                        onClick={() => updateNotLandedSpecy(index)}
+                        title={specyOnboard.isNotLanded ? 'Espèce non débarquée' : 'Espèce débarquée'}
+                      />
+                    )}
                     <IconButton
                       accent={Accent.TERTIARY}
                       disabled={isDisabled}
@@ -489,7 +321,7 @@ export function SpeciesField() {
                       title="Retirer l'espèce"
                     />
                   </DeleteCell>
-                </SpeciesRow>
+                </SpeciesTableRow>
               )
             })}
             <SimpleTable.BodyTr>

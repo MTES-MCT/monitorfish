@@ -16,6 +16,50 @@ WITH pa AS (
     GROUP BY filtered_pa.id_nav_flotteur, filtered_pa.id_adm_intervenant
 ),
 
+addresses_ AS (
+    SELECT
+        ID_ADM_INTERVENANT AS id_adm_intervenant,
+        ROW_NUMBER() OVER (PARTITION BY ID_ADM_INTERVENANT ORDER BY IDC_ADRESSE) AS rk,
+        TRIM(REGEXP_REPLACE(
+            -- Line 1: building/floor details
+            NULLIF(TRIM(
+                COALESCE(ETAGE     || ' ', '') ||
+                COALESCE(BATIMENT  || ' ', '') ||
+                COALESCE(VOIE      || ' ', '')
+            ), '') || CHR(10) ||
+
+            -- Line 2: lieu-dit / BP
+            NULLIF(TRIM(
+                COALESCE(LIEU_DIT  || ' ', '') ||
+                COALESCE(BP        || ' ', '')
+            ), '') || CHR(10) ||
+
+            -- Line 3: postal code, city, cedex
+            NULLIF(TRIM(
+                COALESCE(CODE_POSTAL || ' ', '') ||
+                COALESCE(VILLE       || ' ', '') ||
+                COALESCE(CEDEX       || ' ', '')
+            ), '') || CHR(10) ||
+
+            -- Line 4: country
+            COALESCE(cp.LIB_FRANCAIS, ''),
+
+            -- Remove consecutive newlines left by NULL lines
+            CHR(10) || '+', CHR(10)
+        )) AS full_address
+    FROM ADM.ADM_ADRESSE ad
+    LEFT JOIN COMMUN.C_CODE_PAYS cp
+    ON ad."IDC_PAYS" = cp."IDC_PAYS"
+),
+
+addresses AS (
+    SELECT
+        id_adm_intervenant,
+        full_address
+    FROM addresses_
+    WHERE rk = 1
+),
+
 e AS (
     SELECT
         id_adm_entreprise AS id_adm,
@@ -23,8 +67,12 @@ e AS (
         email,
         REPLACE(telephone, ' ', '') AS phone,
         REPLACE(tel_mobile, ' ', '') AS mobile_phone,
-        REPLACE(fax, ' ', '') AS fax
+        REPLACE(fax, ' ', '') AS fax,
+        full_address,
+        NULL AS nationality
     FROM ADM.ADM_ENTREPRISE
+    LEFT JOIN addresses
+    ON addresses.id_adm_intervenant = ADM.ADM_ENTREPRISE.id_adm_entreprise
 ), 
 
 a AS (
@@ -34,8 +82,14 @@ a AS (
         email,
         REPLACE(telephone, ' ', '') AS phone,
         REPLACE(tel_mobile, ' ', '') AS mobile_phone,
-        REPLACE(fax, ' ', '') AS fax
-    FROM ADM.ADM_ADMINISTRE
+        REPLACE(fax, ' ', '') AS fax,
+        full_address,
+        nat.LIBELLE AS nationality
+    FROM ADM.ADM_ADMINISTRE adm
+    LEFT JOIN addresses
+    ON addresses.id_adm_intervenant = adm.id_adm_administre
+    LEFT JOIN COMMUN.C_CODE_NATIONALITE nat
+    ON nat.IDC_NATIONALITE = adm.IDC_NATIONALITE
 ),
 
 adm AS (
@@ -94,6 +148,8 @@ SELECT
     LOWER(adm_proprietor.email) AS proprietor_email,
     adm_proprietor.phone AS proprietor_phone,
     adm_proprietor.mobile_phone AS proprietor_mobile_phone,
+    adm_proprietor.full_address AS proprietor_address,
+    adm_proprietor.nationality AS proprietor_nationality,
     nfp.fishing_gear_main AS fishing_gear_main,
     nfp.fishing_gear_secondary AS fishing_gear_secondary,
     nfp.fishing_gear_third AS fishing_gear_third

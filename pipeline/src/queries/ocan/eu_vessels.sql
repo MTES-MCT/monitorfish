@@ -14,6 +14,9 @@ SELECT
     tn.libelle AS vessel_type,
     INITCAP(nom_armateur) AS operator_name,
     LOWER(arm_email) AS operator_email,
+    ncp.nom_proprietaire AS proprietor_name,
+    ncp.adresse_proprietaire AS proprietor_address,
+    cp_prop.lib_francais AS proprietor_nationality,
     LOWER(prop_email) AS proprietor_email,
     eng1.code AS fishing_gear_main,
     eng2.code AS fishing_gear_secondary,
@@ -23,6 +26,8 @@ LEFT JOIN NAVPRO.NAV_NAVIRE_CEE_PECHE ncp
 ON f.id_nav_flotteur = ncp.id_nav_flotteur
 LEFT JOIN COMMUN.C_CODE_PAYS cp
 ON f.idc_pays_flotteur = cp.idc_pays
+LEFT JOIN COMMUN.C_CODE_PAYS cp_prop
+ON ncp.idc_pays_prop_nat = cp_prop.idc_pays
 LEFT JOIN COMMUN.C_PCH_CODE_ENGIN_CE eng1
 ON ncp.idc_pch_engin_principal = eng1.idc_pch_engin_ce
 LEFT JOIN  COMMUN.C_PCH_CODE_ENGIN_CE eng2

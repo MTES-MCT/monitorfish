@@ -1,31 +1,41 @@
-import { useGetFaoAreasQuery } from '@api/faoAreas'
-import { useGetSpeciesQuery } from '@api/specy'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
 import {
   Accent,
-  Button,
-  CustomSearch,
   FormikCheckbox,
-  FormikCheckPicker,
-  FormikNumberInput,
   FormikTextarea,
   Icon,
   IconButton,
-  Select,
-  SingleTag,
+  SimpleTable,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { useEffect } from 'react'
 
 import { getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
+import {
+  AddSpeciesButton,
+  DeleteCell,
+  Kg,
+  QuantityWrapper,
+  SelectValue,
+  SpeciesName,
+  SpeciesRow,
+  SpeciesTableWrapper,
+  StyledCheckPicker,
+  StyledFormikTextInput,
+  StyledPickerTd,
+  StyledSpeciesSelect,
+  TdWithoutPaddingWhenActive,
+  useRowActivation,
+  useSpeciesAndFaoOptions,
+  Weight
+} from './speciesTable'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 import { useIsEISREnabled } from '../../hooks/useIsEISREnabled'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
@@ -41,13 +51,11 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
   value: code
 }))
 
-type VisibilityState = { underSized: boolean }
-
 type SpeciesFieldProps = Readonly<{
   controlledWeightLabel: string
 }>
 export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
-  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
+  const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -57,14 +65,19 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
   const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
 
-  const getSpeciesApiQuery = useGetSpeciesQuery()
-  const getFaoAreasQuery = useGetFaoAreasQuery()
+  const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
-  const [visibilityByIndex, setVisibilityByIndex] = useState<VisibilityState[]>(() =>
-    (input.value ?? []).map(s => ({
-      underSized: s.underSizedWeight !== undefined && s.underSizedWeight !== null
-    }))
-  )
+  const {
+    deactivate,
+    handlePickerClose,
+    handlePickerOpen,
+    handleRowBlur,
+    handleRowFocus,
+    handleRowMouseEnter,
+    handleRowMouseLeave,
+    hoveredIndex,
+    isRowActive
+  } = useRowActivation()
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -89,86 +102,49 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input.value, previousValue])
 
-  const speciesAsOptions: Array<Option<Specy>> = useMemo(
-    () =>
-      getSpeciesApiQuery.data
-        ? getSpeciesApiQuery.data.species.map(specy => ({
-            label: `${specy.code} - ${specy.name}`,
-            value: specy
-          }))
-        : [],
-    [getSpeciesApiQuery.data]
-  )
-
-  const faoAreasAsOptions: Array<Option<string>> = useMemo(
-    () => (getFaoAreasQuery.data ? getFaoAreasQuery.data.map(zone => ({ label: zone, value: zone })) : []),
-    [getFaoAreasQuery.data]
-  )
-
-  const customSearch = useMemo(
-    () =>
-      getSpeciesApiQuery.data
-        ? new CustomSearch(
-            structuredClone(speciesAsOptions),
-            [
-              {
-                name: 'value.code',
-                weight: 0.9
-              },
-              {
-                name: 'value.name',
-                weight: 0.1
-              }
-            ],
-            { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
-          )
-        : undefined,
-    [getSpeciesApiQuery.data, speciesAsOptions]
-  )
-
-  const add = (newSpecy: Specy | undefined) => {
-    if (!newSpecy) {
-      // TODO Add a form validation to avoid `undefined`.
-
-      return
-    }
-
+  const addEmptySpecies = () => {
     const newSpecies: MissionAction.SpeciesOnboardControl = {
       controlledWeight: undefined,
       declaredWeight: undefined,
-      faoZones: isEISREnabled ? values.faoAreas : undefined,
+      faoZones: undefined,
       nbFish: undefined,
-      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
-      speciesCode: newSpecy.code,
-      speciesName: newSpecy.name,
+      presentationCodes: undefined,
+      speciesCode: '',
+      speciesName: undefined,
       underSized: false,
       underSizedWeight: undefined
     }
-    const nextSpeciesOnboard = [...(input.value ?? []), newSpecies]
 
-    setVisibilityByIndex(prev => [...prev, { underSized: false }])
+    helper.setValue([...(input.value ?? []), newSpecies])
+  }
+
+  const setSpecies = (index: number, newSpecy: Specy | undefined) => {
+    if (!newSpecy || !input.value) {
+      return
+    }
+
+    deactivate()
+
+    const nextSpeciesOnboard = input.value.map((species, currentIndex) =>
+      currentIndex === index
+        ? {
+            ...species,
+            faoZones: species.faoZones ?? (isEISREnabled ? values.faoAreas : undefined),
+            presentationCodes: species.presentationCodes?.length
+              ? species.presentationCodes
+              : getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+            speciesCode: newSpecy.code,
+            speciesName: newSpecy.name
+          }
+        : species
+    )
+
     updateSegments({
       ...values,
       speciesOnboard: nextSpeciesOnboard
     })
     helper.setValue(nextSpeciesOnboard)
   }
-
-  const getSpecyNameFromSpecyCode = useCallback(
-    (specyCode: Specy['code']) => {
-      if (!getSpeciesApiQuery.data) {
-        return ''
-      }
-
-      const foundSpecy = getSpeciesApiQuery.data.species.find(({ code }) => code === specyCode)
-      if (!foundSpecy) {
-        return ''
-      }
-
-      return foundSpecy.name
-    },
-    [getSpeciesApiQuery.data]
-  )
 
   const remove = (index: number) => {
     if (!input.value) {
@@ -177,45 +153,11 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
 
     const nextSpeciesOnboard = input.value.filter((_, currentIndex) => currentIndex !== index)
 
-    setVisibilityByIndex(prev => {
-      const next = [...prev]
-      next.splice(index, 1)
-
-      return next
-    })
     updateSegments({
       ...values,
       speciesOnboard: nextSpeciesOnboard
     })
     helper.setValue(nextSpeciesOnboard)
-  }
-
-  const openUnderSized = (index: number) => {
-    setVisibilityByIndex(prev => {
-      const next = [...prev]
-      next[index] = { ...(next[index] ?? { underSized: false }), underSized: true }
-
-      return next
-    })
-  }
-
-  const closeUnderSized = (index: number) => {
-    setVisibilityByIndex(prev => {
-      const next = [...prev]
-      next[index] = { ...(next[index] ?? { underSized: false }), underSized: false }
-
-      return next
-    })
-    setFieldValue(`speciesOnboard[${index}].underSizedWeight`, undefined)
-  }
-
-  const isUnderSizedShown = (index: number): boolean => {
-    const species = input.value?.[index]
-    if (species?.underSizedWeight !== undefined && species?.underSizedWeight !== null) {
-      return true
-    }
-
-    return visibilityByIndex[index]?.underSized ?? false
   }
 
   if (!speciesAsOptions.length || !customSearch) {
@@ -302,173 +244,225 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     <FieldsetGroup isLight legend={legend}>
       <ControlCheckTable rows={controlCheckRows} />
 
-      {input.value && input.value.length > 0 && (
-        <>
-          <FieldsetGroupSeparator marginBottom={12} />
-          {input.value.map((specyOnboard, index) => (
-            <Row
-              // eslint-disable-next-line react/no-array-index-key
-              key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
-              $isLast={index + 1 === input.value?.length}
-            >
-              <TagRow>
-                <StyledSingleTag onDelete={() => remove(index)}>{`${
-                  specyOnboard.speciesCode
-                } - ${getSpecyNameFromSpecyCode(specyOnboard.speciesCode)}`}</StyledSingleTag>
-                {isEISREnabled && !isUnderSizedShown(index) && (
-                  <AddButton
-                    accent={Accent.SECONDARY}
-                    disabled={values.isGangwayDeployed === false}
-                    Icon={Icon.Plus}
-                    onClick={() => openUnderSized(index)}
-                  >
-                    Sous-taille
-                  </AddButton>
-                )}
-                {isLandControl && isEISREnabled && (
-                  <FormikCheckbox label="Espèce non débarquée" name={`speciesOnboard[${index}].isNotLanded`} />
-                )}
-              </TagRow>
+      <FieldsetGroupSeparator marginBottom={12} />
+      <SpeciesTableWrapper>
+        <SimpleTable.Table>
+          <SimpleTable.Head>
+            <tr>
+              <SimpleTable.Th $width={isEISREnabled ? 165 : 320}>Espèce(s)</SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
+                {isEISREnabled ? 'Déclaré' : 'Qté déclarée'}
+              </SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
+                {isEISREnabled ? 'Estimé' : 'Qté estimée'}
+              </SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
+                {isEISREnabled ? 'Ss-taille' : 'Sous-taille'}
+              </SimpleTable.Th>
+              {isEISREnabled && <SimpleTable.Th $width={70}>Présentation</SimpleTable.Th>}
+              {isEISREnabled && <SimpleTable.Th $width={70}>Zone</SimpleTable.Th>}
+              <SimpleTable.Th $width={isEISREnabled ? 21 : 25} aria-label="Retirer" />
+            </tr>
+          </SimpleTable.Head>
+          <tbody>
+            {(input.value ?? []).map((specyOnboard, index) => {
+              const isActive = isRowActive(index)
+              const isDisabled = values.isGangwayDeployed === false
+              const presentationDisplay = specyOnboard.presentationCodes?.length
+                ? specyOnboard.presentationCodes.join(', ')
+                : '-'
+              const faoZonesDisplay = specyOnboard.faoZones?.length ? specyOnboard.faoZones.join(', ') : '-'
 
-              <FieldsRow>
-                <FormikNumberInput
-                  disabled={values.isGangwayDeployed === false}
-                  label="Qté déclarée"
-                  name={`speciesOnboard[${index}].declaredWeight`}
-                />
-                <FormikNumberInput
-                  disabled={values.isGangwayDeployed === false}
-                  label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
-                  name={`speciesOnboard[${index}].controlledWeight`}
-                />
-                {isEISREnabled ? (
-                  <>
-                    {isUnderSizedShown(index) && (
-                      <>
-                        <FormikNumberInput
-                          disabled={values.isGangwayDeployed === false}
+              return (
+                <SpeciesRow
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`speciesOnboard-${specyOnboard.speciesCode}-${index}`}
+                  $isHovered={hoveredIndex === index}
+                  data-cy={`species-onboard-row-${index}`}
+                  onBlurCapture={event => handleRowBlur(index, event)}
+                  onFocusCapture={event => handleRowFocus(index, event)}
+                  onMouseEnter={() => handleRowMouseEnter(index)}
+                  onMouseLeave={() => handleRowMouseLeave(index)}
+                >
+                  <StyledPickerTd $isActive={isActive}>
+                    {!isActive ? (
+                      <SpeciesName>{`${specyOnboard.speciesCode} - ${getSpecyNameFromSpecyCode(
+                        specyOnboard.speciesCode
+                      )}`}</SpeciesName>
+                    ) : (
+                      <StyledSpeciesSelect
+                        $isHovered={hoveredIndex === index}
+                        className="Field-SpeciesSelect"
+                        cleanable={false}
+                        customSearch={customSearch}
+                        isLabelHidden
+                        isLight
+                        label="Espèce"
+                        name={`speciesOnboard[${index}].speciesCode`}
+                        onChange={newSpecy => setSpecies(index, newSpecy)}
+                        onClose={() => handlePickerClose(index)}
+                        onOpen={() => handlePickerOpen(index)}
+                        options={speciesAsOptions}
+                        optionValueKey="code"
+                        popupWidth={isEISREnabled ? 280 : undefined}
+                        searchable
+                        value={speciesAsOptions.find(option => option.value.code === specyOnboard.speciesCode)?.value}
+                        virtualized
+                      />
+                    )}
+                  </StyledPickerTd>
+
+                  <TdWithoutPaddingWhenActive $isActive={isActive}>
+                    {isActive ? (
+                      <QuantityWrapper>
+                        <StyledFormikTextInput
+                          $isHovered={hoveredIndex === index}
+                          disabled={isDisabled}
+                          isLabelHidden
+                          isLight
+                          label="Qté déclarée"
+                          name={`speciesOnboard[${index}].declaredWeight`}
+                        />
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
+                    ) : (
+                      <QuantityWrapper>
+                        <Weight>{specyOnboard.declaredWeight ?? '-'}</Weight>
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
+                    )}
+                  </TdWithoutPaddingWhenActive>
+
+                  <TdWithoutPaddingWhenActive $isActive={isActive}>
+                    {isActive ? (
+                      <QuantityWrapper>
+                        <StyledFormikTextInput
+                          $isHovered={hoveredIndex === index}
+                          disabled={isDisabled}
+                          isLabelHidden
+                          isLight
+                          label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
+                          name={`speciesOnboard[${index}].controlledWeight`}
+                        />
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
+                    ) : (
+                      <QuantityWrapper>
+                        <Weight>{specyOnboard.controlledWeight ?? '-'}</Weight>
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
+                    )}
+                  </TdWithoutPaddingWhenActive>
+
+                  <TdWithoutPaddingWhenActive $isActive={isEISREnabled && isActive}>
+                    {!isEISREnabled && (
+                      <FormikCheckbox disabled={isDisabled} label="" name={`speciesOnboard[${index}].underSized`} />
+                    )}
+                    {isEISREnabled && isActive && (
+                      <QuantityWrapper>
+                        <StyledFormikTextInput
+                          $isHovered={hoveredIndex === index}
+                          disabled={isDisabled}
+                          isLabelHidden
+                          isLight
                           label="Qté ss-taille"
                           name={`speciesOnboard[${index}].underSizedWeight`}
                         />
-                        <DeleteButton
-                          accent={Accent.SECONDARY}
-                          Icon={Icon.Delete}
-                          onClick={() => closeUnderSized(index)}
-                          title="Retirer la sous-taille"
-                        />
-                      </>
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
                     )}
-                    <StyledCheckPicker
-                      disabled={values.isGangwayDeployed === false}
-                      label="Présentation"
-                      name={`speciesOnboard[${index}].presentationCodes`}
-                      options={PRESENTATION_OPTIONS}
-                      searchable
-                    />
-                    <StyledCheckPicker
-                      disabled={values.isGangwayDeployed === false}
-                      isRequired
-                      label="Zone de pêche"
-                      name={`speciesOnboard[${index}].faoZones`}
-                      options={faoAreasAsOptions}
-                      searchable
-                    />
-                  </>
-                ) : (
-                  <FormikCheckbox label="Sous-taille" name={`speciesOnboard[${index}].underSized`} />
-                )}
-              </FieldsRow>
-            </Row>
-          ))}
-        </>
-      )}
-      <FieldsetGroupSeparator marginBottom={14} />
+                    {isEISREnabled && !isActive && (
+                      <QuantityWrapper>
+                        <Weight>{specyOnboard.underSizedWeight ?? '-'}</Weight>
+                        <Kg>kg</Kg>
+                      </QuantityWrapper>
+                    )}
+                  </TdWithoutPaddingWhenActive>
 
-      <Select
-        key={String(input.value?.length)}
-        customSearch={customSearch}
-        label="Ajouter une espèce"
-        name="newSpecy"
-        onChange={add}
-        options={speciesAsOptions}
-        optionValueKey="code"
-        searchable
-        virtualized
-      />
+                  {isEISREnabled && (
+                    <StyledPickerTd $isActive={isActive}>
+                      {isActive ? (
+                        <StyledCheckPicker
+                          $isHovered={hoveredIndex === index}
+                          cleanable={false}
+                          disabled={isDisabled}
+                          isLabelHidden
+                          label="Présentation"
+                          name={`speciesOnboard[${index}].presentationCodes`}
+                          onClose={() => handlePickerClose(index)}
+                          onOpen={() => handlePickerOpen(index)}
+                          options={PRESENTATION_OPTIONS}
+                          popupWidth={220}
+                          renderValue={(_, items) =>
+                            items.length > 0 ? (
+                              <SelectValue>{items.map(item => item.value).join(', ')}</SelectValue>
+                            ) : (
+                              <></>
+                            )
+                          }
+                          searchable
+                        />
+                      ) : (
+                        presentationDisplay
+                      )}
+                    </StyledPickerTd>
+                  )}
+
+                  {isEISREnabled && (
+                    <StyledPickerTd $isActive={isActive}>
+                      {isActive ? (
+                        <StyledCheckPicker
+                          $isHovered={hoveredIndex === index}
+                          cleanable={false}
+                          disabled={isDisabled}
+                          isLabelHidden
+                          isRequired
+                          label="Zone de pêche"
+                          name={`speciesOnboard[${index}].faoZones`}
+                          onClose={() => handlePickerClose(index)}
+                          onOpen={() => handlePickerOpen(index)}
+                          options={faoAreasAsOptions}
+                          popupWidth={150}
+                          renderValue={(_, items) =>
+                            items.length > 0 ? (
+                              <SelectValue>{items.map(item => item.label).join(', ')}</SelectValue>
+                            ) : (
+                              <></>
+                            )
+                          }
+                          searchable
+                        />
+                      ) : (
+                        faoZonesDisplay
+                      )}
+                    </StyledPickerTd>
+                  )}
+
+                  <DeleteCell $isCenter>
+                    {isLandControl && isEISREnabled && (specyOnboard.isNotLanded ? 'true' : 'false')}
+                    <IconButton
+                      accent={Accent.TERTIARY}
+                      Icon={Icon.Minus}
+                      onClick={() => remove(index)}
+                      title="Retirer l'espèce"
+                    />
+                  </DeleteCell>
+                </SpeciesRow>
+              )
+            })}
+            <SimpleTable.BodyTr>
+              <SimpleTable.Td colSpan={7}>
+                <AddSpeciesButton onClick={addEmptySpecies} type="button">
+                  <Icon.Plus size={18} />
+                  Ajouter une espèce
+                </AddSpeciesButton>
+              </SimpleTable.Td>
+            </SimpleTable.BodyTr>
+          </tbody>
+        </SimpleTable.Table>
+      </SpeciesTableWrapper>
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" rows={2} />
     </FieldsetGroup>
   )
 }
-
-const StyledCheckPicker = styled(FormikCheckPicker)`
-  flex: 1;
-  min-width: 150px;
-  max-width: 250px;
-
-  .rs-picker-value-count {
-    margin-top: 2px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    height: 16px !important;
-    background-color: ${p => p.theme.color.white} !important;
-    color: ${p => p.theme.color.gunMetal};
-  }
-`
-
-const StyledSingleTag = styled(SingleTag)`
-  max-width: 280px;
-`
-
-const TagRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-`
-
-const Row = styled.div<{
-  $isLast: boolean
-}>`
-  margin-bottom: ${p => (p.$isLast ? 0 : 40)}px;
-
-  > legend {
-    margin: 24px 0 8px;
-  }
-
-  > hr {
-    margin-bottom: 16px;
-  }
-
-  input[type='number'] {
-    width: 112px;
-  }
-`
-
-const FieldsRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 8px;
-  margin-top: 8px;
-  width: 100%;
-
-  > .Field-NumberInput {
-    input {
-      height: 30px;
-      width: 85px;
-    }
-  }
-`
-
-const AddButton = styled(Button)`
-  align-self: flex-end;
-  height: 30px;
-`
-
-const DeleteButton = styled(IconButton)`
-  align-self: flex-end;
-  margin-left: -6px;
-  width: 30px;
-  height: 30px;
-`

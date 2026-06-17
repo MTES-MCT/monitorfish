@@ -78,8 +78,12 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
-    // Inspection des captures
-    cy.fill('Ajouter une espèce', 'COD')
+    // Inspection des captures — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
+    // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select on
+    // hover (it is the only "Espèce" Select rendered, since the prefilled rows show their species as text).
+    cy.clickButton('Ajouter une espèce')
+    cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
+    cy.fill('Espèce', 'COD')
     // Pour les captures détenues à bord
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     // Pour les captures déchargées
@@ -88,25 +92,29 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill("Informations sur l'opérateur de pesée agréé", 'Oui')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Pesée des captures lors du débarquement', 'Non')
+    // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their editors on row hover; non-hovered rows
+    // show plain text. Hover a row, then fill its fields. Weight inputs are queried by id (not `cy.fill`)
+    // because each edit fires an async fleet-segment recompute that remounts the field and detaches a
+    // cached `cy.fill` element. Présentation/Zone are filled by label while only the hovered row's editor
+    // is mounted, so no index is needed.
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
     cy.fill('Espèce non débarquée', true)
-    cy.fill('Qté estimée', 500)
-    cy.clickButton('Sous-taille')
-    cy.fill('Qté ss-taille', 10)
+    cy.get('[id="speciesOnboard[0].controlledWeight"]').type('500', { force: true })
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('10', { force: true })
     cy.fill('Présentation', ['WHL - Entier'])
     cy.fill('Zone de pêche', ['27.8.b'])
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 3 })
+    cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
+    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
+    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
+    cy.fill('Zone de pêche', ['27.8.b'])
+    // Stop hovering so the catch-row editors collapse.
+    // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
+    cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseout', { force: true })
 
-    // Rejets — NEP and BIB are prefilled (DIM discards from the logbook DIS); add the HKE discard (DIS).
-    // "Nature du rejet" / "Qté rejetée" only render in the "Rejets" card (NEP 0, BIB 1, HKE 2).
-    // "Zone de pêche" spans both cards (catches HKE 0, NEP 1, BLI 2, COD 3; rejets NEP 4, BIB 5, HKE 6),
-    // so the HKE discard zone is index 6. NEP/BIB already carry prefilled zones.
-    cy.fill('Ajouter une espèce rejetée', 'HKE')
-    cy.wait(200)
-    cy.fill('Nature du rejet', 'DIS - autres rejets', { index: 2 })
-    cy.fill('Qté rejetée', 3, { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 6 })
+    // The land control form has no "Rejets" card: discards are not edited here. The NEP/BIB logbook
+    // discards remain prefilled in the form state and are submitted as-is (see the payload assertion).
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Appréhensions
@@ -242,21 +250,19 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
           speciesObservations: 'Une observation hors infraction sur les espèces.',
           // Catches are the risk factor species sorted by weight: HKE (471.2), NEP (235.6), BLI (13.46),
-          // then the manually added COD. NEP is both a catch and a logbook discard. The HKE discard now
-          // lives in `discardedSpecies` (HKE keeps isNotLanded / underSizedWeight / presentationCodes as
-          // a landed catch, but no longer discardReason / rejectedWeight here).
+          // then the manually added COD. HKE keeps isNotLanded / underSizedWeight / presentationCodes as a
+          // landed catch.
           speciesOnboard: [
             { controlledWeight: 500, declaredWeight: 471.2, faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCodes: ['WHL'], speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
             { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false },
             { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
           ],
-          // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a); HKE (DIS) is added in
-          // the "Rejets" card.
+          // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a). The land control form has
+          // no "Rejets" card, so these prefilled discards are submitted as-is and no discard is added here.
           discardedSpecies: [
             { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
-            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' },
-            { discardReason: 'DIS', rejectedWeight: 3, speciesCode: 'HKE' }
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' }
           ],
           speciesQuantitySeized: 6289.5,
           unitWithoutOmegaGauge: true,

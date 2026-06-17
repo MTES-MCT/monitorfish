@@ -56,10 +56,14 @@ data class RiskFactorEntity(
     val segmentHighestPriority: String? = null,
     @Column(name = "recent_segment_highest_priority")
     val recentSegmentHighestPriority: String? = null,
+    @Column(name = "usual_segment_highest_priority")
+    val usualSegmentHighestPriority: String? = null,
     @Column(name = "control_priority_level")
     val controlPriorityLevel: Double,
     @Column(name = "recent_segments_control_priority_level")
     val recentControlPriorityLevel: Double,
+    @Column(name = "usual_segments_control_priority_level")
+    val usualSegmentsControlPriorityLevel: Double,
     @Column(name = "last_control_datetime_utc")
     val lastControlDateTime: ZonedDateTime? = null,
     @Column(name = "last_control_at_sea_datetime_utc")
@@ -127,6 +131,8 @@ data class RiskFactorEntity(
             recentSegmentHighestImpact = recentSegmentHighestImpact,
             recentSegmentHighestPriority = recentSegmentHighestPriority,
             recentControlPriorityLevel = recentControlPriorityLevel,
+            usualSegmentHighestPriority = usualSegmentHighestPriority,
+            usualSegmentsControlPriorityLevel = usualSegmentsControlPriorityLevel,
             hasCurrentVmsFishingActivity = hasCurrentVmsFishingActivity,
             infringementRiskLevel = infringementRiskLevel,
             infractionRateRiskFactor = infractionRateRiskFactor,

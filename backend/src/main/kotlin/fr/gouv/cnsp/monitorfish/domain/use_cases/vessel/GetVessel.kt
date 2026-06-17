@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.extractBossNameAndAddressFromERS
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -175,6 +176,7 @@ class GetVessel(
                     when (vesselGroup) {
                         is DynamicVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel, now)
                         is FixedVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel)
+                        is PriorityVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel)
                     }
                 }
 

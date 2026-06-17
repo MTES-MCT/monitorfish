@@ -65,19 +65,19 @@ class GetAllVesselGroupsWithVesselsUTests {
             )
 
         // Then
-        assertThat(vesselGroups).hasSize(2)
+        assertThat(vesselGroups).hasSize(4)
 
-        assertThat((vesselGroups.first().group as FixedVesselGroup).vessels).hasSize(2)
-        assertThat((vesselGroups.first().group as FixedVesselGroup).vessels.first().cfr).isEqualTo("FR123456785")
-        assertThat((vesselGroups.first().group as FixedVesselGroup).vessels.last().cfr).isEqualTo("FR00022680")
+        assertThat((vesselGroups[2].group as FixedVesselGroup).vessels).hasSize(2)
+        assertThat((vesselGroups[2].group as FixedVesselGroup).vessels.first().cfr).isEqualTo("FR123456785")
+        assertThat((vesselGroups[2].group as FixedVesselGroup).vessels.last().cfr).isEqualTo("FR00022680")
 
-        assertThat(vesselGroups.first().vessels).hasSize(2)
+        assertThat(vesselGroups[2].vessels).hasSize(2)
 
-        val firstVessel = vesselGroups.first().vessels.first()
+        val firstVessel = vesselGroups[2].vessels.first()
         assertThat(firstVessel.first).isEqualTo(0)
         assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
 
-        val lastVessel = vesselGroups.first().vessels.last()
+        val lastVessel = vesselGroups[2].vessels.last()
         // VesselId is matched from the getDummyLastPositions() stub: FR00022680 -> FR224226850
         assertThat(lastVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
     }
@@ -132,10 +132,10 @@ class GetAllVesselGroupsWithVesselsUTests {
             )
 
         // Then
-        assertThat(vesselGroups).hasSize(1)
-        assertThat(vesselGroups.first().vessels).hasSize(2)
+        assertThat(vesselGroups).hasSize(3)
+        assertThat(vesselGroups[2].vessels).hasSize(2)
 
-        val firstVessel = vesselGroups.first().vessels.first()
+        val firstVessel = vesselGroups[2].vessels.first()
         // Id is not 0 but 1 because first vessel is unknown
         assertThat(firstVessel.first).isEqualTo(1)
         assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
@@ -181,10 +181,11 @@ class GetAllVesselGroupsWithVesselsUTests {
             )
 
         // Then
-        assertThat(vesselGroups).hasSize(2)
-        assertThat(vesselGroups.first().vessels).hasSize(1)
+        assertThat(vesselGroups).hasSize(4)
+        assertThat(vesselGroups.first().group.name).isEqualTo("Segments P1")
+        assertThat(vesselGroups[1].group.name).isEqualTo("Segments P2")
 
-        val firstVessel = vesselGroups.first().vessels.first()
+        val firstVessel = vesselGroups[2].vessels.first()
         assertThat(firstVessel.second.lastPosition?.vesselId).isEqualTo(1)
         assertThat(firstVessel.second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
         // OTB is matching with the filter

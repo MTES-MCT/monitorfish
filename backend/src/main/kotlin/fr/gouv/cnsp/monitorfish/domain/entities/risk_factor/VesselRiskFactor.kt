@@ -68,7 +68,17 @@ data class VesselRiskFactor(
     val recentSegmentsProbabilityRiskFactor: Double = defaultProbabilityRiskFactor,
     val recentSegmentsInfringementRiskLevel: Double = defaultInfringementRiskLevel,
     val hasCurrentVmsFishingActivity: Boolean = false,
+    val usualSegmentHighestPriority: String? = null,
+    val usualSegmentsControlPriorityLevel: Double = defaultControlPriorityLevel,
 ) {
+    val effectiveControlPriorityLevel: Double
+        get() =
+            when {
+                segmentHighestImpact != null -> controlPriorityLevel
+                recentSegmentHighestPriority != null -> recentControlPriorityLevel
+                usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
+                else -> 1.0
+            }
     fun isInGroup(
         vesselGroup: VesselGroupBase,
         profile: VesselProfile?,

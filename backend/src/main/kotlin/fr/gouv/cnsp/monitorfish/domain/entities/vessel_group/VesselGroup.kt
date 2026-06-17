@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import java.time.ZonedDateTime
+import java.time.ZoneOffset
 
 sealed class VesselGroupBase(
     open val id: Int?,
@@ -128,6 +129,49 @@ data class DynamicVesselGroup(
             hasPositionsMatch &&
             hasProducerOrganizationMatch &&
             hasLandingPortMatch
+    }
+}
+
+data class PriorityVesselGroup(
+    override val id: Int? = null,
+    override val name: String,
+    override val isDeleted: Boolean = false,
+    override val description: String? = null,
+    override val pointsOfAttention: String? = null,
+    override val color: String,
+    override val sharing: Sharing = Sharing.SHARED,
+    override val sharedTo: List<CnspService>? = null,
+    override val createdBy: String = "",
+    override val createdAtUtc: ZonedDateTime = ZonedDateTime.of(2024, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC),
+    override val updatedAtUtc: ZonedDateTime? = null,
+    override val endOfValidityUtc: ZonedDateTime? = null,
+    override val startOfValidityUtc: ZonedDateTime? = null,
+    val priorityLevel: Int,
+) : VesselGroupBase(
+        id = id,
+        name = name,
+        isDeleted = isDeleted,
+        description = description,
+        pointsOfAttention = pointsOfAttention,
+        color = color,
+        sharing = sharing,
+        sharedTo = sharedTo,
+        type = GroupType.HARDCODED,
+        createdBy = createdBy,
+        createdAtUtc = createdAtUtc,
+        updatedAtUtc = updatedAtUtc,
+        endOfValidityUtc = endOfValidityUtc,
+        startOfValidityUtc = startOfValidityUtc,
+    ) {
+    fun containsActiveVessel(activeVessel: EnrichedActiveVessel): Boolean =
+        activeVessel.riskFactor.effectiveControlPriorityLevel.toInt() == priorityLevel
+
+    companion object {
+        val PRIORITY_GROUPS =
+            listOf(
+                PriorityVesselGroup(name = "Segments P1", color = "#E1000F", priorityLevel = 4),
+                PriorityVesselGroup(name = "Segments P2", color = "#FF9940", priorityLevel = 3),
+            )
     }
 }
 

@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
@@ -94,6 +95,7 @@ class GetActiveVessels(
                         when (vesselGroup) {
                             is DynamicVesselGroup -> vesselGroup.containsActiveVessel(activeVessel, now)
                             is FixedVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
+                            is PriorityVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
                         }
                     }
 

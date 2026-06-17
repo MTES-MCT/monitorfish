@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -17,9 +18,12 @@ class GetAllVesselGroups(
     fun execute(userEmail: String): List<VesselGroupBase> {
         val userService = getAuthorizedUser.execute(userEmail).service
 
-        return vesselGroupRepository.findAllByUserAndSharing(
-            user = userEmail,
-            service = userService,
-        )
+        val userGroups =
+            vesselGroupRepository.findAllByUserAndSharing(
+                user = userEmail,
+                service = userService,
+            )
+
+        return PriorityVesselGroup.PRIORITY_GROUPS + userGroups
     }
 }

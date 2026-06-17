@@ -63,7 +63,7 @@ export function WeightInput({ className, disabled, isLabelHidden, isLight, label
  *
  * Handlers are wired individually on elements (no JSX spread, which the repo bans).
  */
-const HOVER_INTENT_DELAY_MS = 60
+const HOVER_INTENT_DELAY_MS = 40
 
 export function useRowActivation() {
   const [hoveredIndex, setHoveredIndex] = useState<number | undefined>(undefined)
@@ -221,6 +221,9 @@ export const SpeciesRow = styled(SimpleTable.BodyTr)<{
 
 export const DeleteCell = styled(SimpleTable.Td)`
   padding-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
   .Element-IconButton {
     padding-left: 0;

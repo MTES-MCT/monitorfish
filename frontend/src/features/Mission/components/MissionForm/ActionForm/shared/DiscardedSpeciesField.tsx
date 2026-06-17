@@ -1,3 +1,4 @@
+import { Ellipsised } from '@components/Ellipsised'
 import { DISCARD_REASON_AS_OPTIONS } from '@features/Mission/components/MissionForm/ActionForm/shared/constants'
 import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
@@ -87,6 +88,8 @@ export function DiscardedSpeciesField() {
     return <FieldsetGroupSpinner isLight legend="Rejets" />
   }
 
+  const isDisabled = values.isGangwayDeployed === false
+
   return (
     <FieldsetGroup isLight legend="Rejets">
       <SpeciesTableWrapper>
@@ -130,6 +133,7 @@ export function DiscardedSpeciesField() {
                         className="Field-SpeciesSelect"
                         cleanable={false}
                         customSearch={customSearch}
+                        disabled={isDisabled}
                         isLabelHidden
                         isLight
                         label="Espèce"
@@ -152,6 +156,7 @@ export function DiscardedSpeciesField() {
                       <QuantityWrapper>
                         <StyledFormikTextInput
                           $isHovered={hoveredIndex === index}
+                          disabled={isDisabled}
                           isLabelHidden
                           isLight
                           label="Qté rejetée"
@@ -172,6 +177,7 @@ export function DiscardedSpeciesField() {
                       <StyledReasonSelect
                         $isHovered={hoveredIndex === index}
                         cleanable={false}
+                        disabled={isDisabled}
                         isLabelHidden
                         isLight
                         label="Nature du rejet"
@@ -182,7 +188,7 @@ export function DiscardedSpeciesField() {
                         popupWidth={220}
                       />
                     ) : (
-                      discardReasonDisplay
+                      <Ellipsised>{discardReasonDisplay}</Ellipsised>
                     )}
                   </StyledPickerTd>
 
@@ -191,6 +197,7 @@ export function DiscardedSpeciesField() {
                       <StyledCheckPicker
                         $isHovered={hoveredIndex === index}
                         cleanable={false}
+                        disabled={isDisabled}
                         isLabelHidden
                         isRequired
                         label="Zone de pêche"
@@ -209,13 +216,14 @@ export function DiscardedSpeciesField() {
                         searchable
                       />
                     ) : (
-                      faoZonesDisplay
+                      <Ellipsised>{faoZonesDisplay}</Ellipsised>
                     )}
                   </StyledPickerTd>
 
                   <DeleteCell $isCenter>
                     <IconButton
                       accent={Accent.TERTIARY}
+                      disabled={isDisabled}
                       Icon={Icon.Minus}
                       onClick={() => removeDiscard(index)}
                       title="Retirer le rejet"
@@ -226,7 +234,7 @@ export function DiscardedSpeciesField() {
             })}
             <SimpleTable.BodyTr>
               <SimpleTable.Td colSpan={5}>
-                <AddSpeciesButton onClick={addEmptyDiscard} type="button">
+                <AddSpeciesButton disabled={isDisabled} onClick={addEmptyDiscard} type="button">
                   <Icon.Plus size={18} />
                   Ajouter une espèce rejetée
                 </AddSpeciesButton>

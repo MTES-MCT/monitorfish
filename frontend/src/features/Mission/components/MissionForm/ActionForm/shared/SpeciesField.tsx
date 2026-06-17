@@ -1,3 +1,4 @@
+import { Ellipsised } from '@components/Ellipsised'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
@@ -9,6 +10,7 @@ import {
   Icon,
   IconButton,
   SimpleTable,
+  THEME,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -16,7 +18,7 @@ import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
 import { useEffect } from 'react'
 
-import { getDefaultPresentationCodes } from '../utils'
+import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
 import {
   AddSpeciesButton,
@@ -129,7 +131,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
       currentIndex === index
         ? {
             ...species,
-            faoZones: species.faoZones ?? (isEISREnabled ? values.faoAreas : undefined),
+            faoZones: species.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
             presentationCodes: species.presentationCodes?.length
               ? species.presentationCodes
               : getDefaultPresentationCodes(isEISREnabled, vessel?.length),
@@ -152,6 +154,27 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
     }
 
     const nextSpeciesOnboard = input.value.filter((_, currentIndex) => currentIndex !== index)
+
+    updateSegments({
+      ...values,
+      speciesOnboard: nextSpeciesOnboard
+    })
+    helper.setValue(nextSpeciesOnboard)
+  }
+
+  const updateNotLandedSpecy = (index: number) => {
+    if (!input.value) {
+      throw new FrontendError('`input.value` is undefined')
+    }
+
+    const nextSpeciesOnboard = input.value.map((species, currentIndex) =>
+      currentIndex === index
+        ? {
+            ...species,
+            isNotLanded: !species.isNotLanded
+          }
+        : species
+    )
 
     updateSegments({
       ...values,
@@ -239,6 +262,8 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
         : [])
     ]
   }
+  const isDisabled = values.isGangwayDeployed === false
+  const actionColumnWidthWithEISREnabled = isLandControl ? 52 : 21
 
   return (
     <FieldsetGroup isLight legend={legend}>
@@ -261,13 +286,12 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
               </SimpleTable.Th>
               {isEISREnabled && <SimpleTable.Th $width={70}>Présentation</SimpleTable.Th>}
               {isEISREnabled && <SimpleTable.Th $width={70}>Zone</SimpleTable.Th>}
-              <SimpleTable.Th $width={isEISREnabled ? 21 : 25} aria-label="Retirer" />
+              <SimpleTable.Th $width={isEISREnabled ? actionColumnWidthWithEISREnabled : 25} aria-label="Retirer" />
             </tr>
           </SimpleTable.Head>
           <tbody>
             {(input.value ?? []).map((specyOnboard, index) => {
               const isActive = isRowActive(index)
-              const isDisabled = values.isGangwayDeployed === false
               const presentationDisplay = specyOnboard.presentationCodes?.length
                 ? specyOnboard.presentationCodes.join(', ')
                 : '-'
@@ -295,6 +319,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                         className="Field-SpeciesSelect"
                         cleanable={false}
                         customSearch={customSearch}
+                        disabled={isDisabled}
                         isLabelHidden
                         isLight
                         label="Espèce"
@@ -403,7 +428,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                           searchable
                         />
                       ) : (
-                        presentationDisplay
+                        <Ellipsised>{presentationDisplay}</Ellipsised>
                       )}
                     </StyledPickerTd>
                   )}
@@ -433,15 +458,34 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
                           searchable
                         />
                       ) : (
-                        faoZonesDisplay
+                        <Ellipsised>{faoZonesDisplay}</Ellipsised>
                       )}
                     </StyledPickerTd>
                   )}
 
                   <DeleteCell $isCenter>
-                    {isLandControl && isEISREnabled && (specyOnboard.isNotLanded ? 'true' : 'false')}
+                    {isLandControl &&
+                      isEISREnabled &&
+                      (specyOnboard.isNotLanded ? (
+                        <IconButton
+                          accent={Accent.TERTIARY}
+                          color={THEME.color.blueGray}
+                          Icon={Icon.CrossedFishery}
+                          onClick={() => updateNotLandedSpecy(index)}
+                          title="Espèce non débarquée"
+                        />
+                      ) : (
+                        <IconButton
+                          accent={Accent.TERTIARY}
+                          color={THEME.color.lightGray}
+                          Icon={Icon.CrossedFishery}
+                          onClick={() => updateNotLandedSpecy(index)}
+                          title="Espèce débarquée"
+                        />
+                      ))}
                     <IconButton
                       accent={Accent.TERTIARY}
+                      disabled={isDisabled}
                       Icon={Icon.Minus}
                       onClick={() => remove(index)}
                       title="Retirer l'espèce"
@@ -452,7 +496,7 @@ export function SpeciesField({ controlledWeightLabel }: SpeciesFieldProps) {
             })}
             <SimpleTable.BodyTr>
               <SimpleTable.Td colSpan={7}>
-                <AddSpeciesButton onClick={addEmptySpecies} type="button">
+                <AddSpeciesButton disabled={isDisabled} onClick={addEmptySpecies} type="button">
                   <Icon.Plus size={18} />
                   Ajouter une espèce
                 </AddSpeciesButton>

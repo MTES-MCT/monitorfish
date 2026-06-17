@@ -178,6 +178,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     // the species in that row's Select — it is the only "Espèce" Select rendered, since the other rows show
     // their species as text once collapsed. Picking a species collapses the row, so hover it to fill the rest.
     cy.clickButton('Ajouter une espèce')
+    // Hover the new empty row before picking its species: a single `hoveredIndex` makes it the active row
+    // and collapses any catch row the preceding zone fills left active, so the new row's Select is the only
+    // "Espèce" Select. Wait out the ~60 ms hover-intent delay so the activation lands before `cy.fill`.
+    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
+    cy.wait(100)
     cy.fill('Espèce', 'COD')
     // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()` instead
     // of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field, and

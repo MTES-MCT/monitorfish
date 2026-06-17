@@ -38,7 +38,7 @@ oracledb = "^3.4.2"
 
 
 [tool.poetry.group.dev.dependencies]
-plotly = "^6.7.0"
+plotly = "^6.8.0"
 xlsxwriter = "^3.2.9"
 jupyter = "^1.1.1"
 matplotlib = "^3.10.9"

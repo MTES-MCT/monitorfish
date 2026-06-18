@@ -22,14 +22,14 @@ export function FormikINNRadio() {
   )
 
   useEffect(() => {
-    if (data?.isInInnArea === true) {
+    if (data?.isInInnArea === false) {
       setFieldValue('isINNControl', false)
     }
   }, [data?.isInInnArea, setFieldValue])
 
-  const isInInnArea = data?.isInInnArea === undefined || data?.isInInnArea === true
+  const isNotInInnArea = data?.isInInnArea === undefined || data?.isInInnArea === false
 
-  if (isInInnArea) {
+  if (isNotInInnArea) {
     return null
   }
 

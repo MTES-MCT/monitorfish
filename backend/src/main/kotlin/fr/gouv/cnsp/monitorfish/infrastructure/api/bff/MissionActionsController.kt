@@ -97,7 +97,9 @@ class MissionActionsController(
     ) = deleteMissionAction.execute(actionId)
 
     @GetMapping("/is-in-inn-area")
-    @Operation(summary = "Check if a coordinate is inside the Metropolitan French EEZ")
+    @Operation(
+        summary = "Check if a coordinate is in an INN control area (outside the French EEZ or in overseas waters)",
+    )
     fun isInInnArea(
         @Parameter(description = "Latitude")
         @RequestParam(name = "latitude")

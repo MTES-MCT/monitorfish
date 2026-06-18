@@ -57,6 +57,22 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
 
+function getInitialTitleVisibility(
+  isInfraction: boolean,
+  title: string | undefined,
+  isStandardized: boolean
+): boolean {
+  if (isInfraction) {
+    return true
+  }
+
+  if (!title) {
+    return false
+  }
+
+  return !isStandardized
+}
+
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
@@ -145,22 +161,6 @@ export function Form({
   const [isTitleDisplayed, setIsTitleDisplayed] = useState(() =>
     getInitialTitleVisibility(isInfractionSuspicion, values.title, isStandardizedTitle)
   )
-
-  function getInitialTitleVisibility(
-    isInfraction: boolean,
-    title: string | undefined,
-    isStandardized: boolean
-  ): boolean {
-    if (isInfraction) {
-      return true
-    }
-
-    if (!title) {
-      return false
-    }
-
-    return !isStandardized
-  }
 
   const isLight = !hasWhiteBackground
 

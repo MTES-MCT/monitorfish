@@ -18,6 +18,15 @@ import type { FormEditedReporting } from '../../types'
 import type { Point as GeoJSONPoint } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 
+const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
+  if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
+    return
+  }
+
+  const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
+  fitMapToExtent(bufferedExtent)
+}
+
 type FormikCoordinatesPickerProps = {
   isLight: boolean
   isRequired: boolean
@@ -67,15 +76,6 @@ export function FormikCoordinatesPicker({ isLight, isRequired }: FormikCoordinat
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [drawedGeometry]
   )
-
-  const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
-    if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
-      return
-    }
-
-    const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
-    fitMapToExtent(bufferedExtent)
-  }
 
   const addOrEditCoordinates = useCallback(async () => {
     if (!longitudeValue || !latitudeValue) {

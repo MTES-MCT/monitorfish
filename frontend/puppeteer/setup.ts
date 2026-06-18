@@ -12,30 +12,28 @@ const HEIGHT = 880
 console.log(`Running in ${IS_HEADLESS ? 'headless' : 'browser'} mode.`)
 
 export default async () => {
-  const browsers = []
-
   // Launch browsers side to side
-  /* eslint-disable no-plusplus */
-  for (let i = 0; i < NUMBER_OF_BROWSERS; i++) {
-    const browser = await puppeteer.launch({
-      // Chrome additional arguments to set browser size and position
-      args: [
-        `--window-size=${WIDTH},${HEIGHT}`,
-        `--window-position=${WIDTH * i},0`,
-        '--enable-features=ExperimentalJavaScript'
-      ],
-      defaultViewport: null,
-      devtools: !IS_HEADLESS,
-      headless: IS_HEADLESS,
-      product: 'firefox'
+  const browsers = await Promise.all(
+    Array.from({ length: NUMBER_OF_BROWSERS }, async (_, i) => {
+      const browser = await puppeteer.launch({
+        // Chrome additional arguments to set browser size and position
+        args: [
+          `--window-size=${WIDTH},${HEIGHT}`,
+          `--window-position=${WIDTH * i},0`,
+          '--enable-features=ExperimentalJavaScript'
+        ],
+        defaultViewport: null,
+        devtools: !IS_HEADLESS,
+        headless: IS_HEADLESS,
+        product: 'firefox'
+      })
+
+      const version = await browser.version()
+      console.log('\nBrowser version: ', version)
+
+      return browser
     })
-
-    const version = await browser.version()
-    console.log('\nBrowser version: ', version)
-
-    // @ts-ignore
-    browsers.push(browser)
-  }
+  )
 
   // use the file system to expose the browsers wsEndpoint for TestEnvironments
   await fs.mkdir(TEMP_DIRECTORY, { recursive: true })

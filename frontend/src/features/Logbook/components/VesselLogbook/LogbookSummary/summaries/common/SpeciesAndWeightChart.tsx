@@ -16,6 +16,12 @@ function getHeight(weight, percentOfTotalFARWeight) {
   return height
 }
 
+const getPercentOfTotalFARWeight = speciesAndWeight =>
+  parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
+
+const getPercentOfPresentationToSpeciesWeight = (presentationWeight, speciesWeight) =>
+  parseFloat(((presentationWeight * 100) / speciesWeight).toFixed(1))
+
 type SpeciesAndWeightChartProps = {
   compareWithTotalWeight: boolean
   increaseChartTotalHeight?: (height: number) => void
@@ -78,12 +84,6 @@ export function SpeciesAndWeightChart({
       increaseChartTotalHeight(height)
     }
   }
-
-  const getPercentOfTotalFARWeight = speciesAndWeight =>
-    parseFloat(((speciesAndWeight.weight * 100) / speciesAndWeight.totalWeight).toFixed(1))
-
-  const getPercentOfPresentationToSpeciesWeight = (presentationWeight, speciesWeight) =>
-    parseFloat(((presentationWeight * 100) / speciesWeight).toFixed(1))
 
   return (
     <>

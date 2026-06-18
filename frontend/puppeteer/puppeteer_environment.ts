@@ -20,18 +20,15 @@ export default class PuppeteerEnvironment extends NodeEnvironment {
       process.exit()
     }
 
+    // Connect puppeteer to the browsers we created during the global setup
     // @ts-ignore
-    this.global.browsers = []
-
-    for (const wsEndpoint of wsEndpoints.split('\\n')) {
-      // Connect puppeteer to the browsers we created during the global setup
-      // @ts-ignore
-      this.global.browsers.push(
-        await puppeteer.connect({
+    this.global.browsers = await Promise.all(
+      wsEndpoints.split('\\n').map(wsEndpoint =>
+        puppeteer.connect({
           browserWSEndpoint: wsEndpoint,
           defaultViewport: null
         })
       )
-    }
+    )
   }
 }

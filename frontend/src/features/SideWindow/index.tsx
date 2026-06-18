@@ -1,4 +1,4 @@
-import { EnvironmentBox, getEnvironmentBorderStyle } from '@components/EnvironmentBox'
+import { EnvironmentBox } from '@components/EnvironmentBox'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { getOperationalAlerts } from '@features/Alert/useCases/getOperationalAlerts'
 import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
@@ -13,6 +13,7 @@ import { VesselListAndGroups } from '@features/Vessel/components/VesselListAndGr
 import { setVessels } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { NewWindowContext, type NewWindowContextValue, THEME } from '@mtes-mct/monitor-ui'
+import { getEnvironmentBorderStyle } from '@utils/getEnvironmentBorderStyle'
 import { getEnvironmentData } from '@utils/getEnvironmentData'
 import {
   type CSSProperties,

@@ -9,7 +9,7 @@ type ControlQualityFieldProps = Readonly<{
 }>
 export function ControlQualityField({ withLastHaul = false }: ControlQualityFieldProps) {
   return (
-    <Wrapper isLight legend="Qualité du contrôle">
+    <Wrapper isLight legend="Qualité du contrôle (interne CNSP)">
       <FormikMultiRadio
         isErrorMessageHidden
         isInline

@@ -1,8 +1,28 @@
+import { SideWindowMenuLabel } from '@features/SideWindow/constants'
+
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 import type { Mission } from '@features/Mission/mission.types'
-import {SideWindowMenuLabel} from "@features/SideWindow/constants";
+
+/**
+ * Picks a species in a hover-edit species/discard row's searchable Select, by exact code.
+ *
+ * `cy.fill('Espèce', code)` can't be used here: its Select handler clicks the first option whose text
+ * *contains* the typed value, so typing "COD" matches "SMS - SAC**COD**ERMA …" before "COD - MORUE …".
+ * Scoping to the row's own Select (options are "<code> - <name>") and clicking the option whose label
+ * starts with the exact "<code> - " makes the pick deterministic.
+ */
+export const pickHoverEditSpecies = (rowDataCy: string, code: string) => {
+  cy.get(`[data-cy="${rowDataCy}"]`).find('.rs-picker-toggle').first().click({ force: true })
+  cy.get('.rs-picker-popup')
+    .filter(':visible')
+    .last()
+    .within(() => {
+      cy.get('input[role="searchbox"]').clear({ force: true }).type(code, { force: true }).wait(250)
+      cy.contains('[role="option"]', new RegExp(`^${code} - `)).click({ force: true })
+    })
+}
 
 export const openSideWindowNewMission = () => {
   cy.viewport(1920, 1080)
@@ -87,7 +107,7 @@ export const fillSideWindowMissionFormBase = (
 
   cy.fill('Types de mission', [missionTypeLabel])
 
-  cy.fill('Mission sous JDP', true)
+  cy.fill('Sous JDP', true)
 
   cy.fill('Administration 1', 'DDTM')
   cy.fill('Unité 1', 'Cultures marines 56')

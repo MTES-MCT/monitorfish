@@ -44,6 +44,14 @@ export function getDefaultPresentationCodes(
   return isEISREnabled && !!vesselLength && vesselLength < 12 ? ['WHL'] : undefined
 }
 
+export function getDefaultFaoZones(
+  isEISREnabled: boolean,
+  faoAreas: string[] | undefined,
+  vesselLength: number | undefined
+): string[] | undefined {
+  return isEISREnabled && !!vesselLength && vesselLength >= 12 ? faoAreas : undefined
+}
+
 export function getFlatInfractionFromThreatsHierarchy(
   infraction: MissionAction.Infraction,
   natinfsAsOptions?: Option<number>[]

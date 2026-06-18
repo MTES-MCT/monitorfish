@@ -1,108 +1,61 @@
-import { useGetFaoAreasQuery } from '@api/faoAreas'
-import { useGetSpeciesQuery } from '@api/specy'
+import { Ellipsised } from '@components/Ellipsised'
+import { DISCARD_REASON_AS_OPTIONS } from '@features/Mission/components/MissionForm/ActionForm/shared/constants'
 import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { FrontendError } from '@libs/FrontendError'
-import {
-  Accent,
-  Button,
-  CustomSearch,
-  FormikCheckPicker,
-  FormikNumberInput,
-  FormikSelect,
-  Icon,
-  IconButton,
-  Select,
-  SingleTag
-} from '@mtes-mct/monitor-ui'
+import { Accent, FormikSelect, Icon, IconButton, SimpleTable } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
-import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import {
+  AddSpeciesButton,
+  DeleteCell,
+  selectFieldCss,
+  SpeciesTableWrapper,
+  StyledPickerTd
+} from './Species/speciesTable.styles'
+import { FaoZonesCell, SpeciesSelectCell, SpeciesTableRow, WeightCell } from './Species/SpeciesTableRow'
+import { useRowActivation } from './Species/useRowActivation'
+import { useSpeciesAndFaoOptions } from './Species/useSpeciesAndFaoOptions'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
-import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 
 import type { MissionActionFormValues } from '../../types'
-import type { Option } from '@mtes-mct/monitor-ui'
 import type { Specy } from 'domain/types/specy'
-
-const DISCARD_REASON_OPTIONS: Array<Option<string>> = Object.entries(DISCARD_REASON_LABEL).map(([code, label]) => ({
-  label: `${code} - ${label}`,
-  value: code
-}))
 
 export function DiscardedSpeciesField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['discardedSpecies']>('discardedSpecies')
 
-  const getSpeciesApiQuery = useGetSpeciesQuery()
-  const getFaoAreasQuery = useGetFaoAreasQuery()
+  const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
-  const speciesAsOptions: Array<Option<Specy>> = useMemo(
-    () =>
-      getSpeciesApiQuery.data
-        ? getSpeciesApiQuery.data.species.map(specy => ({
-            label: `${specy.code} - ${specy.name}`,
-            value: specy
-          }))
-        : [],
-    [getSpeciesApiQuery.data]
-  )
+  const activation = useRowActivation()
+  const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
 
-  const faoAreasAsOptions: Array<Option<string>> = useMemo(
-    () => (getFaoAreasQuery.data ? getFaoAreasQuery.data.map(zone => ({ label: zone, value: zone })) : []),
-    [getFaoAreasQuery.data]
-  )
+  const addEmptyDiscard = () => {
+    const newDiscard: MissionAction.DiscardedSpeciesControl = {
+      discardReason: undefined,
+      faoZones: undefined,
+      rejectedWeight: undefined,
+      speciesCode: ''
+    }
 
-  const customSearch = useMemo(
-    () =>
-      getSpeciesApiQuery.data
-        ? new CustomSearch(
-            structuredClone(speciesAsOptions),
-            [
-              { name: 'value.code', weight: 0.9 },
-              { name: 'value.name', weight: 0.1 }
-            ],
-            { cacheKey: 'SPECIES_AS_OPTIONS', isStrict: true }
-          )
-        : undefined,
-    [getSpeciesApiQuery.data, speciesAsOptions]
-  )
+    helper.setValue([...(input.value ?? []), newDiscard])
+  }
 
-  const getSpecyNameFromSpecyCode = useCallback(
-    (specyCode: Specy['code']) => getSpeciesApiQuery.data?.species.find(({ code }) => code === specyCode)?.name ?? '',
-    [getSpeciesApiQuery.data]
-  )
-
-  /** Groups discard entries by species code while preserving each entry's absolute index in the array. */
-  const groups: Array<[string, number[]]> = useMemo(() => {
-    const indicesBySpecies = new Map<string, number[]>()
-    ;(input.value ?? []).forEach((entry, index) => {
-      const indices = indicesBySpecies.get(entry.speciesCode) ?? []
-      indices.push(index)
-      indicesBySpecies.set(entry.speciesCode, indices)
-    })
-
-    return Array.from(indicesBySpecies.entries())
-  }, [input.value])
-
-  const makeEmptyDiscard = (speciesCode: string): MissionAction.DiscardedSpeciesControl => ({
-    discardReason: undefined,
-    faoZones: values.faoAreas,
-    rejectedWeight: undefined,
-    speciesCode
-  })
-
-  const addSpecies = (newSpecy: Specy | undefined) => {
-    if (!newSpecy) {
+  const setSpecies = (index: number, newSpecy: Specy | undefined) => {
+    if (!newSpecy || !input.value) {
       return
     }
 
-    helper.setValue([...(input.value ?? []), makeEmptyDiscard(newSpecy.code)])
-  }
+    deactivate()
 
-  const addDiscard = (speciesCode: string) => {
-    helper.setValue([...(input.value ?? []), makeEmptyDiscard(speciesCode)])
+    helper.setValue(
+      input.value.map((discard, currentIndex) =>
+        currentIndex === index
+          ? { ...discard, faoZones: discard.faoZones ?? values.faoAreas, speciesCode: newSpecy.code }
+          : discard
+      )
+    )
   }
 
   const removeDiscard = (index: number) => {
@@ -113,143 +66,126 @@ export function DiscardedSpeciesField() {
     helper.setValue(input.value.filter((_, currentIndex) => currentIndex !== index))
   }
 
-  const removeSpecies = (speciesCode: string) => {
-    if (!input.value) {
-      throw new FrontendError('`input.value` is undefined')
-    }
-
-    helper.setValue(input.value.filter(specy => specy.speciesCode !== speciesCode))
-  }
-
   if (!speciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Rejets" />
   }
 
+  const isDisabled = values.isGangwayDeployed === false
+
   return (
     <FieldsetGroup isLight legend="Rejets">
-      {groups.length > 0 && (
-        <>
-          {groups.map(([speciesCode, indices], groupIndex) => (
-            <Row key={`discardedSpecies-${speciesCode}`} $isLast={groupIndex + 1 === groups.length}>
-              <TagRow>
-                <StyledSingleTag onDelete={() => removeSpecies(speciesCode)}>
-                  {`${speciesCode} - ${getSpecyNameFromSpecyCode(speciesCode)}`}
-                </StyledSingleTag>
-                <AddButton accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => addDiscard(speciesCode)}>
-                  Ajouter rejet
-                </AddButton>
-              </TagRow>
+      <SpeciesTableWrapper>
+        <SimpleTable.Table>
+          <SimpleTable.Head>
+            <tr>
+              <SimpleTable.Th $width={165}>Espèce(s) rejetées</SimpleTable.Th>
+              <SimpleTable.Th $width={55}>Qté</SimpleTable.Th>
+              <SimpleTable.Th $width={180}>Nature rejet</SimpleTable.Th>
+              <SimpleTable.Th $width={80}>Zone</SimpleTable.Th>
+              <SimpleTable.Th $width={21} aria-label="Retirer" />
+            </tr>
+          </SimpleTable.Head>
+          <tbody>
+            {(input.value ?? []).map((discard, index) => {
+              const isActive = isRowActive(index)
+              const isHovered = hoveredIndex === index
+              const discardReasonDisplay = discard.discardReason
+                ? `${discard.discardReason} - ${DISCARD_REASON_LABEL[discard.discardReason]}`
+                : '-'
 
-              {indices.map(index => (
-                <FieldsRow key={`discardedSpecies-${speciesCode}-${index}`}>
-                  <StyledSelect
-                    label="Nature du rejet"
-                    name={`discardedSpecies[${index}].discardReason`}
-                    options={DISCARD_REASON_OPTIONS}
+              return (
+                <SpeciesTableRow
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`discardedSpecies-${discard.speciesCode}-${index}`}
+                  activation={activation}
+                  dataCy={`discarded-species-row-${index}`}
+                  index={index}
+                  isHovered={isHovered}
+                >
+                  <SpeciesSelectCell
+                    customSearch={customSearch}
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    name={`discardedSpecies[${index}].speciesCode`}
+                    onChange={newSpecy => setSpecies(index, newSpecy)}
+                    onPickerClose={() => handlePickerClose(index)}
+                    onPickerOpen={() => handlePickerOpen(index)}
+                    options={speciesAsOptions}
+                    popupWidth={280}
+                    speciesCode={discard.speciesCode}
+                    speciesLabel={`${discard.speciesCode} - ${getSpecyNameFromSpecyCode(discard.speciesCode)}`}
                   />
-                  <FormikNumberInput label="Qté rejetée" name={`discardedSpecies[${index}].rejectedWeight`} />
-                  <StyledCheckPicker
-                    isRequired
-                    label="Zone de pêche"
+
+                  <WeightCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
+                    label="Qté rejetée"
+                    name={`discardedSpecies[${index}].rejectedWeight`}
+                    value={discard.rejectedWeight}
+                  />
+
+                  <StyledPickerTd $isActive={isActive}>
+                    {isActive ? (
+                      <StyledReasonSelect
+                        $isHovered={isHovered}
+                        cleanable={false}
+                        disabled={isDisabled}
+                        isLabelHidden
+                        isLight
+                        label="Nature du rejet"
+                        name={`discardedSpecies[${index}].discardReason`}
+                        onClose={() => handlePickerClose(index)}
+                        onOpen={() => handlePickerOpen(index)}
+                        options={DISCARD_REASON_AS_OPTIONS}
+                        popupWidth={220}
+                      />
+                    ) : (
+                      <Ellipsised>{discardReasonDisplay}</Ellipsised>
+                    )}
+                  </StyledPickerTd>
+
+                  <FaoZonesCell
+                    isActive={isActive}
+                    isDisabled={isDisabled}
+                    isHovered={isHovered}
                     name={`discardedSpecies[${index}].faoZones`}
+                    onPickerClose={() => handlePickerClose(index)}
+                    onPickerOpen={() => handlePickerOpen(index)}
                     options={faoAreasAsOptions}
-                    searchable
+                    value={discard.faoZones}
                   />
-                  {indices.length > 1 && (
-                    <DeleteButton
-                      accent={Accent.SECONDARY}
-                      Icon={Icon.Delete}
+
+                  <DeleteCell $isCenter>
+                    <IconButton
+                      accent={Accent.TERTIARY}
+                      disabled={isDisabled}
+                      Icon={Icon.Minus}
                       onClick={() => removeDiscard(index)}
                       title="Retirer le rejet"
                     />
-                  )}
-                </FieldsRow>
-              ))}
-            </Row>
-          ))}
-          <FieldsetGroupSeparator marginBottom={14} />
-        </>
-      )}
-
-      <Select
-        key={String(input.value?.length)}
-        customSearch={customSearch}
-        label="Ajouter une espèce rejetée"
-        name="newDiscardedSpecy"
-        onChange={addSpecies}
-        options={speciesAsOptions}
-        optionValueKey="code"
-        searchable
-        virtualized
-      />
+                  </DeleteCell>
+                </SpeciesTableRow>
+              )
+            })}
+            <SimpleTable.BodyTr>
+              <SimpleTable.Td colSpan={5}>
+                <AddSpeciesButton disabled={isDisabled} onClick={addEmptyDiscard} type="button">
+                  <Icon.Plus size={18} />
+                  Ajouter une espèce rejetée
+                </AddSpeciesButton>
+              </SimpleTable.Td>
+            </SimpleTable.BodyTr>
+          </tbody>
+        </SimpleTable.Table>
+      </SpeciesTableWrapper>
     </FieldsetGroup>
   )
 }
 
-const StyledSelect = styled(FormikSelect)`
-  min-width: 200px;
-`
-
-const StyledCheckPicker = styled(FormikCheckPicker)`
-  flex: 1;
-  min-width: 150px;
-  max-width: 250px;
-
-  .rs-picker-value-count {
-    margin-top: 2px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    height: 16px !important;
-    background-color: ${p => p.theme.color.white} !important;
-    color: ${p => p.theme.color.gunMetal};
-  }
-`
-
-const StyledSingleTag = styled(SingleTag)`
-  max-width: 280px;
-`
-
-const TagRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-`
-
-const Row = styled.div<{
-  $isLast: boolean
+const StyledReasonSelect = styled(FormikSelect)<{
+  $isHovered: boolean
 }>`
-  margin-bottom: ${p => (p.$isLast ? 0 : 40)}px;
-
-  input[type='number'] {
-    width: 112px;
-  }
-`
-
-const FieldsRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 8px;
-  margin-top: 8px;
-  width: 100%;
-
-  > .Field-NumberInput {
-    input {
-      height: 30px;
-      width: 85px;
-    }
-  }
-`
-
-const AddButton = styled(Button)`
-  align-self: flex-end;
-  height: 30px;
-`
-
-const DeleteButton = styled(IconButton)`
-  align-self: flex-end;
-  margin-left: -6px;
-  width: 30px;
-  height: 30px;
+  ${selectFieldCss}
 `

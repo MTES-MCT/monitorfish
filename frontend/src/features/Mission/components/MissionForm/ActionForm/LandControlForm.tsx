@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import { getLandControlFormCompletionSchema, LandControlFormLiveSchema } from './schemas'
 import { ActionFormHeader } from './shared/ActionFormHeader'
 import { ControlQualityField } from './shared/ControlQualityField'
-import { DiscardedSpeciesField } from './shared/DiscardedSpeciesField'
 import { FormikAuthor } from './shared/FormikAuthor'
 import { FormikMultiInfractionPicker } from './shared/FormikMultiInfractionPicker'
 import { FormikOtherControlsCheckboxes } from './shared/FormikOtherControlsCheckboxes'
@@ -64,9 +63,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
 
             <GearsField />
 
-            <SpeciesField controlledWeightLabel="Qté pesée" />
-
-            {isEISREnabled && <DiscardedSpeciesField />}
+            <SpeciesField />
 
             <SeizureFieldsetGroup isLight legend="Appréhensions">
               <FormikCheckbox label="Appréhension d’engin(s)" name="hasSomeGearsSeized" />

@@ -12,13 +12,14 @@ import {
   FormikNumberInput,
   FormikSelect,
   FormikTextarea,
+  MultiRadio,
   Select,
   SingleTag,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
-import { remove as ramdaRemove } from 'ramda'
+import { remove as ramdaRemove, update as ramdaUpdate } from 'ramda'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -120,6 +121,27 @@ export function GearsField() {
     helper.setValue(nextGears)
   }
 
+  const updateGearWasControlled = (index: number) => (gearWasControlled: boolean | undefined) => {
+    const gearOnboard = input.value?.[index]
+    if (!gearOnboard) {
+      return
+    }
+
+    const nextGearOnboard = ramdaUpdate(
+      index,
+      {
+        ...gearOnboard,
+        // When a gear was not controlled, its marking compliance is automatically "N/A"
+        gearMarkingIsCompliant:
+          gearWasControlled === false ? MissionAction.ControlCheck.NOT_APPLICABLE : gearOnboard.gearMarkingIsCompliant,
+        gearWasControlled
+      },
+      input.value ?? []
+    )
+
+    helper.setValue(nextGearOnboard)
+  }
+
   const remove = (index: number) => {
     if (!input.value) {
       return
@@ -158,13 +180,16 @@ export function GearsField() {
                     onDelete={() => remove(index)}
                   >{`${gearOnboard.gearCode} - ${gearOnboard.gearName}`}</SingleTag>
 
-                  <FormikMultiRadio
+                  <MultiRadio
+                    error={typedError?.[index]?.gearWasControlled as unknown as string | undefined}
                     isErrorMessageHidden
                     isInline
                     isRequired
                     label="Engin contrôlé"
                     name={`gearOnboard[${index}].gearWasControlled`}
+                    onChange={updateGearWasControlled(index)}
                     options={BOOLEAN_AS_OPTIONS}
+                    value={gearOnboard.gearWasControlled}
                   />
 
                   {isEISREnabled && !GEAR_MARKING_NOT_APPLICABLE_CATEGORIES.includes(gearCategory) && (
@@ -195,12 +220,16 @@ export function GearsField() {
                     {isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.includes(gearCategory) && (
                       <>
                         <FormikNumberInput
+                          disabled={gearOnboard.gearWasControlled === false}
                           isErrorMessageHidden
+                          isUndefinedWhenDisabled
                           label="Epaisseur moy. de fil"
                           name={`gearOnboard[${index}].averageWireThickness`}
                         />
                         <FormikSelect
+                          disabled={gearOnboard.gearWasControlled === false}
                           isErrorMessageHidden
+                          isUndefinedWhenDisabled
                           label="Type de fil"
                           name={`gearOnboard[${index}].wireType`}
                           options={WIRE_TYPE_OPTIONS}

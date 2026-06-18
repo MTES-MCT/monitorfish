@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
+import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control', () => {
@@ -163,35 +163,53 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
     cy.fill("Arrimage séparé des poissons n'ayant pas la taille requise", 'Oui')
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
-    // FAO zones are required on every catch for completion. The risk factor prefills two catches
-    // HKE (index 0) and BLI (index 1); logbook discards now live in the dedicated "Rejets" card,
-    // so NEP/BIB are no longer rows in "Espèces à bord".
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 0 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
-    cy.fill('Ajouter une espèce', 'COD')
-    // COD is added after the 2 prefilled catches [HKE, BLI], so it is species index 2.
-    // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()`
-    // instead of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` request whose
-    // response re-renders and remounts the field; `cy.fill()` caches the field element and detaches
-    // between its internal `.clear()` and `.type()`, whereas `cy.get()` re-queries the input fresh.
-    // The fields are freshly added/opened (empty), so no `.clear()` is needed.
+    // FAO zones are required on every catch for completion. The risk factor prefills two catches HKE (row 0)
+    // and BLI (row 1); logbook discards live in the dedicated "Rejets" card, so NEP/BIB are not rows in
+    // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row, then wait for
+    // its editors to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
+    // debounced (hover-intent delay), so without this wait `cy.fill` runs before the row activates and fills
+    // whichever row is still active. `mouseout` afterwards so its editors collapse (only one row active at a time).
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
+    cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
+
+    // Add COD: click the in-table "Ajouter une espèce" row to append an empty species (index 2), then pick
+    // the species in that row's Select. Picking a species collapses the row, so hover it again to fill the rest.
+    cy.clickButton('Ajouter une espèce')
+    pickHoverEditSpecies('species-onboard-row-2', 'COD')
+    // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()` instead
+    // of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field, and
+    // `cy.fill()` caches the element and detaches between its internal `.clear()` and `.type()`. The fields
+    // are freshly opened (empty), so no `.clear()` is needed. Présentation/Zone are filled by label while
+    // only the hovered row's editor is mounted, so no index is needed.
+    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
     cy.get('[id="speciesOnboard[2].controlledWeight"]').type('20', { force: true })
-    cy.clickButton('Sous-taille', { index: 2 })
-    cy.wait(200)
     cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
-    cy.fill('Présentation', ['FIL - En filets'], { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 2 })
+    cy.fill('Présentation', ['FIL - En filets'])
+    cy.fill('Zone de pêche', ['27.8.b'])
+    // Stop hovering so the catch-row editors collapse, leaving only the "Rejets" card zones in the DOM.
+    // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
+    cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
 
-    // Rejets — NEP and BIB are prefilled from the logbook DIS message (both DIM); add COD (RET).
-    // "Qté rejetée" / "Nature du rejet" only render in the "Rejets" card (NEP 0, BIB 1, COD 2).
-    // "Zone de pêche" appears in both cards (HKE 0, BLI 1, COD 2 in "Espèces à bord"; NEP 3, BIB 4,
-    // COD 5 in "Rejets"), so the COD discard zone is index 5. NEP/BIB already carry prefilled zones.
-    cy.fill('Ajouter une espèce rejetée', 'COD')
-    cy.wait(200)
-    cy.fill('Qté rejetée', 2, { index: 2 })
-    cy.fill('Nature du rejet', 'RET - espèces protégées', { index: 2 })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 5 })
+    // Rejets — NEP and BIB are prefilled from the logbook DIS message (both DIM); add COD (RET). The
+    // "Rejets" card is now the same hover-to-edit table: click the in-table add row to append the COD
+    // discard (index 2), pick its species, then fill its editors on hover. Editors only render for the
+    // hovered row, so each field label is unambiguous (no index needed).
+    cy.clickButton('Ajouter une espèce rejetée')
+    pickHoverEditSpecies('discarded-species-row-2', 'COD')
+    cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
+    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
+    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
@@ -955,9 +973,24 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[id="gearOnboard[0].averageWireThickness"]').should('exist')
     cy.get('[name="gearOnboard[0].wireType"]').should('exist')
 
-    cy.fill('Engin contrôlé', 'Non', { index: 0 })
+    cy.fill('Engin contrôlé', 'Oui', { index: 0 })
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Maillage déclaré', 60, { index: 0 })
+    cy.fill('Epaisseur moy. de fil  ', 1.5)
+    cy.fill('Type de fil', 'Simple')
+
+    // Switching "Engin contrôlé" to "Non" auto-sets the gear marking compliance to N/A
+    // and disables (and clears) the wire fields
+    cy.fill('Engin contrôlé', 'Non', { index: 0 })
+    cy.get('[name="gearOnboard[0].gearMarkingIsCompliant"][value="NOT_APPLICABLE"]').should('be.checked')
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('be.disabled').should('have.value', '')
+    cy.get('[name="gearOnboard[0].wireType"]').closest('.rs-picker').should('have.class', 'rs-picker-disabled')
+
+    // Switching back to "Oui" re-enables the wire fields; the marking compliance can be overridden
+    cy.fill('Engin contrôlé', 'Oui', { index: 0 })
+    cy.get('[id="gearOnboard[0].averageWireThickness"]').should('not.be.disabled')
+    cy.get('[name="gearOnboard[0].wireType"]').closest('.rs-picker').should('not.have.class', 'rs-picker-disabled')
+    cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
     cy.fill('Epaisseur moy. de fil  ', 1.5)
     cy.fill('Type de fil', 'Simple')
 
@@ -989,7 +1022,7 @@ context('Side Window > Mission Form > Sea Control', () => {
               averageWireThickness: 1.5,
               gearCode: 'OTB',
               gearMarkingIsCompliant: 'NO',
-              gearWasControlled: false,
+              gearWasControlled: true,
               wireType: 'SINGLE'
             }
           ]
@@ -1055,10 +1088,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Verify pre-filled values visible in the form
 
-    // The discards are now displayed in the dedicated "Rejets" card.
+    // The discards are now displayed in the dedicated "Rejets" card (a flat table whose column headers are
+    // "Espèce(s) rejetées" / "Qté" / "Nature rejet" / "Zone"; the per-field labels only exist on row hover).
     cy.contains('Rejets').should('exist')
-    cy.contains('Qté rejetée').should('exist')
-    cy.contains('Nature du rejet').should('exist')
+    cy.contains('Espèce(s) rejetées').should('exist')
+    cy.contains('Nature rejet').should('exist')
 
     // Verify the request body includes the split catches / discards
     cy.fill('Saisi par', 'Gaumont')
@@ -1104,31 +1138,35 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('eq', 201)
   })
 
-  it('Should dismiss the sous-taille field and remove extra rejet lines when delete buttons are clicked', () => {
+  it('Should edit the sous-taille field on row hover and remove extra rejet lines when delete buttons are clicked', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
-    cy.fill('Ajouter une espèce', 'COD')
+    // Adding a species is a two-step in-table flow: click the "Ajouter une espèce" row to append an empty
+    // row, then pick the species in that row's Select.
+    cy.clickButton('Ajouter une espèce')
+    pickHoverEditSpecies('species-onboard-row-0', 'COD')
 
-    // Show under-sized field, fill it, then dismiss it
-    cy.clickButton('Sous-taille')
-    cy.fill('Qté ss-taille', 5)
-    cy.clickButton('Retirer la sous-taille')
-    cy.contains('Qté ss-taille').should('not.exist')
-    cy.contains('button', 'Sous-taille').should('exist')
+    // The Ss-taille weight is now an always-available inline cell: its input only renders while the
+    // row is hovered, and reverts to text once the cursor leaves.
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('5', { force: true })
+    // The row stays in edit mode while the input is focused, so blur it AND stop hovering before asserting
+    // it collapses. React derives `onMouseLeave` from the native `mouseout` event (not `mouseleave`).
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').blur({ force: true })
+    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').should('not.exist')
 
-    // Add a rejected species in the "Rejets" card: a single line has no per-line delete button.
-    cy.fill('Ajouter une espèce rejetée', 'COD')
-    cy.contains('Qté rejetée').should('exist')
-    cy.contains('Nature du rejet').should('exist')
-    cy.contains('Retirer le rejet').should('not.exist')
-
-    // "Ajouter rejet" adds a second line, which makes the per-line delete buttons appear.
-    cy.clickButton('Ajouter rejet')
-    cy.get('[id="discardedSpecies[1].rejectedWeight"]').should('exist')
-    cy.clickButton('Retirer le rejet')
-    cy.get('[id="discardedSpecies[1].rejectedWeight"]').should('not.exist')
-    cy.contains('Qté rejetée').should('exist')
+    // Add two rejected-species rows via the in-table add row, then remove the second via its own row
+    // delete button. The "Rejets" card is now a flat table (one row per discard): the per-species
+    // grouping and the "Ajouter rejet" button are gone, and every row carries a "Retirer le rejet" action.
+    cy.clickButton('Ajouter une espèce rejetée')
+    cy.get('[data-cy="discarded-species-row-0"]').should('exist')
+    cy.clickButton('Ajouter une espèce rejetée')
+    cy.get('[data-cy="discarded-species-row-1"]').should('exist')
+    cy.get('[data-cy="discarded-species-row-1"]').find('[title="Retirer le rejet"]').click({ force: true })
+    cy.get('[data-cy="discarded-species-row-1"]').should('not.exist')
+    cy.get('[data-cy="discarded-species-row-0"]').should('exist')
   })
 })

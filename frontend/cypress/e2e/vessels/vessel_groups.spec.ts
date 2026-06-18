@@ -356,17 +356,31 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum"]').click()
     cy.get('[title=\'Télécharger le groupe "Lorem ipsum"\']').click({ force: true })
 
-    cy.wait(400)
-    cy.exec('cd cypress/downloads && ls').then(result => {
-      const downloadedCSVFilename = result.stdout
+    // The CSV is downloaded by the browser, which can take a moment to flush to disk under CI load.
+    // Poll for the file (tolerating the folder not existing yet) instead of relying on a fixed wait.
+    const readDownloadedGroupCsv = (attempt = 0): Cypress.Chainable => {
+      if (attempt > 25) {
+        throw new Error('Vessel group CSV was never downloaded')
+      }
 
-      return cy
-        .readFile(`cypress/downloads/${downloadedCSVFilename}`)
-        .should(
-          'contains',
-          '"Royaume-Uni","PHENOMENE","FAK000999999","CALLME","","DONTSINK","14.3 m","W10, PEL03","OTB","HKE, BLI"'
-        )
-    })
+      return cy.exec('ls cypress/downloads', { failOnNonZeroExit: false }).then(result => {
+        const downloadedCSVFilename = result.stdout.trim()
+        if (result.code !== 0 || !downloadedCSVFilename) {
+          cy.wait(200)
+
+          return readDownloadedGroupCsv(attempt + 1)
+        }
+
+        return cy
+          .readFile(`cypress/downloads/${downloadedCSVFilename}`)
+          .should(
+            'contains',
+            '"Royaume-Uni","PHENOMENE","FAK000999999","CALLME","","DONTSINK","14.3 m","W10, PEL03","OTB","HKE, BLI"'
+          )
+      })
+    }
+
+    readDownloadedGroupCsv()
 
     cy.get('[title=\'Supprimer le groupe "Lorem ipsum"\']').click()
     cy.clickButton('Confirmer la suppression')

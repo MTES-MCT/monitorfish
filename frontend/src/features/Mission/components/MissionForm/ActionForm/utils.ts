@@ -49,7 +49,7 @@ export function getDefaultFaoZones(
   faoAreas: string[] | undefined,
   vesselLength: number | undefined
 ): string[] | undefined {
-  return isEISREnabled && !!vesselLength && vesselLength >= 12 ? faoAreas : undefined
+  return isEISREnabled && !!vesselLength && vesselLength < 12 ? faoAreas : undefined
 }
 
 export function getFlatInfractionFromThreatsHierarchy(

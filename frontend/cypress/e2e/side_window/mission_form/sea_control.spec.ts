@@ -197,6 +197,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Stop hovering so the catch-row editors collapse, leaving only the "Rejets" card zones in the DOM.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
+    cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Rejets — NEP and BIB are prefilled from the logbook DIS message (both DIM); add COD (RET). The
     // "Rejets" card is now the same hover-to-edit table: click the in-table add row to append the COD
@@ -208,9 +209,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Nature du rejet', 'RET - espèces protégées')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
-    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
-    cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // This should trigger a computation of the fleet segment
     cy.intercept('POST', 'bff/v1/fleet_segments/compute').as(

@@ -50,7 +50,7 @@ export function AirSurveillanceForm({ initialValues, onChange }: AirSurveillance
 
             <hr />
 
-            <FieldsetGroup isLight legend="Qualité du contrôle">
+            <FieldsetGroup isLight legend="Qualité du contrôle (interne CNSP)">
               <FormikTextarea
                 label="Observations sur le déroulé de la surveillance"
                 name="controlQualityComments"

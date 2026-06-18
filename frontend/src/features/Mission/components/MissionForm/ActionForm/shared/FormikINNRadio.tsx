@@ -1,4 +1,4 @@
-import { useGetIsInFrenchEezQuery } from '@features/Mission/missionActionApi'
+import { useGetIsInInnAreaQuery } from '@features/Mission/missionActionApi'
 import { FormikMultiRadio } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
@@ -12,7 +12,7 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikINNRadio() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
-  const { data } = useGetIsInFrenchEezQuery(
+  const { data } = useGetIsInInnAreaQuery(
     values.latitude && values.longitude
       ? {
           latitude: values.latitude,
@@ -22,14 +22,14 @@ export function FormikINNRadio() {
   )
 
   useEffect(() => {
-    if (data?.isInFrenchEez === true) {
+    if (data?.isInInnArea === false) {
       setFieldValue('isINNControl', false)
     }
-  }, [data?.isInFrenchEez, setFieldValue])
+  }, [data?.isInInnArea, setFieldValue])
 
-  const isInFrenchEez = data?.isInFrenchEez === undefined || data?.isInFrenchEez === true
+  const isNotInInnArea = data?.isInInnArea === undefined || data?.isInInnArea === false
 
-  if (isInFrenchEez) {
+  if (isNotInInnArea) {
     return null
   }
 

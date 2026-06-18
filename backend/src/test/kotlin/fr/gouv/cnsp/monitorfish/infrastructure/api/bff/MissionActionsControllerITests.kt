@@ -63,7 +63,7 @@ class MissionActionsControllerITests {
     private lateinit var getActivityReports: GetActivityReports
 
     @MockitoBean
-    private lateinit var isPointInFrenchEez: IsPointInFrenchEez
+    private lateinit var isPointInInnArea: IsPointInInnArea
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper

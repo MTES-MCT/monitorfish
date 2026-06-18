@@ -5,7 +5,7 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
 export const MISSION_ACTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les contrôles de ce navire"
-export const MISSION_ACTIONS_EEZ_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la ZEE de la position"
+export const MISSION_ACTIONS_INN_AREA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la zone de la position"
 
 export const missionActionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -24,16 +24,16 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
       })
     }),
 
-    getIsInFrenchEez: builder.query<{ isInFrenchEez: boolean }, { latitude: number; longitude: number }>({
+    getIsInInnArea: builder.query<{ isInInnArea: boolean }, { latitude: number; longitude: number }>({
       query: ({ latitude, longitude }) => ({
         method: 'GET',
         params: {
           latitude,
           longitude
         },
-        url: '/mission_actions/is-in-french-eez'
+        url: '/mission_actions/is-in-inn-area'
       }),
-      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_EEZ_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(MISSION_ACTIONS_INN_AREA_ERROR_MESSAGE, response)
     }),
 
     getVesselControls: builder.query<MissionAction.MissionControlsSummary, { fromDate: string; vesselId: number }>({
@@ -67,6 +67,6 @@ export const missionActionApi = monitorfishApi.injectEndpoints({
 export const {
   useCreateMissionActionMutation,
   useDeleteMissionActionMutation,
-  useGetIsInFrenchEezQuery,
+  useGetIsInInnAreaQuery,
   useUpdateMissionActionMutation
 } = missionActionApi

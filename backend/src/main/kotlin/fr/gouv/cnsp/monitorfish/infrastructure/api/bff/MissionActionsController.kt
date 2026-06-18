@@ -5,7 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.IsInFrenchEezDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.IsInInnAreaDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -26,7 +26,7 @@ class MissionActionsController(
     private val updateMissionAction: UpdateMissionAction,
     private val deleteMissionAction: DeleteMissionAction,
     private val getActivityReports: GetActivityReports,
-    private val isPointInFrenchEez: IsPointInFrenchEez,
+    private val isPointInInnArea: IsPointInInnArea,
 ) {
     @GetMapping("/controls")
     @Operation(summary = "Get vessel's controls")
@@ -96,15 +96,16 @@ class MissionActionsController(
         actionId: Int,
     ) = deleteMissionAction.execute(actionId)
 
-    @GetMapping("/is-in-french-eez")
-    @Operation(summary = "Check if a coordinate is inside the Metropolitan French EEZ")
-    fun isInFrenchEez(
+    @GetMapping("/is-in-inn-area")
+    @Operation(
+        summary = "Check if a coordinate is in an INN control area (outside the French EEZ or in overseas waters)",
+    )
+    fun isInInnArea(
         @Parameter(description = "Latitude")
         @RequestParam(name = "latitude")
         latitude: Double,
         @Parameter(description = "Longitude")
         @RequestParam(name = "longitude")
         longitude: Double,
-    ): IsInFrenchEezDataOutput =
-        IsInFrenchEezDataOutput(isInFrenchEez = isPointInFrenchEez.execute(latitude, longitude))
+    ): IsInInnAreaDataOutput = IsInInnAreaDataOutput(isInInnArea = isPointInInnArea.execute(latitude, longitude))
 }

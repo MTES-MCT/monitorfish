@@ -1,9 +1,13 @@
 import { Ellipsised } from '@components/Ellipsised'
 import { DISCARD_REASON_AS_OPTIONS } from '@features/Mission/components/MissionForm/ActionForm/shared/constants'
+import { getDefaultFaoZones } from '@features/Mission/components/MissionForm/ActionForm/utils'
+import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
 import { Accent, FormikSelect, Icon, IconButton, SimpleTable } from '@mtes-mct/monitor-ui'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import styled from 'styled-components'
 
@@ -25,6 +29,8 @@ import type { Specy } from 'domain/types/specy'
 export function DiscardedSpeciesField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['discardedSpecies']>('discardedSpecies')
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
 
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
@@ -52,7 +58,11 @@ export function DiscardedSpeciesField() {
     helper.setValue(
       input.value.map((discard, currentIndex) =>
         currentIndex === index
-          ? { ...discard, faoZones: discard.faoZones ?? values.faoAreas, speciesCode: newSpecy.code }
+          ? {
+              ...discard,
+              faoZones: discard.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+              speciesCode: newSpecy.code
+            }
           : discard
       )
     )

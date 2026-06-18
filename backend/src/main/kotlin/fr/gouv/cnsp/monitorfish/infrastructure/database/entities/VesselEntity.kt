@@ -78,6 +78,10 @@ data class VesselEntity(
     val proprietorPhones: List<String>? = null,
     @Column(name = "proprietor_emails", columnDefinition = "varchar(100)[]")
     val proprietorEmails: List<String>? = null,
+    @Column(name = "proprietor_nationality")
+    val proprietorNationality: String? = null,
+    @Column(name = "proprietor_address")
+    val proprietorAddress: String? = null,
     @Column(name = "vessel_phones", columnDefinition = "varchar(100)[]")
     val vesselPhones: List<String>? = null,
     @Column(name = "vessel_emails", columnDefinition = "varchar(100)[]")
@@ -119,6 +123,8 @@ data class VesselEntity(
             proprietorName = proprietorName,
             proprietorPhones = proprietorPhones ?: listOf(),
             proprietorEmails = proprietorEmails ?: listOf(),
+            proprietorNationality = proprietorNationality,
+            proprietorAddress = proprietorAddress,
             vesselPhones = vesselPhones ?: listOf(),
             vesselEmails = vesselEmails ?: listOf(),
             underCharter = underCharter,

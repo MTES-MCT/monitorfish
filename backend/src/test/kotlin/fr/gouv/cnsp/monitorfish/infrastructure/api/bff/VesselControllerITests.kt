@@ -1269,12 +1269,15 @@ class VesselControllerITests {
     fun `Should return species control prefill data from logbook`() {
         // Given
         val speciesControl =
-            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesControlPrefill(speciesCode = "HKE").apply {
-                faoZones = listOf("27.8.a", "27.8.b")
-                presentationCodes = listOf("GUT")
-                rejectedWeight = 50.0
-                discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
-            }
+            fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
+                .SpeciesControlPrefill(
+                    speciesCode = "HKE",
+                ).apply {
+                    faoZones = listOf("27.8.a", "27.8.b")
+                    presentationCodes = listOf("GUT")
+                    rejectedWeight = 50.0
+                    discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
+                }
         given(getSpeciesControlPrefillFromLogbook.execute(any())).willReturn(listOf(speciesControl))
 
         // When

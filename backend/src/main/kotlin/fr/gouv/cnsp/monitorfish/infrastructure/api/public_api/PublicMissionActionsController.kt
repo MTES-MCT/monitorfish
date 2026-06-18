@@ -1,9 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichPublicMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.PatchableMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.outputs.PublicMissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 class PublicMissionActionsController(
     private val getMissionActions: GetMissionActions,
     private val patchMissionAction: PatchMissionAction,
+    private val enrichPublicMissionAction: EnrichPublicMissionAction,
 ) {
     @GetMapping("")
     @Operation(summary = "Get mission actions of specified mission")
@@ -24,12 +26,9 @@ class PublicMissionActionsController(
         @Parameter(description = "Mission id")
         @RequestParam(name = "missionId")
         missionId: Int,
-    ): List<MissionActionDataOutput> =
+    ): List<PublicMissionActionDataOutput> =
         getMissionActions.execute(missionId).map {
-            MissionActionDataOutput.fromMissionAction(
-                it,
-                useThreatHierarchyForForm = false,
-            )
+            PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(it))
         }
 
     @PatchMapping(value = ["/{actionId}"], consumes = ["application/json"])
@@ -41,12 +40,9 @@ class PublicMissionActionsController(
         actionId: Int,
         @RequestBody
         actionInput: PatchableMissionActionDataInput,
-    ): MissionActionDataOutput {
+    ): PublicMissionActionDataOutput {
         val updatedMissionAction = patchMissionAction.execute(actionId, actionInput.toPatchableMissionAction())
 
-        return MissionActionDataOutput.fromMissionAction(
-            missionAction = updatedMissionAction,
-            useThreatHierarchyForForm = false,
-        )
+        return PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(updatedMissionAction))
     }
 }

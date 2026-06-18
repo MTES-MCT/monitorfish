@@ -32,6 +32,7 @@ SELECT
     REPLACE(ne.tel_mobile_armateur, ' ', '') AS operator_mobile_phone,
     REPLACE(ne.fax_armateur, ' ', '') AS operator_fax,
     INITCAP(ne.nom_proprietaire) AS proprietor_name,
+    ne.adresse_proprietaire AS proprietor_address,
     eng_1.code as fishing_gear_main,
     eng_2.code as fishing_gear_secondary
 FROM NAVPRO.NAV_FLOTTEUR f

@@ -1,6 +1,34 @@
 import { hoverOrClickVesselByName } from '../../support/commands/hoverOrClickVesselByName'
 import { openVesselBySearch } from '../main_window/utils'
 
+// Hovering a map feature to reveal the reporting overlay is timing-sensitive: a single hover
+// sometimes lands before the WebGL hit-detection buffer / reporting data are ready, so the overlay
+// never appears or renders without its content. Re-hover until the overlay shows every expected
+// text, nudging the pointer away in between so each retry re-triggers the hover.
+function hoverReportingOverlay(vesselName: string, expectedTexts: string[], attempt = 0): Cypress.Chainable {
+  hoverOrClickVesselByName(vesselName, 'REPORTING', 'hover', 12)
+
+  return cy.get('body').then($body => {
+    const overlay = $body.find('[data-cy="reporting-overlay"]:visible')
+    const overlayText = overlay.text()
+    const isReady = overlay.length > 0 && expectedTexts.every(text => overlayText.includes(text))
+
+    if (!isReady) {
+      if (attempt >= 10) {
+        throw new Error(`Reporting overlay for "${vesselName}" was not ready after ${attempt} hovers`)
+      }
+
+      // Move the pointer away so the next hover actually re-triggers the overlay.
+      cy.get('.REPORTING').trigger('pointermove', { clientX: 5, clientY: 5, force: true, pointerId: 1 })
+      cy.wait(300)
+
+      return hoverReportingOverlay(vesselName, expectedTexts, attempt + 1)
+    }
+
+    return cy.wrap(overlay)
+  })
+}
+
 context('Reporting map form', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -56,7 +84,14 @@ context('Reporting map form', () => {
     // --- Part 2: Update ---
     cy.intercept('PUT', '/bff/v1/reportings/*').as('updateReporting')
 
-    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)
+    hoverReportingOverlay('RENCONTRER VEILLER APPARTEMENT', [
+      'RENCONTRER VEILLER APPARTEMENT',
+      'INN',
+      'Type inconnu / NATINF 27689',
+      "Suspicion d'infraction (BSL Lorient)",
+      'Pêche sans VMS',
+      'Pêche thon rouge sans VMS détecté ni JPE'
+    ])
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('RENCONTRER VEILLER APPARTEMENT')
     cy.getDataCy('reporting-overlay').contains('INN')
@@ -83,7 +118,7 @@ context('Reporting map form', () => {
     cy.clickButton('Fermer')
     cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 
-    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)
+    hoverReportingOverlay('RENCONTRER VEILLER APPARTEMENT', ['Mise à jour du titre depuis le test cypress'])
     cy.getDataCy('reporting-overlay').contains('Mise à jour du titre depuis le test cypress')
     cy.clickButton('Modifier le signalement')
 
@@ -112,7 +147,7 @@ context('Reporting map form', () => {
 
     cy.intercept('DELETE', '/bff/v1/reportings/*').as('deleteReporting')
 
-    hoverOrClickVesselByName('RENCONTRER VEILLER APPARTEMENT', 'REPORTING', 'hover', 12)
+    hoverReportingOverlay('RENCONTRER VEILLER APPARTEMENT', ['RENCONTRER VEILLER APPARTEMENT'])
     cy.getDataCy('reporting-overlay').should('be.visible')
 
     cy.clickButton('Modifier le signalement')
@@ -142,7 +177,7 @@ context('Reporting map form', () => {
     cy.wait('@displayReportings')
 
     // Click on an archived reporting vessel visible at these coordinates
-    hoverOrClickVesselByName('AMAZONIA QUEEN', 'REPORTING', 'hover', 12)
+    hoverReportingOverlay('AMAZONIA QUEEN', ['AMAZONIA QUEEN', 'infraction (OPS)', 'Archivé'])
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('AMAZONIA QUEEN')
     cy.getDataCy('reporting-overlay').contains('infraction (OPS)')
@@ -161,7 +196,7 @@ context('Reporting map form', () => {
     cy.wait('@updateReporting')
     cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 
-    hoverOrClickVesselByName('AMAZONIA QUEEN', 'REPORTING', 'hover', 12)
+    hoverReportingOverlay('AMAZONIA QUEEN', ['Mise à jour du titre depuis le test cypress'])
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('Mise à jour du titre depuis le test cypress')
   })

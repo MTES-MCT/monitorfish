@@ -42,6 +42,9 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.intercept('GET', apiPathBase).as('getReportings')
 
+    // The error state (and its "Réessayer" button) can render a beat after the last failed query
+    // settles. Wait for the button before clicking so we don't race the error UI.
+    cy.contains('button', 'Réessayer', { timeout: 20000 }).should('be.visible')
     cy.clickButton('Réessayer')
 
     cy.wait('@getReportings')

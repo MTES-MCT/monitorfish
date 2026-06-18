@@ -49,6 +49,8 @@ data class Vessel(
     val proprietorName: String? = null,
     val proprietorPhones: List<String> = listOf(),
     val proprietorEmails: List<String> = listOf(),
+    val proprietorNationality: String? = null,
+    val proprietorAddress: String? = null,
     val vesselPhones: List<String> = listOf(),
     val vesselEmails: List<String> = listOf(),
     val underCharter: Boolean? = null,

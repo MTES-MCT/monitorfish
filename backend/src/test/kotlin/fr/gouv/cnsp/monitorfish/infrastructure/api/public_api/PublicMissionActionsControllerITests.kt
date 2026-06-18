@@ -11,10 +11,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichPublicMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichedMissionAction
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -91,6 +91,11 @@ class PublicMissionActionsControllerITests {
                         length = 24.0,
                         vesselType = "Chalutier",
                         imo = "1234567",
+                        proprietorName = "EL MALIK",
+                        proprietorPhones = listOf("+33 6 45 25 14"),
+                        proprietorEmails = listOf("elmalik@gmail.com"),
+                        proprietorNationality = "FR",
+                        proprietorAddress = "1 rue du Port, Lorient",
                     ),
                 tripNumber = "20210001",
                 pnoReportId = "FAKE_PNO_REPORT_ID",
@@ -113,6 +118,11 @@ class PublicMissionActionsControllerITests {
             .andExpect(jsonPath("$[0].vesselLength", equalTo(24.0)))
             .andExpect(jsonPath("$[0].vesselType", equalTo("Chalutier")))
             .andExpect(jsonPath("$[0].imo", equalTo("1234567")))
+            .andExpect(jsonPath("$[0].proprietorName", equalTo("EL MALIK")))
+            .andExpect(jsonPath("$[0].proprietorPhones[0]", equalTo("+33 6 45 25 14")))
+            .andExpect(jsonPath("$[0].proprietorEmails[0]", equalTo("elmalik@gmail.com")))
+            .andExpect(jsonPath("$[0].proprietorNationality", equalTo("FR")))
+            .andExpect(jsonPath("$[0].proprietorAddress", equalTo("1 rue du Port, Lorient")))
             // JPE fields
             .andExpect(jsonPath("$[0].tripNumber", equalTo("20210001")))
             .andExpect(jsonPath("$[0].pnoReportId", equalTo("FAKE_PNO_REPORT_ID")))
@@ -163,6 +173,9 @@ class PublicMissionActionsControllerITests {
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
         val newMission = TestUtils.getDummyMissionAction(dateTime).copy(flagState = CountryCode.UNDEFINED)
         given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(missionAction = invocation.getArgument(0))
+        }
 
         // When
         api

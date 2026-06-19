@@ -39,7 +39,8 @@ class GetAllVesselGroupsWithVessels(
         }
 
         val nonFixedGroups = allGroups.filterNot { it is FixedVesselGroup }
-        val groupToVessels = ConcurrentHashMap(nonFixedGroups.associateWith { CopyOnWriteArrayList<EnrichedActiveVessel>() })
+        val groupToVessels =
+            ConcurrentHashMap(nonFixedGroups.associateWith { CopyOnWriteArrayList<EnrichedActiveVessel>() })
 
         activeVessels.parallelStream().forEach { activeVessel ->
             nonFixedGroups.forEach { group ->
@@ -47,7 +48,7 @@ class GetAllVesselGroupsWithVessels(
                     when (group) {
                         is PriorityVesselGroup -> group.containsActiveVessel(activeVessel)
                         is DynamicVesselGroup -> group.containsActiveVessel(activeVessel, now)
-                        is FixedVesselGroup -> false  // excluded from nonFixedGroups, never reached
+                        is FixedVesselGroup -> false // excluded from nonFixedGroups, never reached
                     }
                 if (matches) groupToVessels[group]?.add(activeVessel)
             }

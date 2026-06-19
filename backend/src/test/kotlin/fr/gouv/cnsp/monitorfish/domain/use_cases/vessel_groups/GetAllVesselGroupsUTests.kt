@@ -56,6 +56,8 @@ class GetAllVesselGroupsUTests {
 
         GetAllVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
 
-        verify(vesselGroupRepository).findAllByUserAndSharing(eq("dummy@email.gouv.fr"), eq(CnspService.POLE_OPS_METROPOLE))
+        verify(
+            vesselGroupRepository,
+        ).findAllByUserAndSharing(eq("dummy@email.gouv.fr"), eq(CnspService.POLE_OPS_METROPOLE))
     }
 }

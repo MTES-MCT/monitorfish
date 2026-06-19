@@ -79,6 +79,7 @@ data class VesselRiskFactor(
                 usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
                 else -> defaultControlPriorityLevel
             }
+
     fun isInGroup(
         vesselGroup: VesselGroupBase,
         profile: VesselProfile?,

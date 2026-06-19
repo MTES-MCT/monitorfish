@@ -31,7 +31,9 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getFixedVesselGroups())
+        given(
+            getAllVesselGroups.execute(any()),
+        ).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getFixedVesselGroups())
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -153,18 +155,30 @@ class GetAllVesselGroupsWithVesselsUTests {
         val p1 = vesselGroups[0]
         assertThat(p1.group.name).isEqualTo("Segments P1")
         assertThat(p1.vessels).hasSize(1)
-        assertThat(p1.vessels.single().second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
+        assertThat(
+            p1.vessels
+                .single()
+                .second.lastPosition
+                ?.internalReferenceNumber,
+        ).isEqualTo("FR224226850")
 
         val p2 = vesselGroups[1]
         assertThat(p2.group.name).isEqualTo("Segments P2")
         assertThat(p2.vessels).hasSize(1)
-        assertThat(p2.vessels.single().second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
+        assertThat(
+            p2.vessels
+                .single()
+                .second.lastPosition
+                ?.internalReferenceNumber,
+        ).isEqualTo("FR123456785")
     }
 
     @Test
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getDynamicVesselGroups())
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS + getDynamicVesselGroups(),
+        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(

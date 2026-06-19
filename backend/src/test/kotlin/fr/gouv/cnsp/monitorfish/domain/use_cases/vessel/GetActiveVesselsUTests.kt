@@ -81,8 +81,9 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            getDynamicVesselGroups(),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups(),
         )
 
         // When
@@ -117,40 +118,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = listOf(CountryCode.FR),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = listOf(CountryCode.FR),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -188,40 +190,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = listOf("NWW03"),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = listOf("NWW03"),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -264,40 +267,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = listOf("OTB"),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = listOf("OTB"),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -335,40 +339,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = true,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = true,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -405,40 +410,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = 3,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = 3,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -475,40 +481,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = listOf(2),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = listOf(2),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -554,40 +561,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = listOf("HKE"),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = listOf("HKE"),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -625,39 +633,40 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = VesselSize.ABOVE_TWELVE_METERS,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = VesselSize.ABOVE_TWELVE_METERS,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -695,39 +704,40 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = listOf(VesselLocation.PORT),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = listOf(VesselLocation.PORT),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -775,46 +785,47 @@ class GetActiveVesselsUTests {
                 ).toTypedArray(),
             )
 
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones =
-                                listOf(
-                                    ZoneFilter(
-                                        feature = polygon,
-                                        label = "Zone manuelle",
-                                        value = "custom",
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones =
+                                    listOf(
+                                        ZoneFilter(
+                                            feature = polygon,
+                                            label = "Zone manuelle",
+                                            value = "custom",
+                                        ),
                                     ),
-                                ),
-                        ),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -853,40 +864,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf("GV"),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf("GV"),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -924,40 +936,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf("GV"),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf("GV"),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -999,40 +1012,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1070,40 +1084,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1131,8 +1146,10 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            emptyList(), // No groups found for the user
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                emptyList(),
+            // No groups found for the user
         )
 
         // When
@@ -1162,43 +1179,44 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            listOf(
-                FixedVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    vessels =
-                        listOf(
-                            VesselIdentity(
-                                vesselId = null,
-                                cfr = "FR123456785",
-                                name = "MY AWESOME VESSEL TWO",
-                                flagState = CountryCode.FR,
-                                ircs = null,
-                                externalIdentification = null,
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    FixedVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        vessels =
+                            listOf(
+                                VesselIdentity(
+                                    vesselId = null,
+                                    cfr = "FR123456785",
+                                    name = "MY AWESOME VESSEL TWO",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                ),
+                                VesselIdentity(
+                                    vesselId = 1,
+                                    cfr = "FR00022680",
+                                    name = "MY AWESOME VESSEL",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = null,
+                                ),
                             ),
-                            VesselIdentity(
-                                vesselId = 1,
-                                cfr = "FR00022680",
-                                name = "MY AWESOME VESSEL",
-                                flagState = CountryCode.FR,
-                                ircs = null,
-                                externalIdentification = null,
-                                vesselIdentifier = null,
-                            ),
-                        ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1231,8 +1249,9 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            getDynamicVesselGroups() +
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
                         id = 1,
@@ -1322,8 +1341,9 @@ class GetActiveVesselsUTests {
             },
         )
 
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
-            getDynamicVesselGroups() +
+        given(getAllVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
                         id = 1,

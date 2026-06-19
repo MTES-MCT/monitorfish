@@ -2,8 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
-import java.time.ZonedDateTime
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 sealed class VesselGroupBase(
     open val id: Int?,

@@ -24,7 +24,7 @@ type VesselTableProps = Readonly<{
   isFixedGroup: boolean
   isFromUrl: boolean
   isPinned: boolean
-  vesselGroupId: number
+  vesselGroupId: number | null
   vessels: Vessel.ActiveVessel[]
 }>
 

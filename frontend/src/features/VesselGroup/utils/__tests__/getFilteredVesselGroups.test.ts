@@ -1,4 +1,4 @@
-import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
+import { GroupType, type HardcodedVesselGroup, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { getFilteredVesselGroups } from '@features/VesselGroup/utils/getFilteredVesselGroups'
 import { describe, expect, it } from '@jest/globals'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -19,6 +19,25 @@ const createMockVesselGroup = (overrides: Partial<VesselGroup> & { id: number })
     type: GroupType.FIXED,
     updatedAtUtc: undefined,
     vessels: [],
+    ...overrides
+  }) as VesselGroup
+
+const createMockHardcodedVesselGroup = (overrides: Partial<HardcodedVesselGroup> & { name: string }): VesselGroup =>
+  ({
+    color: '#E1000F',
+    createdAtUtc: '2024-01-01T00:00:00Z',
+    createdBy: '',
+    description: null,
+    endOfValidityUtc: null,
+    id: null,
+    isDeleted: false,
+    pointsOfAttention: null,
+    priorityLevel: 4,
+    sharedTo: null,
+    sharing: Sharing.SHARED,
+    startOfValidityUtc: null,
+    type: GroupType.HARDCODED,
+    updatedAtUtc: null,
     ...overrides
   }) as VesselGroup
 
@@ -120,5 +139,32 @@ describe('getFilteredVesselGroups', () => {
     expect(result.pinnedVesselGroups[0]?.id).toBe(5)
     expect(result.unpinnedVesselGroups).toHaveLength(1)
     expect(result.unpinnedVesselGroups[0]?.id).toBe(1)
+  })
+
+  it('should filter by HARDCODED group type', () => {
+    const vesselGroups = [
+      createMockVesselGroup({ id: 1, type: GroupType.DYNAMIC }),
+      createMockVesselGroup({ id: 2, type: GroupType.FIXED }),
+      createMockHardcodedVesselGroup({ name: 'Segments P1', priorityLevel: 4 }),
+      createMockHardcodedVesselGroup({ name: 'Segments P2', priorityLevel: 3 })
+    ]
+
+    const result = getFilteredVesselGroups(vesselGroups, GroupType.HARDCODED, undefined, [])
+
+    expect(result.unpinnedVesselGroups).toHaveLength(2)
+    expect(result.unpinnedVesselGroups.map(g => g.type)).toEqual([GroupType.HARDCODED, GroupType.HARDCODED])
+  })
+
+  it('should always place HARDCODED groups in unpinned regardless of pinned IDs', () => {
+    const hardcodedGroup = createMockHardcodedVesselGroup({ name: 'Segments P1' })
+    const vesselGroups = [createMockVesselGroup({ id: 1 }), hardcodedGroup]
+
+    // Even with a null in the pinned IDs array (which wouldn't normally happen), HARDCODED stays unpinned
+    const result = getFilteredVesselGroups(vesselGroups, undefined, undefined, [1])
+
+    expect(result.pinnedVesselGroups).toHaveLength(1)
+    expect(result.pinnedVesselGroups[0]?.id).toBe(1)
+    expect(result.unpinnedVesselGroups).toHaveLength(1)
+    expect(result.unpinnedVesselGroups[0]?.type).toBe(GroupType.HARDCODED)
   })
 })

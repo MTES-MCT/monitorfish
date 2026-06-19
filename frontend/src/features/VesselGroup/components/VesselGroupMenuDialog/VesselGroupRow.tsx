@@ -35,27 +35,37 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const userAccount = useContext(UserAccountContext)
+  const isHardcoded = vesselGroup.type === GroupType.HARDCODED
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
-  const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
+  const isDisplayed = vesselGroup.id !== null && vesselGroupsIdsDisplayed.includes(vesselGroup.id)
 
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isGroupFilterCriteriaOpen, setIsGroupFilterCriteriaOpen] = useState<boolean>(false)
-  const isPinned = vesselGroupsIdsPinned.includes(vesselGroup.id)
+  const isPinned = vesselGroup.id !== null && vesselGroupsIdsPinned.includes(vesselGroup.id)
 
   const handleDeleteVesselGroup = () => {
+    if (vesselGroup.id === null) {
+      return
+    }
     dispatch(deleteVesselGroup(vesselGroup.id))
     setIsDeleteConfirmationModalOpen(false)
   }
 
   const handleEditVesselGroup = () => {
+    if (vesselGroup.type === GroupType.HARDCODED) {
+      return
+    }
     dispatch(vesselGroupActions.vesselGroupEdited(vesselGroup))
     dispatch(setDisplayedComponents({ isVesselGroupMainWindowEditionDisplayed: true }))
   }
 
   const togglePinGroup = async event => {
     event.stopPropagation()
+    if (vesselGroup.id === null) {
+      return
+    }
 
     if (isPinned) {
       await dispatch(vesselGroupActions.vesselGroupIdUnpinned(vesselGroup.id))
@@ -68,6 +78,9 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const hideGroup = async event => {
     event.stopPropagation()
+    if (vesselGroup.id === null) {
+      return
+    }
     trackEvent({
       action: "Masquage d' un groupe de navires depuis la cartographie",
       category: 'VESSEL_GROUP',
@@ -79,6 +92,9 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const showGroup = async event => {
     event.stopPropagation()
+    if (vesselGroup.id === null) {
+      return
+    }
     trackEvent({
       action: "Affichage d' un groupe de navires depuis la cartographie",
       category: 'VESSEL_GROUP',
@@ -131,32 +147,35 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
           <GroupTitle>{vesselGroup.name}</GroupTitle>
           <ValidityText>{isInFuture ? ' – À venir' : ''}</ValidityText>
           <RowIcons>
-            <IconButton
-              accent={Accent.TERTIARY}
-              aria-label="Sélectionner"
-              color={isPinned ? THEME.color.blueGray : THEME.color.gunMetal}
-              Icon={Icon.Pin}
-              onClick={togglePinGroup}
-              title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroup.name}"`}
-            />
-            {isDisplayed ? (
+            {!isHardcoded && (
               <IconButton
                 accent={Accent.TERTIARY}
-                Icon={Icon.Display}
-                iconSize={20}
-                onClick={hideGroup}
-                title={`Cacher le groupe "${vesselGroup.name}"`}
-              />
-            ) : (
-              <IconButton
-                accent={Accent.TERTIARY}
-                color={THEME.color.lightGray}
-                Icon={Icon.Hide}
-                iconSize={20}
-                onClick={showGroup}
-                title={`Afficher le groupe "${vesselGroup.name}"`}
+                aria-label="Sélectionner"
+                color={isPinned ? THEME.color.blueGray : THEME.color.gunMetal}
+                Icon={Icon.Pin}
+                onClick={togglePinGroup}
+                title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroup.name}"`}
               />
             )}
+            {!isHardcoded &&
+              (isDisplayed ? (
+                <IconButton
+                  accent={Accent.TERTIARY}
+                  Icon={Icon.Display}
+                  iconSize={20}
+                  onClick={hideGroup}
+                  title={`Cacher le groupe "${vesselGroup.name}"`}
+                />
+              ) : (
+                <IconButton
+                  accent={Accent.TERTIARY}
+                  color={THEME.color.lightGray}
+                  Icon={Icon.Hide}
+                  iconSize={20}
+                  onClick={showGroup}
+                  title={`Afficher le groupe "${vesselGroup.name}"`}
+                />
+              ))}
           </RowIcons>
         </Row>
         {isOpen && (
@@ -169,12 +188,13 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               {vesselGroup.type === GroupType.FIXED && (
                 <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
               )}
-              {vesselGroup.sharing === Sharing.PRIVATE && (
+              {isHardcoded && <StyledTag borderColor={THEME.color.slateGray}>Groupe CNSP</StyledTag>}
+              {!isHardcoded && vesselGroup.sharing === Sharing.PRIVATE && (
                 <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
                   Groupe personnel
                 </StyledTag>
               )}
-              {vesselGroup.sharing === Sharing.SHARED && (
+              {!isHardcoded && vesselGroup.sharing === Sharing.SHARED && (
                 <StyledTag
                   backgroundColor={THEME.color.goldenPoppy25}
                   borderColor={THEME.color.goldenPoppyBorder}
@@ -200,20 +220,24 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               )}
             </GroupInformation>
             <OpenedGroupIcons>
-              <IconButton
-                accent={Accent.TERTIARY}
-                Icon={Icon.Edit}
-                iconSize={20}
-                onClick={handleEditVesselGroup}
-                title={`Modifier le groupe "${vesselGroup.name}"`}
-              />
-              <IconButton
-                accent={Accent.TERTIARY}
-                Icon={Icon.Delete}
-                iconSize={20}
-                onClick={() => setIsDeleteConfirmationModalOpen(true)}
-                title={`Supprimer le groupe "${vesselGroup.name}"`}
-              />
+              {!isHardcoded && (
+                <IconButton
+                  accent={Accent.TERTIARY}
+                  Icon={Icon.Edit}
+                  iconSize={20}
+                  onClick={handleEditVesselGroup}
+                  title={`Modifier le groupe "${vesselGroup.name}"`}
+                />
+              )}
+              {!isHardcoded && (
+                <IconButton
+                  accent={Accent.TERTIARY}
+                  Icon={Icon.Delete}
+                  iconSize={20}
+                  onClick={() => setIsDeleteConfirmationModalOpen(true)}
+                  title={`Supprimer le groupe "${vesselGroup.name}"`}
+                />
+              )}
               <IconButton
                 accent={Accent.TERTIARY}
                 Icon={Icon.Download}

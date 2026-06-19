@@ -7,7 +7,7 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type ActionButtonsCellProps = Readonly<{
-  groupId: number
+  groupId: number | null
   isFixedGroup: boolean
   vessel: Vessel.ActiveVessel
 }>
@@ -26,7 +26,7 @@ export function ActionButtonsCell({ groupId, isFixedGroup, vessel }: ActionButto
         <IconButton
           accent={Accent.TERTIARY}
           Icon={Icon.Delete}
-          onClick={() => dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
+          onClick={() => groupId !== null && dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
           title={`Supprimer le navire ${vessel.vesselName ? `"${vessel.vesselName}" ` : ''}du groupe`}
           withUnpropagatedClick
         />

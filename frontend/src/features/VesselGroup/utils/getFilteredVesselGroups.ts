@@ -20,7 +20,7 @@ export function getFilteredVesselGroups(
     .filter(group => !filteredSharing || group.sharing === filteredSharing)
 
   return {
-    pinnedVesselGroups: filtered.filter(group => vesselGroupsIdsPinned.includes(group.id)),
-    unpinnedVesselGroups: filtered.filter(group => !vesselGroupsIdsPinned.includes(group.id))
+    pinnedVesselGroups: filtered.filter(group => group.id !== null && vesselGroupsIdsPinned.includes(group.id)),
+    unpinnedVesselGroups: filtered.filter(group => group.id === null || !vesselGroupsIdsPinned.includes(group.id))
   }
 }

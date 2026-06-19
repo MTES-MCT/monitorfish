@@ -32,7 +32,8 @@ export enum Sharing {
 
 export enum GroupType {
   DYNAMIC = 'DYNAMIC',
-  FIXED = 'FIXED'
+  FIXED = 'FIXED',
+  HARDCODED = 'HARDCODED'
 }
 
 export enum CnspService {
@@ -68,7 +69,7 @@ export const VesselGroupFilterSchema = VesselListFilterSchema.omit({
 })
 export type DynamicVesselGroupFilter = z.infer<typeof VesselGroupFilterSchema>
 
-export const DynamicVesselGroupSchema = VesselGroupSchema.safeExtend({
+export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
   filters: VesselGroupFilterSchema,
   type: z.literal(GroupType.DYNAMIC)
 })
@@ -107,7 +108,7 @@ export const VesselIdentitySchema = z.strictObject({
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()])
 })
 
-export const FixedVesselGroupSchema = VesselGroupSchema.safeExtend({
+export const FixedVesselGroupSchema = VesselGroupSchema.extend({
   type: z.literal(GroupType.FIXED),
   vessels: z.array(VesselIdentitySchema)
 })
@@ -135,11 +136,35 @@ export type DynamicVesselGroup = z.infer<typeof DynamicVesselGroupSchema>
 export type CreateOrUpdateFixedVesselGroup = z.infer<typeof CreateOrUpdateFixedVesselGroupSchema>
 export type VesselIdentityForVesselGroup = z.infer<typeof VesselIdentitySchema>
 
-export type VesselGroup = DynamicVesselGroup | FixedVesselGroup
+/**
+ * Hardcoded vessel group (e.g. priority groups P1/P2)
+ */
+
+export const HardcodedVesselGroupSchema = z.strictObject({
+  color: z.string().min(1),
+  createdAtUtc: z.iso.datetime(),
+  createdBy: z.string(),
+  description: z.union([z.string().max(2500), z.undefined(), z.null()]),
+  endOfValidityUtc: z.union([z.string().datetime(), z.undefined(), z.null()]),
+  id: z.null(),
+  isDeleted: z.boolean(),
+  name: z.string().min(1).max(255),
+  pointsOfAttention: z.union([z.string(), z.undefined(), z.null()]),
+  priorityLevel: z.number(),
+  sharedTo: z.union([z.array(z.enum(CnspService)), z.undefined(), z.null()]),
+  sharing: z.enum(Sharing),
+  startOfValidityUtc: z.union([z.string().datetime(), z.undefined(), z.null()]),
+  type: z.literal(GroupType.HARDCODED),
+  updatedAtUtc: z.union([z.string().datetime(), z.undefined(), z.null()])
+})
+
+export type HardcodedVesselGroup = z.infer<typeof HardcodedVesselGroupSchema>
+
+export type VesselGroup = DynamicVesselGroup | FixedVesselGroup | HardcodedVesselGroup
 export type CreateOrUpdateVesselGroup = CreateOrUpdateDynamicVesselGroup | CreateOrUpdateFixedVesselGroup
 
 export const VesselGroupWithVesselsSchema = z.strictObject({
-  group: z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema]),
+  group: z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema, HardcodedVesselGroupSchema]),
   vessels: z.array(ActiveVesselSchema)
 })
 

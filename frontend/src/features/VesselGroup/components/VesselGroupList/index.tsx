@@ -18,7 +18,8 @@ import { UserAccountContext } from '../../../../context/UserAccountContext'
 
 const GROUP_TYPE_OPTIONS = [
   { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
-  { label: 'Groupes fixes', value: GroupType.FIXED }
+  { label: 'Groupes fixes', value: GroupType.FIXED },
+  { label: 'Groupes CNSP', value: GroupType.HARDCODED }
 ]
 
 const SHARING_OPTIONS = [
@@ -92,7 +93,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             name="groupType"
             onChange={value => updateGroupType(value as GroupType | undefined)}
             options={GROUP_TYPE_OPTIONS}
-            placeholder="Groupes dynamiques et fixes"
+            placeholder="Tous les types de groupes"
             value={filteredGroupType}
           />
           {isSuperUser && (
@@ -126,7 +127,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             <PinnedGroups data-cy="pinned-vessels-groups">
               {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
                 <VesselGroupRow
-                  key={groupWithVessels.group.id}
+                  key={groupWithVessels.group.id ?? groupWithVessels.group.name}
                   isFromUrl={isFromUrl}
                   isOpened={areGroupsOpened}
                   isPinned
@@ -140,7 +141,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
           <UnpinnedGroups data-cy="unpinned-vessels-groups">
             {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow
-                key={groupWithVessels.group.id}
+                key={groupWithVessels.group.id ?? groupWithVessels.group.name}
                 isFromUrl={isFromUrl}
                 isOpened={areGroupsOpened}
                 isPinned={false}

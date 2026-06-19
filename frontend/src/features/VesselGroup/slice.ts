@@ -88,6 +88,9 @@ export const selectVesselGroupsIdsFiltered = createSelector(
       vesselGroupsIdsPinned
     )
 
-    return pinnedVesselGroups.concat(unpinnedVesselGroups).map(vg => vg.id)
+    return pinnedVesselGroups
+      .concat(unpinnedVesselGroups)
+      .map(vg => vg.id)
+      .filter((id): id is number => id !== null)
   }
 )

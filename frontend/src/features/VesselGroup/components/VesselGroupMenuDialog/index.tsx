@@ -22,7 +22,8 @@ import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMa
 
 const GROUP_TYPE_OPTIONS = [
   { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
-  { label: 'Groupes fixes', value: GroupType.FIXED }
+  { label: 'Groupes fixes', value: GroupType.FIXED },
+  { label: 'Groupes CNSP', value: GroupType.HARDCODED }
 ]
 
 const SHARING_OPTIONS = [
@@ -90,7 +91,7 @@ export function VesselGroupMenuDialog() {
               name="groupType"
               onChange={value => updateGroupType(value as GroupType | undefined)}
               options={GROUP_TYPE_OPTIONS}
-              placeholder="Groupes dynamiques et fixes"
+              placeholder="Tous les types de groupes"
               value={filteredGroupType}
             />
           </FilterRow>
@@ -111,7 +112,7 @@ export function VesselGroupMenuDialog() {
           <VesselGroupList data-cy="vessel-groups-list">
             {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
-                key={vesselGroup.id}
+                key={vesselGroup.id ?? vesselGroup.name}
                 isLastPinned={vesselGroupsIdsPinned.length === index + 1}
                 vesselGroup={vesselGroup}
               />

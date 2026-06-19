@@ -33,8 +33,9 @@ class GetAllVesselGroupsWithVessels(
         val byCfr = mutableMapOf<String, EnrichedActiveVessel>()
         val byIrcs = mutableMapOf<String, EnrichedActiveVessel>()
         val byExternalId = mutableMapOf<String, EnrichedActiveVessel>()
-        activeVessels.forEach { activeVessel ->
-            buildMapOfIdentifiers(activeVessel, byVesselId, byCfr, byIrcs, byExternalId)
+        val hasFixedGroups = allGroups.any { it is FixedVesselGroup }
+        if (hasFixedGroups) {
+            activeVessels.forEach { buildMapOfIdentifiers(it, byVesselId, byCfr, byIrcs, byExternalId) }
         }
 
         val nonFixedGroups = allGroups.filterNot { it is FixedVesselGroup }
@@ -46,7 +47,7 @@ class GetAllVesselGroupsWithVessels(
                     when (group) {
                         is PriorityVesselGroup -> group.containsActiveVessel(activeVessel)
                         is DynamicVesselGroup -> group.containsActiveVessel(activeVessel, now)
-                        else -> false
+                        is FixedVesselGroup -> false  // excluded from nonFixedGroups, never reached
                     }
                 if (matches) groupToVessels[group]?.add(activeVessel)
             }
@@ -58,7 +59,8 @@ class GetAllVesselGroupsWithVessels(
                 vessels =
                     when (group) {
                         is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
-                        else -> (groupToVessels[group] ?: emptyList()).mapIndexed { index, vessel -> Pair(index, vessel) }
+                        is PriorityVesselGroup, is DynamicVesselGroup ->
+                            (groupToVessels[group] ?: emptyList()).mapIndexed { i, v -> Pair(i, v) }
                     },
             )
         }

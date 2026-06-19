@@ -131,9 +131,9 @@ class GetAllVesselGroupsWithVesselsUTests {
                     producerOrganization = null,
                     riskFactor =
                         when (index) {
-                            // effectiveControlPriorityLevel = controlPriorityLevel when segmentHighestImpact is set
-                            0 -> VesselRiskFactor(controlPriorityLevel = 4.0, segmentHighestImpact = "NWW03")
-                            1 -> VesselRiskFactor(controlPriorityLevel = 3.0, segmentHighestImpact = "PEL13")
+                            // effectiveControlPriorityLevel = controlPriorityLevel when segmentHighestPriority is set
+                            0 -> VesselRiskFactor(controlPriorityLevel = 4.0, segmentHighestPriority = "NWW03")
+                            1 -> VesselRiskFactor(controlPriorityLevel = 3.0, segmentHighestPriority = "PEL13")
                             else -> VesselRiskFactor()
                         },
                     landingPort = null,

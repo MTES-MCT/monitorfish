@@ -74,10 +74,10 @@ data class VesselRiskFactor(
     val effectiveControlPriorityLevel: Double
         get() =
             when {
-                segmentHighestImpact != null -> controlPriorityLevel
+                segmentHighestPriority != null -> controlPriorityLevel
                 recentSegmentHighestPriority != null -> recentControlPriorityLevel
                 usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
-                else -> 1.0
+                else -> defaultControlPriorityLevel
             }
     fun isInGroup(
         vesselGroup: VesselGroupBase,

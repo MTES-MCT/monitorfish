@@ -194,6 +194,61 @@ class VesselGroupControllerITests {
     }
 
     @Test
+    fun `Should get all vessel groups including priority groups`() {
+        // Given
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups")
+                    .with(authenticatedRequest())
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].name", equalTo("Segments P1")))
+            .andExpect(jsonPath("$[0].type", equalTo("HARDCODED")))
+            .andExpect(jsonPath("$[0].priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[1].name", equalTo("Segments P2")))
+            .andExpect(jsonPath("$[1].priorityLevel", equalTo(3)))
+
+        Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
+    }
+
+    @Test
+    fun `Should get all vessel groups with vessels including priority groups`() {
+        // Given
+        given(getAllVesselGroupsWithVessels.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS.map {
+                VesselGroupWithVessels(
+                    group = it,
+                    vessels = listOf(),
+                )
+            },
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups/vessels")
+                    .with(authenticatedRequest())
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].group.name", equalTo("Segments P1")))
+            .andExpect(jsonPath("$[0].group.type", equalTo("HARDCODED")))
+            .andExpect(jsonPath("$[0].group.priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[1].group.name", equalTo("Segments P2")))
+            .andExpect(jsonPath("$[1].group.priorityLevel", equalTo(3)))
+
+        Mockito.verify(getAllVesselGroupsWithVessels).execute("email@domain-name.com")
+    }
+
+    @Test
     fun `Should get all dynamic vessel groups`() {
         // Given
         given(getAllVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())

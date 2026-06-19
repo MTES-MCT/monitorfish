@@ -10,8 +10,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,22 +19,15 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 @UseCase
 class GetAllVesselGroupsWithVessels(
-    private val vesselGroupRepository: VesselGroupRepository,
+    private val getAllVesselGroups: GetAllVesselGroups,
     private val lastPositionRepository: LastPositionRepository,
-    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllVesselGroupsWithVessels::class.java)
 
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
         val now = ZonedDateTime.now()
-        val userService = getAuthorizedUser.execute(userEmail).service
-        val vesselGroups =
-            vesselGroupRepository.findAllByUserAndSharing(
-                user = userEmail,
-                service = userService,
-            )
-        val activeVessels =
-            lastPositionRepository.findActiveVesselWithReferentialData(now.minusMonths(1))
+        val allGroups = getAllVesselGroups.execute(userEmail)
+        val activeVessels = lastPositionRepository.findActiveVesselWithReferentialData(now.minusMonths(1))
 
         val byVesselId = mutableMapOf<Int, EnrichedActiveVessel>()
         val byCfr = mutableMapOf<String, EnrichedActiveVessel>()
@@ -45,57 +36,32 @@ class GetAllVesselGroupsWithVessels(
         activeVessels.forEach { activeVessel ->
             buildMapOfIdentifiers(activeVessel, byVesselId, byCfr, byIrcs, byExternalId)
         }
-        val priorityGroups = PriorityVesselGroup.PRIORITY_GROUPS
-        val priorityGroupsToActiveVessels =
-            ConcurrentHashMap<PriorityVesselGroup, MutableList<EnrichedActiveVessel>>().apply {
-                priorityGroups.forEach { this[it] = CopyOnWriteArrayList() }
-            }
-        val dynamicGroups = vesselGroups.filterIsInstance<DynamicVesselGroup>()
-        val dynamicGroupsToActiveVessels =
-            ConcurrentHashMap<DynamicVesselGroup, MutableList<EnrichedActiveVessel>>().apply {
-                dynamicGroups.forEach { this[it] = CopyOnWriteArrayList() }
-            }
+
+        val nonFixedGroups = allGroups.filterNot { it is FixedVesselGroup }
+        val groupToVessels = ConcurrentHashMap(nonFixedGroups.associateWith { CopyOnWriteArrayList<EnrichedActiveVessel>() })
+
         activeVessels.parallelStream().forEach { activeVessel ->
-            priorityGroups.forEach { group ->
-                if (group.containsActiveVessel(activeVessel)) {
-                    priorityGroupsToActiveVessels[group]?.add(activeVessel)
-                }
-            }
-            dynamicGroups.forEach { group ->
-                if (group.containsActiveVessel(activeVessel, now)) {
-                    dynamicGroupsToActiveVessels[group]?.add(activeVessel)
-                }
+            nonFixedGroups.forEach { group ->
+                val matches =
+                    when (group) {
+                        is PriorityVesselGroup -> group.containsActiveVessel(activeVessel)
+                        is DynamicVesselGroup -> group.containsActiveVessel(activeVessel, now)
+                        else -> false
+                    }
+                if (matches) groupToVessels[group]?.add(activeVessel)
             }
         }
 
-        val priorityGroupResults =
-            priorityGroups.map { group ->
-                VesselGroupWithVessels(
-                    group = group,
-                    vessels =
-                        (priorityGroupsToActiveVessels[group] ?: emptyList())
-                            .mapIndexed { index, vessel -> Pair(index, vessel) },
-                )
-            }
-
-        val userGroupResults =
-            vesselGroups.map { group ->
-                val indexedVessels =
+        return allGroups.map { group ->
+            VesselGroupWithVessels(
+                group = group,
+                vessels =
                     when (group) {
-                        is DynamicVesselGroup ->
-                            (dynamicGroupsToActiveVessels[group] ?: emptyList())
-                                .mapIndexed { index, vessel -> Pair(index, vessel) }
                         is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
-                        is PriorityVesselGroup -> emptyList()
-                    }
-
-                VesselGroupWithVessels(
-                    group = group,
-                    vessels = indexedVessels,
-                )
-            }
-
-        return priorityGroupResults + userGroupResults
+                        else -> (groupToVessels[group] ?: emptyList()).mapIndexed { index, vessel -> Pair(index, vessel) }
+                    },
+            )
+        }
     }
 
     private fun getVesselsFromReferential(

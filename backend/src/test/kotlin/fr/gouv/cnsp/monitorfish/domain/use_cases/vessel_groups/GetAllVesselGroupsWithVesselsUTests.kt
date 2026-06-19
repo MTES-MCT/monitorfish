@@ -2,17 +2,14 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getFixedVesselGroups
@@ -26,24 +23,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 class GetAllVesselGroupsWithVesselsUTests {
     @MockitoBean
-    private lateinit var vesselGroupRepository: VesselGroupRepository
+    private lateinit var getAllVesselGroups: GetAllVesselGroups
 
     @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
 
-    @MockitoBean
-    private lateinit var getAuthorizedUser: GetAuthorizedUser
-
     @Test
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getFixedVesselGroups())
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -56,11 +44,10 @@ class GetAllVesselGroupsWithVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getFixedVesselGroups())
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
+            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -85,13 +72,23 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute get all vessels ids when a vessel is not found`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
+        val modifiedGroup =
+            getFixedVesselGroups().first().copy(
+                vessels =
+                    // Add unknown vessel
+                    listOf(
+                        VesselIdentity(
+                            vesselId = null,
+                            cfr = "NOT_FOUND",
+                            name = null,
+                            flagState = CountryCode.FR,
+                            ircs = null,
+                            externalIdentification = null,
+                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                        ),
+                    ) + getFixedVesselGroups().first().vessels,
+            )
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + listOf(modifiedGroup))
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -104,30 +101,10 @@ class GetAllVesselGroupsWithVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull()))
-            .willReturn(
-                listOf(
-                    getFixedVesselGroups().first().copy(
-                        vessels =
-                            // Add unknown vessel
-                            listOf(
-                                VesselIdentity(
-                                    vesselId = null,
-                                    cfr = "NOT_FOUND",
-                                    name = null,
-                                    flagState = CountryCode.FR,
-                                    ircs = null,
-                                    externalIdentification = null,
-                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                                ),
-                            ) + getFixedVesselGroups().first().vessels,
-                    ),
-                ),
-            )
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
+            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -142,15 +119,52 @@ class GetAllVesselGroupsWithVesselsUTests {
     }
 
     @Test
+    fun `execute correctly assigns vessels to priority groups based on control priority level`() {
+        // Given
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
+            TestUtils.getDummyLastPositions().mapIndexed { index, position ->
+                EnrichedActiveVessel(
+                    lastPosition = position,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor =
+                        when (index) {
+                            // effectiveControlPriorityLevel = controlPriorityLevel when segmentHighestImpact is set
+                            0 -> VesselRiskFactor(controlPriorityLevel = 4.0, segmentHighestImpact = "NWW03")
+                            1 -> VesselRiskFactor(controlPriorityLevel = 3.0, segmentHighestImpact = "PEL13")
+                            else -> VesselRiskFactor()
+                        },
+                    landingPort = null,
+                )
+            },
+        )
+
+        // When
+        val vesselGroups =
+            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
+                userEmail = "dummy@email.gouv.fr",
+            )
+
+        // Then: only the two hardcoded priority groups (no user groups)
+        assertThat(vesselGroups).hasSize(2)
+
+        val p1 = vesselGroups[0]
+        assertThat(p1.group.name).isEqualTo("Segments P1")
+        assertThat(p1.vessels).hasSize(1)
+        assertThat(p1.vessels.single().second.lastPosition?.internalReferenceNumber).isEqualTo("FR224226850")
+
+        val p2 = vesselGroups[1]
+        assertThat(p2.group.name).isEqualTo("Segments P2")
+        assertThat(p2.vessels).hasSize(1)
+        assertThat(p2.vessels.single().second.lastPosition?.internalReferenceNumber).isEqualTo("FR123456785")
+    }
+
+    @Test
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getDynamicVesselGroups())
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -172,11 +186,10 @@ class GetAllVesselGroupsWithVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getDynamicVesselGroups())
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(vesselGroupRepository, lastPositionRepository, getAuthorizedUser).execute(
+            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 

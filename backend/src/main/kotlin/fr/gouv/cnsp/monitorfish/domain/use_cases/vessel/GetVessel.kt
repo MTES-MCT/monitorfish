@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.extractBossNameAndAddressFromERS
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
@@ -28,11 +28,10 @@ class GetVessel(
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
-    private val vesselGroupRepository: VesselGroupRepository,
+    private val getAllVesselGroups: GetAllVesselGroups,
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
     private val reportingRepository: ReportingRepository,
-    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -49,7 +48,6 @@ class GetVessel(
     ): Pair<Boolean, EnrichedActiveVesselWithPositions> =
         coroutineScope {
             val now = ZonedDateTime.now()
-            val userService = getAuthorizedUser.execute(userEmail).service
 
             val (vesselTrackHasBeenModified, positions) =
                 getVesselVMSAndAISPositions.execute(
@@ -97,12 +95,9 @@ class GetVessel(
                     producerOrganizationMembershipRepository.findByInternalReferenceNumber(internalReferenceNumber)
                 }
 
-            val userVesselGroups =
+            val allVesselGroups =
                 async {
-                    vesselGroupRepository.findAllByUserAndSharing(
-                        user = userEmail,
-                        service = userService,
-                    )
+                    getAllVesselGroups.execute(userEmail)
                 }
             val vesselProfile =
                 async {
@@ -172,7 +167,7 @@ class GetVessel(
                 )
 
             val foundVesselGroups =
-                userVesselGroups.await().filter { vesselGroup ->
+                allVesselGroups.await().filter { vesselGroup ->
                     when (vesselGroup) {
                         is DynamicVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel, now)
                         is FixedVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel)

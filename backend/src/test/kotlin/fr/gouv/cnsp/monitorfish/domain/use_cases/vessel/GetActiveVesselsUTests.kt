@@ -2,9 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.mock
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
@@ -22,8 +20,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import org.assertj.core.api.Assertions.assertThat
@@ -42,10 +39,7 @@ class GetActiveVesselsUTests {
     private val reportingRepository: ReportingRepository = mock()
 
     @Mock
-    private val vesselGroupRepository: VesselGroupRepository = mock()
-
-    @Mock
-    private val getAuthorizedUser: GetAuthorizedUser = mock()
+    private val getAllVesselGroups: GetAllVesselGroups = mock()
 
     @Mock
     private val logbookReportRepository: LogbookReportRepository = mock()
@@ -57,8 +51,7 @@ class GetActiveVesselsUTests {
         GetActiveVessels(
             lastPositionRepository,
             reportingRepository,
-            vesselGroupRepository,
-            getAuthorizedUser,
+            getAllVesselGroups,
             logbookReportRepository,
             manualPriorNotificationRepository,
         )
@@ -66,13 +59,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When multiple group conditions matches`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastPosition = TestUtils.getDummyLastPositions().first()
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -95,7 +81,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             getDynamicVesselGroups(),
         )
 
@@ -111,13 +97,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When flag state match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -138,7 +117,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -188,13 +167,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When fleet segment match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -216,7 +188,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -266,13 +238,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When gear match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -299,7 +264,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -349,13 +314,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When has logbook match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -377,7 +335,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -427,13 +385,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When last position match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -454,7 +405,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -504,13 +455,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When risk factor match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -531,7 +475,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -581,13 +525,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When species match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -617,7 +554,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -667,13 +604,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel size match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -695,7 +625,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -744,13 +674,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel location match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -772,7 +695,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -821,13 +744,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When zone match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -859,7 +775,7 @@ class GetActiveVesselsUTests {
                 ).toTypedArray(),
             )
 
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -915,13 +831,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions without groups When vessel district code not match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -944,7 +853,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -993,13 +902,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel district code match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1022,7 +924,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -1072,13 +974,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel Last Control Period match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1104,7 +999,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -1154,13 +1049,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel Last Control Period does not match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1182,7 +1070,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 DynamicVesselGroup(
                     id = 1,
@@ -1231,13 +1119,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return vessels without groups When no matching groups for user`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1250,7 +1131,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             emptyList(), // No groups found for the user
         )
 
@@ -1269,13 +1150,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return fixed groups When vessels are found in the last position table`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1288,7 +1162,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             listOf(
                 FixedVesselGroup(
                     id = 1,
@@ -1345,13 +1219,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return fixed and dynamics groups When vessels are found in the last position table`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1364,7 +1231,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
@@ -1418,13 +1285,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return landing port When vessels are found in future prior notification from logbook and manual prior notification`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "DUMMY_EMAIL",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val vesselThatShouldMatchWithPriorNotification =
             VesselIdentity(
                 vesselId = 1,
@@ -1462,7 +1322,7 @@ class GetActiveVesselsUTests {
             },
         )
 
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS +
             getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
@@ -1527,13 +1387,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return reporting types When vessel has reportings matched by vesselId`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1555,7 +1408,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1579,13 +1432,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return reporting types When vessel has reportings matched by CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1607,7 +1453,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1631,13 +1477,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return deduplicated reporting types When same reporting matches by both vesselId and CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1660,7 +1499,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1685,13 +1524,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return multiple reporting types When vessel has distinct reportings from both vesselId and CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1714,7 +1546,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1749,9 +1581,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should propagate beacon from repository result`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(email = "dummy@email.gouv.fr", isSuperUser = true, service = null),
-        )
         val lastPosition = TestUtils.getDummyLastPositions().first()
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1766,7 +1595,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(listOf())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
 
         // When
         val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
@@ -1780,13 +1609,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return empty reporting types When vessel has no reportings`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1809,7 +1631,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(emptyList())
 
         // When
@@ -1823,13 +1645,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=true When INFRACTION_SUSPICION reporting was created after last DEP`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1853,7 +1668,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1880,13 +1695,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When INFRACTION_SUSPICION reporting was created before last DEP`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1910,7 +1718,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1937,13 +1745,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When no last DEP date found for vessel`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1966,7 +1767,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1991,13 +1792,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When reporting type is not INFRACTION_SUSPICION`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -2021,7 +1815,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(

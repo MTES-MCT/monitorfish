@@ -12,8 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -22,8 +21,7 @@ import java.time.ZonedDateTime
 class GetActiveVessels(
     private val lastPositionRepository: LastPositionRepository,
     private val reportingRepository: ReportingRepository,
-    private val vesselGroupRepository: VesselGroupRepository,
-    private val getAuthorizedUser: GetAuthorizedUser,
+    private val getAllVesselGroups: GetAllVesselGroups,
     private val logbookReportRepository: LogbookReportRepository,
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
 ) {
@@ -31,7 +29,6 @@ class GetActiveVessels(
 
     fun execute(userEmail: String): List<EnrichedActiveVessel> {
         val now = ZonedDateTime.now()
-        val userService = getAuthorizedUser.execute(userEmail).service
         val currentReportings = reportingRepository.findAllCurrent()
         val currentReportingsByCfr = currentReportings.groupBy { it.internalReferenceNumber }
         val currentReportingsByVesselIds = currentReportings.groupBy { it.vesselId }
@@ -43,11 +40,7 @@ class GetActiveVessels(
             lastPositionRepository.findActiveVesselWithReferentialData(
                 now.minusMonths(1),
             )
-        val vesselGroups =
-            vesselGroupRepository.findAllByUserAndSharing(
-                user = userEmail,
-                service = userService,
-            )
+        val vesselGroups = getAllVesselGroups.execute(userEmail)
 
         val priorNotificationsFilter =
             PriorNotificationsFilter(

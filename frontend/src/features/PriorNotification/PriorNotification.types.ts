@@ -98,6 +98,7 @@ export namespace PriorNotification {
     purpose: PurposeCode | undefined
     sentAt: string | undefined
     tripGearCodes: string[]
+    tripNumber: string | undefined
     vesselIdentity: Vessel.VesselIdentity | undefined
   }
 

@@ -20,4 +20,9 @@ interface ManualPriorNotificationRepository {
     fun invalidate(reportId: String)
 
     fun findAllToVerify(): List<PriorNotification>
+
+    fun findAllByCfrAndTripNumber(
+        cfr: String,
+        tripNumber: String,
+    ): List<PriorNotification>
 }

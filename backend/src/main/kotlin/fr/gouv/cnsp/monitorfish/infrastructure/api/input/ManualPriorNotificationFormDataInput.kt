@@ -12,6 +12,7 @@ data class ManualPriorNotificationFormDataInput(
     val fishingCatches: List<ManualPriorNotificationFishingCatchDataInput>,
     val globalFaoArea: String?,
     val note: String?,
+    val tripNumber: String? = null,
     val portLocode: String,
     val purpose: LogbookMessagePurpose,
     val sentAt: ZonedDateTime,

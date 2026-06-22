@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
@@ -48,6 +49,8 @@ data class ManualPriorNotificationEntity(
     val value: String,
     @Column(name = "vessel_name")
     val vesselName: String?,
+    @Column(name = "trip_number")
+    val tripNumber: String?,
 ) {
     companion object {
         fun fromPriorNotification(
@@ -76,6 +79,7 @@ data class ManualPriorNotificationEntity(
                     value = mapper.writeValueAsString(pnoLogbookMessageValue),
                     vesselName = pnoLogbookMessage.vesselName,
                     vesselId = vesselId,
+                    tripNumber = pnoLogbookMessage.tripNumber,
                 )
             } catch (e: IllegalArgumentException) {
                 throw BackendInternalException(
@@ -96,9 +100,11 @@ data class ManualPriorNotificationEntity(
             val pnoLogbookMessage =
                 LogbookMessage(
                     id = null,
+                    acknowledgment = Acknowledgment(isSuccess = true),
                     reportId = reportId,
                     flagState = flagState,
                     isEnriched = true,
+                    tripNumber = tripNumber,
                     integrationDateTime = createdAt,
                     internalReferenceNumber = cfr,
                     ircs = ircs,

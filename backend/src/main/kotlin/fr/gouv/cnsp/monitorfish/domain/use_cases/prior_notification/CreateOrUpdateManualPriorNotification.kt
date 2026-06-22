@@ -28,6 +28,7 @@ class CreateOrUpdateManualPriorNotification(
     fun execute(
         reportId: String?,
         author: String?,
+        tripNumber: String? = null,
         didNotFishAfterZeroNotice: Boolean,
         expectedArrivalDate: ZonedDateTime,
         expectedLandingDate: ZonedDateTime?,
@@ -126,7 +127,7 @@ class CreateOrUpdateManualPriorNotification(
                 id = null,
                 reportId = reportId,
                 operationNumber = null,
-                tripNumber = null,
+                tripNumber = tripNumber,
                 referencedReportId = null,
                 operationDateTime = ZonedDateTime.now(),
                 activityDateTime = expectedArrivalDate,

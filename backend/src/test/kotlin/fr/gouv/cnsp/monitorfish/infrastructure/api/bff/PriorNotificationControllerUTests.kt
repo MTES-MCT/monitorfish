@@ -244,6 +244,7 @@ class PriorNotificationControllerUTests {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
+                anyOrNull(),
             ),
         ).willReturn(fakePriorNotification)
 

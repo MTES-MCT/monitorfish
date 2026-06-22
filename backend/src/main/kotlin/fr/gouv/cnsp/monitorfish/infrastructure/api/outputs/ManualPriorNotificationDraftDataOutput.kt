@@ -9,6 +9,7 @@ data class ManualPriorNotificationDraftDataOutput(
     val hasPortEntranceAuthorization: Boolean,
     val hasPortLandingAuthorization: Boolean,
     val authorTrigram: String?,
+    val tripNumber: String?,
     val didNotFishAfterZeroNotice: Boolean,
     val expectedArrivalDate: String?,
     val expectedLandingDate: String?,
@@ -90,6 +91,7 @@ data class ManualPriorNotificationDraftDataOutput(
                 sentAt = priorNotification.sentAt,
                 purpose = pnoValue.purpose,
                 tripGearCodes = tripGearCodes,
+                tripNumber = logbookMessage.tripNumber,
                 vesselIdentity = vesselIdentity,
             )
         }

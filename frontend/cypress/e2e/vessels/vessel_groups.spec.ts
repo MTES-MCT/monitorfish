@@ -103,8 +103,8 @@ context('Vessel groups', () => {
     cy.get('[title="Lorem ipsum dolor sit amet"]').contains(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
     )
-    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe dynamique')
-    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('Groupe partagé')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('G. dynamique')
+    cy.get('[title="Lorem ipsum dolor sit amet"]').contains('G. partagé')
     cy.get('[title="Afficher les critères de définition du groupe"]').click()
     cy.get('[title="Lorem ipsum dolor sit amet"]').within(() => {
       cy.get('.Component-SingleTag').should('have.length', 5)
@@ -299,7 +299,7 @@ context('Vessel groups', () => {
     cy.get('[title="Dolor sit amet"]').contains(
       'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
     )
-    cy.get('[title="Dolor sit amet"]').contains('Groupe fixe')
+    cy.get('[title="Dolor sit amet"]').contains('G. fixe')
 
     /**
      * Modify the created group

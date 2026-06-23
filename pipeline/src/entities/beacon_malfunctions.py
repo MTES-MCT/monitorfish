@@ -43,6 +43,11 @@ class BeaconMalfunctionStage(Enum):
     ARCHIVED = "ARCHIVED"
 
 
+class BeaconMalfunctionInitialLocation(Enum):
+    AT_SEA = "AT_SEA"
+    AT_PORT = "AT_PORT"
+
+
 class BeaconMalfunctionVesselStatus(Enum):
     AT_SEA = "AT_SEA"
     AT_PORT = "AT_PORT"

@@ -350,6 +350,7 @@ class VesselControllerITests {
                     equalTo(BigDecimal(0.15138120208784955).setScale(17, RoundingMode.HALF_UP)),
                 ),
             ).andExpect(jsonPath("$.vessel.groups[0].name", equalTo("Mission Thémis – chaluts de fonds")))
+            .andExpect(jsonPath("$.vessel.groups[0].isPriorityGroup", equalTo(false)))
 
         runBlocking {
             Mockito.verify(getVessel).execute(

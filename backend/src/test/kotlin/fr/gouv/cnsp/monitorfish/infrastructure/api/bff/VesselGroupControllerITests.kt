@@ -211,8 +211,10 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$[0].name", equalTo("Segments P1")))
             .andExpect(jsonPath("$[0].type", equalTo("HARDCODED")))
             .andExpect(jsonPath("$[0].priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[0].isPriorityGroup", equalTo(true)))
             .andExpect(jsonPath("$[1].name", equalTo("Segments P2")))
             .andExpect(jsonPath("$[1].priorityLevel", equalTo(3)))
+            .andExpect(jsonPath("$[1].isPriorityGroup", equalTo(true)))
 
         Mockito.verify(getAllUserVesselGroups).execute("email@domain-name.com")
     }
@@ -242,8 +244,10 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$[0].group.name", equalTo("Segments P1")))
             .andExpect(jsonPath("$[0].group.type", equalTo("HARDCODED")))
             .andExpect(jsonPath("$[0].group.priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[0].group.isPriorityGroup", equalTo(true)))
             .andExpect(jsonPath("$[1].group.name", equalTo("Segments P2")))
             .andExpect(jsonPath("$[1].group.priorityLevel", equalTo(3)))
+            .andExpect(jsonPath("$[1].group.isPriorityGroup", equalTo(true)))
 
         Mockito.verify(getAllVesselGroupsWithVessels).execute("email@domain-name.com")
     }

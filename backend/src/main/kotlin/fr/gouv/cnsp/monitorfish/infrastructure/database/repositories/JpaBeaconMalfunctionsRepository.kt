@@ -14,7 +14,7 @@ class JpaBeaconMalfunctionsRepository(
     private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
 ) : BeaconMalfunctionsRepository {
     override fun findAll(): List<BeaconMalfunction> =
-        dbBeaconMalfunctionsRepository.findAllAtSea().map {
+        dbBeaconMalfunctionsRepository.findAllFollowed().map {
             it.toBeaconMalfunction()
         }
 

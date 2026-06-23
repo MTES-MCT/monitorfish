@@ -71,15 +71,16 @@ context('Vessel groups', () => {
     /**
      * Filter by group type
      */
+    // The two hardcoded priority groups (Segments P1/P2) are always listed (in addition to the user groups)
     cy.fill('Type de groupe', 'Groupes fixes')
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 1)
     cy.fill('Type de groupe', undefined)
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 6)
 
     cy.fill('Type de groupe', 'Groupes dynamiques')
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 3)
     cy.fill('Type de groupe', undefined)
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 6)
 
     /**
      * Filter list by sharing
@@ -87,12 +88,13 @@ context('Vessel groups', () => {
     cy.fill('Partage', 'Groupes personnels')
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
     cy.fill('Partage', undefined)
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 6)
 
+    // Priority groups are shared, so they also show up when filtering on shared groups
     cy.fill('Partage', 'Groupes partagés')
-    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 2)
-    cy.fill('Partage', undefined)
     cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 4)
+    cy.fill('Partage', undefined)
+    cy.get('[data-cy="vessel-groups-list"] > li').should('have.length', 6)
 
     /**
      * Display the created vessel group
@@ -163,30 +165,33 @@ context('Vessel groups', () => {
      * Pin and unpin vessel groups to change order
      */
     cy.getDataCy('vessel-groups-list').within(() => {
-      cy.get('li').should('have.length', 4)
-      cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
-
-      cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
-      cy.get('li').eq(0).contains('Mission Thémis – chaluts de fonds')
-      cy.get('li').eq(1).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(2).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(3).contains('Mission Thémis – semaine 03')
-
-      cy.get('[title=\'Epingler le groupe "Mission Thémis – semaine 03"\']').click()
-      cy.get('li').eq(0).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(1).contains('Mission Thémis – chaluts de fonds')
+      // Priority groups (Segments P1/P2) are always rendered first and stay on top whatever the pinning
+      cy.get('li').should('have.length', 6)
+      cy.get('li').eq(0).contains('Segments P1')
+      cy.get('li').eq(1).contains('Segments P2')
       cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
       cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(4).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(5).contains('Mission Thémis – chaluts de fonds')
+
+      cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
+      cy.get('li').eq(2).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(3).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(4).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(5).contains('Mission Thémis – semaine 03')
+
+      cy.get('[title=\'Epingler le groupe "Mission Thémis – semaine 03"\']').click()
+      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(4).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(5).contains('Mission Thémis – semaine 04')
 
       cy.get('[title=\'Dépingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
       cy.get('[title=\'Dépingler le groupe "Mission Thémis – semaine 03"\']').click()
-      cy.get('li').eq(0).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(1).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(4).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(5).contains('Mission Thémis – chaluts de fonds')
     })
 
     /**

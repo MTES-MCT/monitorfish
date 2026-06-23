@@ -50,7 +50,7 @@ describe('utils', () => {
     const color = THEME.color.prussianBlue
 
     // When
-    expect(getColorWithAlpha(color, 0.75)).toEqual('rgba(0,52,84,0.75)')
+    expect(getColorWithAlpha(color, 0.75)).toEqual('rgba(0,62,84,0.75)')
   })
 
   // Because this function will be replaced with monitor-ui ones.

@@ -161,7 +161,7 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
         """,
         nativeQuery = true,
     )
-    fun findAllByVesselIdAndTripNumber(
+    fun findAllByCfrAndTripNumber(
         cfr: String,
         tripNumber: String,
     ): List<ManualPriorNotificationEntity>

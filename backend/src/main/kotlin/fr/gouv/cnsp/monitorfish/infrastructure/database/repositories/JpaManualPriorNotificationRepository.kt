@@ -76,7 +76,7 @@ class JpaManualPriorNotificationRepository(
         cfr: String,
         tripNumber: String,
     ): List<PriorNotification> =
-        dbManualPriorNotificationRepository.findAllByVesselIdAndTripNumber(cfr = cfr, tripNumber = tripNumber).map {
+        dbManualPriorNotificationRepository.findAllByCfrAndTripNumber(cfr = cfr, tripNumber = tripNumber).map {
             it.toPriorNotification(mapper)
         }
 

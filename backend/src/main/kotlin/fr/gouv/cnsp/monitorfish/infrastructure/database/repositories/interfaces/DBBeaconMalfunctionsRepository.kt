@@ -9,22 +9,26 @@ import java.time.ZonedDateTime
 
 interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntity, Int> {
     @Query(
-        value =
-            "SELECT * FROM beacon_malfunctions where stage = 'ARCHIVED' " +
-                "ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 60",
+        value = "SELECT * FROM beacon_malfunctions WHERE stage = 'ARCHIVED' AND beacon_malfunction_initial_location = 'AT_SEA' ORDER BY vessel_status_last_modification_date_utc DESC LIMIT 60",
         nativeQuery = true,
     )
     fun findLastSixtyArchived(): List<BeaconMalfunctionEntity>
 
-    @Query(value = "SELECT * FROM beacon_malfunctions where stage <> 'ARCHIVED'", nativeQuery = true)
+    @Query(
+        value = "SELECT * FROM beacon_malfunctions WHERE stage <> 'ARCHIVED' AND beacon_malfunction_initial_location = 'AT_SEA'",
+        nativeQuery = true,
+    )
     fun findAllExceptArchived(): List<BeaconMalfunctionEntity>
+
+    @Query(
+        value = "SELECT * FROM beacon_malfunctions WHERE beacon_malfunction_initial_location = 'AT_SEA'",
+        nativeQuery = true,
+    )
+    fun findAllAtSea(): List<BeaconMalfunctionEntity>
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value =
-            "UPDATE beacon_malfunctions " +
-                "SET vessel_status = CAST(:vesselStatus AS beacon_malfunctions_vessel_status), " +
-                "vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
+        value = "UPDATE beacon_malfunctions SET vessel_status = CAST(:vesselStatus AS beacon_malfunctions_vessel_status), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
         nativeQuery = true,
     )
     fun updateVesselStatus(
@@ -35,9 +39,7 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value =
-            "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), " +
-                "vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
+        value = "UPDATE beacon_malfunctions SET stage = CAST(:stage AS beacon_malfunctions_stage), vessel_status_last_modification_date_utc = :updateDateTime WHERE id = :beaconMalfunctionId",
         nativeQuery = true,
     )
     fun updateStage(
@@ -64,9 +66,7 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     )
 
     @Query(
-        value =
-            "SELECT * FROM beacon_malfunctions WHERE vessel_id = :vesselId " +
-                "AND malfunction_start_date_utc >= :afterDateTime",
+        value = "SELECT * FROM beacon_malfunctions WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime AND beacon_malfunction_initial_location = 'AT_SEA'",
         nativeQuery = true,
     )
     fun findAllByVesselIdEqualsAfterDateTime(

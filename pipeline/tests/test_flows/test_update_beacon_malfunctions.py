@@ -392,16 +392,14 @@ def test_get_ended_malfunction_ids():
     malfunction_datetime_utc_threshold_at_sea = d - 6 * td
 
     (
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) = get_ended_malfunction_ids(
         last_emissions, known_malfunctions, malfunction_datetime_utc_threshold_at_sea
     )
 
-    assert ids_not_at_port_restarted_emitting == [3, 6]
-    assert ids_at_port_restarted_emitting == [4, 7]
+    assert ids_restarted_emitting == [3, 4, 6, 7]
     assert ids_not_required_to_emit == [1]
     assert ids_unsupervised_restarted_emitting == [5]
 
@@ -499,6 +497,12 @@ def test_prepare_new_beacon_malfunctions():
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.UNSUPERVISED.value,
+            ],
+            "beacon_malfunction_initial_location": [
+                "AT_PORT",
+                "AT_SEA",
+                "AT_SEA",
+                "AT_SEA",
             ],
         }
     ).astype({"vessel_status_last_modification_date_utc": "datetime64[us]"})
@@ -637,6 +641,16 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 BeaconStatus.UNSUPERVISED.value,
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.UNSUPERVISED.value,
+            ],
+            "beacon_malfunction_initial_location": [
+                "AT_PORT",
+                "AT_SEA",
+                "AT_SEA",
+                "AT_SEA",
+                "AT_PORT",
+                "AT_SEA",
+                "AT_SEA",
+                "AT_SEA",
             ],
         }
     )
@@ -823,7 +837,6 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
         _,
         _,
         _,
-        _,
     ) = state.result()
     assert len(new_malfunctions) == 0
     assert len(final_beacons_malfunctions) == len(initial_beacons_malfunctions)
@@ -858,8 +871,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
 
     (
         new_malfunctions,
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) = state.result()
@@ -867,13 +879,11 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     assert len(new_malfunctions) == 0
 
     assert (
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) == (
         [beacon_malfunction_id_to_move_to_archived_and_notify],
-        [],
         [beacon_malfunction_id_to_archive],
         [],
     )
@@ -942,8 +952,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
 
     (
         new_malfunctions,
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) = state.result()

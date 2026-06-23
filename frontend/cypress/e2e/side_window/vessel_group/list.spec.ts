@@ -12,6 +12,24 @@ context('Side Window > Vessel Group List', () => {
     cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
 
     /**
+     * Priority groups (P1/P2) are displayed first in their own section, P1 before P2,
+     * and the "Groupes de cibles prioritaires" checkbox keeps only the priority groups
+     */
+    cy.contains('Groupes prioritaires').should('exist')
+    cy.getDataCy('priority-vessels-groups').within(() => {
+      cy.getDataCy('vessel-group-row').eq(0).contains('Segments P1')
+      cy.getDataCy('vessel-group-row').eq(1).contains('Segments P2')
+      cy.getDataCy('vessel-group-priority-icon').should('have.length', 2)
+      cy.getDataCy('vessel-group-priority-tag').first().contains('Cibles prioritaires')
+    })
+
+    cy.get('[title="Groupes de cibles prioritaires"]').click()
+    cy.getDataCy('priority-vessels-groups').should('exist')
+    cy.getDataCy('unpinned-vessels-groups').should('not.exist')
+    cy.get('[title="Groupes de cibles prioritaires"]').click()
+    cy.getDataCy('unpinned-vessels-groups').children().should('have.length', 3)
+
+    /**
      * Filter by expired
      */
 

@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 import org.slf4j.LoggerFactory
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime
 @UseCase
 class GetLogbookMessages(
     private val logbookReportRepository: LogbookReportRepository,
+    private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val gearRepository: GearRepository,
     private val speciesRepository: SpeciesRepository,
     private val portRepository: PortRepository,
@@ -34,13 +36,22 @@ class GetLogbookMessages(
     ): List<LogbookMessage> {
         val referenceData = loadReferenceData()
 
-        val allMessages =
+        val logbookMessages =
             fetchAndPrepareMessages(
                 internalReferenceNumber,
                 firstOperationDateTime,
                 lastOperationDateTime,
                 tripNumber,
             )
+
+        val manualPriorNotificationMessages =
+            manualPriorNotificationRepository
+                .findAllByCfrAndTripNumber(
+                    cfr = internalReferenceNumber,
+                    tripNumber = tripNumber,
+                ).map { it.logbookMessageAndValue.logbookMessage }
+
+        val allMessages = (logbookMessages + manualPriorNotificationMessages).sortedBy { it.reportDateTime }
 
         enrichMessages(allMessages, referenceData)
 

@@ -13,8 +13,11 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyLogbookMessag
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getDummyRETLogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getTrip9463715LogbookMessages
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
+import fr.gouv.cnsp.monitorfish.fakers.LogbookMessageFaker
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
+import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -40,6 +43,15 @@ class GetLogbookMessagesUTests {
 
     @MockitoBean
     private lateinit var logbookRawMessageRepository: LogbookRawMessageRepository
+
+    @MockitoBean
+    private lateinit var manualPriorNotificationRepository: ManualPriorNotificationRepository
+
+    @BeforeEach
+    fun setUp() {
+        // By default no manual prior notification is attached to the trip
+        given(manualPriorNotificationRepository.findAllByCfrAndTripNumber(any(), any())).willReturn(emptyList())
+    }
 
     @Test
     fun `execute Should return an ordered list of last ERS messages with the codes' names`() {
@@ -74,6 +86,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -171,6 +184,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -208,6 +222,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -283,6 +298,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -311,6 +327,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -365,6 +382,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -391,6 +409,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -422,6 +441,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -486,6 +506,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -545,6 +566,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -596,6 +618,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -630,6 +653,7 @@ class GetLogbookMessagesUTests {
         val ersMessages =
             GetLogbookMessages(
                 logbookReportRepository,
+                manualPriorNotificationRepository,
                 gearRepository,
                 speciesRepository,
                 portRepository,
@@ -739,5 +763,78 @@ class GetLogbookMessagesUTests {
         assertThat(cps.catches).hasSize(2)
         assertThat(cps.catches[0].species).isEqualTo("DCO")
         assertThat(cps.catches[0].ring).isEqualTo("1234567")
+    }
+
+    @Test
+    fun `execute Should append the manual prior notification belonging to the trip and enrich it`() {
+        // Given
+        // A regular trip (6 messages)
+        given(
+            logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any()),
+        ).willReturn(
+            getDummyLogbookMessages(),
+        )
+        given(logbookRawMessageRepository.findRawMessage(any())).willReturn("<xml>DUMMY XML MESSAGE</xml>")
+        given(gearRepository.findAll()).willReturn(emptyList())
+        given(portRepository.findAll()).willReturn(
+            listOf(PortFaker.fakePort(locode = "FRABC", name = "Fake Port FRABC")),
+        )
+        given(speciesRepository.findAll()).willReturn(
+            listOf(Species(code = "HKE", name = "MERLU D'EUROPE", scipSpeciesType = ScipSpeciesType.DEMERSAL)),
+        )
+
+        // A manual prior notification created for the same vessel & trip (e.g. to replace an invalidated PNO)
+        val manualPriorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                reportId = "MANUAL_PNO_REPORT_ID",
+                isManuallyCreated = true,
+                logbookMessageAndValue =
+                    LogbookMessageAndValue(
+                        clazz = PNO::class.java,
+                        logbookMessage =
+                            LogbookMessageFaker.fakePnoLogbookMessage(
+                                reportId = "MANUAL_PNO_REPORT_ID",
+                                internalReferenceNumber = "FR224226850",
+                                tripNumber = "345",
+                                messageType = "PNO",
+                                operationType = LogbookOperationType.DAT,
+                                transmissionFormat = LogbookTransmissionFormat.MANUAL,
+                                reportDateTime = ZonedDateTime.now(),
+                                isEnriched = false,
+                            ),
+                    ),
+            )
+        given(manualPriorNotificationRepository.findAllByCfrAndTripNumber(any(), any()))
+            .willReturn(listOf(manualPriorNotification))
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute(
+                internalReferenceNumber = "FR224226850",
+                firstOperationDateTime = ZonedDateTime.now().minusMinutes(5),
+                lastOperationDateTime = ZonedDateTime.now(),
+                tripNumber = "345",
+            )
+
+        // Then
+        // The 6 trip messages + the manual prior notification
+        assertThat(ersMessages).hasSize(7)
+
+        val manualMessage = ersMessages.single { it.reportId == "MANUAL_PNO_REPORT_ID" }
+        assertThat(manualMessage.transmissionFormat).isEqualTo(LogbookTransmissionFormat.MANUAL)
+        assertThat(manualMessage.message).isInstanceOf(PNO::class.java)
+
+        // It has been enriched along with the rest of the trip
+        val manualPno = manualMessage.message as PNO
+        assertThat(manualPno.portName).isEqualTo("Fake Port FRABC")
+        assertThat(manualPno.catchOnboard[0].species).isEqualTo("HKE")
+        assertThat(manualPno.catchOnboard[0].speciesName).isEqualTo("MERLU D'EUROPE")
     }
 }

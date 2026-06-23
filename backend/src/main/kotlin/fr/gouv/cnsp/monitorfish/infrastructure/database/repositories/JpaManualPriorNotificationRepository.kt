@@ -72,6 +72,14 @@ class JpaManualPriorNotificationRepository(
     override fun findByReportId(reportId: String): PriorNotification? =
         dbManualPriorNotificationRepository.findByReportId(reportId)?.toPriorNotification(mapper)
 
+    override fun findAllByCfrAndTripNumber(
+        cfr: String,
+        tripNumber: String,
+    ): List<PriorNotification> =
+        dbManualPriorNotificationRepository.findAllByCfrAndTripNumber(cfr = cfr, tripNumber = tripNumber).map {
+            it.toPriorNotification(mapper)
+        }
+
     @Transactional
     @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {

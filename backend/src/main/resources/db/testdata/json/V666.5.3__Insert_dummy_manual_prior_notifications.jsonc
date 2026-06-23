@@ -30,6 +30,7 @@
                     }
                 ],
                 "vessel_name": "POISSON PAS NET",
+                "trip_number": "20210001",
                 "value:jsonb": {
                     "updatedAt:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 minutes', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "authorTrigram": "BOB",

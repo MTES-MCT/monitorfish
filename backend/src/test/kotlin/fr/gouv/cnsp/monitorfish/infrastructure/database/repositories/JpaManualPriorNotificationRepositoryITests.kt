@@ -546,6 +546,47 @@ class JpaManualPriorNotificationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllByCfrAndTripNumber Should return the manual prior notification created for that vessel trip`() {
+        // Given
+        // A manual prior notification was created (e.g. to replace an invalidated logbook PNO) and
+        // stamped with the trip number "20210001" of the vessel CFR112.
+        val cfr = "CFR112"
+        val tripNumber = "20210001"
+
+        // When
+        val result = jpaManualPriorNotificationRepository.findAllByCfrAndTripNumber(cfr, tripNumber)
+
+        // Then
+        assertThat(result).hasSize(1)
+        assertThat(result.first().reportId).isEqualTo("00000000-0000-4000-0000-000000000001")
+        assertThat(
+            result
+                .first()
+                .logbookMessageAndValue.logbookMessage.tripNumber,
+        ).isEqualTo(tripNumber)
+        assertThat(
+            result
+                .first()
+                .logbookMessageAndValue.logbookMessage.internalReferenceNumber,
+        ).isEqualTo(cfr)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllByCfrAndTripNumber Should return nothing When the trip number or cfr does not match`() {
+        // When
+        // Unknown trip number for the right vessel
+        val unknownTripResult = jpaManualPriorNotificationRepository.findAllByCfrAndTripNumber("CFR112", "UNKNOWN_TRIP")
+        // Existing trip number but for another vessel
+        val otherVesselResult = jpaManualPriorNotificationRepository.findAllByCfrAndTripNumber("CFR115", "20210001")
+
+        // Then
+        assertThat(unknownTripResult).isEmpty()
+        assertThat(otherVesselResult).isEmpty()
+    }
+
+    @Test
+    @Transactional
     fun `save Should create and update a manual prior notification`() {
         val originalPriorNotificationsSize =
             jpaManualPriorNotificationRepository

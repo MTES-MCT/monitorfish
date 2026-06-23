@@ -51,12 +51,12 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
 
                     -- Is zero
                     AND (
-                        :isZero IS NULL 
+                        :isZero IS NULL
                         OR (
                             :isZero = (
-                                EXISTS (SELECT 1 FROM jsonb_array_elements(mpn.value->'catchOnboard')) 
+                                EXISTS (SELECT 1 FROM jsonb_array_elements(mpn.value->'catchOnboard'))
                                 AND NOT EXISTS (
-                                    SELECT 1 
+                                    SELECT 1
                                     FROM jsonb_array_elements(mpn.value->'catchOnboard') AS catchOnboard
                                     WHERE COALESCE((catchOnboard->>'weight')::DOUBLE PRECISION, 0) != 0
                                 )
@@ -150,6 +150,21 @@ interface DBManualPriorNotificationRepository : JpaRepository<ManualPriorNotific
         nativeQuery = true,
     )
     fun findByReportId(reportId: String): ManualPriorNotificationEntity?
+
+    @Query(
+        """
+        SELECT *
+        FROM manual_prior_notifications
+        WHERE
+            cfr = :cfr AND
+            trip_number = :tripNumber
+        """,
+        nativeQuery = true,
+    )
+    fun findAllByCfrAndTripNumber(
+        cfr: String,
+        tripNumber: String,
+    ): List<ManualPriorNotificationEntity>
 
     fun save(entity: ManualPriorNotificationEntity): ManualPriorNotificationEntity
 }

@@ -301,6 +301,7 @@ export function getPriorNotificationFakeResponse({
         purpose: PriorNotification.PurposeCode.LAN,
         sentAt: updatedAt,
         tripGearCodes: ['OTT'],
+        tripNumber: null,
         vesselIdentity: {
           beaconNumber: null,
           districtCode: null,

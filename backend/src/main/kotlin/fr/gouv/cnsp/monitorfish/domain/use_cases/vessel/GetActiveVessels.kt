@@ -84,13 +84,17 @@ class GetActiveVessels(
                     }
 
                 val foundVesselGroups =
-                    vesselGroups.filter { vesselGroup ->
-                        when (vesselGroup) {
-                            is DynamicVesselGroup -> vesselGroup.containsActiveVessel(activeVessel, now)
-                            is FixedVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
-                            is PriorityVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
+                    vesselGroups
+                        .filter { vesselGroup ->
+                            when (vesselGroup) {
+                                is DynamicVesselGroup -> vesselGroup.containsActiveVessel(activeVessel, now)
+                                is FixedVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
+                                is PriorityVesselGroup -> vesselGroup.containsActiveVessel(activeVessel)
+                            }
                         }
-                    }
+                        // Priority groups must be returned first so that they are displayed first
+                        // (vessel label icons and layer group color)
+                        .sortedByDescending { it.isPriorityGroup }
 
                 EnrichedActiveVessel(
                     lastPosition = activeVessel.lastPosition,

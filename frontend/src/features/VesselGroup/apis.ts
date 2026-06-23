@@ -7,7 +7,7 @@ import {
   DynamicVesselGroupSchema,
   type FixedVesselGroup,
   FixedVesselGroupSchema,
-  HardcodedVesselGroupSchema,
+  HardcodedPriorityVesselGroupSchema,
   type VesselGroup,
   type VesselGroupWithVessels
 } from '@features/VesselGroup/types'
@@ -69,7 +69,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
         orderBy(
           parseOrReturn<VesselGroup>(
             baseQueryReturnValue,
-            z.union([DynamicVesselGroupSchema, FixedVesselGroupSchema, HardcodedVesselGroupSchema]),
+            z.union([DynamicVesselGroupSchema, FixedVesselGroupSchema, HardcodedPriorityVesselGroupSchema]),
             true
           ),
           vesselGroup => vesselGroup.id,

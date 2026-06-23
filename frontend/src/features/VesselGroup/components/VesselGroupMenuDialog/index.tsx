@@ -13,7 +13,7 @@ import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hid
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Dropdown, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, Dropdown, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -22,8 +22,7 @@ import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMa
 
 const GROUP_TYPE_OPTIONS = [
   { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
-  { label: 'Groupes fixes', value: GroupType.FIXED },
-  { label: 'Groupes CNSP', value: GroupType.HARDCODED }
+  { label: 'Groupes fixes', value: GroupType.FIXED }
 ]
 
 const SHARING_OPTIONS = [
@@ -42,9 +41,13 @@ export function VesselGroupMenuDialog() {
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
-  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
+  const { filteredGroupType, filteredPriority, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
 
-  const { pinnedVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(filteredGroupType, filteredSharing)
+  const { pinnedVesselGroups, priorityVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(
+    filteredGroupType,
+    filteredSharing,
+    filteredPriority
+  )
   const orderedVesselGroups = pinnedVesselGroups.concat(unpinnedVesselGroups)
 
   const updateGroupType = (nextGroupType: GroupType | undefined) => {
@@ -54,6 +57,11 @@ export function VesselGroupMenuDialog() {
 
   const updateSharing = (nextSharing: Sharing | undefined) => {
     dispatch(vesselGroupActions.setFilteredSharing(nextSharing))
+    dispatch(renderVesselFeatures())
+  }
+
+  const updateFilteredPriority = (nextPriority: boolean | undefined) => {
+    dispatch(vesselGroupActions.setFilteredPriority(!!nextPriority))
     dispatch(renderVesselFeatures())
   }
 
@@ -91,7 +99,7 @@ export function VesselGroupMenuDialog() {
               name="groupType"
               onChange={value => updateGroupType(value as GroupType | undefined)}
               options={GROUP_TYPE_OPTIONS}
-              placeholder="Tous les types de groupes"
+              placeholder="Groupes dynamiques et fixes"
               value={filteredGroupType}
             />
           </FilterRow>
@@ -109,11 +117,27 @@ export function VesselGroupMenuDialog() {
               />
             </FilterRow>
           )}
+          <FilterRow>
+            <Checkbox
+              checked={filteredPriority}
+              label="Afficher uniquement les groupes prioritaires"
+              name="priority"
+              onChange={updateFilteredPriority}
+              title="Afficher uniquement les groupes prioritaires"
+            />
+          </FilterRow>
           <VesselGroupList data-cy="vessel-groups-list">
+            {priorityVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
+              <VesselGroupRow
+                key={vesselGroup.id}
+                isLast={index === priorityVesselGroups.length - 1}
+                vesselGroup={vesselGroup}
+              />
+            ))}
             {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
                 key={vesselGroup.id}
-                isLastPinned={vesselGroupsIdsPinned.length === index + 1}
+                isLast={vesselGroupsIdsPinned.length === index + 1}
                 vesselGroup={vesselGroup}
               />
             ))}
@@ -160,6 +184,10 @@ const Title = styled(MapMenuDialog.Title)`
 
 const FilterRow = styled.div`
   padding: 0 16px 8px;
+
+  .Field-Checkbox {
+    margin-top: 8px;
+  }
 
   .rs-picker-select {
     border: 1px solid ${p => p.theme.color.lightGray};

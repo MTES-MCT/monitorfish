@@ -1,6 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Bold } from '@components/style'
-import { Square } from '@features/Regulation/components/ZonePreview'
 import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { FilterTags } from '@features/Vessel/components/VesselList/FilterTags'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
@@ -9,6 +8,7 @@ import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
@@ -22,20 +22,22 @@ import styled from 'styled-components'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { setDisplayedComponents } from '../../../../domain/shared_slices/DisplayedComponent'
+import { MONITORFISH_THEME } from '../../../../ui/theme'
 import { getDate } from '../../../../utils'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type VesselGroupRowProps = {
-  isLastPinned: boolean
+  isLast: boolean
   vesselGroup: VesselGroup
 }
-export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProps) {
+export function VesselGroupRow({ isLast, vesselGroup }: VesselGroupRowProps) {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const userAccount = useContext(UserAccountContext)
   const isHardcoded = vesselGroup.type === GroupType.HARDCODED
+  const isPriority = isPriorityGroup(vesselGroup)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
@@ -63,7 +65,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const togglePinGroup = async event => {
     event.stopPropagation()
-    if (isHardcoded) {
+    if (isPriority) {
       return
     }
 
@@ -78,9 +80,6 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const hideGroup = async event => {
     event.stopPropagation()
-    if (isHardcoded) {
-      return
-    }
 
     trackEvent({
       action: "Masquage d' un groupe de navires depuis la cartographie",
@@ -93,10 +92,6 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const showGroup = async event => {
     event.stopPropagation()
-
-    if (isHardcoded) {
-      return
-    }
 
     trackEvent({
       action: "Affichage d' un groupe de navires depuis la cartographie",
@@ -143,14 +138,22 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   return (
     <>
-      <Wrapper $isLastPinned={isLastPinned} $isPinned={isPinned} title={vesselGroup?.name}>
+      <Wrapper $isLast={isLast} $isPriorityGroup={isPriority} data-cy="vessel-group-row" title={vesselGroup?.name}>
         <Row onClick={() => setIsOpen(!isOpen)}>
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
-          <Square $fillColor={vesselGroup.color} $strokeColor={THEME.color.lightGray} />
+          {isPriority ? (
+            <PriorityIcon data-cy="vessel-group-priority-icon">
+              <Icon.Priority color={vesselGroup.color} size={16} />
+            </PriorityIcon>
+          ) : (
+            <PriorityIcon>
+              <Icon.CircleFilled color={vesselGroup.color} size={14} />
+            </PriorityIcon>
+          )}
           <GroupTitle>{vesselGroup.name}</GroupTitle>
           <ValidityText>{isInFuture ? ' – À venir' : ''}</ValidityText>
           <RowIcons>
-            {!isHardcoded && (
+            {!isPriority && (
               <IconButton
                 accent={Accent.TERTIARY}
                 aria-label="Sélectionner"
@@ -160,50 +163,49 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
                 title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroup.name}"`}
               />
             )}
-            {!isHardcoded &&
-              (isDisplayed ? (
-                <IconButton
-                  accent={Accent.TERTIARY}
-                  Icon={Icon.Display}
-                  iconSize={20}
-                  onClick={hideGroup}
-                  title={`Cacher le groupe "${vesselGroup.name}"`}
-                />
-              ) : (
-                <IconButton
-                  accent={Accent.TERTIARY}
-                  color={THEME.color.lightGray}
-                  Icon={Icon.Hide}
-                  iconSize={20}
-                  onClick={showGroup}
-                  title={`Afficher le groupe "${vesselGroup.name}"`}
-                />
-              ))}
+            {isDisplayed ? (
+              <IconButton
+                accent={Accent.TERTIARY}
+                Icon={Icon.Display}
+                iconSize={20}
+                onClick={hideGroup}
+                title={`Cacher le groupe "${vesselGroup.name}"`}
+              />
+            ) : (
+              <IconButton
+                accent={Accent.TERTIARY}
+                color={THEME.color.lightGray}
+                Icon={Icon.Hide}
+                iconSize={20}
+                onClick={showGroup}
+                title={`Afficher le groupe "${vesselGroup.name}"`}
+              />
+            )}
           </RowIcons>
         </Row>
         {isOpen && (
           <OpenedGroup>
             <GroupInformation>
               {description && <Description>{description}</Description>}
-              {vesselGroup.type === GroupType.DYNAMIC && (
-                <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
+              {isPriority && <StyledTag borderColor={MONITORFISH_THEME.color.crimsonCarrot}>Cibles prio.</StyledTag>}
+              {(isHardcoded || vesselGroup.type === GroupType.DYNAMIC) && (
+                <StyledTag borderColor={THEME.color.slateGray}>G. dynamique</StyledTag>
               )}
               {vesselGroup.type === GroupType.FIXED && (
-                <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
+                <StyledTag borderColor={THEME.color.slateGray}>G. fixe</StyledTag>
               )}
-              {isHardcoded && <StyledTag borderColor={THEME.color.slateGray}>Groupe CNSP</StyledTag>}
-              {!isHardcoded && vesselGroup.sharing === Sharing.PRIVATE && (
+              {vesselGroup.sharing === Sharing.PRIVATE && (
                 <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
-                  Groupe personnel
+                  G. personnel
                 </StyledTag>
               )}
-              {!isHardcoded && vesselGroup.sharing === Sharing.SHARED && (
+              {vesselGroup.sharing === Sharing.SHARED && (
                 <StyledTag
                   backgroundColor={THEME.color.goldenPoppy25}
                   borderColor={THEME.color.goldenPoppyBorder}
                   title={vesselGroup.sharedTo?.map(shared => CNSP_SERVICE_LABEL[shared])?.join(', ')}
                 >
-                  Groupe partagé
+                  G. partagé
                 </StyledTag>
               )}
               {vesselGroup.type === GroupType.DYNAMIC && (
@@ -223,24 +225,22 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
               )}
             </GroupInformation>
             <OpenedGroupIcons>
-              {!isHardcoded && (
-                <IconButton
-                  accent={Accent.TERTIARY}
-                  Icon={Icon.Edit}
-                  iconSize={20}
-                  onClick={handleEditVesselGroup}
-                  title={`Modifier le groupe "${vesselGroup.name}"`}
-                />
-              )}
-              {!isHardcoded && (
-                <IconButton
-                  accent={Accent.TERTIARY}
-                  Icon={Icon.Delete}
-                  iconSize={20}
-                  onClick={() => setIsDeleteConfirmationModalOpen(true)}
-                  title={`Supprimer le groupe "${vesselGroup.name}"`}
-                />
-              )}
+              <IconButton
+                accent={Accent.TERTIARY}
+                disabled={isHardcoded}
+                Icon={Icon.Edit}
+                iconSize={20}
+                onClick={handleEditVesselGroup}
+                title={`Modifier le groupe "${vesselGroup.name}"`}
+              />
+              <IconButton
+                accent={Accent.TERTIARY}
+                disabled={isHardcoded}
+                Icon={Icon.Delete}
+                iconSize={20}
+                onClick={() => setIsDeleteConfirmationModalOpen(true)}
+                title={`Supprimer le groupe "${vesselGroup.name}"`}
+              />
               <IconButton
                 accent={Accent.TERTIARY}
                 Icon={Icon.Download}
@@ -296,6 +296,13 @@ const StyledFilterTags = styled(FilterTags)`
 
 const StyledTag = styled(Tag)`
   margin-right: 8px;
+`
+
+const PriorityIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  flex-shrink: 0;
 `
 
 const Description = styled(ReactMarkdown)`
@@ -375,11 +382,11 @@ const ChevronIcon = styled(Icon.Chevron)<{
 `
 
 const Wrapper = styled.li<{
-  $isLastPinned: boolean
-  $isPinned: boolean
+  $isLast: boolean
+  $isPriorityGroup: boolean
 }>`
   list-style-type: none;
   margin: 0;
-  border-bottom: ${p => (p.$isLastPinned ? 2 : 1)}px solid ${p => p.theme.color.lightGray};
-  background: ${p => (p.$isPinned ? p.theme.color.cultured : 'unset')};
+  border-bottom: ${p => (p.$isLast ? 2 : 1)}px solid ${p => p.theme.color.lightGray};
+  background: ${p => (p.$isPriorityGroup ? p.theme.color.cultured : 'unset')};
 `

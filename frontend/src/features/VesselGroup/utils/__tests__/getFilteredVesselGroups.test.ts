@@ -1,4 +1,4 @@
-import { GroupType, type HardcodedVesselGroup, Sharing, type VesselGroup } from '@features/VesselGroup/types'
+import { GroupType, type HardcodedPriorityVesselGroup, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { getFilteredVesselGroups } from '@features/VesselGroup/utils/getFilteredVesselGroups'
 import { describe, expect, it } from '@jest/globals'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -11,6 +11,7 @@ const createMockVesselGroup = (overrides: Partial<VesselGroup> & { id: number })
     description: undefined,
     endOfValidityUtc: undefined,
     isDeleted: false,
+    isPriorityGroup: false,
     name: `Vessel Group ${overrides.id}`,
     pointsOfAttention: undefined,
     sharedTo: undefined,
@@ -22,7 +23,9 @@ const createMockVesselGroup = (overrides: Partial<VesselGroup> & { id: number })
     ...overrides
   }) as VesselGroup
 
-const createMockHardcodedVesselGroup = (overrides: Partial<HardcodedVesselGroup> & { name: string }): VesselGroup =>
+const createMockHardcodedVesselGroup = (
+  overrides: Partial<HardcodedPriorityVesselGroup> & { name: string }
+): VesselGroup =>
   ({
     color: '#E1000F',
     createdAtUtc: '2024-01-01T00:00:00Z',
@@ -31,6 +34,7 @@ const createMockHardcodedVesselGroup = (overrides: Partial<HardcodedVesselGroup>
     endOfValidityUtc: null,
     id: null,
     isDeleted: false,
+    isPriorityGroup: true,
     pointsOfAttention: null,
     priorityLevel: 4,
     sharedTo: null,
@@ -45,13 +49,13 @@ describe('getFilteredVesselGroups', () => {
   it('should return empty arrays when vesselGroups is undefined', () => {
     const result = getFilteredVesselGroups(undefined, undefined, undefined, [])
 
-    expect(result).toEqual({ pinnedVesselGroups: [], unpinnedVesselGroups: [] })
+    expect(result).toEqual({ pinnedVesselGroups: [], priorityVesselGroups: [], unpinnedVesselGroups: [] })
   })
 
   it('should return empty arrays when vesselGroups is an empty array', () => {
     const result = getFilteredVesselGroups([], undefined, undefined, [])
 
-    expect(result).toEqual({ pinnedVesselGroups: [], unpinnedVesselGroups: [] })
+    expect(result).toEqual({ pinnedVesselGroups: [], priorityVesselGroups: [], unpinnedVesselGroups: [] })
   })
 
   it('should return all groups as unpinned when no filters and no pinned IDs', () => {
@@ -151,20 +155,48 @@ describe('getFilteredVesselGroups', () => {
 
     const result = getFilteredVesselGroups(vesselGroups, GroupType.HARDCODED, undefined, [])
 
-    expect(result.unpinnedVesselGroups).toHaveLength(2)
-    expect(result.unpinnedVesselGroups.map(g => g.type)).toEqual([GroupType.HARDCODED, GroupType.HARDCODED])
+    expect(result.priorityVesselGroups).toHaveLength(2)
+    expect(result.priorityVesselGroups.map(g => g.type)).toEqual([GroupType.HARDCODED, GroupType.HARDCODED])
+    expect(result.unpinnedVesselGroups).toHaveLength(0)
   })
 
-  it('should always place HARDCODED groups in unpinned regardless of pinned IDs', () => {
+  it('should always place HARDCODED groups in the priority list regardless of pinned IDs', () => {
     const hardcodedGroup = createMockHardcodedVesselGroup({ name: 'Segments P1' })
     const vesselGroups = [createMockVesselGroup({ id: 1 }), hardcodedGroup]
 
-    // Even with a null in the pinned IDs array (which wouldn't normally happen), HARDCODED stays unpinned
     const result = getFilteredVesselGroups(vesselGroups, undefined, undefined, [1])
 
     expect(result.pinnedVesselGroups).toHaveLength(1)
     expect(result.pinnedVesselGroups[0]?.id).toBe(1)
-    expect(result.unpinnedVesselGroups).toHaveLength(1)
-    expect(result.unpinnedVesselGroups[0]?.type).toBe(GroupType.HARDCODED)
+    expect(result.priorityVesselGroups).toHaveLength(1)
+    expect(result.priorityVesselGroups[0]?.type).toBe(GroupType.HARDCODED)
+    expect(result.unpinnedVesselGroups).toHaveLength(0)
+  })
+
+  it('should sort priority groups by descending priorityLevel (P1 before P2)', () => {
+    const vesselGroups = [
+      createMockHardcodedVesselGroup({ name: 'Segments P2', priorityLevel: 3 }),
+      createMockHardcodedVesselGroup({ name: 'Segments P1', priorityLevel: 4 }),
+      createMockVesselGroup({ id: 1 })
+    ]
+
+    const result = getFilteredVesselGroups(vesselGroups, undefined, undefined, [])
+
+    expect(result.priorityVesselGroups.map(g => g.name)).toEqual(['Segments P1', 'Segments P2'])
+    expect(result.unpinnedVesselGroups.map(g => g.id)).toEqual([1])
+  })
+
+  it('should return only priority groups when filteredPriority is true', () => {
+    const vesselGroups = [
+      createMockVesselGroup({ id: 1 }),
+      createMockVesselGroup({ id: 2 }),
+      createMockHardcodedVesselGroup({ name: 'Segments P1', priorityLevel: 4 })
+    ]
+
+    const result = getFilteredVesselGroups(vesselGroups, undefined, undefined, [2], true)
+
+    expect(result.priorityVesselGroups).toHaveLength(1)
+    expect(result.pinnedVesselGroups).toHaveLength(0)
+    expect(result.unpinnedVesselGroups).toHaveLength(0)
   })
 })

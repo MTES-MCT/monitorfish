@@ -4,7 +4,6 @@ import { Circle, Icon, Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 
-import { theme } from '../../../../ui/theme'
 import { OpenLayersGeometryType } from '../../constants'
 
 import type { MultiPolygon } from 'ol/geom'
@@ -51,11 +50,11 @@ export const editStyle = new Style({
   },
   image: new Circle({
     fill: new Fill({
-      color: theme.color.white
+      color: THEME.color.white
     }),
     radius: 5,
     stroke: new Stroke({
-      color: theme.color.charcoal,
+      color: THEME.color.charcoal,
       width: 3
     })
   })

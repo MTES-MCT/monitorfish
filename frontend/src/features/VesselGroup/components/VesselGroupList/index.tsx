@@ -18,8 +18,7 @@ import { UserAccountContext } from '../../../../context/UserAccountContext'
 
 const GROUP_TYPE_OPTIONS = [
   { label: 'Groupes dynamiques', value: GroupType.DYNAMIC },
-  { label: 'Groupes fixes', value: GroupType.FIXED },
-  { label: 'Groupes CNSP', value: GroupType.HARDCODED }
+  { label: 'Groupes fixes', value: GroupType.FIXED }
 ]
 
 const SHARING_OPTIONS = [
@@ -36,7 +35,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const userAccount = useContext(UserAccountContext)
   const { filteredExpired } = useMainAppSelector(state => state.vesselGroupList)
-  const { filteredGroupType, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
+  const { filteredGroupType, filteredPriority, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
 
   useEffect(() => {
     trackEvent({
@@ -46,11 +45,8 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
     })
   }, [userAccount?.email])
 
-  const { isLoading, pinnedVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } = useGetVesselGroupsWithVessels(
-    filteredGroupType,
-    filteredSharing,
-    filteredExpired
-  )
+  const { isLoading, pinnedVesselGroupsWithVessels, priorityVesselGroupsWithVessels, unpinnedVesselGroupsWithVessels } =
+    useGetVesselGroupsWithVessels(filteredGroupType, filteredSharing, filteredExpired, filteredPriority)
 
   const toggleSetSearchQuery = (nextQuery: string | undefined) => {
     dispatch(vesselGroupListActions.setSearchQuery(nextQuery))
@@ -68,6 +64,10 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
 
   const updateExpiredGroups = (nextExpired: boolean | undefined) => {
     dispatch(vesselGroupListActions.setFilteredExpired(!!nextExpired))
+  }
+
+  const updateFilteredPriority = (nextPriority: boolean | undefined) => {
+    dispatch(vesselGroupActions.setFilteredPriority(!!nextPriority))
   }
 
   const areGroupsOpened = !!searchQuery && searchQuery.length > SEARCH_QUERY_MIN_LENGTH
@@ -93,12 +93,11 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             name="groupType"
             onChange={value => updateGroupType(value as GroupType | undefined)}
             options={GROUP_TYPE_OPTIONS}
-            placeholder="Tous les types de groupes"
+            placeholder="Groupes dynamiques et fixes"
             value={filteredGroupType}
           />
           {isSuperUser && (
             <>
-              <VerticalBar />
               <StyledSelect
                 isLabelHidden
                 label="Partage"
@@ -110,35 +109,52 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
               />
             </>
           )}
-          <>
-            <VerticalBar />
-            <StyledCheckbox
-              checked={filteredExpired}
-              label="Groupes expirés"
-              name="expired"
-              onChange={updateExpiredGroups}
-              title="Groupes expirés"
-            />
-          </>
+          <StyledCheckbox
+            checked={filteredPriority}
+            label="Groupes de cibles prioritaires"
+            name="priority"
+            onChange={updateFilteredPriority}
+            title="Groupes de cibles prioritaires"
+          />
+          <StyledCheckbox
+            checked={filteredExpired}
+            label="Groupes expirés"
+            name="expired"
+            onChange={updateExpiredGroups}
+            title="Groupes expirés"
+          />
         </Row>
-        {!isLoading && pinnedVesselGroupsWithVessels.length > 0 && (
-          <PinnedGroupsWrapper>
-            <PinnedGroupsTitle>Groupes épinglés</PinnedGroupsTitle>
-            <PinnedGroups data-cy="pinned-vessels-groups">
-              {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
+        {!isLoading && priorityVesselGroupsWithVessels.length > 0 && (
+          <PriorityGroupsWrapper>
+            <PriorityGroupsTitle>Groupes prioritaires</PriorityGroupsTitle>
+            <PriorityGroups data-cy="priority-vessels-groups">
+              {priorityVesselGroupsWithVessels.map(groupWithVessels => (
                 <VesselGroupRow
                   key={groupWithVessels.group.id}
                   isFromUrl={isFromUrl}
                   isOpened={areGroupsOpened}
-                  isPinned
+                  isPinned={false}
                   vesselGroupWithVessels={groupWithVessels}
                 />
               ))}
-            </PinnedGroups>
-          </PinnedGroupsWrapper>
+            </PriorityGroups>
+          </PriorityGroupsWrapper>
+        )}
+        {!isLoading && pinnedVesselGroupsWithVessels.length > 0 && (
+          <Groups $paddingTop={32} data-cy="pinned-vessels-groups">
+            {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
+              <VesselGroupRow
+                key={groupWithVessels.group.id}
+                isFromUrl={isFromUrl}
+                isOpened={areGroupsOpened}
+                isPinned
+                vesselGroupWithVessels={groupWithVessels}
+              />
+            ))}
+          </Groups>
         )}
         {!isLoading && unpinnedVesselGroupsWithVessels.length > 0 && (
-          <UnpinnedGroups data-cy="unpinned-vessels-groups">
+          <Groups $paddingTop={pinnedVesselGroupsWithVessels.length > 0 ? 0 : 32} data-cy="unpinned-vessels-groups">
             {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow
                 key={groupWithVessels.group.id}
@@ -148,12 +164,14 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
                 vesselGroupWithVessels={groupWithVessels}
               />
             ))}
-          </UnpinnedGroups>
+          </Groups>
         )}
         {isLoading && <StyledLoader color={THEME.color.slateGray} size={40} />}
-        {pinnedVesselGroupsWithVessels.length + unpinnedVesselGroupsWithVessels.length === 0 && !isLoading && (
-          <NoGroup>Aucun groupe.</NoGroup>
-        )}
+        {priorityVesselGroupsWithVessels.length +
+          pinnedVesselGroupsWithVessels.length +
+          unpinnedVesselGroupsWithVessels.length ===
+          0 &&
+          !isLoading && <NoGroup>Aucun groupe.</NoGroup>}
       </StyledBody>
     </>
   )
@@ -195,37 +213,31 @@ const Row = styled.div`
   }
 `
 
-const VerticalBar = styled.span`
-  background: ${p => p.theme.color.lightGray};
-  height: 20px;
-  width: 2px;
-  margin-bottom: 16px;
-  margin-left: 16px;
-`
-
 const StyledBody = styled(Body)`
   padding: 34px 0 0;
 `
 
-const PinnedGroups = styled.ul`
+const PriorityGroups = styled.ul`
   padding: 0;
 `
 
-const UnpinnedGroups = styled.ul`
-  padding: 32px 32px 16px 32px;
+const Groups = styled.ul<{
+  $paddingTop: number
+}>`
+  padding: ${p => p.$paddingTop}px 32px 0 32px;
 `
 
-const PinnedGroupsWrapper = styled.div`
+const PriorityGroupsWrapper = styled.div`
   padding: 16px 32px 16px 32px;
   border-bottom: 2px solid ${p => p.theme.color.gainsboro};
   border-top: 2px solid ${p => p.theme.color.gainsboro};
   background: ${p => p.theme.color.cultured};
 `
 
-const PinnedGroupsTitle = styled.span`
+const PriorityGroupsTitle = styled.span`
   font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 16px;
+  font-weight: 700;
+  margin-bottom: 32px;
   display: inline-block;
   color: ${p => p.theme.color.slateGray};
 `

@@ -103,9 +103,19 @@ export function VesselLabelContent({
                 </Label>
                 {groupsDisplayed.length > 0 && (
                   <VesselGroups>
-                    {groupsDisplayed.map(vesselGroup => (
-                      <VesselGroup key={vesselGroup.id} $color={vesselGroup.color} title={vesselGroup.name} />
-                    ))}
+                    {groupsDisplayed.map(vesselGroup => {
+                      const GroupIcon = vesselGroup.isPriorityGroup ? Icon.PrioritySmall : Icon.CircleFilled
+
+                      return (
+                        <GroupIcon
+                          key={vesselGroup.id}
+                          color={vesselGroup.color}
+                          data-cy="vessel-label-group"
+                          size={vesselGroup.isPriorityGroup ? 14 : 12}
+                          title={vesselGroup.name}
+                        />
+                      )
+                    })}
                   </VesselGroups>
                 )}
               </ZoneText>
@@ -171,10 +181,12 @@ const Label = styled.span<{
   $isRecentSegment: boolean
   $isSegment: boolean
 }>`
-  margin-top: 1px;
-  height: 16px;
   display: inline-block;
   line-height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1px;
 
   ${p => {
     if (p.$isSegment && p.$isRecentSegment) {
@@ -208,23 +220,17 @@ const UnderCharter = styled.span<{
 `
 
 const VesselGroups = styled.span`
-  margin-left: 2px;
-`
-
-const VesselGroup = styled.span<{
-  $color?: string
-}>`
-  border-radius: 5px;
-  width: 10px;
-  height: 10px;
-  background: ${p => p.$color};
-  margin-left: 4px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
 `
 
 const Text = styled.div`
   background: ${p => p.theme.color.white};
   border-radius: 1px;
+  display: flex;
+  align-items: center;
 `
 
 const SubRiskText = styled.span`
@@ -298,18 +304,20 @@ const Flag = styled.img<{
   $rel?: 'preload'
 }>`
   height: 11px;
-  margin: 0 0 8px 4px;
+  margin-left: 4px;
+  flex-shrink: 0;
   user-select: none;
 `
 
 const ZoneText = styled.span<{
   $isLittle?: boolean
 }>`
-  margin-right: 4px;
-  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 4px;
   font-size: ${p => (p.$isLittle ? 8 : 11)}px;
   font-weight: 500;
-  display: inline-block;
   user-select: none;
   color: ${p => p.theme.color.gunMetal};
   line-height: 13px;
@@ -322,16 +330,14 @@ const RiskFactor = styled.span<{
 }>`
   width: 24px;
   height: 18px;
-  padding-top: 0;
-  padding-left: 6px;
-  padding-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
   font-weight: 500;
-  display: inline-block;
   user-select: none;
   color: ${p => p.theme.color.white};
   background: ${p => p.color};
-  line-height: 16px;
   cursor: pointer;
   border-radius: 1px;
   ${p => (p.$hasText ? 'border-bottom-left-radius: 0;' : null)}

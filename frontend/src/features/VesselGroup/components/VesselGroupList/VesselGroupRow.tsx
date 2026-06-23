@@ -1,6 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Bold } from '@components/style'
-import { Square } from '@features/Regulation/components/ZonePreview'
 import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
@@ -19,6 +18,7 @@ import {
 } from '@features/VesselGroup/types'
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
@@ -30,6 +30,7 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { MONITORFISH_THEME } from '../../../../ui/theme'
 import { getDate } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
@@ -47,6 +48,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   const dispatch = useMainAppDispatch()
 
   const isHardcoded = vesselGroupWithVessels.group.type === GroupType.HARDCODED
+  const isPriority = isPriorityGroup(vesselGroupWithVessels.group)
   const isOpenInStore = useMainAppSelector(state => {
     const { id } = vesselGroupWithVessels.group
 
@@ -156,7 +158,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
 
   return (
     <>
-      <Wrapper title={vesselGroupWithVessels.group.name}>
+      <Wrapper data-cy="vessel-group-row" title={vesselGroupWithVessels.group.name}>
         <Row onClick={toggleRow}>
           {!isHardcoded && (
             <IconButton
@@ -169,22 +171,34 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroupWithVessels.group.name}"`}
             />
           )}
-          <StyledSquare $fillColor={vesselGroupWithVessels.group.color} $strokeColor={THEME.color.lightGray} />
+          {isPriority ? (
+            <CircleWrapper data-cy="vessel-group-priority-icon">
+              <Icon.Priority color={vesselGroupWithVessels.group.color} size={16} />
+            </CircleWrapper>
+          ) : (
+            <CircleWrapper>
+              <Icon.CircleFilled color={vesselGroupWithVessels.group.color} size={16} />
+            </CircleWrapper>
+          )}
           {vesselGroupWithVessels.group.name}
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
-          {vesselGroupWithVessels.group.type === GroupType.DYNAMIC && (
+          {isPriority && (
+            <StyledTag borderColor={MONITORFISH_THEME.color.crimsonCarrot} data-cy="vessel-group-priority-tag">
+              Cibles prioritaires
+            </StyledTag>
+          )}
+          {(isHardcoded || vesselGroupWithVessels.group.type === GroupType.DYNAMIC) && (
             <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
           )}
           {vesselGroupWithVessels.group.type === GroupType.FIXED && (
             <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
           )}
-          {isHardcoded && <StyledTag borderColor={THEME.color.slateGray}>Groupe CNSP</StyledTag>}
           {!isHardcoded && vesselGroupWithVessels.group.sharing === Sharing.PRIVATE && (
             <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
               Groupe personnel
             </StyledTag>
           )}
-          {!isHardcoded && vesselGroupWithVessels.group.sharing === Sharing.SHARED && (
+          {vesselGroupWithVessels.group.sharing === Sharing.SHARED && (
             <StyledTag
               backgroundColor={THEME.color.goldenPoppy25}
               borderColor={THEME.color.goldenPoppyBorder}
@@ -215,30 +229,28 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               }}
               title={`Télécharger le groupe "${vesselGroupWithVessels.group.name}"`}
             />
-            {!isHardcoded && (
-              <IconButton
-                accent={Accent.TERTIARY}
-                Icon={Icon.Delete}
-                iconSize={20}
-                onClick={event => {
-                  event.stopPropagation()
-                  setIsDeleteConfirmationModalOpen(true)
-                }}
-                title={`Supprimer le groupe "${vesselGroupWithVessels.group.name}"`}
-              />
-            )}
-            {!isHardcoded && (
-              <IconButton
-                accent={Accent.TERTIARY}
-                Icon={Icon.Edit}
-                iconSize={20}
-                onClick={event => {
-                  event.stopPropagation()
-                  handleEditVesselGroup()
-                }}
-                title={`Modifier le groupe "${vesselGroupWithVessels.group.name}"`}
-              />
-            )}
+            <IconButton
+              accent={Accent.TERTIARY}
+              disabled={isHardcoded}
+              Icon={Icon.Delete}
+              iconSize={20}
+              onClick={event => {
+                event.stopPropagation()
+                setIsDeleteConfirmationModalOpen(true)
+              }}
+              title={`Supprimer le groupe "${vesselGroupWithVessels.group.name}"`}
+            />
+            <IconButton
+              accent={Accent.TERTIARY}
+              disabled={isHardcoded}
+              Icon={Icon.Edit}
+              iconSize={20}
+              onClick={event => {
+                event.stopPropagation()
+                handleEditVesselGroup()
+              }}
+              title={`Modifier le groupe "${vesselGroupWithVessels.group.name}"`}
+            />
           </RowIcons>
         </Row>
         {isOpen && (
@@ -331,8 +343,12 @@ const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   }
 `
 
-const StyledSquare = styled(Square)`
+const CircleWrapper = styled.span`
+  display: inline-flex;
+  align-items: center;
   margin-top: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
 `
 
 const StyledTag = styled(Tag)`

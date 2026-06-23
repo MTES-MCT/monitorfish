@@ -1,7 +1,6 @@
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { theme } from '../../../../../ui/theme'
 import { GreenCircle, RedCircle } from '../../../../commonStyles/Circle.style'
 import { InfoPoint } from '../../RegulationForm/InfoPoint'
 import { INFO_TEXT } from '../../RegulationTables/constants'
@@ -58,7 +57,7 @@ export function RegulatedGears({ authorized, hasMarginTop = false, regulatedGear
       )}
       {!authorized && derogation && (
         <Derogation>
-          <InfoPoint backgroundColor={theme.color.goldenPoppy} color={THEME.color.charcoal} margin="3px 0 0 0" />
+          <InfoPoint backgroundColor={THEME.color.goldenPoppy} color={THEME.color.charcoal} margin="3px 0 0 0" />
           <DerogationMessage>Mesures dérogatoire: consulter les références réglementaires</DerogationMessage>
         </Derogation>
       )}
@@ -70,7 +69,7 @@ const Wrapper = styled.div``
 
 const Derogation = styled.span`
   display: flex;
-  border: 1px solid ${theme.color.goldenPoppy};
+  border: 1px solid ${THEME.color.goldenPoppy};
   padding: 4px 15px 6px 8px;
 `
 

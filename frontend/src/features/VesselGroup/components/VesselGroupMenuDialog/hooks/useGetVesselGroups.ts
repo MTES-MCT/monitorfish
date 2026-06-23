@@ -3,9 +3,19 @@ import { GroupType, Sharing } from '@features/VesselGroup/types'
 import { getFilteredVesselGroups } from '@features/VesselGroup/utils/getFilteredVesselGroups'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
-export function useGetVesselGroups(filteredGroupType: GroupType | undefined, filteredSharing: Sharing | undefined) {
+export function useGetVesselGroups(
+  filteredGroupType: GroupType | undefined,
+  filteredSharing: Sharing | undefined,
+  filteredPriority: boolean
+) {
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const { data: vesselGroups } = useGetAllVesselGroupsQuery()
 
-  return getFilteredVesselGroups(vesselGroups, filteredGroupType, filteredSharing, vesselGroupsIdsPinned)
+  return getFilteredVesselGroups(
+    vesselGroups,
+    filteredGroupType,
+    filteredSharing,
+    vesselGroupsIdsPinned,
+    filteredPriority
+  )
 }

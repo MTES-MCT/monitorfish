@@ -1,9 +1,8 @@
 import { describe, expect, it } from '@jest/globals'
-import { customDayjs } from '@mtes-mct/monitor-ui'
+import { customDayjs, THEME } from '@mtes-mct/monitor-ui'
 import dayjs from 'dayjs'
 
 import { getColorWithAlpha, getHashDigitsFromString, getStartAndEndDatesSetWithCurrentYear } from './utils'
-import { theme } from '../../../../ui/theme'
 
 describe('utils', () => {
   it('getHashDigitsFromRegulation Should return undefined When the regulation is null', async () => {
@@ -40,7 +39,7 @@ describe('utils', () => {
 
   it('getColorWithAlpha Should add the alpha field on a color', async () => {
     // Given
-    const color = theme.color.lightBlue
+    const color = THEME.color.lightBlue
 
     // When
     expect(getColorWithAlpha(color, 0.5)).toEqual('rgba(185,221,229,0.5)')
@@ -48,7 +47,7 @@ describe('utils', () => {
 
   it('getColorWithAlpha Should add the alpha field on a color When the prussianBlue color is used', async () => {
     // Given
-    const color = theme.color.prussianBlue
+    const color = THEME.color.prussianBlue
 
     // When
     expect(getColorWithAlpha(color, 0.75)).toEqual('rgba(0,52,84,0.75)')

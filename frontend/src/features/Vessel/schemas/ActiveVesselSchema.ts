@@ -12,6 +12,7 @@ export const DeclaredLogbookSpeciesSchema = z.strictObject({
 export const VesselGroupOfActiveVesselSchema = z.strictObject({
   color: z.string(),
   id: z.number(),
+  isPriorityGroup: z.boolean().optional(),
   name: z.string()
 })
 

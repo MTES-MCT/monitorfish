@@ -1,13 +1,13 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Bold } from '@components/style'
-import { Square } from '@features/Regulation/components/ZonePreview'
 import { useGetAllVesselGroupsQuery } from '@features/VesselGroup/apis'
 import { addVesselToGroupFromDropdown } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/addVesselToGroupFromDropdown'
 import { removeVesselFromGroup } from '@features/VesselGroup/components/SelectedVesselGroups/useCases/removeVesselFromGroup'
 import { type FixedVesselGroup, GroupType, Sharing } from '@features/VesselGroup/types'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Dropdown, Icon, IconButton, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Dropdown, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -20,6 +20,9 @@ export function SelectedVesselGroups() {
   >(undefined)
 
   const currentVesselGroupIds = selectedVessel?.groups?.map(group => group.id) ?? []
+  const sortedGroups = [...(selectedVessel?.groups ?? [])].sort(
+    (groupA, groupB) => Number(isPriorityGroup(groupB)) - Number(isPriorityGroup(groupA))
+  )
   const vesselsGroupsAsOptions = vesselGroups
     ?.filter(group => group.type === GroupType.FIXED && !currentVesselGroupIds.includes(group.id))
     ?.map(group => ({
@@ -30,32 +33,40 @@ export function SelectedVesselGroups() {
   return (
     <Wrapper>
       <Header>Groupes du navire</Header>
-      {selectedVessel?.groups.map(group => (
+      {sortedGroups.map(group => (
         <Row key={group.id}>
-          <Square $fillColor={group.color} $strokeColor={THEME.color.lightGray} />
+          {isPriorityGroup(group) ? (
+            <PriorityIcon data-cy="vessel-group-priority-icon">
+              <Icon.Priority color={group.color} size={16} />
+            </PriorityIcon>
+          ) : (
+            <PriorityIcon>
+              <Icon.CircleFilled color={group.color} size={16} />
+            </PriorityIcon>
+          )}
           <GroupName title={`${group.name} - ${group.description}`}>{group.name}</GroupName>
           {group.sharing === Sharing.SHARED && (
-            <StyledAttentionIcon
-              backgroundColor={THEME.color.goldenPoppy25}
-              Icon={Icon.Attention}
-              iconColor={THEME.color.gunMetal}
-              title="Ce groupe est partagé"
-              withCircleIcon
-            />
+            <Icon.Sharing color={THEME.color.slateGray} size={20} title="Ce groupe est partagé" />
           )}
           <CloseButton
             $isLast={group.sharing !== Sharing.SHARED}
             accent={Accent.TERTIARY}
             data-cy="vessel-sidebar-delete-vessel-from-group"
-            disabled={group.type === GroupType.DYNAMIC}
+            disabled={group.type === GroupType.DYNAMIC || group.type === GroupType.HARDCODED}
             Icon={Icon.Close}
             iconSize={16}
             onClick={() => setIsDeleteConfirmationModalOpenForGroup(group as FixedVesselGroup)}
-            title={
-              group.type === GroupType.DYNAMIC
-                ? "Le navire ne peut pas être retiré d'un groupe dynamique"
-                : 'Supprimer le navire du groupe fixe'
-            }
+            title={(() => {
+              if (group.type === GroupType.DYNAMIC) {
+                return "Le navire ne peut pas être retiré d'un groupe dynamique"
+              }
+
+              if (group.type === GroupType.HARDCODED) {
+                return "Le navire ne peut pas être retiré d'un groupe de cibles prioritaires"
+              }
+
+              return 'Supprimer le navire du groupe fixe'
+            })()}
           />
         </Row>
       ))}
@@ -128,21 +139,10 @@ const EmptyGroups = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-const StyledAttentionIcon = styled(Tag)`
-  padding: 0;
-  border: 0;
-  width: 20px;
-  height: 20px;
-
-  path {
-    fill: ${p => p.theme.color.goldenPoppyBorder};
-  }
-`
-
 const CloseButton = styled(IconButton)<{
   $isLast: boolean
 }>`
-  margin-left: ${p => (p.$isLast ? 'auto' : '10px')};
+  margin-left: ${p => (p.$isLast ? 'auto' : '8px')};
   margin-right: 0;
   padding-right: 0;
   height: 16px;
@@ -162,11 +162,18 @@ const Row = styled.div`
   align-items: center;
   display: flex;
 
-  .Element-Tag {
+  .Element-IconBox {
     margin-left: auto;
     margin-right: 0;
     padding-right: 0;
   }
+`
+
+const PriorityIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  flex-shrink: 0;
 `
 
 const GroupName = styled.span`

@@ -19,14 +19,14 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 @UseCase
 class GetAllVesselGroupsWithVessels(
-    private val getAllVesselGroups: GetAllVesselGroups,
+    private val getAllUserVesselGroups: GetAllUserVesselGroups,
     private val lastPositionRepository: LastPositionRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetAllVesselGroupsWithVessels::class.java)
 
     fun execute(userEmail: String): List<VesselGroupWithVessels> {
         val now = ZonedDateTime.now()
-        val allGroups = getAllVesselGroups.execute(userEmail)
+        val allGroups = getAllUserVesselGroups.execute(userEmail)
         val activeVessels = lastPositionRepository.findActiveVesselWithReferentialData(now.minusMonths(1))
 
         val byVesselId = mutableMapOf<Int, EnrichedActiveVessel>()
@@ -61,7 +61,7 @@ class GetAllVesselGroupsWithVessels(
                     when (group) {
                         is FixedVesselGroup -> getVesselsFromReferential(group, byVesselId, byCfr, byIrcs, byExternalId)
                         is PriorityVesselGroup, is DynamicVesselGroup ->
-                            (groupToVessels[group] ?: emptyList()).mapIndexed { i, v -> Pair(i, v) }
+                            (groupToVessels[group] ?: emptyList()).mapIndexed { index, vessel -> Pair(index, vessel) }
                     },
             )
         }

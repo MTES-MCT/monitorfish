@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*
 class VesselGroupController(
     private val addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup,
     private val addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup,
-    private val getAllVesselGroups: GetAllVesselGroups,
+    private val getAllUserVesselGroups: GetAllUserVesselGroups,
     private val deleteVesselGroup: DeleteVesselGroup,
     private val deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel,
     private val getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels,
@@ -95,7 +95,7 @@ class VesselGroupController(
     ): List<Any> {
         val email: String = principal?.email ?: ""
 
-        return getAllVesselGroups.execute(email).map {
+        return getAllUserVesselGroups.execute(email).map {
             when (it) {
                 is DynamicVesselGroup -> DynamicVesselGroupDataOutput.fromDynamicVesselGroup(it)
                 is FixedVesselGroup -> FixedVesselGroupDataOutput.fromFixedVesselGroup(vesselGroup = it)

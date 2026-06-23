@@ -4,7 +4,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
 export function getVesselGroupActionColumn(
-  groupId: number | null,
+  groupId: number,
   isFixedGroup: boolean
 ): ColumnDef<Vessel.ActiveVessel, any> {
   return {

@@ -47,21 +47,21 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   const dispatch = useMainAppDispatch()
 
   const isHardcoded = vesselGroupWithVessels.group.type === GroupType.HARDCODED
-  const [isOpenLocal, setIsOpenLocal] = useState(false)
   const isOpenInStore = useMainAppSelector(state => {
     const { id } = vesselGroupWithVessels.group
 
-    return id !== null && state.vesselGroupList.openedVesselGroupIds.includes(id)
+    return state.vesselGroupList.openedVesselGroupIds.includes(id)
   })
-  const isOpen = isOpened || isOpenInStore || isOpenLocal
+  const isOpen = isOpened || isOpenInStore
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isEditDynamicVesselGroupOpened, setIsEditDynamicVesselGroupOpened] = useState(false)
   const [isEditFixedVesselGroupOpened, setIsEditFixedVesselGroupOpened] = useState(false)
 
   const handleDeleteVesselGroup = () => {
-    if (vesselGroupWithVessels.group.id === null) {
+    if (vesselGroupWithVessels.group.type === GroupType.HARDCODED) {
       return
     }
+
     dispatch(deleteVesselGroup(vesselGroupWithVessels.group.id))
     setIsDeleteConfirmationModalOpen(false)
   }
@@ -81,9 +81,10 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
 
   const togglePinGroup = async event => {
     event.stopPropagation()
-    if (vesselGroupWithVessels.group.id === null) {
+    if (vesselGroupWithVessels.group.type === GroupType.HARDCODED) {
       return
     }
+
     trackEvent({
       action: "Epingle d'un groupe de navire dans la deuxième fenêtre",
       category: 'VESSEL_GROUP',
@@ -100,20 +101,14 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   }
 
   const toggleRow = () => {
-    if (isHardcoded) {
-      setIsOpenLocal(prev => !prev)
-
-      return
-    }
-    if (vesselGroupWithVessels.group.id !== null) {
-      dispatch(vesselGroupListActions.vesselGroupIdToggled(vesselGroupWithVessels.group.id))
-    }
+    dispatch(vesselGroupListActions.vesselGroupIdToggled(vesselGroupWithVessels.group.id))
   }
 
   const addVessel = (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
     if (isAIS) {
       return
     }
+
     if (vesselGroupWithVessels.group.type !== GroupType.FIXED) {
       return
     }
@@ -255,7 +250,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
             {vesselGroupWithVessels.group.description && (
               <ReactMarkdown>{vesselGroupWithVessels.group.description}</ReactMarkdown>
             )}
-            <PointsOfAttention title={vesselGroupWithVessels.group.pointsOfAttention ?? undefined}>
+            <PointsOfAttention title={vesselGroupWithVessels.group.pointsOfAttention}>
               {vesselGroupWithVessels.group.pointsOfAttention}
             </PointsOfAttention>
             <VesselTable

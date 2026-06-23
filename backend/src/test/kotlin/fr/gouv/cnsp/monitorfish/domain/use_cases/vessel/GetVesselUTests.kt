@@ -20,7 +20,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.*
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.DUMMY_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyLastPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.TestUtils.getDummyPositions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
@@ -69,7 +69,7 @@ class GetVesselUTests {
     private lateinit var getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions
 
     @MockitoBean
-    private lateinit var getAllVesselGroups: GetAllVesselGroups
+    private lateinit var getAllUserVesselGroups: GetAllUserVesselGroups
 
     @MockitoBean
     private lateinit var vesselProfileRepository: VesselProfileRepository
@@ -98,7 +98,7 @@ class GetVesselUTests {
         given(riskFactorRepository.findByInternalReferenceNumber(any())).willReturn(
             VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS + TestUtils.getDynamicVesselGroups(),
         )
         given(vesselProfileRepository.findByCfr(any())).willReturn(DUMMY_VESSEL_PROFILE)
@@ -118,7 +118,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
@@ -202,7 +202,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
@@ -246,7 +246,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
@@ -293,7 +293,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
@@ -337,7 +337,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
@@ -469,7 +469,7 @@ class GetVesselUTests {
                     riskFactorRepository = riskFactorRepository,
                     beaconRepository = beaconRepository,
                     producerOrganizationMembershipRepository = producerOrganizationMembershipRepository,
-                    getAllVesselGroups = getAllVesselGroups,
+                    getAllUserVesselGroups = getAllUserVesselGroups,
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,

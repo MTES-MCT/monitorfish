@@ -164,13 +164,14 @@ data class PriorityVesselGroup(
         startOfValidityUtc = startOfValidityUtc,
     ) {
     fun containsActiveVessel(activeVessel: EnrichedActiveVessel): Boolean =
-        activeVessel.riskFactor.effectiveControlPriorityLevel.toInt() == priorityLevel
+        activeVessel.riskFactor.effectiveControlPriorityLevel.toInt() == priorityLevel &&
+            (activeVessel.vessel?.let { it.underCharter == false } ?: true)
 
     companion object {
         val PRIORITY_GROUPS =
             listOf(
-                PriorityVesselGroup(name = "Segments P1", color = "#E1000F", priorityLevel = 4),
-                PriorityVesselGroup(name = "Segments P2", color = "#FF9940", priorityLevel = 3),
+                PriorityVesselGroup(id = -1, name = "Segments P1", color = "#E1000F", priorityLevel = 4),
+                PriorityVesselGroup(id = -2, name = "Segments P2", color = "#FF9940", priorityLevel = 3),
             )
     }
 }

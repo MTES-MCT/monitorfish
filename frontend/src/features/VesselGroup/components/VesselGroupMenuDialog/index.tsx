@@ -112,7 +112,7 @@ export function VesselGroupMenuDialog() {
           <VesselGroupList data-cy="vessel-groups-list">
             {orderedVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow
-                key={vesselGroup.id ?? vesselGroup.name}
+                key={vesselGroup.id}
                 isLastPinned={vesselGroupsIdsPinned.length === index + 1}
                 vesselGroup={vesselGroup}
               />

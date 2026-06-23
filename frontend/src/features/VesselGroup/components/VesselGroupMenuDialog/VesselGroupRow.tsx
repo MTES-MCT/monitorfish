@@ -38,15 +38,15 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
   const isHardcoded = vesselGroup.type === GroupType.HARDCODED
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
-  const isDisplayed = vesselGroup.id !== null && vesselGroupsIdsDisplayed.includes(vesselGroup.id)
+  const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
 
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isGroupFilterCriteriaOpen, setIsGroupFilterCriteriaOpen] = useState<boolean>(false)
-  const isPinned = vesselGroup.id !== null && vesselGroupsIdsPinned.includes(vesselGroup.id)
+  const isPinned = vesselGroupsIdsPinned.includes(vesselGroup.id)
 
   const handleDeleteVesselGroup = () => {
-    if (vesselGroup.id === null) {
+    if (isHardcoded) {
       return
     }
     dispatch(deleteVesselGroup(vesselGroup.id))
@@ -54,7 +54,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
   }
 
   const handleEditVesselGroup = () => {
-    if (vesselGroup.type === GroupType.HARDCODED) {
+    if (isHardcoded) {
       return
     }
     dispatch(vesselGroupActions.vesselGroupEdited(vesselGroup))
@@ -63,7 +63,7 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const togglePinGroup = async event => {
     event.stopPropagation()
-    if (vesselGroup.id === null) {
+    if (isHardcoded) {
       return
     }
 
@@ -78,9 +78,10 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const hideGroup = async event => {
     event.stopPropagation()
-    if (vesselGroup.id === null) {
+    if (isHardcoded) {
       return
     }
+
     trackEvent({
       action: "Masquage d' un groupe de navires depuis la cartographie",
       category: 'VESSEL_GROUP',
@@ -92,9 +93,11 @@ export function VesselGroupRow({ isLastPinned, vesselGroup }: VesselGroupRowProp
 
   const showGroup = async event => {
     event.stopPropagation()
-    if (vesselGroup.id === null) {
+
+    if (isHardcoded) {
       return
     }
+
     trackEvent({
       action: "Affichage d' un groupe de navires depuis la cartographie",
       category: 'VESSEL_GROUP',

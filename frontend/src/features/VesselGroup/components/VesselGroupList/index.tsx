@@ -127,7 +127,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
             <PinnedGroups data-cy="pinned-vessels-groups">
               {pinnedVesselGroupsWithVessels.map(groupWithVessels => (
                 <VesselGroupRow
-                  key={groupWithVessels.group.id ?? groupWithVessels.group.name}
+                  key={groupWithVessels.group.id}
                   isFromUrl={isFromUrl}
                   isOpened={areGroupsOpened}
                   isPinned
@@ -141,7 +141,7 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
           <UnpinnedGroups data-cy="unpinned-vessels-groups">
             {unpinnedVesselGroupsWithVessels.map(groupWithVessels => (
               <VesselGroupRow
-                key={groupWithVessels.group.id ?? groupWithVessels.group.name}
+                key={groupWithVessels.group.id}
                 isFromUrl={isFromUrl}
                 isOpened={areGroupsOpened}
                 isPinned={false}

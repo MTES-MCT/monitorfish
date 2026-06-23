@@ -1,3 +1,4 @@
+import { isHardcodedGroup } from '@features/VesselGroup/utils/utils'
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 
 import { vesselGroupApi } from './apis'
@@ -91,6 +92,6 @@ export const selectVesselGroupsIdsFiltered = createSelector(
     return pinnedVesselGroups
       .concat(unpinnedVesselGroups)
       .map(vg => vg.id)
-      .filter((id): id is number => id !== null)
+      .filter(id => !isHardcodedGroup(id))
   }
 )

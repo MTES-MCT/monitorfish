@@ -52,7 +52,7 @@ class VesselGroupControllerITests {
     private lateinit var addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup
 
     @MockitoBean
-    private lateinit var getAllVesselGroups: GetAllVesselGroups
+    private lateinit var getAllUserVesselGroups: GetAllUserVesselGroups
 
     @MockitoBean
     private lateinit var getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels
@@ -196,7 +196,7 @@ class VesselGroupControllerITests {
     @Test
     fun `Should get all vessel groups including priority groups`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
 
         // When
         api
@@ -214,7 +214,7 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$[1].name", equalTo("Segments P2")))
             .andExpect(jsonPath("$[1].priorityLevel", equalTo(3)))
 
-        Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
+        Mockito.verify(getAllUserVesselGroups).execute("email@domain-name.com")
     }
 
     @Test
@@ -251,7 +251,7 @@ class VesselGroupControllerITests {
     @Test
     fun `Should get all dynamic vessel groups`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
+        given(getAllUserVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
 
         // When
         api
@@ -267,7 +267,7 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$[0].filters.hasLogbook", equalTo(true)))
             .andExpect(jsonPath("$[0].filters.countryCodes", equalTo(listOf("FR", "ES", "IT"))))
 
-        Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
+        Mockito.verify(getAllUserVesselGroups).execute("email@domain-name.com")
     }
 
     @Test

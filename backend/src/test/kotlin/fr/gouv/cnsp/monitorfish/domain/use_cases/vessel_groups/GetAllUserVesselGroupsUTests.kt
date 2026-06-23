@@ -18,7 +18,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class GetAllVesselGroupsUTests {
+class GetAllUserVesselGroupsUTests {
     @MockitoBean
     private lateinit var vesselGroupRepository: VesselGroupRepository
 
@@ -33,7 +33,7 @@ class GetAllVesselGroupsUTests {
         given(getAuthorizedUser.execute(any())).willReturn(authorizedUser())
         given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getDynamicVesselGroups())
 
-        val groups = GetAllVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
+        val groups = GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
 
         assertThat(groups).containsAll(PriorityVesselGroup.PRIORITY_GROUPS)
         assertThat(groups).containsAll(getDynamicVesselGroups())
@@ -44,7 +44,7 @@ class GetAllVesselGroupsUTests {
         given(getAuthorizedUser.execute(any())).willReturn(authorizedUser())
         given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
 
-        val groups = GetAllVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
+        val groups = GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
 
         assertThat(groups).containsExactlyInAnyOrderElementsOf(PriorityVesselGroup.PRIORITY_GROUPS)
     }
@@ -54,7 +54,7 @@ class GetAllVesselGroupsUTests {
         given(getAuthorizedUser.execute(any())).willReturn(authorizedUser(service = CnspService.POLE_OPS_METROPOLE))
         given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
 
-        GetAllVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
+        GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
 
         verify(
             vesselGroupRepository,

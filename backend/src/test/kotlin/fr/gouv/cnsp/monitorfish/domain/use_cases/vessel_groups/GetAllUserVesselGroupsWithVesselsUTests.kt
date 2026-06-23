@@ -21,9 +21,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-class GetAllVesselGroupsWithVesselsUTests {
+class GetAllUserVesselGroupsWithVesselsUTests {
     @MockitoBean
-    private lateinit var getAllVesselGroups: GetAllVesselGroups
+    private lateinit var getAllUserVesselGroups: GetAllUserVesselGroups
 
     @MockitoBean
     private lateinit var lastPositionRepository: LastPositionRepository
@@ -32,7 +32,7 @@ class GetAllVesselGroupsWithVesselsUTests {
     fun `execute get all fixed groups with vessels from last positions`() {
         // Given
         given(
-            getAllVesselGroups.execute(any()),
+            getAllUserVesselGroups.execute(any()),
         ).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + getFixedVesselGroups())
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
@@ -49,7 +49,7 @@ class GetAllVesselGroupsWithVesselsUTests {
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(getAllUserVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -90,7 +90,9 @@ class GetAllVesselGroupsWithVesselsUTests {
                         ),
                     ) + getFixedVesselGroups().first().vessels,
             )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS + listOf(modifiedGroup))
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS + listOf(modifiedGroup),
+        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -106,7 +108,7 @@ class GetAllVesselGroupsWithVesselsUTests {
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(getAllUserVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -123,7 +125,7 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute correctly assigns vessels to priority groups based on control priority level`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().mapIndexed { index, position ->
                 EnrichedActiveVessel(
@@ -145,7 +147,7 @@ class GetAllVesselGroupsWithVesselsUTests {
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(getAllUserVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 
@@ -176,7 +178,7 @@ class GetAllVesselGroupsWithVesselsUTests {
     @Test
     fun `execute get all dynamic groups with vessels from last positions`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS + getDynamicVesselGroups(),
         )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
@@ -203,7 +205,7 @@ class GetAllVesselGroupsWithVesselsUTests {
 
         // When
         val vesselGroups =
-            GetAllVesselGroupsWithVessels(getAllVesselGroups, lastPositionRepository).execute(
+            GetAllVesselGroupsWithVessels(getAllUserVesselGroups, lastPositionRepository).execute(
                 userEmail = "dummy@email.gouv.fr",
             )
 

@@ -263,11 +263,11 @@ export class MonitorFishWebWorker {
       return fuse.find(searchQuery)
     })()
 
-    const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
-      vesselGroup => vesselGroup.group.id !== null && vesselGroupsIdsPinned.includes(vesselGroup.group.id)
+    const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(vesselGroup =>
+      vesselGroupsIdsPinned.includes(vesselGroup.group.id)
     )
     const unpinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
-      vesselGroup => vesselGroup.group.id === null || !vesselGroupsIdsPinned.includes(vesselGroup.group.id)
+      vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.group.id)
     )
 
     return {

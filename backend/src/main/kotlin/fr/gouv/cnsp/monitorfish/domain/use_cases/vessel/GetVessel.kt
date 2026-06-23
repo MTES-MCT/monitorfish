@@ -12,7 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.extractBossNameAndAddressFromERS
 import fr.gouv.cnsp.monitorfish.domain.repositories.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.Logger
@@ -28,7 +28,7 @@ class GetVessel(
     private val riskFactorRepository: RiskFactorRepository,
     private val beaconRepository: BeaconRepository,
     private val producerOrganizationMembershipRepository: ProducerOrganizationMembershipRepository,
-    private val getAllVesselGroups: GetAllVesselGroups,
+    private val getAllUserVesselGroups: GetAllUserVesselGroups,
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
     private val reportingRepository: ReportingRepository,
@@ -95,9 +95,9 @@ class GetVessel(
                     producerOrganizationMembershipRepository.findByInternalReferenceNumber(internalReferenceNumber)
                 }
 
-            val allVesselGroups =
+            val userVesselGroups =
                 async {
-                    getAllVesselGroups.execute(userEmail)
+                    getAllUserVesselGroups.execute(userEmail)
                 }
             val vesselProfile =
                 async {
@@ -167,7 +167,7 @@ class GetVessel(
                 )
 
             val foundVesselGroups =
-                allVesselGroups.await().filter { vesselGroup ->
+                userVesselGroups.await().filter { vesselGroup ->
                     when (vesselGroup) {
                         is DynamicVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel, now)
                         is FixedVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel)

@@ -20,7 +20,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import org.assertj.core.api.Assertions.assertThat
@@ -39,7 +39,7 @@ class GetActiveVesselsUTests {
     private val reportingRepository: ReportingRepository = mock()
 
     @Mock
-    private val getAllVesselGroups: GetAllVesselGroups = mock()
+    private val getAllUserVesselGroups: GetAllUserVesselGroups = mock()
 
     @Mock
     private val logbookReportRepository: LogbookReportRepository = mock()
@@ -51,7 +51,7 @@ class GetActiveVesselsUTests {
         GetActiveVessels(
             lastPositionRepository,
             reportingRepository,
-            getAllVesselGroups,
+            getAllUserVesselGroups,
             logbookReportRepository,
             manualPriorNotificationRepository,
         )
@@ -81,7 +81,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 getDynamicVesselGroups(),
         )
@@ -118,7 +118,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -190,7 +190,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -267,7 +267,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -339,7 +339,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -410,7 +410,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -481,7 +481,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -561,7 +561,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -633,7 +633,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -704,7 +704,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -785,7 +785,7 @@ class GetActiveVesselsUTests {
                 ).toTypedArray(),
             )
 
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -864,7 +864,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -936,7 +936,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -1012,7 +1012,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -1084,7 +1084,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     DynamicVesselGroup(
@@ -1146,7 +1146,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 emptyList(),
             // No groups found for the user
@@ -1179,7 +1179,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 listOf(
                     FixedVesselGroup(
@@ -1249,7 +1249,7 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 getDynamicVesselGroups() +
                 listOf(
@@ -1341,7 +1341,7 @@ class GetActiveVesselsUTests {
             },
         )
 
-        given(getAllVesselGroups.execute(any())).willReturn(
+        given(getAllUserVesselGroups.execute(any())).willReturn(
             PriorityVesselGroup.PRIORITY_GROUPS +
                 getDynamicVesselGroups() +
                 listOf(
@@ -1428,7 +1428,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1473,7 +1473,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1519,7 +1519,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1566,7 +1566,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1615,7 +1615,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
 
         // When
         val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
@@ -1651,7 +1651,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(emptyList())
 
         // When
@@ -1688,7 +1688,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1738,7 +1738,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1787,7 +1787,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1835,7 +1835,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(getAllVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(

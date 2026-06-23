@@ -69,7 +69,8 @@ export const VesselGroupFilterSchema = VesselListFilterSchema.omit({
 })
 export type DynamicVesselGroupFilter = z.infer<typeof VesselGroupFilterSchema>
 
-export const DynamicVesselGroupSchema = VesselGroupSchema.extend({
+export const DynamicVesselGroupSchema = z.strictObject({
+  ...VesselGroupSchema.shape,
   filters: VesselGroupFilterSchema,
   type: z.literal(GroupType.DYNAMIC)
 })
@@ -108,7 +109,8 @@ export const VesselIdentitySchema = z.strictObject({
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()])
 })
 
-export const FixedVesselGroupSchema = VesselGroupSchema.extend({
+export const FixedVesselGroupSchema = z.strictObject({
+  ...VesselGroupSchema.shape,
   type: z.literal(GroupType.FIXED),
   vessels: z.array(VesselIdentitySchema)
 })
@@ -141,21 +143,9 @@ export type VesselIdentityForVesselGroup = z.infer<typeof VesselIdentitySchema>
  */
 
 export const HardcodedVesselGroupSchema = z.strictObject({
-  color: z.string().min(1),
-  createdAtUtc: z.iso.datetime(),
-  createdBy: z.string(),
-  description: z.union([z.string().max(2500), z.undefined(), z.null()]),
-  endOfValidityUtc: z.union([z.string().datetime(), z.undefined(), z.null()]),
-  id: z.null(),
-  isDeleted: z.boolean(),
-  name: z.string().min(1).max(255),
-  pointsOfAttention: z.union([z.string(), z.undefined(), z.null()]),
+  ...VesselGroupSchema.shape,
   priorityLevel: z.number(),
-  sharedTo: z.union([z.array(z.enum(CnspService)), z.undefined(), z.null()]),
-  sharing: z.enum(Sharing),
-  startOfValidityUtc: z.union([z.string().datetime(), z.undefined(), z.null()]),
-  type: z.literal(GroupType.HARDCODED),
-  updatedAtUtc: z.union([z.string().datetime(), z.undefined(), z.null()])
+  type: z.literal(GroupType.HARDCODED)
 })
 
 export type HardcodedVesselGroup = z.infer<typeof HardcodedVesselGroupSchema>

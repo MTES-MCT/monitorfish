@@ -13,6 +13,7 @@ from config import (
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
 from src.entities.beacon_malfunctions import (
+    BeaconMalfunctionInitialLocation,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
@@ -175,7 +176,7 @@ def get_ended_malfunction_ids(
     last_emissions_of_vessels_that_should_emit: pd.DataFrame,
     known_malfunctions: pd.DataFrame,
     malfunction_datetime_utc_threshold_at_sea: datetime,
-) -> Tuple[list, list, list, list]:
+) -> Tuple[list, list, list]:
     ids_not_required_to_emit = set(
         known_malfunctions.loc[
             ~known_malfunctions.beacon_number.isin(
@@ -208,37 +209,18 @@ def get_ended_malfunction_ids(
         ]
     )
 
-    ids_at_port_restarted_emitting = set(
+    ids_restarted_emitting = set(
         malfunctions_with_restarted_emissions.loc[
             (
                 malfunctions_with_restarted_emissions.beacon_status
                 == BeaconStatus.ACTIVATED.value
-            )
-            & (
-                malfunctions_with_restarted_emissions.vessel_status
-                == BeaconMalfunctionVesselStatus.AT_PORT.value
-            ),
-            "id",
-        ]
-    )
-
-    ids_not_at_port_restarted_emitting = set(
-        malfunctions_with_restarted_emissions.loc[
-            (
-                malfunctions_with_restarted_emissions.beacon_status
-                == BeaconStatus.ACTIVATED.value
-            )
-            & (
-                malfunctions_with_restarted_emissions.vessel_status
-                != BeaconMalfunctionVesselStatus.AT_PORT.value
             ),
             "id",
         ]
     )
 
     return (
-        list(ids_not_at_port_restarted_emitting),
-        list(ids_at_port_restarted_emitting),
+        list(ids_restarted_emitting),
         list(ids_not_required_to_emit),
         list(ids_unsupervised_restarted_emitting),
     )
@@ -251,6 +233,14 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         [
             BeaconMalfunctionVesselStatus.AT_SEA.value,
             BeaconMalfunctionVesselStatus.AT_PORT.value,
+        ],
+    )
+
+    new_malfunctions["beacon_malfunction_initial_location"] = np.choose(
+        new_malfunctions.is_at_port.astype(int),
+        [
+            BeaconMalfunctionInitialLocation.AT_SEA.value,
+            BeaconMalfunctionInitialLocation.AT_PORT.value,
         ],
     )
 
@@ -308,6 +298,7 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "longitude",
         "beacon_number",
         "beacon_status_at_malfunction_creation",
+        "beacon_malfunction_initial_location",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 
@@ -500,8 +491,7 @@ def update_beacon_malfunctions_flow(
     load_new_beacon_malfunctions(new_malfunctions)
 
     (
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     ) = get_ended_malfunction_ids(
@@ -510,43 +500,16 @@ def update_beacon_malfunctions_flow(
         malfunction_datetime_utc_threshold_at_sea,
     )
 
-    # Updated August 2024 :
-    # Malfunctions not "at port" (or supposed not to be, according to the latest
-    # vessel_status of the malfunction) - that is, in a status of AT_SEA,
-    # ACTIVITY_DETECTED... anything but AT_PORT - are moved to ARCHIVED and
-    # automatically notified.
-    # Previously : were moved to END_OF_MALFUNCTION and the notification was
-    # requested by the user after a manual check
-    ids_not_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
-        ids_not_at_port_restarted_emitting,
+    ids_restarted_emitting_updated = update_beacon_malfunction.map(
+        ids_restarted_emitting,
         new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
         end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
     )
 
-    ids_not_at_port_restarted_emitting_updated = filter_results(
-        ids_not_at_port_restarted_emitting_updated
-    )
+    ids_restarted_emitting_updated = filter_results(ids_restarted_emitting_updated)
 
     request_notification.map(
-        ids_not_at_port_restarted_emitting_updated,
-        unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
-    )
-
-    # Malfunctions "at port" (or supposed to be, according to the latest
-    # vessel_status of the malfunction) and malfunctions of unsupervised beacons
-    # are moved to ARCHIVED and automatically notified.
-    ids_at_port_restarted_emitting_updated = update_beacon_malfunction.map(
-        ids_at_port_restarted_emitting,
-        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
-    )
-
-    ids_at_port_restarted_emitting_updated = filter_results(
-        ids_at_port_restarted_emitting_updated
-    )
-
-    request_notification.map(
-        ids_at_port_restarted_emitting_updated,
+        ids_restarted_emitting_updated,
         unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
     )
 
@@ -578,8 +541,7 @@ def update_beacon_malfunctions_flow(
 
     return (
         new_malfunctions,
-        ids_not_at_port_restarted_emitting,
-        ids_at_port_restarted_emitting,
+        ids_restarted_emitting,
         ids_not_required_to_emit,
         ids_unsupervised_restarted_emitting,
     )

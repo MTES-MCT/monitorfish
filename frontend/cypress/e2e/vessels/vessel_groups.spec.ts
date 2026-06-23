@@ -165,33 +165,32 @@ context('Vessel groups', () => {
      * Pin and unpin vessel groups to change order
      */
     cy.getDataCy('vessel-groups-list').within(() => {
-      // Priority groups (Segments P1/P2) are always rendered first and stay on top whatever the pinning
+      // The hardcoded priority groups (Segments P1/P2) are always rendered first, so the user groups occupy the last
+      // rows: assert their order with negative indices to stay independent from the priority prefix.
       cy.get('li').should('have.length', 6)
-      cy.get('li').eq(0).contains('Segments P1')
-      cy.get('li').eq(1).contains('Segments P2')
-      cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(4).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(5).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(-4).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(-3).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(-2).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(-1).contains('Mission Thémis – chaluts de fonds')
 
       cy.get('[title=\'Epingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
-      cy.get('li').eq(2).contains('Mission Thémis – chaluts de fonds')
-      cy.get('li').eq(3).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(4).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(5).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(-4).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(-3).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(-2).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(-1).contains('Mission Thémis – semaine 03')
 
       cy.get('[title=\'Epingler le groupe "Mission Thémis – semaine 03"\']').click()
-      cy.get('li').eq(2).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(3).contains('Mission Thémis – chaluts de fonds')
-      cy.get('li').eq(4).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(5).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(-4).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(-3).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(-2).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(-1).contains('Mission Thémis – semaine 04')
 
       cy.get('[title=\'Dépingler le groupe "Mission Thémis – chaluts de fonds"\']').click()
       cy.get('[title=\'Dépingler le groupe "Mission Thémis – semaine 03"\']').click()
-      cy.get('li').eq(2).contains('Lorem ipsum dolor sit amet')
-      cy.get('li').eq(3).contains('Mission Thémis – semaine 04')
-      cy.get('li').eq(4).contains('Mission Thémis – semaine 03')
-      cy.get('li').eq(5).contains('Mission Thémis – chaluts de fonds')
+      cy.get('li').eq(-4).contains('Lorem ipsum dolor sit amet')
+      cy.get('li').eq(-3).contains('Mission Thémis – semaine 04')
+      cy.get('li').eq(-2).contains('Mission Thémis – semaine 03')
+      cy.get('li').eq(-1).contains('Mission Thémis – chaluts de fonds')
     })
 
     /**

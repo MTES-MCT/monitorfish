@@ -8,11 +8,10 @@ import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
-import { Accent, FormikSelect, Icon, IconButton, SimpleTable, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Accent, FormikSelect, Icon, IconButton, SimpleTable } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import {
@@ -36,7 +35,6 @@ export function DiscardedSpeciesField() {
   const [input, , helper] = useField<MissionActionFormValues['discardedSpecies']>('discardedSpecies')
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
-  const { newWindowContainerRef } = useNewWindow()
   const [discardToDeleteIndex, setDiscardToDeleteIndex] = useState<number | undefined>(undefined)
 
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
@@ -216,25 +214,23 @@ export function DiscardedSpeciesField() {
           </tbody>
         </SimpleTable.Table>
       </SpeciesTableWrapper>
-      {discardToDeleteIndex !== undefined &&
-        createPortal(
-          <ConfirmationModal
-            confirmationButtonLabel="Confirmer la suppression"
-            message={
-              <>
-                <p>Êtes-vous sûr de vouloir supprimer</p>
-                <Bold>le rejet ?</Bold>
-              </>
-            }
-            onCancel={() => setDiscardToDeleteIndex(undefined)}
-            onConfirm={() => {
-              removeDiscard(discardToDeleteIndex)
-              setDiscardToDeleteIndex(undefined)
-            }}
-            title="Suppression du rejet"
-          />,
-          newWindowContainerRef.current
-        )}
+      {discardToDeleteIndex !== undefined && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer</p>
+              <Bold>le rejet ?</Bold>
+            </>
+          }
+          onCancel={() => setDiscardToDeleteIndex(undefined)}
+          onConfirm={() => {
+            removeDiscard(discardToDeleteIndex)
+            setDiscardToDeleteIndex(undefined)
+          }}
+          title="Suppression du rejet"
+        />
+      )}
     </FieldsetGroup>
   )
 }

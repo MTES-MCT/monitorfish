@@ -13,14 +13,12 @@ import {
   IconButton,
   SimpleTable,
   THEME,
-  useNewWindow,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
 import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
@@ -59,7 +57,6 @@ export function SpeciesField() {
   const { updateSegments } = useGetMissionActionFormikUsecases()
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
-  const { newWindowContainerRef } = useNewWindow()
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
@@ -349,25 +346,23 @@ export function SpeciesField() {
       </SpeciesTableWrapper>
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" rows={2} />
-      {speciesToDeleteIndex !== undefined &&
-        createPortal(
-          <ConfirmationModal
-            confirmationButtonLabel="Confirmer la suppression"
-            message={
-              <>
-                <p>Êtes-vous sûr de vouloir supprimer</p>
-                <Bold>l’espèce ?</Bold>
-              </>
-            }
-            onCancel={() => setSpeciesToDeleteIndex(undefined)}
-            onConfirm={() => {
-              remove(speciesToDeleteIndex)
-              setSpeciesToDeleteIndex(undefined)
-            }}
-            title="Suppression de l’espèce"
-          />,
-          newWindowContainerRef.current
-        )}
+      {speciesToDeleteIndex !== undefined && (
+        <ConfirmationModal
+          confirmationButtonLabel="Confirmer la suppression"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir supprimer</p>
+              <Bold>l’espèce ?</Bold>
+            </>
+          }
+          onCancel={() => setSpeciesToDeleteIndex(undefined)}
+          onConfirm={() => {
+            remove(speciesToDeleteIndex)
+            setSpeciesToDeleteIndex(undefined)
+          }}
+          title="Suppression de l’espèce"
+        />
+      )}
     </FieldsetGroup>
   )
 }

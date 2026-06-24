@@ -498,14 +498,31 @@ def test_prepare_new_beacon_malfunctions():
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.UNSUPERVISED.value,
             ],
-            "beacon_malfunction_initial_location": [
+            "initial_vessel_status": [
                 "AT_PORT",
                 "AT_SEA",
                 "AT_SEA",
                 "AT_SEA",
             ],
+            "is_followed": [
+                False,
+                True,
+                True,
+                True,
+            ],
+            "creation_datetime_utc": [
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+            ],
         }
-    ).astype({"vessel_status_last_modification_date_utc": "datetime64[us]"})
+    ).astype(
+        {
+            "vessel_status_last_modification_date_utc": "datetime64[us]",
+            "creation_datetime_utc": "datetime64[us]",
+        }
+    )
 
     pd.testing.assert_frame_equal(beacon_malfunctions, expected_beacon_malfunctions)
 
@@ -642,7 +659,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.UNSUPERVISED.value,
             ],
-            "beacon_malfunction_initial_location": [
+            "initial_vessel_status": [
                 "AT_PORT",
                 "AT_SEA",
                 "AT_SEA",
@@ -651,6 +668,26 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 "AT_SEA",
                 "AT_SEA",
                 "AT_SEA",
+            ],
+            "is_followed": [
+                False,
+                True,
+                True,
+                True,
+                False,
+                True,
+                True,
+                True,
+            ],
+            "creation_datetime_utc": [
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
+                datetime(2021, 1, 1, 1, 1, 1),
             ],
         }
     )

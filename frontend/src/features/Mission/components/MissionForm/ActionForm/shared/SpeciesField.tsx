@@ -1,4 +1,6 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Ellipsised } from '@components/Ellipsised'
+import { Bold } from '@components/style'
 import { LogbookSpeciesPresentation } from '@features/Logbook/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
@@ -11,12 +13,14 @@ import {
   IconButton,
   SimpleTable,
   THEME,
+  useNewWindow,
   usePrevious
 } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
 import { isEqual } from 'lodash-es'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
@@ -24,6 +28,7 @@ import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
   DeleteCell,
+  RequiredAsterisk,
   SelectValue,
   SpeciesTableWrapper,
   StyledCheckPicker,
@@ -54,6 +59,8 @@ export function SpeciesField() {
   const { updateSegments } = useGetMissionActionFormikUsecases()
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
+  const { newWindowContainerRef } = useNewWindow()
+  const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
   const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
@@ -90,9 +97,9 @@ export function SpeciesField() {
     const newSpecies: MissionAction.SpeciesOnboardControl = {
       controlledWeight: undefined,
       declaredWeight: undefined,
-      faoZones: undefined,
+      faoZones: getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
       nbFish: undefined,
-      presentationCodes: undefined,
+      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
       speciesCode: '',
       speciesName: undefined,
       underSized: false,
@@ -182,7 +189,7 @@ export function SpeciesField() {
         <SimpleTable.Table>
           <SimpleTable.Head>
             <tr>
-              <SimpleTable.Th $width={isEISREnabled ? 165 : 320}>Espèce(s)</SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 165 : 320}>Espèce</SimpleTable.Th>
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
                 {isEISREnabled ? 'Déclaré' : 'Qté déclarée'}
               </SimpleTable.Th>
@@ -193,7 +200,11 @@ export function SpeciesField() {
                 {isEISREnabled ? 'Ss-taille' : 'Sous-taille'}
               </SimpleTable.Th>
               {isEISREnabled && <SimpleTable.Th $width={70}>Présentation</SimpleTable.Th>}
-              {isEISREnabled && <SimpleTable.Th $width={70}>Zone</SimpleTable.Th>}
+              {isEISREnabled && (
+                <SimpleTable.Th $width={70}>
+                  Zone <RequiredAsterisk>*</RequiredAsterisk>
+                </SimpleTable.Th>
+              )}
               <SimpleTable.Th $width={isEISREnabled ? actionColumnWidth : 25} aria-label="Retirer" />
             </tr>
           </SimpleTable.Head>
@@ -216,6 +227,7 @@ export function SpeciesField() {
                     isActive={isActive}
                     isDisabled={isDisabled}
                     isHovered={isHovered}
+                    isNotLanded={!!specyOnboard.isNotLanded}
                     name={`speciesOnboard[${index}].speciesCode`}
                     onChange={newSpecy => setSpecies(index, newSpecy)}
                     onPickerClose={() => handlePickerClose(index)}
@@ -317,7 +329,7 @@ export function SpeciesField() {
                       accent={Accent.TERTIARY}
                       disabled={isDisabled}
                       Icon={Icon.Minus}
-                      onClick={() => remove(index)}
+                      onClick={() => setSpeciesToDeleteIndex(index)}
                       title="Retirer l'espèce"
                     />
                   </DeleteCell>
@@ -337,6 +349,25 @@ export function SpeciesField() {
       </SpeciesTableWrapper>
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" rows={2} />
+      {speciesToDeleteIndex !== undefined &&
+        createPortal(
+          <ConfirmationModal
+            confirmationButtonLabel="Confirmer la suppression"
+            message={
+              <>
+                <p>Êtes-vous sûr de vouloir supprimer</p>
+                <Bold>l’espèce ?</Bold>
+              </>
+            }
+            onCancel={() => setSpeciesToDeleteIndex(undefined)}
+            onConfirm={() => {
+              remove(speciesToDeleteIndex)
+              setSpeciesToDeleteIndex(undefined)
+            }}
+            title="Suppression de l’espèce"
+          />,
+          newWindowContainerRef.current
+        )}
     </FieldsetGroup>
   )
 }

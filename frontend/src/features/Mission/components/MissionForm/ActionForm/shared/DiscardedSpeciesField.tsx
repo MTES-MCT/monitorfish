@@ -1,4 +1,6 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Ellipsised } from '@components/Ellipsised'
+import { Bold } from '@components/style'
 import { DISCARD_REASON_AS_OPTIONS } from '@features/Mission/components/MissionForm/ActionForm/shared/constants'
 import { getDefaultFaoZones } from '@features/Mission/components/MissionForm/ActionForm/utils'
 import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
@@ -6,14 +8,17 @@ import { DISCARD_REASON_LABEL } from '@features/Mission/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { FrontendError } from '@libs/FrontendError'
-import { Accent, FormikSelect, Icon, IconButton, SimpleTable } from '@mtes-mct/monitor-ui'
+import { Accent, FormikSelect, Icon, IconButton, SimpleTable, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useField, useFormikContext } from 'formik'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import {
   AddSpeciesButton,
   DeleteCell,
+  RequiredAsterisk,
   selectFieldCss,
   SpeciesTableWrapper,
   StyledPickerTd
@@ -31,6 +36,8 @@ export function DiscardedSpeciesField() {
   const [input, , helper] = useField<MissionActionFormValues['discardedSpecies']>('discardedSpecies')
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
+  const { newWindowContainerRef } = useNewWindow()
+  const [discardToDeleteIndex, setDiscardToDeleteIndex] = useState<number | undefined>(undefined)
 
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
@@ -76,6 +83,23 @@ export function DiscardedSpeciesField() {
     helper.setValue(input.value.filter((_, currentIndex) => currentIndex !== index))
   }
 
+  const getDiscardReasonOptions = (index: number) => {
+    const currentSpeciesCode = input.value?.[index]?.speciesCode
+    const usedReasons = new Set<string>(
+      (input.value ?? [])
+        .filter(
+          (discard, currentIndex) =>
+            currentIndex !== index && discard.speciesCode === currentSpeciesCode && !!discard.discardReason
+        )
+        .map(discard => discard.discardReason as string)
+    )
+
+    return DISCARD_REASON_AS_OPTIONS.map(option => ({
+      ...option,
+      isDisabled: usedReasons.has(option.value)
+    }))
+  }
+
   if (!speciesAsOptions.length || !customSearch) {
     return <FieldsetGroupSpinner isLight legend="Rejets" />
   }
@@ -88,10 +112,12 @@ export function DiscardedSpeciesField() {
         <SimpleTable.Table>
           <SimpleTable.Head>
             <tr>
-              <SimpleTable.Th $width={165}>Espèce(s) rejetées</SimpleTable.Th>
+              <SimpleTable.Th $width={165}>Espèce rejetée</SimpleTable.Th>
               <SimpleTable.Th $width={55}>Qté</SimpleTable.Th>
               <SimpleTable.Th $width={180}>Nature rejet</SimpleTable.Th>
-              <SimpleTable.Th $width={80}>Zone</SimpleTable.Th>
+              <SimpleTable.Th $width={80}>
+                Zone <RequiredAsterisk>*</RequiredAsterisk>
+              </SimpleTable.Th>
               <SimpleTable.Th $width={21} aria-label="Retirer" />
             </tr>
           </SimpleTable.Head>
@@ -148,7 +174,7 @@ export function DiscardedSpeciesField() {
                         name={`discardedSpecies[${index}].discardReason`}
                         onClose={() => handlePickerClose(index)}
                         onOpen={() => handlePickerOpen(index)}
-                        options={DISCARD_REASON_AS_OPTIONS}
+                        options={getDiscardReasonOptions(index)}
                         popupWidth={220}
                       />
                     ) : (
@@ -172,7 +198,7 @@ export function DiscardedSpeciesField() {
                       accent={Accent.TERTIARY}
                       disabled={isDisabled}
                       Icon={Icon.Minus}
-                      onClick={() => removeDiscard(index)}
+                      onClick={() => setDiscardToDeleteIndex(index)}
                       title="Retirer le rejet"
                     />
                   </DeleteCell>
@@ -190,6 +216,25 @@ export function DiscardedSpeciesField() {
           </tbody>
         </SimpleTable.Table>
       </SpeciesTableWrapper>
+      {discardToDeleteIndex !== undefined &&
+        createPortal(
+          <ConfirmationModal
+            confirmationButtonLabel="Confirmer la suppression"
+            message={
+              <>
+                <p>Êtes-vous sûr de vouloir supprimer</p>
+                <Bold>le rejet ?</Bold>
+              </>
+            }
+            onCancel={() => setDiscardToDeleteIndex(undefined)}
+            onConfirm={() => {
+              removeDiscard(discardToDeleteIndex)
+              setDiscardToDeleteIndex(undefined)
+            }}
+            title="Suppression du rejet"
+          />,
+          newWindowContainerRef.current
+        )}
     </FieldsetGroup>
   )
 }

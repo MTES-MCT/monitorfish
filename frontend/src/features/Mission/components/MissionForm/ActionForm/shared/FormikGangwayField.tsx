@@ -17,6 +17,7 @@ const GANGWAY_DEPENDENT_FIELDS: Array<keyof MissionActionFormValues> = [
   'emitsVms',
   'emitsAis',
   'licencesMatchActivity',
+  'logbookMatchesActivity',
   'separateStowageOfPreservedSpecies',
   'speciesWeightControlled',
   'speciesSizeControlled',
@@ -56,6 +57,11 @@ export function FormikGangwayField() {
       })
     } else if (values.isGangwayDeployed === true) {
       GANGWAY_DEPENDENT_FIELDS.forEach(field => setFieldValue(field, undefined))
+
+      values.gearOnboard?.forEach((_, index) => {
+        setFieldValue(`gearOnboard[${index}].gearWasControlled`, undefined)
+        setFieldValue(`gearOnboard[${index}].gearMarkingIsCompliant`, undefined)
+      })
     }
   }, [values.gearOnboard, values.isGangwayDeployed, setFieldValue])
 

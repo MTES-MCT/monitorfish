@@ -184,7 +184,7 @@ describe('ActionForm/schemas', () => {
   })
 
   describe('getLandControlFormCompletionSchema', () => {
-    // On land controls the propulsion engine power, VMS and AIS emission checks are forced to N/A.
+    // On land controls the propulsion engine power check is forced to N/A; VMS and AIS emissions are still controlled.
     const completionValuesWithoutEISR = {
       actionDatetimeUtc: '2026-06-15T10:00:00Z',
       completedBy: 'DEF',
@@ -214,10 +214,9 @@ describe('ActionForm/schemas', () => {
       underSizedSeparateStowage: MissionAction.ControlCheck.YES
     }
 
-    // The two land-specific obligation checks, required only when e-ISR is enabled.
+    // The land-specific obligation check, required only when e-ISR is enabled.
     const landEisrChecks = {
-      portEntranceAndLandingAuthorized: MissionAction.ControlCheck.YES,
-      vmsEmissionControlBeforeArrival: MissionAction.ControlCheck.YES
+      portEntranceAndLandingAuthorized: MissionAction.ControlCheck.YES
     }
 
     // The land-specific species checks (two subsections), required only when e-ISR is enabled.

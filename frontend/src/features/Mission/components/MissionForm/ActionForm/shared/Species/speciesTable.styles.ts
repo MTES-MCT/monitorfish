@@ -12,6 +12,7 @@ export const SpeciesTableWrapper = styled.div`
   th {
     padding-left: 5px;
     padding-right: 5px;
+    text-align: left;
   }
 
   /* Keep a stable row height whether a cell shows plain text or its editor, to avoid jitter. */
@@ -76,6 +77,15 @@ export const AddSpeciesButton = styled.button`
   color: ${p => p.theme.color.slateGray};
   cursor: pointer;
   font-weight: 500;
+
+  &:disabled {
+    color: ${p => p.theme.color.lightGray};
+    cursor: not-allowed;
+  }
+`
+
+export const RequiredAsterisk = styled.span`
+  color: ${p => p.theme.color.maximumRed};
 `
 
 export const QuantityWrapper = styled.div`
@@ -98,13 +108,21 @@ export const Kg = styled.span`
   padding-left: 4px;
 `
 
-export const SpeciesName = styled.span`
+export const SpeciesName = styled.span<{
+  $isNotLanded?: boolean
+}>`
   font-weight: 700;
   display: inline-block;
   max-width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  ${p =>
+    p.$isNotLanded &&
+    css`
+      color: ${p.theme.color.slateGray};
+      font-style: italic;
+    `}
 `
 
 export const SelectValue = styled.span`

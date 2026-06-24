@@ -22,9 +22,17 @@ export const updateActionLogbookFilledPriorToControl =
     ])
 
     const vessel = vesselResult?.data
-    const isVesselUnder10m = !!vessel?.length && vessel.length < 12
-    if (isVesselUnder10m) {
+    const vesselLength = vessel?.length
+
+    if (!!vesselLength && vesselLength < 10) {
       setFieldValue('logbookFilledPriorToControl', MissionAction.ControlCheck.NOT_APPLICABLE)
+
+      return
+    }
+
+    // Between 10m and 12m the field is left empty: the user must check the paper logbook on board.
+    if (!!vesselLength && vesselLength < 12) {
+      setFieldValue('logbookFilledPriorToControl', undefined)
 
       return
     }

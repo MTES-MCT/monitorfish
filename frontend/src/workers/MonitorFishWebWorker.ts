@@ -10,7 +10,13 @@ import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselEmitsPosition, VesselLocation, vesselSize } from '@features/Vessel/types/vessel'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { SEARCH_QUERY_MIN_LENGTH } from '@features/VesselGroup/components/VesselGroupList/hooks/constants'
-import { GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import {
+  GroupType,
+  type HardcodedPriorityVesselGroup,
+  Sharing,
+  type VesselGroupWithVessels
+} from '@features/VesselGroup/types'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { customDayjs, CustomSearch } from '@mtes-mct/monitor-ui'
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
@@ -195,6 +201,8 @@ export class MonitorFishWebWorker {
     const groupsDisplayed = filteredVesselGroups
       .map(id => vessel.vesselGroups.find(group => group.id === id))
       .filter((group): group is Vessel.VesselGroupOfActiveVessel => !!group)
+      // Priority groups are displayed first (label icons and layer group color)
+      .sort((a, b) => Number(Boolean(b.isPriorityGroup)) - Number(Boolean(a.isPriorityGroup)))
 
     const numberOfGroupsHidden =
       vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
@@ -215,15 +223,18 @@ export class MonitorFishWebWorker {
     searchQuery: string | undefined,
     filteredGroupType: GroupType | undefined,
     filteredGroupSharing: Sharing | undefined,
-    filteredExpired: boolean
+    filteredExpired: boolean,
+    filteredPriority: boolean = false
   ): {
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
+    priorityVesselGroupsWithVessels: VesselGroupWithVessels[]
     unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   } {
     const filteredVesselGroups =
       vesselGroupsWithVessels
         ?.filter(vesselGroup => !filteredGroupType || vesselGroup.group.type === filteredGroupType)
         ?.filter(vesselGroup => !filteredGroupSharing || vesselGroup.group.sharing === filteredGroupSharing)
+        ?.filter(vesselGroup => !filteredPriority || isPriorityGroup(vesselGroup.group))
         ?.filter(vesselGroup =>
           vesselGroup.group.endOfValidityUtc && !filteredExpired
             ? customDayjs(vesselGroup.group.endOfValidityUtc).isAfter(customDayjs(), 'day')
@@ -263,15 +274,26 @@ export class MonitorFishWebWorker {
       return fuse.find(searchQuery)
     })()
 
-    const pinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(vesselGroup =>
+    const priorityVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery
+      .filter(vesselGroup => isPriorityGroup(vesselGroup.group))
+      .sort(
+        (a, b) =>
+          ((b.group as HardcodedPriorityVesselGroup).priorityLevel ?? 0) -
+          ((a.group as HardcodedPriorityVesselGroup).priorityLevel ?? 0)
+      )
+    const otherVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
+      vesselGroup => !isPriorityGroup(vesselGroup.group)
+    )
+    const pinnedVesselGroupsWithVessels = otherVesselGroupsWithVessels.filter(vesselGroup =>
       vesselGroupsIdsPinned.includes(vesselGroup.group.id)
     )
-    const unpinnedVesselGroupsWithVessels = filteredVesselGroupsWithVesselsBySearchQuery.filter(
+    const unpinnedVesselGroupsWithVessels = otherVesselGroupsWithVessels.filter(
       vesselGroup => !vesselGroupsIdsPinned.includes(vesselGroup.group.id)
     )
 
     return {
       pinnedVesselGroupsWithVessels,
+      priorityVesselGroupsWithVessels,
       unpinnedVesselGroupsWithVessels
     }
   }

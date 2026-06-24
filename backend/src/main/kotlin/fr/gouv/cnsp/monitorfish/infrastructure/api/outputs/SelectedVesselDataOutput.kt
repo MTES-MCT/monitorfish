@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.util.*
@@ -154,10 +155,8 @@ data class SelectedVesselDataOutput(
                     enrichedActiveVessel.vesselGroups.map {
                         when (it) {
                             is DynamicVesselGroup -> DynamicVesselGroupDataOutput.fromDynamicVesselGroup(it)
-                            is FixedVesselGroup ->
-                                FixedVesselGroupDataOutput.fromFixedVesselGroup(
-                                    vesselGroup = it,
-                                )
+                            is FixedVesselGroup -> FixedVesselGroupDataOutput.fromFixedVesselGroup(vesselGroup = it)
+                            is PriorityVesselGroup -> PriorityVesselGroupDataOutput.fromPriorityVesselGroup(it)
                         }
                     },
                 profile = enrichedActiveVessel.vesselProfile?.let { VesselProfileDataOutput.fromVesselProfile(it) },

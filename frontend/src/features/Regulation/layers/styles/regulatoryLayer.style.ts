@@ -2,7 +2,6 @@ import { getColorWithAlpha, getHashDigitsFromString, getStyle } from '@features/
 import { THEME, customDayjs } from '@mtes-mct/monitor-ui'
 
 import { isForbiddenPeriod } from './utils/isForbiddenPeriod'
-import { theme } from '../../../../ui/theme'
 
 import type { BaseRegulatoryZone } from '../../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -27,17 +26,17 @@ export function getRegulatoryLayerStyle(
 
 const DIGIT_TO_LAYER_COLOR_MAP = new Map<number, string>([
   [0, THEME.color.yaleBlue],
-  [1, theme.color.queenBlue],
+  [1, THEME.color.queenBlue],
   [2, THEME.color.glaucous],
   [3, THEME.color.blueNcs],
   [4, THEME.color.iceberg],
   [5, THEME.color.lightSteelBlue],
   [6, THEME.color.lightPeriwinkle],
-  [7, theme.color.aliceBlue],
-  [8, theme.color.lightBlue],
-  [9, theme.color.skyBlue],
-  [10, theme.color.frenchBlue],
-  [11, theme.color.prussianBlue]
+  [7, THEME.color.aliceBlue],
+  [8, THEME.color.lightBlue],
+  [9, THEME.color.skyBlue],
+  [10, THEME.color.frenchBlue],
+  [11, THEME.color.prussianBlue]
 ])
 
 const getLayerColor = (randomDigits, metadataIsShowed) => {

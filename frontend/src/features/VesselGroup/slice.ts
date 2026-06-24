@@ -11,6 +11,7 @@ export type VesselGroupState = {
   areVesselsNotInVesselGroupsHidden: boolean
   editedVesselGroup: CreateOrUpdateVesselGroup | undefined
   filteredGroupType: GroupType | undefined
+  filteredPriority: boolean
   filteredSharing: Sharing | undefined
   vesselGroupsIdsDisplayed: number[]
   vesselGroupsIdsPinned: number[]
@@ -19,6 +20,7 @@ export const INITIAL_STATE: VesselGroupState = {
   areVesselsNotInVesselGroupsHidden: false,
   editedVesselGroup: undefined,
   filteredGroupType: undefined,
+  filteredPriority: false,
   filteredSharing: undefined,
   vesselGroupsIdsDisplayed: [],
   vesselGroupsIdsPinned: []
@@ -33,6 +35,10 @@ const vesselGroupSlice = createSlice({
 
     setFilteredGroupType(state, action: PayloadAction<GroupType | undefined>) {
       state.filteredGroupType = action.payload
+    },
+
+    setFilteredPriority(state, action: PayloadAction<boolean>) {
+      state.filteredPriority = action.payload
     },
 
     setFilteredSharing(state, action: PayloadAction<Sharing | undefined>) {
@@ -78,16 +84,21 @@ export const selectVesselGroupsIdsFiltered = createSelector(
     (state: MainRootState) => selectAllVesselGroupsQuery(state),
     (state: MainRootState) => state.vesselGroup.filteredGroupType,
     (state: MainRootState) => state.vesselGroup.filteredSharing,
-    (state: MainRootState) => state.vesselGroup.vesselGroupsIdsPinned
+    (state: MainRootState) => state.vesselGroup.vesselGroupsIdsPinned,
+    (state: MainRootState) => state.vesselGroup.filteredPriority
   ],
-  (queryResult, filteredGroupType, filteredSharing, vesselGroupsIdsPinned) => {
-    const { pinnedVesselGroups, unpinnedVesselGroups } = getFilteredVesselGroups(
+  (queryResult, filteredGroupType, filteredSharing, vesselGroupsIdsPinned, filteredPriority) => {
+    const { pinnedVesselGroups, priorityVesselGroups, unpinnedVesselGroups } = getFilteredVesselGroups(
       queryResult.data,
       filteredGroupType,
       filteredSharing,
-      vesselGroupsIdsPinned
+      vesselGroupsIdsPinned,
+      filteredPriority
     )
 
-    return pinnedVesselGroups.concat(unpinnedVesselGroups).map(vg => vg.id)
+    return pinnedVesselGroups
+      .concat(unpinnedVesselGroups)
+      .concat(priorityVesselGroups)
+      .map(vg => vg.id)
   }
 )

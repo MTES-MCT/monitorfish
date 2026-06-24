@@ -1,6 +1,5 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Bold } from '@components/style'
-import { Square } from '@features/Regulation/components/ZonePreview'
 import { VESSEL_LIST_CSV_MAP_BASE } from '@features/Vessel/components/ExportVesselListDialog/csvMap'
 import { VesselSearchWithMapVessels } from '@features/Vessel/components/VesselSearch/VesselSearchWithMapVessels'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
@@ -10,9 +9,16 @@ import { vesselGroupListActions } from '@features/VesselGroup/components/VesselG
 import { VesselTable } from '@features/VesselGroup/components/VesselGroupList/VesselTable'
 import { CNSP_SERVICE_LABEL } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { type DynamicVesselGroup, GroupType, Sharing, type VesselGroupWithVessels } from '@features/VesselGroup/types'
+import {
+  type CreateOrUpdateVesselGroup,
+  type DynamicVesselGroup,
+  GroupType,
+  Sharing,
+  type VesselGroupWithVessels
+} from '@features/VesselGroup/types'
 import { addVesselToFixedVesselGroup } from '@features/VesselGroup/useCases/addVesselToFixedVesselGroup'
 import { deleteVesselGroup } from '@features/VesselGroup/useCases/deleteVesselGroup'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
@@ -24,6 +30,7 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
+import { MONITORFISH_THEME } from '../../../../ui/theme'
 import { getDate } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
@@ -40,15 +47,23 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   const { newWindowContainerRef } = useNewWindow()
   const dispatch = useMainAppDispatch()
 
-  const isOpenInStore = useMainAppSelector(state =>
-    state.vesselGroupList.openedVesselGroupIds.includes(vesselGroupWithVessels.group.id)
-  )
+  const isHardcoded = vesselGroupWithVessels.group.type === GroupType.HARDCODED
+  const isPriority = isPriorityGroup(vesselGroupWithVessels.group)
+  const isOpenInStore = useMainAppSelector(state => {
+    const { id } = vesselGroupWithVessels.group
+
+    return state.vesselGroupList.openedVesselGroupIds.includes(id)
+  })
   const isOpen = isOpened || isOpenInStore
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isEditDynamicVesselGroupOpened, setIsEditDynamicVesselGroupOpened] = useState(false)
   const [isEditFixedVesselGroupOpened, setIsEditFixedVesselGroupOpened] = useState(false)
 
   const handleDeleteVesselGroup = () => {
+    if (vesselGroupWithVessels.group.type === GroupType.HARDCODED) {
+      return
+    }
+
     dispatch(deleteVesselGroup(vesselGroupWithVessels.group.id))
     setIsDeleteConfirmationModalOpen(false)
   }
@@ -68,6 +83,10 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
 
   const togglePinGroup = async event => {
     event.stopPropagation()
+    if (vesselGroupWithVessels.group.type === GroupType.HARDCODED) {
+      return
+    }
+
     trackEvent({
       action: "Epingle d'un groupe de navire dans la deuxième fenêtre",
       category: 'VESSEL_GROUP',
@@ -83,10 +102,15 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     dispatch(renderVesselFeatures())
   }
 
+  const toggleRow = () => {
+    dispatch(vesselGroupListActions.vesselGroupIdToggled(vesselGroupWithVessels.group.id))
+  }
+
   const addVessel = (nextVessel: Vessel.VesselIdentity | AISVessel.AISVessel | undefined, isAIS?: boolean) => {
     if (isAIS) {
       return
     }
+
     if (vesselGroupWithVessels.group.type !== GroupType.FIXED) {
       return
     }
@@ -134,27 +158,42 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
 
   return (
     <>
-      <Wrapper title={vesselGroupWithVessels.group.name}>
-        <Row onClick={() => dispatch(vesselGroupListActions.vesselGroupIdToggled(vesselGroupWithVessels.group.id))}>
-          <IconButton
-            accent={Accent.TERTIARY}
-            aria-label="Sélectionner"
-            color={isPinned ? THEME.color.blueGray : THEME.color.gunMetal}
-            Icon={Icon.Pin}
-            onClick={togglePinGroup}
-            style={{ marginRight: 4 }}
-            title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroupWithVessels.group.name}"`}
-          />
-          <StyledSquare $fillColor={vesselGroupWithVessels.group.color} $strokeColor={THEME.color.lightGray} />
+      <Wrapper data-cy="vessel-group-row" title={vesselGroupWithVessels.group.name}>
+        <Row onClick={toggleRow}>
+          {!isHardcoded && (
+            <IconButton
+              accent={Accent.TERTIARY}
+              aria-label="Sélectionner"
+              color={isPinned ? THEME.color.blueGray : THEME.color.gunMetal}
+              Icon={Icon.Pin}
+              onClick={togglePinGroup}
+              style={{ marginRight: 4 }}
+              title={`${isPinned ? 'Dépingler' : 'Epingler'} le groupe "${vesselGroupWithVessels.group.name}"`}
+            />
+          )}
+          {isPriority ? (
+            <CircleWrapper data-cy="vessel-group-priority-icon">
+              <Icon.Priority color={vesselGroupWithVessels.group.color} size={16} />
+            </CircleWrapper>
+          ) : (
+            <CircleWrapper>
+              <Icon.CircleFilled color={vesselGroupWithVessels.group.color} size={16} />
+            </CircleWrapper>
+          )}
           {vesselGroupWithVessels.group.name}
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
-          {vesselGroupWithVessels.group.type === GroupType.DYNAMIC && (
+          {isPriority && (
+            <StyledTag borderColor={MONITORFISH_THEME.color.crimsonCarrot} data-cy="vessel-group-priority-tag">
+              Cibles prioritaires
+            </StyledTag>
+          )}
+          {(isHardcoded || vesselGroupWithVessels.group.type === GroupType.DYNAMIC) && (
             <StyledTag borderColor={THEME.color.slateGray}>Groupe dynamique</StyledTag>
           )}
           {vesselGroupWithVessels.group.type === GroupType.FIXED && (
             <StyledTag borderColor={THEME.color.slateGray}>Groupe fixe</StyledTag>
           )}
-          {vesselGroupWithVessels.group.sharing === Sharing.PRIVATE && (
+          {!isHardcoded && vesselGroupWithVessels.group.sharing === Sharing.PRIVATE && (
             <StyledTag backgroundColor={THEME.color.gainsboro} borderColor={THEME.color.lightGray}>
               Groupe personnel
             </StyledTag>
@@ -170,10 +209,13 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
           )}
           <RowIcons>
             <span>
-              <b>{vesselGroupWithVessels.vessels.length} navires</b> – {getValidityText()}
-              Créé par {vesselGroupWithVessels.group.createdBy.split('@')?.[0]} le{' '}
-              {getDate(vesselGroupWithVessels.group.createdAtUtc)}
-              {vesselGroupWithVessels.group.updatedAtUtc &&
+              <b>{vesselGroupWithVessels.vessels.length} navires</b>
+              {!isHardcoded && ` – ${getValidityText()}`}
+              {!isHardcoded &&
+                vesselGroupWithVessels.group.createdBy &&
+                `Créé par ${vesselGroupWithVessels.group.createdBy.split('@')?.[0]} le ${getDate(vesselGroupWithVessels.group.createdAtUtc)}`}
+              {!isHardcoded &&
+                vesselGroupWithVessels.group.updatedAtUtc &&
                 `, modifié le ${getDate(vesselGroupWithVessels.group.updatedAtUtc)}`}
             </span>
             <Separator />
@@ -189,6 +231,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
             />
             <IconButton
               accent={Accent.TERTIARY}
+              disabled={isHardcoded}
               Icon={Icon.Delete}
               iconSize={20}
               onClick={event => {
@@ -199,6 +242,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
             />
             <IconButton
               accent={Accent.TERTIARY}
+              disabled={isHardcoded}
               Icon={Icon.Edit}
               iconSize={20}
               onClick={event => {
@@ -268,14 +312,14 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
       )}
       {isEditDynamicVesselGroupOpened && (
         <EditDynamicVesselGroupDialog
-          editedVesselGroup={vesselGroupWithVessels.group}
+          editedVesselGroup={vesselGroupWithVessels.group as CreateOrUpdateVesselGroup}
           initialListFilterValues={(vesselGroupWithVessels.group as DynamicVesselGroup).filters}
           onExit={() => setIsEditDynamicVesselGroupOpened(false)}
         />
       )}
       {isEditFixedVesselGroupOpened && (
         <EditFixedVesselGroupDialog
-          editedVesselGroup={vesselGroupWithVessels.group}
+          editedVesselGroup={vesselGroupWithVessels.group as CreateOrUpdateVesselGroup}
           onExit={() => setIsEditFixedVesselGroupOpened(false)}
         />
       )}
@@ -299,8 +343,12 @@ const StyledVesselSearch = styled(VesselSearchWithMapVessels)`
   }
 `
 
-const StyledSquare = styled(Square)`
+const CircleWrapper = styled.span`
+  display: inline-flex;
+  align-items: center;
   margin-top: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
 `
 
 const StyledTag = styled(Tag)`

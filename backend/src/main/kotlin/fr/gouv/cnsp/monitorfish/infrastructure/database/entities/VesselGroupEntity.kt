@@ -87,6 +87,7 @@ data class VesselGroupEntity(
                     endOfValidityUtc = endOfValidityUtc,
                     startOfValidityUtc = startOfValidityUtc,
                 )
+            GroupType.HARDCODED -> throw IllegalStateException("Hard-coded groups are not stored in the database.")
         }
 
     companion object {

@@ -1,11 +1,10 @@
 import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
-import { customDayjs, Icon } from '@mtes-mct/monitor-ui'
+import { customDayjs, Icon, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { InfractionsSummary } from './InfractionsSummary'
 import { LastControl } from './LastControl'
 import { LawReminders } from './LawReminders'
-import { theme } from '../../../../../../ui/theme'
 // TODO Add the icon to https://github.com/MTES-MCT/monitor-ui
 import CautionSVG from '../../../../../icons/Attention_controles.svg?react'
 import SeaSVG from '../../../../../icons/Avarie_statut_navire_en_mer.svg?react'
@@ -39,7 +38,7 @@ export function ControlsSummary({ controlsFromDate, lastControls, summary }: Con
         </Columns>
         <Columns $isFirst={false}>
           <IconColumn>
-            <Icon.Anchor color={theme.color.slateGray} />
+            <Icon.Anchor color={THEME.color.slateGray} />
           </IconColumn>
           <LastControl field={lastControls.LAND} />
         </Columns>

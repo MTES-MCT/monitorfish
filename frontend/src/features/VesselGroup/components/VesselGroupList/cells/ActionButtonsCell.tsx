@@ -2,6 +2,7 @@ import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { deleteVesselFromVesselGroup } from '@features/VesselGroup/useCases/deleteVesselFromVesselGroup'
+import { isHardcodedGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -25,8 +26,9 @@ export function ActionButtonsCell({ groupId, isFixedGroup, vessel }: ActionButto
       {isFixedGroup && (
         <IconButton
           accent={Accent.TERTIARY}
+          disabled={isHardcodedGroup(groupId)}
           Icon={Icon.Delete}
-          onClick={() => dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
+          onClick={() => !isHardcodedGroup(groupId) && dispatch(deleteVesselFromVesselGroup(groupId, vessel.id!!))}
           title={`Supprimer le navire ${vessel.vesselName ? `"${vessel.vesselName}" ` : ''}du groupe`}
           withUnpropagatedClick
         />

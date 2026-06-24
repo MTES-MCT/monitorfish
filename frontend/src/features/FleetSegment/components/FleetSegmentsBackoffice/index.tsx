@@ -8,7 +8,6 @@ import styled from 'styled-components'
 
 import { CreateOrEditFleetSegmentModal } from './CreateOrEditFleetSegmentModal'
 import { FleetSegmentsTable } from './FleetSegmentsTable'
-import { theme } from '../../../../ui/theme'
 import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
 import { addFleetSegmentYear } from '../../useCases/addFleetSegmentYear'
 import { createFleetSegment } from '../../useCases/createFleetSegment'
@@ -162,7 +161,7 @@ export function FleetSegmentsBackoffice() {
         </>
       ) : (
         <Loading>
-          <FulfillingBouncingCircleLoader className="update-vessels" color={theme.color.lightGray} />
+          <FulfillingBouncingCircleLoader className="update-vessels" color={THEME.color.lightGray} />
         </Loading>
       )}
 

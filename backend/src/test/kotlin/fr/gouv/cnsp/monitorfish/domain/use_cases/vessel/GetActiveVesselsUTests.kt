@@ -2,9 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.mock
-import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
@@ -22,8 +20,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
-import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
 import org.assertj.core.api.Assertions.assertThat
@@ -42,10 +39,7 @@ class GetActiveVesselsUTests {
     private val reportingRepository: ReportingRepository = mock()
 
     @Mock
-    private val vesselGroupRepository: VesselGroupRepository = mock()
-
-    @Mock
-    private val getAuthorizedUser: GetAuthorizedUser = mock()
+    private val getAllUserVesselGroups: GetAllUserVesselGroups = mock()
 
     @Mock
     private val logbookReportRepository: LogbookReportRepository = mock()
@@ -57,8 +51,7 @@ class GetActiveVesselsUTests {
         GetActiveVessels(
             lastPositionRepository,
             reportingRepository,
-            vesselGroupRepository,
-            getAuthorizedUser,
+            getAllUserVesselGroups,
             logbookReportRepository,
             manualPriorNotificationRepository,
         )
@@ -66,13 +59,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When multiple group conditions matches`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastPosition = TestUtils.getDummyLastPositions().first()
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -95,8 +81,9 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            getDynamicVesselGroups(),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups(),
         )
 
         // When
@@ -111,13 +98,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When flag state match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -138,40 +118,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = listOf(CountryCode.FR),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = listOf(CountryCode.FR),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -188,13 +169,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When fleet segment match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -216,40 +190,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = listOf("NWW03"),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = listOf("NWW03"),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -266,13 +241,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When gear match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -299,40 +267,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = listOf("OTB"),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = listOf("OTB"),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -349,13 +318,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When has logbook match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -377,40 +339,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = true,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = true,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -427,13 +390,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When last position match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -454,40 +410,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = 3,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = 3,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -504,13 +461,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When risk factor match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -531,40 +481,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = listOf(2),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = listOf(2),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -581,13 +532,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When species match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -617,40 +561,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = listOf("HKE"),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = listOf("HKE"),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -667,13 +612,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel size match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -695,39 +633,40 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = VesselSize.ABOVE_TWELVE_METERS,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = VesselSize.ABOVE_TWELVE_METERS,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -744,13 +683,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel location match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -772,39 +704,40 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = listOf(VesselLocation.PORT),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = listOf(VesselLocation.PORT),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -821,13 +754,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When zone match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -859,46 +785,47 @@ class GetActiveVesselsUTests {
                 ).toTypedArray(),
             )
 
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones =
-                                listOf(
-                                    ZoneFilter(
-                                        feature = polygon,
-                                        label = "Zone manuelle",
-                                        value = "custom",
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones =
+                                    listOf(
+                                        ZoneFilter(
+                                            feature = polygon,
+                                            label = "Zone manuelle",
+                                            value = "custom",
+                                        ),
                                     ),
-                                ),
-                        ),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -915,13 +842,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions without groups When vessel district code not match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -944,40 +864,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf("GV"),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf("GV"),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -993,13 +914,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel district code match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1022,40 +936,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = listOf("GV"),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = null,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = listOf("GV"),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = null,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1072,13 +987,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel Last Control Period match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1104,40 +1012,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = LastControlPeriod.BEFORE_ONE_YEAR_AGO,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1154,13 +1063,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return last positions with groups When vessel Last Control Period does not match`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1182,40 +1084,41 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                DynamicVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    filters =
-                        VesselGroupFilters(
-                            countryCodes = emptyList(),
-                            districtCodes = emptyList(),
-                            fleetSegments = emptyList(),
-                            gearCodes = emptyList(),
-                            hasLogbook = null,
-                            lastControlAtSeaPeriod = null,
-                            lastControlAtQuayPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
-                            landingPortLocodes = emptyList(),
-                            lastPositionHoursAgo = null,
-                            producerOrganizations = emptyList(),
-                            riskFactors = emptyList(),
-                            specyCodes = emptyList(),
-                            vesselSize = null,
-                            vesselsLocation = emptyList(),
-                            zones = emptyList(),
-                        ),
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    DynamicVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        filters =
+                            VesselGroupFilters(
+                                countryCodes = emptyList(),
+                                districtCodes = emptyList(),
+                                fleetSegments = emptyList(),
+                                gearCodes = emptyList(),
+                                hasLogbook = null,
+                                lastControlAtSeaPeriod = null,
+                                lastControlAtQuayPeriod = LastControlPeriod.AFTER_ONE_MONTH_AGO,
+                                landingPortLocodes = emptyList(),
+                                lastPositionHoursAgo = null,
+                                producerOrganizations = emptyList(),
+                                riskFactors = emptyList(),
+                                specyCodes = emptyList(),
+                                vesselSize = null,
+                                vesselsLocation = emptyList(),
+                                zones = emptyList(),
+                            ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1231,13 +1134,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return vessels without groups When no matching groups for user`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1250,8 +1146,10 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            emptyList(), // No groups found for the user
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                emptyList(),
+            // No groups found for the user
         )
 
         // When
@@ -1269,13 +1167,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return fixed groups When vessels are found in the last position table`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1288,43 +1179,44 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            listOf(
-                FixedVesselGroup(
-                    id = 1,
-                    isDeleted = false,
-                    name = "Dummy group",
-                    description = "",
-                    pointsOfAttention = "",
-                    color = "",
-                    sharing = Sharing.PRIVATE,
-                    createdBy = "dummy@email.gouv.fr",
-                    createdAtUtc = ZonedDateTime.now(),
-                    updatedAtUtc = null,
-                    endOfValidityUtc = null,
-                    vessels =
-                        listOf(
-                            VesselIdentity(
-                                vesselId = null,
-                                cfr = "FR123456785",
-                                name = "MY AWESOME VESSEL TWO",
-                                flagState = CountryCode.FR,
-                                ircs = null,
-                                externalIdentification = null,
-                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                listOf(
+                    FixedVesselGroup(
+                        id = 1,
+                        isDeleted = false,
+                        name = "Dummy group",
+                        description = "",
+                        pointsOfAttention = "",
+                        color = "",
+                        sharing = Sharing.PRIVATE,
+                        createdBy = "dummy@email.gouv.fr",
+                        createdAtUtc = ZonedDateTime.now(),
+                        updatedAtUtc = null,
+                        endOfValidityUtc = null,
+                        vessels =
+                            listOf(
+                                VesselIdentity(
+                                    vesselId = null,
+                                    cfr = "FR123456785",
+                                    name = "MY AWESOME VESSEL TWO",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                ),
+                                VesselIdentity(
+                                    vesselId = 1,
+                                    cfr = "FR00022680",
+                                    name = "MY AWESOME VESSEL",
+                                    flagState = CountryCode.FR,
+                                    ircs = null,
+                                    externalIdentification = null,
+                                    vesselIdentifier = null,
+                                ),
                             ),
-                            VesselIdentity(
-                                vesselId = 1,
-                                cfr = "FR00022680",
-                                name = "MY AWESOME VESSEL",
-                                flagState = CountryCode.FR,
-                                ircs = null,
-                                externalIdentification = null,
-                                vesselIdentifier = null,
-                            ),
-                        ),
+                    ),
                 ),
-            ),
         )
 
         // When
@@ -1345,13 +1237,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return fixed and dynamics groups When vessels are found in the last position table`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             TestUtils.getDummyLastPositions().map {
                 EnrichedActiveVessel(
@@ -1364,8 +1249,9 @@ class GetActiveVesselsUTests {
                 )
             },
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            getDynamicVesselGroups() +
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
                         id = 1,
@@ -1418,13 +1304,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return landing port When vessels are found in future prior notification from logbook and manual prior notification`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "DUMMY_EMAIL",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val vesselThatShouldMatchWithPriorNotification =
             VesselIdentity(
                 vesselId = 1,
@@ -1462,8 +1341,9 @@ class GetActiveVesselsUTests {
             },
         )
 
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(
-            getDynamicVesselGroups() +
+        given(getAllUserVesselGroups.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS +
+                getDynamicVesselGroups() +
                 listOf(
                     FixedVesselGroup(
                         id = 1,
@@ -1527,13 +1407,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return reporting types When vessel has reportings matched by vesselId`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1555,7 +1428,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1579,13 +1452,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return reporting types When vessel has reportings matched by CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1607,7 +1473,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1631,13 +1497,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return deduplicated reporting types When same reporting matches by both vesselId and CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1660,7 +1519,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1685,13 +1544,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return multiple reporting types When vessel has distinct reportings from both vesselId and CFR`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1714,7 +1566,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1749,9 +1601,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should propagate beacon from repository result`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(email = "dummy@email.gouv.fr", isSuperUser = true, service = null),
-        )
         val lastPosition = TestUtils.getDummyLastPositions().first()
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1766,7 +1615,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(listOf())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
 
         // When
         val activeVessels = getActiveVessels.execute("DUMMY_EMAIL")
@@ -1780,13 +1629,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return empty reporting types When vessel has no reportings`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1809,7 +1651,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(emptyList())
 
         // When
@@ -1823,13 +1665,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=true When INFRACTION_SUSPICION reporting was created after last DEP`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1853,7 +1688,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1880,13 +1715,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When INFRACTION_SUSPICION reporting was created before last DEP`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -1910,7 +1738,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1937,13 +1765,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When no last DEP date found for vessel`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -1966,7 +1787,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(
@@ -1991,13 +1812,6 @@ class GetActiveVesselsUTests {
     @Test
     fun `execute Should return hasCurrentTripInfractionSuspicion=false When reporting type is not INFRACTION_SUSPICION`() {
         // Given
-        given(getAuthorizedUser.execute(any())).willReturn(
-            AuthorizedUser(
-                email = "dummy@email.gouv.fr",
-                isSuperUser = true,
-                service = null,
-            ),
-        )
         val lastDep = ZonedDateTime.now().minusDays(1)
         given(lastPositionRepository.findActiveVesselWithReferentialData(any())).willReturn(
             listOf(
@@ -2021,7 +1835,7 @@ class GetActiveVesselsUTests {
                 ),
             ),
         )
-        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
         given(reportingRepository.findAllCurrent()).willReturn(
             listOf(
                 CurrentReporting(

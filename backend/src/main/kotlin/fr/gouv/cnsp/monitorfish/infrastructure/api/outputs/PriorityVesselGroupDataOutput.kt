@@ -1,13 +1,12 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
 import java.time.ZonedDateTime
 
-data class DynamicVesselGroupDataOutput(
+data class PriorityVesselGroupDataOutput(
     val id: Int?,
     val name: String,
     val isDeleted: Boolean,
@@ -15,19 +14,19 @@ data class DynamicVesselGroupDataOutput(
     val pointsOfAttention: String?,
     val color: String,
     val sharing: Sharing,
-    val sharedTo: List<CnspService>? = null,
+    val sharedTo: List<CnspService>?,
     val type: GroupType,
     val isPriorityGroup: Boolean,
     val createdBy: String,
     val createdAtUtc: ZonedDateTime,
-    val updatedAtUtc: ZonedDateTime? = null,
-    val endOfValidityUtc: ZonedDateTime? = null,
-    val startOfValidityUtc: ZonedDateTime? = null,
-    val filters: VesselGroupFilters,
+    val updatedAtUtc: ZonedDateTime?,
+    val endOfValidityUtc: ZonedDateTime?,
+    val startOfValidityUtc: ZonedDateTime?,
+    val priorityLevel: Int,
 ) {
     companion object {
-        fun fromDynamicVesselGroup(vesselGroup: DynamicVesselGroup) =
-            DynamicVesselGroupDataOutput(
+        fun fromPriorityVesselGroup(vesselGroup: PriorityVesselGroup) =
+            PriorityVesselGroupDataOutput(
                 id = vesselGroup.id,
                 name = vesselGroup.name,
                 isDeleted = vesselGroup.isDeleted,
@@ -43,7 +42,7 @@ data class DynamicVesselGroupDataOutput(
                 updatedAtUtc = vesselGroup.updatedAtUtc,
                 endOfValidityUtc = vesselGroup.endOfValidityUtc,
                 startOfValidityUtc = vesselGroup.startOfValidityUtc,
-                filters = vesselGroup.filters,
+                priorityLevel = vesselGroup.priorityLevel,
             )
     }
 }

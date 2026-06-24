@@ -52,7 +52,7 @@ class VesselGroupControllerITests {
     private lateinit var addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup
 
     @MockitoBean
-    private lateinit var getAllVesselGroups: GetAllVesselGroups
+    private lateinit var getAllUserVesselGroups: GetAllUserVesselGroups
 
     @MockitoBean
     private lateinit var getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels
@@ -194,9 +194,68 @@ class VesselGroupControllerITests {
     }
 
     @Test
+    fun `Should get all vessel groups including priority groups`() {
+        // Given
+        given(getAllUserVesselGroups.execute(any())).willReturn(PriorityVesselGroup.PRIORITY_GROUPS)
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups")
+                    .with(authenticatedRequest())
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].name", equalTo("Segments P1")))
+            .andExpect(jsonPath("$[0].type", equalTo("HARDCODED")))
+            .andExpect(jsonPath("$[0].priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[0].isPriorityGroup", equalTo(true)))
+            .andExpect(jsonPath("$[1].name", equalTo("Segments P2")))
+            .andExpect(jsonPath("$[1].priorityLevel", equalTo(3)))
+            .andExpect(jsonPath("$[1].isPriorityGroup", equalTo(true)))
+
+        Mockito.verify(getAllUserVesselGroups).execute("email@domain-name.com")
+    }
+
+    @Test
+    fun `Should get all vessel groups with vessels including priority groups`() {
+        // Given
+        given(getAllVesselGroupsWithVessels.execute(any())).willReturn(
+            PriorityVesselGroup.PRIORITY_GROUPS.map {
+                VesselGroupWithVessels(
+                    group = it,
+                    vessels = listOf(),
+                )
+            },
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessel_groups/vessels")
+                    .with(authenticatedRequest())
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].group.name", equalTo("Segments P1")))
+            .andExpect(jsonPath("$[0].group.type", equalTo("HARDCODED")))
+            .andExpect(jsonPath("$[0].group.priorityLevel", equalTo(4)))
+            .andExpect(jsonPath("$[0].group.isPriorityGroup", equalTo(true)))
+            .andExpect(jsonPath("$[1].group.name", equalTo("Segments P2")))
+            .andExpect(jsonPath("$[1].group.priorityLevel", equalTo(3)))
+            .andExpect(jsonPath("$[1].group.isPriorityGroup", equalTo(true)))
+
+        Mockito.verify(getAllVesselGroupsWithVessels).execute("email@domain-name.com")
+    }
+
+    @Test
     fun `Should get all dynamic vessel groups`() {
         // Given
-        given(getAllVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
+        given(getAllUserVesselGroups.execute(any())).willReturn(TestUtils.getDynamicVesselGroups())
 
         // When
         api
@@ -212,7 +271,7 @@ class VesselGroupControllerITests {
             .andExpect(jsonPath("$[0].filters.hasLogbook", equalTo(true)))
             .andExpect(jsonPath("$[0].filters.countryCodes", equalTo(listOf("FR", "ES", "IT"))))
 
-        Mockito.verify(getAllVesselGroups).execute("email@domain-name.com")
+        Mockito.verify(getAllUserVesselGroups).execute("email@domain-name.com")
     }
 
     @Test

@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.FixedVesselGroupDataInput
@@ -9,6 +10,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DynamicVesselGroupDat
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DynamicVesselGroupWithVesselsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FixedVesselGroupWithVesselsDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorityVesselGroupDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorityVesselGroupWithVesselsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
@@ -24,7 +27,7 @@ import org.springframework.web.bind.annotation.*
 class VesselGroupController(
     private val addOrUpdateDynamicVesselGroup: AddOrUpdateDynamicVesselGroup,
     private val addOrUpdateFixedVesselGroup: AddOrUpdateFixedVesselGroup,
-    private val getAllVesselGroups: GetAllVesselGroups,
+    private val getAllUserVesselGroups: GetAllUserVesselGroups,
     private val deleteVesselGroup: DeleteVesselGroup,
     private val deleteFixedVesselGroupVessel: DeleteFixedVesselGroupVessel,
     private val getAllVesselGroupsWithVessels: GetAllVesselGroupsWithVessels,
@@ -92,13 +95,11 @@ class VesselGroupController(
     ): List<Any> {
         val email: String = principal?.email ?: ""
 
-        return getAllVesselGroups.execute(email).map {
+        return getAllUserVesselGroups.execute(email).map {
             when (it) {
                 is DynamicVesselGroup -> DynamicVesselGroupDataOutput.fromDynamicVesselGroup(it)
-                is FixedVesselGroup ->
-                    FixedVesselGroupDataOutput.fromFixedVesselGroup(
-                        vesselGroup = it,
-                    )
+                is FixedVesselGroup -> FixedVesselGroupDataOutput.fromFixedVesselGroup(vesselGroup = it)
+                is PriorityVesselGroup -> PriorityVesselGroupDataOutput.fromPriorityVesselGroup(it)
             }
         }
     }
@@ -120,6 +121,11 @@ class VesselGroupController(
                     )
                 is FixedVesselGroup ->
                     FixedVesselGroupWithVesselsDataOutput.fromFixedVesselGroup(
+                        group = groupWithVessels.group,
+                        vessels = groupWithVessels.vessels,
+                    )
+                is PriorityVesselGroup ->
+                    PriorityVesselGroupWithVesselsDataOutput.fromPriorityVesselGroup(
                         group = groupWithVessels.group,
                         vessels = groupWithVessels.vessels,
                     )

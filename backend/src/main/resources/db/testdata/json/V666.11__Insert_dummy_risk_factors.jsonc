@@ -28288,7 +28288,7 @@
       },
       {
         "cfr": "ABC000254636",
-        "control_priority_level": 2.56,
+        "control_priority_level": 3.0,
         "control_rate_risk_factor": 3.8,
         "departure_datetime_utc:sql": "CURRENT_DATE",
         "detectability_risk_factor": 2.253094782587141,

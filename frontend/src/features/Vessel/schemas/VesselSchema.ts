@@ -4,7 +4,11 @@ import { RiskFactorSchema } from '@features/RiskFactor/types'
 import { ActivityOrigin, VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { BeaconSchema } from '@features/Vessel/schemas/BeaconSchema'
 import { VesselProfileSchema } from '@features/Vessel/schemas/VesselProfileSchema'
-import { DynamicVesselGroupSchema, FixedVesselGroupSchema } from '@features/VesselGroup/types'
+import {
+  DynamicVesselGroupSchema,
+  FixedVesselGroupSchema,
+  HardcodedPriorityVesselGroupSchema
+} from '@features/VesselGroup/types'
 import { z } from 'zod'
 
 export const VesselSchema = z.strictObject({
@@ -22,7 +26,7 @@ export const VesselSchema = z.strictObject({
   externalReferenceNumber: z.string().optional(),
   flagState: z.string(),
   gauge: z.number().optional(),
-  groups: z.array(z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema])),
+  groups: z.array(z.union([FixedVesselGroupSchema, DynamicVesselGroupSchema, HardcodedPriorityVesselGroupSchema])),
   hasAlert: z.boolean(),
   hasInfractionSuspicion: z.boolean(),
   hasLogbookEsacapt: z.boolean(),

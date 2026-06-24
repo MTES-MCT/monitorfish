@@ -1,16 +1,15 @@
 import { VESSEL_INFRACTION_SUSPICION_STYLE } from '@features/Vessel/types/vessel'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
-
-import { theme } from '../../../../ui/theme'
 
 const vesselInfractionSuspicionCircleStyle = new Style({
   image: new Circle({
     fill: undefined,
     radius: 19,
     stroke: new Stroke({
-      color: theme.color.maximumRed,
+      color: THEME.color.maximumRed,
       width: 2
     })
   }),

@@ -1,8 +1,8 @@
 import { VESSEL_SELECTOR_STYLE } from '@features/Vessel/types/vessel'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { type FeatureLike } from 'ol/Feature'
 import { Icon, Style } from 'ol/style'
 
-import { theme } from '../../../../ui/theme'
 import { degreesToRadian } from '../VesselsLayer/style'
 
 export const getSelectedVesselStyle = (isLight: boolean) => (feature: FeatureLike) => {
@@ -10,7 +10,7 @@ export const getSelectedVesselStyle = (isLight: boolean) => (feature: FeatureLik
 
   const vesselStyle = new Style({
     image: new Icon({
-      color: isLight ? theme.color.lightGray : theme.color.charcoal,
+      color: isLight ? THEME.color.lightGray : THEME.color.charcoal,
       offset: [0, 50],
       opacity: 1,
       rotation: degreesToRadian(course),

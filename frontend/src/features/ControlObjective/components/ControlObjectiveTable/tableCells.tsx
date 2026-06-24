@@ -1,13 +1,12 @@
 // TODO Re-enable ESLint for this old file which has been migrated from JSX to TSX.
 /* eslint-disable */
 
-import {Accent, Icon, IconButton, TextInput} from '@mtes-mct/monitor-ui'
+import {Accent, Icon, IconButton, TextInput, THEME} from '@mtes-mct/monitor-ui'
 import {useCallback} from 'react'
 import {Table} from 'rsuite'
 import styled from 'styled-components'
 
 import {getRiskFactorColor} from '@features/RiskFactor/utils'
-import {theme} from '../../../../ui/theme'
 import {RiskFactorBox} from '@features/RiskFactor/components/RiskFactorBox'
 
 import type {InnerCellProps} from 'rsuite-table/lib/Cell'
@@ -113,7 +112,7 @@ type SegmentCellWithTitleProps = Readonly<
 export function SegmentCellWithTitle({ dataKey, rowData, ...props }: SegmentCellWithTitleProps) {
   return (
     <Cell
-      style={{ background: rowData.segmentName ? 'unset' : theme.color.goldenPoppy }}
+      style={{ background: rowData.segmentName ? 'unset' : THEME.color.goldenPoppy }}
       title={`Segment ${rowData[dataKey] || 'inconnu'}`}
       {...props}
     >

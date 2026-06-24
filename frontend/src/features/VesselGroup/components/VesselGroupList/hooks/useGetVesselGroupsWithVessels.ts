@@ -10,19 +10,23 @@ import { MonitorFishWorker } from '../../../../../workers/MonitorFishWorker'
 export function useGetVesselGroupsWithVessels(
   filteredGroupType: GroupType | undefined,
   filteredSharing: Sharing | undefined,
-  filteredExpired: boolean
+  filteredExpired: boolean,
+  filteredPriority: boolean
 ): {
   isLoading: boolean
   pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
+  priorityVesselGroupsWithVessels: VesselGroupWithVessels[]
   unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
 } {
   const [result, setResult] = useState<{
     isLoading: boolean
     pinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
+    priorityVesselGroupsWithVessels: VesselGroupWithVessels[]
     unpinnedVesselGroupsWithVessels: VesselGroupWithVessels[]
   }>({
     isLoading: true,
     pinnedVesselGroupsWithVessels: [],
+    priorityVesselGroupsWithVessels: [],
     unpinnedVesselGroupsWithVessels: []
   })
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
@@ -38,6 +42,7 @@ export function useGetVesselGroupsWithVessels(
       debouncedFilteredGroupType: GroupType | undefined,
       debouncedFilteredSharing: Sharing | undefined,
       debouncedFilteredExpired: boolean,
+      debouncedFilteredPriority: boolean,
       debouncedIsLoading: boolean
     ) => {
       if (debouncedIsLoading) {
@@ -50,12 +55,14 @@ export function useGetVesselGroupsWithVessels(
         debouncedSearchQuery,
         debouncedFilteredGroupType,
         debouncedFilteredSharing,
-        debouncedFilteredExpired
+        debouncedFilteredExpired,
+        debouncedFilteredPriority
       )
 
       setResult({
         isLoading: false,
         pinnedVesselGroupsWithVessels: nextGroups.pinnedVesselGroupsWithVessels,
+        priorityVesselGroupsWithVessels: nextGroups.priorityVesselGroupsWithVessels,
         unpinnedVesselGroupsWithVessels: nextGroups.unpinnedVesselGroupsWithVessels
       })
     },
@@ -68,7 +75,7 @@ export function useGetVesselGroupsWithVessels(
       setResult(prev => ({ ...prev, isLoading: true }))
     }
 
-    debouncedSearch(searchQuery, filteredGroupType, filteredSharing, filteredExpired, isLoading)
+    debouncedSearch(searchQuery, filteredGroupType, filteredSharing, filteredExpired, filteredPriority, isLoading)
   }, [
     searchQuery,
     isLoading,
@@ -76,6 +83,7 @@ export function useGetVesselGroupsWithVessels(
     filteredGroupType,
     filteredSharing,
     filteredExpired,
+    filteredPriority,
     vesselGroupsIdsPinned,
     vesselGroupsWithVessels
   ])

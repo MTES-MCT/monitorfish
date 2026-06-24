@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselGroupRepository
@@ -46,6 +47,10 @@ class AddOrUpdateFixedVesselGroup(
                         is DynamicVesselGroup -> throw BackendUsageException(
                             BackendUsageErrorCode.COULD_NOT_UPDATE,
                             message = "Could not update a dynamic group to a fixed group.",
+                        )
+                        is PriorityVesselGroup -> throw BackendUsageException(
+                            BackendUsageErrorCode.COULD_NOT_UPDATE,
+                            message = "Could not update a hard-coded group.",
                         )
                         is FixedVesselGroup -> {
                             val hasRight = savedVesselGroup.hasUserRights(userEmail, userService)

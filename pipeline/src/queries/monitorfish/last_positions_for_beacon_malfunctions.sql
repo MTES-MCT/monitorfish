@@ -8,4 +8,4 @@ SELECT
     is_manual,
     latitude,
     longitude
-FROM last_positions
+FROM last_positions_vms

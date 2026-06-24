@@ -13,11 +13,12 @@ from src.flows.last_positions import (
     estimate_current_positions,
     extract_ais_last_positions,
     extract_beacon_malfunctions,
-    extract_last_positions,
-    extract_previous_last_positions,
+    extract_previous_vms_last_positions,
     extract_reportings,
     extract_risk_factors,
+    extract_vms_last_positions,
     join,
+    join_ais,
     last_positions_flow,
     load_last_positions,
     split,
@@ -54,15 +55,15 @@ def test_extract_risk_factors(reset_test_data):
 
 
 def test_extract_previous_last_positions(reset_test_data):
-    previous_last_positions = extract_previous_last_positions()
+    previous_last_positions = extract_previous_vms_last_positions()
     assert previous_last_positions.shape == (4, 22)
 
 
 def test_extract_last_positions(reset_test_data):
-    last_positions = extract_last_positions(minutes=15)
+    last_positions = extract_vms_last_positions(minutes=15)
     assert last_positions.shape == (2, 21)
 
-    last_positions = extract_last_positions(minutes=35)
+    last_positions = extract_vms_last_positions(minutes=35)
     assert last_positions.shape == (3, 21)
 
 
@@ -92,7 +93,7 @@ def test_extract_reportings(reset_test_data):
 
 def test_extract_ais_last_positions(reset_test_data):
     res = extract_ais_last_positions()
-    assert len(res) == 12
+    assert len(res) == 13
 
 
 def test_load_last_positions(reset_test_data):
@@ -563,8 +564,8 @@ def test_join():
         pending_alerts,
         reportings,
         known_malfunctions,
-        ais_last_positions,
     )
+    res = join_ais(res, ais_last_positions)
 
     res = res.sort_values("vessel_id").reset_index(drop=True)
 
@@ -607,6 +608,65 @@ def test_join():
     pd.testing.assert_frame_equal(expected_res, res)
 
 
+def test_join_keeps_ais_position_type_when_ais_datetime_equals_stored():
+    """Regression: a vessel whose last_position_datetime_utc was already updated to
+    the AIS timestamp in a previous run must keep position_type='AIS', not be reset
+    to 'VMS' because the AIS timestamp is no longer strictly greater."""
+    ais_datetime = datetime(2021, 1, 1, 11, 0, 0)
+
+    last_positions = pd.DataFrame(
+        {
+            "vessel_id": [1],
+            "cfr": ["A"],
+            "ircs": ["aa"],
+            "external_immatriculation": ["aaa"],
+            "last_position_datetime_utc": [ais_datetime],
+            "latitude": [46.0],
+            "longitude": [-6.0],
+        }
+    )
+
+    ais_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A"],
+            "last_position_datetime_utc": [ais_datetime],
+            "latitude": [46.0],
+            "longitude": [-6.0],
+        }
+    )
+
+    join_key_cols = {
+        "vessel_id": pd.Series(dtype=float),
+        "cfr": pd.Series(dtype=object),
+        "ircs": pd.Series(dtype=object),
+        "external_immatriculation": pd.Series(dtype=object),
+    }
+    risk_factors = pd.DataFrame(
+        {
+            **join_key_cols,
+            "impact_risk_factor": pd.Series(dtype=float),
+            "probability_risk_factor": pd.Series(dtype=float),
+            "detectability_risk_factor": pd.Series(dtype=float),
+            "risk_factor": pd.Series(dtype=float),
+            "total_weight_onboard": pd.Series(dtype=float),
+        }
+    )
+    pending_alerts = pd.DataFrame({**join_key_cols, "alerts": pd.Series(dtype=object)})
+    reportings = pd.DataFrame({**join_key_cols, "reportings": pd.Series(dtype=object)})
+    beacon_malfunctions = pd.DataFrame({**join_key_cols, "id": pd.Series(dtype=float)})
+
+    res = join(
+        last_positions,
+        risk_factors,
+        pending_alerts,
+        reportings,
+        beacon_malfunctions,
+    )
+    res = join_ais(res, ais_last_positions)
+
+    assert res.iloc[0]["position_type"] == "AIS"
+
+
 def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     reset_test_data,
 ):
@@ -615,6 +675,9 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     )
     initial_last_positions_ais = read_query(
         "SELECT * FROM last_positions_ais;", db="monitorfish_remote"
+    )
+    initial_last_positions_vms = read_query(
+        "SELECT * FROM last_positions_vms;", db="monitorfish_remote"
     )
 
     with patch(
@@ -634,6 +697,9 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     final_last_positions_ais = read_query(
         "SELECT * FROM last_positions_ais;", db="monitorfish_remote"
     )
+    final_last_positions_vms = read_query(
+        "SELECT * FROM last_positions_vms;", db="monitorfish_remote"
+    )
 
     assert len(initial_last_positions) == 4
     assert len(final_last_positions) == 4
@@ -650,7 +716,13 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "ZZTOPACDC",
     }
     assert len(initial_last_positions_ais) == 0
-    assert len(final_last_positions_ais) == 12
+    assert len(final_last_positions_ais) == 13
+
+    assert len(initial_last_positions_vms) == 4
+    assert len(final_last_positions_vms) == 4
+    assert final_last_positions[["ircs", "position_type"]].set_index("ircs").to_dict()[
+        "position_type"
+    ] == {"ZZ000000": "VMS", "LLUK": "VMS", "FQ7058": "AIS", "OGMJ": "VMS"}
 
 
 def test_last_positions_flow_updates_last_positions_when_action_is_update(

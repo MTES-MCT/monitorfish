@@ -97,7 +97,7 @@ class ComputeVesselFaoAreasUTests {
     @Test
     fun `execute Should return the fao areas found in the risk factors table`() {
         given(riskFactorRepository.findByInternalReferenceNumber(any()))
-            .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = "27.8.c"))))
+            .willReturn(VesselRiskFactor(speciesOnboard = listOf(Species(faoZone = "27.8.c", weight = 500.0))))
 
         // When
         val faoAreas =
@@ -106,6 +106,59 @@ class ComputeVesselFaoAreasUTests {
 
         // Then
         assertThat(faoAreas).isEqualTo(listOf("27.8.c"))
+    }
+
+    @Test
+    fun `execute Should exclude fao areas of FAR 0 catches from the risk factors table`() {
+        given(riskFactorRepository.findByInternalReferenceNumber(any()))
+            .willReturn(
+                VesselRiskFactor(
+                    speciesOnboard =
+                        listOf(
+                            Species(faoZone = "27.8.a", weight = 500.0),
+                            // FAR 0: a 0 kg catch with a FAO zone but no fishing activity
+                            Species(faoZone = "27.8.b", weight = 0.0),
+                            // FAR 0 with a null weight
+                            Species(faoZone = "27.8.c", weight = null),
+                        ),
+                ),
+            )
+
+        // When
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", 12.5, 45.1, null)
+
+        // Then
+        assertThat(faoAreas).isEqualTo(listOf("27.8.a"))
+    }
+
+    @Test
+    fun `execute Should fall back to the computed fao areas When the risk factors only contain FAR 0 catches`() {
+        given(riskFactorRepository.findByInternalReferenceNumber(any()))
+            .willReturn(
+                VesselRiskFactor(
+                    speciesOnboard =
+                        listOf(
+                            Species(faoZone = "27.8.a", weight = 0.0),
+                            Species(faoZone = "27.8.b", weight = null),
+                        ),
+                ),
+            )
+        given(computeFAOAreasFromCoordinates.execute(any(), any())).willReturn(
+            listOf(
+                FaoArea("27.8.c"),
+                FaoArea("27.8"),
+            ),
+        )
+
+        // When
+        val faoAreas =
+            ComputeVesselFaoAreas(riskFactorRepository, portRepository, computeFAOAreasFromCoordinates)
+                .execute("DUMMY_CFR", 12.5, 45.1, null)
+
+        // Then
+        assertThat(faoAreas).isEqualTo(listOf("27.8.c", "27.8"))
     }
 
     @Test

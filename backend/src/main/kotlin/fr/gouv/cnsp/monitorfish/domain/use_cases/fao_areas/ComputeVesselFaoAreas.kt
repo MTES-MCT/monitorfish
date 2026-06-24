@@ -39,7 +39,8 @@ class ComputeVesselFaoAreas(
             // Get faoZones from speciesOnboard in risk factors table (updated by the pipeline)
             val vesselRiskFactor = riskFactorRepository.findByInternalReferenceNumber(internalReferenceNumber)
             val faoAreas =
-                vesselRiskFactor?.speciesOnboard
+                vesselRiskFactor
+                    ?.speciesOnboard
                     // Exclude "FAR 0" catches (0 kg) so their FAO zones are not attributed to the control
                     ?.filter { specy -> (specy.weight ?: 0.0) > 0.0 }
                     ?.mapNotNull { specy -> specy.faoZone }

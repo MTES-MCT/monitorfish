@@ -72,7 +72,7 @@ export function TagBar({
             title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}`}
           >
             {PriorNotification.STATE_LABEL[state]}
-            {verificationReasonsLabel ? ` ${verificationReasonsLabel}` : ''}
+            {verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}
           </FixedTag>
         )}
 

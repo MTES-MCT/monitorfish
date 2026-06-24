@@ -46,6 +46,7 @@ type SpeciesSelectCellProps = Readonly<{
   isActive: boolean
   isDisabled: boolean
   isHovered: boolean
+  isNotLanded?: boolean
   name: string
   onChange: (newSpecy: Specy | undefined) => void
   onPickerClose: () => void
@@ -60,6 +61,7 @@ export function SpeciesSelectCell({
   isActive,
   isDisabled,
   isHovered,
+  isNotLanded,
   name,
   onChange,
   onPickerClose,
@@ -72,7 +74,7 @@ export function SpeciesSelectCell({
   return (
     <StyledPickerTd $isActive={isActive}>
       {speciesCode && !isActive ? (
-        <SpeciesName>{speciesLabel}</SpeciesName>
+        <SpeciesName $isNotLanded={!!isNotLanded}>{speciesLabel}</SpeciesName>
       ) : (
         <StyledSpeciesSelect
           $isHovered={isHovered}

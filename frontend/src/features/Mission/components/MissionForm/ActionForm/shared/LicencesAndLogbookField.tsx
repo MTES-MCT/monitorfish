@@ -11,12 +11,8 @@ import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 
-// On land controls these checks are not relevant: they are hidden and forced to N/A.
-const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = [
-  'propulsionEnginePowerControl',
-  'emitsVms',
-  'emitsAis'
-]
+// On land controls this check is not relevant: it is hidden and forced to N/A.
+const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['propulsionEnginePowerControl']
 
 export function LicencesAndLogbookField() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
@@ -35,15 +31,12 @@ export function LicencesAndLogbookField() {
     })
     // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLandControl, setFieldValue, values.propulsionEnginePowerControl, values.emitsVms, values.emitsAis])
+  }, [isLandControl, setFieldValue, values.propulsionEnginePowerControl])
 
   const landControlFields = isEISREnabled
     ? [
-        {
-          isRequired: true,
-          label: 'Contrôle de l’émission VMS avant l’arrivée à terre',
-          name: 'vmsEmissionControlBeforeArrival'
-        },
+        { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
+        { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
         {
           isRequired: true,
           label: 'Accès au port / autorisation de débarquement conformes',

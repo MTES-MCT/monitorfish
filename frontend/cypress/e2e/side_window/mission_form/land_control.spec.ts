@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('21 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('22 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -58,8 +58,9 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Port de contrôle', 'Auray')
 
     // Obligations déclaratives et autorisations
-    // VMS / AIS / propulsion power checks are not displayed on land controls (forced to N/A)
-    cy.fill("Contrôle de l’émission VMS avant l’arrivée à terre", "Oui")
+    // The propulsion power check is not displayed on land controls (forced to N/A); VMS / AIS are controlled.
+    cy.fill("Bonne émission VMS", "Oui")
+    cy.fill("Bonne émission AIS", "Non")
     cy.fill("Accès au port / autorisation de débarquement conformes", "Non")
     cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
     cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
@@ -184,9 +185,8 @@ context('Side Window > Mission Form > Land Control', () => {
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
           districtCode: 'AY',
-          emitsAis: 'NOT_APPLICABLE',
-          emitsVms: 'NOT_APPLICABLE',
-          vmsEmissionControlBeforeArrival: 'YES',
+          emitsAis: 'NO',
+          emitsVms: 'YES',
           portEntranceAndLandingAuthorized: 'NO',
           externalReferenceNumber: 'DONTSINK',
           facade: null,

@@ -1089,9 +1089,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Verify pre-filled values visible in the form
 
     // The discards are now displayed in the dedicated "Rejets" card (a flat table whose column headers are
-    // "Espèce(s) rejetées" / "Qté" / "Nature rejet" / "Zone"; the per-field labels only exist on row hover).
+    // "Espèce rejetée" / "Qté" / "Nature rejet" / "Zone"; the per-field labels only exist on row hover).
     cy.contains('Rejets').should('exist')
-    cy.contains('Espèce(s) rejetées').should('exist')
+    cy.contains('Espèce rejetée').should('exist')
     cy.contains('Nature rejet').should('exist')
 
     // Verify the request body includes the split catches / discards
@@ -1138,7 +1138,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('eq', 201)
   })
 
-  it('Should edit the sous-taille field on row hover and remove extra rejet lines when delete buttons are clicked', () => {
+  it('Should edit the sous-taille field on row hover and remove species / rejet lines through the confirmation modal', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1158,14 +1158,29 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').should('not.exist')
 
+    // Add a second species, then remove it through the confirmation modal: cancelling keeps the row,
+    // confirming deletes only the targeted row.
+    cy.clickButton('Ajouter une espèce')
+    pickHoverEditSpecies('species-onboard-row-1', 'HKE')
+    cy.get('[data-cy="species-onboard-row-1"]').find('[title="Retirer l\'espèce"]').click({ force: true })
+    cy.contains('Suppression de l’espèce').should('be.visible')
+    cy.contains('Êtes-vous sûr de vouloir supprimer').should('be.visible')
+    cy.clickButton('Annuler')
+    cy.get('[data-cy="species-onboard-row-1"]').should('exist')
+    cy.get('[data-cy="species-onboard-row-1"]').find('[title="Retirer l\'espèce"]').click({ force: true })
+    cy.clickButton('Confirmer la suppression')
+    cy.get('[data-cy="species-onboard-row-1"]').should('not.exist')
+    cy.get('[data-cy="species-onboard-row-0"]').should('exist')
+
     // Add two rejected-species rows via the in-table add row, then remove the second via its own row
-    // delete button. The "Rejets" card is now a flat table (one row per discard): the per-species
-    // grouping and the "Ajouter rejet" button are gone, and every row carries a "Retirer le rejet" action.
+    // delete button. Removing a row now also goes through the confirmation modal.
     cy.clickButton('Ajouter une espèce rejetée')
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
     cy.clickButton('Ajouter une espèce rejetée')
     cy.get('[data-cy="discarded-species-row-1"]').should('exist')
     cy.get('[data-cy="discarded-species-row-1"]').find('[title="Retirer le rejet"]').click({ force: true })
+    cy.contains('Suppression du rejet').should('be.visible')
+    cy.clickButton('Confirmer la suppression')
     cy.get('[data-cy="discarded-species-row-1"]').should('not.exist')
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
   })

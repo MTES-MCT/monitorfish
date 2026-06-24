@@ -31,10 +31,10 @@ describe('features/Mission/components/MissionForm/useCases.updateActionLogbookFi
     expect(mockSetFieldValue).not.toHaveBeenCalled()
   })
 
-  it('Should set NOT_APPLICABLE When the vessel is under 12 meters', async () => {
+  it('Should set NOT_APPLICABLE When the vessel is under 10 meters', async () => {
     // Given
     mockDispatch
-      .mockResolvedValueOnce({ data: { length: 10 } } as never) // getVessel
+      .mockResolvedValueOnce({ data: { length: 8 } } as never) // getVessel
       .mockResolvedValueOnce({ data: true } as never) // getHasFilledLogbookForCurrentTrip
 
     // When
@@ -51,6 +51,25 @@ describe('features/Mission/components/MissionForm/useCases.updateActionLogbookFi
       'logbookFilledPriorToControl',
       MissionAction.ControlCheck.NOT_APPLICABLE
     )
+  })
+
+  it('Should leave the field empty When the vessel is between 10 and 12 meters', async () => {
+    // Given
+    mockDispatch
+      .mockResolvedValueOnce({ data: { length: 10 } } as never) // getVessel
+      .mockResolvedValueOnce({ data: true } as never) // getHasFilledLogbookForCurrentTrip
+
+    // When
+    await updateActionLogbookFilledPriorToControl(
+      mockDispatch,
+      mockSetFieldValue
+    )({
+      ...dummyAction,
+      vesselId: 1
+    } as any)
+
+    // Then
+    expect(mockSetFieldValue).toHaveBeenCalledWith('logbookFilledPriorToControl', undefined)
   })
 
   it('Should set the logbook-filled value When the vessel is over 12 meters', async () => {

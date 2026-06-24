@@ -26,7 +26,6 @@ function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
 function makeLandControlEIsrObligationsSchema(isEISR: boolean) {
   return isEISR
     ? object({
-        vmsEmissionControlBeforeArrival: string().required(HIDDEN_ERROR),
         portEntranceAndLandingAuthorized: string().required(HIDDEN_ERROR)
       })
     : object({})

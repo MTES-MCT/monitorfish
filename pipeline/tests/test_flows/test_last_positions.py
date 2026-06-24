@@ -92,7 +92,7 @@ def test_extract_reportings(reset_test_data):
 
 def test_extract_ais_last_positions(reset_test_data):
     res = extract_ais_last_positions()
-    assert len(res) == 12
+    assert len(res) == 13
 
 
 def test_load_last_positions(reset_test_data):
@@ -607,6 +607,65 @@ def test_join():
     pd.testing.assert_frame_equal(expected_res, res)
 
 
+def test_join_keeps_ais_position_type_when_ais_datetime_equals_stored():
+    """Regression: a vessel whose last_position_datetime_utc was already updated to
+    the AIS timestamp in a previous run must keep position_type='AIS', not be reset
+    to 'VMS' because the AIS timestamp is no longer strictly greater."""
+    ais_datetime = datetime(2021, 1, 1, 11, 0, 0)
+
+    last_positions = pd.DataFrame(
+        {
+            "vessel_id": [1],
+            "cfr": ["A"],
+            "ircs": ["aa"],
+            "external_immatriculation": ["aaa"],
+            "last_position_datetime_utc": [ais_datetime],
+            "latitude": [46.0],
+            "longitude": [-6.0],
+        }
+    )
+
+    ais_last_positions = pd.DataFrame(
+        {
+            "cfr": ["A"],
+            "last_position_datetime_utc": [ais_datetime],
+            "latitude": [46.0],
+            "longitude": [-6.0],
+        }
+    )
+
+    join_key_cols = {
+        "vessel_id": pd.Series(dtype=float),
+        "cfr": pd.Series(dtype=object),
+        "ircs": pd.Series(dtype=object),
+        "external_immatriculation": pd.Series(dtype=object),
+    }
+    risk_factors = pd.DataFrame(
+        {
+            **join_key_cols,
+            "impact_risk_factor": pd.Series(dtype=float),
+            "probability_risk_factor": pd.Series(dtype=float),
+            "detectability_risk_factor": pd.Series(dtype=float),
+            "risk_factor": pd.Series(dtype=float),
+            "total_weight_onboard": pd.Series(dtype=float),
+        }
+    )
+    pending_alerts = pd.DataFrame({**join_key_cols, "alerts": pd.Series(dtype=object)})
+    reportings = pd.DataFrame({**join_key_cols, "reportings": pd.Series(dtype=object)})
+    beacon_malfunctions = pd.DataFrame({**join_key_cols, "id": pd.Series(dtype=float)})
+
+    res = join(
+        last_positions,
+        risk_factors,
+        pending_alerts,
+        reportings,
+        beacon_malfunctions,
+        ais_last_positions,
+    )
+
+    assert res.iloc[0]["position_type"] == "AIS"
+
+
 def test_last_positions_flow_resets_last_positions_when_action_is_replace(
     reset_test_data,
 ):
@@ -650,7 +709,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "ZZTOPACDC",
     }
     assert len(initial_last_positions_ais) == 0
-    assert len(final_last_positions_ais) == 12
+    assert len(final_last_positions_ais) == 13
 
 
 def test_last_positions_flow_updates_last_positions_when_action_is_update(

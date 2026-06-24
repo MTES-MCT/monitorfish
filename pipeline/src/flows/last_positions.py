@@ -437,7 +437,7 @@ def join(
 
     ais_is_more_recent = last_positions["ais_last_position_datetime_utc"].notna() & (
         last_positions["ais_last_position_datetime_utc"]
-        > last_positions["last_position_datetime_utc"]
+        >= last_positions["last_position_datetime_utc"]
     )
 
     last_positions.loc[

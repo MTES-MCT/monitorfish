@@ -182,7 +182,7 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             riskFactor={editedPriorNotificationComputedValues?.riskFactor}
             tripSegments={editedPriorNotificationComputedValues?.tripSegments}
             types={editedPriorNotificationComputedValues?.types}
-            verificationReason={editedPriorNotificationComputedValues?.verificationReason!!}
+            verificationReasons={editedPriorNotificationComputedValues?.verificationReasons!!}
           />
 
           <hr />

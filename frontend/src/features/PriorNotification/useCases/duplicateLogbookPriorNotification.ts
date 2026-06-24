@@ -44,7 +44,7 @@ export const duplicateLogbookPriorNotification =
         types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
           logbookPriorNotification.logbookMessage.message.pnoTypes
         ),
-        verificationReason: logbookPriorNotification.verificationReason
+        verificationReasons: logbookPriorNotification.verificationReasons
       }
 
       const nextHasGlobalFaoArea = !!logbookPriorNotification.asManualDraft.globalFaoArea

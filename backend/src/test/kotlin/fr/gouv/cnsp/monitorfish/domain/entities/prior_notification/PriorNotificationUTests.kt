@@ -76,13 +76,13 @@ class PriorNotificationUTests {
     }
 
     // ---------------------------------------------------------------------------
-    // getVerificationReason
+    // getVerificationReasons
     // ---------------------------------------------------------------------------
 
     @Test
-    fun `getVerificationReason Should return MISSING_DATA When vesselFlagCountryCode is null`() {
+    fun `getVerificationReasons Should return only MISSING_DATA When vesselFlagCountryCode is null`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = null,
                 vesselFlagCountryCode = null,
@@ -90,13 +90,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.MISSING_DATA)
+        assertThat(result).containsExactly(PnoVerificationReason.MISSING_DATA)
     }
 
     @Test
-    fun `getVerificationReason Should return MISSING_DATA When vesselRiskFactor is null`() {
+    fun `getVerificationReasons Should return only MISSING_DATA When vesselRiskFactor is null`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = null,
                 vesselFlagCountryCode = CountryCode.FR,
@@ -104,13 +104,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.MISSING_DATA)
+        assertThat(result).containsExactly(PnoVerificationReason.MISSING_DATA)
     }
 
     @Test
-    fun `getVerificationReason Should return OPEN_REPORTING When vessel has active infraction suspicions`() {
+    fun `getVerificationReasons Should return OPEN_REPORTING When vessel has active infraction suspicions`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = null,
                 vesselFlagCountryCode = CountryCode.FR,
@@ -118,13 +118,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 2,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.OPEN_REPORTING)
+        assertThat(result).containsExactly(PnoVerificationReason.OPEN_REPORTING)
     }
 
     @Test
-    fun `getVerificationReason Should return HIGH_RISK_FACTOR When vessel risk factor meets threshold`() {
+    fun `getVerificationReasons Should return HIGH_RISK_FACTOR When vessel risk factor meets threshold`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = null,
                 vesselFlagCountryCode = CountryCode.FR,
@@ -132,13 +132,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.HIGH_RISK_FACTOR)
+        assertThat(result).containsExactly(PnoVerificationReason.HIGH_RISK_FACTOR)
     }
 
     @Test
-    fun `getVerificationReason Should return FOREIGN_FLAG_COUNTRY When vessel is not French`() {
+    fun `getVerificationReasons Should return FOREIGN_FLAG_COUNTRY When vessel is not French`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = null,
                 vesselFlagCountryCode = CountryCode.GB,
@@ -146,13 +146,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.FOREIGN_FLAG_COUNTRY)
+        assertThat(result).containsExactly(PnoVerificationReason.FOREIGN_FLAG_COUNTRY)
     }
 
     @Test
-    fun `getVerificationReason Should return FOREIGN_PORT When logbook PNO targets a port in a monitored country`() {
+    fun `getVerificationReasons Should return FOREIGN_PORT When logbook PNO targets a port in a monitored country`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = PortFaker.fakePort(countryCode = "GB"),
                 vesselFlagCountryCode = CountryCode.FR,
@@ -160,13 +160,32 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isEqualTo(PnoVerificationReason.FOREIGN_PORT)
+        assertThat(result).containsExactly(PnoVerificationReason.FOREIGN_PORT)
     }
 
     @Test
-    fun `getVerificationReason Should return null When manual PNO targets a port in a monitored country`() {
+    fun `getVerificationReasons Should return all applicable reasons When several conditions are met`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
+                isManual = false,
+                port = PortFaker.fakePort(countryCode = "GB"),
+                vesselFlagCountryCode = CountryCode.GB,
+                vesselRiskFactor = PriorNotification.VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD,
+                infractionSuspicionsCount = 2,
+            )
+
+        assertThat(result).containsExactly(
+            PnoVerificationReason.HIGH_RISK_FACTOR,
+            PnoVerificationReason.OPEN_REPORTING,
+            PnoVerificationReason.FOREIGN_FLAG_COUNTRY,
+            PnoVerificationReason.FOREIGN_PORT,
+        )
+    }
+
+    @Test
+    fun `getVerificationReasons Should be empty When manual PNO targets a port in a monitored country`() {
+        val result =
+            PriorNotification.getVerificationReasons(
                 isManual = true,
                 port = PortFaker.fakePort(countryCode = "GB"),
                 vesselFlagCountryCode = CountryCode.FR,
@@ -174,13 +193,13 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isNull()
+        assertThat(result).isEmpty()
     }
 
     @Test
-    fun `getVerificationReason Should return null When no condition is met`() {
+    fun `getVerificationReasons Should be empty When no condition is met`() {
         val result =
-            PriorNotification.getVerificationReason(
+            PriorNotification.getVerificationReasons(
                 isManual = false,
                 port = PortFaker.fakePort(countryCode = "FR"),
                 vesselFlagCountryCode = CountryCode.FR,
@@ -188,7 +207,7 @@ class PriorNotificationUTests {
                 infractionSuspicionsCount = 0,
             )
 
-        assertThat(result).isNull()
+        assertThat(result).isEmpty()
     }
 
     companion object {

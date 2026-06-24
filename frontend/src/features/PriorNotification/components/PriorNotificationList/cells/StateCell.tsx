@@ -8,9 +8,13 @@ import { getColorsFromState } from '../utils'
 type SendButtonCellProps = Readonly<{
   isInvalidated: boolean | undefined
   state: PriorNotification.State | undefined
-  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
+  verificationReasons: PriorNotification.PnoVerificationScopeReason[] | undefined
 }>
-export function StateCell({ isInvalidated, state, verificationReason }: SendButtonCellProps) {
+export function StateCell({ isInvalidated, state, verificationReasons }: SendButtonCellProps) {
+  const verificationReasonsLabel = (verificationReasons ?? [])
+    .map(reason => PnoVerificationScopeReasonLabel[reason])
+    .join(' ')
+
   if (isInvalidated) {
     return (
       <Wrapper title="Préavis invalidé">
@@ -26,7 +30,7 @@ export function StateCell({ isInvalidated, state, verificationReason }: SendButt
   return (
     <Wrapper
       $state={state}
-      title={`${PriorNotification.STATE_LABEL[state]}${verificationReason ? ` ${PnoVerificationScopeReasonLabel[verificationReason]}` : ''}`}
+      title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` ${verificationReasonsLabel}` : ''}`}
     >
       {!!state && [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(state) ? (
         <SpinnerWrapper>

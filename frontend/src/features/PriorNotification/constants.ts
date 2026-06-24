@@ -26,5 +26,5 @@ export const PnoVerificationScopeReasonLongLabel: Record<PriorNotification.PnoVe
   FOREIGN_PORT: '(navire français débarquant dans le port d’un État tiers)',
   HIGH_RISK_FACTOR: '(note de risque du navire égale ou supérieure à 2,3)',
   MISSING_DATA: '(données manquantes)',
-  OPEN_REPORTING: '(suspicion d’infraction ouverte)'
+  OPEN_REPORTING: '(suspicion d’infraction en cours sur la marée du navire)'
 }

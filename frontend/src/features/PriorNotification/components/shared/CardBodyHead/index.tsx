@@ -73,8 +73,8 @@ export function CardBodyHead({
       )}
       {!isNewPriorNotification && isPendingVerification && (
         <Intro>
-          Le préavis doit être vérifié par le CNSP avant sa diffusion
-          {verificationReasons?.map(reason => ` ${PnoVerificationScopeReasonLongLabel[reason]}`).join('')}.
+          Le préavis doit être vérifié par le CNSP avant sa diffusion (
+          {verificationReasons?.map(reason => `${PnoVerificationScopeReasonLongLabel[reason]}`).join(' et ')}).
         </Intro>
       )}
       {(!!editedPriorNotificationComputedValues || !!detail) && (

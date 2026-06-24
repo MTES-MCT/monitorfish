@@ -33,7 +33,7 @@ export function TagBar({
 }: TagBarProps) {
   const verificationReasonsLabel = (verificationReasons ?? [])
     .map(reason => PnoVerificationScopeReasonLabel[reason])
-    .join(' ')
+    .join(' / ')
 
   return (
     <Wrapper className="Wrapper" data-cy="PriorNotificationCard-TagBar">
@@ -69,7 +69,7 @@ export function TagBar({
             backgroundColor={getColorsFromState(state).backgroundColor}
             borderColor={getColorsFromState(state).borderColor}
             color={getColorsFromState(state).color}
-            title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` ${verificationReasonsLabel}` : ''}`}
+            title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}`}
           >
             {PriorNotification.STATE_LABEL[state]}
             {verificationReasonsLabel ? ` ${verificationReasonsLabel}` : ''}

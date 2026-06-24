@@ -196,11 +196,11 @@ export function Row({ row }: RowProps) {
                   borderColor={getColorsFromState(priorNotification.state).borderColor}
                   color={getColorsFromState(priorNotification.state).color}
                   style={{ marginBottom: 16 }}
-                  title={`${PriorNotification.STATE_LABEL[priorNotification.state]}${priorNotification.verificationReasons.length > 0 ? ` ${priorNotification.verificationReasons.map(reason => PnoVerificationScopeReasonLabel[reason]).join(' ')}` : ''}`}
+                  title={`${PriorNotification.STATE_LABEL[priorNotification.state]}${priorNotification.verificationReasons.length > 0 ? ` - ${priorNotification.verificationReasons.map(reason => PnoVerificationScopeReasonLabel[reason]).join(' / ')}` : ''}`}
                 >
                   {PriorNotification.STATE_LABEL[priorNotification.state]}
                   {priorNotification.verificationReasons.length > 0
-                    ? ` ${priorNotification.verificationReasons.map(reason => PnoVerificationScopeReasonLabel[reason]).join(' ')}`
+                    ? ` - ${priorNotification.verificationReasons.map(reason => PnoVerificationScopeReasonLabel[reason]).join(' / ')}`
                     : ''}
                 </FixedTag>
               )}

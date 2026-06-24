@@ -14,17 +14,17 @@ export enum OpenedPriorNotificationType {
 }
 
 export const PnoVerificationScopeReasonLabel: Record<PriorNotification.PnoVerificationScopeReason, string> = {
-  FOREIGN_FLAG_COUNTRY: '- navire tiers',
-  FOREIGN_PORT: '- port tiers',
-  HIGH_RISK_FACTOR: '- note ≥ 2,3',
-  MISSING_DATA: '- données manquantes',
-  OPEN_REPORTING: '- susp. d’inf.'
+  FOREIGN_FLAG_COUNTRY: 'navire tiers',
+  FOREIGN_PORT: 'port tiers',
+  HIGH_RISK_FACTOR: 'note ≥ 2,3',
+  MISSING_DATA: 'données manquantes',
+  OPEN_REPORTING: 'susp. d’inf.'
 }
 
 export const PnoVerificationScopeReasonLongLabel: Record<PriorNotification.PnoVerificationScopeReason, string> = {
-  FOREIGN_FLAG_COUNTRY: '(navire d’un État tiers débarquant dans un port français)',
-  FOREIGN_PORT: '(navire français débarquant dans le port d’un État tiers)',
-  HIGH_RISK_FACTOR: '(note de risque du navire égale ou supérieure à 2,3)',
-  MISSING_DATA: '(données manquantes)',
-  OPEN_REPORTING: '(suspicion d’infraction en cours sur la marée du navire)'
+  FOREIGN_FLAG_COUNTRY: 'navire d’un État tiers débarquant dans un port français',
+  FOREIGN_PORT: 'navire français débarquant dans le port d’un État tiers',
+  HIGH_RISK_FACTOR: 'note de risque du navire égale ou supérieure à 2,3',
+  MISSING_DATA: 'données manquantes',
+  OPEN_REPORTING: 'suspicion d’infraction en cours'
 }

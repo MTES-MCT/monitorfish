@@ -13,7 +13,7 @@ type SendButtonCellProps = Readonly<{
 export function StateCell({ isInvalidated, state, verificationReasons }: SendButtonCellProps) {
   const verificationReasonsLabel = (verificationReasons ?? [])
     .map(reason => PnoVerificationScopeReasonLabel[reason])
-    .join(' ')
+    .join(' / ')
 
   if (isInvalidated) {
     return (
@@ -30,7 +30,7 @@ export function StateCell({ isInvalidated, state, verificationReasons }: SendBut
   return (
     <Wrapper
       $state={state}
-      title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` ${verificationReasonsLabel}` : ''}`}
+      title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}`}
     >
       {!!state && [PriorNotification.State.PENDING_AUTO_SEND, PriorNotification.State.PENDING_SEND].includes(state) ? (
         <SpinnerWrapper>

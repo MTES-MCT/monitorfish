@@ -9,7 +9,8 @@ import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notific
 import type { OrUndefinedToOrNull } from '../../types'
 import type { BackendApi } from '@api/BackendApi.types'
 import type { Reporting } from '@features/Reporting/types'
-import PnoVerificationReason = PriorNotification.PnoVerificationScopeReason;
+
+import PnoVerificationReason = PriorNotification.PnoVerificationScopeReason
 
 /**
  * For both logbook and manual prior notifications.
@@ -117,6 +118,7 @@ export function getPriorNotificationsFakeResponse({
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
         types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
+        verificationReasons: [PnoVerificationReason.FOREIGN_FLAG_COUNTRY],
         vesselExternalReferenceNumber: 'EXTIMM121',
         vesselFlagCountryCode: 'FR',
         vesselId: 121,
@@ -125,8 +127,7 @@ export function getPriorNotificationsFakeResponse({
         vesselLastControlDateTime: null,
         vesselLength: 7.7,
         vesselMmsi: 'MMSI121',
-        vesselName: 'MARE ET BASS',
-        verificationReason: PnoVerificationReason.FOREIGN_FLAG_COUNTRY,
+        vesselName: 'MARE ET BASS'
       }
     ],
     extraData: {
@@ -263,8 +264,8 @@ export function getPriorNotificationFakeResponse({
     riskFactor: 3.2,
     state,
     updatedAt,
+    verificationReasons: [PnoVerificationReason.FOREIGN_FLAG_COUNTRY],
     vesselId: 121,
-    verificationReason: PnoVerificationReason.FOREIGN_FLAG_COUNTRY,
     vesselIdentity: {
       beaconNumber: null,
       districtCode: null,

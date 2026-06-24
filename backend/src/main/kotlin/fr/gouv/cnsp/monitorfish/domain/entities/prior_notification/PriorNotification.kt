@@ -82,12 +82,12 @@ data class PriorNotification(
                 }
             }
 
-    val verificationReason: PnoVerificationReason?
+    val verificationReasons: List<PnoVerificationReason>
         get() {
             if (state == PriorNotificationState.PENDING_VERIFICATION ||
                 state == PriorNotificationState.VERIFIED_AND_SENT
             ) {
-                return getVerificationReason(
+                return getVerificationReasons(
                     isManual = isManuallyCreated,
                     port = port,
                     vesselFlagCountryCode = vessel?.flagState,
@@ -96,7 +96,7 @@ data class PriorNotification(
                 )
             }
 
-            return null
+            return emptyList()
         }
 
     fun enrich(
@@ -251,27 +251,35 @@ data class PriorNotification(
                 CountryCode.CI,
             )
 
-        fun getVerificationReason(
+        /**
+         * All the reasons why a prior notification is within the verification scope.
+         *
+         * When the vessel flag country or risk factor is missing, the other reasons can't be computed, so
+         * `MISSING_DATA` is returned as the sole reason. Otherwise every applicable reason is accumulated.
+         */
+        fun getVerificationReasons(
             isManual: Boolean,
             port: Port?,
             vesselFlagCountryCode: CountryCode?,
             vesselRiskFactor: Double?,
             infractionSuspicionsCount: Int,
-        ): PnoVerificationReason? {
+        ): List<PnoVerificationReason> {
             if (vesselFlagCountryCode == null || vesselRiskFactor == null) {
-                return PnoVerificationReason.MISSING_DATA
+                return listOf(PnoVerificationReason.MISSING_DATA)
+            }
+
+            val reasons = mutableListOf<PnoVerificationReason>()
+
+            if (vesselRiskFactor >= VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD) {
+                reasons.add(PnoVerificationReason.HIGH_RISK_FACTOR)
             }
 
             if (infractionSuspicionsCount > 0) {
-                return PnoVerificationReason.OPEN_REPORTING
-            }
-
-            if (vesselRiskFactor >= VESSEL_RISK_FACTOR_VERIFICATION_THRESHOLD) {
-                return PnoVerificationReason.HIGH_RISK_FACTOR
+                reasons.add(PnoVerificationReason.OPEN_REPORTING)
             }
 
             if (vesselFlagCountryCode !in VESSEL_FLAG_COUNTRY_CODES_WITHOUT_SYSTEMATIC_VERIFICATION) {
-                return PnoVerificationReason.FOREIGN_FLAG_COUNTRY
+                reasons.add(PnoVerificationReason.FOREIGN_FLAG_COUNTRY)
             }
 
             if (!isManual &&
@@ -282,10 +290,10 @@ data class PriorNotification(
                 } ==
                 true
             ) {
-                return PnoVerificationReason.FOREIGN_PORT
+                reasons.add(PnoVerificationReason.FOREIGN_PORT)
             }
 
-            return null
+            return reasons
         }
 
         fun isInVerificationScope(
@@ -295,13 +303,13 @@ data class PriorNotification(
             vesselRiskFactor: Double?,
             infractionSuspicions: List<Reporting>,
         ): Boolean =
-            getVerificationReason(
+            getVerificationReasons(
                 isManual = isManual,
                 port = port,
                 vesselFlagCountryCode = vesselFlagCountryCode,
                 vesselRiskFactor = vesselRiskFactor,
                 infractionSuspicionsCount = infractionSuspicions.size,
-            ) != null
+            ).isNotEmpty()
 
         /**
          * Next initial state of the prior notification once it will be created or updated.

@@ -21,7 +21,7 @@ type CardBodyHeadProps = Readonly<{
   riskFactor: number | undefined
   tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
-  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
+  verificationReasons: PriorNotification.PnoVerificationScopeReason[] | undefined
 }>
 export function CardBodyHead({
   applicableState,
@@ -34,7 +34,7 @@ export function CardBodyHead({
   riskFactor,
   tripSegments,
   types,
-  verificationReason
+  verificationReasons
 }: CardBodyHeadProps) {
   const [isSentMessageListExpanded, setIsSentMessageListExpanded] = useState(false)
   const { forceUpdate } = useForceUpdate()
@@ -62,7 +62,7 @@ export function CardBodyHead({
         state={applicableState}
         tripSegments={tripSegments}
         types={types}
-        verificationReason={verificationReason}
+        verificationReasons={verificationReasons}
       />
 
       {isNewPriorNotification && !editedPriorNotificationComputedValues && (
@@ -73,8 +73,8 @@ export function CardBodyHead({
       )}
       {!isNewPriorNotification && isPendingVerification && (
         <Intro>
-          Le préavis doit être vérifié par le CNSP avant sa diffusion{' '}
-          {verificationReason && PnoVerificationScopeReasonLongLabel[verificationReason]}.
+          Le préavis doit être vérifié par le CNSP avant sa diffusion (
+          {verificationReasons?.map(reason => `${PnoVerificationScopeReasonLongLabel[reason]}`).join(' et ')}).
         </Intro>
       )}
       {(!!editedPriorNotificationComputedValues || !!detail) && (

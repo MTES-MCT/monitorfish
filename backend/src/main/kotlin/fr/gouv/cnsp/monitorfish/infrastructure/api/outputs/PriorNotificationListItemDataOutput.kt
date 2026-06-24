@@ -36,7 +36,7 @@ data class PriorNotificationListItemDataOutput(
     val tripGears: List<LogbookMessageGearDataOutput>,
     val tripSegments: List<LogbookMessageTripSegmentDataOutput>,
     val types: List<PriorNotificationTypeDataOutput>,
-    val verificationReason: PnoVerificationReason?,
+    val verificationReasons: List<PnoVerificationReason>,
     val vesselId: Int?,
     val vesselExternalReferenceNumber: String?,
     val vesselFlagCountryCode: CountryCode,
@@ -108,7 +108,7 @@ data class PriorNotificationListItemDataOutput(
                 vesselMmsi = vessel.mmsi,
                 vesselName = vessel.vesselName,
                 riskFactor = priorNotification.logbookMessageAndValue.value.riskFactor,
-                verificationReason = priorNotification.verificationReason,
+                verificationReasons = priorNotification.verificationReasons,
             )
         }
     }

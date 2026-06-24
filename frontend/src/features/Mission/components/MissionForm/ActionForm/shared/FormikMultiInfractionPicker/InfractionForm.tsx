@@ -26,7 +26,7 @@ export function InfractionForm({ initialValues, onCancel, onSubmit }: Infraction
       validateOnMount
       validationSchema={validationSchema}
     >
-      {({ isValid, setFieldValue, values }) => (
+      {({ setFieldValue, values }) => (
         <StyledForm>
           <FormikMultiRadio
             isErrorMessageHidden
@@ -55,7 +55,12 @@ export function InfractionForm({ initialValues, onCancel, onSubmit }: Infraction
             <Button accent={Accent.TERTIARY} onClick={onCancel}>
               Annuler
             </Button>
-            <Button accent={Accent.PRIMARY} disabled={!isValid} type="submit">
+            <Button
+              accent={Accent.PRIMARY}
+              disabled={!InfractionFormLiveSchema.isValidSync(values)}
+              onClick={() => onSubmit(values)}
+              type="button"
+            >
               Valider l’infraction
             </Button>
           </FormButtonGroup>

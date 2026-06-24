@@ -6,6 +6,21 @@ import type { MonitorFishFeature } from '@features/NewFeatures/types'
 export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
+      {
+        date: '2026-06-24',
+        description: `Le formulaire des comptes rendus de contrôle (CR) en mer et à la débarque a été retravaillé pour gagner en lisibilité et préparer l'arrivée de e-ISR (**non encore activée**).
+
+**Saisie des espèces sous forme de tableau**
+
+Les espèces contrôlées sont désormais saisies dans un tableau, plus compact et plus lisible. L'ajout, la modification et la suppression d'une espèce se font directement depuis ce tableau.
+
+**Préparation de l'e-ISR (à venir)**
+
+En vue de l'e-ISR, le formulaire intègre de nouveaux champs (déploiement de l'échelle de coupée, présentation et zone de capture par espèce…), qui ne seront visibles qu'une fois la fonctionnalité activée pour les unités concernées pendant la période de test.`,
+        for: 'CNSP',
+        title: `CR de contrôle – Refonte des contrôles en mer et à la débarque`,
+        type: 'IMPROVEMENT'
+      },
       /**
        * TODO Dé-commenter ce bloc lorsque FRONTEND_AIS_VESSELS_ENABLED = 'true'
        */
@@ -38,6 +53,24 @@ L'historique des positions AIS est conservé sur une profondeur maximale d'**1 m
         type: 'NEW_FEATURE'
       },
        */
+      {
+        date: '2026-06-24',
+        description: `Il est désormais possible d'enregistrer une infraction dont le résultat est **"en attente"**, y compris une fois la mission terminée.
+
+Le champ reste affiché en rouge pour signaler qu'il reste à compléter.`,
+        for: 'CNSP',
+        title: `Enregistrement d'une infraction en attente`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-06-23',
+        description: `Les préavis manuels sont désormais affichés dans la marée du navire, aux côtés des messages du journal de pêche électronique (JPE).
+
+Cela permet de retrouver les préavis invalidés et modifiés manuellement par le CNSP au sein d'une même marée.`,
+        for: 'ALL',
+        title: 'Affichage des préavis manuels dans la marée du navire',
+        type: 'IMPROVEMENT'
+      },
       {
         date: '2026-04-03',
         description: `Les navires dont la dernière position remonte à plus de **3 heures** sont désormais affichés avec une opacité réduite sur la carte.

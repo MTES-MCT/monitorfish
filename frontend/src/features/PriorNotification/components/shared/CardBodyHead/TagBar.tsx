@@ -18,7 +18,7 @@ type TagBarProps = Readonly<{
   state: PriorNotification.State | undefined
   tripSegments: Logbook.Segment[] | undefined
   types: PriorNotification.Type[] | undefined
-  verificationReason: PriorNotification.PnoVerificationScopeReason | undefined
+  verificationReasons: PriorNotification.PnoVerificationScopeReason[] | undefined
 }>
 export function TagBar({
   hasBeenComputed = true,
@@ -29,8 +29,12 @@ export function TagBar({
   state,
   tripSegments,
   types,
-  verificationReason
+  verificationReasons
 }: TagBarProps) {
+  const verificationReasonsLabel = (verificationReasons ?? [])
+    .map(reason => PnoVerificationScopeReasonLabel[reason])
+    .join(' / ')
+
   return (
     <Wrapper className="Wrapper" data-cy="PriorNotificationCard-TagBar">
       <Row>
@@ -65,10 +69,10 @@ export function TagBar({
             backgroundColor={getColorsFromState(state).backgroundColor}
             borderColor={getColorsFromState(state).borderColor}
             color={getColorsFromState(state).color}
-            title={`${PriorNotification.STATE_LABEL[state]}${verificationReason ? ` ${PnoVerificationScopeReasonLabel[verificationReason]}` : ''}`}
+            title={`${PriorNotification.STATE_LABEL[state]}${verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}`}
           >
-            {PriorNotification.STATE_LABEL[state]}{' '}
-            {verificationReason ? PnoVerificationScopeReasonLabel[verificationReason] : ''}
+            {PriorNotification.STATE_LABEL[state]}
+            {verificationReasonsLabel ? ` - ${verificationReasonsLabel}` : ''}
           </FixedTag>
         )}
 

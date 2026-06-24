@@ -125,9 +125,13 @@ export function ReportingDetails({
           {reporting.infractions.length > 0 && (
             <InfractionTags ref={infractionTagsRef}>
               {reporting.infractions.map(infraction => (
-                <Tag key={infraction.natinfCode} accent={Accent.PRIMARY}>
+                <InfractionTag
+                  key={infraction.natinfCode}
+                  accent={Accent.PRIMARY}
+                  title={`${infraction.threatCharacterization} / NATINF ${infraction.natinfCode}`}
+                >
                   {infraction.threatCharacterization} / NATINF {infraction.natinfCode}
-                </Tag>
+                </InfractionTag>
               ))}
             </InfractionTags>
           )}
@@ -229,6 +233,14 @@ const InfractionTags = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 4px;
+`
+
+const InfractionTag = styled(Tag)`
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const ThreatTitle = styled.div<{ $hasInfractions: boolean }>`

@@ -135,7 +135,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
         <StateCell
           isInvalidated={info.row.original.isInvalidated}
           state={info.getValue()}
-          verificationReason={info.row.original.verificationReason}
+          verificationReasons={info.row.original.verificationReasons}
         />
       ),
       enableSorting: false,

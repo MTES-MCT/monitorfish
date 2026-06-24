@@ -105,7 +105,7 @@ export function PriorNotificationCard({
             riskFactor={detail.riskFactor}
             tripSegments={detail.logbookMessage.tripSegments}
             types={getPriorNotificationTypesFromLogbookMessagePnoTypes(detail.logbookMessage.message.pnoTypes)}
-            verificationReason={detail.verificationReason}
+            verificationReasons={detail.verificationReasons}
           />
 
           <hr />

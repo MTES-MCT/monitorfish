@@ -64,7 +64,7 @@ export const openManualPriorNotificationForm =
         types: getPriorNotificationTypesFromLogbookMessagePnoTypes(
           manualPriorNotification.logbookMessage.message.pnoTypes
         ),
-        verificationReason: manualPriorNotification.verificationReason
+        verificationReasons: manualPriorNotification.verificationReasons
       }
 
       const nextHasGlobalFaoArea = !!manualPriorNotification.asManualForm.globalFaoArea

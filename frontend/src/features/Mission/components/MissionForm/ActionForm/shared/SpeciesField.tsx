@@ -325,7 +325,7 @@ export function SpeciesField() {
               )
             })}
             <SimpleTable.BodyTr>
-              <SimpleTable.Td colSpan={7}>
+              <SimpleTable.Td colSpan={isEISREnabled ? 7 : 5}>
                 <AddSpeciesButton disabled={isDisabled} onClick={addEmptySpecies} type="button">
                   <Icon.Plus size={18} />
                   Ajouter une espèce

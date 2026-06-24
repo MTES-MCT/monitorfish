@@ -63,9 +63,9 @@ def extract_ais_last_positions() -> pd.DataFrame:
 
 
 @task
-def extract_last_positions(minutes: int) -> pd.DataFrame:
+def extract_vms_last_positions(minutes: int) -> pd.DataFrame:
     """
-    Extracts the last position of each vessel over the past `minutes` minutes.
+    Extracts the last VMS position of each vessel over the past `minutes` minutes.
 
     Args:
         minutes (int): number of minutes from current datetime to extract
@@ -75,7 +75,7 @@ def extract_last_positions(minutes: int) -> pd.DataFrame:
     """
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/compute_last_positions.sql",
+        query_filepath="monitorfish/compute_vms_last_positions.sql",
         params={"minutes": minutes},
         dtypes={"last_position_datetime_utc": "datetime64[ns]"},
     )
@@ -126,19 +126,19 @@ def drop_duplicates(positions: pd.DataFrame) -> pd.DataFrame:
 
 
 @task
-def extract_previous_last_positions() -> pd.DataFrame:
+def extract_previous_vms_last_positions() -> pd.DataFrame:
     """
-    Extracts the contents of the `last_positions` table (which was computed by the
+    Extracts the contents of the `last_positions_vms` table (which was computed by the
     previous run of the `last_positions` flow), with the `has_charter` field updated
     by taking the current value in the `vessels` table.
 
     Returns:
-        pd.DataFrame: DataFrame of vessels' last position as (it was last computed by
+        pd.DataFrame: DataFrame of vessels' last VMS position as (it was last computed by
           the last_positions flow).
     """
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/previous_last_positions.sql",
+        query_filepath="monitorfish/previous_vms_last_positions.sql",
     )
 
 
@@ -374,7 +374,6 @@ def join(
     pending_alerts: pd.DataFrame,
     reportings: pd.DataFrame,
     beacon_malfunctions: pd.DataFrame,
-    ais_last_positions: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Performs a left join on last_positions, risk_factors, pending_alerts, reportings and
@@ -419,6 +418,14 @@ def join(
         {**default_risk_factors, "total_weight_onboard": 0.0}
     ).astype({"vessel_id": float})
 
+    return last_positions
+
+
+@task
+def join_ais(
+    last_positions: pd.DataFrame,
+    ais_last_positions: pd.DataFrame,
+) -> pd.DataFrame:
     last_positions = last_positions.merge(
         ais_last_positions[
             ["cfr", "last_position_datetime_utc", "latitude", "longitude"]
@@ -479,6 +486,24 @@ def load_last_positions(last_positions):
 
 
 @task
+def load_last_positions_vms(last_positions_vms):
+    load(
+        last_positions_vms,
+        table_name="last_positions_vms",
+        schema="public",
+        db_name="monitorfish_remote",
+        logger=get_run_logger(),
+        how="replace",
+        pg_array_columns=["segments", "alerts", "reportings"],
+        handle_array_conversion_errors=True,
+        value_on_array_conversion_error="{}",
+        jsonb_columns=["gear_onboard", "species_onboard"],
+        nullable_integer_columns=["beacon_malfunction_id", "vessel_id"],
+        timedelta_columns=["emission_period"],
+    )
+
+
+@task
 def load_last_positions_ais(ais_last_positions):
     load(
         ais_last_positions,
@@ -511,49 +536,57 @@ def last_positions_flow(
     beacon_malfunctions = extract_beacon_malfunctions.submit()
     ais_last_positions = extract_ais_last_positions.submit()
 
-    last_positions = extract_last_positions.submit(minutes=minutes)
-    last_positions = add_vessel_id(last_positions, vessels_table)
-    last_positions = drop_duplicates(last_positions)
-    last_positions = add_vessel_identifier(last_positions)
-    last_positions = tag_positions_at_port(last_positions)
+    vms_last_positions = extract_vms_last_positions.submit(minutes=minutes)
+    vms_last_positions = add_vessel_id(vms_last_positions, vessels_table)
+    vms_last_positions = drop_duplicates(vms_last_positions)
+    vms_last_positions = add_vessel_identifier(vms_last_positions)
+    vms_last_positions = tag_positions_at_port(vms_last_positions)
     ais_last_positions = tag_positions_at_port(ais_last_positions)
 
     if action == "update":
-        previous_last_positions = extract_previous_last_positions.submit()
-        previous_last_positions = add_vessel_id(previous_last_positions, vessels_table)
-        previous_last_positions = drop_duplicates(previous_last_positions)
-        new_last_positions = drop_unchanged_new_last_positions(
-            last_positions, previous_last_positions
+        previous_vms_last_positions = extract_previous_vms_last_positions.submit()
+        previous_vms_last_positions = add_vessel_id(
+            previous_vms_last_positions, vessels_table
+        )
+        previous_vms_last_positions = drop_duplicates(previous_vms_last_positions)
+        new_vms_last_positions = drop_unchanged_new_last_positions(
+            vms_last_positions, previous_vms_last_positions
         )
 
         (
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
-            last_positions_to_update,
-        ) = split(previous_last_positions, new_last_positions)
-        updated_last_positions = compute_emission_period(last_positions_to_update)
+            unchanged_previous_vms_last_positions,
+            new_vessels_vms_last_positions,
+            last_vms_positions_to_update,
+        ) = split(previous_vms_last_positions, new_vms_last_positions)
+        updated_last_positions = compute_emission_period(last_vms_positions_to_update)
 
-        last_positions = concatenate(
-            unchanged_previous_last_positions,
-            new_vessels_last_positions,
+        vms_last_positions = concatenate(
+            unchanged_previous_vms_last_positions,
+            new_vessels_vms_last_positions,
             updated_last_positions,
         )
 
-    last_positions = estimate_current_positions(
-        last_positions=last_positions,
+    vms_last_positions = estimate_current_positions(
+        last_positions=vms_last_positions,
         max_hours_since_last_position=current_position_estimation_max_hours,
     )
-    last_positions = join(
-        last_positions,
+    vms_last_positions = join(
+        vms_last_positions,
         risk_factors,
         pending_alerts,
         reportings,
         beacon_malfunctions,
+    )
+
+    last_positions = join_ais(
+        vms_last_positions,
         ais_last_positions,
     )
 
+    vms_last_positions = drop_duplicates(vms_last_positions)
     last_positions = drop_duplicates(last_positions)
 
     # Load
     load_last_positions(last_positions)
+    load_last_positions_vms(vms_last_positions)
     load_last_positions_ais(ais_last_positions)

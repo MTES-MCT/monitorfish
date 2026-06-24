@@ -1,6 +1,7 @@
 DELETE FROM last_positions;
+DELETE FROM last_positions_vms;
 
-INSERT INTO last_positions (
+INSERT INTO last_positions_vms (
     id,
     cfr, external_immatriculation, mmsi, ircs, vessel_name, flag_state, 
     trip_number, latitude, longitude, speed, course, 
@@ -77,3 +78,7 @@ INSERT INTO last_positions (
     1, 2, 2, 1.74110112659225003,
     false, false, true
 );
+
+INSERT INTO last_positions
+SELECT *, 'VMS' AS position_type
+FROM last_positions_vms;

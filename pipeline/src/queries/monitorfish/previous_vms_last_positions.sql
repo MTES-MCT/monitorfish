@@ -21,6 +21,6 @@ SELECT
     pos.vessel_identifier,
     pos.is_at_port,
     pos.is_manual
-FROM last_positions pos
+FROM last_positions_vms pos
 LEFT JOIN vessels
 ON pos.cfr = vessels.cfr

@@ -13,7 +13,6 @@ from config import (
     BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
 )
 from src.entities.beacon_malfunctions import (
-    BeaconMalfunctionInitialLocation,
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
@@ -236,18 +235,29 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         ],
     )
 
-    new_malfunctions["beacon_malfunction_initial_location"] = np.choose(
+    new_malfunctions["initial_vessel_status"] = np.choose(
         new_malfunctions.is_at_port.astype(int),
         [
-            BeaconMalfunctionInitialLocation.AT_SEA.value,
-            BeaconMalfunctionInitialLocation.AT_PORT.value,
+            BeaconMalfunctionVesselStatus.AT_SEA.value,
+            BeaconMalfunctionVesselStatus.AT_PORT.value,
         ],
     )
+
+    new_malfunctions["is_followed"] = np.choose(
+        new_malfunctions.is_at_port.astype(int),
+        [
+            True,
+            False,
+        ],
+    )
+
+    now = datetime.utcnow()
+    new_malfunctions["creation_datetime_utc"] = now
 
     new_malfunctions["stage"] = BeaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
-    new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
+    new_malfunctions["vessel_status_last_modification_date_utc"] = now
 
     notification_to_send = {
         (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.ACTIVATED.value): (
@@ -298,7 +308,9 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "longitude",
         "beacon_number",
         "beacon_status_at_malfunction_creation",
-        "beacon_malfunction_initial_location",
+        "initial_vessel_status",
+        "is_followed",
+        "creation_datetime_utc",
     ]
     return new_malfunctions.loc[:, ordered_columns]
 

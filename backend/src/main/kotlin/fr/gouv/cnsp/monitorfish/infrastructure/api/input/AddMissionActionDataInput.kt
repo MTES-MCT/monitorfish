@@ -7,10 +7,14 @@ import java.time.ZonedDateTime
 
 data class MissionActionInfractionDataInput(
     val infractionType: InfractionType,
-    val threats: List<ThreatHierarchyDataInput>,
+    val threats: List<ThreatHierarchyDataInput> = emptyList(),
     val comments: String? = null,
 ) {
     fun toInfraction(): Infraction {
+        if (infractionType == InfractionType.PENDING) {
+            return Infraction(infractionType = infractionType, comments = comments)
+        }
+
         val threat = threats.single()
         val threatName = threat.value
         val threatCharacterization = threat.children.single().value

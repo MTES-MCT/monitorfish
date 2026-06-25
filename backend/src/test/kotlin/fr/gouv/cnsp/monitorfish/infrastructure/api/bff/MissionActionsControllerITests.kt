@@ -236,6 +236,54 @@ class MissionActionsControllerITests {
     }
 
     @Test
+    fun `Should create a mission action with a pending infraction having no threat`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime)
+        given(addMissionAction.execute(any())).willReturn(newMission)
+
+        // When
+        api
+            .perform(
+                post("/bff/v1/mission_actions")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.SEA_CONTROL,
+                                infractions =
+                                    listOf(
+                                        MissionActionInfractionDataInput(
+                                            infractionType = InfractionType.PENDING,
+                                            threats = emptyList(),
+                                            comments = "En attente de PV",
+                                        ),
+                                    ),
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isCreated)
+
+        argumentCaptor<MissionAction>().apply {
+            verify(addMissionAction).execute(capture())
+
+            val infraction = allValues[0].infractions.single()
+            Assertions.assertThat(infraction.infractionType).isEqualTo(InfractionType.PENDING)
+            Assertions.assertThat(infraction.comments).isEqualTo("En attente de PV")
+            Assertions.assertThat(infraction.natinf).isNull()
+            Assertions.assertThat(infraction.threat).isNull()
+            Assertions.assertThat(infraction.threatCharacterization).isNull()
+        }
+    }
+
+    @Test
     fun `Should update a mission action`() {
         // Given
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")

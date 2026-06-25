@@ -326,6 +326,10 @@ export function MissionForm() {
         return
       }
 
+      const haveMissionDatesChanged =
+        mainFormValues.startDateTimeUtc !== nextMissionMainFormValues.startDateTimeUtc ||
+        mainFormValues.endDateTimeUtc !== nextMissionMainFormValues.endDateTimeUtc
+
       const savedMainFormValues = await dispatch(
         autoSaveMission(nextMissionMainFormValues, mainFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
@@ -336,8 +340,52 @@ export function MissionForm() {
       setMainFormValues(savedMainFormValues)
       missionIdRef.current = savedMainFormValues.id
       updateReduxSliceDraft()
+
+      /**
+       * A control date must fall within the mission period, so changing the mission dates can make a
+       * previously out-of-range action valid. An action is otherwise only auto-saved when its own form
+       * changes, so we re-attempt saving the edited action here to persist a control that just became
+       * valid (without this, the user has to re-edit the control date to trigger its save).
+       */
+      if (!haveMissionDatesChanged || editedActionIndex === undefined) {
+        return
+      }
+
+      const editedActionFormValues = actionsFormValues[editedActionIndex]
+      if (!editedActionFormValues) {
+        return
+      }
+
+      // Persist the draft synchronously so the action validation (which reads the mission dates from the
+      // draft) sees the updated dates instead of the debounced, still-stale ones.
+      dispatch(
+        missionFormActions.setDraft({
+          actionsFormValues: [...actionsFormValues],
+          mainFormValues: { ...savedMainFormValues }
+        })
+      )
+
+      const savedActionId = await dispatch(
+        autoSaveMissionAction(editedActionFormValues, missionIdRef.current, isAutoSaveEnabled)
+      )
+      if (savedActionId !== editedActionFormValues.id) {
+        setActionsFormValues(previousActionsFormValues =>
+          previousActionsFormValues.map((action, index) =>
+            index === editedActionIndex ? { ...editedActionFormValues, id: savedActionId } : action
+          )
+        )
+        updateReduxSliceDraft()
+      }
     },
-    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, mainFormValues, isAutoSaveEnabled]
+    [
+      dispatch,
+      updateEditedActionFormValues,
+      updateReduxSliceDraft,
+      mainFormValues,
+      isAutoSaveEnabled,
+      editedActionIndex,
+      actionsFormValues
+    ]
   )
 
   const updateMainFormValues = useDebouncedCallback(

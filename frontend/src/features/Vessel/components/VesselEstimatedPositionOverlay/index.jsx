@@ -1,11 +1,11 @@
 import { COLORS } from '@constants/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { getCoordinates } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { VesselEstimatedPositionCard } from './VesselEstimatedPositionCard'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { LayerProperties, WSG84_PROJECTION } from '../../../Map/constants'
 import { monitorfishMap } from '../../../Map/monitorfishMap'
 

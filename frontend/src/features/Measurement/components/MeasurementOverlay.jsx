@@ -1,8 +1,8 @@
+import { COLORS } from '@constants/constants'
 import Overlay from 'ol/Overlay'
 import React, { createRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '@constants/constants'
 import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 

@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
-import { getLocalStorageState } from '../../../utils.ts'
 import { isNumeric } from '@utils/isNumeric.ts'
+import { useEffect } from 'react'
+
+import { getLocalStorageState } from '../../../utils.ts'
 import { monitorfishMap } from '../monitorfishMap.ts'
 
 const savedMapExtentLocalStorageKey = 'mapExtent'
@@ -8,7 +9,7 @@ const savedMapViewLocalStorageKey = 'mapView'
 /**
  * Handle browser and LocalStorage history on map URL
  */
-export const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveTrigger }) => {
+export const MapHistory = ({ historyMoveTrigger, setShouldUpdateView, shouldUpdateView }) => {
   useEffect(() => {
     // restore view on browser history navigation
     const handlePopState = event => {
@@ -30,14 +31,14 @@ export const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveT
 
   useEffect(() => {
     const mapState = {
+      extent: getLocalStorageState(null, savedMapExtentLocalStorageKey),
       view: getLocalStorageState(
         {
-          zoom: null,
-          center: null
+          center: null,
+          zoom: null
         },
         savedMapViewLocalStorageKey
-      ),
-      extent: getLocalStorageState(null, savedMapExtentLocalStorageKey)
+      )
     }
     function initMapView() {
       if (window.location.hash !== '') {
@@ -70,8 +71,8 @@ export const MapHistory = ({ setShouldUpdateView, shouldUpdateView, historyMoveT
         const currentView = monitorfishMap.getView()
         const center = currentView.getCenter()
         const view = {
-          zoom: currentView.getZoom().toFixed(2),
-          center: center
+          center: center,
+          zoom: currentView.getZoom().toFixed(2)
         }
         const extent = currentView.calculateExtent()
         window.localStorage.setItem(savedMapViewLocalStorageKey, JSON.stringify(view))

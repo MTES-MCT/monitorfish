@@ -1,10 +1,10 @@
+import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { getCoordinates } from '@mtes-mct/monitor-ui'
 import React from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
-import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { COLORS } from '../../../../constants/constants'
 import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../constants'

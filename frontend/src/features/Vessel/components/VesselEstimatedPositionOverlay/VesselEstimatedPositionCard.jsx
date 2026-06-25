@@ -1,6 +1,6 @@
+import { COLORS } from '@constants/constants'
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '@constants/constants'
 
 export const VesselEstimatedPositionCard = ({ coordinates }) => {
   return (

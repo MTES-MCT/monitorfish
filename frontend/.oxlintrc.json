@@ -1,6 +1,14 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["import", "react", "typescript", "jsx-a11y", "unicorn", "oxc"],
+  // jsPlugins: these ESLint rules have no native OxLint equivalent, so OxLint runs the real ESLint
+  // plugins in-process. `import` and `react` are reserved native plugin names, hence the `-js` aliases.
+  "jsPlugins": [
+    "eslint-plugin-sort-keys-fix",
+    "eslint-plugin-sort-destructure-keys",
+    { "name": "import-js", "specifier": "eslint-plugin-import" },
+    { "name": "react-js", "specifier": "eslint-plugin-react" }
+  ],
   "categories": {
     "correctness": "error"
   },
@@ -31,11 +39,17 @@
         "message": "Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead."
       }
     ],
-    "no-unused-vars": [
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }],
+
+    "sort-keys-fix/sort-keys-fix": ["error", "asc", { "caseSensitive": false, "natural": false }],
+    "sort-destructure-keys/sort-destructure-keys": ["error", { "caseSensitive": false }],
+    "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],
+    "import-js/order": [
       "error",
       {
-        "argsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
+        "alphabetize": { "caseInsensitive": true, "order": "asc" },
+        "groups": [["builtin", "external", "internal"], ["parent", "index", "sibling"], ["type"], ["object"]],
+        "newlines-between": "always"
       }
     ]
   },
@@ -48,9 +62,7 @@
         "src/**/slice.*.ts",
         "src/**/*.slice.*.ts"
       ],
-      "rules": {
-        "no-param-reassign": "off"
-      }
+      "rules": { "no-param-reassign": "off" }
     },
     {
       "files": [
@@ -59,22 +71,16 @@
         "src/domain/shared_slices/**/*.ts",
         "src/**/slice.ts"
       ],
-      "rules": {
-        "no-param-reassign": "off"
-      }
+      "rules": { "no-param-reassign": "off" }
     },
     {
       "files": ["src/components/**/*.tsx", "src/ui/**/*.tsx"],
-      "rules": {
-        "react/jsx-props-no-spreading": "off"
-      }
+      "rules": { "react/jsx-props-no-spreading": "off" }
     },
     {
       "files": ["__mocks__/**/*.js", "__mocks__/**/*.ts", "**/*.test.ts", "**/*.test.tsx", "puppeteer/**/*.ts"],
       "plugins": ["jest"],
-      "env": {
-        "jest": true
-      },
+      "env": { "jest": true },
       "rules": {
         "no-restricted-imports": [
           "error",
@@ -101,9 +107,7 @@
     },
     {
       "files": ["cypress/**/*.js", "cypress/**/*.ts", "cypress.config.ts"],
-      "rules": {
-        "import/no-default-export": "off"
-      }
+      "rules": { "import/no-default-export": "off" }
     },
     {
       "files": [
@@ -116,13 +120,8 @@
         "config/**/*.ts",
         "scripts/**/*.ts"
       ],
-      "env": {
-        "browser": false,
-        "node": true
-      },
-      "rules": {
-        "import/no-default-export": "off"
-      }
+      "env": { "browser": false, "node": true },
+      "rules": { "import/no-default-export": "off" }
     }
   ]
 }

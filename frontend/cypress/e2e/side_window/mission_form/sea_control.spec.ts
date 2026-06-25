@@ -1164,7 +1164,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     pickHoverEditSpecies('species-onboard-row-1', 'HKE')
     cy.get('[data-cy="species-onboard-row-1"]').find('[title="Retirer l\'espèce"]').click({ force: true })
     cy.contains('Suppression de l’espèce').should('be.visible')
-    cy.contains('Êtes-vous sûr de vouloir supprimer').should('be.visible')
+    cy.contains('supprimer l’espèce ?').should('be.visible')
     cy.clickButton('Annuler')
     cy.get('[data-cy="species-onboard-row-1"]').should('exist')
     cy.get('[data-cy="species-onboard-row-1"]').find('[title="Retirer l\'espèce"]').click({ force: true })

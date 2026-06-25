@@ -30,7 +30,7 @@ export const updateActionLogbookFilledPriorToControl =
       return
     }
 
-    // Between 10m and 12m the field is left empty: the user must check the paper logbook on board.
+    // Between 10m and 12m the field is left empty: the controller must check the paper logbook on board.
     if (!!vesselLength && vesselLength < 12) {
       setFieldValue('logbookFilledPriorToControl', undefined)
 

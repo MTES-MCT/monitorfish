@@ -55,6 +55,18 @@ L'historique des positions AIS est conservé sur une profondeur maximale d'**1 m
        */
       {
         date: '2026-06-24',
+        description: `Les navires appartenant à des segments prioritaires à contrôler en mer sont désormais automatiquement regroupés en deux groupes prioritaires, selon l'avancée des objectifs PIRC et la saisonnalité :
+
+- **Segments P1** : Navires appartenant à des segments aux objectifs non atteints et donc la priorité est élevée selon la note d'impact et/ou la saisonnalité,
+- **Segments P2** : Navires appartenant à des segments aux objectifs non atteints et dont la priorité est moindre.
+
+Ces groupes prioritaires sont repérables sur la carte et dans la liste des groupes grâce à une icône de cible et à des couleurs dédiées.`,
+        for: 'ALL',
+        title: 'Groupes prioritaires P1 et P2',
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2026-06-24',
         description: `Il est désormais possible d'enregistrer une infraction dont le résultat est **"en attente"**, y compris une fois la mission terminée.
 
 Le champ reste affiché en rouge pour signaler qu'il reste à compléter.`,

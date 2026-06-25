@@ -351,8 +351,8 @@ export function SpeciesField() {
           confirmationButtonLabel="Confirmer la suppression"
           message={
             <>
-              <p>Êtes-vous sûr de vouloir supprimer</p>
-              <Bold>l’espèce ?</Bold>
+              <p>Êtes-vous sûr de vouloir</p>
+              <Bold>supprimer l’espèce ?</Bold>
             </>
           }
           onCancel={() => setSpeciesToDeleteIndex(undefined)}

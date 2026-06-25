@@ -1186,10 +1186,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
   })
 
-  // [INVESTIGATION] Repro attempt for: "control date stays red & un-saveable after the mission end
-  // date is extended past it". Auto-save path (default), control form open, asserting the field error.
-  it('[REPRO] Should clear the control date error after extending the mission end date past the control date', () => {
-    // The base form sets the mission end date to now + 7 days (auto-save stays enabled).
+  // [INVESTIGATION] Controlled experiment: does the control-date error track the mission end's
+  // TIME-OF-DAY (not just the calendar day)? If extending the end to a later day/time that is still
+  // before the control time keeps the error, the reporter likely extended the day but not past the
+  // control time. All assertions passing (green) confirms the comparison works correctly.
+  it('[REPRO] Control date error tracks the mission end time-of-day, not just the calendar day', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
 
     cy.clickButton('Ajouter')
@@ -1201,20 +1202,25 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Saisi par', 'Marlin')
 
-    // When the control date is set after the mission end date (now + 14 days)
-    const controlDate = getUtcDateInMultipleFormats(customDayjs().utc().add(14, 'day').toISOString())
-    cy.fill('Date et heure du contrôle', controlDate.utcDateTupleWithTime)
+    // Anchor on a fixed time-of-day, 7 days ahead (future → auto-save stays enabled), to avoid any
+    // midnight-crossing flakiness from the wall-clock run time.
+    const baseDay = customDayjs().utc().add(7, 'day').startOf('day').add(10, 'hour')
+    const errorMessage = 'La date du contrôle doit être antérieure à la date de fin de la mission.'
+
+    // Mission ends at 10:00; the control is at 12:00 (same day) → after the end → error shown.
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.toISOString()).utcDateTupleWithTime)
+    cy.fill('Date et heure du contrôle', getUtcDateInMultipleFormats(baseDay.add(2, 'hour').toISOString()).utcDateTupleWithTime)
     cy.wait(1000)
+    cy.contains(errorMessage).should('exist')
 
-    // Then the error is shown (red)
-    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('exist')
-
-    // When extending the mission end date past the control date (now + 21 days)
-    const newEndDate = getUtcDateInMultipleFormats(customDayjs().utc().add(21, 'day').toISOString())
-    cy.fill('Fin de mission', newEndDate.utcDateTupleWithTime)
+    // Extend the end to a LATER time (11:00) that is STILL before the control (12:00) → stays red.
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.add(1, 'hour').toISOString()).utcDateTupleWithTime)
     cy.wait(1000)
+    cy.contains(errorMessage).should('exist')
 
-    // Then the error clears
-    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('not.exist')
+    // Extend the end PAST the control time (13:00) → error clears.
+    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.add(3, 'hour').toISOString()).utcDateTupleWithTime)
+    cy.wait(1000)
+    cy.contains(errorMessage).should('not.exist')
   })
 })

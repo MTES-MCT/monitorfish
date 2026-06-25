@@ -1186,15 +1186,20 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
   })
 
-  // [INVESTIGATION] Controlled experiment: does the control-date error track the mission end's
-  // TIME-OF-DAY (not just the calendar day)? If extending the end to a later day/time that is still
-  // before the control time keeps the error, the reporter likely extended the day but not past the
-  // control time. All assertions passing (green) confirms the comparison works correctly.
-  it('[REPRO] Control date error tracks the mission end time-of-day, not just the calendar day', () => {
+  // [INVESTIGATION] Repro for the reporter's bug: in the auto-save flow, a control whose date is
+  // after the mission end is never persisted. Extending the mission end date past the control makes
+  // it valid, but the action is only auto-saved when the ACTION form changes — changing the mission
+  // end date triggers only the main-form save, so the now-valid control is never written.
+  it('[REPRO] Should persist a control that becomes valid after extending the mission end date', () => {
+    // Base form sets the mission end date to now + 7 days (auto-save stays enabled).
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
+    // Main-form auto-save endpoint (extending the end date hits this).
+    cy.intercept('POST', '/api/v1/missions/1', { body: { id: 1 }, statusCode: 201 }).as('updateMission')
 
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 1 }, statusCode: 201 }).as('createControl')
 
     cy.fill('Navire inconnu', true)
     cy.fill('Nom du navire', 'Un navire')
@@ -1202,25 +1207,24 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Ajouter un engin', 'MIS')
     cy.fill('Saisi par', 'Marlin')
 
-    // Anchor on a fixed time-of-day, 7 days ahead (future → auto-save stays enabled), to avoid any
-    // midnight-crossing flakiness from the wall-clock run time.
-    const baseDay = customDayjs().utc().add(7, 'day').startOf('day').add(10, 'hour')
-    const errorMessage = 'La date du contrôle doit être antérieure à la date de fin de la mission.'
+    // The control is created with the default (current) date, which is within the mission range.
+    cy.wait('@createControl').its('response.statusCode').should('eq', 201)
 
-    // Mission ends at 10:00; the control is at 12:00 (same day) → after the end → error shown.
-    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.toISOString()).utcDateTupleWithTime)
-    cy.fill('Date et heure du contrôle', getUtcDateInMultipleFormats(baseDay.add(2, 'hour').toISOString()).utcDateTupleWithTime)
-    cy.wait(1000)
-    cy.contains(errorMessage).should('exist')
+    // From here on, persisting the control means updating it.
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', { body: { id: 1 }, statusCode: 201 }).as('updateControl')
 
-    // Extend the end to a LATER time (11:00) that is STILL before the control (12:00) → stays red.
-    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.add(1, 'hour').toISOString()).utcDateTupleWithTime)
+    // When the control date is moved after the mission end date → invalid, not persisted (error shown).
+    const controlDate = getUtcDateInMultipleFormats(customDayjs().utc().add(14, 'day').toISOString())
+    cy.fill('Date et heure du contrôle', controlDate.utcDateTupleWithTime)
     cy.wait(1000)
-    cy.contains(errorMessage).should('exist')
+    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('exist')
 
-    // Extend the end PAST the control time (13:00) → error clears.
-    cy.fill('Fin de mission', getUtcDateInMultipleFormats(baseDay.add(3, 'hour').toISOString()).utcDateTupleWithTime)
-    cy.wait(1000)
-    cy.contains(errorMessage).should('not.exist')
+    // When extending the mission end date past the control date — WITHOUT touching the control form again
+    const newEndDate = getUtcDateInMultipleFormats(customDayjs().utc().add(21, 'day').toISOString())
+    cy.fill('Fin de mission', newEndDate.utcDateTupleWithTime)
+    cy.wait('@updateMission')
+
+    // Then the now-valid control must be persisted (this is what fails today).
+    cy.wait('@updateControl', { timeout: 8000 }).its('request.body.actionDatetimeUtc').should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
   })
 })

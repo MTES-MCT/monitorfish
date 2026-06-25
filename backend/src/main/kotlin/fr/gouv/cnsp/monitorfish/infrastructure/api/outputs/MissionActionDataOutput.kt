@@ -18,8 +18,16 @@ data class MissionActionInfractionDataOutput(
     val comments: String? = null,
 ) {
     companion object {
-        fun fromInfractionWithThreatHierarchy(infraction: Infraction) =
-            MissionActionInfractionDataOutput(
+        fun fromInfractionWithThreatHierarchy(infraction: Infraction): MissionActionInfractionDataOutput {
+            // A pending infraction has no threat/NATINF yet, so there is no hierarchy to build
+            if (infraction.infractionType == InfractionType.PENDING) {
+                return MissionActionInfractionDataOutput(
+                    infractionType = InfractionType.PENDING,
+                    comments = infraction.comments,
+                )
+            }
+
+            return MissionActionInfractionDataOutput(
                 infractionType = infraction.infractionType!!,
                 threats =
                     listOf(
@@ -27,6 +35,7 @@ data class MissionActionInfractionDataOutput(
                     ),
                 comments = infraction.comments,
             )
+        }
 
         fun fromInfraction(infraction: Infraction) =
             MissionActionInfractionDataOutput(

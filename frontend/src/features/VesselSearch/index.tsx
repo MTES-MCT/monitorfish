@@ -187,6 +187,7 @@ export function VesselSearch({
           $baseUrl={baseUrl}
           $flagState={flagState}
           $hasError={hasError}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus the search input when a vessel is preselected
           autoFocus={!baseRef && !!selectedVesselIdentity}
           data-cy="vessel-search-input"
           defaultValue={vesselName}

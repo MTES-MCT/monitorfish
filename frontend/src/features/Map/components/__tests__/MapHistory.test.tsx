@@ -37,7 +37,7 @@ describe('MapHistory popstate listener', () => {
   })
 
   it('adds a popstate listener on mount', async () => {
-    const { default: MapHistory } = await import('../MapHistory')
+    const { MapHistory } = await import('../MapHistory')
 
     render(
       React.createElement(MapHistory, {
@@ -52,7 +52,7 @@ describe('MapHistory popstate listener', () => {
   })
 
   it('removes the popstate listener on unmount', async () => {
-    const { default: MapHistory } = await import('../MapHistory')
+    const { MapHistory } = await import('../MapHistory')
 
     const { unmount } = render(
       React.createElement(MapHistory, {
@@ -68,7 +68,7 @@ describe('MapHistory popstate listener', () => {
   })
 
   it('registers and removes the same function reference for popstate', async () => {
-    const { default: MapHistory } = await import('../MapHistory')
+    const { MapHistory } = await import('../MapHistory')
 
     const { unmount } = render(
       React.createElement(MapHistory, {

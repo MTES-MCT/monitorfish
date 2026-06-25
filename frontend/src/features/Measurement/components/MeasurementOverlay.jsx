@@ -6,7 +6,7 @@ import { COLORS } from '@constants/constants'
 import CloseIconSVG from '../../icons/Croix_grise.svg?react'
 import { monitorfishMap } from '../../Map/monitorfishMap'
 
-function MeasurementOverlay({ coordinates, deleteFeature, id, measurement }) {
+export function MeasurementOverlay({ coordinates, deleteFeature, id, measurement }) {
   const ref = createRef()
   const [overlay] = useState(
     new Overlay({
@@ -93,5 +93,3 @@ const CloseIcon = styled(CloseIconSVG)`
   margin: 0 6px 0 7px;
   padding-left: 7px;
 `
-
-export default MeasurementOverlay

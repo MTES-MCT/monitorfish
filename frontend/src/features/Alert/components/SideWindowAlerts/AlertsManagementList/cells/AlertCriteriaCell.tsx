@@ -90,7 +90,7 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
           <ExpandedRowLabel>Navires :</ExpandedRowLabel>
           <ExpandedRowValue>
             {alertSpecification.vessels?.map(vessel => (
-              <span title={vessel.internalReferenceNumber}>
+              <span key={vessel.internalReferenceNumber} title={vessel.internalReferenceNumber}>
                 <Flag
                   rel="preload"
                   src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.svg`}

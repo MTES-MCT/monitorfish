@@ -51,6 +51,7 @@ export function FormikNameSelect() {
 
   return isCustomName ? (
     <Wrapper>
+      {/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus the custom-name input as soon as it appears */}
       <FormikTextInput autoFocus isLight label="Nom du contact" name="name" />
       <IconButton accent={Accent.TERTIARY} Icon={Icon.Close} iconSize={17} onClick={cancelCustomName} title="Annuler" />
     </Wrapper>

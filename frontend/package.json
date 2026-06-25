@@ -28,8 +28,11 @@
     "test:e2e:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:multi-windows:open": "IS_HEADLESS=false jest --config=./config/multi-windows/jest.config.js",
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js",
-    "test:lint": "NODE_OPTIONS='--max-old-space-size=8192' eslint --config=./.eslintrc.cjs ./src",
-    "test:lint:fix": "NODE_OPTIONS='--max-old-space-size=8192' npm run test:lint -- --fix",
+    "test:lint": "oxlint --config=.oxlintrc.json src && eslint --ext .ts,.tsx --config=./.eslintrc.cjs ./src",
+    "test:lint:fix": "oxlint --fix --config=.oxlintrc.json src && eslint --ext .ts,.tsx --config=./.eslintrc.cjs --fix ./src && prettier --write ./src",
+    "test:lint:ox": "oxlint --config=.oxlintrc.json src",
+    "test:format": "prettier --check ./src",
+    "format": "prettier --write ./src",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
     "test:unit:watch": "npm run test:unit -- --watch"
@@ -95,6 +98,7 @@
     "@import-meta-env/prepare": "0.2.3",
     "@import-meta-env/unplugin": "0.6.3",
     "@jest/globals": "30.4.1",
+    "@prettier/plugin-oxc": "0.1.4",
     "@rollup/plugin-replace": "6.0.3",
     "@swc/core": "1.15.40",
     "@swc/jest": "0.2.39",
@@ -120,16 +124,12 @@
     "cypress-axe": "1.7.0",
     "dotenv": "16.5.0",
     "eslint": "8.57.1",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-typescript": "18.0.0",
-    "eslint-config-prettier": "9.1.0",
     "eslint-plugin-cypress": "3.5.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jest": "28.12.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-mocha": "10.5.0",
     "eslint-plugin-no-null": "1.0.2",
-    "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-sort-destructure-keys": "1.5.0",
@@ -143,6 +143,7 @@
     "lint-staged": "14.0.1",
     "madge": "8.0.0",
     "ora": "9.4.0",
+    "oxlint": "1.71.0",
     "postgres": "3.4.9",
     "prettier": "3.8.3",
     "puppeteer": "22.15.0",
@@ -181,8 +182,14 @@
   "//": "https://github.com/okonet/lint-staged/issues/825#issuecomment-674575655",
   "lint-staged": {
     "*.{json,md,yaml,yml}": "prettier --write",
+    "*.{js,jsx}": [
+      "oxlint --config=.oxlintrc.json --fix",
+      "prettier --write"
+    ],
     "*.{ts,tsx}": [
+      "oxlint --config=.oxlintrc.json --fix",
       "eslint --config=./.eslintrc.cjs --fix",
+      "prettier --write",
       "bash -c 'npm run test:type'"
     ]
   }

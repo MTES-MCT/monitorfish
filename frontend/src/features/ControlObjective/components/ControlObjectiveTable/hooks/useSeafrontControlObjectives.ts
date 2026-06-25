@@ -62,7 +62,7 @@ export function useSeafrontControlObjectives(
         objective =>
           ({
             ...objective,
-            ...(findFleetSegment(objective.segment) ?? {}),
+            ...findFleetSegment(objective.segment),
             ...localEdits[objective.id]
           }) as ControlObjectiveWithMaybeFleetSegment
       )

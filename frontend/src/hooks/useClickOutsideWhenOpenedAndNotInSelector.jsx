@@ -4,7 +4,7 @@ export const useClickOutsideWhenOpenedAndNotInSelector = (ref, isOpened, selecto
   const [clicked, setClicked] = useState(null)
 
   useEffect(() => {
-    function handleClickOutside (event) {
+    function handleClickOutside(event) {
       const element = document.querySelector(selector)
       if (ref.current && !ref.current.contains(event.target) && !element?.contains(event.target)) {
         setClicked({})

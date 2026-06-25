@@ -174,7 +174,7 @@ export const monitorfishApiKy = ky.extend({
         let requestData
         try {
           requestData = await request.json()
-        } catch (e) {
+        } catch {
           // eslint-disable-next-line no-console
           console.error('Could not parse request data', error)
         }
@@ -182,7 +182,7 @@ export const monitorfishApiKy = ky.extend({
         let responseData
         try {
           responseData = await response.json()
-        } catch (e) {
+        } catch {
           // eslint-disable-next-line no-console
           console.error('Could not parse response data', error)
         }

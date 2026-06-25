@@ -9,7 +9,7 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 export const showOrHideAdministrativeLayer =
   (zone: MonitorFishMap.AdminShowableLayer, isShown: boolean): MainAppThunk =>
   dispatch => {
-    const type = zone.hasFetchableZones ? zone.group?.code!! : zone.code
+    const type = zone.hasFetchableZones ? zone.group!.code : zone.code
     const zoneCode = zone.hasFetchableZones ? zone.code : undefined
 
     if (isShown) {

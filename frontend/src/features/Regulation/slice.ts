@@ -118,7 +118,7 @@ const regulationSlice = createSlice({
   reducers: {
     addObjectToRegulatoryTextCheckedMap(state, action: PayloadAction<{ complete: boolean; index: number }>) {
       state.regulatoryTextCheckedMap = {
-        ...(state.regulatoryTextCheckedMap ?? {}),
+        ...state.regulatoryTextCheckedMap,
         [action.payload.index]: action.payload.complete
       }
     },

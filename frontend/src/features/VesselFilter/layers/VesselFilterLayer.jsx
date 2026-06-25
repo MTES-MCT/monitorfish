@@ -7,7 +7,7 @@ import VectorSource from 'ol/source/Vector'
 import { Stroke, Style } from 'ol/style'
 import React, { useEffect, useRef } from 'react'
 
-function VesselFilterLayer() {
+function VesselFilterLayerComponent() {
   const filters = []
   // TODO use vessel groups
   const zonesSelected = undefined
@@ -86,4 +86,4 @@ function VesselFilterLayer() {
   return null
 }
 
-export default React.memo(VesselFilterLayer)
+export const VesselFilterLayer = React.memo(VesselFilterLayerComponent)

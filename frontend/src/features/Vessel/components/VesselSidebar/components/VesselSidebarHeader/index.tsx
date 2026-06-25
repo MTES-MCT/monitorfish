@@ -75,6 +75,7 @@ export function VesselSidebarHeader() {
       {!isVesselNameShown && (
         <VesselSearchWithMapVessels
           aisVessels={areAISVesselsDisplayed ? aisVessels : undefined}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus the vessel search input when expanded
           autoFocus={isFocusedOnVesselSearch}
           extendedWidth={500}
           isExtended={isFocusedOnVesselSearch || vesselSidebarIsOpen}

@@ -167,7 +167,7 @@ export const getCPSNumberOfDistinctSpecies = (logbookMessages: Logbook.CpsMessag
       []
     )
 
-  return Array.from(new Set(species)).length
+  return new Set(species).size
 }
 
 export const areAllMessagesNotAcknowledged = (logbookMessages: Logbook.Message[]) =>

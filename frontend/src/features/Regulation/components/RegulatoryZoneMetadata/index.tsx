@@ -48,7 +48,7 @@ export function RegulatoryZoneMetadata() {
               </RegulatoryZoneName>
               <TagsContainer>
                 {regulatoryZoneMetadata?.tags?.map(tag => (
-                  <StyledTag backgroundColor={THEME.color.white} title={RegulatoryTagsLabel[tag]}>
+                  <StyledTag key={tag} backgroundColor={THEME.color.white} title={RegulatoryTagsLabel[tag]}>
                     {tag}
                   </StyledTag>
                 ))}

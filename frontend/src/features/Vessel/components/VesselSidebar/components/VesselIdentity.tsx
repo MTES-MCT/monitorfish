@@ -228,7 +228,7 @@ export function VesselIdentity() {
               <>
                 <ValueWithLineBreak>{selectedVessel?.proprietorName}</ValueWithLineBreak>
                 {selectedVessel?.proprietorPhones?.map(proprietorPhone => (
-                  <ValueWithLineBreak>{proprietorPhone}</ValueWithLineBreak>
+                  <ValueWithLineBreak key={proprietorPhone}>{proprietorPhone}</ValueWithLineBreak>
                 ))}
                 {!!selectedVessel?.proprietorEmails && (
                   <ValueWithLineBreak>{selectedVessel?.proprietorEmails.join(', ')}</ValueWithLineBreak>
@@ -244,7 +244,7 @@ export function VesselIdentity() {
               <>
                 <ValueWithLineBreak>{selectedVessel?.operatorName}</ValueWithLineBreak>
                 {selectedVessel?.operatorPhones?.map(operatorPhone => (
-                  <ValueWithLineBreak>{operatorPhone}</ValueWithLineBreak>
+                  <ValueWithLineBreak key={operatorPhone}>{operatorPhone}</ValueWithLineBreak>
                 ))}
                 {!!selectedVessel?.operatorEmail && (
                   <ValueWithLineBreak>{selectedVessel?.operatorEmail}</ValueWithLineBreak>
@@ -270,10 +270,10 @@ export function VesselIdentity() {
             value: (!(selectedVessel?.vesselPhones?.length === 0) || !(selectedVessel?.vesselEmails.length === 0)) && (
               <>
                 {selectedVessel?.vesselPhones?.map(vesselPhone => (
-                  <ValueWithLineBreak>{vesselPhone}</ValueWithLineBreak>
+                  <ValueWithLineBreak key={vesselPhone}>{vesselPhone}</ValueWithLineBreak>
                 ))}
                 {selectedVessel?.vesselEmails?.map(vesselEmail => (
-                  <ValueWithLineBreak>{vesselEmail}</ValueWithLineBreak>
+                  <ValueWithLineBreak key={vesselEmail}>{vesselEmail}</ValueWithLineBreak>
                 ))}
               </>
             )

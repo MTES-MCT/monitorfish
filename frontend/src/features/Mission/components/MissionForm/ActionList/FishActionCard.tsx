@@ -62,7 +62,10 @@ export function FishActionCard({ missionAction, onDuplicate, onRemove }: FishAct
         ]
 
       case MissionAction.MissionActionType.OBSERVATION:
-        return [<NoteContent>{missionAction.otherComments ?? 'Note libre à renseigner'}</NoteContent>, Icon.Note]
+        return [
+          <NoteContent key="note">{missionAction.otherComments ?? 'Note libre à renseigner'}</NoteContent>,
+          Icon.Note
+        ]
 
       case MissionAction.MissionActionType.SEA_CONTROL:
         return [

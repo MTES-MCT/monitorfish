@@ -142,12 +142,12 @@ export function ActionList({
                       key={index}
                       isSelected={action.index === currentIndex}
                       missionAction={action}
-                      onSelect={() => onSelect(action.index!!)}
+                      onSelect={() => onSelect(action.index!)}
                     >
                       <FishActionCard
                         missionAction={action as MissionActionFormValues}
-                        onDuplicate={() => onDuplicate(action.index!!)}
-                        onRemove={() => onRemove(action.index!!)}
+                        onDuplicate={() => onDuplicate(action.index!)}
+                        onRemove={() => onRemove(action.index!)}
                       />
                     </ActionCard>
                   )

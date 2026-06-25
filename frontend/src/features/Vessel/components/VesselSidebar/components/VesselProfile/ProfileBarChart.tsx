@@ -13,7 +13,12 @@ export function ProfileBarChart({ profile, title }: ProfileBarChartProps) {
       <Header>{title}</Header>
       <Chart>
         {sortedProfileBarsByDesc.map(bar => (
-          <Bar $backgroundColor={bar.color} $width={Number(bar.value)} title={`${bar.key} (${bar.value}%)`}>
+          <Bar
+            key={bar.key}
+            $backgroundColor={bar.color}
+            $width={Number(bar.value)}
+            title={`${bar.key} (${bar.value}%)`}
+          >
             {Number(bar.value) > 5 && Number(bar.value) <= 15 && <span style={{ fontWeight: 500 }}>{bar.key}</span>}
             {Number(bar.value) > 15 && <span style={{ fontWeight: 500 }}>{`${bar.key} (${bar.value}%)`}</span>}
           </Bar>

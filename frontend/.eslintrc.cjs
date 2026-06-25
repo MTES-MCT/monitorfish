@@ -1,24 +1,45 @@
-const path = require('path')
-
+// Slim ESLint config — runs ONLY the rules that OxLint cannot replicate.
+// Everything else (correctness, react, jsx-a11y, import/no-default-export, no-unused-vars, sort-keys,
+// no-restricted-imports, …) is handled by OxLint via `.oxlintrc.json`, and formatting by Prettier.
+//
+// These remaining rules are all *syntactic* (no type information needed), so this config deliberately
+// does NOT set `parserOptions.project`, which keeps the pass fast.
+//
+// Intentionally NOT ported (were type-aware → would require the slow type-aware pass):
+//   - @typescript-eslint/naming-convention (was `warn`)
+//   - @typescript-eslint/prefer-nullish-coalescing (was `error`)
+//   - @typescript-eslint/lines-between-class-members (was `error`)
+// They can be re-enabled later through OxLint's experimental `--type-aware` mode.
 module.exports = {
-  extends: ['airbnb', 'airbnb/hooks', 'airbnb-typescript', 'prettier'],
-  plugins: ['prettier', 'sort-keys-fix', 'sort-destructure-keys', 'typescript-sort-keys'],
+  root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2022,
-    project: path.join(__dirname, 'tsconfig.json')
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true }
   },
+  plugins: [
+    'import',
+    'react',
+    'sort-keys-fix',
+    'sort-destructure-keys',
+    'typescript-sort-keys',
+    // Loaded (rules left OFF) only so that the existing `eslint-disable` comments for OxLint-owned
+    // rules resolve here instead of erroring with "Definition for rule '…' was not found".
+    '@typescript-eslint',
+    'react-hooks',
+    'jsx-a11y',
+    'jest',
+    'no-null'
+  ],
   ignorePatterns: ['/build/*', '/public/*', '.eslintrc.cjs'],
-  env: {
-    browser: true
+  settings: {
+    'import/resolver': {
+      node: { extensions: ['.mjs', '.js', '.json', '.ts', '.tsx', '.d.ts'] }
+    },
+    react: { version: 'detect' }
   },
   rules: {
-    curly: ['error', 'all'],
-    'func-names': 'off',
-    'newline-before-return': 'error',
-    'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
-
-    'import/no-default-export': 'error',
     'import/order': [
       'error',
       {
@@ -30,209 +51,14 @@ module.exports = {
         'newlines-between': 'always'
       }
     ],
-    'import/prefer-default-export': 'off',
 
-    'prettier/prettier': 'error',
-
-    'react/jsx-pascal-case': [
-      'error',
-      {
-        ignore: ['LEGACY_*']
-      }
-    ],
-    'react/jsx-no-useless-fragment': 'off',
-    'react/jsx-sort-props': 'error',
-    'react/prop-types': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/require-default-props': 'off',
+    'react/jsx-sort-props': ['error', { ignoreCase: true, reservedFirst: true }],
 
     'sort-destructure-keys/sort-destructure-keys': ['error', { caseSensitive: false }],
 
     'sort-keys-fix/sort-keys-fix': ['error', 'asc', { caseSensitive: false, natural: false }],
 
-    '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
-    // We must add PascalCase in formats because ESLint trim the prefix before evaluating the case
-    // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/naming-convention.md#format-options
-    // > Note: As documented above, the prefix is trimmed before format is validated,
-    // > therefore PascalCase must be used to allow variables such as isEnabled using the prefix is.
-    '@typescript-eslint/naming-convention': [
-      'warn',
-      {
-        selector: 'function',
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'typeLike',
-        format: ['PascalCase']
-      },
-      {
-        selector: 'accessor',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'classProperty',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'objectLiteralProperty',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'parameter',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'parameterProperty',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase']
-      },
-      {
-        selector: 'variable',
-        types: ['boolean'],
-        format: ['camelCase', 'PascalCase', 'UPPER_CASE']
-      }
-    ],
-    '@typescript-eslint/no-restricted-imports': [
-      'error',
-      {
-        name: 'react-redux',
-        importNames: ['useSelector', 'useDispatch'],
-        message: 'Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead.'
-      }
-    ],
-    '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      {
-        argsIgnorePattern: '^_',
-        caughtErrorsIgnorePattern: '^_'
-      }
-    ],
-    '@typescript-eslint/prefer-nullish-coalescing': 'error',
-
     'typescript-sort-keys/interface': 'error',
     'typescript-sort-keys/string-enum': 'error'
-  },
-  overrides: [
-    // Redux
-    {
-      files: ['src/domain/shared_slices/**/*.ts', 'src/**/*.slice.ts', 'src/**/slice.ts', 'src/**/slice.*.ts', 'src/**/*.slice.*.ts'],
-      rules: {
-        'no-param-reassign': 'off'
-      }
-    },
-    {
-      files: ['src/domain/schemas/*.ts', 'src/domain/**/schemas.ts', 'src/domain/shared_slices/**/*.ts', 'src/**/slice.ts'],
-      plugins: ['no-null'],
-      rules: {
-        'no-param-reassign': 'off'
-      }
-    },
-
-    // UI
-    {
-      files: ['src/components/**/*.tsx', 'src/ui/**/*.tsx'],
-      rules: {
-        'react/jsx-props-no-spreading': 'off'
-      }
-    },
-
-    // Jest
-    {
-      files: ['__mocks__/**/*.[j|t]s', '**/*.test.ts', '**/*.test.tsx', 'puppeteer/**/*.ts'],
-      plugins: ['jest'],
-      env: {
-        jest: true
-      },
-      rules: {
-        // Use the global `jest` (enabled above via `env: { jest: true }`), never the import.
-        // swc only hoists `jest.mock()` above the file imports when the call references the GLOBAL
-        // `jest`. When `jest` is imported from `@jest/globals`, the hoist does not happen, so
-        // `jest.mock()` runs only after the mocked module has already been imported — the mock then
-        // silently has no effect.
-        '@typescript-eslint/no-restricted-imports': [
-          'error',
-          {
-            name: 'react-redux',
-            importNames: ['useSelector', 'useDispatch'],
-            message: 'Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead.'
-          },
-          {
-            name: '@jest/globals',
-            importNames: ['jest'],
-            message:
-              'Do not import `jest` from `@jest/globals`; use the global `jest`. An imported binding breaks swc `jest.mock()` hoisting, so mocks may silently have no effect.'
-          }
-        ],
-        'jest/no-disabled-tests': 'error',
-        'jest/no-focused-tests': 'error',
-        'jest/no-identical-title': 'error',
-        'jest/prefer-to-have-length': 'error',
-        'jest/valid-expect': 'error',
-        'no-await-in-loop': 'off',
-        'no-console': 'off',
-        'no-restricted-syntax': 'off',
-        'no-underscore-dangle': 'off',
-        'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off'
-      }
-    },
-
-    // Cypress
-    {
-      files: ['cypress/**/*.js', 'cypress/**/*.ts', 'cypress.config.ts'],
-      plugins: ['cypress', 'mocha'],
-      rules: {
-        'func-names': ['off'],
-        // TODO Check why either Prettier or ESLint auto-formatting does that and why this rule is not enabled.
-        // 'max-len': ['warn', { code: 120 }],
-
-        '@typescript-eslint/naming-convention': 'off',
-        '@typescript-eslint/no-unused-expressions': 'off',
-
-        'cypress/assertion-before-screenshot': 'error',
-        'cypress/no-assigning-return-values': 'error',
-        'cypress/no-async-tests': 'error',
-        // TODO Hopefully we'll able to enforce that rule someday.
-        'cypress/no-force': 'off',
-        'cypress/no-pause': 'error',
-        // TODO Hopefully we'll able to enforce that rule someday.
-        'cypress/no-unnecessary-waiting': 'off',
-
-        'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off',
-
-        'mocha/no-exclusive-tests': 'error',
-        'mocha/no-skipped-tests': 'error'
-      }
-    },
-
-    // Configs & scripts
-    {
-      files: [
-        '**/*.spec.js',
-        './*.cjs',
-        './*.js',
-        './config/**/*.js',
-        './scripts/**/*.js',
-        '**/*.spec.ts',
-        './config/**/*.ts',
-        './scripts/**/*.ts'
-      ],
-      env: {
-        browser: false,
-        node: true
-      },
-      rules: {
-        'import/no-default-export': 'off',
-        'import/no-extraneous-dependencies': 'off',
-
-        '@typescript-eslint/naming-convention': 'off'
-      }
-    }
-  ]
+  }
 }

@@ -1,7 +1,7 @@
 import type { FeatureCollection, Geometry } from 'geojson'
 
 export type CRS = {
-  properties: Object
+  properties: object
   type: string
 }
 

@@ -444,6 +444,29 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
 
     // Then, the form is valid but incomplete (the completed by field is missing)
     cy.get('button:contains("Enregistrer")').should('not.be.disabled')
+
+    // -------------------------------------------------------------------------
+    // Non-regression: extending the mission end date past a control date must re-enable saving.
+    // Bug: a control dated after the mission end kept the form un-saveable even after the mission
+    // end date was extended past the control date (the save gate did not react to the date change).
+    // The control is dated 2023-03-06 (see `dateTime` above). Dates are kept in the past so the
+    // manual "Enregistrer" button stays available (auto-save is off for missions ended > 48h ago).
+    const missionStart = getUtcDateInMultipleFormats('2023-03-01T08:00:00Z')
+    cy.fill('Début de mission', missionStart.utcDateTupleWithTime)
+
+    // When the mission ends before the control date, the form is invalid and saving is disabled
+    const endBeforeControl = getUtcDateInMultipleFormats('2023-03-05T08:00:00Z')
+    cy.fill('Fin de mission', endBeforeControl.utcDateTupleWithTime)
+    cy.wait(500)
+    cy.get('button:contains("Enregistrer")').should('be.disabled')
+
+    // When extending the mission end date past the control date
+    const endAfterControl = getUtcDateInMultipleFormats('2023-03-08T08:00:00Z')
+    cy.fill('Fin de mission', endAfterControl.utcDateTupleWithTime)
+    cy.wait(500)
+
+    // Then the form becomes saveable again
+    cy.get('button:contains("Enregistrer")').should('not.be.disabled')
   })
 
   it('Should edit and delete an existing infraction', () => {

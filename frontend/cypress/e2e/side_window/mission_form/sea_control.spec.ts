@@ -1,6 +1,7 @@
 import { Mission } from '@features/Mission/mission.types'
 
 import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control', () => {
@@ -1183,5 +1184,37 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Confirmer la suppression')
     cy.get('[data-cy="discarded-species-row-1"]').should('not.exist')
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
+  })
+
+  // [INVESTIGATION] Repro attempt for: "control date stays red & un-saveable after the mission end
+  // date is extended past it". Auto-save path (default), control form open, asserting the field error.
+  it('[REPRO] Should clear the control date error after extending the mission end date past the control date', () => {
+    // The base form sets the mission end date to now + 7 days (auto-save stays enabled).
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.fill('Navire inconnu', true)
+    cy.fill('Nom du navire', 'Un navire')
+    cy.fill('Nationalité', 'France')
+    cy.fill('Ajouter un engin', 'MIS')
+    cy.fill('Saisi par', 'Marlin')
+
+    // When the control date is set after the mission end date (now + 14 days)
+    const controlDate = getUtcDateInMultipleFormats(customDayjs().utc().add(14, 'day').toISOString())
+    cy.fill('Date et heure du contrôle', controlDate.utcDateTupleWithTime)
+    cy.wait(1000)
+
+    // Then the error is shown (red)
+    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('exist')
+
+    // When extending the mission end date past the control date (now + 21 days)
+    const newEndDate = getUtcDateInMultipleFormats(customDayjs().utc().add(21, 'day').toISOString())
+    cy.fill('Fin de mission', newEndDate.utcDateTupleWithTime)
+    cy.wait(1000)
+
+    // Then the error clears
+    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('not.exist')
   })
 })

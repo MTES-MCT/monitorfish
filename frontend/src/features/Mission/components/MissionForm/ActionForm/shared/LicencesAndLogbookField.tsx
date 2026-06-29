@@ -33,17 +33,19 @@ export function LicencesAndLogbookField() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLandControl, setFieldValue, values.propulsionEnginePowerControl])
 
-  const landControlFields = isEISREnabled
-    ? [
-        { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
-        { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
-        {
-          isRequired: true,
-          label: 'Accès au port / autorisation de débarquement conformes',
-          name: 'portEntranceAndLandingAuthorized'
-        }
-      ]
-    : []
+  const landControlFields = [
+    { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
+    { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
+    ...(isEISREnabled
+      ? [
+          {
+            isRequired: true,
+            label: 'Accès au port / autorisation de débarquement conformes',
+            name: 'portEntranceAndLandingAuthorized'
+          }
+        ]
+      : [])
+  ]
 
   const rows: ControlCheckRow[] = [
     ...(isLandControl

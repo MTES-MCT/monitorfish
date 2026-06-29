@@ -65,6 +65,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Lint Backend
+        run: ./gradlew ktlintCheck
+        working-directory: ./backend
+
       - name: Unit test
         run: make test-back
 

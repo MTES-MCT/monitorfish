@@ -36,14 +36,16 @@ export function LicencesAndLogbookField() {
   const landControlFields = [
     { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
     { isRequired: true, label: 'Bonne émission AIS', name: 'emitsAis' },
-    ...isEISREnabled ? [
-        {
-          isRequired: true,
-          label: 'Accès au port / autorisation de débarquement conformes',
-          name: 'portEntranceAndLandingAuthorized'
-        }
-      ]
-    : []]
+    ...(isEISREnabled
+      ? [
+          {
+            isRequired: true,
+            label: 'Accès au port / autorisation de débarquement conformes',
+            name: 'portEntranceAndLandingAuthorized'
+          }
+        ]
+      : [])
+  ]
 
   const rows: ControlCheckRow[] = [
     ...(isLandControl

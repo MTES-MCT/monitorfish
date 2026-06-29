@@ -95,6 +95,10 @@ jobs:
         run: npm run test:lint
         working-directory: ./frontend
 
+      - name: Type-aware lint Frontend
+        run: npm run test:lint:types
+        working-directory: ./frontend
+
       - name: Check Frontend formatting
         run: npm run test:format
         working-directory: ./frontend

@@ -52,6 +52,8 @@ data class BeaconMalfunctionEntity(
     @Enumerated(EnumType.STRING)
     @Column(name = "beacon_status_at_malfunction_creation")
     val beaconStatusAtMalfunctionCreation: BeaconStatus,
+    @Column(name = "is_followed")
+    val isFollowed: Boolean,
 ) {
     fun toBeaconMalfunction() =
         BeaconMalfunction(
@@ -73,5 +75,6 @@ data class BeaconMalfunctionEntity(
             requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
             beaconNumber = beaconNumber,
             beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
+            isFollowed = isFollowed,
         )
 }

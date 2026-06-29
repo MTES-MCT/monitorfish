@@ -82,6 +82,6 @@ export function getZoomToRequestPaths() {
       const xRange = range(value.start[0], value.end[0] + 1)
       const yRange = range(value.start[1], value.end[1] + 1)
 
-      return xRange.map(x => yRange.map(y => `${zoom}/${x}/${y}`)).flat()
+      return xRange.flatMap(x => yRange.map(y => `${zoom}/${x}/${y}`))
     })
 }

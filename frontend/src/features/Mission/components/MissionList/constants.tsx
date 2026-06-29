@@ -59,11 +59,11 @@ export const SUB_MENU_LABEL: Record<SeafrontGroup | AllSeafrontGroup, string> = 
 
 export const MISSION_LIST_SUB_MENU_OPTIONS = getOptionsFromLabelledEnum(SUB_MENU_LABEL)
 
-const MISSION_ACTION_CONTROL_TYPES = [
+const MISSION_ACTION_CONTROL_TYPES = new Set([
   MissionAction.MissionActionType.AIR_CONTROL,
   MissionAction.MissionActionType.LAND_CONTROL,
   MissionAction.MissionActionType.SEA_CONTROL
-]
+])
 
 export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions> = {
   columns: [
@@ -115,7 +115,7 @@ export const MISSION_LIST_TABLE_OPTIONS: TableOptions<Mission.MissionWithActions
       key: 'inspectionsCount',
       label: 'Contrôles',
       labelTransform: mission => {
-        const controls = mission.actions.filter(({ actionType }) => MISSION_ACTION_CONTROL_TYPES.includes(actionType))
+        const controls = mission.actions.filter(({ actionType }) => MISSION_ACTION_CONTROL_TYPES.has(actionType))
         const numberOfInfractions = controls
           .map(control => getNumberOfInfractions(control))
           .reduce((accumulator, infractions) => accumulator + infractions, 0)

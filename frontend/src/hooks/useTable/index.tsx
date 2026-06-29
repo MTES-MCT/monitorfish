@@ -129,11 +129,11 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   }, [filteredTableData, fuse, searchQuery])
 
   const filteredCheckedIds = useMemo(() => {
-    const filteredDataIds = filteredAndSearchedTableData.map(
-      filteredAndSearchedTableItem => filteredAndSearchedTableItem.id
+    const filteredDataIds = new Set(
+      filteredAndSearchedTableData.map(filteredAndSearchedTableItem => filteredAndSearchedTableItem.id)
     )
 
-    return checkedIds.filter(checkedId => filteredDataIds.includes(checkedId))
+    return checkedIds.filter(checkedId => filteredDataIds.has(checkedId))
   }, [checkedIds, filteredAndSearchedTableData])
 
   const isAllChecked = useMemo(

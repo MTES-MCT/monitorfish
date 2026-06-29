@@ -21,7 +21,7 @@ export function LawReminders({ controls }: LawRemindersProps) {
     0
   )
 
-  const infractions = controls.map(control => control.infractions.filter(infractionWithoutRecordFilter)).flat()
+  const infractions = controls.flatMap(control => control.infractions.filter(infractionWithoutRecordFilter))
 
   const natinfTags = uniqWith(infractions, (a, b) => a.natinf === b.natinf && a.threat === b.threat).map(infraction => (
     <StyledTag key={infraction.natinf} accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>

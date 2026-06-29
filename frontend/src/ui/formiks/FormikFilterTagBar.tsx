@@ -54,7 +54,7 @@ export function FormikFilterTagBar({
     () =>
       Object.keys(filterValues)
         .filter(key => !ignoredFilterKeys.includes(key))
-        .map(key => {
+        .flatMap(key => {
           const filterLabelEnum = filterLabelEnums[key]
 
           const filterValue: string | string[] | undefined = filterValues[key]
@@ -73,8 +73,7 @@ export function FormikFilterTagBar({
               {String(filterLabelEnum ? filterLabelEnum[filterValue] : filterValue)}
             </SingleTag>
           )
-        })
-        .flat(),
+        }),
     [filterValues, ignoredFilterKeys, filterLabelEnums, remove]
   )
 

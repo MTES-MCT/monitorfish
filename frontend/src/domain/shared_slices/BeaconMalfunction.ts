@@ -159,10 +159,10 @@ const beaconMalfunctionSlice = createSlice({
       }>
     ) {
       const { beaconMalfunctions } = action.payload
-      const ids = beaconMalfunctions.map(beaconMalfunction => beaconMalfunction.id)
+      const ids = new Set(beaconMalfunctions.map(beaconMalfunction => beaconMalfunction.id))
 
       const nextBeaconMalfunctions = state.beaconMalfunctions.filter(
-        beaconMalfunction => !ids.includes(beaconMalfunction.id)
+        beaconMalfunction => !ids.has(beaconMalfunction.id)
       )
 
       state.beaconMalfunctions = nextBeaconMalfunctions.concat(beaconMalfunctions)

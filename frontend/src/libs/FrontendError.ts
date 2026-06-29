@@ -5,7 +5,7 @@ import { captureException, Scope } from '@sentry/react'
 
 import type { CustomResponseError } from '@api/types'
 
-const IGNORED_HTTP_STATUS = [HttpStatusCode.FORBIDDEN, HttpStatusCode.UNAUTHORIZED]
+const IGNORED_HTTP_STATUS = new Set([HttpStatusCode.FORBIDDEN, HttpStatusCode.UNAUTHORIZED])
 
 export class FrontendError extends Error {
   #scope: Scope | undefined
@@ -39,7 +39,7 @@ export class FrontendError extends Error {
     return (
       isCustomResponseError(this.originalError) &&
       typeof this.originalError.status === 'number' &&
-      IGNORED_HTTP_STATUS.includes(this.originalError.status as number)
+      IGNORED_HTTP_STATUS.has(this.originalError.status as number)
     )
   }
 

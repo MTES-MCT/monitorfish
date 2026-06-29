@@ -129,7 +129,7 @@ export const convertTreeOptionsToRegulatoryAreasArray = (
   nextRegulationValues: TreeOption[]
 ): RegulatoryAreaSpecification[] =>
   Object.entries(nextRegulationValues)
-    .map(([_lawTypeKey, lawType]) =>
+    .flatMap(([_lawTypeKey, lawType]) =>
       Object.entries(lawType.children as TreeBranchOption[]).map(([_topicKey, topic]) =>
         Object.entries(topic.children).map(([_zoneKey, zone]) => ({
           lawType: lawType.value,
@@ -138,7 +138,6 @@ export const convertTreeOptionsToRegulatoryAreasArray = (
         }))
       )
     )
-    .flat()
     .flat()
 
 export const convertRegulatoryLayerLawTypesToTreeOptions = (

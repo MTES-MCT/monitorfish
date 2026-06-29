@@ -44,7 +44,7 @@ const WIRE_TYPE_OPTIONS = [
   { label: 'Multiple', value: MissionAction.WireType.MANY }
 ]
 
-const WIRE_FIELDS_GEAR_CATEGORIES = ['Chaluts', 'Sennes traînantes']
+const WIRE_FIELDS_GEAR_CATEGORIES = new Set(['Chaluts', 'Sennes traînantes'])
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
@@ -217,7 +217,7 @@ export function GearsField() {
                       label="Maillage mesuré"
                       name={`gearOnboard[${index}].controlledMesh`}
                     />
-                    {isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.includes(gearCategory) && (
+                    {isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.has(gearCategory) && (
                       <>
                         <FormikNumberInput
                           disabled={gearOnboard.gearWasControlled === false}

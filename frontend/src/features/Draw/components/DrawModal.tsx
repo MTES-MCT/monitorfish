@@ -36,12 +36,12 @@ const INTERACTION_LISTENER_LABELS: Partial<Record<InteractionListener, { button:
   [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: { button: 'la zone de groupe', title: 'une zone de groupe' }
 }
 
-const pointListeners = [InteractionListener.CONTROL_POINT, InteractionListener.REPORTING_POINT]
-const polygonListeners = [
+const pointListeners = new Set([InteractionListener.CONTROL_POINT, InteractionListener.REPORTING_POINT])
+const polygonListeners = new Set([
   InteractionListener.MISSION_ZONE,
   InteractionListener.VESSELS_LIST,
   InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG
-]
+])
 
 export function DrawLayerModal() {
   const dispatch = useMainAppDispatch()
@@ -67,8 +67,8 @@ export function DrawLayerModal() {
     }).readFeature(currentGeometry) as Feature
   }, [initialGeometry, drawedGeometry])
 
-  const isPointListener = !!listener && pointListeners.includes(listener)
-  const isPolygonListener = !!listener && polygonListeners.includes(listener)
+  const isPointListener = !!listener && pointListeners.has(listener)
+  const isPolygonListener = !!listener && polygonListeners.has(listener)
 
   const pointCoordinates = useMemo(() => {
     if (!isPointListener) {

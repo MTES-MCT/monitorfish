@@ -50,15 +50,22 @@ def test_extract_known_malfunctions(reset_test_data):
 
     expected_malfunctions = pd.DataFrame(
         {
-            "id": [2, 3, 4, 5],
-            "beacon_number": ["A56CZ2", "BEA951357", "BEACON_NOT_EMITTING", "987654"],
+            "id": [2, 3, 4, 5, 6],
+            "beacon_number": [
+                "A56CZ2",
+                "BEA951357",
+                "BEACON_NOT_EMITTING",
+                "987654",
+                "NEW_BEACON_ACT_DET",
+            ],
             "vessel_status": [
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
+                BeaconMalfunctionVesselStatus.NO_NEWS.value,
             ],
-            "satellite_operator_id": [2, 2, 2, 1],
+            "satellite_operator_id": [2, 2, 2, 1, 1],
         }
     )
     pd.testing.assert_frame_equal(
@@ -70,15 +77,22 @@ def test_extract_vessels_that_should_emit(reset_test_data):
     vessels_that_should_emit = extract_vessels_that_should_emit()
     expected_beacon_numbers_and_statuses = pd.DataFrame(
         {
-            "vessel_id": [2, 4, 5, 6],
-            "beacon_number": ["123456", "A56CZ2", "BEACON_NOT_EMITTING", "BEA951357"],
+            "vessel_id": [2, 4, 5, 6, 8],
+            "beacon_number": [
+                "123456",
+                "A56CZ2",
+                "BEACON_NOT_EMITTING",
+                "BEA951357",
+                "NEW_BEACON_ACT_DET",
+            ],
             "beacon_status": [
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.UNSUPERVISED.value,
                 BeaconStatus.ACTIVATED.value,
+                BeaconStatus.ACTIVATED.value,
             ],
-            "satellite_operator_id": [1, 2, 2, 2],
+            "satellite_operator_id": [1, 2, 2, 2, 1],
         }
     )
     pd.testing.assert_frame_equal(
@@ -550,8 +564,8 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
     ) = state.result()
 
     assert len(new_malfunctions) == 1
-    assert len(initial_beacon_malfunctions) == 4
-    assert len(loaded_beacon_malfunctions) == 5
+    assert len(initial_beacon_malfunctions) == 5
+    assert len(loaded_beacon_malfunctions) == 6
     assert "FQ7058" not in initial_beacon_malfunctions.ircs.values
     assert "FQ7058" in loaded_beacon_malfunctions.ircs.values
 

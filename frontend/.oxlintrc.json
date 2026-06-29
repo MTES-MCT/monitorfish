@@ -105,7 +105,7 @@
             "message": "Do not import `jest` from `@jest/globals`; use the global `jest`. An imported binding breaks swc `jest.mock()` hoisting, so mocks may silently have no effect."
           }
         ],
-        "jest/no-conditional-expect": "warn",
+        "jest/no-conditional-expect": "off",
         "jest/no-disabled-tests": "error",
         "jest/no-focused-tests": "error",
         "jest/no-identical-title": "error",

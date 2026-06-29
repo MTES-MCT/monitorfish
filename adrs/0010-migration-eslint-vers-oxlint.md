@@ -71,14 +71,21 @@ En parallèle, plusieurs faiblesses de l'outillage qualité ont été identifié
 
 ### 3. Hooks Git (`frontend/config/husky/`, Husky 9)
 
-- **`pre-commit`** : uniquement `lint-staged` (OxLint `--fix` + Prettier sur les fichiers *staged*,
-  réindexés automatiquement). Volontairement minimal pour garder des commits **rapides (< 20 s)** :
-  le `tsc` complet a été **retiré**, et le backend n'est **pas** formaté ici (`gradlew ktlintFormat`
-  sur tout le backend est trop lent et non *scopable* aux fichiers *staged*).
+- **`pre-commit`** : `lint-staged` pour le frontend (OxLint `--fix` + Prettier) **et** pour le
+  backend (formatage Kotlin des fichiers *staged*), tous deux réindexés automatiquement.
+  Volontairement minimal pour garder des commits **rapides (< 20 s)** : le `tsc` complet a été
+  **retiré**.
+  - Backend : on n'utilise **pas** `gradlew ktlintFormat` (JVM lente, formate tout le backend).
+    On invoque le **CLI ktlint autonome** (`backend/tools/ktlint`, version épinglée 1.5.0,
+    téléchargée et mise en cache au premier usage) uniquement sur les fichiers *staged*, via une
+    config `backend/.lintstagedrc.json` :
+    `tools/ktlint -F --relative --baseline=config/ktlint/baseline.xml`. `lint-staged` gère la
+    réindexation et le *stash* des modifications non *staged* (cas `git add -p`). La seconde
+    invocation `lint-staged --cwd ./backend` n'est lancée que si des `*.kt`/`*.kts` sont *staged*.
 - **`pre-push`** (nouveau) : checks lents non *scopables* aux fichiers *staged* → `npm run test:type`
   (tsc complet) et `npm run test:lint:types`.
-- **Backend** : plus de formatage automatique au commit. Le lint Kotlin est garanti par `ktlintCheck`
-  en CI (cf. §4) ; le formatage manuel reste disponible via `make lint-back`.
+- **Backend (CI)** : le lint Kotlin reste garanti par `ktlintCheck` en CI (cf. §4) ; le formatage
+  complet manuel reste disponible via `make lint-back`.
 
 ### 4. Application du lint Kotlin en CI
 

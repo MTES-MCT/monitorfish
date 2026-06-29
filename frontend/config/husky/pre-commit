@@ -1,6 +1,10 @@
 set -e
 
-# Frontend: lint + format staged files only (oxlint --fix / prettier, re-staged by lint-staged).
-# Kept intentionally minimal so commits stay fast (< 20s). Slower, whole-project checks live in
-# the pre-push hook (tsc, type-aware lint), and backend ktlint is enforced in CI (with a baseline).
+# Frontend: lint + format staged files (oxlint --fix / prettier, re-staged by lint-staged).
 npx lint-staged --cwd ./frontend
+
+# Backend: format staged Kotlin files via the standalone ktlint CLI (fast, per-file), re-staged
+# by lint-staged. Skipped entirely when no Kotlin file is staged, so commits stay fast (< 20s).
+if git diff --cached --name-only --diff-filter=ACMR -- '*.kt' '*.kts' | grep -q .; then
+  npx lint-staged --cwd ./backend
+fi

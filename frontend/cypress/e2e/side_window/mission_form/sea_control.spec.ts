@@ -1,6 +1,7 @@
 import { Mission } from '@features/Mission/mission.types'
 
 import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Sea Control', () => {
@@ -1183,5 +1184,46 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Confirmer la suppression')
     cy.get('[data-cy="discarded-species-row-1"]').should('not.exist')
     cy.get('[data-cy="discarded-species-row-0"]').should('exist')
+  })
+
+  // Non-regression: an action is only auto-saved when its own form changes, so a control dated after
+  // the mission end (invalid) was never persisted, and extending the mission end date past it — which
+  // only triggers the main-form save — left the now-valid control unsaved until the user re-edited it.
+  it('Should persist a control that becomes valid after extending the mission end date', () => {
+    // Base form sets the mission end date to now + 7 days (auto-save stays enabled).
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA, false)
+    // Main-form auto-save endpoint (extending the end date hits this).
+    cy.intercept('POST', '/api/v1/missions/1', { body: { id: 1 }, statusCode: 201 }).as('updateMission')
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 1 }, statusCode: 201 }).as('createControl')
+
+    cy.fill('Navire inconnu', true)
+    cy.fill('Nom du navire', 'Un navire')
+    cy.fill('Nationalité', 'France')
+    cy.fill('Ajouter un engin', 'MIS')
+    cy.fill('Saisi par', 'Marlin')
+
+    // The control is created with the default (current) date, which is within the mission range.
+    cy.wait('@createControl').its('response.statusCode').should('eq', 201)
+
+    // From here on, persisting the control means updating it.
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', { body: { id: 1 }, statusCode: 201 }).as('updateControl')
+
+    // When the control date is moved after the mission end date → invalid, not persisted (error shown).
+    const controlDate = getUtcDateInMultipleFormats(customDayjs().utc().add(14, 'day').toISOString())
+    cy.fill('Date et heure du contrôle', controlDate.utcDateTupleWithTime)
+    cy.wait(1000)
+    cy.contains('La date du contrôle doit être antérieure à la date de fin de la mission.').should('exist')
+
+    // When extending the mission end date past the control date — WITHOUT touching the control form again
+    const newEndDate = getUtcDateInMultipleFormats(customDayjs().utc().add(21, 'day').toISOString())
+    cy.fill('Fin de mission', newEndDate.utcDateTupleWithTime)
+    cy.wait('@updateMission')
+
+    // Then the now-valid control must be persisted without re-editing it.
+    cy.wait('@updateControl', { timeout: 8000 }).its('request.body.actionDatetimeUtc').should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
   })
 })

@@ -7,4 +7,5 @@ INSERT INTO public.beacons
 (                '123456',         2,    'ACTIVATED',                     1, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days'),
 (                'A56CZ2',         4,    'ACTIVATED',                     2, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days'),
 (   'BEACON_NOT_EMITTING',         5, 'UNSUPERVISED',                     2, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days'),
-(             'BEA951357',         6,    'ACTIVATED',                     2, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days');
+(             'BEA951357',         6,    'ACTIVATED',                     2, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days'),
+(       'NEW_BEACON_ACT_DET',         8,    'ACTIVATED',                     1, CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 days');

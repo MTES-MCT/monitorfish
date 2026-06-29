@@ -111,6 +111,8 @@
         "jest/no-identical-title": "error",
         "jest/prefer-to-have-length": "error",
         "jest/valid-expect": "error",
+        "oxc/no-accumulating-spread": "off",
+        "oxc/no-map-spread": "off",
         "no-console": "off",
         "import/no-default-export": "off"
       }

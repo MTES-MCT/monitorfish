@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionIsFollowedDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionResumeAndDetailsDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
 
 @RestController
 @RequestMapping("/api/v1/beacon_malfunctions")
 @Tag(name = "Public APIs for beacon malfunctions")
 class PublicBeaconMalfunctionController(
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
+    private val updateBeaconMalfunctionIsFollowed: UpdateBeaconMalfunctionIsFollowed,
     private val requestNotification: RequestNotification,
 ) {
     @PutMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
@@ -41,6 +44,20 @@ class PublicBeaconMalfunctionController(
             ).let {
                 BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
             }
+
+    @PatchMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
+    @Operation(summary = "Update is_followed of a beacon malfunction")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateBeaconMalfunctionIsFollowed(
+        @PathParam("Beacon malfunction id")
+        @PathVariable(name = "beaconMalfunctionId")
+        beaconMalfunctionId: Int,
+        @RequestBody
+        updateBeaconMalfunctionIsFollowedData: UpdateBeaconMalfunctionIsFollowedDataInput,
+    ) = updateBeaconMalfunctionIsFollowed.execute(
+        id = beaconMalfunctionId,
+        isFollowed = updateBeaconMalfunctionIsFollowedData.isFollowed,
+    )
 
     @PutMapping(value = ["/{beaconMalfunctionId}/{notificationRequested}"])
     @Operation(summary = "Request a notification")

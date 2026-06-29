@@ -12,10 +12,11 @@ export type DisplayedErrorStateValue = {
 }
 
 export type DisplayedErrorState = Record<DisplayedErrorKey, DisplayedErrorStateValue | undefined>
-export const INITIAL_STATE: DisplayedErrorState = Object.values(DisplayedErrorKey).reduce(
-  (acc, key) => ({ ...acc, [key]: undefined }),
-  {} as DisplayedErrorState
-)
+export const INITIAL_STATE: DisplayedErrorState = Object.values(DisplayedErrorKey).reduce((acc, key) => {
+  acc[key] = undefined
+
+  return acc
+}, {} as DisplayedErrorState)
 
 const displayedErrorSlice = createSlice({
   initialState: INITIAL_STATE,

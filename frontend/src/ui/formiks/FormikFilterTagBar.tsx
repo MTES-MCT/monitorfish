@@ -4,6 +4,8 @@ import { useFormikContext } from 'formik'
 import { useCallback, useMemo, type ReactNode } from 'react'
 import styled from 'styled-components'
 
+const DEFAULT_IGNORED_FILTER_KEYS: string[] = []
+
 type FormikFilterTagBarProps = {
   children: ReactNode
   filterLabelEnums: Record<string, Record<string, string> | undefined>
@@ -13,7 +15,7 @@ type FormikFilterTagBarProps = {
 export function FormikFilterTagBar({
   children,
   filterLabelEnums,
-  ignoredFilterKeys = [],
+  ignoredFilterKeys = DEFAULT_IGNORED_FILTER_KEYS,
   isResetLinkDisplayed
 }: FormikFilterTagBarProps) {
   const {

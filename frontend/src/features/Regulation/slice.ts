@@ -187,9 +187,8 @@ const regulationSlice = createSlice({
         // Remove layer group if it's empty
         .filter(([, regulatoryZones]) => regulatoryZones.length > 0)
       const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
-      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce<Array<number | string>>(
-        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id).filter(isNotNullish)],
-        []
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.flatMap(([, regulatoryZones]) =>
+        regulatoryZones.map(({ id }) => id).filter(isNotNullish)
       )
 
       state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
@@ -210,9 +209,8 @@ const regulationSlice = createSlice({
         ([topic]) => topic !== action.payload
       )
       const nextSelectedRegulatoryLayers = fromPairs(nextSelectedRegulatoryLayersAsPairs)
-      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.reduce<Array<number | string>>(
-        (ids, [, regulatoryZones]) => [...ids, ...regulatoryZones.map(({ id }) => id).filter(isNotNullish)],
-        []
+      const nextSelectedRegulatoryLayerIds = nextSelectedRegulatoryLayersAsPairs.flatMap(([, regulatoryZones]) =>
+        regulatoryZones.map(({ id }) => id).filter(isNotNullish)
       )
 
       state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers

@@ -28,9 +28,8 @@ export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) 
       )
     })
 
-  const recipientFunctions = notification.notifications.reduce((_recipientFunctionGroup, _notification) => {
+  const recipientFunctions = notification.notifications.reduce((recipientFunctionGroup, _notification) => {
     const { recipientFunction } = _notification
-    const recipientFunctionGroup = { ..._recipientFunctionGroup }
 
     recipientFunctionGroup[recipientFunction] = recipientFunctionGroup[recipientFunction] ?? []
     recipientFunctionGroup[recipientFunction].push(_notification)

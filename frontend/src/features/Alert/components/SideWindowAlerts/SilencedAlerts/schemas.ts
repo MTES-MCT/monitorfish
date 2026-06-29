@@ -23,18 +23,16 @@ export function atLeastOneRequired(
   }
 
   return this.shape(
-    requiredFields.reduce(
-      (acc, field) => ({
-        ...acc,
+    requiredFields.reduce((acc, field) => {
+      // @ts-ignore
+      acc[field] = this.fields[field].when(without(requiredFields, field), {
+        is: (...values) => !values.some(item => item),
         // @ts-ignore
-        [field]: this.fields[field].when(without(requiredFields, field), {
-          is: (...values) => !values.some(item => item),
-          // @ts-ignore
-          then: () => this.fields[field].required(message)
-        })
-      }),
-      {}
-    ),
+        then: () => this.fields[field].required(message)
+      })
+
+      return acc
+    }, {}),
     // @ts-ignore
     requiredFields.reduce((acc, item, idx, all) => [...acc, ...all.slice(idx + 1).map(i => [item, i])], [])
   )

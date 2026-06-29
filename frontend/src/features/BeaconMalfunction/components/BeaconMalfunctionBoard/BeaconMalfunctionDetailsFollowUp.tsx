@@ -65,12 +65,11 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const commentsByDate: Record<string, BeaconMalfunctionFollowUpItem> = useMemo(
     () =>
       comments?.reduce((commentsByDayAccumulated, _comment) => {
-        const nextCommentsByDayAccumulated = { ...commentsByDayAccumulated }
         const nextComment = { ..._comment, type: BeaconMalfunctionDetailsType.COMMENT }
 
         const dateWithoutTime = _comment.dateTime.split('T')[0]
 
-        return pushToObjectAtIndex(nextCommentsByDayAccumulated, dateWithoutTime, nextComment)
+        return pushToObjectAtIndex(commentsByDayAccumulated, dateWithoutTime, nextComment)
       }, {}) || {},
     [comments]
   )
@@ -79,12 +78,11 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const actionsByDate: Record<string, BeaconMalfunctionFollowUpItem[]> = useMemo(() => {
     const nextActionsByDate =
       actions?.reduce((actionsByDayAccumulated, _action) => {
-        const nextActionsByDayAccumulated = { ...actionsByDayAccumulated }
         const nextAction = { ..._action, type: BeaconMalfunctionDetailsType.ACTION }
 
         const dateWithoutTime = nextAction.dateTime.split('T')[0] || ''
 
-        return pushToObjectAtIndex(nextActionsByDayAccumulated, dateWithoutTime, nextAction)
+        return pushToObjectAtIndex(actionsByDayAccumulated, dateWithoutTime, nextAction)
       }, {}) || {}
 
     if (firstVesselStatus) {
@@ -110,12 +108,11 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
   const notificationsByDate: Record<string, BeaconMalfunctionFollowUpItem[]> = useMemo(
     () =>
       notifications?.reduce((notificationsByDayAccumulated, _notification) => {
-        const nextNotificationsByDayAccumulated = { ...notificationsByDayAccumulated }
         const nextNotification = { ..._notification, type: BeaconMalfunctionDetailsType.NOTIFICATION }
 
         const dateWithoutTime = nextNotification.dateTime.split('T')[0] || ''
 
-        return pushToObjectAtIndex(nextNotificationsByDayAccumulated, dateWithoutTime, nextNotification)
+        return pushToObjectAtIndex(notificationsByDayAccumulated, dateWithoutTime, nextNotification)
       }, {}) || {},
     [notifications]
   )

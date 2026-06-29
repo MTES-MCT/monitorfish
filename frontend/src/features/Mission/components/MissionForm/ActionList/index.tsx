@@ -17,6 +17,8 @@ import { FormBody } from '../shared/FormBody'
 import type { MissionActionFormValues, MissionActionForTimeline } from '../types'
 import type { Promisable } from 'type-fest'
 
+const DEFAULT_MISSION_TYPES: Mission.MissionType[] = []
+
 type ActionListProps = Readonly<{
   actionsFormValues: MissionActionFormValues[]
   currentIndex: number | undefined
@@ -31,7 +33,7 @@ export function ActionList({
   actionsFormValues,
   currentIndex,
   missionId,
-  missionTypes = [],
+  missionTypes = DEFAULT_MISSION_TYPES,
   onAdd,
   onDuplicate,
   onRemove,

@@ -153,10 +153,11 @@ export function getBeaconMalfunctionsByStage(
   }
 
   return columns.reduce<Record<BeaconMalfunctionsStage, BeaconMalfunction[]>>(
-    (previous, stage) => ({
-      ...previous,
-      [stage]: getByStage(stage as BeaconMalfunctionsStage, beaconsMalfunctions)
-    }),
+    (previous, stage) => {
+      previous[stage] = getByStage(stage as BeaconMalfunctionsStage, beaconsMalfunctions)
+
+      return previous
+    },
     {} as Record<BeaconMalfunctionsStage, BeaconMalfunction[]>
   )
 }
@@ -175,31 +176,27 @@ export function searchInBeaconMalfunctions(
   let nextFilteredItems = beaconMalfunctions
 
   if (searchedVessel?.length > 1) {
-    nextFilteredItems = Object.keys(beaconMalfunctions).reduce(
-      (previous, stage) => ({
-        ...previous,
-        [stage]: beaconMalfunctions[stage].filter(
-          beaconMalfunction =>
-            getTextForSearch(beaconMalfunction.vesselName).includes(getTextForSearch(searchedVessel)) ||
-            getTextForSearch(beaconMalfunction.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-            getTextForSearch(beaconMalfunction.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
-            getTextForSearch(beaconMalfunction.ircs).includes(getTextForSearch(searchedVessel))
-        )
-      }),
-      {} as any
-    )
+    nextFilteredItems = Object.keys(beaconMalfunctions).reduce((previous, stage) => {
+      previous[stage] = beaconMalfunctions[stage].filter(
+        beaconMalfunction =>
+          getTextForSearch(beaconMalfunction.vesselName).includes(getTextForSearch(searchedVessel)) ||
+          getTextForSearch(beaconMalfunction.internalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+          getTextForSearch(beaconMalfunction.externalReferenceNumber).includes(getTextForSearch(searchedVessel)) ||
+          getTextForSearch(beaconMalfunction.ircs).includes(getTextForSearch(searchedVessel))
+      )
+
+      return previous
+    }, {} as any)
   }
 
   if (filteredVesselStatus) {
-    nextFilteredItems = Object.keys(nextFilteredItems).reduce(
-      (previous, stage) => ({
-        ...previous,
-        [stage]: nextFilteredItems[stage].filter(
-          beaconMalfunction => beaconMalfunction.vesselStatus === filteredVesselStatus.value
-        )
-      }),
-      {} as any
-    )
+    nextFilteredItems = Object.keys(nextFilteredItems).reduce((previous, stage) => {
+      previous[stage] = nextFilteredItems[stage].filter(
+        beaconMalfunction => beaconMalfunction.vesselStatus === filteredVesselStatus.value
+      )
+
+      return previous
+    }, {} as any)
   }
 
   return nextFilteredItems

@@ -5,6 +5,8 @@ import styled from 'styled-components'
 /**
  * `IconSVG` props is deprecated, use `Icon` instead.
  */
+const DEFAULT_BOOLEAN_VERBS: [string, string] = ['Masquer', 'Afficher']
+
 type MapPropertyTriggerProps = Readonly<{
   booleanProperty: boolean
   booleanVerbs?: [string, string]
@@ -19,7 +21,7 @@ type MapPropertyTriggerProps = Readonly<{
 
 export function MapPropertyTrigger({
   booleanProperty,
-  booleanVerbs = ['Masquer', 'Afficher'],
+  booleanVerbs = DEFAULT_BOOLEAN_VERBS,
   disabled,
   Icon,
   IconSVG,

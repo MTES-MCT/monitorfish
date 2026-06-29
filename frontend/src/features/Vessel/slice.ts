@@ -265,21 +265,11 @@ const vesselSlice = createSlice({
       >
     ) {
       const vesselsFeatureIds = action.payload.map(reporting => reporting.vesselFeatureId)
-      const vessels = vesselSelectors.selectAll(state.vessels)
 
-      vesselsAdapter.setMany(
+      vesselsAdapter.updateMany(
         state.vessels,
-        vessels.map(vessel => {
-          if (!vesselsFeatureIds.find(vesselFeatureId => vessel.vesselFeatureId === vesselFeatureId)) {
-            return vessel
-          }
-
-          return {
-            ...vessel,
-            // The optimistic value might be wrong as there might be infraction suspicions currently opened
-            hasInfractionSuspicion: false
-          }
-        })
+        // The optimistic value might be wrong as there might be infraction suspicions currently opened
+        vesselsFeatureIds.map(vesselFeatureId => ({ changes: { hasInfractionSuspicion: false }, id: vesselFeatureId }))
       )
 
       if (!state.selectedVesselIdentity) {

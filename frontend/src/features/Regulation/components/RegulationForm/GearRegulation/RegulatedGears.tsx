@@ -238,7 +238,7 @@ export function RegulatedGears({
             if (!selectedCategoriesAndGears.find(value => value === item.optionValue)) {
               set(
                 REGULATED_GEARS_KEYS.SELECTED_GEARS_AND_CATEGORIES,
-                selectedCategoriesAndGears.concat(item.optionValue as any)
+                selectedCategoriesAndGears.concat(item.optionValue)
               )
             }
 

@@ -49,7 +49,7 @@ function buildWholeVectorSource(type: string, zone: string | undefined): VectorS
       return
     }
 
-    vectorSource.addFeatures(features as Feature[])
+    vectorSource.addFeatures(features)
   })
 
   return vectorSource
@@ -70,7 +70,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
             return
           }
 
-          vectorSource.addFeatures(features as Feature[])
+          vectorSource.addFeatures(features)
         })
         .catch(() => {
           vectorSource.removeLoadedExtent(extent)

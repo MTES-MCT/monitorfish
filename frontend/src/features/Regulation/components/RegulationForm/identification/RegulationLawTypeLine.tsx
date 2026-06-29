@@ -38,7 +38,7 @@ export function RegulationLawTypeLine({ selectData }) {
         searchable={false}
         style={{ width: '200px' }}
       />
-      {lawType && <StyledTag onDelete={onLawTypeChange}>{lawType as unknown as string}</StyledTag>}
+      {lawType && <StyledTag onDelete={onLawTypeChange}>{lawType}</StyledTag>}
     </ContentLine>
   )
 }

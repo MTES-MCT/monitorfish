@@ -4,8 +4,7 @@ import { OBSERVATION_TITLES, OTHER_OBSERVATION_TITLE } from '@features/Reporting
 import { FormikCoordinatesPicker } from '@features/Reporting/components/ReportingForm/FormikCoordinatesPicker'
 import {
   InfractionRow,
-  type InfractionSuspicionFormErrors,
-  type InfractionSuspicionFormValues
+  type InfractionSuspicionFormErrors
 } from '@features/Reporting/components/ReportingForm/InfractionRow'
 import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
@@ -139,7 +138,7 @@ export function Form({
   })
   const isDepOptionEnabled = !isIUU && selectedVesselHasLogbook
   const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
-  const infractions = isInfractionSuspicion ? ((values as InfractionSuspicionFormValues).infractions ?? []) : []
+  const infractions = isInfractionSuspicion ? (values.infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
   const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
   const [isTitleDisplayed, setIsTitleDisplayed] = useState(() =>

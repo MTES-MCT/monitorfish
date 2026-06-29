@@ -159,7 +159,7 @@ export function FormikLocationPicker() {
                 {`Zone de mission ${index + 1}`}
                 {/* TODO Add `Accent.LINK` accent in @mtes-mct/monitor-ui and use it here. */}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                <Link onClick={() => handleCenterOnMap(polygonCoordinates as Coordinate[][])}>
+                <Link onClick={() => handleCenterOnMap(polygonCoordinates)}>
                   <Icon.SelectRectangle />
                   <span>Centrer sur la carte</span>
                 </Link>

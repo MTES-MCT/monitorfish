@@ -3,7 +3,6 @@ import { ReportingValidityOption } from '@features/Reporting/types/ReportingVali
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { FormEditedReporting, ReportingCreation } from '@features/Reporting/types'
-import type { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 
 export function computeExpirationDate(formValues: FormEditedReporting): string | undefined {
   if (formValues.validityOption === ReportingValidityOption.ONE_MONTH) {
@@ -38,7 +37,7 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     numberOfVessels: formValues.numberOfVessels,
     otherSourceType: formValues.otherSourceType,
     reportingDate: formValues.reportingDate,
-    reportingSource: formValues.reportingSource as ReportingOriginSource,
+    reportingSource: formValues.reportingSource,
     satelliteType: formValues.satelliteType,
     threatHierarchies:
       formValues.type === ReportingType.INFRACTION_SUSPICION

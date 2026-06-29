@@ -29,7 +29,7 @@ export function FormikCoordinatesPicker({ isLight, isRequired }: FormikCoordinat
   const { errors, setValues, values } = useFormikContext<FormEditedReporting>()
   const longitudeValue = values.longitude
   const latitudeValue = values.latitude
-  const error = (errors.longitude ?? errors.latitude) as string | undefined
+  const error = errors.longitude ?? errors.latitude
 
   const dispatch = useMainAppDispatch()
   const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.REPORTING_POINT)

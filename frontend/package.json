@@ -31,6 +31,7 @@
     "test:lint": "oxlint --config=.oxlintrc.json src",
     "test:lint:fix": "oxlint --fix --config=.oxlintrc.json src && prettier --write ./src",
     "test:lint:types": "eslint --no-eslintrc --no-inline-config --config eslint-typed.config.cjs --ext .ts,.tsx src",
+    "test:lint:types:fix": "eslint --no-eslintrc --no-inline-config --fix --config eslint-typed.config.cjs --ext .ts,.tsx src && prettier --write ./src",
     "test:format": "prettier --check ./src",
     "format": "prettier --write ./src",
     "test:type": "tsc",

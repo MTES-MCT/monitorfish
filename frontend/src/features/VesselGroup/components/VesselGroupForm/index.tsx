@@ -88,7 +88,7 @@ export function VesselGroupForm({
     <div ref={ref}>
       <Formik
         initialValues={newOrEditedVesselGroup}
-        innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
+        innerRef={formRef}
         onSubmit={handleOnSubmit}
         validate={validationSchema}
       >

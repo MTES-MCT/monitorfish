@@ -35,27 +35,26 @@ const createGroup = (overrides: Partial<VesselGroup> & { id: number }): VesselGr
 
 const createPriorityGroup = (
   overrides: Partial<HardcodedPriorityVesselGroup> & { id: number; name: string }
-): VesselGroupWithVessels =>
-  ({
-    group: {
-      color: '#E1000F',
-      createdAtUtc: '2024-01-01T00:00:00Z',
-      createdBy: '',
-      description: undefined,
-      endOfValidityUtc: undefined,
-      isDeleted: false,
-      isPriorityGroup: true,
-      pointsOfAttention: undefined,
-      priorityLevel: 4,
-      sharedTo: undefined,
-      sharing: Sharing.SHARED,
-      startOfValidityUtc: undefined,
-      type: GroupType.HARDCODED,
-      updatedAtUtc: undefined,
-      ...overrides
-    },
-    vessels: []
-  }) as VesselGroupWithVessels
+): VesselGroupWithVessels => ({
+  group: {
+    color: '#E1000F',
+    createdAtUtc: '2024-01-01T00:00:00Z',
+    createdBy: '',
+    description: undefined,
+    endOfValidityUtc: undefined,
+    isDeleted: false,
+    isPriorityGroup: true,
+    pointsOfAttention: undefined,
+    priorityLevel: 4,
+    sharedTo: undefined,
+    sharing: Sharing.SHARED,
+    startOfValidityUtc: undefined,
+    type: GroupType.HARDCODED,
+    updatedAtUtc: undefined,
+    ...overrides
+  },
+  vessels: []
+})
 
 describe('MonitorFishWebWorker.getFilteredVesselGroups', () => {
   it('should split priority, pinned and unpinned groups', () => {

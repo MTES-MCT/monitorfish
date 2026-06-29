@@ -71,9 +71,9 @@ describe('vessel/track', () => {
       name: 'VESSEL_TRACK:position:0',
       speed: 2.8
     })
-    expect(feature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:0')
-    expect(feature!.getGeometry()?.getFlatCoordinates()[0]).toEqual(-370471.26536001445)
-    expect(feature!.getGeometry()?.getFlatCoordinates()[1]).toEqual(5842423.238503429)
+    expect(feature.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:0')
+    expect(feature.getGeometry()?.getFlatCoordinates()[0]).toEqual(-370471.26536001445)
+    expect(feature.getGeometry()?.getFlatCoordinates()[1]).toEqual(5842423.238503429)
   })
 
   it('getFeaturesFromPositions Should return multiple features When a track is given', async () => {
@@ -98,39 +98,39 @@ describe('vessel/track', () => {
 
     // First Line
     const firstLineFeature = lineFeatures[0] as Vessel.VesselLineFeature
-    expect(firstLineFeature!.course!.toString()).toContain('-1.8')
-    expect(firstLineFeature!.speed).toEqual(2.8)
-    expect(firstLineFeature!.isTimeEllipsis).toEqual(false)
+    expect(firstLineFeature.course!.toString()).toContain('-1.8')
+    expect(firstLineFeature.speed).toEqual(2.8)
+    expect(firstLineFeature.isTimeEllipsis).toEqual(false)
     // Line should be fishing as N+1 and N+1 positions have the isFishing property set to true
-    expect(firstLineFeature!.trackType!.code).toEqual('FISHING')
-    expect(firstLineFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:0')
-    expect(firstLineFeature!.getGeometry()?.getLength().toString()).toContain('7411')
+    expect(firstLineFeature.trackType!.code).toEqual('FISHING')
+    expect(firstLineFeature.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:0')
+    expect(firstLineFeature.getGeometry()?.getLength().toString()).toContain('7411')
     // A LineString geometry is of type Coordinate[][]
-    expect(firstLineFeature!.getGeometry()?.getCoordinates()).toEqual([
+    expect(firstLineFeature.getGeometry()?.getCoordinates()).toEqual([
       [-370471.26536001445, 5842423.238503429],
       [-372586.33568508667, 5849526.831117608]
     ])
 
     // Second Line
     const secondLineFeature = lineFeatures[1] as Vessel.VesselLineFeature
-    expect(secondLineFeature!.course!.toString()).toContain('-2.57')
-    expect(secondLineFeature!.speed).toEqual(2.9)
-    expect(secondLineFeature!.isTimeEllipsis).toEqual(false)
-    expect(secondLineFeature!.trackType!.code).toEqual('TRANSIT')
-    expect(secondLineFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:1')
-    expect(secondLineFeature!.getGeometry()?.getLength().toString()).toContain('8439')
+    expect(secondLineFeature.course!.toString()).toContain('-2.57')
+    expect(secondLineFeature.speed).toEqual(2.9)
+    expect(secondLineFeature.isTimeEllipsis).toEqual(false)
+    expect(secondLineFeature.trackType!.code).toEqual('TRANSIT')
+    expect(secondLineFeature.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:line:1')
+    expect(secondLineFeature.getGeometry()?.getLength().toString()).toContain('8439')
     // A LineString geometry is of type Coordinate[][]
-    expect(secondLineFeature!.getGeometry()?.getCoordinates()).toEqual([
+    expect(secondLineFeature.getGeometry()?.getCoordinates()).toEqual([
       [-372586.33568508667, 5849526.831117608],
       [-379710.7830958562, 5854050.285232945]
     ])
 
     // Last position
     const positionFeature = positionFeatures[5] as Vessel.VesselPointFeature
-    expect(positionFeature!.course).toEqual(263)
-    expect(positionFeature!.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:5')
+    expect(positionFeature.course).toEqual(263)
+    expect(positionFeature.getId()).toEqual('VESSEL_TRACK:VESSEL_ID:position:5')
     // A Point geometry is of type Coordinate[]
-    expect(positionFeature!.getGeometry()?.getCoordinates()).toEqual([-402308.6397268907, 5852757.632510743])
+    expect(positionFeature.getGeometry()?.getCoordinates()).toEqual([-402308.6397268907, 5852757.632510743])
   })
 
   it('getFeaturesFromPositions Should return one features When a track with same coordinates is given', async () => {

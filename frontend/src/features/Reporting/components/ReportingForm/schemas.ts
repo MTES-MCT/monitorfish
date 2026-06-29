@@ -126,7 +126,7 @@ export const CreateOrEditReportingSchema = z
         data.validityOption === ReportingValidityOption.CUSTOM ||
         data.validityOption === ReportingValidityOption.ONE_MONTH ||
         data.validityOption === ReportingValidityOption.TWELVE_MONTHS)
-    if (hasCustomDate && !data.isArchived && !customDayjs().isBefore(data.expirationDate!)) {
+    if (hasCustomDate && !data.isArchived && !customDayjs().isBefore(data.expirationDate)) {
       ctx.addIssue({
         code: 'custom',
         message: 'La date de fin de validité doit être dans le futur.',

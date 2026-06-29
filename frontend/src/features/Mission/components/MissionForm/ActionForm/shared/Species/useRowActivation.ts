@@ -27,7 +27,7 @@ export function useRowActivation() {
   // Only hold the row open for its text inputs (CheckPickers are covered by `openPickerIndex` while their
   // dropdown is open). This keeps a focused text input visible even after the cursor has left the row.
   const handleRowFocus = (index: number, event: FocusEvent<HTMLElement>) => {
-    const target = event.target as HTMLElement
+    const target = event.target
     if (target.tagName === 'INPUT' && !target.closest('.rs-picker')) {
       setFocusedIndex(index)
     }
@@ -35,7 +35,7 @@ export function useRowActivation() {
 
   // Release the row once focus leaves it entirely (moving between its own inputs keeps it active).
   const handleRowBlur = (index: number, event: FocusEvent<HTMLElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
       setFocusedIndex(prev => (prev === index ? undefined : prev))
     }
   }

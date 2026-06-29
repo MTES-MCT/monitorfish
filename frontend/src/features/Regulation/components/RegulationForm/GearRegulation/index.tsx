@@ -45,7 +45,7 @@ export function GearRegulation() {
   const setGearRegulation = (subKey: any, value: any) => {
     dispatch(
       regulationActions.updateProcessingRegulationByKeyAndSubKey({
-        key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION as 'gearRegulation',
+        key: REGULATORY_REFERENCE_KEYS.GEAR_REGULATION,
         // @ts-ignore
         subKey,
         // @ts-ignore

@@ -53,9 +53,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
         const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform ?? maybeColumn.transform)
 
         return (rawItem: T) => {
-          const searchableValue = maybeSearchTransform
-            ? maybeSearchTransform(rawItem as any)
-            : path(keyAsArrayPath, rawItem)
+          const searchableValue = maybeSearchTransform ? maybeSearchTransform(rawItem) : path(keyAsArrayPath, rawItem)
 
           const normalizedSearchableValue = diacritics.remove(String(searchableValue))
 

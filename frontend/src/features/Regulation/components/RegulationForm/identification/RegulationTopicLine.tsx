@@ -54,7 +54,7 @@ export function RegulationTopicLine({ isDisabled }) {
           searchable
           style={{ width: '200px' }}
         />
-        {topic && !isAddTopicClicked && <StyledTag onDelete={updateTopic}>{topic as unknown as string}</StyledTag>}
+        {topic && !isAddTopicClicked && <StyledTag onDelete={updateTopic}>{topic}</StyledTag>}
         {isAddTopicClicked && (
           <CreateRegulationTopicForm
             onCancelEdit={() => {

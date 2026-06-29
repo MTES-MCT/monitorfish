@@ -164,7 +164,7 @@ function VesselsTracksLayer() {
     Object.entries(vesselsTracksShowed)
       .filter(([, track]) => track?.toZoom && track?.extent && !track?.toShow)
       .forEach(([vesselCompositeIdentifier, track]) => {
-        fitMapToVesselTrack(track!.extent!, () => dispatch(updateVesselTrackAsZoomed(vesselCompositeIdentifier)))
+        fitMapToVesselTrack(track.extent!, () => dispatch(updateVesselTrackAsZoomed(vesselCompositeIdentifier)))
       })
   }, [dispatch, vesselsTracksShowed])
 

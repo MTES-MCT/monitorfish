@@ -1,7 +1,7 @@
 import { EditDynamicVesselGroupDialog } from '@features/VesselGroup/components/EditDynamicVesselGroupDialog'
 import { EditFixedVesselGroupDialog } from '@features/VesselGroup/components/EditFixedVesselGroupDialog'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import { type CreateOrUpdateDynamicVesselGroup, GroupType } from '@features/VesselGroup/types'
+import { GroupType } from '@features/VesselGroup/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
@@ -29,7 +29,7 @@ export function VesselGroupMainWindowEdition() {
       {isVesselGroupMainWindowEditionDisplayed && editedVesselGroup.type === GroupType.DYNAMIC && (
         <EditDynamicVesselGroupDialog
           editedVesselGroup={editedVesselGroup}
-          initialListFilterValues={(editedVesselGroup as CreateOrUpdateDynamicVesselGroup).filters}
+          initialListFilterValues={editedVesselGroup.filters}
           isMainWindow
           onExit={handleCloseEditVesselGroup}
         />

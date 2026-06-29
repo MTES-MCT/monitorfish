@@ -39,7 +39,7 @@ export class FrontendError extends Error {
     return (
       isCustomResponseError(this.originalError) &&
       typeof this.originalError.status === 'number' &&
-      IGNORED_HTTP_STATUS.has(this.originalError.status as number)
+      IGNORED_HTTP_STATUS.has(this.originalError.status)
     )
   }
 

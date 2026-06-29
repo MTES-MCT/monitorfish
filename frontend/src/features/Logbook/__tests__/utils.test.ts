@@ -79,7 +79,7 @@ describe('Logbook/utils.ts', () => {
     const depMessage = getDEPMessage(dummyLogbookMessages)
 
     // When
-    const weight = getTotalDEPWeight(depMessage!)
+    const weight = getTotalDEPWeight(depMessage)
 
     // Then
     expect(weight).toEqual(579)
@@ -90,7 +90,7 @@ describe('Logbook/utils.ts', () => {
     const lanMessage = getLANMessage(dummyLogbookMessages)
 
     // When
-    const weight = getTotalLANWeight(lanMessage!)
+    const weight = getTotalLANWeight(lanMessage)
 
     // Then
     // A conversion factor of 1.2 is applied to the species "LANGOUSTE DU SUD" of 10kg

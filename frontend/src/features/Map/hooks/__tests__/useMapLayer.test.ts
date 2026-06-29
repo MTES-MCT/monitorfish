@@ -11,7 +11,7 @@ jest.mock('@features/Map/monitorfishMap', () => ({
 }))
 
 function getMocks() {
-  const { monitorfishMap } = jest.requireMock('@features/Map/monitorfishMap') as any
+  const { monitorfishMap } = jest.requireMock('@features/Map/monitorfishMap')
 
   return monitorfishMap
 }

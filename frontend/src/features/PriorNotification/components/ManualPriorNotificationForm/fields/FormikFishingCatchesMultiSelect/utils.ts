@@ -19,12 +19,12 @@ export function getFishingsCatchesValidationError(
 
   const faoAreaError = fishingCatchesErrors.find(fishingCatchError => typeof fishingCatchError?.faoArea === 'string')
   if (faoAreaError) {
-    return faoAreaError.faoArea as string
+    return faoAreaError.faoArea
   }
 
   const weightError = fishingCatchesErrors.find(fishingCatchError => typeof fishingCatchError?.weight === 'string')
   if (weightError) {
-    return weightError.weight as string
+    return weightError.weight
   }
 
   return undefined

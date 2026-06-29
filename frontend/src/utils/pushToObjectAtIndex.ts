@@ -2,7 +2,7 @@ export function pushToObjectAtIndex(record: Record<string, any[]>, index: string
   const nextRecord = record
 
   if (nextRecord[index]) {
-    nextRecord[index]!.push(item)
+    nextRecord[index].push(item)
   } else {
     nextRecord[index] = [item]
   }

@@ -55,7 +55,7 @@ export function MissionList() {
         }
 
         return facade && SEAFRONT_GROUP_SEAFRONTS[seafrontGroup]
-          ? SEAFRONT_GROUP_SEAFRONTS[seafrontGroup].includes(facade as any)
+          ? SEAFRONT_GROUP_SEAFRONTS[seafrontGroup].includes(facade)
           : false
       }).length,
     [missions]

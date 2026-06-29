@@ -455,7 +455,7 @@ export function getSummedSpeciesOnBoard(speciesOnBoard: Vessel.DeclaredLogbookSp
       const nextSpecy = { ...accumulator[previousSpecyIndex] }
       // @ts-ignore
       nextSpecy.weight = (nextSpecy.weight ?? 0) + specy.weight
-      accumulator[previousSpecyIndex] = nextSpecy as Vessel.DeclaredLogbookSpecies
+      accumulator[previousSpecyIndex] = nextSpecy
 
       return accumulator
     }

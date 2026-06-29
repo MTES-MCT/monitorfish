@@ -15,7 +15,7 @@ import { groupBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import type { EditedAlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
+import type { EditedAlertSpecification } from '@features/Alert/types'
 
 const FILTERED_ZONES = new Set(['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour situation VMS'])
 
@@ -70,7 +70,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
 
     const nextRegulationArray = convertTreeOptionsToRegulatoryAreasArray(nextRegulationValues)
 
-    setFieldValue('regulatoryAreas', nextRegulationArray as RegulatoryAreaSpecification[])
+    setFieldValue('regulatoryAreas', nextRegulationArray)
   }
 
   const handleDeleteCriteria = () => {

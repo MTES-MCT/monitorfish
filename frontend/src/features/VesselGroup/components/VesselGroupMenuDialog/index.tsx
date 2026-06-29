@@ -97,7 +97,7 @@ export function VesselGroupMenuDialog() {
               isLight
               label="Type de groupe"
               name="groupType"
-              onChange={value => updateGroupType(value as GroupType | undefined)}
+              onChange={value => updateGroupType(value)}
               options={GROUP_TYPE_OPTIONS}
               placeholder="Groupes dynamiques et fixes"
               value={filteredGroupType}
@@ -110,7 +110,7 @@ export function VesselGroupMenuDialog() {
                 isLight
                 label="Partage"
                 name="sharing"
-                onChange={value => updateSharing(value as Sharing | undefined)}
+                onChange={value => updateSharing(value)}
                 options={SHARING_OPTIONS}
                 placeholder="Groupes partagés et personnels"
                 value={filteredSharing}

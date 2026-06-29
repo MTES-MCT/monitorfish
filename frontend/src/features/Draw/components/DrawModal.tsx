@@ -129,7 +129,7 @@ export function DrawLayerModal() {
         return
       }
 
-      if (isEchoFromMapClick(drawedGeometryRef.current as GeoJSONPoint | null | undefined, latitude, longitude)) {
+      if (isEchoFromMapClick(drawedGeometryRef.current, latitude, longitude)) {
         return
       }
 

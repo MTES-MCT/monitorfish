@@ -96,7 +96,7 @@ function loadFeaturesIntoSource(vectorSource: VectorSource<Feature<Geometry>>, g
   const format = vectorSource.getFormat()
   if (format) {
     // TODO Type this any.
-    vectorSource.addFeatures(format.readFeatures(geoJson) as any)
+    vectorSource.addFeatures(format.readFeatures(geoJson))
   }
 }
 

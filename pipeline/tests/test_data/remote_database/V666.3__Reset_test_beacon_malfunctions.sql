@@ -149,6 +149,31 @@ INSERT INTO beacon_malfunctions (
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
     true
+),
+(
+    6,
+    'GBR000888888',
+    'GBR001',
+    'ZZZ99',
+    'AIS ACTIVITY VESSEL',
+    'INTERNAL_REFERENCE_NUMBER',
+    'NO_NEWS',
+    'INITIAL_ENCOUNTER',
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '5 hours',
+    NULL,
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '4 hours',
+    'GB',
+    NULL,
+    8,
+    NULL,
+    NULL,
+    0.0,
+    0.0,
+    'NEW_BEACON_ACT_DET',
+    'ACTIVATED',
+    'AT_SEA',
+    (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '6 hours',
+    false
 );
 
-ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 6;
+ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 7;

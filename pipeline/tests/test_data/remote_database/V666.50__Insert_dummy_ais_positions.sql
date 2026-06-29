@@ -57860,3 +57860,7 @@ INSERT INTO ais_positions (mmsi, date_time, latitude, longitude, speed, course, 
 (819527780,(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '30 minutes',45.3469,-0.93983,2.3,120.1,'Engaged in fishing','QO0830','POÉSIE POUVOIR RESTE',30,NULL,'ABC000570464'),
 (819527780,(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '20 minutes',45.34377,-0.93212,2.3,116.7,'Engaged in fishing','QO0830','POÉSIE POUVOIR RESTE',30,NULL,'ABC000570464'),
 (819527780,(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '10 minutes',45.34095,-0.92416,2.3,110.7,'Engaged in fishing','QO0830','POÉSIE POUVOIR RESTE',30,NULL,'ABC000570464');
+
+-- AIS position in the 1-4 hour window for beacon malfunction activity detection tests
+INSERT INTO ais_positions (mmsi, date_time, latitude, longitude, speed, course, status, ircs, vessel_name, ship_type, imo, cfr) VALUES
+(999999999,(now() AT TIME ZONE 'UTC')::TIMESTAMP - interval '2 hours',0.0,0.0,5.0,270,'Under way using engine','ZZZ99','AIS ACTIVITY VESSEL',30,NULL,'GBR000888888');

@@ -16,6 +16,7 @@ from src.shared_tasks.beacon_malfunctions import (
     load_new_beacon_malfunctions,
     prepare_new_beacon_malfunctions,
     update_beacon_malfunction,
+    update_beacon_malfunction_is_followed,
 )
 from tests.mocks import mock_datetime_utcnow
 
@@ -458,4 +459,23 @@ def test_load_new_beacon_malfunctions(reset_test_data):
             ],
             name="external_reference_number",
         ),
+    )
+
+
+@pytest.mark.parametrize("is_followed", [False, True])
+@patch("src.shared_tasks.beacon_malfunctions.requests")
+@patch(
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "dummy/end/point/",
+)
+def test_update_beacon_malfunction_is_followed(mock_requests, is_followed):
+    update_beacon_malfunction_is_followed(25, is_followed=is_followed)
+    mock_requests.patch.assert_called_once_with(
+        url="dummy/end/point/25",
+        json={"isFollowed": is_followed},
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key",
+        },
     )

@@ -6,11 +6,14 @@
   "jsPlugins": [
     "eslint-plugin-sort-keys-fix",
     "eslint-plugin-sort-destructure-keys",
+    "eslint-plugin-typescript-sort-keys",
     { "name": "import-js", "specifier": "eslint-plugin-import" },
-    { "name": "react-js", "specifier": "eslint-plugin-react" }
+    { "name": "react-js", "specifier": "eslint-plugin-react" },
+    { "name": "stylistic", "specifier": "@stylistic/eslint-plugin" }
   ],
   "categories": {
-    "correctness": "error"
+    "correctness": "error",
+    "perf": "warn"
   },
   "env": {
     "browser": true,
@@ -26,6 +29,7 @@
     "react/jsx-pascal-case": ["error", { "ignore": ["LEGACY_*"] }],
     "react/react-in-jsx-scope": "off",
 
+    "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
 
     "unicorn/no-thenable": "off",
@@ -43,6 +47,12 @@
 
     "sort-keys-fix/sort-keys-fix": ["error", "asc", { "caseSensitive": false, "natural": false }],
     "sort-destructure-keys/sort-destructure-keys": ["error", { "caseSensitive": false }],
+    "typescript-sort-keys/interface": [
+      "error",
+      "asc",
+      { "caseSensitive": false, "natural": false, "requiredFirst": false }
+    ],
+    "stylistic/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],
     "import-js/order": [
       "error",

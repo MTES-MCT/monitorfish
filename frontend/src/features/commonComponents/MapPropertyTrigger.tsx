@@ -6,12 +6,12 @@ import styled from 'styled-components'
  * `IconSVG` props is deprecated, use `Icon` instead.
  */
 type MapPropertyTriggerProps = Readonly<{
-  Icon?: FunctionComponent<JSX.Element>
-  // TODO Remove this legacy props
-  IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   booleanProperty: boolean
   booleanVerbs?: [string, string]
   disabled?: boolean
+  Icon?: FunctionComponent<JSX.Element>
+  // TODO Remove this legacy props
+  IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   inverse?: boolean
   text: string
   updateBooleanProperty: (isChecked) => void

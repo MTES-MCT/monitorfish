@@ -17,8 +17,8 @@ export function getLabelFromFeatures(
     selectedVessel: Vessel.SelectedVessel | undefined
     vesselLabel: VesselLabel
     vesselLabelsShowedOnMap: boolean
-    vesselToCoordinates: Map<string, any>
     vesselsTracksShowed: Record<string, ShowedVesselTrack>
+    vesselToCoordinates: Map<string, any>
   }
 ) {
   const showedTracksVesselsIdentities = Object.keys(options.vesselsTracksShowed)

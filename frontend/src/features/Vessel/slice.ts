@@ -32,11 +32,11 @@ export type VesselState = {
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
-  vesselSidebarIsOpen: boolean
-  vesselTrackExtent: any | null
   vessels: EntityState<Vessel.ActiveVessel, Vessel.VesselFeatureId>
   vesselsEstimatedPositions: any[]
+  vesselSidebarIsOpen: boolean
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
+  vesselTrackExtent: any | null
 }
 const INITIAL_STATE: VesselState = {
   hideNonSelectedVessels: false,

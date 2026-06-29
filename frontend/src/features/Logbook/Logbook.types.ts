@@ -277,8 +277,8 @@ export namespace Logbook {
     hasPortEntranceAuthorization: boolean | undefined
     hasPortLandingAuthorization: boolean | undefined
     isBeingSent: boolean | undefined
-    isInVerificationScope: boolean | undefined
     isInvalidated: boolean | undefined
+    isInVerificationScope: boolean | undefined
     isSent: boolean | undefined
     isVerified: boolean | undefined
     latitude: string | undefined

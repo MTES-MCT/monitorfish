@@ -76,6 +76,13 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
 
     @Modifying(clearAutomatically = true)
     @Query(
+        value = "UPDATE beacon_malfunctions SET is_followed = :isFollowed WHERE id = :beaconMalfunctionId",
+        nativeQuery = true,
+    )
+    fun updateIsFollowed(beaconMalfunctionId: Int, isFollowed: Boolean)
+
+    @Modifying(clearAutomatically = true)
+    @Query(
         value = """
             UPDATE beacon_malfunctions
             SET

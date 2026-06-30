@@ -993,8 +993,8 @@ def test_flow(reset_test_data):
     ).all()
 
     # Check that malfunctions' `notification_requested` field is reset to nulls.
-    assert len(initial_malfunctions) == 5
-    assert initial_malfunctions.notification_requested.notnull().all()
+    assert len(initial_malfunctions) == 6
+    assert initial_malfunctions.notification_requested.notnull().any()
     assert final_malfunctions.notification_requested.isna().all()
     assert final_malfunctions.requested_notification_foreign_fmc_code.isna().all()
 

@@ -129,7 +129,7 @@ export function BeaconMalfunctionBoard() {
       dispatch(
         updateBeaconMalfunctionFromKanban(beaconMalfunction.id, nextBeaconMalfunction, {
           stage: undefined,
-          vesselStatus: nextBeaconMalfunction.vesselStatus as BeaconMalfunctionVesselStatus | undefined
+          vesselStatus: nextBeaconMalfunction.vesselStatus
         })
       )
     },

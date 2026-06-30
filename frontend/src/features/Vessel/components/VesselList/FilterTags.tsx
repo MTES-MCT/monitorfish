@@ -48,7 +48,7 @@ export function FilterTags({
 
   const areListFilterValuesEqualToDefaultOnes = isEqual(listFilterValues, DEFAULT_VESSEL_LIST_FILTER_VALUES)
 
-  const remove = (key: keyof VesselListFilter, value: Object | boolean | string | number) => {
+  const remove = (key: keyof VesselListFilter, value: object | boolean | string | number) => {
     const filterValue = listFilterValues[key]
 
     if (!filterValue) {

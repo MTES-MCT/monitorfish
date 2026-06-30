@@ -53,9 +53,7 @@ export function useTable<T extends CollectionItem = CollectionItem>(
         const maybeSearchTransform = maybeColumn && (maybeColumn.searchTransform ?? maybeColumn.transform)
 
         return (rawItem: T) => {
-          const searchableValue = maybeSearchTransform
-            ? maybeSearchTransform(rawItem as any)
-            : path(keyAsArrayPath, rawItem)
+          const searchableValue = maybeSearchTransform ? maybeSearchTransform(rawItem) : path(keyAsArrayPath, rawItem)
 
           const normalizedSearchableValue = diacritics.remove(String(searchableValue))
 
@@ -129,11 +127,11 @@ export function useTable<T extends CollectionItem = CollectionItem>(
   }, [filteredTableData, fuse, searchQuery])
 
   const filteredCheckedIds = useMemo(() => {
-    const filteredDataIds = filteredAndSearchedTableData.map(
-      filteredAndSearchedTableItem => filteredAndSearchedTableItem.id
+    const filteredDataIds = new Set(
+      filteredAndSearchedTableData.map(filteredAndSearchedTableItem => filteredAndSearchedTableItem.id)
     )
 
-    return checkedIds.filter(checkedId => filteredDataIds.includes(checkedId))
+    return checkedIds.filter(checkedId => filteredDataIds.has(checkedId))
   }, [checkedIds, filteredAndSearchedTableData])
 
   const isAllChecked = useMemo(

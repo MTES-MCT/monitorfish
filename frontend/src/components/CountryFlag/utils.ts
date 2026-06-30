@@ -19,7 +19,7 @@ export function getAlpha2CodeFromAlpha2or3Code(countryCode: string | undefined):
     }
 
     return undefined
-  } catch (err) {
+  } catch {
     return undefined
   }
 }

@@ -89,7 +89,7 @@ export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
                 <IconButton
                   accent={Accent.TERTIARY}
                   Icon={Icon.Delete}
-                  onClick={() => handleDeleteVessel(vessel.vesselId!!)}
+                  onClick={() => handleDeleteVessel(vessel.vesselId!)}
                   title="Supprimer le navire"
                 />
               </DeleteColumn>

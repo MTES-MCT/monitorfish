@@ -1,5 +1,7 @@
+import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
@@ -7,13 +9,10 @@ import { COLORS } from '../../../../constants/constants'
 import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../constants'
 
-import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
-import { getCoordinates } from '@mtes-mct/monitor-ui'
-
 timeago.register('fr', timeagoFrenchLocale)
 
-function VesselTrackCard({ feature, overlayPosition }) {
-  const { coordinatesFormat } = useSelector(state => state.map)
+export function VesselTrackCard({ feature, overlayPosition }) {
+  const { coordinatesFormat } = useMainAppSelector(state => state.map)
 
   return (
     <>
@@ -204,5 +203,3 @@ const VesselCardBody = styled.div`
   flex: 1 1 1;
   text-align: center;
 `
-
-export default VesselTrackCard

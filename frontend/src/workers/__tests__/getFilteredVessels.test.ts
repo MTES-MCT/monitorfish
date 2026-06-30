@@ -209,7 +209,7 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
                 ]
               ]
             ],
-            type: 'MultiPolygon' as 'MultiPolygon'
+            type: 'MultiPolygon' as const
           },
           label: 'Zone de filtre manuelle',
           value: 'CUSTOM'

@@ -70,8 +70,8 @@ export type BeaconMalfunctionNotification = {
 export type BeaconMalfunctionNotifications = {
   beaconMalfunctionId: Integer<number>
   dateTimeUtc: string
-  notificationType: string
   notifications: BeaconMalfunctionNotification[]
+  notificationType: string
 }
 
 export type BeaconMalfunctionResumeAndDetails = {

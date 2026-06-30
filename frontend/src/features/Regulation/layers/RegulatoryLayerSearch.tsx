@@ -72,7 +72,7 @@ export function RegulatoryLayerSearch() {
     }
 
     getVectorSource().clear(true)
-    getVectorSource().addFeatures(features as Feature<Geometry>[])
+    getVectorSource().addFeatures(features)
   }, [zoneSelected, getVectorSource])
 
   return null

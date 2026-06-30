@@ -9,7 +9,7 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 import { getRegulatoryLayerStyle } from './styles/regulatoryLayer.style'
 import { zoomInLayer } from '../../LayersSidebar/useCases/zoomInLayer'
 
-import type { BaseRegulatoryZone, RegulatoryZone } from '../types'
+import type { RegulatoryZone } from '../types'
 import type { ZoneFilter } from '@features/Regulation/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
@@ -41,7 +41,7 @@ function UnmemoizedRegulatoryPreviewLayer({ regulatoryZonesToPreview, zoneSelect
       layerRef.current = new Vector({
         renderBuffer: 4,
         source: getVectorSource(),
-        style: feature => [getRegulatoryLayerStyle(feature, feature.getProperties() as BaseRegulatoryZone)],
+        style: feature => [getRegulatoryLayerStyle(feature, feature.getProperties())],
         updateWhileAnimating: false,
         updateWhileInteracting: false
       })

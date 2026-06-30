@@ -13,7 +13,7 @@ export const VESSEL_TRACK_VECTOR_LAYER = new VectorLayerWithCode({
   isClickable: true,
   isHoverable: true,
   renderBuffer: 4,
-  source: VESSEL_TRACK_VECTOR_SOURCE as any,
+  source: VESSEL_TRACK_VECTOR_SOURCE,
   updateWhileAnimating: false,
   updateWhileInteracting: false,
   zIndex: LayerProperties.VESSEL_TRACK.zIndex

@@ -31,7 +31,7 @@ import type { RegulatoryZone } from '@features/Regulation/types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
 import type { SortingState } from '@tanstack/react-table'
 import type { Specy } from 'domain/types/specy'
-import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson'
+import type { Feature, FeatureCollection, Polygon } from 'geojson'
 
 export class MonitorFishWebWorker {
   static getStructuredRegulationLawTypes(regulatoryZones) {
@@ -546,7 +546,7 @@ export class MonitorFishWebWorker {
           const vesselPoint = point([vessel.longitude, vessel.latitude])
 
           const features = filters.zones.map(zone => zone.feature)
-          if (!features.some(polygon => booleanPointInPolygon(vesselPoint, polygon as Polygon | MultiPolygon))) {
+          if (!features.some(polygon => booleanPointInPolygon(vesselPoint, polygon))) {
             return false
           }
         }

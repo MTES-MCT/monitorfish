@@ -51,10 +51,7 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       },
       transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
       transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
-        if (
-          !isVesselVoyage(response) &&
-          (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
-        ) {
+        if (!isVesselVoyage(response) && response.code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK) {
           return undefined
         }
 
@@ -74,10 +71,7 @@ export const logbookApi = monitorfishApi.injectEndpoints({
       },
       transformErrorResponse: response => new FrontendApiError(LOGBOOK_ERROR_MESSAGE, response),
       transformResponse: (response: BackendApi.ResponseBodyError | Logbook.VesselVoyage) => {
-        if (
-          !isVesselVoyage(response) &&
-          (response as BackendApi.ResponseBodyError).code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK
-        ) {
+        if (!isVesselVoyage(response) && response.code === BackendApi.ErrorCode.NOT_FOUND_BUT_OK) {
           return undefined
         }
 

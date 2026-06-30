@@ -8,8 +8,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { REPORTINGS_LINE_VECTOR_SOURCE, REPORTINGS_VECTOR_SOURCE } from '../../layers/ReportingLayer/constants'
 import { ReportingOverlay } from '../ReportingOverlay'
 
-import type { Coordinate } from 'ol/coordinate'
-
 export function SelectedReportingOverlay() {
   const selectedReportingFeatureIds = useMainAppSelector(store => store.reporting.selectedReportingFeatureIds)
   const isReportingLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isReportingLayerDisplayed)
@@ -59,10 +57,10 @@ function SelectedReportingItem({ featureId }: SelectedReportingItemProps) {
       const existingLine = REPORTINGS_LINE_VECTOR_SOURCE.getFeatureById(lineFeatureId)
 
       if (existingLine) {
-        existingLine.setGeometry(new LineString([anchorCoordinates as Coordinate, nextCoordinates as Coordinate]))
+        existingLine.setGeometry(new LineString([anchorCoordinates, nextCoordinates]))
       } else {
         const lineFeature = new Feature({
-          geometry: new LineString([anchorCoordinates, nextCoordinates as Coordinate])
+          geometry: new LineString([anchorCoordinates, nextCoordinates])
         })
 
         lineFeature.setId(lineFeatureId)

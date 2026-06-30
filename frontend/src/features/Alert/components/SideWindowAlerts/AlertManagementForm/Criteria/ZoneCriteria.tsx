@@ -15,9 +15,9 @@ import { groupBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import type { EditedAlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
+import type { EditedAlertSpecification } from '@features/Alert/types'
 
-const FILTERED_ZONES = ['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour situation VMS']
+const FILTERED_ZONES = new Set(['Zone manuelle', 'Zones Cormoran (NAMO-SA)', 'Zones pour situation VMS'])
 
 type ZoneCriteriaProps = {
   onDelete: () => void
@@ -30,7 +30,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
   )
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const filterableZoneAsTreeOptions = useGetFilterableZonesAsTreeOptions()
-  const filteredZones = filterableZoneAsTreeOptions?.filter(zone => !FILTERED_ZONES.includes(zone.label)) ?? []
+  const filteredZones = filterableZoneAsTreeOptions?.filter(zone => !FILTERED_ZONES.has(zone.label)) ?? []
   const uncheckableZones = Object.keys(filteredZones)
 
   const regulatoryLayerLawTypes = useMainAppSelector(state => state.regulation.regulatoryLayerLawTypes)
@@ -70,7 +70,7 @@ export function ZoneCriteria({ onDelete }: ZoneCriteriaProps) {
 
     const nextRegulationArray = convertTreeOptionsToRegulatoryAreasArray(nextRegulationValues)
 
-    setFieldValue('regulatoryAreas', nextRegulationArray as RegulatoryAreaSpecification[])
+    setFieldValue('regulatoryAreas', nextRegulationArray)
   }
 
   const handleDeleteCriteria = () => {

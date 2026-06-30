@@ -1,0 +1,3 @@
+{
+  "*.{kt,kts}": "tools/ktlint -F --relative --baseline=config/ktlint/baseline.xml"
+}

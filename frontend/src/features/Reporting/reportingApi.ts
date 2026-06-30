@@ -106,7 +106,7 @@ export const reportingApi = monitorfishApi.injectEndpoints({
           throw new Error('Cannot edit a pending alert reporting')
         }
 
-        return parsed as Reporting.EditableReporting
+        return parsed
       }
     }),
 

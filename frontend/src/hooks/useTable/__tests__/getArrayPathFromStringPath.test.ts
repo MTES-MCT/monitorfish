@@ -24,6 +24,6 @@ describe('hooks/useTable/utils.getArrayPathFromStringPath()', () => {
 
     const call = () => getArrayPathFromStringPath(stringPath)
 
-    expect(call).toThrow()
+    expect(call).toThrow("A path can't be empty")
   })
 })

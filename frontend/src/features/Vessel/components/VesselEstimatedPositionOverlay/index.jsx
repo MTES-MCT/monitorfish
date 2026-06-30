@@ -1,17 +1,17 @@
 import { COLORS } from '@constants/constants'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import VesselEstimatedPositionCard from './VesselEstimatedPositionCard'
+import { VesselEstimatedPositionCard } from './VesselEstimatedPositionCard'
 import { LayerProperties, WSG84_PROJECTION } from '../../../Map/constants'
 import { monitorfishMap } from '../../../Map/monitorfishMap'
-import { getCoordinates } from '@mtes-mct/monitor-ui'
 
-function VesselEstimatedPositionOverlay({ feature }) {
-  const coordinatesFormat = useSelector(state => state.map.coordinatesFormat)
-  const mousePosition = useSelector(state => state.layer.mousePosition)
+export function VesselEstimatedPositionOverlay({ feature }) {
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const mousePosition = useMainAppSelector(state => state.layer.mousePosition)
   const [coordinates, setCoordinates] = useState(null)
   const overlayRef = useRef(null)
   const overlayObjectRef = useRef(null)
@@ -74,5 +74,3 @@ const VesselEstimatedPositionCardOverlayComponent = styled.div`
   border-radius: 2px;
   z-index: 100;
 `
-
-export default VesselEstimatedPositionOverlay

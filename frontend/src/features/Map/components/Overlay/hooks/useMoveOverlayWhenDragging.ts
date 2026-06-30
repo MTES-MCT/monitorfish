@@ -25,7 +25,7 @@ export const useMoveOverlayWhenDragging = (
     if (overlay) {
       eventKey = overlay.on('change:offset', ({ target }) => {
         moveLineWithThrottle(target as Overlay, 50)
-      }) as EventsKey
+      })
     }
 
     return () => {

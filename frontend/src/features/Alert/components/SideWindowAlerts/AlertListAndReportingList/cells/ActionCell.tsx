@@ -45,7 +45,7 @@ export function ActionCell({ alert, openSilenceAlertMenu }: ActionCellProps) {
         data-cy="side-window-alerts-silence-alert"
         Icon={Icon.Reject}
         onClick={e => {
-          openSilenceAlertMenu(alert, e.currentTarget as HTMLElement)
+          openSilenceAlertMenu(alert, e.currentTarget)
         }}
         title="Suspendre l'alerte"
         withUnpropagatedClick

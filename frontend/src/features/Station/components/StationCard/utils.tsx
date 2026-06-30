@@ -8,18 +8,10 @@ export function displayControlUnitResourcesFromControlUnit(controlUnit: ControlU
     .filter(controlUnitResource => controlUnitResource.stationId === stationId && !controlUnitResource.isArchived)
     .reduce(
       (previousControlUnitResourceTypeCounts, controlUnitResource) => {
-        const controlUnitResourceTypeCount = previousControlUnitResourceTypeCounts[controlUnitResource.type]
-        if (!controlUnitResourceTypeCount) {
-          return {
-            ...previousControlUnitResourceTypeCounts,
-            [controlUnitResource.type]: 1
-          }
-        }
+        const controlUnitResourceTypeCount = previousControlUnitResourceTypeCounts[controlUnitResource.type] ?? 0
+        previousControlUnitResourceTypeCounts[controlUnitResource.type] = controlUnitResourceTypeCount + 1
 
-        return {
-          ...previousControlUnitResourceTypeCounts,
-          [controlUnitResource.type]: controlUnitResourceTypeCount + 1
-        }
+        return previousControlUnitResourceTypeCounts
       },
       {} as Record<string, number>
     )

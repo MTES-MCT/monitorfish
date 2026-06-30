@@ -41,20 +41,18 @@ function getFeaturesFromGeoJson(customZones: CustomZone[]) {
     return []
   }
 
-  return customZones
-    .map(zone => {
-      const features = new GeoJSON({
-        dataProjection: WSG84_PROJECTION,
-        featureProjection: OPENLAYERS_PROJECTION
-      }).readFeatures(zone.feature)
+  return customZones.flatMap(zone => {
+    const features = new GeoJSON({
+      dataProjection: WSG84_PROJECTION,
+      featureProjection: OPENLAYERS_PROJECTION
+    }).readFeatures(zone.feature)
 
-      features
-        .filter(feature => feature.getGeometry()?.getType() === OpenLayersGeometryType.POLYGON)
-        .forEach(feature => feature.set('name', zone.name))
+    features
+      .filter(feature => feature.getGeometry()?.getType() === OpenLayersGeometryType.POLYGON)
+      .forEach(feature => feature.set('name', zone.name))
 
-      return features
-    })
-    .flat()
+    return features
+  })
 }
 
 function getLayerStyle(feature: Feature) {

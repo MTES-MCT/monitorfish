@@ -51,7 +51,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
         (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
     )
     .filter(filterNonSelectedVessels(vesselsTracksShowed, !!hideNonSelectedVessels, selectedVesselIdentity))
-    .map(feature => {
+    .flatMap(feature => {
       const properties = feature.getProperties()
 
       return getEstimatedPositionFeatures(properties as Vessel.ActiveVesselEmittingPosition, {
@@ -59,7 +59,6 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
         isOpacityReducedEpochMilli
       })
     })
-    .flat()
     .filter(feature => feature !== undefined)
 
   VESSELS_ESTIMATED_POSITION_VECTOR_SOURCE.clear(true)

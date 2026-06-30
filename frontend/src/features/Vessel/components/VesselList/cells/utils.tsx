@@ -55,14 +55,13 @@ export function displayOnboardFishingSpecies(
         return update(aggregatedCatches, `[${existingCatchSpecyIndex}].weight`, weight => weight + currentCatch.weight)
       }
 
-      return [
-        ...aggregatedCatches,
-        {
-          specyCode: normalizedSpecyCode,
-          specyName: normalizedSpecyName,
-          weight: currentCatch.weight
-        }
-      ]
+      aggregatedCatches.push({
+        specyCode: normalizedSpecyCode,
+        specyName: normalizedSpecyName,
+        weight: currentCatch.weight
+      } as (typeof aggregatedCatches)[number])
+
+      return aggregatedCatches
     }, [])
     .sort((a, b) => b.weight - a.weight)
     .slice(0, 5)

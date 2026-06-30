@@ -43,6 +43,7 @@ export function TextareaForm({ controlUnit, isLabelHidden, label, name, onSubmit
     return (
       <Form onSubmit={updateControlUnit}>
         <Textarea
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus the textarea when entering edit mode
           autoFocus
           data-cy={`ControlUnitDialog-${name}`}
           isLabelHidden={isLabelHidden}

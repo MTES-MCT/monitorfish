@@ -8,13 +8,13 @@ export function areMissionFormsValuesValid(
 ): boolean {
   try {
     actionsFormValues.forEach(actionFormValues => getValidMissionActionData(actionFormValues))
-  } catch (e) {
+  } catch {
     return false
   }
 
   try {
     mainFormValues.controlUnits?.forEach(controlUnit => getValidMissionDataControlUnit(controlUnit))
-  } catch (e) {
+  } catch {
     return false
   }
 

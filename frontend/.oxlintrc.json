@@ -1,0 +1,139 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "react", "typescript", "jsx-a11y", "unicorn", "oxc"],
+  // jsPlugins: these ESLint rules have no native OxLint equivalent, so OxLint runs the real ESLint
+  // plugins in-process. `import` and `react` are reserved native plugin names, hence the `-js` aliases.
+  "jsPlugins": [
+    "eslint-plugin-sort-keys-fix",
+    "eslint-plugin-sort-destructure-keys",
+    "eslint-plugin-typescript-sort-keys",
+    { "name": "import-js", "specifier": "eslint-plugin-import" },
+    { "name": "react-js", "specifier": "eslint-plugin-react" },
+    { "name": "stylistic", "specifier": "@stylistic/eslint-plugin" }
+  ],
+  "categories": {
+    "correctness": "error",
+    "perf": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": ["build/**", "public/**"],
+  "rules": {
+    "curly": ["error", "all"],
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+
+    "import/no-default-export": "error",
+
+    "react/jsx-pascal-case": ["error", { "ignore": ["LEGACY_*"] }],
+    "react/react-in-jsx-scope": "off",
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+
+    "unicorn/no-thenable": "off",
+    "unicorn/no-empty-file": "off",
+
+    "no-restricted-imports": [
+      "error",
+      {
+        "name": "react-redux",
+        "importNames": ["useSelector", "useDispatch"],
+        "message": "Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead."
+      }
+    ],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }],
+
+    "sort-keys-fix/sort-keys-fix": ["error", "asc", { "caseSensitive": false, "natural": false }],
+    "sort-destructure-keys/sort-destructure-keys": ["error", { "caseSensitive": false }],
+    "typescript-sort-keys/interface": [
+      "error",
+      "asc",
+      { "caseSensitive": false, "natural": false, "requiredFirst": false }
+    ],
+    "stylistic/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],
+    "import-js/order": [
+      "error",
+      {
+        "alphabetize": { "caseInsensitive": true, "order": "asc" },
+        "groups": [["builtin", "external", "internal"], ["parent", "index", "sibling"], ["type"], ["object"]],
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/domain/shared_slices/**/*.ts",
+        "src/**/*.slice.ts",
+        "src/**/slice.ts",
+        "src/**/slice.*.ts",
+        "src/**/*.slice.*.ts"
+      ],
+      "rules": { "no-param-reassign": "off" }
+    },
+    {
+      "files": [
+        "src/domain/schemas/*.ts",
+        "src/domain/**/schemas.ts",
+        "src/domain/shared_slices/**/*.ts",
+        "src/**/slice.ts"
+      ],
+      "rules": { "no-param-reassign": "off" }
+    },
+    {
+      "files": ["src/components/**/*.tsx", "src/ui/**/*.tsx"],
+      "rules": { "react/jsx-props-no-spreading": "off" }
+    },
+    {
+      "files": ["__mocks__/**/*.js", "__mocks__/**/*.ts", "**/*.test.ts", "**/*.test.tsx", "puppeteer/**/*.ts"],
+      "plugins": ["jest"],
+      "env": { "jest": true },
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "name": "react-redux",
+            "importNames": ["useSelector", "useDispatch"],
+            "message": "Use typed hooks `useMainAppDispatch` and `useMainAppSelector` instead."
+          },
+          {
+            "name": "@jest/globals",
+            "importNames": ["jest"],
+            "message": "Do not import `jest` from `@jest/globals`; use the global `jest`. An imported binding breaks swc `jest.mock()` hoisting, so mocks may silently have no effect."
+          }
+        ],
+        "jest/no-conditional-expect": "off",
+        "jest/no-disabled-tests": "error",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "error",
+        "jest/valid-expect": "error",
+        "oxc/no-accumulating-spread": "off",
+        "oxc/no-map-spread": "off",
+        "no-console": "off",
+        "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["cypress/**/*.js", "cypress/**/*.ts", "cypress.config.ts"],
+      "rules": { "import/no-default-export": "off" }
+    },
+    {
+      "files": [
+        "**/*.spec.js",
+        "*.cjs",
+        "*.js",
+        "config/**/*.js",
+        "scripts/**/*.js",
+        "**/*.spec.ts",
+        "config/**/*.ts",
+        "scripts/**/*.ts"
+      ],
+      "env": { "browser": false, "node": true },
+      "rules": { "import/no-default-export": "off" }
+    }
+  ]
+}

@@ -28,7 +28,7 @@ export function CPSMessageResume({
   showLogbookMessages
 }: CPSMessageResumeProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const species = messageValues.map(cps => cps.catches).flat()
+  const species = messageValues.flatMap(cps => cps.catches)
 
   const resumeTitleText = hasNoMessageAcknowledged
     ? `${messageValues.length} ${pluralize('message', messageValues.length)} non ${pluralize(

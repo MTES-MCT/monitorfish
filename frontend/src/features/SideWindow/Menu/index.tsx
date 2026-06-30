@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus -- `MenuButton` is `styled(IconButton)`, which
+   renders a native <button>, so these `role="menuitem"` elements are already keyboard-focusable. */
 import { SideWindowMenuKey, SideWindowMenuLabel } from '@features/SideWindow/constants'
 import { Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'

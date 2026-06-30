@@ -22,12 +22,7 @@ import { useDisplayWarningWhenEditingSharedGroup } from '@features/VesselGroup/c
 import { VesselGroupForm } from '@features/VesselGroup/components/VesselGroupForm'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP } from '@features/VesselGroup/constants'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
-import {
-  type CreateOrUpdateDynamicVesselGroup,
-  type CreateOrUpdateVesselGroup,
-  type DynamicVesselGroupFilter,
-  GroupType
-} from '@features/VesselGroup/types'
+import { type CreateOrUpdateVesselGroup, type DynamicVesselGroupFilter, GroupType } from '@features/VesselGroup/types'
 import { countFilteredVessels } from '@features/VesselGroup/useCases/countFilteredVessels'
 import { useGetFilterableZonesAsTreeOptions } from '@hooks/useGetFilterableZonesAsTreeOptions'
 import { useGetGearsAsTreeOptions } from '@hooks/useGetGearsAsTreeOptions'
@@ -156,7 +151,7 @@ export function EditDynamicVesselGroupDialog({
         vesselGroupActions.vesselGroupEdited({
           ...editedVesselGroupRef.current,
           filters: listFilterValues
-        } as CreateOrUpdateDynamicVesselGroup)
+        })
       )
     }
     const nextZones = await dispatch(

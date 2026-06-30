@@ -58,14 +58,11 @@ export function useSeafrontControlObjectives(
     }
 
     return data
-      .map(
-        objective =>
-          ({
-            ...objective,
-            ...(findFleetSegment(objective.segment) ?? {}),
-            ...localEdits[objective.id]
-          }) as ControlObjectiveWithMaybeFleetSegment
-      )
+      .map(objective => ({
+        ...objective,
+        ...findFleetSegment(objective.segment),
+        ...localEdits[objective.id]
+      }))
       .sort((a, b) => sortArrayByColumn(a, b, sortColumn, sortType))
   }, [data, fleetSegments, findFleetSegment, localEdits, sortColumn, sortType])
 

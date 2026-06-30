@@ -25,7 +25,7 @@ export const updateReporting =
       const updatedReporting = await dispatch(
         reportingApi.endpoints.updateReporting.initiate({
           id,
-          nextReportingFormData: reportingData as FormEditedReporting
+          nextReportingFormData: reportingData
         })
       ).unwrap()
 

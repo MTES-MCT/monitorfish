@@ -5,7 +5,7 @@ import { SelectedReportingOverlay } from '@features/Reporting/components/Selecte
 import { ReportingLayer } from '@features/Reporting/layers/ReportingLayer'
 import { AISVesselCardOverlay } from '@features/Vessel/components/AISVesselCardOverlay'
 import { AISVesselsLayer } from '@features/Vessel/layers/AISVesselsLayer'
-import FilterLayer from '@features/VesselFilter/layers/VesselFilterLayer'
+import { VesselFilterLayer as FilterLayer } from '@features/VesselFilter/layers/VesselFilterLayer'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
@@ -15,11 +15,11 @@ import { useCallback, useState } from 'react'
 import { BaseMap } from './BaseMap'
 import { ControlOverlay } from './ControlOverlay'
 import { LayerDetailsBox } from './LayerDetailsBox'
-import MapHistory from './MapHistory'
+import { MapHistory } from './MapHistory'
 import { RightClickMapMenu } from './RightClickMapMenu'
 import { SelectedControlOverlay } from './SelectedControlOverlay'
 import { TrackTypeOverlay } from './TrackTypeOverlay'
-import VesselTrackOverlay from './VesselTrackOverlay'
+import { VesselTrackOverlay } from './VesselTrackOverlay'
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
 import { AdministrativeLayers } from '../../AdministrativeZone/layers/AdministrativeLayers'
 import { DrawLayer } from '../../Draw/layer'
@@ -39,7 +39,7 @@ import { HoveredStationOverlay } from '../../Station/components/HoveredStationOv
 import { SelectedStationOverlay } from '../../Station/components/SelectedStationOverlay'
 import { StationLayer } from '../../Station/components/StationLayer'
 import { VesselCardOverlay } from '../../Vessel/components/VesselCardOverlay'
-import VesselEstimatedPositionOverlay from '../../Vessel/components/VesselEstimatedPositionOverlay'
+import { VesselEstimatedPositionOverlay } from '../../Vessel/components/VesselEstimatedPositionOverlay'
 import { VesselSelectedLayer } from '../../Vessel/layers/SelectedVesselLayer/VesselSelectedLayer'
 import { VesselAlertAndBeaconMalfunctionLayer } from '../../Vessel/layers/VesselAlertAndBeaconMalfunctionLayer'
 import { VesselAlertLayer } from '../../Vessel/layers/VesselAlertLayer'
@@ -66,7 +66,7 @@ export function MainMap() {
   const [shouldUpdateView, setShouldUpdateView] = useState(true)
   const [historyMoveTrigger, setHistoryMoveTrigger] = useState({})
   const [hoveredFeature, setHoveredFeature] = useState<Feature | FeatureWithCodeAndEntityId | undefined>(undefined)
-  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<Object>({})
+  const [mapMovingAndZoomEvent, setMapMovingAndZoomEvent] = useState<object>({})
 
   const hoveredFeatureWithCodeAndEntityId =
     hoveredFeature && hoveredFeature instanceof FeatureWithCodeAndEntityId ? hoveredFeature : undefined

@@ -38,7 +38,7 @@ export function InfractionRow({
   return (
     <InfractionRowWrapper $isFirst={isFirst}>
       <CheckTreePicker
-        error={rowError as string | undefined}
+        error={rowError}
         isLight={isLight}
         isRequired={isFirst}
         isSelect

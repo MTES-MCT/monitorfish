@@ -11,8 +11,8 @@ export type MeasurementState = {
     measurement: any
   } | null
   circleMeasurementToAdd: CircleMeasurementToAdd | undefined
-  measurementTypeToAdd: MeasurementType | null
   measurementsDrawed: DrawedMeasurement[]
+  measurementTypeToAdd: MeasurementType | null
 }
 const INITIAL_STATE: MeasurementState = {
   circleMeasurementInDrawing: null,

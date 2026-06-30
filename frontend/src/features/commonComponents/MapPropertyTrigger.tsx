@@ -5,13 +5,15 @@ import styled from 'styled-components'
 /**
  * `IconSVG` props is deprecated, use `Icon` instead.
  */
+const DEFAULT_BOOLEAN_VERBS: [string, string] = ['Masquer', 'Afficher']
+
 type MapPropertyTriggerProps = Readonly<{
-  Icon?: FunctionComponent<JSX.Element>
-  // TODO Remove this legacy props
-  IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   booleanProperty: boolean
   booleanVerbs?: [string, string]
   disabled?: boolean
+  Icon?: FunctionComponent<JSX.Element>
+  // TODO Remove this legacy props
+  IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
   inverse?: boolean
   text: string
   updateBooleanProperty: (isChecked) => void
@@ -19,7 +21,7 @@ type MapPropertyTriggerProps = Readonly<{
 
 export function MapPropertyTrigger({
   booleanProperty,
-  booleanVerbs = ['Masquer', 'Afficher'],
+  booleanVerbs = DEFAULT_BOOLEAN_VERBS,
   disabled,
   Icon,
   IconSVG,

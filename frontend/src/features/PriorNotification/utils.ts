@@ -71,7 +71,7 @@ export function getFormValuesFishingCatchesFromFormDataFishingCatches(
           : {
               ...existingBluefinTunaFishingCatch,
               $bluefinTunaExtendedCatch: {
-                ...(existingBluefinTunaFishingCatch.$bluefinTunaExtendedCatch ?? {}),
+                ...existingBluefinTunaFishingCatch.$bluefinTunaExtendedCatch,
                 [formDataFishingCatch.specyCode]: {
                   quantity: formDataFishingCatch.quantity ?? 0,
                   specyName: formDataFishingCatch.specyName,

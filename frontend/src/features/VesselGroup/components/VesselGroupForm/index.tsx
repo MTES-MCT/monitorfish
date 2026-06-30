@@ -29,6 +29,8 @@ import styled from 'styled-components'
 import type { FormikProps } from 'formik'
 import type { Promisable } from 'type-fest'
 
+const DEFAULT_VESSEL_IDENTITIES: VesselIdentityForVesselGroup[] = []
+
 type VesselGroupFormProps = {
   editedVesselGroup: CreateOrUpdateVesselGroup | undefined
   formRef: MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>
@@ -47,7 +49,7 @@ export function VesselGroupForm({
   listFilterValues,
   onChange,
   onExit,
-  vesselIdentities = []
+  vesselIdentities = DEFAULT_VESSEL_IDENTITIES
 }: VesselGroupFormProps) {
   const dispatch = useMainAppDispatch()
   const { newWindowContainerRef } = useNewWindow()
@@ -86,7 +88,7 @@ export function VesselGroupForm({
     <div ref={ref}>
       <Formik
         initialValues={newOrEditedVesselGroup}
-        innerRef={formRef as MutableRefObject<FormikProps<CreateOrUpdateVesselGroup>>}
+        innerRef={formRef}
         onSubmit={handleOnSubmit}
         validate={validationSchema}
       >

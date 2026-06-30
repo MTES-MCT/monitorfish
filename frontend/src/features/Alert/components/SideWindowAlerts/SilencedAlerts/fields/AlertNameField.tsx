@@ -41,7 +41,7 @@ export function AlertNameField() {
       <Select
         label="Alerte suspendue"
         name="alertName"
-        onChange={nextValue => add(nextValue as string | undefined)}
+        onChange={nextValue => add(nextValue)}
         options={alertsAsOptions}
         searchable
         style={{ width: '495px' }}

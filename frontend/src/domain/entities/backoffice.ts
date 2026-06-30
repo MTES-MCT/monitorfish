@@ -65,13 +65,13 @@ export const SORTED_CATEGORY_LIST = [
   'Engins divers'
 ]
 
-const CATEGORIES_TO_HIDE = ['engins inconnus', "pas d'engin", 'engins de pêche récréative']
+const CATEGORIES_TO_HIDE = new Set(['engins inconnus', "pas d'engin", 'engins de pêche récréative'])
 
 export const prepareCategoriesAndGearsToDisplay = (
   categoriesToGears: Record<string, Gear[]>
 ): TreeBranchOptionWithValue[] =>
   SORTED_CATEGORY_LIST.map(category => {
-    if (!CATEGORIES_TO_HIDE.includes(category) && categoriesToGears[category]) {
+    if (!CATEGORIES_TO_HIDE.has(category) && categoriesToGears[category]) {
       const categoryGearList = [...categoriesToGears[category]]
       const gears: Option[] = categoryGearList
         .sort((gearA, gearB) => {

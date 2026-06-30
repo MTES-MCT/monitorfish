@@ -42,12 +42,10 @@ export function CustomSelectComponent({
       isLabelHidden
       isTransparent
       label={label}
-      locale={
-        {
-          emptyMessage,
-          noResultsText: emptyMessage
-        } as any
-      }
+      locale={{
+        emptyMessage,
+        noResultsText: emptyMessage
+      }}
       name={name}
       onChange={onChange}
       options={options}

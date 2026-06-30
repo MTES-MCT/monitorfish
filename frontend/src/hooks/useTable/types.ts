@@ -39,9 +39,9 @@ export type TableOptions<T extends CollectionItem> = {
   columns: TableColumn<T>[]
   defaultSortedKey?: string
   isDefaultSortingDesc?: boolean
+  searchableKeys?: string[]
   searchFuseOptions?: IFuseOptions<TableItem<T>>
   searchQuery?: string
-  searchableKeys?: string[]
 }
 
 export type TableItem<T extends CollectionItem> = T & {

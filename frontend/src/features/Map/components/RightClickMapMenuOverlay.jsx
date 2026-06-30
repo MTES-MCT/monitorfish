@@ -1,11 +1,11 @@
 import Overlay from 'ol/Overlay'
 import { createRef, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
+import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { addVesselToFavorites } from '../../FavoriteVessel/slice'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
@@ -13,7 +13,7 @@ import { showVesselTrack } from '../../Vessel/useCases/showVesselTrack'
 import { monitorfishMap } from '../monitorfishMap'
 
 export function RightClickMapMenuOverlay({ coordinates, vessel }) {
-  const dispatch = useDispatch()
+  const dispatch = useMainAppDispatch()
 
   const ref = createRef()
   /** @type {React.MutableRefObject<import('ol').Overlay | undefined>} */

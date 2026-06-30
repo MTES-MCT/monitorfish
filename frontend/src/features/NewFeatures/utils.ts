@@ -8,10 +8,9 @@ export function getFeaturesByMonths(features: MonitorFishFeature[]): Record<stri
     const date = customDayjs(feature.date).format('MMMM YYYY')
     const dateFeatures = acc[date]?.concat(feature) ?? [feature]
 
-    return {
-      ...acc,
-      [date]: orderBy(dateFeatures, 'date', ['desc'])
-    }
+    acc[date] = orderBy(dateFeatures, 'date', ['desc'])
+
+    return acc
   }, {})
 }
 

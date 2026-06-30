@@ -40,7 +40,7 @@ export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRe
           }
         })
         if (regulatoryZoneMetadata) {
-          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata as any)) {
+          if (!searchResultIncludeZone(searchResult, regulatoryZoneMetadata)) {
             dispatch(regulationActions.closeRegulatoryZoneMetadataPanel())
           }
         }

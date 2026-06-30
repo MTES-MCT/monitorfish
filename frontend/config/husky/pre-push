@@ -1,0 +1,11 @@
+set -e
+
+# Slow, whole-project checks that can't be scoped to staged files live here (pre-push)
+# rather than pre-commit, to keep commits fast.
+cd ./frontend
+
+# Full TypeScript type-check
+npm run test:type
+
+# Type-aware lint (typescript-eslint, needs full type information)
+npm run test:lint:types

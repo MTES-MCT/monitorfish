@@ -1,15 +1,15 @@
 // TODO Re-enable ESLint for this old file which has been migrated from JSX to TSX.
 /* eslint-disable */
 
-import {Accent, Icon, IconButton, TextInput, THEME} from '@mtes-mct/monitor-ui'
-import {useCallback} from 'react'
-import {Table} from 'rsuite'
+import { Accent, Icon, IconButton, TextInput, THEME } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
+import { Table } from 'rsuite'
 import styled from 'styled-components'
 
-import {getRiskFactorColor} from '@features/RiskFactor/utils'
-import {RiskFactorBox} from '@features/RiskFactor/components/RiskFactorBox'
+import { getRiskFactorColor } from '@features/RiskFactor/utils'
+import { RiskFactorBox } from '@features/RiskFactor/components/RiskFactorBox'
 
-import type {InnerCellProps} from 'rsuite-table/lib/Cell'
+import type { InnerCellProps } from 'rsuite-table/lib/Cell'
 
 const { Cell } = Table
 export const INPUT_TYPE = {
@@ -86,7 +86,7 @@ export function ModifiableCell({
             marginRight: 0,
             marginTop: -8,
             paddingLeft: 5,
-            paddingRight: 10,
+            paddingRight: 10
           }}
           value={rowData[dataKey]}
         />

@@ -19,12 +19,16 @@ export function TwelveMonthsSummary({ threatSummary }: TwelveMonthsSummaryProps)
           </Threat>
         )}
         {Object.keys(threatSummary).map(threat => (
-          <Threat>
+          <Threat key={threat}>
             <Label>{threat}</Label>
 
             <Tags>
               {threatSummary[threat]?.map(infraction => (
-                <Tag backgroundColor={THEME.color.gainsboro} title={getTitle(threat, infraction)}>
+                <Tag
+                  key={infraction.natinfCode}
+                  backgroundColor={THEME.color.gainsboro}
+                  title={getTitle(threat, infraction)}
+                >
                   <BadgeNumber>{infraction.numberOfOccurrences}</BadgeNumber>
                   {infraction.threatCharacterization} / NATINF {infraction.natinfCode}
                 </Tag>

@@ -65,6 +65,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Lint Backend
+        run: ./gradlew ktlintCheck
+        working-directory: ./backend
+
       - name: Unit test
         run: make test-back
 
@@ -93,6 +97,14 @@ jobs:
 
       - name: Lint Frontend
         run: npm run test:lint
+        working-directory: ./frontend
+
+      - name: Type-aware lint Frontend
+        run: npm run test:lint:types
+        working-directory: ./frontend
+
+      - name: Check Frontend formatting
+        run: npm run test:format
         working-directory: ./frontend
 
       - name: Check Frontend types

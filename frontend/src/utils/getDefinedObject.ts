@@ -13,5 +13,5 @@ const isAnyPropUndefined = <T extends AnyObject>(obj: T, keys: Array<keyof T>): 
 }
 
 export function getDefinedObject<T extends AnyObject>(obj: T, keys: Array<keyof T>): Define<T> | undefined {
-  return isAnyPropUndefined(obj, keys) ? undefined : (obj as Define<T>)
+  return isAnyPropUndefined(obj, keys) ? undefined : obj
 }

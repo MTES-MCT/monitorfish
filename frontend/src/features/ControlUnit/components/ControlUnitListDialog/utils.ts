@@ -44,18 +44,10 @@ export function displayBaseNamesFromControlUnit(controlUnit: ControlUnit.Control
 export function displayControlUnitResourcesFromControlUnit(controlUnit: ControlUnit.ControlUnit): string {
   const controlUnitResourceTypeCounts = controlUnit.controlUnitResources.filter(isNotArchived).reduce(
     (previousControlUnitResourceTypeCounts, controlUnitResource) => {
-      const controlUnitResourceTypeCount = previousControlUnitResourceTypeCounts[controlUnitResource.type]
-      if (!controlUnitResourceTypeCount) {
-        return {
-          ...previousControlUnitResourceTypeCounts,
-          [controlUnitResource.type]: 1
-        }
-      }
+      const controlUnitResourceTypeCount = previousControlUnitResourceTypeCounts[controlUnitResource.type] ?? 0
+      previousControlUnitResourceTypeCounts[controlUnitResource.type] = controlUnitResourceTypeCount + 1
 
-      return {
-        ...previousControlUnitResourceTypeCounts,
-        [controlUnitResource.type]: controlUnitResourceTypeCount + 1
-      }
+      return previousControlUnitResourceTypeCounts
     },
     {} as Record<string, number>
   )
@@ -104,13 +96,13 @@ export function getFilters(
   // Base
   if (filtersState.stationId) {
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
-      controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
+      controlUnits.filter(controlUnit => {
         const matches = controlUnit.controlUnitResources.filter(
           ({ isArchived, stationId }) => !isArchived && stationId === filtersState.stationId
         )
 
-        return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
-      }, [])
+        return matches.length > 0
+      })
 
     filters.push(filter)
   }
@@ -118,15 +110,15 @@ export function getFilters(
   // Control Unit Resource Category
   if (filtersState.categories) {
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
-      controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
+      controlUnits.filter(controlUnit => {
         const matches = controlUnit.controlUnitResources.filter(({ isArchived, type }) => {
           const category = getControlUnitResourceCategoryFromType(type)
 
           return !isArchived && !!category && filtersState.categories?.includes(category)
         })
 
-        return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
-      }, [])
+        return matches.length > 0
+      })
 
     filters.push(filter)
   }
@@ -134,13 +126,13 @@ export function getFilters(
   // Control Unit Resource Type
   if (filtersState.type) {
     const filter: Filter<ControlUnit.ControlUnit> = controlUnits =>
-      controlUnits.reduce<ControlUnit.ControlUnit[]>((previousControlUnits, controlUnit) => {
+      controlUnits.filter(controlUnit => {
         const matches = controlUnit.controlUnitResources.filter(
           ({ isArchived, type }) => !isArchived && type === filtersState.type
         )
 
-        return matches.length > 0 ? [...previousControlUnits, controlUnit] : previousControlUnits
-      }, [])
+        return matches.length > 0
+      })
 
     filters.push(filter)
   }

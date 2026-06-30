@@ -12,11 +12,7 @@ jest.mock('../../constants', () => ({
 import { computeIsEISREnabled } from '../useIsEISREnabled'
 
 // Same instance required by the module under test, so mutations are picked up.
-const mockConstants = jest.requireMock('../../constants') as {
-  E_ISR_APPLICATION_DATE: string
-  E_ISR_CONTROL_UNITS_FOR_TEST: number[]
-  E_ISR_ENABLED: boolean
-}
+const mockConstants = jest.requireMock('../../constants')
 
 describe('computeIsEISREnabled', () => {
   beforeEach(() => {

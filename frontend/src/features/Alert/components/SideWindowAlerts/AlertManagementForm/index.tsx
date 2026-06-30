@@ -120,7 +120,7 @@ export function AlertManagementForm() {
           withAutomaticClosing: true
         })
       )
-    } catch (e) {
+    } catch {
       dispatch(
         addSideWindowBanner({
           children: isCreation ? CREATE_ALERT_ERROR_MESSAGE : UPDATE_ALERT_ERROR_MESSAGE,
@@ -157,7 +157,7 @@ export function AlertManagementForm() {
         category: 'ALERT_MANAGEMENT',
         name: 'CNSP'
       })
-    } catch (e) {
+    } catch {
       dispatch(
         addSideWindowBanner({
           children: DELETE_ALERT_ERROR_MESSAGE,
@@ -217,7 +217,7 @@ export function AlertManagementForm() {
                   <FormikTextInput isRequired label="Nom" name="name" />
                   <FormikTextarea isRequired label="Description" name="description" />
                   <CheckTreePicker
-                    error={errors.threatHierarchy as string | undefined}
+                    error={errors.threatHierarchy}
                     isRequired
                     isSelect
                     label="Type d’infraction et NATINF"

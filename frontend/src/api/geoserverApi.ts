@@ -40,7 +40,7 @@ export const geoserverApi = createApi({
           }
 
           return { error }
-        } catch (e) {
+        } catch {
           if (import.meta.env.DEV) {
             return {
               data: {

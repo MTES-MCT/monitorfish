@@ -22,7 +22,7 @@ export const openBeaconMalfunction =
     try {
       const beaconMalfunctionWithDetails = await dispatch(
         beaconMalfunctionApi.endpoints.getBeaconMalfunction.initiate(
-          beaconMalfunction.beaconMalfunction?.id as number,
+          beaconMalfunction.beaconMalfunction?.id,
           RTK_FORCE_REFETCH_QUERY_OPTIONS
         )
       ).unwrap()

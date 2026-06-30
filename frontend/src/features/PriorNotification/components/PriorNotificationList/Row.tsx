@@ -210,7 +210,9 @@ export function Row({ row }: RowProps) {
                   backgroundColor={THEME.color.maximumRed15}
                   color={THEME.color.maximumRed}
                   onClick={openReportingList}
+                  // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- FixedTag is a styled Tag used as an in-app action trigger, not a navigable anchor
                   role="link"
+                  tabIndex={0}
                   title="Ouvrir la liste des signalements pour ce navire"
                 >{`${
                   priorNotification.reportingCount

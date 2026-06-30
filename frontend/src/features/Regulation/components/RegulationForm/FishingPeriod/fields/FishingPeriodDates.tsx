@@ -23,7 +23,8 @@ export function FishingPeriodDates({ disabled }) {
       </ContentWrapper>
       <DateList>
         {fishingPeriod?.dates?.map((date, id) => (
-          <FishingPeriodDate date={date} disabled={disabled} id={id} />
+          // eslint-disable-next-line react/no-array-index-key
+          <FishingPeriodDate key={id} date={date} disabled={disabled} id={id} />
         ))}
       </DateList>
       <ContentWrapper $alignSelf="flex-end">

@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# Standalone ktlint launcher used by the pre-commit hook for fast, per-staged-file formatting.
+# Pinned to the same version as the Gradle ktlint plugin (see backend/build.gradle.kts) so local
+# formatting and CI `ktlintCheck` stay consistent. The binary is downloaded once and cached under
+# the user's cache dir (not committed). Requires `curl` and a JRE on PATH.
+set -e
+
+KTLINT_VERSION="1.5.0"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/monitorfish/ktlint"
+KTLINT_BIN="$CACHE_DIR/ktlint-$KTLINT_VERSION"
+
+if [ ! -x "$KTLINT_BIN" ]; then
+  echo "Downloading ktlint $KTLINT_VERSION..." >&2
+  mkdir -p "$CACHE_DIR"
+  curl -sSLf "https://github.com/pinterest/ktlint/releases/download/$KTLINT_VERSION/ktlint" -o "$KTLINT_BIN"
+  chmod +x "$KTLINT_BIN"
+fi
+
+exec "$KTLINT_BIN" "$@"

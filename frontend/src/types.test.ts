@@ -1,3 +1,6 @@
+/* eslint-disable jest/no-export, jest/expect-expect -- This is a type-level test: the exported
+   consts are validated by `tsc` via the `@ts-expect-error`/`@ts-expect-no-error` annotations, and
+   the dummy `it` only satisfies jest's "must contain at least one test" requirement. */
 import { describe, it } from '@jest/globals'
 
 import type { Undefine } from '@mtes-mct/monitor-ui'
@@ -28,5 +31,5 @@ describe('types', () => {
    * - undefinableTestInterface
    * - undefinableTestInterfaceWithMissingProp
    */
-  it('dummy test ', async () => {})
+  it('dummy test', async () => {})
 })

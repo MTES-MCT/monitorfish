@@ -35,7 +35,7 @@ export function LastControl({ field }: LastControlProps) {
               <Red />
               <br />
               {control.infractions.map(infraction => (
-                <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
+                <StyledTag key={infraction.natinf} accent={Accent.PRIMARY} title={getInfractionTitle(infraction)}>
                   {infraction.threatCharacterization} / NATINF {infraction.natinf}
                 </StyledTag>
               ))}

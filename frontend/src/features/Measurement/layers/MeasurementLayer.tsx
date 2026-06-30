@@ -17,7 +17,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 
 import { measurementStyle, measurementStyleWithCenter } from './measurement.style'
 import { UserAccountContext } from '../../../context/UserAccountContext'
-import MeasurementOverlay from '../components/MeasurementOverlay'
+import { MeasurementOverlay } from '../components/MeasurementOverlay'
 import { removeMeasurementDrawed, resetMeasurementTypeToAdd, setCircleMeasurementInDrawing } from '../slice'
 import { saveMeasurement } from '../useCases/saveMeasurement'
 

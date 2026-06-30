@@ -424,7 +424,7 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
     initial_beacons_malfunctions = read_query(
         "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
-    with patch("src.flows.update_beacon_malfunctions.requests"):
+    with patch("src.shared_tasks.beacon_malfunctions.requests"):
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=24,
@@ -465,7 +465,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         db="monitorfish_remote",
     ).iloc[0, 0]
 
-    with patch("src.flows.update_beacon_malfunctions.requests") as mock_requests:
+    with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=12,
             max_hours_without_emission_at_port=24,
@@ -542,7 +542,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         db="monitorfish_remote",
     )
 
-    with patch("src.flows.update_beacon_malfunctions.requests"):
+    with patch("src.shared_tasks.beacon_malfunctions.requests"):
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=1,
@@ -596,7 +596,7 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         "SELECT * FROM beacon_malfunctions", db="monitorfish_remote"
     )
 
-    with patch("src.flows.update_beacon_malfunctions.requests"):
+    with patch("src.shared_tasks.beacon_malfunctions.requests"):
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=1,
@@ -632,7 +632,7 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
         db="monitorfish_remote",
     )
 
-    with patch("src.flows.update_beacon_malfunctions.requests"):
+    with patch("src.shared_tasks.beacon_malfunctions.requests"):
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=24,

@@ -21,7 +21,7 @@ from src.shared_tasks.beacon_malfunctions import (
 from tests.mocks import mock_datetime_utcnow
 
 
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
@@ -38,7 +38,7 @@ def test_update_beacon_malfunction_raises_when_both_stage_and_status_are_supplie
         )
 
 
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
@@ -52,7 +52,7 @@ def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
         )
 
 
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
@@ -74,7 +74,7 @@ def test_update_beacon_malfunction_updates_status(mock_requests):
     )
 
 
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
@@ -103,7 +103,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
         EndOfMalfunctionReason.BEACON_DEACTIVATED_OR_UNEQUIPPED,
     ],
 )
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
@@ -129,7 +129,7 @@ def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests, reaso
     )
 
 
-@patch("src.flows.update_beacon_malfunctions.requests")
+@patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
     "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",

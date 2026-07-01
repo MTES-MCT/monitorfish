@@ -108,6 +108,11 @@ context('Show reporting from the reporting list', () => {
 
       const createdReportingId: number = createInterception.response.body.id
 
+      // The form must be done auto-saving (no longer dirty) before closing, otherwise "Fermer" opens an
+      // unsaved-changes confirmation dialog instead of actually closing it
+      cy.wait('@displayReportings')
+      cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
+
       cy.clickButton('Fermer')
       cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 

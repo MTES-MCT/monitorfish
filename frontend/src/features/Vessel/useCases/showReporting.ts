@@ -30,7 +30,6 @@ export const showReporting =
 
       let positionToMoveTo: [number, number] | undefined
 
-      // if reporting has a position, we will center the map on that
       if (reporting.longitude !== undefined && reporting.latitude !== undefined) {
         positionToMoveTo = [reporting.longitude, reporting.latitude]
       }
@@ -43,8 +42,6 @@ export const showReporting =
         reporting.ircs !== undefined
 
       if (reportingHasVessel) {
-        // fetching vessel info
-
         const vesselIdentity = extractVesselIdentityProps(reporting)
         dispatch(loadingVessel(vesselIdentity))
 
@@ -65,8 +62,6 @@ export const showReporting =
           )
         ).unwrap()
 
-        // if the reporting has no position but the vessel has one,
-        // we will center the map on the vessel position
         const { vessel } = vesselAndPositions
         if (
           positionToMoveTo === undefined &&
@@ -84,12 +79,10 @@ export const showReporting =
         )
         dispatch(reportingActions.unsetEditedReporting())
 
-        // opening vessel sidebar at reporting tab
         dispatch(setSelectedVessel(vesselAndPositions))
         dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))
       }
 
-      // centering map on position if any
       if (positionToMoveTo !== undefined) {
         const coordinates = transform(positionToMoveTo, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
         if (coordinates[0] !== undefined && coordinates[1] !== undefined) {
@@ -99,12 +92,10 @@ export const showReporting =
       }
 
       if (!reportingHasVessel) {
-        // closing vessel sidebar and opening reporting form
         dispatch(closeVesselSidebar())
         dispatch(editReportingFromMap(reporting.id))
       }
 
-      // open reporting popup
       const featureId = `${LayerProperties.REPORTING.code}:${reporting.id}`
       dispatch(reportingActions.selectReportingFeatureId(featureId))
     } catch (error) {

@@ -34,11 +34,16 @@ context('Show reporting from the reporting list', () => {
       .click({ force: true })
 
     // Then: the reporting is force-displayed on the map and selected, despite the reportings layer being hidden
+    // (matching only by vessel name isn't enough to pick out a specific feature when this vessel has more
+    // than one reporting, so check that at least one of its features is the selected one)
     cy.getFeaturesFromLayer('REPORTING').should(features => {
-      const feature = features.find(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
+      const matchingFeatures = features.filter(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
 
-      assert.exists(feature, 'reporting feature should be force-displayed on the map')
-      expect(feature?.get('isSelected'), 'reporting feature should be selected').to.equal(true)
+      assert.isNotEmpty(matchingFeatures, 'reporting feature should be force-displayed on the map')
+      expect(
+        matchingFeatures.some(f => f.get('isSelected') === true),
+        'one of its reporting features should be selected'
+      ).to.equal(true)
     })
 
     // And: the vessel sidebar opens on the reporting tab for that vessel

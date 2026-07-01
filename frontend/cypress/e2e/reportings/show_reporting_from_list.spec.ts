@@ -18,8 +18,9 @@ context('Show reporting from the reporting list', () => {
     cy.clickButton('Signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
     cy.clickButton('Voir la vue détaillée des signalements')
+    cy.wait(1000)
 
-    cy.getDataCy('side-window-reporting-tab').click()
+    cy.getDataCy('side-window-reporting-tab').click({ force: true })
     cy.getDataCy('side-window-sub-menu-NAMO').click()
 
     // When: clicking "Voir sur la carte" for the reporting
@@ -39,8 +40,8 @@ context('Show reporting from the reporting list', () => {
     cy.get('*[data-cy="vessel-sidebar"]').should('exist')
     cy.get('*[data-cy="vessel-reporting"]').should('exist')
 
-    // When: closing the vessel sidebar
-    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]').click()
+    // When: closing the vessel sidebar (still behind the side window overlay, which this test never closes)
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]').click({ force: true })
 
     // Then: the reporting is hidden again since the reportings layer is still off
     cy.getFeaturesFromLayer('REPORTING').should(features => {

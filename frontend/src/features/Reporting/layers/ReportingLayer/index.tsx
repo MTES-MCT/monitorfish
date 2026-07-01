@@ -40,9 +40,13 @@ function UnmemoizedReportingLayer() {
   // The reporting being edited and the one selected on the map (e.g. via "voir sur la carte") are fetched by
   // id below with no isArchived filter applied, so archived reportings are included regardless of archive state.
   const selectedReportingId = useMemo(() => {
-    const id = selectedReportingFeatureId && Number(selectedReportingFeatureId.split(':').at(-1))
+    if (!selectedReportingFeatureId) {
+      return undefined
+    }
 
-    return id !== undefined && !Number.isNaN(id) ? id : undefined
+    const id = Number(selectedReportingFeatureId.split(':').at(-1))
+
+    return Number.isNaN(id) ? undefined : id
   }, [selectedReportingFeatureId])
 
   const extraIds = useMemo(

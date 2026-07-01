@@ -1,3 +1,5 @@
+import { Icon } from '@mtes-mct/monitor-ui'
+
 import { getApplicabilityByFieldName } from './getSpeciesEISRApplicability'
 
 import type { SpeciesEISRApplicability } from './getSpeciesEISRApplicability'
@@ -8,7 +10,12 @@ const BASE_SPECIES_CHECK_ROWS: ControlCheckRow[] = [
   { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
   {
     isRequired: true,
-    label: 'Arrimage séparé des espèces soumises à plan',
+    label: (
+      <>
+        Arrimage séparé des espèces soumises à plan{' '}
+        <Icon.Info size={16} title="concernés : espèces démersales / SWO / BFT" />
+      </>
+    ),
     name: 'separateStowageOfPreservedSpecies'
   }
 ]

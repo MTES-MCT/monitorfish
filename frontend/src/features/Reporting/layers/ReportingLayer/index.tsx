@@ -41,9 +41,8 @@ function UnmemoizedReportingLayer() {
 
   const { data: filterData, error } = useDisplayReportingsQuery(displayFilters, { skip: skipQuery })
 
-  // XXX: missing archived??
-
-  // XXX: lot of codedup
+  // Reportings forced-visible below (edited reporting, selected vessel's reportings) are fetched by id
+  // with no isArchived filter applied, so archived reportings are included regardless of their archive state.
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
 
   const selectedLegacyVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
@@ -56,7 +55,8 @@ function UnmemoizedReportingLayer() {
     [selectedLegacyVesselIdentity]
   )
 
-  // XXX: this is assumed when it can differ in the sidebar
+  // Uses the default reportings start date rather than the vessel sidebar's own (potentially custom) date range,
+  // so a vessel reporting older than the default window may not get forced-visible here even if it's in the sidebar.
   const startDate = getDefaultReportingsStartDate()
 
   const showSelectedVesselReportings = !!(selectedVesselIdentity && isVesselSidebarOpen)
@@ -90,16 +90,15 @@ function UnmemoizedReportingLayer() {
     startDate: undefined
   })
 
-  // FIXME: this has a lot of cpu complexity
-  const data = useMemo(
-    () => [
-      ...(isReportingLayerDisplayed ? (filterData ?? []) : []),
-      ...(isReportingLayerDisplayed
-        ? (extraData ?? []).filter(d => !filterData?.find(fd => fd.id === d.id))
-        : (extraData ?? []))
-    ],
-    [extraData, filterData, isReportingLayerDisplayed]
-  )
+  const data = useMemo(() => {
+    if (!isReportingLayerDisplayed) {
+      return extraData ?? []
+    }
+
+    const filterDataIds = new Set((filterData ?? []).map(d => d.id))
+
+    return [...(filterData ?? []), ...(extraData ?? []).filter(d => !filterDataIds.has(d.id))]
+  }, [extraData, filterData, isReportingLayerDisplayed])
 
   useMapLayer(REPORTINGS_VECTOR_LAYER)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
@@ -139,8 +138,7 @@ function UnmemoizedReportingLayer() {
 
     dispatch(
       addMainWindowBanner({
-        // TODO: better formating if two errors
-        children: [((error as Error | undefined)?.message, (extraError as Error | undefined)?.message)]
+        children: [(error as Error | undefined)?.message, (extraError as Error | undefined)?.message]
           .filter(d => !!d)
           .join('\n'),
         closingDelay: 6000,

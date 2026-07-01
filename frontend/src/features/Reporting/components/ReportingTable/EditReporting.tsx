@@ -12,8 +12,6 @@ import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
 import { ReportingForm } from '../ReportingForm'
 
-// $isEditedInSideWindow is deadCode?
-
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)

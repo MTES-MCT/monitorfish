@@ -19,19 +19,6 @@ import { vesselApi } from '../vesselApi'
 import type { Reporting } from '@features/Reporting/types'
 import type { MainAppThunk } from '@store'
 
-/* NOTES
-
-** Tous:
-
-** Signalements avec navire:
-
-** Signalements sans navire:
-
-- si on ferme le form de signalement de la liste de signalements,
-  le form reste ouvert dans la main window mais deviens un form pour un nouveau signalement
-  
-*/
-
 /**
  * Show a reporting in the main window
  */
@@ -89,18 +76,13 @@ export const showReporting =
           positionToMoveTo = [vessel.lastPositionLongitude, vessel.lastPositionLatitude]
         }
 
-        // closing reporting form
-        // TODO: cleanup
-        const handleReportingFormClose = () => {
-          // TODO: setIsDraftCancellationConfirmationDialogOpen(false)
-          dispatch(
-            displayedComponentActions.setDisplayedComponents({
-              isReportingMapFormDisplayed: false
-            })
-          )
-          dispatch(reportingActions.unsetEditedReporting())
-        }
-        handleReportingFormClose()
+        // closing reporting form, in case it was open for a different reporting
+        dispatch(
+          displayedComponentActions.setDisplayedComponents({
+            isReportingMapFormDisplayed: false
+          })
+        )
+        dispatch(reportingActions.unsetEditedReporting())
 
         // opening vessel sidebar at reporting tab
         dispatch(setSelectedVessel(vesselAndPositions))

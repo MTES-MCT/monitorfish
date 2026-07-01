@@ -114,7 +114,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   useEffect(() => {
-    if ((showReportingForm && editedReporting) ?? openedBeaconMalfunctionInKanban) {
+    if ((showReportingForm && editedReporting) || openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return

@@ -26,7 +26,10 @@ context('Show reporting from the reporting list', () => {
     cy.getDataCy('side-window-sub-menu-NAMO').click({ force: true })
 
     // When: clicking "Voir sur la carte" for the reporting
+    // `.first()` guards against this vessel having more than one reporting row (other specs sharing this
+    // seeded DB may add one) — any of its rows exercises the same "show on map" behavior being tested here.
     cy.get('tr:contains("RENCONTRER VEILLER APPARTEMENT")')
+      .first()
       .find('*[data-cy="side-window-silenced-alerts-show-vessel"]')
       .click({ force: true })
 

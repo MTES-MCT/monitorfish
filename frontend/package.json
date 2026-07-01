@@ -45,7 +45,7 @@
     "@reduxjs/toolkit": "2.12.0",
     "@sentry/react": "8.53.0",
     "@tanstack/react-table": "8.21.3",
-    "@tanstack/react-virtual": "3.14.3",
+    "@tanstack/react-virtual": "3.14.4",
     "@turf/boolean-point-in-polygon": "7.3.5",
     "@turf/helpers": "7.3.5",
     "@types/geojson": "7946.0.16",

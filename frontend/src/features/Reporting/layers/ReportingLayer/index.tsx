@@ -1,4 +1,3 @@
-import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
@@ -10,13 +9,10 @@ import {
 import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingSearchPeriod } from '@features/Reporting/types'
-import { buildReportingFeature, getDefaultReportingsStartDate } from '@features/Reporting/utils'
-import { getVesselIdentityFromLegacyVesselIdentity } from '@features/Vessel/utils'
-import { useGetVesselReportingsByVesselIdentityQuery } from '@features/Vessel/vesselApi'
+import { buildReportingFeature } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Level } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 
 function UnmemoizedReportingLayer() {
@@ -41,44 +37,18 @@ function UnmemoizedReportingLayer() {
 
   const { data: filterData, error } = useDisplayReportingsQuery(displayFilters, { skip: skipQuery })
 
-  // Reportings forced-visible below (edited reporting, selected vessel's reportings) are fetched by id
-  // with no isArchived filter applied, so archived reportings are included regardless of their archive state.
-  const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
+  // The reporting being edited and the one selected on the map (e.g. via "voir sur la carte") are fetched by
+  // id below with no isArchived filter applied, so archived reportings are included regardless of archive state.
+  const selectedReportingId = useMemo(() => {
+    const id = selectedReportingFeatureId && Number(selectedReportingFeatureId.split(':').at(-1))
 
-  const selectedLegacyVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+    return id !== undefined && !Number.isNaN(id) ? id : undefined
+  }, [selectedReportingFeatureId])
 
-  const selectedVesselIdentity = useMemo(
-    () =>
-      selectedLegacyVesselIdentity
-        ? getVesselIdentityFromLegacyVesselIdentity(selectedLegacyVesselIdentity)
-        : undefined,
-    [selectedLegacyVesselIdentity]
+  const extraIds = useMemo(
+    () => Array.from(new Set([editedReporting?.id, selectedReportingId].filter(id => id !== undefined))),
+    [editedReporting?.id, selectedReportingId]
   )
-
-  // Uses the default reportings start date rather than the vessel sidebar's own (potentially custom) date range,
-  // so a vessel reporting older than the default window may not get forced-visible here even if it's in the sidebar.
-  const startDate = getDefaultReportingsStartDate()
-
-  const showSelectedVesselReportings = !!(selectedVesselIdentity && isVesselSidebarOpen)
-
-  const { data: vesselReportings } = useGetVesselReportingsByVesselIdentityQuery(
-    showSelectedVesselReportings
-      ? {
-          fromDate: startDate.toISOString(),
-          vesselIdentity: selectedVesselIdentity
-        }
-      : skipToken,
-    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
-  )
-  const vesselReportingIds = showSelectedVesselReportings ? vesselReportings?.current.map(vr => vr.reporting.id) : []
-
-  const extraIds: number[] = []
-  if (editedReporting?.id !== undefined) {
-    extraIds.push(editedReporting.id)
-  }
-  if (vesselReportingIds !== undefined) {
-    extraIds.push(...vesselReportingIds.filter(id => !extraIds.find(eid => eid === id)))
-  }
 
   const { data: extraData, error: extraError } = useDisplayReportingsQuery({
     endDate: undefined,
@@ -112,7 +82,8 @@ function UnmemoizedReportingLayer() {
       return
     }
 
-    if (!REPORTINGS_VECTOR_SOURCE.getFeatureById(id)) {
+    // Still displayed, nothing to unselect
+    if (REPORTINGS_VECTOR_SOURCE.getFeatureById(id)) {
       return
     }
 
@@ -127,6 +98,10 @@ function UnmemoizedReportingLayer() {
       .map(reporting => buildReportingFeature(reporting))
     REPORTINGS_VECTOR_SOURCE.clear(true)
     REPORTINGS_VECTOR_SOURCE.addFeatures(features)
+
+    // The source was just rebuilt from scratch (every feature starts unselected), so the selected feature's
+    // marker highlight needs reapplying here too, not just when selectedReportingFeatureId itself changes.
+    trySetFeatureSelected(selectedReportingFeatureIdRef.current, true)
 
     hideDisplayedOverlaysWhenFeatureFiltered()
   }, [data, dispatch, hideDisplayedOverlaysWhenFeatureFiltered])

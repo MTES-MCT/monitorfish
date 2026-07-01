@@ -19,6 +19,14 @@ export type SpeciesEISRApplicability = {
   isUnderSizedSeparateStowageApplicable: boolean
 }
 
+// Before a vessel is selected there is no species/length data to decide anything from — default
+// to applicable, the same conservative stance taken for an unknown vessel length.
+export const DEFAULT_SPECIES_EISR_APPLICABILITY: SpeciesEISRApplicability = {
+  isSeparateStowageOfPreservedSpeciesApplicable: true,
+  isUnderSizedSeparateRecordingApplicable: true,
+  isUnderSizedSeparateStowageApplicable: true
+}
+
 export function hasDemersalSpeciesOnboard(
   speciesOnboard: MissionAction.SpeciesOnboardControl[] | undefined,
   getScipSpeciesTypeFromSpecyCode: ScipSpeciesTypeLookup

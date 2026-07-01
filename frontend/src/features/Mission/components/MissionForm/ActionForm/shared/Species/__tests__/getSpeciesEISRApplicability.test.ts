@@ -2,6 +2,7 @@ import { ScipSpeciesType } from '@features/FleetSegment/types'
 import { expect } from '@jest/globals'
 
 import {
+  DEFAULT_SPECIES_EISR_APPLICABILITY,
   getSmallPelagicsShare,
   getSpeciesEISRApplicability,
   hasBftOrSwoOnboard,
@@ -159,6 +160,23 @@ describe('getSpeciesEISRApplicability', () => {
       const speciesOnboard = [makeSpecy('COD', { controlledWeight: 50 })]
 
       expect(getSpeciesEISRApplicability(speciesOnboard, lookup, 13)).toStrictEqual({
+        isSeparateStowageOfPreservedSpeciesApplicable: true,
+        isUnderSizedSeparateRecordingApplicable: true,
+        isUnderSizedSeparateStowageApplicable: true
+      })
+    })
+
+    it('should return not-applicable for separateStowageOfPreservedSpecies with no species and no vessel length', () => {
+      // Callers must not invoke this before a vessel is selected — see DEFAULT_SPECIES_EISR_APPLICABILITY.
+      expect(getSpeciesEISRApplicability([], lookup, undefined).isSeparateStowageOfPreservedSpeciesApplicable).toBe(
+        false
+      )
+    })
+  })
+
+  describe('DEFAULT_SPECIES_EISR_APPLICABILITY', () => {
+    it('should default every field to applicable', () => {
+      expect(DEFAULT_SPECIES_EISR_APPLICABILITY).toStrictEqual({
         isSeparateStowageOfPreservedSpeciesApplicable: true,
         isUnderSizedSeparateRecordingApplicable: true,
         isUnderSizedSeparateStowageApplicable: true

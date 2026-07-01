@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react'
 
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
-import { getSpeciesEISRApplicability } from './Species/getSpeciesEISRApplicability'
+import { DEFAULT_SPECIES_EISR_APPLICABILITY, getSpeciesEISRApplicability } from './Species/getSpeciesEISRApplicability'
 import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
@@ -75,11 +75,10 @@ export function SpeciesField() {
   const activation = useRowActivation()
   const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
 
-  const speciesEISRApplicability = getSpeciesEISRApplicability(
-    input.value,
-    getScipSpeciesTypeFromSpecyCode,
-    vessel?.length
-  )
+  const speciesEISRApplicability =
+    values.vesselId !== undefined
+      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.length)
+      : DEFAULT_SPECIES_EISR_APPLICABILITY
   useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
 
   /**

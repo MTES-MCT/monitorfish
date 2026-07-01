@@ -20,13 +20,15 @@ context('Show reporting from the reporting list', () => {
     cy.clickButton('Voir la vue détaillée des signalements')
     cy.wait(1000)
 
+    // The side window renders on top of the main window (via a stubbed same-document portal rather than a
+    // real popup), so its actionability checks are unreliable here — force every click inside it.
     cy.getDataCy('side-window-reporting-tab').click({ force: true })
-    cy.getDataCy('side-window-sub-menu-NAMO').click()
+    cy.getDataCy('side-window-sub-menu-NAMO').click({ force: true })
 
     // When: clicking "Voir sur la carte" for the reporting
     cy.get('tr:contains("RENCONTRER VEILLER APPARTEMENT")')
       .find('*[data-cy="side-window-silenced-alerts-show-vessel"]')
-      .click()
+      .click({ force: true })
 
     // Then: the reporting is force-displayed on the map and selected, despite the reportings layer being hidden
     cy.getFeaturesFromLayer('REPORTING').should(features => {

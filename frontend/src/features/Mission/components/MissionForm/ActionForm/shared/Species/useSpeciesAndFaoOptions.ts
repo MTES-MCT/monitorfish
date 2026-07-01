@@ -46,5 +46,17 @@ export function useSpeciesAndFaoOptions() {
     [getSpeciesApiQuery.data]
   )
 
-  return { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions }
+  const getScipSpeciesTypeFromSpecyCode = useCallback(
+    (specyCode: Specy['code']) =>
+      getSpeciesApiQuery.data?.species.find(({ code }) => code === specyCode)?.scipSpeciesType,
+    [getSpeciesApiQuery.data]
+  )
+
+  return {
+    customSearch,
+    faoAreasAsOptions,
+    getScipSpeciesTypeFromSpecyCode,
+    getSpecyNameFromSpecyCode,
+    speciesAsOptions
+  }
 }

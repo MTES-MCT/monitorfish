@@ -1,3 +1,6 @@
+import { getApplicabilityByFieldName } from './getSpeciesEISRApplicability'
+
+import type { SpeciesEISRApplicability } from './getSpeciesEISRApplicability'
 import type { ControlCheckRow } from '../ControlCheckTable'
 
 const BASE_SPECIES_CHECK_ROWS: ControlCheckRow[] = [
@@ -66,10 +69,26 @@ const SEA_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
   }
 ]
 
-export function getSpeciesControlCheckRows(isLandControl: boolean, isEISREnabled: boolean): ControlCheckRow[] {
-  if (isLandControl) {
-    return isEISREnabled ? LAND_CONTROL_EISR_CHECK_ROWS : BASE_SPECIES_CHECK_ROWS
+export function getSpeciesControlCheckRows(
+  isLandControl: boolean,
+  isEISREnabled: boolean,
+  applicability: SpeciesEISRApplicability
+): ControlCheckRow[] {
+  const rows = isLandControl
+    ? isEISREnabled
+      ? LAND_CONTROL_EISR_CHECK_ROWS
+      : BASE_SPECIES_CHECK_ROWS
+    : isEISREnabled
+      ? [...BASE_SPECIES_CHECK_ROWS, ...SEA_CONTROL_EISR_CHECK_ROWS]
+      : BASE_SPECIES_CHECK_ROWS
+
+  if (!isEISREnabled) {
+    return rows
   }
 
-  return isEISREnabled ? [...BASE_SPECIES_CHECK_ROWS, ...SEA_CONTROL_EISR_CHECK_ROWS] : BASE_SPECIES_CHECK_ROWS
+  const isRowApplicable = getApplicabilityByFieldName(applicability)
+
+  return rows.map(row =>
+    row.name in isRowApplicable && !isRowApplicable[row.name] ? Object.assign({}, row, { disabled: true }) : row
+  )
 }

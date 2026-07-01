@@ -78,8 +78,10 @@ context('Show reporting from the reporting list', () => {
 
   it('Should open the reporting form and show it on the map for a reporting without a vessel', () => {
     cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+    cy.wait(2000)
 
     cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
     cy.clickButton('Créer un nouveau signalement INN')
 

@@ -25,13 +25,13 @@ context('Show reporting from the reporting list', () => {
     cy.getDataCy('side-window-reporting-tab').click({ force: true })
     cy.getDataCy('side-window-sub-menu-NAMO').click({ force: true })
 
-    // When: clicking "Voir sur la carte" for the reporting
-    // `.first()` guards against this vessel having more than one reporting row (other specs sharing this
-    // seeded DB may add one) — any of its rows exercises the same "show on map" behavior being tested here.
-    cy.get('tr:contains("RENCONTRER VEILLER APPARTEMENT")')
-      .first()
-      .find('*[data-cy="side-window-silenced-alerts-show-vessel"]')
-      .click({ force: true })
+    // When: clicking "Voir sur la carte" for the reporting.
+    // The table is virtualized, so a plain `cy.get(...).click()` chain can grab a row that gets
+    // re-rendered/detached before the click lands; `clickButton` re-queries and scrolls/retries instead.
+    // `withinSelector` picks the first matching row, which is fine if this vessel has more than one
+    // reporting (other specs sharing this seeded DB may add one) — any of its rows exercises the same
+    // "show on map" behavior being tested here.
+    cy.clickButton('Voir sur la carte', { withinSelector: 'tr:contains("RENCONTRER VEILLER APPARTEMENT")' })
 
     // Then: the reporting is force-displayed on the map and selected, despite the reportings layer being hidden
     // (matching only by vessel name isn't enough to pick out a specific feature when this vessel has more

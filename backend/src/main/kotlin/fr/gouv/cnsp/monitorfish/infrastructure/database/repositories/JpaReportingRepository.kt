@@ -388,5 +388,5 @@ class JpaReportingRepository(
     private fun getIdsPredicate(
         ids: List<Int>,
         reportingEntity: Root<ReportingEntity>,
-    ): Predicate = reportingEntity.get<ReportingType>("id").`in`(*ids.toTypedArray())
+    ): Predicate = reportingEntity.get<Int>("id").`in`(*ids.toTypedArray())
 }

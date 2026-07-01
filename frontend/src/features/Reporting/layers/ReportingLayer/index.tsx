@@ -21,6 +21,10 @@ function UnmemoizedReportingLayer() {
   const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
   const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
+  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
+  const isReportingListFormDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isReportingListFormDisplayed
+  )
 
   const selectedReportingFeatureIdRef = useRef(selectedReportingFeatureId)
   useEffect(() => {
@@ -49,9 +53,14 @@ function UnmemoizedReportingLayer() {
     return Number.isNaN(id) ? undefined : id
   }, [selectedReportingFeatureId])
 
+  // EditReporting (the side-window list's inline edit panel) keeps editedReporting set after closing, to
+  // keep the form's content rendered through its slide-out CSS transition, so it can't be used alone here.
+  const editedReportingId =
+    isReportingMapFormDisplayed || isReportingListFormDisplayed ? editedReporting?.id : undefined
+
   const extraIds = useMemo(
-    () => Array.from(new Set([editedReporting?.id, selectedReportingId].filter(id => id !== undefined))),
-    [editedReporting?.id, selectedReportingId]
+    () => Array.from(new Set([editedReportingId, selectedReportingId].filter(id => id !== undefined))),
+    [editedReportingId, selectedReportingId]
   )
 
   const { data: extraData, error: extraError } = useDisplayReportingsQuery({

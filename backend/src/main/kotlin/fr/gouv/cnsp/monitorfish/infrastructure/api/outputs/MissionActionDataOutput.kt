@@ -200,7 +200,8 @@ data class MissionActionDataOutput(
             isLastHaul = missionAction.isLastHaul,
             isAdministrativeControl = missionAction.isAdministrativeControl,
             isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
-            isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
+            isSafetyEquipmentAndStandardsComplianceControl =
+                missionAction.isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = missionAction.isSeafarersControl,
             isINNControl = missionAction.isINNControl,
             isGangwayDeployed = missionAction.isGangwayDeployed,

@@ -1,7 +1,8 @@
 // Support file
 // This file runs before every single spec file.
 // https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Support-file
-import '@mtes-mct/monitor-ui/cypress/global.d.ts'
+// eslint-disable-next-line typescript/triple-slash-reference -- webpack can't bundle this ambient .d.ts as a real import
+/// <reference path="../../node_modules/@mtes-mct/monitor-ui/cypress/global.d.ts" />
 import 'cypress-axe'
 
 import './commands'

@@ -100,7 +100,7 @@
     ],
     // typescript-sort-keys/string-enum cannot run here: it crashes under jsPlugins (OxLint puts
     // enum members in `body.members`, the rule expects `members`), and the crash silently disables
-    // every other jsPlugin rule for the file. It runs in eslint-typed.config.cjs instead.
+    // every other jsPlugin rule for the file. It runs in eslint-typed.config.mjs instead.
     "stylistic/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "stylistic/padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }],
     "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],

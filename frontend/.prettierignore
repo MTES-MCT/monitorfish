@@ -2,3 +2,6 @@
 
 # Machine-generated WireMock stubs (see test:e2e:generate) — keep out of Prettier to avoid mass reformats
 /cypress/mappings/
+
+# Machine-managed by `eslint --prune-suppressions` — keep Prettier from fighting its format
+/eslint-suppressions.json

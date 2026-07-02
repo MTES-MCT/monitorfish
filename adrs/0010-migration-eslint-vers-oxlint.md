@@ -168,10 +168,9 @@ d'attente au commit/push.
   gagne `--cache` (ESLint, `node_modules/.cache/eslint-typed`, stratégie `content`). ⚠️ Le cache
   ESLint est par fichier : un changement de type dans A ne re-linte pas B qui en dépend — la CI,
   toujours à froid, reste l'autorité.
-- **Ratchet** : `test:lint:types` porte désormais `--max-warnings=760` : toute **nouvelle**
-  violation fait échouer le push et la CI. Abaisser ce seuil au fil de la résorption du backlog
-  (326 `no-floating-promises`, 154 `require-await`, 150 `no-misused-promises`,
-  91 `prefer-nullish-coalescing`, 32 `await-thenable`, 7 `naming-convention`).
+- **Ratchet** : d'abord un `--max-warnings=760` global, remplacé dans la foulée par les
+  **suppressions natives d'ESLint 9** (cf. addendum suivant) — plus fin (par fichier et par
+  règle) et auto-resserrant.
 
 ### Parité de règles restaurée
 
@@ -208,3 +207,29 @@ d'attente au commit/push.
   d'enum dans `body.members`, la règle attend `members`) et le crash désactive silencieusement
   **toutes** les autres règles `jsPlugins` du fichier (59 fichiers touchés). La règle vit donc
   dans la passe type-aware. Symptôme à surveiller : `Error running JS plugin` dans la sortie.
+
+## Addendum (2026-07-02, suite) : ESLint 9 + suppressions natives pour la passe type-aware
+
+Le `--max-warnings=760` global était un garde-fou grossier : les warnings y sont fongibles
+(une nouvelle violation peut passer si quelqu'un en corrige une autre), le seuil ne se resserre
+pas tout seul, et l'échec (« too many warnings ») n'identifie pas la violation fautive.
+
+Remplacé par les **bulk suppressions natives d'ESLint** (≥ 9.24) — l'équivalent frontend de la
+**baseline ktlint** déjà adoptée côté backend (§4) :
+
+- **ESLint 9.39** + `eslint-typed.config.mjs` (flat config). ESLint ne sert plus que cette passe
+  (OxLint a le reste), donc la migration ne touche qu'un fichier. Un `override` npm relâche le
+  *peer* `eslint` d'`eslint-plugin-typescript-sort-keys` (ancré `^7 || ^8`, fonctionne en 9).
+- Toutes les règles passent de `warn` à **`error`** ; le backlog existant (760 violations,
+  293 fichiers) est enregistré dans **`eslint-suppressions.json`** (commité), généré via
+  `eslint --suppress-all`.
+- Toute **nouvelle** violation échoue **par fichier et par règle** (plus de fongibilité), et la
+  sortie pointe précisément le fichier fautif.
+- Résorber du backlog laisse des suppressions orphelines → la passe échoue (exit 2) avec le
+  message « Consider re-running with --prune-suppressions » : lancer
+  **`npm run test:lint:types:prune`** et commiter le fichier réduit avec la correction.
+  Le ratchet se resserre donc mécaniquement.
+- `--cache` cohabite avec les suppressions (vérifié : ~54 s à froid, ~1,3 s à chaud) ;
+  `--no-inline-config` conservé ; `--ext`/`--no-eslintrc` supprimés (disparus d'ESLint 9).
+- `eslint-suppressions.json` est géré par ESLint : exclu de Prettier (`.prettierignore`) pour
+  éviter le ping-pong de formatage avec `--prune-suppressions`.

@@ -30,13 +30,23 @@
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js",
     "test:lint": "oxlint --config=.oxlintrc.json src cypress",
     "test:lint:fix": "oxlint --fix --config=.oxlintrc.json src cypress && prettier --write ./src",
-    "test:lint:types": "eslint --no-eslintrc --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --max-warnings 760 --config eslint-typed.config.cjs --ext .ts,.tsx src",
-    "test:lint:types:fix": "eslint --no-eslintrc --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --fix --config eslint-typed.config.cjs --ext .ts,.tsx src && prettier --write ./src",
+    "test:lint:types": "eslint --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --config eslint-typed.config.mjs src",
+    "test:lint:types:fix": "eslint --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --fix --config eslint-typed.config.mjs src && prettier --write ./src",
+    "test:lint:types:prune": "eslint --no-inline-config --config eslint-typed.config.mjs --prune-suppressions src",
     "test:format": "prettier --check ./src",
     "format": "prettier --write ./src",
     "test:type": "tsc",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
     "test:unit:watch": "npm run test:unit -- --watch"
+  },
+  "overrides": {
+    "socket.io": ">=2.5.0",
+    "ws": ">=7.5.10",
+    "@remix-run/router": "1.23.2",
+    "picomatch": "4.0.4",
+    "eslint-plugin-typescript-sort-keys": {
+      "eslint": "$eslint"
+    }
   },
   "dependencies": {
     "@dnd-kit/core": "6.3.1",
@@ -125,7 +135,7 @@
     "cypress": "14.5.0",
     "cypress-axe": "1.7.0",
     "dotenv": "16.5.0",
-    "eslint": "8.57.1",
+    "eslint": "9.39.4",
     "eslint-plugin-cypress": "3.5.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-mocha": "10.5.0",
@@ -155,12 +165,6 @@
     "vite-plugin-svgr": "5.2.0",
     "vite-tsconfig-paths": "6.1.1",
     "whatwg-fetch": "3.6.20"
-  },
-  "overrides": {
-    "socket.io": ">=2.5.0",
-    "ws": ">=7.5.10",
-    "@remix-run/router": "1.23.2",
-    "picomatch": "4.0.4"
   },
   "browserslist": {
     "production": [

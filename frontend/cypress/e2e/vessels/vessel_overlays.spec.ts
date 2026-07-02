@@ -1,4 +1,4 @@
-import {openVesselBySearch} from "../main_window/utils";
+import { openVesselBySearch } from '../main_window/utils'
 
 context('Vessels Overlays', () => {
   it('Last position card with vessel groups Should be seen on the map on pointer move', () => {

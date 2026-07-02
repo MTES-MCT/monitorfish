@@ -35,7 +35,7 @@ context('Vessel sidebar logbook tab', () => {
      * Fishing Should contain the vessel fishing resume
      */
 
-    cy.getDataCy("vessel-search-selected-vessel-title").click()
+    cy.getDataCy('vessel-search-selected-vessel-title').click()
     openVesselBySearch('Pheno')
 
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
@@ -118,7 +118,7 @@ context('Vessel sidebar logbook tab', () => {
      */
 
     // Given
-    cy.getDataCy("vessel-search-selected-vessel-title").click()
+    cy.getDataCy('vessel-search-selected-vessel-title').click()
     openVesselBySearch('SOCRATE')
 
     // When

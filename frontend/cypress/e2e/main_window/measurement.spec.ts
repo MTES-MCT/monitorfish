@@ -10,7 +10,7 @@ context('Measurement', () => {
      * A circle range measurement Should be created When clicking on the map
      */
     // When
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })
     cy.get('body').click(450, 585, { timeout: 10000 })
@@ -24,7 +24,7 @@ context('Measurement', () => {
      * A circle range measurement Should be created When the radius in entered in input
      */
     // When
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
 
     /**
@@ -49,7 +49,7 @@ context('Measurement', () => {
      * A circle range measurement Should be created When the coordinates and radius are entered in input
      */
     // When
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="dms-coordinates-input"]').type('470123N0070123W', { timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').type('47', { timeout: 10000 })
@@ -64,12 +64,12 @@ context('Measurement', () => {
 
   it('A multi line range measurement Should be created When clicking on the map', () => {
     // When
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.wait(400)
     // Close then re-open
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.wait(400)
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement-multiline"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })
     cy.get('body').click(420, 635, { timeout: 10000 })
@@ -83,7 +83,7 @@ context('Measurement', () => {
 
   it('Many measurements Should be created When clicking on the map', () => {
     // When
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('body').click(490, 580, { timeout: 10000 })
     cy.wait(250)
@@ -91,7 +91,7 @@ context('Measurement', () => {
     cy.get('*[data-cy="measurement-value"]').should('have.length', 1)
     cy.wait(500)
 
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.wait(250)
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(

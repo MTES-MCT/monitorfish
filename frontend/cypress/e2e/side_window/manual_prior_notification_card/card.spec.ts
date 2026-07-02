@@ -22,7 +22,9 @@ context('Side Window > Manual Prior Notification Card > Card', () => {
 
     cy.contains('FILET DOUX (CFR122)').should('be.visible')
     cy.contains('À vérifier - note ≥ 2,3').should('be.visible')
-    cy.contains('Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).').should('be.visible')
+    cy.contains(
+      'Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).'
+    ).should('be.visible')
   })
 
   it('Should refresh the list when the opened manual prior notification data differs from its entry in the current list', () => {

@@ -26,8 +26,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Form
 
     cy.fill('Navire inconnu', true)
-    cy.fill('Nom du navire', "Un navire")
-    cy.fill('Nationalité', "France")
+    cy.fill('Nom du navire', 'Un navire')
+    cy.fill('Nationalité', 'France')
     cy.fill('Ajouter un engin', 'MIS')
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
@@ -102,8 +102,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=TALK2ME' +
-      '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
-      '&vesselId=2&vesselIdentifier=',
+        '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
+        '&vesselId=2&vesselIdentifier='
     ).as('showVessel')
     cy.get('a:contains("Voir la fiche")').click()
     cy.wait('@showVessel')
@@ -116,12 +116,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Obligations déclaratives et autorisations
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
-    cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
-    cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
-    cy.fill("Contrôle de la puissance du moteur de propulsion", "Oui")
-    cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
-    cy.fill("Plan d’arrimage présent et valide", "N/A")
-    cy.fill("Autorisation pour la pesée à bord", "N/A")
+    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'N/A')
+    cy.fill('Autorisations de pêche (AEP) conformes à l’activité du navire ', 'Non')
+    cy.fill('Contrôle de la puissance du moteur de propulsion', 'Oui')
+    cy.fill('Licence de pêche conformes à l’activité du navire', 'Non')
+    cy.fill('Plan d’arrimage présent et valide', 'N/A')
+    cy.fill('Autorisation pour la pesée à bord', 'N/A')
     // The weighing certificate field should not be visible initially
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
@@ -141,8 +141,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Autorisation pour la pesée à bord', 'Non')
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
     cy.fill(
-      "Observations (hors infractions) sur les obligations déclaratives / autorisations",
-      "Une observation hors infraction sur les obligations déclaaratives."
+      'Observations (hors infractions) sur les obligations déclaratives / autorisations',
+      'Une observation hors infraction sur les obligations déclaaratives.'
     )
 
     // Engins à bord
@@ -214,9 +214,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
 
     // This should trigger a computation of the fleet segment
-    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as(
-      'computeFleetSegments'
-    )
+    cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegments')
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
     cy.wait('@computeFleetSegments')
 
@@ -274,12 +272,28 @@ context('Side Window > Mission Form > Sea Control', () => {
           completion: 'COMPLETED',
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
+          // NEP and BIB are prefilled from the real species-control-prefill endpoint (logbook DIM
+          // discards at 27.8.a); COD (RET) is added manually in the "Rejets" card.
+          discardedSpecies: [
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' },
+            { discardReason: 'RET', faoZones: ['27.8.b'], rejectedWeight: 2, speciesCode: 'COD' }
+          ],
+
           districtCode: 'AY',
+
           emitsAis: 'NO',
+
           emitsVms: 'YES',
+
           externalReferenceNumber: 'TALK2ME',
+
           facade: null,
+
+          fishingLicencesMatchActivity: 'NO',
+
           flagState: 'UNDEFINED',
+
           gearOnboard: [
             {
               comments: null,
@@ -302,74 +316,166 @@ context('Side Window > Mission Form > Sea Control', () => {
               hasUncontrolledMesh: false
             }
           ],
+
           hasSomeGearsSeized: true,
+
           hasSomeSpeciesSeized: true,
+
           id: 2,
-          isINNControl: false,
-          internalReferenceNumber: 'U_W0NTFINDME',
-          ircs: 'QGDF',
-          isLastHaul: false,
-          latitude: 47.084,
-          licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
-          licencesMatchActivity: 'NO',
+
           infractions: [
             {
               comments: 'Une observation sur l’infraction déclarative.',
               infractionType: 'WITH_RECORD',
-              threats: [{"children":[{"children":[{"label":"27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL","value":27717}],"label":"Transbordement","value":"Transbordement"}],"label":"Mesures techniques et de conservation","value":"Mesures techniques et de conservation"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          label:
+                            "27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
+                          value: 27717
+                        }
+                      ],
+                      label: 'Transbordement',
+                      value: 'Transbordement'
+                    }
+                  ],
+                  label: 'Mesures techniques et de conservation',
+                  value: 'Mesures techniques et de conservation'
+                }
+              ]
             },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',
-              threats: [{"children":[{"children":[{"label":"4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES","value":4234}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          label:
+                            '4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES',
+                          value: 4234
+                        }
+                      ],
+                      label: 'Interférence',
+                      value: 'Interférence'
+                    }
+                  ],
+                  label: 'Entrave au contrôle',
+                  value: 'Entrave au contrôle'
+                }
+              ]
             },
             {
               comments: 'Une observation sur l’infraction autre.',
               infractionType: 'WITHOUT_RECORD',
-              threats: [{"children":[{"children":[{"label":"2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME","value":2584}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [{ label: '2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME', value: 2584 }],
+                      label: 'Interférence',
+                      value: 'Interférence'
+                    }
+                  ],
+                  label: 'Entrave au contrôle',
+                  value: 'Entrave au contrôle'
+                }
+              ]
             }
           ],
+
+          internalReferenceNumber: 'U_W0NTFINDME',
+
+          ircs: 'QGDF',
+
+          isINNControl: false,
+
+          isLastHaul: false,
+
+          latitude: 47.084,
+
+          licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
+
+          licencesMatchActivity: 'NO',
+
           logbookMatchesActivity: 'NOT_APPLICABLE',
+
           longitude: -3.872,
+
           missionId: 1,
+
           numberOfVesselsFlownOver: null,
-          otherComments: 'Une autre observation.',
-          portLocode: null,
-          segments: [],
-          seizureAndDiversion: true,
-          seizureAndDiversionComments: null,
-          separateStowageOfPreservedSpecies: 'YES',
-          propulsionEnginePowerControl: 'YES',
-          fishingLicencesMatchActivity: 'NO',
-          stowagePlanPresent: 'NOT_APPLICABLE',
+
           onboardWeighingPermit: 'NO',
-          weighingCertificateAndSystemsValid: null,
-          underSizedSeparateStowage: 'YES',
-          underSizedSeparateRecording: 'NO',
+
+          otherComments: 'Une autre observation.',
+
+          portLocode: null,
+
+          propulsionEnginePowerControl: 'YES',
+
+          segments: [],
+
+          seizureAndDiversion: true,
+
+          seizureAndDiversionComments: null,
+
+          separateStowageOfPreservedSpecies: 'YES',
+
           speciesObservations: 'Une observation hors infraction sur les espèces.',
+
           // Catches only — logbook discards are no longer merged here, they live in `discardedSpecies`.
           // HKE and BLI are the risk factor catches (MALOTRU's FAR has no catches, so no prefilled
           // zones); the DIS species NEP and BIB move to `discardedSpecies`.
           speciesOnboard: [
-            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'HKE', underSized: false },
-            { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
-            { controlledWeight: 20, declaredWeight: 10, faoZones: ['27.8.b'], nbFish: null, presentationCodes: ['FIL'], speciesCode: 'COD', underSized: false, underSizedWeight: 5 }
+            {
+              controlledWeight: null,
+              declaredWeight: 235.6,
+              faoZones: ['27.8.b'],
+              nbFish: null,
+              speciesCode: 'HKE',
+              underSized: false
+            },
+            {
+              controlledWeight: null,
+              declaredWeight: 13.46,
+              faoZones: ['27.8.b'],
+              nbFish: null,
+              speciesCode: 'BLI',
+              underSized: false
+            },
+            {
+              controlledWeight: 20,
+              declaredWeight: 10,
+              faoZones: ['27.8.b'],
+              nbFish: null,
+              presentationCodes: ['FIL'],
+              speciesCode: 'COD',
+              underSized: false,
+              underSizedWeight: 5
+            }
           ],
-          // NEP and BIB are prefilled from the real species-control-prefill endpoint (logbook DIM
-          // discards at 27.8.a); COD (RET) is added manually in the "Rejets" card.
-          discardedSpecies: [
-            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
-            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' },
-            { discardReason: 'RET', faoZones: ['27.8.b'], rejectedWeight: 2, speciesCode: 'COD' }
-          ],
+
           speciesQuantitySeized: 6289.5,
+
           speciesSizeControlled: 'NO',
+
           speciesWeightControlled: 'YES',
+
+          stowagePlanPresent: 'NOT_APPLICABLE',
+          underSizedSeparateRecording: 'NO',
+          underSizedSeparateStowage: 'YES',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 2,
           vesselName: 'MALOTRU',
-          vesselTargeted: 'YES'
+          vesselTargeted: 'YES',
+          weighingCertificateAndSystemsValid: null
         }
       },
       10
@@ -440,6 +546,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
+          fishingLicencesMatchActivity: null,
           flagState: 'FR',
           gearOnboard: [
             {
@@ -455,6 +562,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           hasSomeGearsSeized: false,
           hasSomeSpeciesSeized: false,
           id: 2,
+          infractions: [],
           internalReferenceNumber: 'FAK000999999',
           ircs: 'CALLME',
           latitude: 47.084,
@@ -464,20 +572,14 @@ context('Side Window > Mission Form > Sea Control', () => {
           longitude: -3.872,
           missionId: 1,
           numberOfVesselsFlownOver: null,
+          onboardWeighingPermit: null,
           otherComments: null,
           portLocode: null,
+          propulsionEnginePowerControl: null,
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
           separateStowageOfPreservedSpecies: null,
-          propulsionEnginePowerControl: null,
-          fishingLicencesMatchActivity: null,
-          stowagePlanPresent: null,
-          onboardWeighingPermit: null,
-          weighingCertificateAndSystemsValid: null,
-          underSizedSeparateStowage: null,
-          underSizedSeparateRecording: null,
-          infractions: [],
           speciesObservations: null,
           speciesOnboard: [
             { controlledWeight: null, declaredWeight: 471.2, nbFish: null, speciesCode: 'HKE', underSized: false },
@@ -485,11 +587,15 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           speciesSizeControlled: null,
           speciesWeightControlled: null,
+          stowagePlanPresent: null,
+          underSizedSeparateRecording: null,
+          underSizedSeparateStowage: null,
           unitWithoutOmegaGauge: false,
           userTrigram: 'Gaumont',
           vesselId: 1,
           vesselName: 'PHENOMENE',
-          vesselTargeted: null
+          vesselTargeted: null,
+          weighingCertificateAndSystemsValid: null
         }
       },
       10
@@ -592,9 +698,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(250)
 
     // A mission zone should be automatically added (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
-    cy.get('.Component-Banner').contains(
-      'Une zone de mission a été modifiée à partir des contrôles de la mission'
-    )
+    cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',
       'Actuellement, la zone de mission ' +
@@ -621,9 +725,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     // The mission zone should be automatically updated (because of the stubbed coordinates update when IS_CYPRESS LocalSorage key is "true")
-    cy.get('.Component-Banner').contains(
-      'Une zone de mission a été modifiée à partir des contrôles de la mission'
-    )
+    cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
     cy.get('*[data-cy="mission-main-form-location"]').should(
       'contain',
       'Actuellement, la zone de mission ' +
@@ -928,7 +1030,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     })
   })
 
-
   it('Should display the expected vessel details', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
@@ -1047,8 +1148,8 @@ context('Side Window > Mission Form > Sea Control', () => {
 
       // "Obligations déclaratives et autorisations de pêche" e-ISR fields
       cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
-      cy.contains("Licence de pêche conformes à l’activité du navire").should('not.exist')
-      cy.contains("Plan d’arrimage présent et valide").should('not.exist')
+      cy.contains('Licence de pêche conformes à l’activité du navire').should('not.exist')
+      cy.contains('Plan d’arrimage présent et valide').should('not.exist')
       cy.contains('Autorisation pour la pesée à bord').should('not.exist')
       cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
@@ -1103,20 +1204,6 @@ context('Side Window > Mission Form > Sea Control', () => {
       '@postMissionAction3',
       {
         body: {
-          speciesOnboard: [
-            {
-              declaredWeight: 471.2,
-              faoZones: ['27.8.a', '27.8.b'],
-              presentationCodes: ['WHL', 'GUT'],
-              speciesCode: 'HKE'
-            },
-            {
-              declaredWeight: 13.46,
-              faoZones: ['27.8.c'],
-              presentationCodes: ['WHL'],
-              speciesCode: 'BLI'
-            }
-          ],
           discardedSpecies: [
             {
               discardReason: 'DIS',
@@ -1128,6 +1215,20 @@ context('Side Window > Mission Form > Sea Control', () => {
               discardReason: 'DIM',
               faoZones: ['27.8.c'],
               rejectedWeight: 5.0,
+              speciesCode: 'BLI'
+            }
+          ],
+          speciesOnboard: [
+            {
+              declaredWeight: 471.2,
+              faoZones: ['27.8.a', '27.8.b'],
+              presentationCodes: ['WHL', 'GUT'],
+              speciesCode: 'HKE'
+            },
+            {
+              declaredWeight: 13.46,
+              faoZones: ['27.8.c'],
+              presentationCodes: ['WHL'],
               speciesCode: 'BLI'
             }
           ]
@@ -1224,6 +1325,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait('@updateMission')
 
     // Then the now-valid control must be persisted without re-editing it.
-    cy.wait('@updateControl', { timeout: 8000 }).its('request.body.actionDatetimeUtc').should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
+    cy.wait('@updateControl', { timeout: 8000 })
+      .its('request.body.actionDatetimeUtc')
+      .should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
   })
 })

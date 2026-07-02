@@ -1,6 +1,6 @@
-import {openSideWindowMissionList} from './utils'
-import {customDayjs} from '../../utils/customDayjs'
-import {getUtcDateInMultipleFormats} from '../../utils/getUtcDateInMultipleFormats'
+import { openSideWindowMissionList } from './utils'
+import { customDayjs } from '../../utils/customDayjs'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 // TODO Add search query, custom period and filter reset E2E tests.
 context('Side Window > Mission List > VesselFilter Bar', () => {

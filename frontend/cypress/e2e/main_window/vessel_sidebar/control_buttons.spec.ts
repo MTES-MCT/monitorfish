@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import {openVesselBySearch} from '../utils'
+import { openVesselBySearch } from '../utils'
 
 context('Vessel sidebar controls buttons', () => {
   beforeEach(() => {
@@ -165,8 +165,9 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('input[aria-label="Jour de fin"]').type('19')
     cy.get('input[aria-label="Mois de fin"]').type('10')
     cy.get('input[aria-label="Année de fin"]').type('2019')
-    cy.get('.Component-Banner')
-      .contains("Nous avons trouvé 3 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE.")
+    cy.get('.Component-Banner').contains(
+      "Nous avons trouvé 3 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE."
+    )
     cy.getDataCy('vessel-menu-fishing').click()
     cy.getDataCy('custom-dates-showed-text').contains('Piste affichée du 11/02/19 au 19/10/19')
 

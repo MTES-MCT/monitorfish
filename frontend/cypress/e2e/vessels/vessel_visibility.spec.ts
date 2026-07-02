@@ -1,4 +1,4 @@
-import {openVesselBySearch} from '../main_window/utils'
+import { openVesselBySearch } from '../main_window/utils'
 
 context('Vessel visibility', () => {
   beforeEach(() => {

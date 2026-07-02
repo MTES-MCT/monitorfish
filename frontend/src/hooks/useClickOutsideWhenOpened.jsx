@@ -15,6 +15,7 @@ export const useClickOutsideWhenOpened = (ref, isOpened) => {
     // Bind the event listener
     if (isOpened) {
       document.addEventListener('mousedown', handleClickOutside)
+
       return
     }
 

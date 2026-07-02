@@ -6,14 +6,16 @@ context('Main Window > My Account', () => {
       onBeforeLoad(window) {
         Object.defineProperty(window.navigator, 'serviceWorker', {
           value: {
-            register: () => Promise.resolve({
-              addEventListener: () => {},
-            }),
-            getRegistration: () => Promise.resolve({
-              update: () => {},
-            }),
+            addEventListener: () => {},
+            getRegistration: () =>
+              Promise.resolve({
+                update: () => {}
+              }),
             getRegistrations: () => Promise.resolve([]),
-            addEventListener: () => {}
+            register: () =>
+              Promise.resolve({
+                addEventListener: () => {}
+              })
           }
         })
       }
@@ -28,11 +30,11 @@ context('Main Window > My Account', () => {
 
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("les cartes en local")').click()
 
-    cy.contains('Êtes-vous sûr d\'activer le téléchargement des cartes en local ?').should('be.visible')
+    cy.contains("Êtes-vous sûr d'activer le téléchargement des cartes en local ?").should('be.visible')
 
     cy.clickButton('Activer et recharger')
 
-    cy.getDataCy("map-account-box").contains('Taille des cartes téléchargées')
+    cy.getDataCy('map-account-box').contains('Taille des cartes téléchargées')
 
     cy.get('*[data-cy="map-property-trigger"]').filter(':contains("les cartes en local")').click()
 
@@ -40,5 +42,4 @@ context('Main Window > My Account', () => {
 
     cy.clickButton('Désactiver')
   })
-
 })

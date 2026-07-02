@@ -14,8 +14,8 @@ context('Offline management', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
-      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
-      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
+        '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+        '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
       { statusCode: 400 }
     ).as('openVessel')
     openVesselBySearch('Pheno')
@@ -101,8 +101,8 @@ context('Offline management', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
-      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
-      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
+        '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+        '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('openVessel')
     cy.intercept(
       {
@@ -121,8 +121,8 @@ context('Offline management', () => {
     // When clicking on Resume tab
     cy.intercept(
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
-      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
-      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
+        '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+        '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
       cy.spy().as('openVesselSpyed')
     )
     cy.getDataCy('vessel-menu-summary').click()

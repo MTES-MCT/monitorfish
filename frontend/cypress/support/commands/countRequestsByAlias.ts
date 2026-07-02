@@ -28,7 +28,7 @@ export function countRequestsByAlias(alias: string, waitForInMs: number = 0): Cy
       STORE[alias] = []
     }
 
-    const storedInterceptionIds = STORE[alias]!!
+    const storedInterceptionIds = STORE[alias]!
     if (interception && !storedInterceptionIds.includes(interception.id)) {
       storedInterceptionIds.push(interception.id)
       STORE[alias] = storedInterceptionIds

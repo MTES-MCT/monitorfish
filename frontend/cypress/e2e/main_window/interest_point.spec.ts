@@ -7,7 +7,7 @@ context('InterestPoint', () => {
 
   it('An interest point Should be created When clicking on the map', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
 
     // Then
@@ -26,7 +26,7 @@ context('InterestPoint', () => {
 
   it('Multiple interest points Should be created When clicking on the map', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est dans la bergerie')
@@ -36,9 +36,11 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 1)
     cy.wait(300)
 
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
-    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '47° 51′ 23″ N 007° 24′ 25″ W')
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
+      'have.value',
+      '47° 51′ 23″ N 007° 24′ 25″ W'
+    )
     cy.get('#root').click(300, 430, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène 2')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore dans la bergerie')
@@ -48,17 +50,20 @@ context('InterestPoint', () => {
     cy.get('*[data-cy="interest-point-observations"]').contains('Est encore dans la bergerie', { timeout: 10000 })
     cy.wait(300)
 
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
-    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '47° 51′ 23″ N 007° 24′ 25″ W')
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
+      'have.value',
+      '47° 51′ 23″ N 007° 24′ 25″ W'
+    )
     cy.get('#root').click(650, 690, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-name-input"]').type('Phénomène 3')
     cy.get('*[data-cy="interest-point-observations-input"]').type('Est encore encore dans la bergerie')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.get('*[data-cy="edit-interest-point"]').should('be.visible')
     cy.get('*[data-cy="interest-point-observations"]').should('have.length', 3)
-    cy.get('*[data-cy="interest-point-observations"]')
-      .contains('Est encore encore dans la bergerie', { timeout: 10000 })
+    cy.get('*[data-cy="interest-point-observations"]').contains('Est encore encore dans la bergerie', {
+      timeout: 10000
+    })
   })
 
   it('An interest Should be created from input When DD coordinates are selected', () => {
@@ -67,7 +72,7 @@ context('InterestPoint', () => {
     cy.wait(500)
     cy.get('*[value="DD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
 
     // Then
     cy.get('*[data-cy="coordinates-dd-input-lat"]').clear()
@@ -88,13 +93,12 @@ context('InterestPoint', () => {
     cy.wait(500)
     cy.get('*[value="DMD"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.wait(300)
     cy.get('*[data-cy="interest-point-edit"]').click({ timeout: 10000 })
-    cy.get('*[data-cy="dmd-coordinates-input"]')
-      .type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
+    cy.get('*[data-cy="dmd-coordinates-input"]').type('{backspace}{backspace}{backspace}{backspace}{backspace}500W')
 
     // Then
     cy.get('*[data-cy="interest-point-coordinates"]')
@@ -106,7 +110,7 @@ context('InterestPoint', () => {
     // When
     cy.get('*[data-cy="coordinates-selection"]').click({ force: true, timeout: 10000 })
     cy.get('#root').click(159, 1000, { timeout: 10000 })
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.fill('Type de point', 'Autre point')
 
@@ -124,8 +128,10 @@ context('InterestPoint', () => {
     cy.wait(300)
     cy.get('*[data-cy="interest-point-edit"]').should('not.be.visible')
     cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
-    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 })
-      .should('have.value', '47° 42′ 07″ N 007° 54′ 51″ E')
+    cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
+      'have.value',
+      '47° 42′ 07″ N 007° 54′ 51″ E'
+    )
     cy.get('.Field-MultiRadio').contains('Type de point').get('.rs-radio-checked').contains('Autre point')
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
 
@@ -137,7 +143,7 @@ context('InterestPoint', () => {
 
   it('An interest Should be deleted When it is in edit mode', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.get('#root').click(490, 580, { timeout: 10000 })
     cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
     cy.wait(300)
@@ -151,7 +157,7 @@ context('InterestPoint', () => {
 
   it('An interest in drawing mode Should be stopped When closing the interest point tool', () => {
     // When
-    cy.clickButton('Créer un point d\'intérêt', { withoutScroll: true })
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
     cy.wait(100)
     cy.get('body').type('{esc}')
     cy.wait(200)

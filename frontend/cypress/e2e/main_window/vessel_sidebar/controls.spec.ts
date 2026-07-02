@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
+import { getDate } from '../../../../src/utils.ts'
 import { openVesselBySearch } from '../utils'
-import {getDate} from "../../../../src/utils.ts";
 
 context('Vessel sidebar controls tab', () => {
   beforeEach(() => {
@@ -68,7 +68,9 @@ context('Vessel sidebar controls tab', () => {
 
       // The control date is hardcoded in the test data
       if (lastQuayControlDate.isSame('2021', 'year')) {
-        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('2 contrôles, 1 infraction sans PV')
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains(
+          '2 contrôles, 1 infraction sans PV'
+        )
       } else {
         cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
       }
@@ -79,7 +81,9 @@ context('Vessel sidebar controls tab', () => {
 
       // The control date is hardcoded in the test data
       if (lastQuayControlDate.isSame('2021', 'year')) {
-        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('2 contrôles, 1 infraction sans PV')
+        cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains(
+          '2 contrôles, 1 infraction sans PV'
+        )
       } else {
         cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2021"]`).contains('1 contrôle, 1 infraction sans PV')
       }
@@ -95,10 +99,11 @@ context('Vessel sidebar controls tab', () => {
     cy.get('*[data-cy="vessel-control-title"]').first().contains(`CONTRÔLE EN MER DU ${date}`)
 
     // The infractions label from natinfs should be rendered
-    cy.get('[title="Mesures techniques et de conservation - Espèces en sous taille / sous poids\n' +
-      '28346 - Détention de produits de la pêche maritime et de l\'aquaculture marine de taille, calibre ou poids prohibe"]').should('exist')
-    cy.get('[title="Famille inconnue - Type inconnu\n' +
-      '23584 - Défaut AIS"]').should('exist')
+    cy.get(
+      '[title="Mesures techniques et de conservation - Espèces en sous taille / sous poids\n' +
+        '28346 - Détention de produits de la pêche maritime et de l\'aquaculture marine de taille, calibre ou poids prohibe"]'
+    ).should('exist')
+    cy.get('[title="Famille inconnue - Type inconnu\n23584 - Défaut AIS"]').should('exist')
 
     cy.get('*[data-cy="vessel-control"]')
       .first()

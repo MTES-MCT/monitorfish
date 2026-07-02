@@ -23,7 +23,7 @@ from tests.mocks import mock_datetime_utcnow
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_raises_when_both_stage_and_status_are_supplied(
@@ -40,7 +40,7 @@ def test_update_beacon_malfunction_raises_when_both_stage_and_status_are_supplie
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
@@ -54,7 +54,7 @@ def test_update_beacon_malfunction_raises_when_reason_is_missing(mock_requests):
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_updates_status(mock_requests):
@@ -76,7 +76,7 @@ def test_update_beacon_malfunction_updates_status(mock_requests):
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_updates_stage(mock_requests):
@@ -105,7 +105,7 @@ def test_update_beacon_malfunction_updates_stage(mock_requests):
 )
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests, reason):
@@ -131,7 +131,7 @@ def test_update_beacon_malfunction_updates_stage_and_reason(mock_requests, reaso
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
 @patch(
-    "src.flows.update_beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
+    "src.shared_tasks.beacon_malfunctions.BEACON_MALFUNCTIONS_ENDPOINT",
     "dummy/end/point/",
 )
 def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_requests):
@@ -145,7 +145,7 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
 
 
 @patch(
-    "src.flows.update_beacon_malfunctions.datetime",
+    "src.shared_tasks.beacon_malfunctions.datetime",
     mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_prepare_new_beacon_malfunctions():
@@ -448,6 +448,7 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 "ZZTOPACDC",
                 "AB123456",
                 "LLUK",
+                "GBR001",
                 "BB",
                 "DD",
                 "EE",

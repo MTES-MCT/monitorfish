@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run bundle-sw && vite build",
-    "clean": "rm -Rf ./build ./public/service-worker.js ./node-modules/.cache ./node-modules/.vite",
+    "clean": "rm -Rf ./build ./public/service-worker.js ./node_modules/.cache ./node_modules/.vite",
     "dev": "import-meta-env-prepare -x ./.env.example -p ./.env.local.defaults  && vite --port 3000",
     "bundle-sw": "esbuild src/workers/serviceWorker.ts --bundle --outfile=public/service-worker.js",
     "dev-monitorenv": "FRONTEND_MONITORENV_URL=//localhost:9880 import-meta-env-prepare -u -x ./.env.local.defaults && vite --port 3000",
@@ -28,10 +28,10 @@
     "test:e2e:open": "cypress open --browser firefox --config-file ./config/cypress.config.ts --e2e",
     "test:multi-windows:open": "IS_HEADLESS=false jest --config=./config/multi-windows/jest.config.js",
     "test:multi-windows:run": "IS_HEADLESS=true jest --config=./config/multi-windows/jest.config.js",
-    "test:lint": "oxlint --config=.oxlintrc.json src",
-    "test:lint:fix": "oxlint --fix --config=.oxlintrc.json src && prettier --write ./src",
-    "test:lint:types": "eslint --no-eslintrc --no-inline-config --config eslint-typed.config.cjs --ext .ts,.tsx src",
-    "test:lint:types:fix": "eslint --no-eslintrc --no-inline-config --fix --config eslint-typed.config.cjs --ext .ts,.tsx src && prettier --write ./src",
+    "test:lint": "oxlint --config=.oxlintrc.json src cypress",
+    "test:lint:fix": "oxlint --fix --config=.oxlintrc.json src cypress && prettier --write ./src",
+    "test:lint:types": "eslint --no-eslintrc --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --max-warnings 760 --config eslint-typed.config.cjs --ext .ts,.tsx src",
+    "test:lint:types:fix": "eslint --no-eslintrc --no-inline-config --cache --cache-location node_modules/.cache/eslint-typed --cache-strategy content --fix --config eslint-typed.config.cjs --ext .ts,.tsx src && prettier --write ./src",
     "test:format": "prettier --check ./src",
     "format": "prettier --write ./src",
     "test:type": "tsc",
@@ -126,7 +126,9 @@
     "cypress-axe": "1.7.0",
     "dotenv": "16.5.0",
     "eslint": "8.57.1",
+    "eslint-plugin-cypress": "3.5.0",
     "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-mocha": "10.5.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-sort-destructure-keys": "3.0.0",
     "eslint-plugin-sort-keys-fix": "1.1.2",
@@ -171,9 +173,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "//": "https://github.com/okonet/lint-staged/issues/825#issuecomment-674575655",
   "lint-staged": {

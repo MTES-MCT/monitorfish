@@ -152,3 +152,59 @@ la passe `test:lint:types`.
 - ✅ Suite de tests unitaires frontend : verte (595 tests).
 - ✅ `./gradlew ktlintCheck` : OK (baseline en place).
 - ✅ CI « Back & Front » verte sur les commits de la PR.
+
+## Addendum (2026-07-02) : parité de règles Airbnb et accélération des hooks
+
+Suite de la migration : rapprocher la couverture de l'ancienne config Airbnb et réduire le temps
+d'attente au commit/push.
+
+### Accélération du `pre-push`
+
+- **Skip** : le hook sort immédiatement si les commits sortants (`merge-base @{u}` ou
+  `origin/master`) ne touchent aucun fichier `frontend/` — un push backend-only ne coûte plus rien.
+- **Parallélisme** : `test:type` et `test:lint:types` tournent en parallèle ; leur sortie n'est
+  affichée qu'en cas d'échec (plus de mur de warnings sur un push vert).
+- **Caches** : `tsc` était déjà incrémental (~57 s à froid → ~11 s à chaud) ; la passe type-aware
+  gagne `--cache` (ESLint, `node_modules/.cache/eslint-typed`, stratégie `content`). ⚠️ Le cache
+  ESLint est par fichier : un changement de type dans A ne re-linte pas B qui en dépend — la CI,
+  toujours à froid, reste l'autorité.
+- **Ratchet** : `test:lint:types` porte désormais `--max-warnings=760` : toute **nouvelle**
+  violation fait échouer le push et la CI. Abaisser ce seuil au fil de la résorption du backlog
+  (326 `no-floating-promises`, 154 `require-await`, 150 `no-misused-promises`,
+  91 `prefer-nullish-coalescing`, 32 `await-thenable`, 7 `naming-convention`).
+
+### Parité de règles restaurée
+
+- **Passe type-aware** : `@typescript-eslint/naming-convention` restaurée (options identiques à
+  l'ancienne config, `warn`, 7 findings) — la réserve « non portée » des *Alternatives* est levée.
+  `typescript-sort-keys/string-enum` (`error`) y est aussi hébergée (cf. *Limites* : crash sous
+  `jsPlugins`), avec des overrides par fichier reproduisant les `eslint-disable` inline
+  (ignorés par `--no-inline-config`) des enums dont l'ordre est volontaire.
+- **OxLint** : `stylistic/padding-line-between-statements`
+  (équivalent de `newline-before-return`), `import-js/no-extraneous-dependencies`, catégorie
+  `suspicious` en `warn` (~180 findings), et les règles Airbnb explicites remises en `error`
+  (`eqeqeq` avec `null: ignore`, `no-shadow`, `no-param-reassign` avec `props: true`,
+  `no-else-return`, `no-nested-ternary`, `no-plusplus`, `no-underscore-dangle`, `no-return-assign`,
+  `no-throw-literal`, `no-useless-concat`, `object-shorthand`, `prefer-promise-reject-errors`,
+  `prefer-template`, `radix`, `yoda`, `default-case`) — le code étant linté Airbnb jusqu'à la
+  migration, le reliquat était minime (~20 corrections).
+- **Cypress** : `eslint-plugin-cypress` 3.5.0 et `eslint-plugin-mocha` 10.5.0 réintégrés via
+  `jsPlugins` (`no-pause`, `no-async-tests`, `no-exclusive-tests`, `no-skipped-tests`, etc.), et
+  `test:lint` couvre désormais `cypress/` (reliquat historique corrigé, ~50 findings).
+- Nettoyage : `eslintConfig: react-app` (vestige CRA qui cassait l'extension VS Code ESLint)
+  retiré de `package.json`.
+
+### Limites découvertes
+
+- ⚠️ Le fixer des `jsPlugins` n'applique qu'**une seule passe** (pas de boucle de point fixe comme
+  ESLint) : `sort-keys-fix --fix` ne converge pas sur les gros littéraux et peut casser
+  l'indentation/les commentaires. Le tri de masse a été fait via un ESLint one-shot en boucle ;
+  au quotidien, `lint-staged` enchaîne Prettier derrière le fix, ce qui neutralise le problème de
+  forme (mais pas la non-convergence : re-committer si le hook échoue sur `sort-keys-fix`).
+- ⚠️ Le `no-shadow` natif d'OxLint ne comprend pas le *declaration merging*
+  (`export namespace X { export type X = … }`) : règle coupée sur `src/**/*.types.ts`,
+  `src/**/types.ts` et `src/domain/types/**`.
+- ⚠️ `typescript-sort-keys/string-enum` **crashe** sous `jsPlugins` (OxLint expose les membres
+  d'enum dans `body.members`, la règle attend `members`) et le crash désactive silencieusement
+  **toutes** les autres règles `jsPlugins` du fichier (59 fichiers touchés). La règle vit donc
+  dans la passe type-aware. Symptôme à surveiller : `Error running JS plugin` dans la sortie.

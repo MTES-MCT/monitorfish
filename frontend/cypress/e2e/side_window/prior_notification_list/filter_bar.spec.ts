@@ -1,10 +1,10 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { SideWindowMenuLabel } from '@features/SideWindow/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
 
 import { openSideWindowPriorNotificationListAsSuperUser } from './utils'
 import { assertAll } from '../../utils/assertAll'
 import { customDayjs } from '../../utils/customDayjs'
-import {SideWindowMenuLabel} from "@features/SideWindow/constants";
 
 context('Side Window > Prior Notification List > Filter Bar', () => {
   const apiPathBase = '/bff/v1/prior_notifications?'
@@ -61,12 +61,16 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
      * Should filter prior notifications by last control date
      */
     const expectedPartialBeforeDate = customDayjs.utc().subtract(3, 'months').toISOString().substring(0, 10)
-    cy.intercept('GET', `${apiPathBase}*lastControlledBefore=${expectedPartialBeforeDate}*`).as('getPriorNotificationsThreeMonths')
+    cy.intercept('GET', `${apiPathBase}*lastControlledBefore=${expectedPartialBeforeDate}*`).as(
+      'getPriorNotificationsThreeMonths'
+    )
     cy.fill('Date du dernier contrôle', 'Contrôlé il y a plus de 3 mois')
     cy.wait('@getPriorNotificationsThreeMonths')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
     const expectedPartialAfterDate = customDayjs.utc().subtract(1, 'month').toISOString().substring(0, 10)
-    cy.intercept('GET', `${apiPathBase}*lastControlledAfter=${expectedPartialAfterDate}*`).as('getPriorNotificationsOneMonth')
+    cy.intercept('GET', `${apiPathBase}*lastControlledAfter=${expectedPartialAfterDate}*`).as(
+      'getPriorNotificationsOneMonth'
+    )
     cy.fill('Date du dernier contrôle', 'Contrôlé il y a moins d’1 mois')
     cy.wait('@getPriorNotificationsOneMonth')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)

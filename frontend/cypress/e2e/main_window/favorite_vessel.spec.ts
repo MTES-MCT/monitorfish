@@ -103,7 +103,7 @@ context('Favorite Vessel', () => {
     cy.wait(1500)
 
     // Then
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
       expect(features.length).to.be.equal(7)
     })
 
@@ -111,13 +111,13 @@ context('Favorite Vessel', () => {
     cy.fill('Afficher depuis', '1 semaine')
     cy.wait(1500)
 
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
       expect(features.length).to.be.equal(28)
     })
 
     cy.get('*[data-cy^="close-vessel-track"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then((features) => {
+    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
       expect(features.length).to.be.equal(0)
     })
   })

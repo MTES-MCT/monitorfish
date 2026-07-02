@@ -12,7 +12,7 @@ context('Sidebars > Custom Zones', () => {
     cy.get('*[data-cy="custom-zones-toggle"]').click()
 
     // When it displays the zone at init
-    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+    cy.getFeaturesFromLayer('CUSTOM').then(features => {
       expect(features.length).to.be.equal(1)
     })
 
@@ -24,12 +24,12 @@ context('Sidebars > Custom Zones', () => {
         const zones = JSON.parse(customZonesItem.zones)
         expect(zones['b2f8aea3-7814-4247-98fa-ddc58c922d09'].isShown).equal(false)
       })
-    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+    cy.getFeaturesFromLayer('CUSTOM').then(features => {
       expect(features.length).to.be.equal(0)
     })
 
     cy.get('*[data-cy="custom-zone-display-button"]').click()
-    cy.getFeaturesFromLayer('CUSTOM').then((features) => {
+    cy.getFeaturesFromLayer('CUSTOM').then(features => {
       expect(features.length).to.be.equal(1)
     })
 

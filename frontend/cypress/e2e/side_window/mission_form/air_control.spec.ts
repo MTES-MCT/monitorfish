@@ -84,9 +84,34 @@ context('Side Window > Mission Form > Air Control', () => {
           flagState: 'FR',
           gearOnboard: [],
           id: 2,
+          infractions: [
+            {
+              comments: 'Une observation sur l’infraction.',
+              infractionType: 'WITH_RECORD',
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          label:
+                            "27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
+                          value: 27717
+                        }
+                      ],
+                      label: 'Transbordement',
+                      value: 'Transbordement'
+                    }
+                  ],
+                  label: 'Mesures techniques et de conservation',
+                  value: 'Mesures techniques et de conservation'
+                }
+              ]
+            }
+          ],
           internalReferenceNumber: 'FAK000999999',
-          isINNControl: false,
           ircs: 'CALLME',
+          isINNControl: false,
           latitude: 47.084,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
@@ -95,13 +120,6 @@ context('Side Window > Mission Form > Air Control', () => {
           missionId: 1,
           numberOfVesselsFlownOver: null,
           otherComments: 'Une autre observation.',
-          infractions: [
-            {
-              comments: 'Une observation sur l’infraction.',
-              infractionType: 'WITH_RECORD',
-              threats: [{"children":[{"children":[{"label":"27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL","value":27717}],"label":"Transbordement","value":"Transbordement"}],"label":"Mesures techniques et de conservation","value":"Mesures techniques et de conservation"}]
-  }
-          ],
           portLocode: null,
           segments: [],
           seizureAndDiversion: null,

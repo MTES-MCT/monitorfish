@@ -71,7 +71,7 @@ export const MapHistory = ({ historyMoveTrigger, setShouldUpdateView, shouldUpda
         const currentView = monitorfishMap.getView()
         const center = currentView.getCenter()
         const view = {
-          center: center,
+          center,
           zoom: currentView.getZoom().toFixed(2)
         }
         const extent = currentView.calculateExtent()

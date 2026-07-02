@@ -1,8 +1,8 @@
-import {PriorNotification} from '@features/PriorNotification/PriorNotification.types'
+import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
 import dayjs from 'dayjs'
 
-import {editSideWindowPriorNotification} from './utils'
-import {openSideWindowPriorNotificationListAsSuperUser} from '../prior_notification_list/utils'
+import { editSideWindowPriorNotification } from './utils'
+import { openSideWindowPriorNotificationListAsSuperUser } from '../prior_notification_list/utils'
 
 context('Side Window > Logbook Prior Notification Form > Form', () => {
   it('Should update a logbook prior notification', () => {

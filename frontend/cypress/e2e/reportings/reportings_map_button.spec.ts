@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs'
 
 context('Reportings Map Button', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ context('Reportings Map Button', () => {
     cy.clickButton('Afficher les signalements')
 
     cy.fill('Statut', 'Archivé')
-    cy.fill('Type', 'Suspicion d\'infraction')
+    cy.fill('Type', "Suspicion d'infraction")
     cy.fill('INN / non INN', 'Signalement INN')
     cy.fill('Période', 'Période spécifique')
     const startDateAsDayjs = dayjs().subtract(1, 'year').hour(1).minute(2)

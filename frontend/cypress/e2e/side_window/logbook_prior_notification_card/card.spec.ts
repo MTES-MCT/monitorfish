@@ -42,7 +42,9 @@ context('Side Window > Logbook Prior Notification Card > Card', () => {
 
     // Verification reason labels
     cy.contains('À vérifier - note ≥ 2,3').should('be.visible')
-    cy.contains('Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).').should('be.visible')
+    cy.contains(
+      'Le préavis doit être vérifié par le CNSP avant sa diffusion (note de risque du navire égale ou supérieure à 2,3).'
+    ).should('be.visible')
   })
 
   it('Should refresh the list when the opened logbook prior notification data differs from its entry in the current list', () => {

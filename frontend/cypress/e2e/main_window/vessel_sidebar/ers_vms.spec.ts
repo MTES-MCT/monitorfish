@@ -86,8 +86,8 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
-      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
-      '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
+        '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS' +
+        '&vesselId=1&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('openVessel')
     openVesselBySearch('Pheno')
     cy.wait('@openVessel')
@@ -106,8 +106,8 @@ context('Vessel sidebar ers/vms tab', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=TALK2ME' +
-      '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
-      '&vesselId=2&vesselIdentifier=INTERNAL_REFERENCE_NUMBER',
+        '&internalReferenceNumber=U_W0NTFINDME&IRCS=QGDF&trackDepth=TWELVE_HOURS' +
+        '&vesselId=2&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('openVesselTwo')
     cy.intercept('GET', '/bff/v1/vessels/beacon_malfunctions*').as('vesselTwoBeaconMalfunctions')
     cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]', { timeout: 10000 }).click()

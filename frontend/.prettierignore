@@ -1,1 +1,4 @@
 /package-lock.json
+
+# Machine-generated WireMock stubs (see test:e2e:generate) — keep out of Prettier to avoid mass reformats
+/cypress/mappings/

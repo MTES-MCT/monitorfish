@@ -2,10 +2,29 @@ set -e
 
 # Slow, whole-project checks that can't be scoped to staged files live here (pre-push)
 # rather than pre-commit, to keep commits fast.
+
+# Skip entirely when the outgoing commits touch no frontend file (e.g. backend-only pushes).
+base=$(git merge-base '@{u}' HEAD 2>/dev/null) \
+  || base=$(git merge-base origin/master HEAD 2>/dev/null) \
+  || base=''
+if [ -n "$base" ] && git diff --quiet "$base" HEAD -- frontend; then
+  exit 0
+fi
+
 cd ./frontend
 
-# Full TypeScript type-check
-npm run test:type
+# Full type-check (tsc, incremental) and type-aware lint (typescript-eslint) both need complete
+# type information and are the two slowest checks: run them in parallel, and only print their
+# output when they fail so a passing push stays silent.
+tsc_log=$(mktemp) && lint_log=$(mktemp)
+trap 'rm -f "$tsc_log" "$lint_log"' EXIT
 
-# Type-aware lint (typescript-eslint, needs full type information)
-npm run test:lint:types
+npm run test:type > "$tsc_log" 2>&1 &
+tsc_pid=$!
+npm run test:lint:types > "$lint_log" 2>&1 &
+lint_pid=$!
+
+status=0
+wait "$tsc_pid" || { cat "$tsc_log"; status=1; }
+wait "$lint_pid" || { cat "$lint_log"; status=1; }
+exit "$status"

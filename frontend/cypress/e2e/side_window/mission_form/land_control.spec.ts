@@ -59,17 +59,17 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Obligations déclaratives et autorisations
     // The propulsion power check is not displayed on land controls (forced to N/A); VMS / AIS are controlled.
-    cy.fill("Bonne émission VMS", "Oui")
-    cy.fill("Bonne émission AIS", "Non")
-    cy.fill("Accès au port / autorisation de débarquement conformes", "Non")
-    cy.fill("Déclarations journal de pêche conformes à l’activité du navire", "N/A")
-    cy.fill("Autorisations de pêche (AEP) conformes à l’activité du navire ", "Non")
-    cy.fill("Licence de pêche conformes à l’activité du navire", "Non")
-    cy.fill("Plan d’arrimage présent et valide", "N/A")
-    cy.fill("Autorisation pour la pesée à bord", "N/A")
+    cy.fill('Bonne émission VMS', 'Oui')
+    cy.fill('Bonne émission AIS', 'Non')
+    cy.fill('Accès au port / autorisation de débarquement conformes', 'Non')
+    cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'N/A')
+    cy.fill('Autorisations de pêche (AEP) conformes à l’activité du navire ', 'Non')
+    cy.fill('Licence de pêche conformes à l’activité du navire', 'Non')
+    cy.fill('Plan d’arrimage présent et valide', 'N/A')
+    cy.fill('Autorisation pour la pesée à bord', 'N/A')
     cy.fill(
-      "Observations (hors infractions) sur les obligations déclaratives / autorisations",
-      "Une observation hors infraction sur les obligations déclaaratives."
+      'Observations (hors infractions) sur les obligations déclaratives / autorisations',
+      'Une observation hors infraction sur les obligations déclaaratives.'
     )
 
     // Engins à bord
@@ -180,18 +180,36 @@ context('Side Window > Mission Form > Land Control', () => {
       {
         body: {
           actionType: 'LAND_CONTROL',
+          approvedWeighingOperatorInformation: 'YES',
+          catchesWeighedAtLanding: 'NO',
           completedBy: 'Alice',
           completion: 'COMPLETED',
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
+          cratesWeighingSamplingControl: 'NO',
+          // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a). The land control form has
+          // no "Rejets" card, so these prefilled discards are submitted as-is and no discard is added here.
+          discardedSpecies: [
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
+            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' }
+          ],
+
           districtCode: 'AY',
+
           emitsAis: 'NO',
+
           emitsVms: 'YES',
-          portEntranceAndLandingAuthorized: 'NO',
+
           externalReferenceNumber: 'DONTSINK',
+
           facade: null,
+
           faoAreas: ['27.8.b', '27.8.c'],
+
+          fishingLicencesMatchActivity: 'NO',
+
           flagState: 'FR',
+
           gearOnboard: [
             {
               comments: null,
@@ -214,74 +232,166 @@ context('Side Window > Mission Form > Land Control', () => {
               hasUncontrolledMesh: false
             }
           ],
+
           hasSomeGearsSeized: true,
+
           hasSomeSpeciesSeized: true,
-          id: 2,
-          internalReferenceNumber: 'FAK000999999',
-          ircs: 'CALLME',
-          isLastHaul: true,
-          latitude: null,
-          licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
-          licencesMatchActivity: 'NO',
-          logbookMatchesActivity: 'NOT_APPLICABLE',
-          longitude: null,
-          missionId: 1,
-          numberOfVesselsFlownOver: null,
-          otherComments: 'Une autre observation.',
-          portLocode: 'FRZEG',
-          segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
-          seizureAndDiversion: true,
-          seizureAndDiversionComments: null,
-          propulsionEnginePowerControl: 'NOT_APPLICABLE',
-          fishingLicencesMatchActivity: 'NO',
-          stowagePlanPresent: 'NOT_APPLICABLE',
-          onboardWeighingPermit: 'NOT_APPLICABLE',
-          weighingCertificateAndSystemsValid: null,
-          underSizedSeparateRecording: 'NO',
-          minimumConservationReferenceSizeControlled: 'YES',
-          cratesWeighingSamplingControl: 'NO',
-          approvedWeighingOperatorInformation: 'YES',
+
           holdControlledAfterUnloading: 'YES',
-          catchesWeighedAtLanding: 'NO',
+
+          id: 2,
+
           infractions: [
             {
               comments: 'Une observation sur l’infraction déclarative.',
               infractionType: 'WITH_RECORD',
-              threats: [{"children":[{"children":[{"label":"27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL","value":27717}],"label":"Transbordement","value":"Transbordement"}],"label":"Mesures techniques et de conservation","value":"Mesures techniques et de conservation"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          label:
+                            "27717 - TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
+                          value: 27717
+                        }
+                      ],
+                      label: 'Transbordement',
+                      value: 'Transbordement'
+                    }
+                  ],
+                  label: 'Mesures techniques et de conservation',
+                  value: 'Mesures techniques et de conservation'
+                }
+              ]
             },
             {
               comments: 'Une observation sur l’infraction espèce.',
               infractionType: 'WITHOUT_RECORD',
-              threats: [{"children":[{"children":[{"label":"4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES","value":4234}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          label:
+                            '4234 - NON PRESENTATION PAR UN CAPITAINE DE SON JOURNAL DE BORD AU VISA DES AGENTS DES DOUANES',
+                          value: 4234
+                        }
+                      ],
+                      label: 'Interférence',
+                      value: 'Interférence'
+                    }
+                  ],
+                  label: 'Entrave au contrôle',
+                  value: 'Entrave au contrôle'
+                }
+              ]
             },
             {
               comments: 'Une observation sur l’infraction autre.',
               infractionType: 'WITHOUT_RECORD',
-              threats: [{"children":[{"children":[{"label":"2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME","value":2584}],"label":"Interférence","value":"Interférence"}],"label":"Entrave au contrôle","value":"Entrave au contrôle"}]
+              threats: [
+                {
+                  children: [
+                    {
+                      children: [{ label: '2584 - OBSTACLE A UNE SAISIE EN MATIERE DE PECHE MARITIME', value: 2584 }],
+                      label: 'Interférence',
+                      value: 'Interférence'
+                    }
+                  ],
+                  label: 'Entrave au contrôle',
+                  value: 'Entrave au contrôle'
+                }
+              ]
             }
           ],
+
+          internalReferenceNumber: 'FAK000999999',
+
+          ircs: 'CALLME',
+
+          isLastHaul: true,
+
+          latitude: null,
+
+          licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
+
+          licencesMatchActivity: 'NO',
+
+          logbookMatchesActivity: 'NOT_APPLICABLE',
+
+          longitude: null,
+
+          minimumConservationReferenceSizeControlled: 'YES',
+
+          missionId: 1,
+
+          numberOfVesselsFlownOver: null,
+
+          onboardWeighingPermit: 'NOT_APPLICABLE',
+
+          otherComments: 'Une autre observation.',
+
+          portEntranceAndLandingAuthorized: 'NO',
+
+          portLocode: 'FRZEG',
+
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
+
+          segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
+
+          seizureAndDiversion: true,
+
+          seizureAndDiversionComments: null,
+
           speciesObservations: 'Une observation hors infraction sur les espèces.',
+
           // Catches are the risk factor species sorted by weight: HKE (471.2), NEP (235.6), BLI (13.46),
           // then the manually added COD. HKE keeps isNotLanded / underSizedWeight / presentationCodes as a
           // landed catch.
           speciesOnboard: [
-            { controlledWeight: 500, declaredWeight: 471.2, faoZones: ['27.8.b'], isNotLanded: true, nbFish: null, presentationCodes: ['WHL'], speciesCode: 'HKE', underSized: false, underSizedWeight: 10 },
-            { controlledWeight: null, declaredWeight: 235.6, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'NEP', underSized: false },
-            { controlledWeight: null, declaredWeight: 13.46, faoZones: ['27.8.b'], nbFish: null, speciesCode: 'BLI', underSized: false },
+            {
+              controlledWeight: 500,
+              declaredWeight: 471.2,
+              faoZones: ['27.8.b'],
+              isNotLanded: true,
+              nbFish: null,
+              presentationCodes: ['WHL'],
+              speciesCode: 'HKE',
+              underSized: false,
+              underSizedWeight: 10
+            },
+            {
+              controlledWeight: null,
+              declaredWeight: 235.6,
+              faoZones: ['27.8.b'],
+              nbFish: null,
+              speciesCode: 'NEP',
+              underSized: false
+            },
+            {
+              controlledWeight: null,
+              declaredWeight: 13.46,
+              faoZones: ['27.8.b'],
+              nbFish: null,
+              speciesCode: 'BLI',
+              underSized: false
+            },
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
           ],
-          // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a). The land control form has
-          // no "Rejets" card, so these prefilled discards are submitted as-is and no discard is added here.
-          discardedSpecies: [
-            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
-            { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' }
-          ],
+
           speciesQuantitySeized: 6289.5,
+
+          stowagePlanPresent: 'NOT_APPLICABLE',
+
+          underSizedSeparateRecording: 'NO',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 1,
           vesselName: 'PHENOMENE',
-          vesselTargeted: 'YES'
+          vesselTargeted: 'YES',
+          weighingCertificateAndSystemsValid: null
         }
       },
       5

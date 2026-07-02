@@ -7,13 +7,16 @@
     "eslint-plugin-sort-keys-fix",
     "eslint-plugin-sort-destructure-keys",
     "eslint-plugin-typescript-sort-keys",
+    "eslint-plugin-cypress",
+    "eslint-plugin-mocha",
     { "name": "import-js", "specifier": "eslint-plugin-import" },
     { "name": "react-js", "specifier": "eslint-plugin-react" },
     { "name": "stylistic", "specifier": "@stylistic/eslint-plugin" }
   ],
   "categories": {
     "correctness": "error",
-    "perf": "warn"
+    "perf": "warn",
+    "suspicious": "warn"
   },
   "env": {
     "browser": true,
@@ -22,7 +25,43 @@
   "ignorePatterns": ["build/**", "public/**"],
   "rules": {
     "curly": ["error", "all"],
+    "default-case": "error",
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
     "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "no-else-return": "error",
+    "no-nested-ternary": "error",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "acc",
+          "accumulator",
+          "e",
+          "ctx",
+          "context",
+          "req",
+          "request",
+          "res",
+          "response",
+          "$scope",
+          "staticContext"
+        ],
+        // `previous*` is this codebase's naming convention for reduce accumulators.
+        "ignorePropertyModificationsForRegex": ["^previous"]
+      }
+    ],
+    "no-plusplus": "error",
+    "no-return-assign": ["error", "always"],
+    "no-shadow": "error",
+    "no-throw-literal": "error",
+    "no-underscore-dangle": "error",
+    "no-useless-concat": "error",
+    "object-shorthand": ["error", "always", { "avoidQuotes": true, "ignoreConstructors": false }],
+    "prefer-promise-reject-errors": ["error", { "allowEmptyReject": true }],
+    "prefer-template": "error",
+    "radix": "error",
+    "yoda": "error",
 
     "import/no-default-export": "error",
 
@@ -34,6 +73,13 @@
 
     "unicorn/no-thenable": "off",
     "unicorn/no-empty-file": "off",
+    // Their fixers rewrite .sort()/.reverse() into ES2023 toSorted()/toReversed(), which
+    // tsconfig `lib: ES2022` does not declare — tsc then fails on every fixed call site.
+    "unicorn/no-array-sort": "off",
+    "unicorn/no-array-reverse": "off",
+    // Its fixer strips `export {}` from .d.ts files, turning them into non-modules where
+    // `declare global` no longer applies (breaks src/matomo.d.ts).
+    "typescript/no-useless-empty-export": "off",
 
     "no-restricted-imports": [
       "error",
@@ -52,8 +98,13 @@
       "asc",
       { "caseSensitive": false, "natural": false, "requiredFirst": false }
     ],
+    // typescript-sort-keys/string-enum cannot run here: it crashes under jsPlugins (OxLint puts
+    // enum members in `body.members`, the rule expects `members`), and the crash silently disables
+    // every other jsPlugin rule for the file. It runs in eslint-typed.config.cjs instead.
     "stylistic/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "stylistic/padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }],
     "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],
+    "import-js/no-extraneous-dependencies": ["error", { "devDependencies": ["**/__tests__/**", "**/__mocks__/**"] }],
     "import-js/order": [
       "error",
       {
@@ -67,6 +118,8 @@
     {
       "files": [
         "src/domain/shared_slices/**/*.ts",
+        "src/domain/schemas/*.ts",
+        "src/domain/**/schemas.ts",
         "src/**/*.slice.ts",
         "src/**/slice.ts",
         "src/**/slice.*.ts",
@@ -75,17 +128,14 @@
       "rules": { "no-param-reassign": "off" }
     },
     {
-      "files": [
-        "src/domain/schemas/*.ts",
-        "src/domain/**/schemas.ts",
-        "src/domain/shared_slices/**/*.ts",
-        "src/**/slice.ts"
-      ],
-      "rules": { "no-param-reassign": "off" }
-    },
-    {
       "files": ["src/components/**/*.tsx", "src/ui/**/*.tsx"],
       "rules": { "react/jsx-props-no-spreading": "off" }
+    },
+    {
+      // The `export namespace X { export type X = … }` declaration-merging convention shadows by
+      // design; OxLint's native no-shadow does not understand it (typescript-eslint's did).
+      "files": ["src/**/*.types.ts", "src/**/types.ts", "src/domain/types/**/*.ts"],
+      "rules": { "no-shadow": "off" }
     },
     {
       "files": ["__mocks__/**/*.js", "__mocks__/**/*.ts", "**/*.test.ts", "**/*.test.tsx", "puppeteer/**/*.ts"],
@@ -114,12 +164,27 @@
         "oxc/no-accumulating-spread": "off",
         "oxc/no-map-spread": "off",
         "no-console": "off",
-        "import/no-default-export": "off"
+        "no-underscore-dangle": "off",
+        "import/no-default-export": "off",
+        "import-js/no-extraneous-dependencies": "off"
       }
     },
     {
       "files": ["cypress/**/*.js", "cypress/**/*.ts", "cypress.config.ts"],
-      "rules": { "import/no-default-export": "off" }
+      "rules": {
+        "cypress/assertion-before-screenshot": "error",
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-async-tests": "error",
+        "cypress/no-pause": "error",
+        "mocha/no-exclusive-tests": "error",
+        "mocha/no-skipped-tests": "error",
+        // Chai-style assertions (`expect(x).to.be.undefined`) are expression statements.
+        "no-unused-expressions": "off",
+        // `/// <reference types="..." />` is the Cypress convention for typing custom commands.
+        "typescript/triple-slash-reference": "off",
+        "import/no-default-export": "off",
+        "import-js/no-extraneous-dependencies": "off"
+      }
     },
     {
       "files": [
@@ -133,7 +198,10 @@
         "scripts/**/*.ts"
       ],
       "env": { "browser": false, "node": true },
-      "rules": { "import/no-default-export": "off" }
+      "rules": {
+        "import/no-default-export": "off",
+        "import-js/no-extraneous-dependencies": "off"
+      }
     }
   ]
 }

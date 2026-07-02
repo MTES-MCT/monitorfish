@@ -12,9 +12,9 @@ context('Missions Map Button', () => {
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)
 
     // When
-    cy.clickButton("Missions et contrôles")
+    cy.clickButton('Missions et contrôles')
     cy.get('*[data-cy="missions-menu-box"]').should('be.visible')
-    cy.clickButton("Cacher les missions")
+    cy.clickButton('Cacher les missions')
 
     // Then
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
@@ -25,8 +25,8 @@ context('Missions Map Button', () => {
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 0)
 
     // Show the missions back
-    cy.clickButton("Missions et contrôles")
-    cy.clickButton("Afficher les missions")
+    cy.clickButton('Missions et contrôles')
+    cy.clickButton('Afficher les missions')
     cy.get('.MISSION_PIN_POINT').should('exist')
     cy.get('*[data-cy="mission-label-text"]').should('have.length', 1)
   })

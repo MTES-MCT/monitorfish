@@ -17,7 +17,7 @@ export function useMatomo() {
       return
     }
 
-    window._paq = window._paq || []
+    window._paq = window._paq ?? []
 
     window._paq.push(['trackPageView'])
     window._paq.push(['enableLinkTracking'])

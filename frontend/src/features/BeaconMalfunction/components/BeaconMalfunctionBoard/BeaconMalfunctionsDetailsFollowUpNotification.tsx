@@ -28,13 +28,13 @@ export function BeaconMalfunctionsDetailsFollowUpNotification({ notification }) 
       )
     })
 
-  const recipientFunctions = notification.notifications.reduce((recipientFunctionGroup, _notification) => {
+  const recipientFunctions = notification.notifications.reduce((acc, _notification) => {
     const { recipientFunction } = _notification
 
-    recipientFunctionGroup[recipientFunction] = recipientFunctionGroup[recipientFunction] ?? []
-    recipientFunctionGroup[recipientFunction].push(_notification)
+    acc[recipientFunction] = acc[recipientFunction] ?? []
+    acc[recipientFunction].push(_notification)
 
-    return recipientFunctionGroup
+    return acc
   }, {})
 
   return (

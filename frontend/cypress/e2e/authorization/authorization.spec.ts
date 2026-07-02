@@ -17,7 +17,7 @@ context('Authorization', () => {
   })
 
   it('Should redirect to login page if an API request is Unauthorized', () => {
-    cy.on("uncaught:exception", () => {
+    cy.on('uncaught:exception', () => {
       // We do no track uncaught exception as it is OK that fetch are being canceled
       return false
     })

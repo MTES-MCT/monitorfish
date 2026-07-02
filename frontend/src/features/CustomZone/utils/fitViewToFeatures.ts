@@ -6,7 +6,7 @@ import type { Geometry } from 'ol/geom'
 
 export function fitViewToFeatures(features: Feature<Geometry>[]) {
   const vectorSource = new VectorSource({
-    features: features
+    features
   })
 
   const extent = vectorSource.getExtent()

@@ -202,7 +202,7 @@ context('BackOffice > Regulation Form > Edition', () => {
         '{"unauthorized":{"allGears":false,"allTowedGears":false,' +
           '"regulatedGears":{"OT":{"code":"OT","name":"Chaluts à panneaux (non spécifiés)","category":"Chaluts","groupId":1}},' +
           '"allPassiveGears":false,"regulatedGearCategories":{},"selectedCategoriesAndGears":["OT"]},' +
-          '"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",'+
+          '"otherInfo":"- Drague sans dent et de largeur maximale 1,30 mètre\\n - Dragues avec dents !",' +
           // Authorized
           '"authorized":{"allGears":false,' +
           '"allTowedGears":false,"regulatedGears":{"TBN":{"code":"TBN","name":"Chaluts à langoustines",' +

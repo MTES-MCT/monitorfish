@@ -46,8 +46,8 @@ export function VesselEstimatedPositionOverlay({ feature }) {
 
         const { latitude } = feature.estimatedPosition
         const { longitude } = feature.estimatedPosition
-        const coordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
-        setCoordinates(coordinates)
+        const nextCoordinates = getCoordinates([longitude, latitude], WSG84_PROJECTION, coordinatesFormat)
+        setCoordinates(nextCoordinates)
         if (mousePosition) {
           overlayObjectRef.current.setPosition(monitorfishMap.getCoordinateFromPixel(mousePosition))
         }

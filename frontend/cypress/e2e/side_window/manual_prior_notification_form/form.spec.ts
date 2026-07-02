@@ -435,8 +435,9 @@ context('Side Window > Manual Prior Notification Form > Form', () => {
 
     cy.fill('Engins utilisés', ['OTB'], { index: 1 })
 
-    const { utcDateTupleWithTime: arrivalDateTupleWithTime } =
-      getUtcDateInMultipleFormats(customDayjs().add(2, 'hours').startOf('minute').toISOString())
+    const { utcDateTupleWithTime: arrivalDateTupleWithTime } = getUtcDateInMultipleFormats(
+      customDayjs().add(2, 'hours').startOf('minute').toISOString()
+    )
     cy.fill("Date et heure estimées d'arrivée au port (UTC)", arrivalDateTupleWithTime)
     cy.fill("équivalentes à celles de l'arrivée au port", true)
 

@@ -256,6 +256,8 @@ export function getRegulatoryZonesInExtentFromAPI(
   } catch (error) {
     console.error(error)
 
+    // Callers expect the same string rejection as the `throw` paths above (see file-level eslint-disable).
+    // eslint-disable-next-line prefer-promise-reject-errors
     return Promise.reject(REGULATORY_ZONES_ZONE_SELECTION_ERROR_MESSAGE)
   }
 }

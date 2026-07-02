@@ -17,6 +17,7 @@ export const useClickOutsideWhenOpenedAndNotInSelector = (ref, isOpened, selecto
     if (isOpened) {
       document.addEventListener('mousedown', handleClickOutside)
     }
+
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside)

@@ -1,5 +1,5 @@
-import {openSideWindowAlertList} from './utils'
-import {getUtcDateInMultipleFormats} from '../../utils/getUtcDateInMultipleFormats'
+import { openSideWindowAlertList } from './utils'
+import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Alert List', () => {
   beforeEach(() => {
@@ -50,9 +50,7 @@ context('Side Window > Alert List', () => {
 
     // Then
     cy.get('*[data-cy^="side-window-sub-menu-NAMO-number"]').contains('10')
-    cy.get('body').contains(
-      '2 suspensions d\'alertes en NAMO'
-    )
+    cy.get('body').contains("2 suspensions d'alertes en NAMO")
     cy.get('*[data-cy="side-window-alerts-list"] tbody tr').should('have.length', 10)
 
     cy.get('*[data-cy="side-window-alerts-list"] tbody tr').last().should('contain', 'Chalutage dans les 3 milles')
@@ -92,7 +90,7 @@ context('Side Window > Alert List', () => {
     cy.intercept(
       'GET',
       'bff/v1/vessels/find?afterDateTime=&beforeDateTime=&externalReferenceNumber=DONTSINK' +
-      '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselId=&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
+        '&internalReferenceNumber=FAK000999999&IRCS=CALLME&trackDepth=TWELVE_HOURS&vesselId=&vesselIdentifier=INTERNAL_REFERENCE_NUMBER'
     ).as('showVesselPositionsOnMap')
     cy.get('[title="Voir sur la carte"]').first().forceClick()
     cy.wait('@showVesselPositionsOnMap').then(({ response }) => expect(response && response.statusCode).equal(200))
@@ -110,7 +108,7 @@ context('Side Window > Alert List', () => {
     // When
     cy.intercept('PUT', '/bff/v1/operational_alerts/1/validate').as('validateAlert')
     cy.get('[title="Valider l\'alerte"]').first().click({ force: true })
-    cy.get('.Component-Banner').contains("Alerte validée et ajoutée à la fiche du navire")
+    cy.get('.Component-Banner').contains('Alerte validée et ajoutée à la fiche du navire')
     cy.wait('@validateAlert').then(({ response }) => expect(response && response.statusCode).equal(200))
 
     // The value is saved in database when I refresh the page
@@ -191,7 +189,8 @@ context('Side Window > Alert List', () => {
         flagState: 'FR',
         internalReferenceNumber: 'FAK000999999',
         ircs: 'CALLME',
-        value: '{"alertId":4,"name":"Pêche en ZEE française par un navire tiers","natinfCode":2608,"threat":"Activités INN","threatCharacterization":"Pêche sans autorisation par navire tiers","type":"POSITION_ALERT"}',
+        value:
+          '{"alertId":4,"name":"Pêche en ZEE française par un navire tiers","natinfCode":2608,"threat":"Activités INN","threatCharacterization":"Pêche sans autorisation par navire tiers","type":"POSITION_ALERT"}',
         vesselId: 1,
         vesselIdentifier: 'INTERNAL_REFERENCE_NUMBER',
         vesselName: 'PHENOMENE'

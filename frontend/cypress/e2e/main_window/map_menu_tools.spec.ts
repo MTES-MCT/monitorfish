@@ -13,7 +13,7 @@ context('Map menu tools', () => {
     cy.get('#root').click(880, 760, { timeout: 10000 })
 
     // Measurement should not close the vessel sidebar
-    cy.clickButton("Mesurer une distance", { withoutScroll: true })
+    cy.clickButton('Mesurer une distance', { withoutScroll: true })
     cy.get('*[data-cy="measurement"]').should('have.css', 'width', '40px')
     cy.get('*[data-cy="measurement-circle-range"]').click({ timeout: 10000 })
     cy.get('*[data-cy="measurement-circle-radius-input"]').should('be.visible')
@@ -46,7 +46,7 @@ context('Map menu tools', () => {
     cy.get('*[data-cy="map-account-box"]').should('be.visible')
 
     // Account
-    cy.clickButton("Nouveautés MonitorFish", { withoutScroll: true })
+    cy.clickButton('Nouveautés MonitorFish', { withoutScroll: true })
     cy.get('*[data-cy="map-account-box"]').should('not.exist')
     cy.getDataCy('map-new-features-box').should('be.visible')
 

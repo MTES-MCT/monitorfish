@@ -2,7 +2,7 @@ export function hoverOrClickVesselByName(
   vesselName: string,
   layerName: string = 'VESSELS_POINTS',
   action: 'hover' | 'click' = 'hover',
-  topNegativeOffset: number = 0,
+  topNegativeOffset: number = 0
 ): Cypress.Chainable {
   return cy.get(`.${layerName}`).then($mapElement =>
     cy.window().then(win => {
@@ -20,8 +20,7 @@ export function hoverOrClickVesselByName(
       const [mapWidth, mapHeight] = win.olTestUtils.getMapSize() ?? [1280, 1024]
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       let pixel = win.olTestUtils.getPixelFromCoordinate(coordinates)
-      const isVisible =
-        pixel && pixel[0] >= 0 && pixel[0] <= mapWidth && pixel[1] >= 0 && pixel[1] <= mapHeight
+      const isVisible = pixel && pixel[0] >= 0 && pixel[0] <= mapWidth && pixel[1] >= 0 && pixel[1] <= mapHeight
       if (!isVisible) {
         // Vessel is off-screen (e.g. map panned after a previous click).
         // Center the map instantly so we can compute a valid click position.
@@ -51,9 +50,9 @@ export function hoverOrClickVesselByName(
         //   • button: 0 must be explicit: Cypress defaults pointerup to button:-1
         //     (PointerEvents "no state change" sentinel), which fails OL's
         //     isMouseActionButton_() check and silently skips click emulation.
-        cy.window().then(win => {
+        cy.window().then(clickWin => {
           // @ts-ignore
-          const viewport = win.olTestUtils.monitorfishMap.getViewport()
+          const viewport = clickWin.olTestUtils.monitorfishMap.getViewport()
           cy.wrap(viewport).trigger('pointerdown', { button: 0, clientX, clientY, force: true, pointerId: 1 })
           cy.wait(20)
           cy.wrap(viewport).trigger('pointerup', { button: 0, clientX, clientY, force: true, pointerId: 1 })

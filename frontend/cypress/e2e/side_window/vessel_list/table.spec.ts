@@ -1,5 +1,4 @@
 context('Side Window > Vessel List > Table', () => {
-
   it('Should filter vessels, open a row and download the CSV When logged as super user', () => {
     cy.cleanDownloadedFiles()
     cy.login('superuser')
@@ -78,8 +77,12 @@ context('Side Window > Vessel List > Table', () => {
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
-    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
-    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains(
+      'OTT – Chaluts jumeaux à panneaux'
+    )
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains(
+      'OTB – Chaluts de fond à panneaux'
+    )
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')
@@ -147,8 +150,12 @@ context('Side Window > Vessel List > Table', () => {
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW01 – NWW01')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('NWW03 – NWW03')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Segments actuels')
-    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTT – Chaluts jumeaux à panneaux')
-    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('OTB – Chaluts de fond à panneaux')
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains(
+      'OTT – Chaluts jumeaux à panneaux'
+    )
+    cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains(
+      'OTB – Chaluts de fond à panneaux'
+    )
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('Engins à bord')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('ANF – 4164.47 kg')
     cy.get('[data-id="VESSELS_POINTS:ABC000452438/CC0029/OO600648-expanded"]').contains('LEZ – 330.72 kg')

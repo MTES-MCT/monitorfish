@@ -80,7 +80,7 @@ export const showReporting =
         dispatch(reportingActions.unsetEditedReporting())
 
         dispatch(setSelectedVessel(vesselAndPositions))
-        dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))
+        void dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))
       }
 
       if (positionToMoveTo !== undefined) {
@@ -93,13 +93,15 @@ export const showReporting =
 
       if (!reportingHasVessel) {
         dispatch(closeVesselSidebar())
-        dispatch(editReportingFromMap(reporting.id))
+        void dispatch(editReportingFromMap(reporting.id))
       }
 
       const featureId = `${LayerProperties.REPORTING.code}:${reporting.id}`
       dispatch(reportingActions.selectReportingFeatureId(featureId))
     } catch (error) {
-      dispatch(displayOrLogError(error as Error, undefined, true, DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR))
+      void dispatch(
+        displayOrLogError(error as Error, undefined, true, DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR)
+      )
       dispatch(resetLoadingVessel())
     }
   }

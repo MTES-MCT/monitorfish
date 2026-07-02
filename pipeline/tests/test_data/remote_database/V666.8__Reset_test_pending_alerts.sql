@@ -1,4 +1,5 @@
 DELETE FROM pending_alerts;
+ALTER SEQUENCE pending_alerts_id_seq RESTART WITH 1;
 
 INSERT INTO pending_alerts (
     id,

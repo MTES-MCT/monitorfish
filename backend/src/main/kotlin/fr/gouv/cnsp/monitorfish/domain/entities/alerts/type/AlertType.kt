@@ -3,7 +3,10 @@ package fr.gouv.cnsp.monitorfish.domain.entities.alerts.type
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import java.time.ZonedDateTime
 
-enum class AlertType(
+enum class
+
+
+AlertType(
     val specification: PositionAlertSpecification?,
 ) {
     POSITION_ALERT(
@@ -104,6 +107,9 @@ Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
                 createdBy = "MonitorFish",
                 createdAtUtc = ZonedDateTime.parse("2025-09-11T10:24:46.021615+02:00"),
             ),
+    ),
+    BEACON_MALFUNCTION_ACTIVITY_DETECTED_ALERT(
+        specification = null,
     ),
     ;
 

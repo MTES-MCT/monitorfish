@@ -14,7 +14,7 @@ class JpaBeaconMalfunctionsRepository(
     private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
 ) : BeaconMalfunctionsRepository {
     override fun findAll(): List<BeaconMalfunction> =
-        dbBeaconMalfunctionsRepository.findAll().map {
+        dbBeaconMalfunctionsRepository.findAllFollowed().map {
             it.toBeaconMalfunction()
         }
 
@@ -68,6 +68,11 @@ class JpaBeaconMalfunctionsRepository(
             .map {
                 it.toBeaconMalfunction()
             }
+
+    @Transactional
+    override fun updateIsFollowed(id: Int, isFollowed: Boolean) {
+        dbBeaconMalfunctionsRepository.updateIsFollowed(id, isFollowed)
+    }
 
     @Transactional
     override fun requestNotification(

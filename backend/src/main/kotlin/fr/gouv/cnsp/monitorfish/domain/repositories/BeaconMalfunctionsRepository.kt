@@ -25,6 +25,8 @@ interface BeaconMalfunctionsRepository {
         updateDateTime: ZonedDateTime,
     )
 
+    fun updateIsFollowed(id: Int, isFollowed: Boolean)
+
     fun requestNotification(
         id: Int,
         notificationType: BeaconMalfunctionNotificationType,

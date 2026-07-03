@@ -6,8 +6,9 @@ set -euo pipefail
 # the file stops changing. Reordering several imports often needs more than one pass to fully converge
 # (moving one import past another can reveal a new ordering violation further down), so a single
 # `oxlint --fix` run can leave fixable `import-js(order)` violations behind. This wrapper reruns the
-# fixer until the staged files stop changing (capped to guard against a genuine oxlint bug looping
-# forever), then does one last run so the exit code still reflects any remaining, non-autofixable errors.
+# fixer until a run stops changing the files (capped to guard against a genuine oxlint bug looping
+# forever) and exits with that run's status, so remaining non-autofixable errors still fail the commit.
+# A file with nothing fixable converges on the very first run.
 
 max_passes=15
 files=("$@")
@@ -16,17 +17,18 @@ checksum() {
   cksum "${files[@]}"
 }
 
-previous_checksum=""
+previous_checksum="$(checksum)"
 for ((pass = 1; pass <= max_passes; pass += 1)); do
   set +e
   npx oxlint --config=.oxlintrc.json --fix "${files[@]}"
+  status=$?
   set -e
 
   current_checksum="$(checksum)"
   if [[ "$current_checksum" == "$previous_checksum" ]]; then
-    break
+    exit "$status"
   fi
   previous_checksum="$current_checksum"
 done
 
-npx oxlint --config=.oxlintrc.json --fix "${files[@]}"
+exit "$status"

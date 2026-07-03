@@ -81,17 +81,13 @@ export function getSpeciesControlCheckRows(
   isEISREnabled: boolean,
   applicability: SpeciesEISRApplicability
 ): ControlCheckRow[] {
-  const rows = isLandControl
-    ? isEISREnabled
-      ? LAND_CONTROL_EISR_CHECK_ROWS
-      : BASE_SPECIES_CHECK_ROWS
-    : isEISREnabled
-      ? [...BASE_SPECIES_CHECK_ROWS, ...SEA_CONTROL_EISR_CHECK_ROWS]
-      : BASE_SPECIES_CHECK_ROWS
-
   if (!isEISREnabled) {
-    return rows
+    return BASE_SPECIES_CHECK_ROWS
   }
+
+  const rows = isLandControl
+    ? LAND_CONTROL_EISR_CHECK_ROWS
+    : [...BASE_SPECIES_CHECK_ROWS, ...SEA_CONTROL_EISR_CHECK_ROWS]
 
   const isRowApplicable = getApplicabilityByFieldName(applicability)
 

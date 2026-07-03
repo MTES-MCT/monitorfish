@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react'
 
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
+import { DEFAULT_SPECIES_EISR_APPLICABILITY, getSpeciesEISRApplicability } from './Species/getSpeciesEISRApplicability'
 import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
@@ -34,6 +35,7 @@ import {
   TdWithoutPaddingWhenActive
 } from './Species/speciesTable.styles'
 import { FaoZonesCell, SpeciesSelectCell, SpeciesTableRow, WeightCell } from './Species/SpeciesTableRow'
+import { useForceSpeciesEISRFieldsNotApplicable } from './Species/useForceSpeciesEISRFieldsNotApplicable'
 import { useRowActivation } from './Species/useRowActivation'
 import { useSpeciesAndFaoOptions } from './Species/useSpeciesAndFaoOptions'
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
@@ -62,10 +64,22 @@ export function SpeciesField() {
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
   const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
 
-  const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
+  const {
+    customSearch,
+    faoAreasAsOptions,
+    getScipSpeciesTypeFromSpecyCode,
+    getSpecyNameFromSpecyCode,
+    speciesAsOptions
+  } = useSpeciesAndFaoOptions()
 
   const activation = useRowActivation()
   const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
+
+  const speciesEISRApplicability =
+    values.vesselId !== undefined
+      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.length)
+      : DEFAULT_SPECIES_EISR_APPLICABILITY
+  useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -179,7 +193,7 @@ export function SpeciesField() {
 
   return (
     <FieldsetGroup isLight legend={legend}>
-      <ControlCheckTable rows={getSpeciesControlCheckRows(isLandControl, isEISREnabled)} />
+      <ControlCheckTable rows={getSpeciesControlCheckRows(isLandControl, isEISREnabled, speciesEISRApplicability)} />
 
       <FieldsetGroupSeparator marginBottom={12} />
       <SpeciesTableWrapper>

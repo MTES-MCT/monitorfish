@@ -96,6 +96,11 @@ class PublicMissionActionsControllerITests {
                         proprietorEmails = listOf("elmalik@gmail.com"),
                         proprietorNationality = "FR",
                         proprietorAddress = "1 rue du Port, Lorient",
+                        operatorName = "MARINE ARMEMENT",
+                        operatorPhones = listOf("+33 6 12 34 56 78"),
+                        operatorEmail = "operator@armement.fr",
+                        operatorNationality = "FR",
+                        operatorAddress = "2 rue du Port, Lorient",
                     ),
                 tripNumber = "20210001",
                 pnoReportId = "FAKE_PNO_REPORT_ID",
@@ -123,6 +128,11 @@ class PublicMissionActionsControllerITests {
             .andExpect(jsonPath("$[0].proprietorEmails[0]", equalTo("elmalik@gmail.com")))
             .andExpect(jsonPath("$[0].proprietorNationality", equalTo("FR")))
             .andExpect(jsonPath("$[0].proprietorAddress", equalTo("1 rue du Port, Lorient")))
+            .andExpect(jsonPath("$[0].chartererName", equalTo("MARINE ARMEMENT")))
+            .andExpect(jsonPath("$[0].chartererPhones[0]", equalTo("+33 6 12 34 56 78")))
+            .andExpect(jsonPath("$[0].chartererEmail", equalTo("operator@armement.fr")))
+            .andExpect(jsonPath("$[0].chartererNationality", equalTo("FR")))
+            .andExpect(jsonPath("$[0].chartererAddress", equalTo("2 rue du Port, Lorient")))
             // JPE fields
             .andExpect(jsonPath("$[0].tripNumber", equalTo("20210001")))
             .andExpect(jsonPath("$[0].pnoReportId", equalTo("FAKE_PNO_REPORT_ID")))

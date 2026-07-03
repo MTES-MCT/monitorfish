@@ -46,6 +46,8 @@ data class Vessel(
     val operatorName: String? = null,
     val operatorPhones: List<String> = listOf(),
     val operatorEmail: String? = null,
+    val operatorNationality: String? = null,
+    val operatorAddress: String? = null,
     val proprietorName: String? = null,
     val proprietorPhones: List<String> = listOf(),
     val proprietorEmails: List<String> = listOf(),

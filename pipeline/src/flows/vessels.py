@@ -18,6 +18,11 @@ def extract_french_vessels() -> pd.DataFrame:
 
 
 @task
+def extract_administre_nationalities() -> pd.DataFrame:
+    return extract("ocan", "ocan/administre_nationalities.sql")
+
+
+@task
 def extract_eu_vessels() -> pd.DataFrame:
     """
     Extracts EU vessels from Navpro.
@@ -95,6 +100,7 @@ def concat_merge_vessels(
     vessels_operators: pd.DataFrame,
     licences: pd.DataFrame,
     control_charters: pd.DataFrame,
+    administre_nationalities: pd.DataFrame,
 ) -> pd.DataFrame:
     """
     Concatenates `french_vessels`, `eu_vessels` and `non_eu_vessels`, then performs a
@@ -118,6 +124,7 @@ def concat_merge_vessels(
         vessels_operators (pd.DataFrame): vessels' operators data
         licences (pd.DataFrame): french vessels navigation licences data
         control_charters (pd.DataFrame): vessels under_charter status
+        administre_nationalities (pd.DataFrame): nationality of 'administre'
 
     Raises:
         ValueError: if a vessel `id` is duplicated
@@ -134,6 +141,13 @@ def concat_merge_vessels(
     all_vessels = pd.merge(all_vessels, licences, on="id", how="left")
 
     all_vessels = pd.merge(all_vessels, control_charters, on="id", how="left")
+
+    all_vessels = pd.merge(
+        all_vessels,
+        administre_nationalities,
+        on="operator_id_adm_intervenant",
+        how="left",
+    )
 
     all_vessels = all_vessels.fillna({"under_charter": False})
 
@@ -186,6 +200,8 @@ def concat_merge_vessels(
         "operator_phone_3_pos": "category",
         "operator_mobile_phone_pos": "category",
         "operator_fax_pos": "category",
+        "operator_address": "category",
+        "operator_nationality": "category",
         "under_charter": bool,
     }
 
@@ -326,6 +342,8 @@ def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
         "operator_mobile_phone",
         "operator_email",
         "operator_fax",
+        "operator_address",
+        "operator_nationality",
         "vessel_phones",
         "vessel_mobile_phone",
         "vessel_emails",
@@ -422,6 +440,7 @@ def vessels_flow():
     vessels_operators = extract_vessels_operators.submit()
     licences = extract_french_vessels_navigation_licences.submit()
     control_charters = extract_control_charters.submit()
+    administre_nationalities = extract_administre_nationalities.submit()
     vessels_logbook_equipement = extract_vessels_logbook_equipement.submit()
 
     # Transform
@@ -433,6 +452,7 @@ def vessels_flow():
         vessels_operators,
         licences,
         control_charters,
+        administre_nationalities,
     )
     all_vessels = clean_vessels(all_vessels)
     all_vessels = add_unknown_vessel(all_vessels)

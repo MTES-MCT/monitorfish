@@ -143,6 +143,8 @@ vessels_operators_data = {
     "operator_phone_3_pos": ["pos_02", None],
     "operator_mobile_phone_pos": ["pos_06", "pos_061"],
     "operator_fax_pos": [None, "pos_fax3"],
+    "operator_address": ["Adresse de l'armateur", None],
+    "operator_id_adm_intervenant": [1000, None],
 }
 
 licences_data = {
@@ -158,6 +160,10 @@ control_charters_data = {
     "under_charter": [False, False, True],
 }
 
+administre_nationalities_data = {
+    "operator_id_adm_intervenant": [1, 2, 1000],
+    "operator_nationality": ["JAPON", "GABON", "FRANCE"],
+}
 concat_merged_data = {
     "id": [1, 2, 3, 4, 5, 6],
     "imo": [None, "1010", "10", "12", "951", None],
@@ -225,6 +231,8 @@ concat_merged_data = {
     "operator_phone_3_pos": ["pos_02", None, None, None, None, None],
     "operator_mobile_phone_pos": ["pos_06", None, "pos_061", None, None, None],
     "operator_fax_pos": [None, None, "pos_fax3", None, None, None],
+    "operator_address": ["Adresse de l'armateur", None, None, None, None, None],
+    "operator_id_adm_intervenant": [1000, None, None, None, None, None],
     "nav_licence_status": [None, "Prorogé", None, None, None, None],
     "nav_licence_expiration_date": [
         None,
@@ -244,6 +252,7 @@ concat_merged_data = {
     ],
     "sailing_category": [None, "3ème", None, None, None, None],
     "under_charter": [False, False, False, True, False, False],
+    "operator_nationality": ["FRANCE", None, None, None, None, None],
 }
 
 concat_merged_dtype = {
@@ -270,6 +279,7 @@ concat_merged_dtype = {
     "operator_phone": "category",
     "operator_mobile_phone": "category",
     "operator_fax": "category",
+    "operator_address": "category",
     "proprietor_name": "category",
     "proprietor_email": "category",
     "proprietor_phone": "category",
@@ -291,6 +301,7 @@ concat_merged_dtype = {
     "operator_mobile_phone_pos": "category",
     "operator_fax_pos": "category",
     "under_charter": bool,
+    "operator_nationality": "category",
 }
 
 cleaned_vessels_data = {
@@ -375,6 +386,8 @@ cleaned_vessels_data = {
         None,
     ],
     "operator_fax": ["navpro_fax_1", None, "pos_fax3", None, None, "fax12"],
+    "operator_address": ["Adresse de l'armateur", None, None, None, None, None],
+    "operator_nationality": ["FRANCE", None, None, None, None, None],
     "vessel_phones": [
         ["1234567890", "0000000000"],
         ["mobile_phone_000"],
@@ -418,6 +431,8 @@ cleaned_vessels_dtype = {
     "proprietor_nationality": "category",
     "logbook_equipment_status": "category",
     "under_charter": bool,
+    "operator_address": "category",
+    "operator_nationality": "category",
 }
 
 
@@ -454,6 +469,11 @@ def licences() -> pd.DataFrame:
 @pytest.fixture
 def control_charters() -> pd.DataFrame:
     return pd.DataFrame(control_charters_data)
+
+
+@pytest.fixture
+def administre_nationalities() -> pd.DataFrame:
+    return pd.DataFrame(administre_nationalities_data)
 
 
 @pytest.fixture
@@ -529,6 +549,7 @@ def test_concat_merge_vessels(
     vessels_operators,
     licences,
     control_charters,
+    administre_nationalities,
     all_vessels,
 ):
     res = concat_merge_vessels(
@@ -539,6 +560,7 @@ def test_concat_merge_vessels(
         vessels_operators,
         licences,
         control_charters,
+        administre_nationalities,
     )
 
     pd.testing.assert_frame_equal(res, all_vessels)

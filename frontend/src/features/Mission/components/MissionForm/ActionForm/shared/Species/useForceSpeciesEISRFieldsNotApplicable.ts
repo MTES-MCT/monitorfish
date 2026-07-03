@@ -25,13 +25,13 @@ export function useForceSpeciesEISRFieldsNotApplicable(
       const currentValue = values[field as keyof MissionActionFormValues]
 
       if (!isApplicable && currentValue !== MissionAction.ControlCheck.NOT_APPLICABLE) {
-        setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
+        void setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
       } else if (
         isApplicable &&
         currentValue === MissionAction.ControlCheck.NOT_APPLICABLE &&
         values.isGangwayDeployed !== false
       ) {
-        setFieldValue(field, undefined)
+        void setFieldValue(field, undefined)
       }
     })
     // Only re-run when the applicability flags themselves change — not on every value change,

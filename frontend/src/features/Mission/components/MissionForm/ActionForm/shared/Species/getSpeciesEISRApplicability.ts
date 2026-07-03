@@ -74,17 +74,23 @@ export function isSeparateStowageOfPreservedSpeciesApplicable(
   return isDemersalAndLongEnough || hasBftOrSwoOnboard(speciesOnboard)
 }
 
+// All vessels >= 12m are subject to this obligation, unless more than 80% of the catch onboard is
+// small pelagics — vessels < 12m are never subject to it.
 export function isUnderSizedSeparateStowageApplicable(
   speciesOnboard: MissionAction.SpeciesOnboardControl[] | undefined,
   vesselLength: number | undefined
 ): boolean {
-  if (vesselLength === undefined || vesselLength >= UNDER_SIZED_SEPARATE_STOWAGE_MIN_VESSEL_LENGTH_METERS) {
+  if (vesselLength === undefined) {
     return true
+  }
+
+  if (vesselLength < UNDER_SIZED_SEPARATE_STOWAGE_MIN_VESSEL_LENGTH_METERS) {
+    return false
   }
 
   const smallPelagicsShare = getSmallPelagicsShare(speciesOnboard)
 
-  return smallPelagicsShare === undefined || smallPelagicsShare < SMALL_PELAGICS_SHARE_THRESHOLD
+  return smallPelagicsShare === undefined || smallPelagicsShare <= SMALL_PELAGICS_SHARE_THRESHOLD
 }
 
 export function isUnderSizedSeparateRecordingApplicable(vesselLength: number | undefined): boolean {

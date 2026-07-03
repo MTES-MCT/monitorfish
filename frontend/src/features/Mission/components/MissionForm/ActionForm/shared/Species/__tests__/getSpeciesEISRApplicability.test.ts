@@ -108,30 +108,30 @@ describe('getSpeciesEISRApplicability', () => {
   })
 
   describe('isUnderSizedSeparateStowageApplicable', () => {
-    it('should be applicable for vessels >= 12m regardless of species', () => {
-      expect(isUnderSizedSeparateStowageApplicable([makeSpecy('PIL', { controlledWeight: 100 })], 12)).toBe(true)
-    })
-
-    it('should not be applicable for vessels < 12m with >= 80% small pelagics', () => {
-      const speciesOnboard = [makeSpecy('PIL', { controlledWeight: 90 }), makeSpecy('COD', { controlledWeight: 10 })]
-
-      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 11)).toBe(false)
-    })
-
-    it('should be applicable for vessels < 12m with < 80% small pelagics', () => {
+    it('should be applicable for vessels >= 12m with < 80% small pelagics', () => {
       const speciesOnboard = [makeSpecy('PIL', { controlledWeight: 79 }), makeSpecy('COD', { controlledWeight: 21 })]
 
-      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 11)).toBe(true)
+      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 12)).toBe(true)
     })
 
-    it('should not be applicable at exactly 80% small pelagics', () => {
+    it('should be applicable for vessels >= 12m with no weighed catch yet', () => {
+      expect(isUnderSizedSeparateStowageApplicable([], 12)).toBe(true)
+    })
+
+    it('should be applicable at exactly 80% small pelagics', () => {
       const speciesOnboard = [makeSpecy('PIL', { controlledWeight: 80 }), makeSpecy('COD', { controlledWeight: 20 })]
 
-      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 11)).toBe(false)
+      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 12)).toBe(true)
     })
 
-    it('should be applicable for vessels < 12m with no weighed catch yet', () => {
-      expect(isUnderSizedSeparateStowageApplicable([], 11)).toBe(true)
+    it('should not be applicable for vessels >= 12m with more than 80% small pelagics', () => {
+      const speciesOnboard = [makeSpecy('PIL', { controlledWeight: 81 }), makeSpecy('COD', { controlledWeight: 19 })]
+
+      expect(isUnderSizedSeparateStowageApplicable(speciesOnboard, 12)).toBe(false)
+    })
+
+    it('should not be applicable for vessels < 12m regardless of species', () => {
+      expect(isUnderSizedSeparateStowageApplicable([makeSpecy('COD', { controlledWeight: 100 })], 11.9)).toBe(false)
     })
 
     it('should be applicable when vessel length is unknown (conservative default)', () => {

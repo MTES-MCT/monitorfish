@@ -1,5 +1,6 @@
-// Hardcoded per business decision — see GitHub #5168.
-export const SMALL_PELAGIC_SPECIES_CODES = ['ANE', 'PIL', 'HER', 'HOM', 'MAC', 'SPR', 'WHB', 'ARG']
+// Species listed at art. 6 of Regulation (EU) 2019/1241 (anchovy, sardine, herring, horse mackerel,
+// mackerel, sprat, blue whiting, boarfish, argentine), plus sandeel (SAN) added per DGAMPA doctrine.
+export const SMALL_PELAGIC_SPECIES_CODES = ['ANE', 'PIL', 'HER', 'HOM', 'MAC', 'SPR', 'WHB', 'BOC', 'ARG', 'SAN']
 
 // Duplicated rather than imported from `features/PriorNotification/constants.ts`, since
 // `features/Mission` never imports from peer features in this codebase.

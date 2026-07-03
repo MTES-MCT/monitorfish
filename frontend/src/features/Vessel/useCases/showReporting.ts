@@ -17,7 +17,7 @@ import { extractVesselIdentityProps } from '../utils'
 import { vesselApi } from '../vesselApi'
 
 import type { Reporting } from '@features/Reporting/types'
-import type { MainAppThunk } from '@store'
+import type { MainAppDispatch, MainAppGetState, MainAppThunk } from '@store'
 
 /**
  * Show a reporting in the main window
@@ -34,7 +34,6 @@ export const showReporting =
         positionToMoveTo = [reporting.longitude, reporting.latitude]
       }
 
-      // adapted from the logic of GetVesselReportings
       const reportingHasVessel =
         reporting.vesselId !== undefined ||
         reporting.cfr !== undefined ||
@@ -42,49 +41,12 @@ export const showReporting =
         reporting.ircs !== undefined
 
       if (reportingHasVessel) {
-        const vesselIdentity = extractVesselIdentityProps(reporting)
-        dispatch(loadingVessel(vesselIdentity))
-
-        const {
-          map: { defaultVesselTrackDepth },
-          vessel: { selectedVesselTrackRequest }
-        } = getState()
-
-        const nextTrackRequest = getCustomOrDefaultTrackRequest(
-          selectedVesselTrackRequest,
-          defaultVesselTrackDepth,
-          false
-        )
-        const { vesselAndPositions } = await dispatch(
-          vesselApi.endpoints.getVesselAndPositions.initiate(
-            { trackRequest: nextTrackRequest, vesselIdentity },
-            RTK_FORCE_REFETCH_QUERY_OPTIONS
-          )
-        ).unwrap()
-
-        const { vessel } = vesselAndPositions
-        if (
-          positionToMoveTo === undefined &&
-          vessel.lastPositionLongitude !== undefined &&
-          vessel.lastPositionLatitude !== undefined
-        ) {
-          positionToMoveTo = [vessel.lastPositionLongitude, vessel.lastPositionLatitude]
-        }
-
-        // closing reporting form, in case it was open for a different reporting
-        dispatch(
-          displayedComponentActions.setDisplayedComponents({
-            isReportingMapFormDisplayed: false
-          })
-        )
-        dispatch(reportingActions.unsetEditedReporting())
-
-        dispatch(setSelectedVessel(vesselAndPositions))
-        void dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))
+        positionToMoveTo = await showReportingWithKnownVessel(dispatch, getState, reporting, positionToMoveTo)
       }
 
       if (positionToMoveTo !== undefined) {
         const coordinates = transform(positionToMoveTo, WSG84_PROJECTION, OPENLAYERS_PROJECTION)
+
         if (coordinates[0] !== undefined && coordinates[1] !== undefined) {
           const isVesselSidebarOpen = true // vessel sidebar or reporting form will be open so we can set this to true in all cases
           animateToVesselCoordinates([coordinates[0], coordinates[1]], isVesselSidebarOpen)
@@ -105,3 +67,47 @@ export const showReporting =
       dispatch(resetLoadingVessel())
     }
   }
+
+async function showReportingWithKnownVessel(
+  dispatch: MainAppDispatch,
+  getState: MainAppGetState,
+  reporting: Reporting.Reporting,
+  positionToMoveTo: [number, number] | undefined
+) {
+  const vesselIdentity = extractVesselIdentityProps(reporting)
+  dispatch(loadingVessel(vesselIdentity))
+
+  const {
+    map: { defaultVesselTrackDepth },
+    vessel: { selectedVesselTrackRequest }
+  } = getState()
+
+  const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+  const { vesselAndPositions } = await dispatch(
+    vesselApi.endpoints.getVesselAndPositions.initiate(
+      { trackRequest: nextTrackRequest, vesselIdentity },
+      RTK_FORCE_REFETCH_QUERY_OPTIONS
+    )
+  ).unwrap()
+
+  const { vessel } = vesselAndPositions
+  const resolvedPositionToMoveTo =
+    positionToMoveTo === undefined &&
+    vessel.lastPositionLongitude !== undefined &&
+    vessel.lastPositionLatitude !== undefined
+      ? ([vessel.lastPositionLongitude, vessel.lastPositionLatitude] as [number, number])
+      : positionToMoveTo
+
+  // closing reporting form, in case it was open for a different reporting
+  dispatch(
+    displayedComponentActions.setDisplayedComponents({
+      isReportingMapFormDisplayed: false
+    })
+  )
+  dispatch(reportingActions.unsetEditedReporting())
+
+  dispatch(setSelectedVessel(vesselAndPositions))
+  void dispatch(openVesselSidebarTab(VesselSidebarTab.REPORTING))
+
+  return resolvedPositionToMoveTo
+}

@@ -1,9 +1,7 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
-import { ReportingSearchPeriod } from '@features/Reporting/types'
+import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportings'
 import { buildReportingFeature } from '@features/Reporting/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { skipToken } from '@reduxjs/toolkit/query'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
 import { unByKey } from 'ol/Observable'
@@ -34,32 +32,17 @@ function SelectedReportingItem({ featureId }: SelectedReportingItemProps) {
     return Number.isNaN(id) ? undefined : id
   }, [featureId])
 
-  // The feature might not be in the shared source yet (e.g. it had to be fetched because the reportings
-  // layer was hidden), in which case ReportingLayer's own fetch for it may still be in flight — fetch it
-  // directly instead of guessing when that will resolve.
-  const { data: fetchedReportings } = useDisplayReportingsQuery(
-    sourceFeature || reportingId === undefined
-      ? skipToken
-      : {
-          endDate: undefined,
-          ids: [reportingId],
-          isArchived: undefined,
-          isIUU: undefined,
-          reportingPeriod: ReportingSearchPeriod.CUSTOM,
-          reportingType: undefined,
-          startDate: undefined
-        }
-  )
+  const { pinnedReportings } = usePinnedReportings()
 
   const selectedFeature = useMemo(() => {
     if (sourceFeature) {
       return sourceFeature
     }
 
-    const fetchedReporting = fetchedReportings?.find(reporting => reporting.id === reportingId)
+    const pinnedReporting = pinnedReportings?.find(reporting => reporting.id === reportingId)
 
-    return fetchedReporting?.coordinates?.length === 2 ? buildReportingFeature(fetchedReporting) : undefined
-  }, [sourceFeature, fetchedReportings, reportingId])
+    return pinnedReporting?.coordinates?.length === 2 ? buildReportingFeature(pinnedReporting) : undefined
+  }, [sourceFeature, pinnedReportings, reportingId])
 
   const [zoomHasChanged, setZoomHasChanged] = useState<number | undefined>(undefined)
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
+import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportings'
 import {
   REPORTINGS_LINE_VECTOR_LAYER,
   REPORTINGS_VECTOR_LAYER,
@@ -20,11 +21,7 @@ function UnmemoizedReportingLayer() {
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
   const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
   const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
-  const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
-  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
-  const isReportingListFormDisplayed = useMainAppSelector(
-    state => state.displayedComponent.isReportingListFormDisplayed
-  )
+  const { pinnedReportings, pinnedReportingsError } = usePinnedReportings()
 
   const selectedReportingFeatureIdRef = useRef(selectedReportingFeatureId)
   useEffect(() => {
@@ -39,54 +36,24 @@ function UnmemoizedReportingLayer() {
     displayFilters.reportingPeriod === ReportingSearchPeriod.CUSTOM &&
     (!displayFilters.startDate || !displayFilters.endDate)
 
-  const { data: filterData, error } = useDisplayReportingsQuery(displayFilters, { skip: skipQuery })
-
-  // The reporting being edited and the one selected on the map (e.g. via "voir sur la carte") are fetched by
-  // id below with no isArchived filter applied, so archived reportings are included regardless of archive state.
-  const selectedReportingId = useMemo(() => {
-    if (!selectedReportingFeatureId) {
-      return undefined
-    }
-
-    const id = Number(selectedReportingFeatureId.split(':').at(-1))
-
-    return Number.isNaN(id) ? undefined : id
-  }, [selectedReportingFeatureId])
-
-  // EditReporting (the side-window list's inline edit panel) keeps editedReporting set after closing, to
-  // keep the form's content rendered through its slide-out CSS transition, so it can't be used alone here.
-  const editedReportingId =
-    isReportingMapFormDisplayed || isReportingListFormDisplayed ? editedReporting?.id : undefined
-
-  const extraIds = useMemo(
-    () => Array.from(new Set([editedReportingId, selectedReportingId].filter(id => id !== undefined))),
-    [editedReportingId, selectedReportingId]
-  )
-
-  const { data: extraData, error: extraError } = useDisplayReportingsQuery({
-    endDate: undefined,
-    ids: extraIds,
-    isArchived: undefined,
-    isIUU: undefined,
-    reportingPeriod: ReportingSearchPeriod.CUSTOM,
-    reportingType: undefined,
-    startDate: undefined
+  const { data: filteredReportings, error: filteredReportingsError } = useDisplayReportingsQuery(displayFilters, {
+    skip: skipQuery
   })
 
-  const data = useMemo(() => {
+  const displayedReportings = useMemo(() => {
     if (!isReportingLayerDisplayed) {
-      return extraData ?? []
+      return pinnedReportings ?? []
     }
 
-    const filterDataIds = new Set((filterData ?? []).map(d => d.id))
+    const filteredReportingIds = new Set((filteredReportings ?? []).map(d => d.id))
 
-    return [...(filterData ?? []), ...(extraData ?? []).filter(d => !filterDataIds.has(d.id))]
-  }, [extraData, filterData, isReportingLayerDisplayed])
+    return [...(filteredReportings ?? []), ...(pinnedReportings ?? []).filter(d => !filteredReportingIds.has(d.id))]
+  }, [pinnedReportings, filteredReportings, isReportingLayerDisplayed])
 
   useMapLayer(REPORTINGS_VECTOR_LAYER)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
-  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!extraData?.length)
-  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!extraData?.length)
+  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
+  useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
     const id = selectedReportingFeatureIdRef.current
@@ -104,7 +71,7 @@ function UnmemoizedReportingLayer() {
   }, [dispatch])
 
   useEffect(() => {
-    const features = data
+    const features = displayedReportings
       // If the coordinates is a a valid WGS84, the backend return an empty list,
       // we need to filter them as we can't display them on map
       .filter(reporting => reporting.coordinates?.length === 2)
@@ -117,16 +84,19 @@ function UnmemoizedReportingLayer() {
     trySetFeatureSelected(selectedReportingFeatureIdRef.current, true)
 
     hideDisplayedOverlaysWhenFeatureFiltered()
-  }, [data, dispatch, hideDisplayedOverlaysWhenFeatureFiltered])
+  }, [displayedReportings, dispatch, hideDisplayedOverlaysWhenFeatureFiltered])
 
   useEffect(() => {
-    if (!error && !extraError) {
+    if (!filteredReportingsError && !pinnedReportingsError) {
       return
     }
 
     dispatch(
       addMainWindowBanner({
-        children: [(error as Error | undefined)?.message, (extraError as Error | undefined)?.message]
+        children: [
+          (filteredReportingsError as Error | undefined)?.message,
+          (pinnedReportingsError as Error | undefined)?.message
+        ]
           .filter(d => !!d)
           .join('\n'),
         closingDelay: 6000,
@@ -135,7 +105,7 @@ function UnmemoizedReportingLayer() {
         withAutomaticClosing: true
       })
     )
-  }, [dispatch, error, extraError])
+  }, [dispatch, filteredReportingsError, pinnedReportingsError])
 
   return null
 }

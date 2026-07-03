@@ -27,7 +27,7 @@ context('Show reporting from the reporting list', () => {
     cy.wait(1000)
   })
 
-  it('Should show the reporting on the map and open its vessel sidebar, even though the reportings layer is hidden by filters', () => {
+  it('Should show the reporting on the map and open its vessel sidebar, even though the reportings layer is hidden by filters, keep it shown when switching vessel sidebar tabs, and stop showing it once the sidebar is closed', () => {
     openSideWindowReportingList()
 
     cy.clickButton('Voir sur la carte', { withinSelector: 'tr:contains("RENCONTRER VEILLER APPARTEMENT")' })
@@ -47,21 +47,6 @@ context('Show reporting from the reporting list', () => {
     cy.get('*[data-cy="vessel-sidebar"]').should('exist')
     cy.get('*[data-cy="vessel-reporting"]').should('exist')
 
-    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]').click({ force: true })
-
-    cy.getFeaturesFromLayer('REPORTING').should(features => {
-      const feature = features.find(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
-
-      assert.notExists(feature, 'reporting feature should no longer be force-displayed on the map')
-    })
-  })
-
-  it('Should keep the reporting shown when switching vessel sidebar tabs', () => {
-    openSideWindowReportingList()
-
-    cy.clickButton('Voir sur la carte', { withinSelector: 'tr:contains("RENCONTRER VEILLER APPARTEMENT")' })
-    cy.get('*[data-cy="vessel-reporting"]').should('exist')
-
     cy.get('*[data-cy="vessel-menu-summary"]').click({ force: true })
     cy.get('*[data-cy="vessel-summary-latitude"]').should('exist')
     cy.get('*[data-cy="vessel-reporting"]').should('not.exist')
@@ -73,6 +58,14 @@ context('Show reporting from the reporting list', () => {
         matchingFeatures.some(f => f.get('isSelected') === true),
         'the reporting should still be selected after switching tabs'
       ).to.equal(true)
+    })
+
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]').click({ force: true })
+
+    cy.getFeaturesFromLayer('REPORTING').should(features => {
+      const feature = features.find(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
+
+      assert.notExists(feature, 'reporting feature should no longer be force-displayed on the map')
     })
   })
 })

@@ -4,7 +4,7 @@ import { showReporting } from '@features/Vessel/useCases/showReporting'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import { setDisplayedComponents } from 'domain/shared_slices/DisplayedComponent'
-import { type CSSProperties, useCallback } from 'react'
+import { type CSSProperties } from 'react'
 import styled from 'styled-components'
 
 import type { InfractionSuspicionReporting, ObservationReporting, Reporting } from '@features/Reporting/types'
@@ -17,24 +17,18 @@ export function ActionButtonsCell({ reporting }: ActionButtonsCellProps) {
   const editingIsDisabled = reporting.type === ReportingType.ALERT
 
   // TODO Rather use a reporting id here than passing a copy of the whole Reporting object.
-  const edit = useCallback(
-    (isDisabled: boolean, editedReporting: Reporting.EditableReporting) => {
-      if (isDisabled) {
-        return
-      }
+  function edit(isDisabled: boolean, editedReporting: Reporting.EditableReporting) {
+    if (isDisabled) {
+      return
+    }
 
-      dispatch(reportingActions.setEditedReporting(editedReporting))
-      dispatch(setDisplayedComponents({ isReportingListFormDisplayed: true }))
-    },
-    [dispatch]
-  )
+    dispatch(reportingActions.setEditedReporting(editedReporting))
+    dispatch(setDisplayedComponents({ isReportingListFormDisplayed: true }))
+  }
 
-  const focusOnMap = useCallback(
-    (focusedReporting: Reporting.Reporting) => {
-      dispatch(showReporting(focusedReporting))
-    },
-    [dispatch]
-  )
+  function focusOnMap(focusedReporting: Reporting.Reporting) {
+    dispatch(showReporting(focusedReporting))
+  }
 
   return (
     <Wrapper>

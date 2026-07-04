@@ -1,10 +1,20 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import jakarta.persistence.*
+import jakarta.persistence.Basic
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Type
 import java.time.ZonedDateTime
 

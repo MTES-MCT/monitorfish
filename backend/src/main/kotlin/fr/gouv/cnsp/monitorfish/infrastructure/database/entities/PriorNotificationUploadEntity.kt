@@ -2,7 +2,12 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationDocument
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcType
 import org.hibernate.type.descriptor.jdbc.BinaryJdbcType
 import java.time.ZonedDateTime

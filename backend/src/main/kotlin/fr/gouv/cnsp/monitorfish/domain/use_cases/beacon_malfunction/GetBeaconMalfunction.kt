@@ -1,8 +1,15 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotifications
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionNotificationsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 

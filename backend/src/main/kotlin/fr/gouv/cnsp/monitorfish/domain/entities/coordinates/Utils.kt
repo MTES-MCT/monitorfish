@@ -1,6 +1,10 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.coordinates
 
-import org.locationtech.proj4j.*
+import org.locationtech.proj4j.CRSFactory
+import org.locationtech.proj4j.CoordinateReferenceSystem
+import org.locationtech.proj4j.CoordinateTransform
+import org.locationtech.proj4j.CoordinateTransformFactory
+import org.locationtech.proj4j.ProjCoordinate
 
 const val WSG84_PROJECTION = "EPSG:4326"
 const val OPENLAYERS_PROJECTION = "EPSG:3857"

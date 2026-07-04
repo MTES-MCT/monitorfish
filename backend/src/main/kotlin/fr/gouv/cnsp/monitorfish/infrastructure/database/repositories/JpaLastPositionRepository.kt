@@ -7,7 +7,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
-import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.*
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.BeaconEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselEntity
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.VesselProfileEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLastPositionRepository
 import jakarta.transaction.Transactional
 import org.springframework.cache.annotation.Cacheable

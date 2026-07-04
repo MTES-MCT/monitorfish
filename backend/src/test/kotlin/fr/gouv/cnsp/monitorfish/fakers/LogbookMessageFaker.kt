@@ -1,6 +1,12 @@
 package fr.gouv.cnsp.monitorfish.fakers
 
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import java.time.ZonedDateTime

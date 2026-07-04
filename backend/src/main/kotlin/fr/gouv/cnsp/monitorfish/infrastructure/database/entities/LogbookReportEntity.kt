@@ -1,12 +1,24 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.JSONB_NULL_STRING
 import fr.gouv.cnsp.monitorfish.domain.mappers.ERSMapper.getERSMessageValueFromJSON
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.Type
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType

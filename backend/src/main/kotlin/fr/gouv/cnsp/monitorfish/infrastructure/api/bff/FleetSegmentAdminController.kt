@@ -1,6 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.AddFleetSegmentYear
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.CreateFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.DeleteFleetSegment
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.GetFleetSegmentYearEntries
+import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.UpdateFleetSegment
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateOrUpdateFleetSegmentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.FleetSegmentDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -8,7 +12,16 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/bff/v1/admin/fleet_segments")

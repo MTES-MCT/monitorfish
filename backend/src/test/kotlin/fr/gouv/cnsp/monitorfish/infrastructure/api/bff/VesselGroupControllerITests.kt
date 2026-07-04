@@ -8,11 +8,22 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateDynamicVesselGroupCommands
 import fr.gouv.cnsp.monitorfish.domain.use_cases.TestUtils.getCreateOrUpdateFixedVesselGroupCommands
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateDynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.AddOrUpdateFixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteFixedVesselGroupVessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.DeleteVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllVesselGroupsWithVessels
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.dtos.VesselGroupWithVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.DynamicVesselGroupDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.FixedVesselGroupDataInput
@@ -28,7 +39,9 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 

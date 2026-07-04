@@ -2,7 +2,11 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Haul
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.HealthState
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CPS
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP

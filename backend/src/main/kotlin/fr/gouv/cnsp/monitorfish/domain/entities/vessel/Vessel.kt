@@ -6,7 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.last_position.LastPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
-import java.util.*
+import java.util.Date
 
 // TODO Remove all default values.
 data class Vessel(

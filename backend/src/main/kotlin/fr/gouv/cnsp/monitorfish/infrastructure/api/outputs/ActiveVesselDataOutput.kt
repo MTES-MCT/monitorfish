@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityOrigin
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
 

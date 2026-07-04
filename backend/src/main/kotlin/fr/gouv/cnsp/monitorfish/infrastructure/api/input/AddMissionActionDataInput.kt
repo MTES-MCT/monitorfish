@@ -1,8 +1,14 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import java.time.ZonedDateTime
 
 data class MissionActionInfractionDataInput(

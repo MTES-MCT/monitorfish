@@ -13,7 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import java.time.Duration
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Date
 
 /**
  * We remove null fields from the payload to reduce JSON size.

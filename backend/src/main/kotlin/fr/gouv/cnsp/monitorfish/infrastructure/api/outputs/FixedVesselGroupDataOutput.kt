@@ -1,7 +1,9 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import java.time.ZonedDateTime
 
 data class FixedVesselGroupDataOutput(

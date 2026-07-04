@@ -6,7 +6,13 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.AbstractDBTests
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

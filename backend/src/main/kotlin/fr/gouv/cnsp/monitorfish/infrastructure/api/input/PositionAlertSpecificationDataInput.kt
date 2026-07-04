@@ -1,6 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
 import java.time.ZonedDateTime
 
 data class PositionAlertSpecificationDataInput(

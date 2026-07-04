@@ -11,10 +11,14 @@ max_line_length = 120
 trim_trailing_whitespace = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
 ij_kotlin_allow_trailing_comma = true
-# The codebase intentionally uses snake_case packages (use_cases, vessel_group, …).
-# This is a permanent convention, not transitional debt, so disable the rule instead of
-# recording one fragile, line-anchored baseline entry per file.
+# These rules flag intentional, permanent domain conventions rather than fixable debt, so they
+# are disabled here instead of being recorded as fragile, line-anchored baseline entries:
+#   - package-name: snake_case packages (use_cases, vessel_group, …)
+#   - enum-entry-name-case: enum entries mirror external codes (ERS logbook message types, …)
+#   - property-naming: domain acronyms used as identifiers (IRCS, MMSI, CFR, …)
 ktlint_standard_package-name = disabled
+ktlint_standard_enum-entry-name-case = disabled
+ktlint_standard_property-naming = disabled
 
 [COMMIT_EDITMSG]
 max_line_length = 0

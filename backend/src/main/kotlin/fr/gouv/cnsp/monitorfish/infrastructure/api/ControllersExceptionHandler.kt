@@ -1,7 +1,16 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api
 
-import fr.gouv.cnsp.monitorfish.domain.exceptions.*
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotUpdateControlObjectiveException
+import fr.gouv.cnsp.monitorfish.domain.exceptions.NAFMessageParsingException
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendInternalErrorDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendRequestErrorDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendUsageErrorDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import jakarta.annotation.Priority
 import org.slf4j.Logger

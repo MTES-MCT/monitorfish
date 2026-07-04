@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.*
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionAndActions
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.MultiPolygon
 import java.time.ZonedDateTime
 
 /**

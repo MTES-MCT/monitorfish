@@ -8,8 +8,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.Mission
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.MissionDataResponse
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async

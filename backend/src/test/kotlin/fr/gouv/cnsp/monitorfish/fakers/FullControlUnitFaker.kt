@@ -1,7 +1,10 @@
 package fr.gouv.cnsp.monitorfish.fakers
 
 import fr.gouv.cnsp.monitorfish.domain.entities.administration.Administration
-import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.*
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitContact
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitDepartmentArea
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitResourceType
 import fr.gouv.cnsp.monitorfish.domain.entities.station.Station
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnit
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnitResource

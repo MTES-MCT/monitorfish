@@ -1,6 +1,13 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionActionPropertyName
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionCommentsRepository

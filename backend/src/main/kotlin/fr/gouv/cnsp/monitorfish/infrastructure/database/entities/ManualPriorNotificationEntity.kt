@@ -1,7 +1,13 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageAndValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessageTypeMapping
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookOperationType
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTransmissionFormat
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
@@ -10,7 +16,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.deserializeJSONList
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.Type
 import java.time.ZonedDateTime
 

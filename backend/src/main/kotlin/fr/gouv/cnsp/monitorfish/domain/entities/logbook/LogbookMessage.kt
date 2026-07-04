@@ -1,7 +1,18 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.logbook
 
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
-import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.*
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.Acknowledgment
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.COE
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.COX
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CPS
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.CRO
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DIS
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.FAR
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
+import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.RTP
 import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import org.slf4j.LoggerFactory

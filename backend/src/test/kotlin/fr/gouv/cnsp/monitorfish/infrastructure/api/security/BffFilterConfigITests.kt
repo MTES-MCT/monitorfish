@@ -1,7 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.config.KeycloakProxyProperties
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController

@@ -2,7 +2,13 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.*
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.controlRateRiskFactorCoefficient
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultControlRateRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfractionRateRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfringementRiskLevel
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.impactRiskFactorCoefficient
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.probabilityRiskFactorCoefficient
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository

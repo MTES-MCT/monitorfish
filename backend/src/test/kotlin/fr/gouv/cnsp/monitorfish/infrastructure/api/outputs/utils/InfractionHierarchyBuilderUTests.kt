@@ -23,7 +23,9 @@ class InfractionHierarchyBuilderUTests {
                     threat = "Mesures techniques et de conservation",
                     characterization = "Autorisation Débarquement",
                     natinfCode = 27718,
-                    infractionName = "Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port désigné",
+                    infractionName =
+                        "Débarquement de produits de la pêche maritime et de l'aquaculture marine hors d'un port " +
+                            "désigné",
                 ),
             )
 

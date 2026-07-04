@@ -19,6 +19,7 @@ ij_kotlin_allow_trailing_comma = true
 ktlint_standard_package-name = disabled
 ktlint_standard_enum-entry-name-case = disabled
 ktlint_standard_property-naming = disabled
+ktlint_ignore_back_ticked_identifier = true
 
 [COMMIT_EDITMSG]
 max_line_length = 0

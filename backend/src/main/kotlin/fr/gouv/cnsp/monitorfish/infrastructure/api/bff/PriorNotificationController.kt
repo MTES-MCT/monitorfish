@@ -224,7 +224,9 @@ class PriorNotificationController(
 
     @PostMapping("/manual/compute")
     @Operation(
-        summary = "Calculate manual prior notification fleet segments, prior notification types, risk factor and next state",
+        summary =
+            "Calculate manual prior notification fleet segments, prior notification types, risk factor " +
+                "and next state",
     )
     fun getManualComputation(
         @RequestBody

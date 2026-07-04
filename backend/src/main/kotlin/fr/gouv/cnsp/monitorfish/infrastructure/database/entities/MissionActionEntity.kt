@@ -283,7 +283,8 @@ class MissionActionEntity(
                 completion = missionAction.completion,
                 isAdministrativeControl = missionAction.isAdministrativeControl,
                 isComplianceWithWaterRegulationsControl = missionAction.isComplianceWithWaterRegulationsControl,
-                isSafetyEquipmentAndStandardsComplianceControl = missionAction.isSafetyEquipmentAndStandardsComplianceControl,
+                isSafetyEquipmentAndStandardsComplianceControl =
+                    missionAction.isSafetyEquipmentAndStandardsComplianceControl,
                 isSeafarersControl = missionAction.isSeafarersControl,
                 isInnControl = missionAction.isINNControl,
                 isGangwayDeployed = missionAction.isGangwayDeployed,

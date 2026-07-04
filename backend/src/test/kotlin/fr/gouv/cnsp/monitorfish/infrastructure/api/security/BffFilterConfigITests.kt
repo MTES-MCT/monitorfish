@@ -88,9 +88,7 @@ class BffFilterConfigITests {
     @Test
     fun `Should return 401 for all public but protected paths`() {
         // When
-        /**
-         * These paths are public but require authentication when OIDC is enabled.
-         */
+        // These paths are public but require authentication when OIDC is enabled.
         listOf(
             "/api/v1/authorization/management",
             "/api/v1/beacon_malfunctions/123",
@@ -105,10 +103,8 @@ class BffFilterConfigITests {
     @Test
     fun `Should return 401 When deleting an user`() {
         // When
-        /**
-         * DELETE operations on user management paths require authentication.
-         * Without proper OIDC authentication, they return 401 Forbidden.
-         */
+        // DELETE operations on user management paths require authentication.
+        // Without proper OIDC authentication, they return 401 Forbidden.
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
         ).forEach {

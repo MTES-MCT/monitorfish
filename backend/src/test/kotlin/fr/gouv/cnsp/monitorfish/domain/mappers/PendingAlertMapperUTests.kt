@@ -39,7 +39,8 @@ class PendingAlertMapperUTests {
     fun `getReportingValueFromJSON Should deserialize a POSITION_ALERT When a legacy flagState property is found`() {
         // Given
         val alert =
-            "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"natinfCode\": 7059, \"flagState\": \"FR\", \"name\": \"Chalutage\", " +
+            "{\"type\": \"POSITION_ALERT\", \"alertId\": 1, \"natinfCode\": 7059, \"flagState\": \"FR\", \"name\": " +
+                "\"Chalutage\", " +
                 "\"seaFront\": \"MEMN\", \"riskFactor\": 1.2311444133}"
 
         // When

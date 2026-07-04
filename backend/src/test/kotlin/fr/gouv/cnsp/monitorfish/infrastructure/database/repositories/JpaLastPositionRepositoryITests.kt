@@ -159,9 +159,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
             )
 
         // Then
-        /**
-         * Only a last position without a profile
-         */
+        // Only a last position without a profile
         assertThat(lastPositionsWithProfiles).hasSize(3312)
         assertThat(lastPositionsWithProfiles.first().lastPosition).isNotNull()
         assertThat(lastPositionsWithProfiles.first().vesselProfile).isNull()

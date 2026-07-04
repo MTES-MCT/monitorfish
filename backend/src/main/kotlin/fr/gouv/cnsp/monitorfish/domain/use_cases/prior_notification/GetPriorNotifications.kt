@@ -237,19 +237,29 @@ class GetPriorNotifications(
         ): Boolean =
             (states.isNullOrEmpty() && isInvalidated == null && isPriorNotificationZero == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
-                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated) ||
-                (isPriorNotificationZero != null && priorNotification.isPriorNotificationZero == isPriorNotificationZero)
+                (
+                    isInvalidated != null &&
+                        priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated
+                ) ||
+                (
+                    isPriorNotificationZero != null &&
+                        priorNotification.isPriorNotificationZero == isPriorNotificationZero
+                )
 
         private fun getSortKey(
             priorNotification: PriorNotification,
             sortColumn: PriorNotificationsSortColumn,
         ): Comparable<*>? =
             when (sortColumn) {
-                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageAndValue.value.predictedArrivalDatetimeUtc
-                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageAndValue.value.predictedLandingDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE ->
+                    priorNotification.logbookMessageAndValue.value.predictedArrivalDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE ->
+                    priorNotification.logbookMessageAndValue.value.predictedLandingDatetimeUtc
                 PriorNotificationsSortColumn.PORT_NAME -> priorNotification.port?.name
-                PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageAndValue.logbookMessage.vesselName
-                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.logbookMessageAndValue.value.riskFactor
+                PriorNotificationsSortColumn.VESSEL_NAME ->
+                    priorNotification.logbookMessageAndValue.logbookMessage.vesselName
+                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR ->
+                    priorNotification.logbookMessageAndValue.value.riskFactor
             }
     }
 }

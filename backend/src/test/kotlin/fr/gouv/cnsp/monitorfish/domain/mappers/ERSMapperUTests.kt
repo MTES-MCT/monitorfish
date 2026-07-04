@@ -85,20 +85,35 @@ class ERSMapperUTests {
         // Given
         val farMessage =
             "{\"hauls\":[{\"gear\": \"GTN\", \"mesh\": 100.0, \"catches\": [" +
-                "{\"weight\": 2.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"SCL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 10.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"BRB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 1.5, \"nbFish\": null, \"species\": \"LBE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 18.0, \"nbFish\": null, \"species\": \"BSS\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 5.0, \"nbFish\": null, \"species\": \"SWA\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 30.0, \"nbFish\": null, \"species\": \"BIB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 8.0, \"nbFish\": null, \"species\": \"COE\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 4.0, \"nbFish\": null, \"species\": \"SOL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 1.0, \"nbFish\": null, \"species\": \"MKG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 10.0, \"nbFish\": null, \"species\": \"MNZ\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 70.0, \"nbFish\": null, \"species\": \"POL\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
-                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": \"2019-12-05T11:55Z\"" +
+                "{\"weight\": 2.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"SCL\", \"faoZone\": " +
+                "\"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 10.0, \"conversionFactor\": 1.0, \"nbFish\": null, \"species\": \"BRB\", \"faoZone\": " +
+                "\"27.8.a\", \"effortZone\": \"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 1.5, \"nbFish\": null, \"species\": \"LBE\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 18.0, \"nbFish\": null, \"species\": \"BSS\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 5.0, \"nbFish\": null, \"species\": \"SWA\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 30.0, \"nbFish\": null, \"species\": \"BIB\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 8.0, \"nbFish\": null, \"species\": \"COE\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 4.0, \"nbFish\": null, \"species\": \"SOL\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 1.0, \"nbFish\": null, \"species\": \"MKG\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 10.0, \"nbFish\": null, \"species\": \"MNZ\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 70.0, \"nbFish\": null, \"species\": \"POL\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 40.0, \"nbFish\": null, \"species\": \"USB\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"RJH\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}, " +
+                "{\"weight\": 15.0, \"nbFish\": null, \"species\": \"WHG\", \"faoZone\": \"27.8.a\", \"effortZone\": " +
+                "\"C\", \"economicZone\": \"FRA\", \"statisticalRectangle\": \"23E6\"}], \"farDatetimeUtc\": " +
+                "\"2019-12-05T11:55Z\"" +
                 "}]}"
 
         // When

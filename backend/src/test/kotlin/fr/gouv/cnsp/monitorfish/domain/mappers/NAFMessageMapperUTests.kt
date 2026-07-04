@@ -187,7 +187,10 @@ internal class NAFMessageMapperUTests {
     @Test
     internal fun `init Should not throw an exception When the message type is manual`() {
         // Given
-        val naf = "//SR//TM/MAN//IR/ESP000022941//NA/PLAYA DE TUYA//RC/FIUW//FS/FRA//XR/BA932998//DA/20210602//TI/2330//LT/+53.267//LG/-011.733//FR/FRA//RD/20210603//RT/0551//ER//"
+        val naf =
+            "//SR//TM/MAN//IR/ESP000022941//NA/PLAYA DE " +
+                "TUYA//RC/FIUW//FS/FRA//XR/BA932998//DA/20210602//TI/2330//LT/+53.267//LG/-011.733//FR/FRA//RD/" +
+                "20210603//RT/0551//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -198,7 +201,10 @@ internal class NAFMessageMapperUTests {
     @Test
     internal fun `init Should not throw an exception When the country is not found`() {
         // Given
-        val naf = "//SR//TM/POS//NA/LADY CHRIS 7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//SP/020//CO/221//FR/FRA//RD/20210929//RT/1234//ER//"
+        val naf =
+            "//SR//TM/POS//NA/LADY CHRIS " +
+                "7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//SP/020//CO/221//FR/FRA//RD/" +
+                "20210929//RT/1234//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -209,7 +215,9 @@ internal class NAFMessageMapperUTests {
     @Test
     internal fun `init Should set the speed and course as null When not specified in the NAF message`() {
         // Given
-        val naf = "//SR//TM/POS//NA/LADY CHRIS 7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//FR/FRA//RD/20210929//RT/1234//ER//"
+        val naf =
+            "//SR//TM/POS//NA/LADY CHRIS " +
+                "7//RC/FLBO//FS/X//DA/20210929//TI/1234//LT/-13.477//LG/-141.731//FR/FRA//RD/20210929//RT/1234//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -221,7 +229,9 @@ internal class NAFMessageMapperUTests {
     @Test
     internal fun `init Should parse the network type When given`() {
         // Given
-        val naf = "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/SAT//ER//"
+        val naf =
+            "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/" +
+                "+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/SAT//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()
@@ -233,7 +243,9 @@ internal class NAFMessageMapperUTests {
     @Test
     internal fun `init Should not throw When the network type is incorrect`() {
         // Given
-        val naf = "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/INCORRECT//ER//"
+        val naf =
+            "//SR//TM/POS//IR/FRA000123456//NA/MANUEL//RC/FT6951//FS/FRA//XR/TL326095//DA/20200814//TI/0911//LT/" +
+                "+43.0789//LG/+006.1549//SP/000//CO/0//FR/FRA//RD/20200814//RT/0912//MS/INCORRECT//ER//"
 
         // When
         val position = NAFMessageMapper(naf).toPosition()

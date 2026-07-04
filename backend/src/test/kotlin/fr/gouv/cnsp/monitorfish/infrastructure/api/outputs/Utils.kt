@@ -6,19 +6,25 @@ val dummyInfractionThreatCharacterizations =
     listOf(
         InfractionThreatCharacterization(
             natinfCode = 2608,
-            infraction = "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+            infraction =
+                "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays " +
+                    "tiers a l'union europeenne",
             threat = "Activités INN",
             threatCharacterization = "Pêche sans autorisation par navire tiers",
         ),
         InfractionThreatCharacterization(
             natinfCode = 2609,
-            infraction = "PECHE MARITIME NON CONFORME A L'AUTORISATION, DANS LES EAUX MARITIMES OU SALEES FRANCAISES PAR UN NAVIRE DE PAYS TIERS A L'UNION EUROPEENNE",
+            infraction =
+                "PECHE MARITIME NON CONFORME A L'AUTORISATION, DANS LES EAUX MARITIMES OU SALEES FRANCAISES PAR UN " +
+                    "NAVIRE DE PAYS TIERS A L'UNION EUROPEENNE",
             threat = "Activités INN",
             threatCharacterization = "Pêche non conforme à l'autorisation par navire tiers",
         ),
         InfractionThreatCharacterization(
             natinfCode = 2610,
-            infraction = "PECHE MARITIME NON AUTORISEE DANS LES EAUX SOUS SOUVERAINETE OU JURIDICTION FRANCAISES PAR CAPITAINE DE NAVIRE COMMUNAUTAIRE",
+            infraction =
+                "PECHE MARITIME NON AUTORISEE DANS LES EAUX SOUS SOUVERAINETE OU JURIDICTION FRANCAISES PAR " +
+                    "CAPITAINE DE NAVIRE COMMUNAUTAIRE",
             threat = "Activités INN",
             threatCharacterization = "Pêche sans autorisation par navire communautaire",
         ),
@@ -36,31 +42,40 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 27900,
-            infraction = "MISE EN VENTE, VENTE, STOCKAGE OU EXPOSITION DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DEBARQUES OU TRANSBORDES ILLEGALEMENT",
+            infraction =
+                "MISE EN VENTE, VENTE, STOCKAGE OU EXPOSITION DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE DEBARQUES OU TRANSBORDES ILLEGALEMENT",
             threat = "Activités INN",
             threatCharacterization = "Vente de produits pêchés illégalement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27898,
-            infraction = "TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE PROVENANT D'UNE ACTIVITE DE PECHE ILLEGALE",
+            infraction =
+                "TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE PROVENANT D'UNE ACTIVITE DE " +
+                    "PECHE ILLEGALE",
             threat = "Activités INN",
             threatCharacterization = "Transport de produits pêchés illégalement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27885,
-            infraction = "EXERCICE D'ACTIVITE DE PECHE MARITIME SANS RESPECT DES OBLIGATIONS DECLARATIVES NECESSAIRES AU CONTROLE DES ACTIVITES DE PECHES",
+            infraction =
+                "EXERCICE D'ACTIVITE DE PECHE MARITIME SANS RESPECT DES OBLIGATIONS DECLARATIVES NECESSAIRES AU " +
+                    "CONTROLE DES ACTIVITES DE PECHES",
             threat = "Entrave au contrôle",
             threatCharacterization = "Entrave à l'observation",
         ),
         InfractionThreatCharacterization(
             natinfCode = 12922,
-            infraction = "DISSIMULATION OU FALSIFICATION PAR CAPITAINE D'ELEMENT D'IDENTIFICATION DE NAVIRE DE PECHE MARITIME",
+            infraction =
+                "DISSIMULATION OU FALSIFICATION PAR CAPITAINE D'ELEMENT D'IDENTIFICATION DE NAVIRE DE PECHE MARITIME",
             threat = "Entrave au contrôle",
             threatCharacterization = "Dissimulation",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27685,
-            infraction = "DISSIMULATION, AUX AGENTS CHARGES DE LA POLICE DE LA PECHE, DE CAPTURES, ENGINS OU DOCUMENTS DETENUS A BORD D'UN NAVIRE DE PECHE MARITIME",
+            infraction =
+                "DISSIMULATION, AUX AGENTS CHARGES DE LA POLICE DE LA PECHE, DE CAPTURES, ENGINS OU DOCUMENTS " +
+                    "DETENUS A BORD D'UN NAVIRE DE PECHE MARITIME",
             threat = "Entrave au contrôle",
             threatCharacterization = "Dissimulation",
         ),
@@ -72,7 +87,9 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 2604,
-            infraction = "REFUS, PAR LE CAPITAINE D'UN NAVIRE DE PECHE MARITIME D'OBTEMPERER A UNE SOMMATION DE STOPPER POUR SE SOUSTRAIRE A UN CONTROLE",
+            infraction =
+                "REFUS, PAR LE CAPITAINE D'UN NAVIRE DE PECHE MARITIME D'OBTEMPERER A UNE SOMMATION DE STOPPER POUR " +
+                    "SE SOUSTRAIRE A UN CONTROLE",
             threat = "Entrave au contrôle",
             threatCharacterization = "Interférence",
         ),
@@ -90,7 +107,9 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 2605,
-            infraction = "ENTRAVE AU CONTROLE D'EXPLOITATION AQUACOLE, DE CULTURE MARINE OU D'ETABLISSEMENT DE CAPTURE OU DE STRUCTURE ARTIFICIELLE - PECHE MARITIME",
+            infraction =
+                "ENTRAVE AU CONTROLE D'EXPLOITATION AQUACOLE, DE CULTURE MARINE OU D'ETABLISSEMENT DE CAPTURE OU DE " +
+                    "STRUCTURE ARTIFICIELLE - PECHE MARITIME",
             threat = "Entrave au contrôle",
             threatCharacterization = "Sécurité",
         ),
@@ -108,25 +127,33 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 27688,
-            infraction = "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
+            infraction =
+                "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE " +
+                    "DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "AIS",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27688,
-            infraction = "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
+            infraction =
+                "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE " +
+                    "DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "REM",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27688,
-            infraction = "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
+            infraction =
+                "NON RESPECT DES OBLIGATIONS D'ENREGISTREMENT ET DE COMMUNICATION DES DONNEES REQUISES DANS LE CADRE " +
+                    "DU SYSTEME DE SURVEILLANCE DES NAVIRES DE PECHE MARITIME",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "VMS",
         ),
         InfractionThreatCharacterization(
             natinfCode = 2603,
-            infraction = "FORMATION OU IMMERSION NON AUTORISEE D'EXPLOITATION AQUACOLE OU DE STRUCTURE DE CULTURE OU DE CAPTURE MARINE - PECHE MARITIME",
+            infraction =
+                "FORMATION OU IMMERSION NON AUTORISEE D'EXPLOITATION AQUACOLE OU DE STRUCTURE DE CULTURE OU DE " +
+                    "CAPTURE MARINE - PECHE MARITIME",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Autorisation",
         ),
@@ -150,13 +177,16 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 32099,
-            infraction = "PECHE MARITIME D'ANGUILLE EUROPEENNE, D'ESTURGEON EUROPEEN OU DE SAUMON ATLANTIQUE SANS LICENCE OU AUTORISATION - ESPECE PROTEGEE",
+            infraction =
+                "PECHE MARITIME D'ANGUILLE EUROPEENNE, D'ESTURGEON EUROPEEN OU DE SAUMON ATLANTIQUE SANS LICENCE OU " +
+                    "AUTORISATION - ESPECE PROTEGEE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Autorisation",
         ),
         InfractionThreatCharacterization(
             natinfCode = 10400,
-            infraction = "DEBARQUEMENT DE PRODUITS DE PECHE MARITIME ET D'AQUACULTURE MARINE EN DEHORS DES LIEUX DETERMINES",
+            infraction =
+                "DEBARQUEMENT DE PRODUITS DE PECHE MARITIME ET D'AQUACULTURE MARINE EN DEHORS DES LIEUX DETERMINES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Débarquement",
         ),
@@ -168,13 +198,16 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 27718,
-            infraction = "DEBARQUEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
+            infraction =
+                "DEBARQUEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE " +
+                    "D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Débarquement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27721,
-            infraction = "DEBARQUEMENT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE HORS DES HORAIRES AUTORISES",
+            infraction =
+                "DEBARQUEMENT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE HORS DES HORAIRES AUTORISES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Débarquement",
         ),
@@ -210,61 +243,78 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 12898,
-            infraction = "UTILISATION POUR LA PECHE MARITIME D'INSTRUMENT OU APPAREIL DANS UNE ZONE OU SON EMPLOI EST INTERDIT",
+            infraction =
+                "UTILISATION POUR LA PECHE MARITIME D'INSTRUMENT OU APPAREIL DANS UNE ZONE OU SON EMPLOI EST INTERDIT",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 12918,
-            infraction = "UTILISATION POUR LA PECHE MARITIME D'UN NOMBRE D'ENGINS OU APPAREILS EN NOMBRE SUPERIEUR A CELUI AUTORISE",
+            infraction =
+                "UTILISATION POUR LA PECHE MARITIME D'UN NOMBRE D'ENGINS OU APPAREILS EN NOMBRE SUPERIEUR A CELUI " +
+                    "AUTORISE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27724,
-            infraction = "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de gestion des ressources",
+            infraction =
+                "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de " +
+                    "gestion des ressources",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27724,
-            infraction = "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de gestion des ressources",
+            infraction =
+                "Utilisation d'engin de pêche maritime non conforme aux mesures techniques de conservation et de " +
+                    "gestion des ressources",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Marquage engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27725,
-            infraction = "DETENTION D'ENGIN DE PECHE MARITIME NON CONFORME AUX MESURES TECHNIQUES DE CONSERVATION ET DE GESTION DES RESSOURCES",
+            infraction =
+                "DETENTION D'ENGIN DE PECHE MARITIME NON CONFORME AUX MESURES TECHNIQUES DE CONSERVATION ET DE " +
+                    "GESTION DES RESSOURCES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27725,
-            infraction = "DETENTION D'ENGIN DE PECHE MARITIME NON CONFORME AUX MESURES TECHNIQUES DE CONSERVATION ET DE GESTION DES RESSOURCES",
+            infraction =
+                "DETENTION D'ENGIN DE PECHE MARITIME NON CONFORME AUX MESURES TECHNIQUES DE CONSERVATION ET DE " +
+                    "GESTION DES RESSOURCES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Marquage engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27731,
-            infraction = "DETENTION A BORD D'UN NAVIRE D'ENGIN, DISPOSITIF, INSTRUMENT OU APPAREIL PROHIBE POUR LA PECHE MARITIME",
+            infraction =
+                "DETENTION A BORD D'UN NAVIRE D'ENGIN, DISPOSITIF, INSTRUMENT OU APPAREIL PROHIBE POUR LA PECHE " +
+                    "MARITIME",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Engin",
         ),
         InfractionThreatCharacterization(
             natinfCode = 7063,
-            infraction = "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
+            infraction =
+                "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèce interdite",
         ),
         InfractionThreatCharacterization(
             natinfCode = 7064,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE DONT LA PECHE EST INTERDITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèce interdite",
         ),
         InfractionThreatCharacterization(
             natinfCode = 28347,
-            infraction = "DETENTION DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
+            infraction =
+                "DETENTION DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèce interdite",
         ),
@@ -288,67 +338,89 @@ val dummyInfractionThreatCharacterizations =
         ),
         InfractionThreatCharacterization(
             natinfCode = 7983,
-            infraction = "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DE TAILLE, CALIBRE OU POIDS PROHIBE",
+            infraction =
+                "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DE TAILLE, CALIBRE OU POIDS " +
+                    "PROHIBE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèces en sous taille / sous poids",
         ),
         InfractionThreatCharacterization(
             natinfCode = 7984,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DE TAILLE, CALIBRE OU POIDS PROHIBE",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE DE TAILLE, CALIBRE OU POIDS PROHIBE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèces en sous taille / sous poids",
         ),
         InfractionThreatCharacterization(
             natinfCode = 28346,
-            infraction = "Détention de produits de la pêche maritime et de l'aquaculture marine de taille, calibre ou poids prohibe",
+            infraction =
+                "Détention de produits de la pêche maritime et de l'aquaculture marine de taille, calibre ou poids " +
+                    "prohibe",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Espèces en sous taille / sous poids",
         ),
         InfractionThreatCharacterization(
             natinfCode = 12900,
-            infraction = "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE EN QUANTITE OU EN POIDS SUPERIEURS A CEUX AUTORISES",
+            infraction =
+                "PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE EN QUANTITE OU EN POIDS " +
+                    "SUPERIEURS A CEUX AUTORISES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Surquota",
         ),
         InfractionThreatCharacterization(
             natinfCode = 12902,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE EN QUANTITE OU POIDS SUPERIEURS A CEUX AUTORISES",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE EN QUANTITE OU POIDS SUPERIEURS A CEUX AUTORISES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Surquota",
         ),
         InfractionThreatCharacterization(
             natinfCode = 28348,
-            infraction = "DETENTION A BORD D'UN NAVIRE DE PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE EN QUANTITE OU EN POIDS SUPERIEURS A CEUX AUTORISES",
+            infraction =
+                "DETENTION A BORD D'UN NAVIRE DE PECHE DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE " +
+                    "EN QUANTITE OU EN POIDS SUPERIEURS A CEUX AUTORISES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Surquota",
         ),
         InfractionThreatCharacterization(
             natinfCode = 7064,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE DONT LA PECHE EST INTERDITE",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE DONT LA PECHE EST INTERDITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Transbordement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 12902,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE EN QUANTITE OU POIDS SUPERIEURS A CEUX AUTORISES",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE EN QUANTITE OU POIDS SUPERIEURS A CEUX AUTORISES",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Transbordement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 33914,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE SANS MARQUAGE CONFORME DE TRACABILITE",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE SANS MARQUAGE CONFORME DE TRACABILITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Tracabilité",
         ),
         InfractionThreatCharacterization(
             natinfCode = 33914,
-            infraction = "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE MARINE SANS MARQUAGE CONFORME DE TRACABILITE",
+            infraction =
+                "TRANSBORDEMENT, DEBARQUEMENT OU TRANSPORT DE PRODUITS DE LA PECHE MARITIME ET DE L'AQUACULTURE " +
+                    "MARINE SANS MARQUAGE CONFORME DE TRACABILITE",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Transbordement",
         ),
         InfractionThreatCharacterization(
             natinfCode = 27717,
-            infraction = "TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
+            infraction =
+                "TRANSBORDEMENT HORS D'UN PORT DESIGNE DE PRODUITS DE LA PECHE MARITIME OU DE L'AQUACULTURE MARINE " +
+                    "D'ESPECES SOUMISES A UN PLAN PLURIANNUEL",
             threat = "Mesures techniques et de conservation",
             threatCharacterization = "Transbordement",
         ),

@@ -9,8 +9,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotification
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationRecipientFunction
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotifications
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
@@ -159,16 +159,16 @@ class UpdateBeaconMalfunctionUTests {
                             BeaconMalfunctionNotifications(
                                 beaconMalfunctionId = 1,
                                 dateTimeUtc = ZonedDateTime.now(),
-                                notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                notificationType = MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                 notifications =
                                     listOf(
                                         BeaconMalfunctionNotification(
                                             id = 1,
                                             beaconMalfunctionId = 1,
                                             dateTimeUtc = ZonedDateTime.now(),
-                                            notificationType = BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
+                                            notificationType = MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
                                             communicationMeans = CommunicationMeans.SMS,
-                                            recipientFunction = BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
+                                            recipientFunction = VESSEL_CAPTAIN,
                                             recipientName = "Jack Sparrow",
                                             recipientAddressOrNumber = "0000000000",
                                             success = false,

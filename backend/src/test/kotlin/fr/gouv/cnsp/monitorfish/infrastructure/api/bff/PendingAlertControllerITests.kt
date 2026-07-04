@@ -314,7 +314,10 @@ class PendingAlertControllerITests {
                                 vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
                                 flagState = CountryCode.FR,
                                 silencedBeforeDate = ZonedDateTime.now(),
-                                value = "{\"type\": \"MISSING_FAR_48_HOURS_ALERT\", \"name\": \"FAR manquant en 48h\", \"threat\": \"Obligations déclaratives\", \"threatCharacterization\": \"DEP\"}",
+                                value =
+                                    "{\"type\": \"MISSING_FAR_48_HOURS_ALERT\", \"name\": \"FAR manquant en 48h\", " +
+                                        "\"threat\": \"Obligations déclaratives\", \"threatCharacterization\": " +
+                                        "\"DEP\"}",
                             ),
                         ),
                     ).contentType(MediaType.APPLICATION_JSON),

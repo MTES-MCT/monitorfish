@@ -30,7 +30,7 @@ class VesselController(
     private val getActiveVessels: GetActiveVessels,
     private val getLastPositionsAIS: GetLastPositionsAIS,
     private val getVessel: GetVessel,
-    private val getVesselById: GetVesselById,
+    private val getControlledVesselById: GetControlledVesselById,
     private val getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions,
     private val getVesselAISPositions: GetVesselAISPositions,
     private val getVesselVoyage: GetVesselVoyage,
@@ -84,11 +84,11 @@ class VesselController(
         trackDepth: VesselTrackDepth,
         @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime?,
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         beforeDateTime: ZonedDateTime?,
     ): List<PositionDataOutput> =
         getVesselAISPositions
@@ -107,7 +107,18 @@ class VesselController(
         @PathParam("Vessel ID")
         @PathVariable(name = "vesselId")
         vesselId: Int,
-    ): SelectedVesselDataOutput = SelectedVesselDataOutput.fromVessel(getVesselById.execute(vesselId))
+        @AuthenticationPrincipal principal: OidcUser?,
+    ): ControlledVesselDataOutput =
+        runBlocking {
+            val email = principal?.email ?: ""
+            val controlledVessel = getControlledVesselById.execute(vesselId = vesselId, userEmail = email)
+
+            ControlledVesselDataOutput.fromVessel(
+                vessel = controlledVessel.controlledVessel,
+                vesselGroups = controlledVessel.groups,
+                tripReportings = controlledVessel.tripReportings,
+            )
+        }
 
     @GetMapping("/find")
     @Operation(summary = "Get vessel information and positions")
@@ -132,11 +143,11 @@ class VesselController(
         vesselIdentifier: VesselIdentifier?,
         @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime?,
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         beforeDateTime: ZonedDateTime?,
         @AuthenticationPrincipal principal: OidcUser?,
     ): ResponseEntity<SelectedVesselAndPositionsDataOutput> =
@@ -171,7 +182,7 @@ class VesselController(
         vesselId: Int,
         @Parameter(description = "beacon malfunctions after date time")
         @RequestParam(name = "afterDateTime")
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime,
     ): BeaconMalfunctionsResumeAndHistoryDataOutput {
         val beaconMalfunctionsWithDetails =
@@ -205,11 +216,11 @@ class VesselController(
         vesselIdentifier: VesselIdentifier?,
         @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime?,
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         beforeDateTime: ZonedDateTime?,
     ): ResponseEntity<List<PositionDataOutput>> =
         runBlocking {
@@ -235,7 +246,7 @@ class VesselController(
         }
 
     companion object {
-        const val zoneDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.000X"
+        const val ZONE_DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.000X"
     }
 
     @GetMapping("/reportings")
@@ -258,7 +269,7 @@ class VesselController(
         vesselIdentifier: VesselIdentifier?,
         @Parameter(description = "Reporting from date time")
         @RequestParam(name = "fromDate")
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         fromDate: ZonedDateTime,
     ): VesselReportingsDataOutput {
         val currentAndArchivedReportings =
@@ -300,11 +311,11 @@ class VesselController(
         trackDepth: VesselTrackDepth,
         @Parameter(description = "from date")
         @RequestParam(name = "afterDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime?,
         @Parameter(description = "to date")
         @RequestParam(name = "beforeDateTime", required = false)
-        @DateTimeFormat(pattern = zoneDateTimePattern)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
         beforeDateTime: ZonedDateTime?,
     ): VoyageDataOutput {
         val voyage =

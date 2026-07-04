@@ -42,6 +42,13 @@ class JpaLastPositionRepository(
             null
         }
 
+    override fun findByVesselId(vesselId: Int): LastPosition? =
+        try {
+            dbLastPositionRepository.findByVesselId(vesselId = vesselId).toLastPosition(mapper)
+        } catch (e: EmptyResultDataAccessException) {
+            null
+        }
+
     @Cacheable(value = ["active_vessels"])
     override fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVessel> =
         dbLastPositionRepository

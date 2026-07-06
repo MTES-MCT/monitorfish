@@ -5,6 +5,7 @@ class LegipecheSpider(scrapy.Spider):
     name = "legipeche"
     start_urls = [
         "https://legipeche.metier.e2.rie.gouv.fr/bibliotheque-r3.html",
+        "https://legipeche.metier.e2.rie.gouv.fr/quotas-r5.html",
     ]
 
     def parse(self, response):
@@ -51,4 +52,9 @@ class LegipecheSpider(scrapy.Spider):
             yield response.follow(href, callback=self.parse)
 
         for href in response.xpath('//nav[@class="pagination"]/ul/li/a/@href'):
+            yield response.follow(href, callback=self.parse)
+
+        for href in response.xpath(
+            '//nav[@class="pagination pagination-intra"]/ul/li/a/@href'
+        ):
             yield response.follow(href, callback=self.parse)

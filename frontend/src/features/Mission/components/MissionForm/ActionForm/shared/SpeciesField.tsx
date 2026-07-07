@@ -77,7 +77,7 @@ export function SpeciesField() {
 
   const speciesEISRApplicability =
     values.vesselId !== undefined
-      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.length)
+      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.vesselLength)
       : DEFAULT_SPECIES_EISR_APPLICABILITY
   useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
 
@@ -108,9 +108,9 @@ export function SpeciesField() {
     const newSpecies: MissionAction.SpeciesOnboardControl = {
       controlledWeight: undefined,
       declaredWeight: undefined,
-      faoZones: getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+      faoZones: getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.vesselLength),
       nbFish: undefined,
-      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.vesselLength),
       speciesCode: '',
       speciesName: undefined,
       underSized: false,
@@ -131,10 +131,10 @@ export function SpeciesField() {
       currentIndex === index
         ? {
             ...species,
-            faoZones: species.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+            faoZones: species.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.vesselLength),
             presentationCodes: species.presentationCodes?.length
               ? species.presentationCodes
-              : getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+              : getDefaultPresentationCodes(isEISREnabled, vessel?.vesselLength),
             speciesCode: newSpecy.code,
             speciesName: newSpecy.name
           }

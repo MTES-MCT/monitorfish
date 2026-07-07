@@ -65,7 +65,7 @@ export function DiscardedSpeciesField() {
         currentIndex === index
           ? {
               ...discard,
-              faoZones: discard.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+              faoZones: discard.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.vesselLength),
               speciesCode: newSpecy.code
             }
           : discard

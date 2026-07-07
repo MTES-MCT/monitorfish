@@ -96,6 +96,7 @@ class GetControlledVesselByIdUTests {
         id: Int,
         name: String,
         isPriorityGroup: Boolean,
+        sharing: Sharing = Sharing.SHARED,
     ) = FixedVesselGroup(
         id = id,
         isDeleted = false,
@@ -103,7 +104,7 @@ class GetControlledVesselByIdUTests {
         description = "",
         pointsOfAttention = "",
         color = "",
-        sharing = Sharing.PRIVATE,
+        sharing = sharing,
         isPriorityGroup = isPriorityGroup,
         createdBy = "dummy@email.gouv.fr",
         createdAtUtc = ZonedDateTime.now(),
@@ -135,14 +136,15 @@ class GetControlledVesselByIdUTests {
     }
 
     @Test
-    fun `execute Should only keep the priority groups the vessel belongs to`() {
+    fun `execute Should only keep the shared groups the vessel belongs to`() {
         // Given
         given(vesselRepository.findVesselById(any())).willReturn(dummyVessel)
         given(lastPositionRepository.findByVesselId(any())).willReturn(dummyLastPosition)
         given(getAllUserVesselGroups.execute(any())).willReturn(
             listOf(
-                fixedGroup(id = 1, name = "Priority group", isPriorityGroup = true),
-                fixedGroup(id = 2, name = "Non priority group", isPriorityGroup = false),
+                fixedGroup(id = 1, name = "Shared priority group", isPriorityGroup = true, sharing = Sharing.SHARED),
+                fixedGroup(id = 2, name = "Shared group", isPriorityGroup = false, sharing = Sharing.SHARED),
+                fixedGroup(id = 3, name = "Private group", isPriorityGroup = false, sharing = Sharing.PRIVATE),
             ),
         )
 
@@ -151,9 +153,9 @@ class GetControlledVesselByIdUTests {
             runBlocking { getControlledVesselById.execute(vesselId = 123, userEmail = "user@gouv.fr") }
 
         // Then
-        assertThat(controlledVessel.groups).hasSize(1)
-        assertThat(controlledVessel.groups).allMatch { it.isPriorityGroup }
-        assertThat(controlledVessel.groups.first().name).isEqualTo("Priority group")
+        assertThat(controlledVessel.groups).hasSize(2)
+        assertThat(controlledVessel.groups.map { it.name })
+            .containsExactlyInAnyOrder("Shared priority group", "Shared group")
     }
 
     @Test

@@ -34,7 +34,7 @@ describe('features/Mission/components/MissionForm/useCases.updateActionLogbookFi
   it('Should set NOT_APPLICABLE When the vessel is under 10 meters', async () => {
     // Given
     mockDispatch
-      .mockResolvedValueOnce({ data: { length: 8 } }) // getVessel
+      .mockResolvedValueOnce({ data: { vesselLength: 8 } }) // getVessel
       .mockResolvedValueOnce({ data: true }) // getHasFilledLogbookForCurrentTrip
 
     // When
@@ -56,7 +56,7 @@ describe('features/Mission/components/MissionForm/useCases.updateActionLogbookFi
   it('Should leave the field empty When the vessel is between 10 and 12 meters', async () => {
     // Given
     mockDispatch
-      .mockResolvedValueOnce({ data: { length: 10 } }) // getVessel
+      .mockResolvedValueOnce({ data: { vesselLength: 10 } }) // getVessel
       .mockResolvedValueOnce({ data: true }) // getHasFilledLogbookForCurrentTrip
 
     // When

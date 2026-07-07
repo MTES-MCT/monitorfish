@@ -11,6 +11,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
@@ -54,7 +55,7 @@ class GetControlledVesselById(
 
             ControlledVessel(
                 controlledVessel = vessel,
-                groups = findPriorityGroups(userVesselGroups.await(), enrichedActiveVessel, now),
+                groups = findSharedGroups(userVesselGroups.await(), enrichedActiveVessel, now),
                 tripReportings = findCurrentTripReportings(vessel, vesselId),
             )
         }
@@ -89,13 +90,13 @@ class GetControlledVesselById(
             )
         }
 
-    private fun findPriorityGroups(
+    private fun findSharedGroups(
         userVesselGroups: List<VesselGroupBase>,
         enrichedActiveVessel: EnrichedActiveVessel,
         now: ZonedDateTime,
     ): List<VesselGroupBase> =
         userVesselGroups
-            .filter { it.isPriorityGroup }
+            .filter { it.sharing == Sharing.SHARED }
             .filter { it.containsActiveVessel(enrichedActiveVessel, now) }
 
     private fun VesselGroupBase.containsActiveVessel(

@@ -49,6 +49,10 @@ const Wrapper = styled.div`
     > .Field-DatePicker {
       &:last-child {
         margin-left: 12px;
+
+        .rs-picker-popup {
+          left: -50px !important;
+        }
       }
     }
   }

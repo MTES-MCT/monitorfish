@@ -184,11 +184,12 @@ export function VesselField() {
             {sortedGroups.map(group => (
               <StyledTag
                 key={`group-${group.id}`}
-                backgroundColor={THEME.color.gainsboro}
+                backgroundColor={THEME.color.white}
                 color={THEME.color.gunMetal}
                 Icon={isPriorityGroup(group) ? Icon.Priority : Icon.CircleFilled}
                 iconColor={group.color}
                 title={isPriorityGroup(group) ? 'Groupe prioritaire du navire' : 'Groupe du navire'}
+                withCircleIcon
               >
                 {group.name}
               </StyledTag>
@@ -196,8 +197,8 @@ export function VesselField() {
             {tripReportings.map(reporting => (
               <StyledTag
                 key={`reporting-${reporting.id}`}
-                backgroundColor={THEME.color.gainsboro}
-                color={THEME.color.gunMetal}
+                backgroundColor={THEME.color.white}
+                color={THEME.color.maximumRed}
                 Icon={Icon.Alert}
                 iconColor={THEME.color.maximumRed}
                 title="Suspicion d'infraction en cours sur la marée"
@@ -263,7 +264,7 @@ const StyledVesselSearch = styled(VesselSearch)`
 const VesselIdentityBar = styled.div`
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
-  margin-top: 4px;
+  margin-top: 8px;
 
   > span {
     font-weight: normal;
@@ -283,5 +284,11 @@ const TagsBar = styled.div`
 `
 
 const StyledTag = styled(Tag)`
+  padding-left: 3px;
+  font-weight: 500;
   cursor: default;
+
+  .Element-IconBox > svg {
+    width: 16px;
+  }
 `

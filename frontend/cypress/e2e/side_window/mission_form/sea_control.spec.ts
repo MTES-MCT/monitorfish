@@ -1346,7 +1346,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
   })
 
-  it('Should display the shared groups and current trip reportings as tags under the vessel search', () => {
+  it('Should display the shared groups and current trip reportings as tags under the vessel search (stubbed response)', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1401,5 +1401,27 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Plan cétacés - Dolphinfree')
     cy.get('[title="Groupe du navire"]').should('contain', 'Maintenance ERS à prévoir')
     cy.get('[title="Suspicion d\'infraction en cours sur la marée"]').should('contain', 'Chalutage 3 milles')
+  })
+
+  it('Should display a real shared priority group as a tag under the vessel search', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    // QUEUE DE POISSON (vessel id 117) has an effective control priority level of 4 and is not under
+    // charter, so it belongs to the shared "Segments P1" priority group. The endpoint is NOT stubbed:
+    // the tag is built from the real backend response.
+    cy.intercept('GET', '/bff/v1/vessels/117').as('getControlledVessel')
+
+    // Rechercher un navire...
+    cy.get('input[placeholder="Rechercher un navire..."]').type('queue de poisson').wait(250)
+    cy.getDataCy('VesselSearch-item').contains('QUEUE DE POISSON').click()
+
+    cy.wait('@getControlledVessel')
+
+    // The priority group is displayed as a tag with the "priority group" tooltip.
+    cy.getDataCy('mission-action-vessel-tags').should('exist')
+    cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Segments P1')
   })
 })

@@ -11,6 +11,10 @@ max_line_length = 120
 trim_trailing_whitespace = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
 ij_kotlin_allow_trailing_comma = true
+# The codebase intentionally uses snake_case packages (use_cases, vessel_group, …).
+# This is a permanent convention, not transitional debt, so disable the rule instead of
+# recording one fragile, line-anchored baseline entry per file.
+ktlint_standard_package-name = disabled
 
 [COMMIT_EDITMSG]
 max_line_length = 0

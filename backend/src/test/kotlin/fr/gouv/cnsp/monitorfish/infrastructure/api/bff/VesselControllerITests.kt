@@ -83,7 +83,7 @@ class VesselControllerITests {
     private lateinit var getVessel: GetVessel
 
     @MockitoBean
-    private lateinit var getVesselById: GetVesselById
+    private lateinit var getControlledVesselById: GetControlledVesselById
 
     @MockitoBean
     private lateinit var getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions
@@ -204,6 +204,64 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
+    }
+
+    @Test
+    fun `Should get a controlled vessel by its id with its priority groups and current trip reportings`() {
+        // Given
+        val vessel =
+            Vessel(
+                id = 123,
+                internalReferenceNumber = "FR224226850",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                hasLogbookEsacapt = false,
+            )
+        val tripReporting =
+            Reporting.InfractionSuspicion(
+                id = 1,
+                vesselId = 123,
+                cfr = "FR224226850",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                reportingSource = ReportingSource.OPS,
+                title = "Infraction suspicion",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "threat",
+                            threatCharacterization = "threat characterization",
+                        ),
+                    ),
+                createdBy = "test@example.gouv.fr",
+            )
+        givenSuspended {
+            getControlledVesselById.execute(vesselId = eq(123), userEmail = eq("email@domain-name.com"))
+        } willReturn {
+            ControlledVessel(
+                controlledVessel = vessel,
+                groups = getDynamicVesselGroups(),
+                tripReportings = listOf(tripReporting),
+            )
+        }
+
+        // When
+        api
+            .perform(get("/bff/v1/vessels/123").with(authenticatedRequest()))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.vesselId", equalTo(123)))
+            .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
+            .andExpect(jsonPath("$.groups.length()", equalTo(getDynamicVesselGroups().size)))
+            .andExpect(jsonPath("$.tripReportings.length()", equalTo(1)))
+            .andExpect(jsonPath("$.tripReportings[0].id", equalTo(1)))
     }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!

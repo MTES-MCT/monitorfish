@@ -19,6 +19,8 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
      */
     fun findAllByDateTimeGreaterThanEqualOrBeaconMalfunctionIdNotNull(dateTime: ZonedDateTime): List<LastPositionEntity>
 
+    fun findByVesselId(vesselId: Int): LastPositionEntity
+
     @Query(
         "select last_position_datetime_utc from last_positions where last_position_datetime_utc < now() order by last_position_datetime_utc desc limit 1",
         nativeQuery = true,

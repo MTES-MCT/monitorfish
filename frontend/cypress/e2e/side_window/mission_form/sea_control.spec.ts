@@ -4,6 +4,22 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditS
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
+const sharedGroup = (id: number, name: string, color: string, isPriorityGroup: boolean) => ({
+  color,
+  createdAtUtc: '2024-01-01T00:00:00Z',
+  createdBy: 'dummy@test.gouv.fr',
+  description: '',
+  id,
+  isDeleted: false,
+  isPriorityGroup,
+  name,
+  pointsOfAttention: '',
+  sharedTo: ['POLE_OPS_METROPOLE'],
+  sharing: 'SHARED',
+  type: 'FIXED',
+  vessels: []
+})
+
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
     openSideWindowNewMission()
@@ -1328,5 +1344,75 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait('@updateControl', { timeout: 8000 })
       .its('request.body.actionDatetimeUtc')
       .should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
+  })
+
+  it('Should display the shared groups and current trip reportings as tags under the vessel search', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    // -------------------------------------------------------------------------
+    // Real data: QUEUE DE POISSON (vessel id 117) has an effective control priority level of 4 and is
+    // not under charter, so it belongs to the shared "Segments P1" priority group. The endpoint is NOT
+    // stubbed here: the tag is built from the real backend response.
+    cy.intercept('GET', '/bff/v1/vessels/117').as('getRealControlledVessel')
+
+    cy.get('input[placeholder="Rechercher un navire..."]').type('queue de poisson').wait(250)
+    cy.getDataCy('VesselSearch-item').contains('QUEUE DE POISSON').click()
+
+    cy.wait('@getRealControlledVessel')
+
+    cy.getDataCy('mission-action-vessel-tags').should('exist')
+    cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Segments P1')
+
+    // -------------------------------------------------------------------------
+    // Stubbed data: change the vessel and stub the response to deterministically cover all tag variants
+    // (priority group, shared non-priority group and current trip reporting) with their tooltips.
+    cy.intercept('GET', '/bff/v1/vessels/2', {
+      body: {
+        externalReferenceNumber: 'TALK2ME',
+        flagState: 'FR',
+        groups: [
+          sharedGroup(101, 'Maintenance ERS à prévoir', '#1675f0', false),
+          sharedGroup(102, 'Plan cétacés - Dolphinfree', '#e1000f', true)
+        ],
+        internalReferenceNumber: 'U_W0NTFINDME',
+        ircs: 'QGDF',
+        tripReportings: [
+          {
+            createdBy: 'dummy@test.gouv.fr',
+            creationDate: '2024-01-01T00:00:00Z',
+            flagState: 'FR',
+            id: 4768,
+            isArchived: false,
+            isDeleted: false,
+            isIUU: false,
+            lastUpdateDate: '2024-01-01T00:00:00Z',
+            reportingDate: '2024-01-01T00:00:00Z',
+            type: 'INFRACTION_SUSPICION',
+            value: {
+              infractions: [],
+              title: 'Chalutage 3 milles'
+            }
+          }
+        ],
+        vesselId: 2,
+        vesselLength: 22,
+        vesselName: 'MALOTRU'
+      },
+      statusCode: 200
+    }).as('getStubbedControlledVessel')
+
+    cy.get('[aria-label="Vider le champ"]').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot').wait(250)
+    cy.contains('mark', 'MALOT').click()
+
+    cy.wait('@getStubbedControlledVessel')
+
+    cy.getDataCy('mission-action-vessel-tags').should('exist')
+    cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Plan cétacés - Dolphinfree')
+    cy.get('[title="Groupe du navire"]').should('contain', 'Maintenance ERS à prévoir')
+    cy.get('[title="Suspicion d\'infraction en cours sur la marée"]').should('contain', 'Chalutage 3 milles')
   })
 })

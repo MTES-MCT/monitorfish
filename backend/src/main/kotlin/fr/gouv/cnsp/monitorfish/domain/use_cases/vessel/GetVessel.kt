@@ -82,7 +82,7 @@ class GetVessel(
                         )
                     } ?: listOf()
                 }
-            val vesselFuture =
+            val vessel =
                 async {
                     vesselId?.let { vesselRepository.findVesselById(vesselId) }
                 }
@@ -154,7 +154,7 @@ class GetVessel(
                     beacon = beacon.await(),
                     vesselProfile = vesselProfile.await(),
                     vessel =
-                        vesselFuture.await()?.copy(
+                        vessel.await()?.copy(
                             hasVisioCaptures = hasVisioCaptures,
                             logbookSoftware = logbookSoftware,
                             bossName = bossNameAndAddress?.first,

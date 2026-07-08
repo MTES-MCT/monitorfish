@@ -4,6 +4,7 @@ import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReport
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
+import { ControlledVesselSchema } from '@features/Vessel/schemas/ControlledVesselSchema'
 import { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
@@ -51,12 +52,12 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
     }),
 
-    getVessel: builder.query<Vessel.SelectedVessel, number>({
+    getVessel: builder.query<Vessel.ControlledVessel, number>({
       providesTags: () => [{ type: RtkCacheTagType.Vessel }],
       query: id => `/vessels/${id}`,
       transformErrorResponse: response => new FrontendApiError(GET_VESSEL_ERROR_MESSAGE, response),
-      transformResponse: (baseQueryReturnValue: Vessel.SelectedVessel) =>
-        parseOrReturn<Vessel.SelectedVessel>(baseQueryReturnValue, VesselSchema, false)
+      transformResponse: (baseQueryReturnValue: Vessel.ControlledVessel) =>
+        parseOrReturn<Vessel.ControlledVessel>(baseQueryReturnValue, ControlledVesselSchema, false)
     }),
 
     getVesselAISPositions: builder.query<Vessel.VesselPosition[], { mmsi: number; trackRequest: TrackRequest }>({

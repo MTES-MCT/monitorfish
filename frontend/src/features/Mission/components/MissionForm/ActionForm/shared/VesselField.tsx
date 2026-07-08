@@ -1,12 +1,14 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
+import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Checkbox, FormikSelect, FormikTextInput, useNewWindow } from '@mtes-mct/monitor-ui'
+import { Checkbox, FormikSelect, FormikTextInput, Icon, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -111,6 +113,12 @@ export function VesselField() {
     dispatch(showVessel(displayedVessel, false))
   }
 
+  const sortedGroups = [...(vessel?.groups ?? [])].sort(
+    (groupA, groupB) => Number(isPriorityGroup(groupB)) - Number(isPriorityGroup(groupA))
+  )
+  const tripReportings = vessel?.tripReportings ?? []
+  const hasTags = !isFetching && (sortedGroups.length > 0 || tripReportings.length > 0)
+
   return (
     <>
       <Wrapper>
@@ -164,12 +172,41 @@ export function VesselField() {
                 <span>{values.ircs}</span> (Call Sign)
               </>
             )}
-            {!isFetching && !!vessel?.length && (
+            {!isFetching && !!vessel?.vesselLength && (
               <>
-                <span>{vessel.length}m</span> (Taille)
+                <span>{vessel.vesselLength}m</span> (Taille)
               </>
             )}
           </VesselIdentityBar>
+        )}
+        {values.vesselId && values.vesselId !== UNKNOWN_VESSEL.vesselId && hasTags && (
+          <TagsBar data-cy="mission-action-vessel-tags">
+            {sortedGroups.map(group => (
+              <StyledTag
+                key={`group-${group.id}`}
+                backgroundColor={THEME.color.white}
+                color={THEME.color.gunMetal}
+                Icon={isPriorityGroup(group) ? Icon.Priority : Icon.CircleFilled}
+                iconColor={group.color}
+                title={isPriorityGroup(group) ? 'Groupe prioritaire du navire' : 'Groupe du navire'}
+                withCircleIcon
+              >
+                {group.name}
+              </StyledTag>
+            ))}
+            {tripReportings.map(reporting => (
+              <StyledTag
+                key={`reporting-${reporting.id}`}
+                backgroundColor={THEME.color.white}
+                color={THEME.color.maximumRed}
+                Icon={Icon.Alert}
+                iconColor={THEME.color.maximumRed}
+                title="Suspicion d'infraction en cours sur la marée"
+              >
+                {reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title}
+              </StyledTag>
+            ))}
+          </TagsBar>
         )}
       </Wrapper>
 
@@ -227,7 +264,7 @@ const StyledVesselSearch = styled(VesselSearch)`
 const VesselIdentityBar = styled.div`
   color: ${p => p.theme.color.slateGray};
   font-weight: 300;
-  margin-top: 4px;
+  margin-top: 8px;
 
   > span {
     font-weight: normal;
@@ -235,5 +272,23 @@ const VesselIdentityBar = styled.div`
     &:not(:first-child) {
       margin-left: 16px;
     }
+  }
+`
+
+const TagsBar = styled.div`
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+`
+
+const StyledTag = styled(Tag)`
+  padding-left: 3px;
+  font-weight: 500;
+  cursor: default;
+
+  .Element-IconBox > svg {
+    width: 16px;
   }
 `

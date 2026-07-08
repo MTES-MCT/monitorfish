@@ -36,7 +36,7 @@ class MissionActionsController(
         vesselId: Int,
         @Parameter(description = "actions after date time")
         @RequestParam(name = "afterDateTime")
-        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        @DateTimeFormat(pattern = VesselController.ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime,
     ): ControlsSummaryDataOutput =
         runBlocking {
@@ -49,11 +49,11 @@ class MissionActionsController(
     fun getActivityReports(
         @Parameter(description = "actions before date time")
         @RequestParam(name = "beforeDateTime")
-        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        @DateTimeFormat(pattern = VesselController.ZONE_DATE_TIME_PATTERN)
         beforeDateTime: ZonedDateTime,
         @Parameter(description = "actions after date time")
         @RequestParam(name = "afterDateTime")
-        @DateTimeFormat(pattern = VesselController.zoneDateTimePattern)
+        @DateTimeFormat(pattern = VesselController.ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime,
         @Parameter(description = "JDP")
         @RequestParam(name = "jdp")

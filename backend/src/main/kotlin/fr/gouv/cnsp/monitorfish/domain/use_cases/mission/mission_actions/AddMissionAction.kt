@@ -29,7 +29,12 @@ class AddMissionAction(
                 it.apply { this.speciesName = singleSpecies?.name }
             }
 
-        val enrichedAction = action.copy(facade = facade, speciesOnboard = speciesOnboard)
+        val enrichedAction =
+            action.copy(
+                facade = facade,
+                speciesOnboard = speciesOnboard,
+                isPrioritized = action.computeIsPrioritized(),
+            )
 
         return missionActionsRepository.save(enrichedAction)
     }

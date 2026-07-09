@@ -6,9 +6,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlC
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReportingThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WireType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -117,9 +122,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(firstControl.longitude).isEqualTo(-0.52)
         assertThat(firstControl.latitude).isEqualTo(47.44)
         assertThat(firstControl.portLocode).isNull()
-        assertThat(firstControl.vesselTargeted).isEqualTo(
-            ControlCheck.NO,
-        )
+        assertThat(firstControl.isPrioritized).isFalse
         assertThat(firstControl.seizureAndDiversion).isTrue
         assertThat(firstControl.seizureAndDiversionComments).isEqualTo("Saisie de la pêche")
         assertThat(firstControl.otherComments).isEqualTo("Commentaires post contrôle")
@@ -212,6 +215,67 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `save Should persist the vesselGroups and tripReportings snapshot and round-trip it intact`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val vesselGroups =
+            listOf(
+                MissionActionVesselGroup(
+                    id = 1,
+                    name = "Groupe prioritaire",
+                    color = "#FF0000",
+                    type = GroupType.FIXED,
+                    isPriorityGroup = true,
+                ),
+            )
+        val tripReportings =
+            listOf(
+                MissionActionReporting(
+                    id = 42,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    title = "Suspicion d'infraction",
+                    threats =
+                        listOf(
+                            MissionActionReportingThreat(
+                                natinfCode = 27689,
+                                threat = "Pêche sans autorisation",
+                            ),
+                        ),
+                ),
+            )
+        val newMission =
+            getDummyMissionAction(dateTime).copy(
+                vesselGroups = vesselGroups,
+                tripReportings = tripReportings,
+            )
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then the frozen snapshot (groups and reportings with their threats) is stored and read back intact
+        assertThat(loaded.vesselGroups).isEqualTo(vesselGroups)
+        assertThat(loaded.tripReportings).isEqualTo(tripReportings)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should default the vesselGroups and tripReportings snapshot to an empty array When not provided`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime)
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.vesselGroups).isEmpty()
+        assertThat(loaded.tripReportings).isEmpty()
+    }
+
+    @Test
+    @Transactional
     fun `save Should throw an exception When save a new mission action with bad facade`() {
         // Given
         val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
@@ -298,7 +362,7 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
                 userTrigram = "JKL",
                 vesselId = 1,
                 vesselName = "PHENOMENE",
-                vesselTargeted = ControlCheck.YES,
+                isPrioritized = true,
                 isDeleted = false,
                 hasSomeGearsSeized = false,
                 hasSomeSpeciesSeized = false,

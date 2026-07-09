@@ -1,6 +1,8 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -174,5 +176,48 @@ class MissionActionUTests {
         // Then
         assertThat(throwable).isNotNull()
         assertThat(throwable.message).isEqualTo("A control must specify a position: the `latitude` must be given.")
+    }
+
+    @Test
+    fun `computeIsPrioritized Should be true When the vessel is in a priority group or has a current trip reporting`() {
+        // Given
+        val baseAction =
+            MissionAction(
+                id = null,
+                vesselId = 1,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                actionType = MissionActionType.SEA_CONTROL,
+                isDeleted = false,
+                userTrigram = "LTH",
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                completion = Completion.TO_COMPLETE,
+                flagState = CountryCode.FR,
+            )
+        val priorityGroup =
+            MissionActionVesselGroup(
+                id = 1,
+                name = "P1",
+                color = "#000000",
+                type = GroupType.HARDCODED,
+                isPriorityGroup = true,
+            )
+        val nonPriorityGroup =
+            MissionActionVesselGroup(
+                id = 2,
+                name = "Other",
+                color = "#000000",
+                type = GroupType.FIXED,
+                isPriorityGroup = false,
+            )
+        val reporting = MissionActionReporting(id = 1, type = ReportingType.INFRACTION_SUSPICION)
+
+        // When / Then
+        assertThat(baseAction.copy(vesselGroups = listOf(priorityGroup)).computeIsPrioritized()).isTrue()
+        assertThat(baseAction.copy(tripReportings = listOf(reporting)).computeIsPrioritized()).isTrue()
+        assertThat(baseAction.copy(vesselGroups = listOf(nonPriorityGroup)).computeIsPrioritized()).isFalse()
+        assertThat(baseAction.computeIsPrioritized()).isFalse()
     }
 }

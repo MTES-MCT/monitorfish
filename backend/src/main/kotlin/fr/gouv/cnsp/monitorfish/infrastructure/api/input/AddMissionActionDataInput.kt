@@ -8,8 +8,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGo
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import java.time.ZonedDateTime
 
 data class MissionActionInfractionDataInput(
@@ -95,7 +97,8 @@ data class AddMissionActionDataInput(
     var userTrigram: String,
     var speciesOnboard: List<SpeciesOnboardControlDataInput> = listOf(),
     var discardedSpecies: List<DiscardedSpeciesControlDataInput> = listOf(),
-    var vesselTargeted: ControlCheck? = null,
+    var vesselGroups: List<MissionActionVesselGroup> = listOf(),
+    var tripReportings: List<MissionActionReporting> = listOf(),
     var hasSomeGearsSeized: Boolean = false,
     var hasSomeSpeciesSeized: Boolean = false,
     var speciesQuantitySeized: Int? = null,
@@ -163,8 +166,9 @@ data class AddMissionActionDataInput(
             gearOnboard = gearOnboard.map { it.toGearControl() },
             speciesOnboard = speciesOnboard.map { it.toSpeciesOnboardControl() },
             discardedSpecies = discardedSpecies.map { it.toDiscardedSpeciesControl() },
+            vesselGroups = vesselGroups,
+            tripReportings = tripReportings,
             userTrigram = userTrigram,
-            vesselTargeted = vesselTargeted,
             isDeleted = false,
             hasSomeGearsSeized = hasSomeGearsSeized,
             hasSomeSpeciesSeized = hasSomeSpeciesSeized,

@@ -41,6 +41,7 @@ class UpdateMissionAction(
                 observationsByUnit = previousMissionAction.observationsByUnit,
                 id = actionId,
                 facade = facade,
+                isPrioritized = action.computeIsPrioritized(),
             )
 
         return missionActionsRepository.save(enrichedAction)

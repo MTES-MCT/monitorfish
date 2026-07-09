@@ -70,8 +70,7 @@ context('Side Window > Mission Form > Observation', () => {
           unitWithoutOmegaGauge: null,
           userTrigram: 'Marlin',
           vesselId: null,
-          vesselName: null,
-          vesselTargeted: null
+          vesselName: null
         }
       },
       5

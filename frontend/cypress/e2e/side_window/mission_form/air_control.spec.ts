@@ -132,8 +132,7 @@ context('Side Window > Mission Form > Air Control', () => {
           unitWithoutOmegaGauge: null,
           userTrigram: 'Marlin',
           vesselId: 1,
-          vesselName: 'PHENOMENE',
-          vesselTargeted: null
+          vesselName: 'PHENOMENE'
         }
       },
       5

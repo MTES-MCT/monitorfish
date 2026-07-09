@@ -16,10 +16,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Controls
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReportingThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.AddMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.DeleteMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetActivityReports
@@ -255,6 +260,71 @@ class MissionActionsControllerITests {
             verify(addMissionAction).execute(capture())
 
             Assertions.assertThat(allValues[0].actionDatetimeUtc.toString()).isEqualTo("2023-04-27T16:05Z")
+        }
+    }
+
+    @Test
+    fun `Should create a mission action storing the vesselGroups and tripReportings snapshot`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
+        val vesselGroups =
+            listOf(
+                MissionActionVesselGroup(
+                    id = 1,
+                    name = "Groupe prioritaire",
+                    color = "#FF0000",
+                    type = GroupType.FIXED,
+                    isPriorityGroup = true,
+                ),
+            )
+        val tripReportings =
+            listOf(
+                MissionActionReporting(
+                    id = 42,
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    title = "Suspicion",
+                    threats = listOf(MissionActionReportingThreat(natinfCode = 27689)),
+                ),
+            )
+        val newMission =
+            TestUtils.getDummyMissionAction(dateTime).copy(
+                vesselGroups = vesselGroups,
+                tripReportings = tripReportings,
+            )
+        given(addMissionAction.execute(any())).willReturn(newMission)
+
+        // When
+        api
+            .perform(
+                post("/bff/v1/mission_actions")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.SEA_CONTROL,
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                                vesselGroups = vesselGroups,
+                                tripReportings = tripReportings,
+                            ),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.vesselGroups[0].name", equalTo("Groupe prioritaire")))
+            .andExpect(jsonPath("$.vesselGroups[0].isPriorityGroup", equalTo(true)))
+            .andExpect(jsonPath("$.tripReportings[0].type", equalTo("INFRACTION_SUSPICION")))
+            .andExpect(jsonPath("$.tripReportings[0].threats[0].natinfCode", equalTo(27689)))
+
+        argumentCaptor<MissionAction>().apply {
+            verify(addMissionAction).execute(capture())
+
+            Assertions.assertThat(allValues[0].vesselGroups).isEqualTo(vesselGroups)
+            Assertions.assertThat(allValues[0].tripReportings).isEqualTo(tripReportings)
         }
     }
 

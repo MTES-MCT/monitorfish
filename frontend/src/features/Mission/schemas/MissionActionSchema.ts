@@ -6,6 +6,7 @@ import { DiscardedSpeciesControlSchema } from './DiscardedSpeciesControlSchema'
 import { FleetSegmentSchema } from './FleetSegmentSchema'
 import { GearControlSchema } from './GearControlSchema'
 import { InfractionSchema } from './InfractionSchema'
+import { MissionActionReportingSchema, MissionActionVesselGroupSchema } from './MissionActionSnapshotSchema'
 import { SpeciesOnboardControlSchema } from './SpeciesOnboardControlSchema'
 import { LegacyControlUnitSchema } from '../../ControlUnit/schemas/LegacyControlUnitSchema'
 
@@ -42,6 +43,7 @@ export const MissionActionSchema = z.strictObject({
   isFromPoseidon: booleanOrUndefined,
   isINNControl: z.boolean(),
   isLastHaul: z.boolean(),
+  isPrioritized: z.boolean(),
   isSafetyEquipmentAndStandardsComplianceControl: booleanOrUndefined,
   isSeafarersControl: booleanOrUndefined,
   isUnitBoarded: booleanOrUndefined,
@@ -73,13 +75,14 @@ export const MissionActionSchema = z.strictObject({
   speciesSizeControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   speciesWeightControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   stowagePlanPresent: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
+  tripReportings: z.array(MissionActionReportingSchema),
   underSizedSeparateRecording: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   underSizedSeparateStowage: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   unitWithoutOmegaGauge: booleanOrUndefined,
   userTrigram: stringOrUndefined,
+  vesselGroups: z.array(MissionActionVesselGroupSchema),
   vesselId: numberOrUndefined,
   vesselName: stringOrUndefined,
-  vesselTargeted: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   vmsEmissionControlBeforeArrival: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   weighingCertificateAndSystemsValid: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   weighingOperationsMonitoredByInspectors: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),

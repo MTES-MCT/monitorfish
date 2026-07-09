@@ -93,8 +93,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           unitWithoutOmegaGauge: false,
           userTrigram: 'JKL',
           vesselId: 2,
-          vesselName: 'MALOTRU',
-          vesselTargeted: 'YES'
+          vesselName: 'MALOTRU'
         }
       },
       5
@@ -197,8 +196,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
           unitWithoutOmegaGauge: false,
           userTrigram: 'JKL',
           vesselId: 1,
-          vesselName: 'PHENOMENE',
-          vesselTargeted: 'YES'
+          vesselName: 'PHENOMENE'
         }
       },
       5

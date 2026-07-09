@@ -127,8 +127,7 @@ context('Side Window > Mission Form > Air Surveillance', () => {
               unitWithoutOmegaGauge: null,
               userTrigram: 'Marlin',
               vesselId: null,
-              vesselName: null,
-              vesselTargeted: null
+              vesselName: null
             }
           },
           5

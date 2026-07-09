@@ -104,7 +104,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -1423,11 +1423,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[title="Groupe du navire"]').should('contain', 'Maintenance ERS à prévoir')
     cy.get('[title="Suspicion d\'infraction en cours sur la marée"]').should('contain', 'Chalutage 3 milles')
 
-    // A form change auto-saves the control: the last save request must carry the displayed snapshot
+    // Filling a required field makes the control valid, triggering the initial auto-save (POST) that
+    // must carry the snapshot displayed above.
     cy.fill('Saisi par', 'LTH')
 
     cy.waitForLastRequest(
-      '@updateMissionAction',
+      '@createMissionAction',
       {
         body: {
           tripReportings: [{ id: 4768, threats: [], title: 'Chalutage 3 milles', type: 'INFRACTION_SUSPICION' }],

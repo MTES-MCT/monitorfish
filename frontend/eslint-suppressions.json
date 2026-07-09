@@ -331,6 +331,61 @@
       "count": 2
     }
   },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/InfractionForm.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/index.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 3
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikOtherControlsCheckboxes.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 4
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikPortSelect.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 5
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikRevalidationEffect.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/GearsField.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 6
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/LicencesAndLogbookField.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/Species/WeightInput.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/SpeciesField.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 8
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    }
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/VesselFleetSegmentsField.tsx": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 2
+    }
+  },
   "src/features/Mission/components/MissionForm/ActionList/ActionCard.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1

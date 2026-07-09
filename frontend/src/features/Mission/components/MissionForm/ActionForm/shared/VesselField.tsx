@@ -67,8 +67,8 @@ export function VesselField() {
       return
     }
 
-    setFieldValue('vesselGroups', vessel.groups.map(toVesselGroupSnapshot))
-    setFieldValue('tripReportings', vessel.tripReportings.map(toReportingSnapshot))
+    void setFieldValue('vesselGroups', vessel.groups.map(toVesselGroupSnapshot))
+    void setFieldValue('tripReportings', vessel.tripReportings.map(toReportingSnapshot))
     snapshotPendingVesselIdRef.current = undefined
   }, [vessel, setFieldValue])
 
@@ -106,7 +106,7 @@ export function VesselField() {
     const identity = nextVessel as Partial<Vessel.VesselIdentity> | undefined
     if (!identity) {
       snapshotPendingVesselIdRef.current = undefined
-      setValues({
+      void setValues({
         ...values,
         districtCode: undefined,
         externalReferenceNumber: undefined,
@@ -133,7 +133,7 @@ export function VesselField() {
     const isAlreadyLoaded = !isUnknownVessel && vessel?.vesselId === identity.vesselId
     snapshotPendingVesselIdRef.current = isUnknownVessel || isAlreadyLoaded ? undefined : identity.vesselId
 
-    setValues({
+    void setValues({
       ...values,
       districtCode: identity.districtCode,
       externalReferenceNumber: identity.externalReferenceNumber,
@@ -151,7 +151,7 @@ export function VesselField() {
       internalReferenceNumber: identity.internalReferenceNumber ?? undefined,
       vesselId: identity.vesselId ?? undefined
     }
-    updateFieldsControlledByVessel(valuesWithVessel)
+    void updateFieldsControlledByVessel(valuesWithVessel)
   }
 
   const handleIsVesselUnknownChange = (isChecked: boolean | undefined) => {
@@ -165,7 +165,7 @@ export function VesselField() {
   }
 
   const handleVesselLinkClick = (displayedVessel: Vessel.VesselIdentity) => {
-    dispatch(showVessel(displayedVessel, false))
+    void dispatch(showVessel(displayedVessel, false))
   }
 
   // Read from the persisted snapshot, not the live query, so a saved control keeps showing the

@@ -8,7 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Random
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class LogbookMessageUTests {

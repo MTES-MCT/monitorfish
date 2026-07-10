@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
 import org.springframework.web.servlet.HandlerInterceptor
-import java.util.*
+import java.util.UUID
 
 /**
  * A webflow request interceptor injecting correlation id to the request context.

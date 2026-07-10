@@ -4,8 +4,8 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.RapportnavProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.RapportNavMissionAction
 import fr.gouv.cnsp.monitorfish.domain.repositories.RapportNavMissionActionsRepository
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
 import org.slf4j.Logger

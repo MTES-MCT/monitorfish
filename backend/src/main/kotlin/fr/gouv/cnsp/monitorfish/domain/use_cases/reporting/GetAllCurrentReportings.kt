@@ -150,7 +150,8 @@ class GetAllCurrentReportings(
             }
         } catch (e: Throwable) {
             logger.debug(
-                "Last position not found for vessel \"${reporting.cfr}/${reporting.ircs}/${reporting.externalMarker}\" " +
+                "Last position not found for vessel " +
+                    "\"${reporting.cfr}/${reporting.ircs}/${reporting.externalMarker}\" " +
                     "and vessel identifier \"${reporting.vesselIdentifier}\": ${e.message}",
             )
 

@@ -1,7 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.security
 
-import fr.gouv.cnsp.monitorfish.config.*
+import fr.gouv.cnsp.monitorfish.config.KeycloakProxyProperties
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
+import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.ProtectedPathsAPIProperties
+import fr.gouv.cnsp.monitorfish.config.SecurityConfig
+import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUser
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
@@ -84,9 +88,7 @@ class BffFilterConfigITests {
     @Test
     fun `Should return 401 for all public but protected paths`() {
         // When
-        /**
-         * These paths are public but require authentication when OIDC is enabled.
-         */
+        // These paths are public but require authentication when OIDC is enabled.
         listOf(
             "/api/v1/authorization/management",
             "/api/v1/beacon_malfunctions/123",
@@ -101,10 +103,8 @@ class BffFilterConfigITests {
     @Test
     fun `Should return 401 When deleting an user`() {
         // When
-        /**
-         * DELETE operations on user management paths require authentication.
-         * Without proper OIDC authentication, they return 401 Forbidden.
-         */
+        // DELETE operations on user management paths require authentication.
+        // Without proper OIDC authentication, they return 401 Forbidden.
         listOf(
             "/api/v1/authorization/management/dummy@user.com",
         ).forEach {

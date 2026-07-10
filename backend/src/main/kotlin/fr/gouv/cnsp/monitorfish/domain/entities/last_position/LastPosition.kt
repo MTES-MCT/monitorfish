@@ -3,7 +3,10 @@ package fr.gouv.cnsp.monitorfish.domain.entities.last_position
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory

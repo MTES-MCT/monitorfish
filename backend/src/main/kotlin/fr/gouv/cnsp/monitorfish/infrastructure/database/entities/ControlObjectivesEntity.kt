@@ -2,7 +2,13 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
-import jakarta.persistence.*
+import jakarta.persistence.Basic
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "control_objectives")

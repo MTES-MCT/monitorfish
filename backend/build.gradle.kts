@@ -190,8 +190,6 @@ configure<KtlintExtension> {
     android.set(false)
     outputToConsole.set(true)
     ignoreFailures.set(false)
-    // Existing accepted violations are recorded in a baseline so ktlintCheck only fails on new ones.
-    baseline.set(file("config/ktlint/baseline.xml"))
 }
 
 tasks.named<Test>("test") {

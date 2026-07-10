@@ -61,7 +61,8 @@ data class VesselIdentity(
             !this.ircs.isNullOrEmpty() && !activeVessel.vessel.ircs.isNullOrEmpty() ->
                 this.ircs == activeVessel.vessel.ircs
 
-            !this.externalIdentification.isNullOrEmpty() && !activeVessel.vessel.externalReferenceNumber.isNullOrEmpty() ->
+            !this.externalIdentification.isNullOrEmpty() &&
+                !activeVessel.vessel.externalReferenceNumber.isNullOrEmpty() ->
                 this.externalIdentification == activeVessel.vessel.externalReferenceNumber
 
             else -> false

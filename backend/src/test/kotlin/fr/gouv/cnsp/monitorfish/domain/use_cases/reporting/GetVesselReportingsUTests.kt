@@ -375,7 +375,9 @@ class GetVesselReportingsUTests {
         given(infractionRepository.findInfractionByNatinfCode(eq(27689))).willReturn(
             Infraction(
                 natinfCode = 27689,
-                infraction = "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays tiers a l'union europeenne",
+                infraction =
+                    "Peche maritime non autorisee dans les eaux maritimes ou salees francaises par un navire de pays " +
+                        "tiers a l'union europeenne",
                 infractionCategory = InfractionCategory.FISHING,
             ),
         )

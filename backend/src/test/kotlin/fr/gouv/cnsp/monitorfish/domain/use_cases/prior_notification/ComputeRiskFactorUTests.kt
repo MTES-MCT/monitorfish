@@ -3,7 +3,11 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.FleetSegment
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.*
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultControlRateRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfractionRateRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfringementRiskLevel
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository

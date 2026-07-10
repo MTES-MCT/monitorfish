@@ -61,16 +61,26 @@ data class PriorNotification(
 
                 return when {
                     isInVerificationScope == null || isVerified == null || isSent == null || isBeingSent == null -> null
-                    !isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
-                    !isInVerificationScope && !isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_AUTO_SEND
-                    !isInVerificationScope && !isVerified && isSent && !isBeingSent -> PriorNotificationState.AUTO_SEND_DONE
-                    !isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
-                    !isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
-                    !isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
-                    isInVerificationScope && !isVerified && !isSent && !isBeingSent -> PriorNotificationState.PENDING_VERIFICATION
-                    isInVerificationScope && isVerified && !isSent && !isBeingSent -> PriorNotificationState.FAILED_SEND
-                    isInVerificationScope && isVerified && !isSent && isBeingSent -> PriorNotificationState.PENDING_SEND
-                    isInVerificationScope && isVerified && isSent && !isBeingSent -> PriorNotificationState.VERIFIED_AND_SENT
+                    !isInVerificationScope && !isVerified && !isSent && !isBeingSent ->
+                        PriorNotificationState.OUT_OF_VERIFICATION_SCOPE
+                    !isInVerificationScope && !isVerified && !isSent && isBeingSent ->
+                        PriorNotificationState.PENDING_AUTO_SEND
+                    !isInVerificationScope && !isVerified && isSent && !isBeingSent ->
+                        PriorNotificationState.AUTO_SEND_DONE
+                    !isInVerificationScope && isVerified && !isSent && !isBeingSent ->
+                        PriorNotificationState.FAILED_SEND
+                    !isInVerificationScope && isVerified && !isSent && isBeingSent ->
+                        PriorNotificationState.PENDING_SEND
+                    !isInVerificationScope && isVerified && isSent && !isBeingSent ->
+                        PriorNotificationState.VERIFIED_AND_SENT
+                    isInVerificationScope && !isVerified && !isSent && !isBeingSent ->
+                        PriorNotificationState.PENDING_VERIFICATION
+                    isInVerificationScope && isVerified && !isSent && !isBeingSent ->
+                        PriorNotificationState.FAILED_SEND
+                    isInVerificationScope && isVerified && !isSent && isBeingSent ->
+                        PriorNotificationState.PENDING_SEND
+                    isInVerificationScope && isVerified && isSent && !isBeingSent ->
+                        PriorNotificationState.VERIFIED_AND_SENT
                     else -> {
                         logger.error(
                             "Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",

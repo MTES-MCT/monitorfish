@@ -180,14 +180,18 @@ data class PriorityVesselGroup(
                 PriorityVesselGroup(
                     id = -1,
                     name = "Segments P1",
-                    description = "Navires appartenant à des segments aux objectifs non atteints et donc la priorité est élevée selon la note d'impact et/ou la saisonnalité",
+                    description =
+                        "Navires appartenant à des segments aux objectifs non atteints et donc la priorité est " +
+                            "élevée selon la note d'impact et/ou la saisonnalité",
                     color = "#E1000F",
                     priorityLevel = 4,
                 ),
                 PriorityVesselGroup(
                     id = -2,
                     name = "Segments P2",
-                    description = "Navires appartenant à des segments aux objectifs non atteints et dont la priorité est moindre",
+                    description =
+                        "Navires appartenant à des segments aux objectifs non atteints " +
+                            "et dont la priorité est moindre",
                     color = "#FF9940",
                     priorityLevel = 3,
                 ),

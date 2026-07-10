@@ -23,7 +23,8 @@ class JpaBeaconMalfunctionCommentsRepositoryITests : AbstractDBTests() {
         assertThat(comments.last().beaconMalfunctionId).isEqualTo(1)
         assertThat(comments.last().comment).isEqualTo(
             "La pêche profonde résulte directement de l’épuisement " +
-                "des ressources marines dans les eaux de surface. Après avoir surexploité les stocks de poissons en surface, " +
+                "des ressources marines dans les eaux de surface. Après avoir surexploité les stocks de poissons en " +
+                "surface, " +
                 "les flottes de pêche industrielles se sont tournées vers les grands fonds pour trouver la ressource qui leur faisait défaut.",
         )
         assertThat(comments.last().dateTime).isNotNull

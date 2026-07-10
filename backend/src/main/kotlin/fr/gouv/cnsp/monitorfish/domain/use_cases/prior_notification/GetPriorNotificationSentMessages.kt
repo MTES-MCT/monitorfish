@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationSentMessage
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.PriorNotificationSentMessageRepository
 
 @UseCase
 class GetPriorNotificationSentMessages(

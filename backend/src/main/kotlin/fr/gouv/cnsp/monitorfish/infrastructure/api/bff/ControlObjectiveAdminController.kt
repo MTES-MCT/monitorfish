@@ -1,6 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.AddControlObjective
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.AddControlObjectiveYear
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.DeleteControlObjective
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.GetControlObjectiveYearEntries
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.GetControlObjectivesOfYear
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.UpdateControlObjective
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlObjectiveDataOutput
@@ -8,7 +13,15 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/bff/v1/admin/control_objectives")

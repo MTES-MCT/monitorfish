@@ -4,7 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_objective.ControlObjective
-import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.AddControlObjective
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.AddControlObjectiveYear
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.DeleteControlObjective
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.GetControlObjectiveYearEntries
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.GetControlObjectivesOfYear
+import fr.gouv.cnsp.monitorfish.domain.use_cases.control_objective.UpdateControlObjective
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddControlObjectiveDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateControlObjectiveDataInput
 import org.hamcrest.Matchers.equalTo
@@ -17,7 +22,10 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 

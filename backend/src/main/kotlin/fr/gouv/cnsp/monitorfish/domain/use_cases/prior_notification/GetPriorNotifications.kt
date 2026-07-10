@@ -13,7 +13,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -230,19 +237,29 @@ class GetPriorNotifications(
         ): Boolean =
             (states.isNullOrEmpty() && isInvalidated == null && isPriorNotificationZero == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
-                (isInvalidated != null && priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated) ||
-                (isPriorNotificationZero != null && priorNotification.isPriorNotificationZero == isPriorNotificationZero)
+                (
+                    isInvalidated != null &&
+                        priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated
+                ) ||
+                (
+                    isPriorNotificationZero != null &&
+                        priorNotification.isPriorNotificationZero == isPriorNotificationZero
+                )
 
         private fun getSortKey(
             priorNotification: PriorNotification,
             sortColumn: PriorNotificationsSortColumn,
         ): Comparable<*>? =
             when (sortColumn) {
-                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE -> priorNotification.logbookMessageAndValue.value.predictedArrivalDatetimeUtc
-                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE -> priorNotification.logbookMessageAndValue.value.predictedLandingDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE ->
+                    priorNotification.logbookMessageAndValue.value.predictedArrivalDatetimeUtc
+                PriorNotificationsSortColumn.EXPECTED_LANDING_DATE ->
+                    priorNotification.logbookMessageAndValue.value.predictedLandingDatetimeUtc
                 PriorNotificationsSortColumn.PORT_NAME -> priorNotification.port?.name
-                PriorNotificationsSortColumn.VESSEL_NAME -> priorNotification.logbookMessageAndValue.logbookMessage.vesselName
-                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR -> priorNotification.logbookMessageAndValue.value.riskFactor
+                PriorNotificationsSortColumn.VESSEL_NAME ->
+                    priorNotification.logbookMessageAndValue.logbookMessage.vesselName
+                PriorNotificationsSortColumn.VESSEL_RISK_FACTOR ->
+                    priorNotification.logbookMessageAndValue.value.riskFactor
             }
     }
 }

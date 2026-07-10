@@ -11,7 +11,11 @@ data class PriorNotificationSubscriberDataInput(
     val portLocodesWithFullSubscription: List<String>,
     val vesselIds: List<Int>,
 ) {
-    fun toSubscriptions(): Triple<List<PriorNotificationFleetSegmentSubscription>, List<PriorNotificationPortSubscription>, List<PriorNotificationVesselSubscription>> {
+    fun toSubscriptions(): Triple<
+        List<PriorNotificationFleetSegmentSubscription>,
+        List<PriorNotificationPortSubscription>,
+        List<PriorNotificationVesselSubscription>,
+    > {
         val fleetSegmentSubscriptions =
             fleetSegmentCodes.map { segmentCode ->
                 PriorNotificationFleetSegmentSubscription(controlUnitId, segmentCode, null)

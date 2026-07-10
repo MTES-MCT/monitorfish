@@ -53,7 +53,9 @@ class PositionsControllerITests {
     @Test
     fun `A valid NAF param Should return 201`() {
         // Given
-        val naf = "//SR//AD/FRA//FR/GBR//RD/20201006//RT/2141//FS/GBR//RC/MGXR6//IR/GBROOC21250//DA/20201006//TI/1625//LT/53.254//LG/.940//SP/96//CO/8//TM/POS//ER//"
+        val naf =
+            "//SR//AD/FRA//FR/GBR//RD/20201006//RT/2141//FS/GBR//RC/MGXR6//IR/GBROOC21250//DA/20201006//TI/1625//LT/" +
+                "53.254//LG/.940//SP/96//CO/8//TM/POS//ER//"
 
         // When
         api

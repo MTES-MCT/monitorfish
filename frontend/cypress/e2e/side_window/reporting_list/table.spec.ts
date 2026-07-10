@@ -1,11 +1,11 @@
-import { RTK_MAX_RETRIES } from '@api/constants'
-
 import { SeafrontGroup } from '../../../../src/constants/seafront'
 
 context('Side Window > Reporting List > Table', () => {
-  const failedQueryCount = RTK_MAX_RETRIES + 1
   const apiPathBase = '/bff/v1/reportings'
   const absentVesselPath = `${apiPathBase}?absentVessel=true`
+  // Matches only the base reportings request (no query string), so it never captures the
+  // `?absentVessel=true` request handled later in this test.
+  const baseReportingsUrl = /\/bff\/v1\/reportings$/
 
   it('Should filter reportings by vessel name (search input)', () => {
     cy.login('superuser')
@@ -14,42 +14,37 @@ context('Side Window > Reporting List > Table', () => {
      * Should handle fetching error as expected
      */
 
-    cy.wait(500)
-    cy.intercept(
-      {
-        method: 'GET',
-        times: failedQueryCount * 2,
-        url: apiPathBase
-      },
-      {
-        statusCode: 400
+    // Force every reportings fetch to fail so the error state (and its "Réessayer" button) is
+    // guaranteed to render, no matter how many times RTK Query refetches. The previous approach
+    // capped failures at an exact `times` budget; any extra refetch overshot it, let a real
+    // response through and cleared the error before we could assert the button — the main flake.
+    let shouldFail = true
+    cy.intercept({ method: 'GET', url: baseReportingsUrl }, req => {
+      if (shouldFail) {
+        req.reply({ statusCode: 400 })
+
+        return
       }
-    ).as('getReportingsWithError')
+
+      req.continue()
+    }).as('getReportingsWithError')
 
     cy.visit('/side_window')
-    for (let i = 1; i <= failedQueryCount; i += 1) {
-      cy.wait('@getReportingsWithError')
-    }
-
-    cy.wait(500)
-
     cy.getDataCy('side-window-reporting-tab').click()
-    for (let i = 1; i <= failedQueryCount; i += 1) {
-      cy.wait('@getReportingsWithError')
-    }
-
     cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
+
+    cy.contains('button', 'Réessayer', { timeout: 20000 }).should('be.visible')
 
     cy.intercept('GET', apiPathBase).as('getReportings')
 
-    // The error state (and its "Réessayer" button) can render a beat after the last failed query
-    // settles. Wait for the button before clicking so we don't race the error UI.
-    cy.contains('button', 'Réessayer', { timeout: 20000 }).should('be.visible')
+    // Let the retry reach the real backend, then wait for the table to actually populate before
+    // asserting counts, so the client-side filters below run against fully loaded data.
+    cy.then(() => {
+      shouldFail = false
+    })
     cy.clickButton('Réessayer')
 
-    cy.wait('@getReportings')
-
-    cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 4)
+    cy.get('.Table-SimpleTable tr', { timeout: 20000 }).should('have.length.to.be.greaterThan', 4)
 
     /**
      * Search a vessel

@@ -62,7 +62,11 @@ context('Vessel sidebar resume tab', () => {
      * An alert should be shown on the vessel sidebar
      */
     // When
+    // The alert is carried by the `vessels/find` response (`selectedVessel.alerts`), so we must wait
+    // for that request to settle before asserting the alert, otherwise we race the data fetch.
+    cy.intercept('GET', '/bff/v1/vessels/find*').as('getVesselWithAlert')
     openVesselBySearch('tempete couleur')
+    cy.wait('@getVesselWithAlert')
 
     // Then
     cy.getDataCy('vessel-sidebar-alert').contains('Pêche en ZEE française par un navire tiers', {

@@ -7,12 +7,12 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetSpeciesControlPrefillFromLogbook
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselContactToUpdateByVesselId
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
@@ -24,11 +24,11 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.VesselContactToUpdateDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActiveVesselBaseDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionsResumeAndHistoryDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlledVesselDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.LastPositionAISDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.RiskFactorDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SelectedVesselAndPositionsDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SelectedVesselDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SpeciesControlPrefillDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput.Companion.fromVesselContactToUpdate

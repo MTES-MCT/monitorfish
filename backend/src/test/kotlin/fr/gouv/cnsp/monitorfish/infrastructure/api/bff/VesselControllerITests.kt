@@ -32,12 +32,16 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting.InfractionSuspicion
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingAndOccurrences
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ThreatSummary
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.VesselReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ControlledVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -53,12 +57,12 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetSpeciesControlPrefillFromLogbook
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselContactToUpdateByVesselId
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
@@ -255,7 +259,7 @@ class VesselControllerITests {
                 hasLogbookEsacapt = false,
             )
         val tripReporting =
-            Reporting.InfractionSuspicion(
+            InfractionSuspicion(
                 id = 1,
                 vesselId = 123,
                 cfr = "FR224226850",

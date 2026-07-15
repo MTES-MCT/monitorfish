@@ -142,10 +142,10 @@ describe('ActionForm/schemas', () => {
     }
 
     const eisrFields = {
-      fishingLicencesMatchActivity: MissionAction.ControlCheck.YES,
-      logbookFilledPriorToControl: MissionAction.ControlCheck.YES,
+      europeanFishingLicenceValid: MissionAction.ControlCheck.YES,
+      gangwayPresentAndCompliant: MissionAction.ControlCheck.YES,
+      logbookOpenedPriorToControl: MissionAction.ControlCheck.YES,
       onboardWeighingPermit: MissionAction.ControlCheck.NO,
-      propulsionEnginePowerControl: MissionAction.ControlCheck.YES,
       stowagePlanPresent: MissionAction.ControlCheck.YES,
       underSizedSeparateRecording: MissionAction.ControlCheck.YES,
       underSizedSeparateStowage: MissionAction.ControlCheck.YES
@@ -184,7 +184,7 @@ describe('ActionForm/schemas', () => {
   })
 
   describe('getLandControlFormCompletionSchema', () => {
-    // On land controls the propulsion engine power check is forced to N/A; VMS and AIS emissions are still controlled.
+    // On land controls VMS and AIS emissions are still controlled.
     const completionValuesWithoutEISR = {
       actionDatetimeUtc: '2026-06-15T10:00:00Z',
       completedBy: 'DEF',
@@ -203,12 +203,11 @@ describe('ActionForm/schemas', () => {
       vesselTargeted: MissionAction.ControlCheck.YES
     }
 
-    // e-ISR fields shared with the sea control (propulsionEnginePowerControl is forced to N/A on land).
+    // e-ISR fields shared with the sea control.
     const eisrFields = {
-      fishingLicencesMatchActivity: MissionAction.ControlCheck.YES,
-      logbookFilledPriorToControl: MissionAction.ControlCheck.YES,
+      europeanFishingLicenceValid: MissionAction.ControlCheck.YES,
+      logbookOpenedPriorToControl: MissionAction.ControlCheck.YES,
       onboardWeighingPermit: MissionAction.ControlCheck.NO,
-      propulsionEnginePowerControl: MissionAction.ControlCheck.NOT_APPLICABLE,
       stowagePlanPresent: MissionAction.ControlCheck.YES,
       underSizedSeparateRecording: MissionAction.ControlCheck.YES,
       underSizedSeparateStowage: MissionAction.ControlCheck.YES
@@ -221,12 +220,11 @@ describe('ActionForm/schemas', () => {
 
     // The land-specific species checks (two subsections), required only when e-ISR is enabled.
     const landEisrSpeciesChecks = {
-      approvedWeighingOperatorInformation: MissionAction.ControlCheck.YES,
-      catchesWeighedAtLanding: MissionAction.ControlCheck.YES,
-      cratesWeighingSamplingControl: MissionAction.ControlCheck.YES,
       holdControlledAfterUnloading: MissionAction.ControlCheck.YES,
       minimumConservationReferenceSizeControlled: MissionAction.ControlCheck.YES,
-      underSizedSeparateRecording: MissionAction.ControlCheck.YES
+      underSizedSeparateRecording: MissionAction.ControlCheck.YES,
+      weighingOperationsMonitoredByInspectors: MissionAction.ControlCheck.YES,
+      weightControlMethod: MissionAction.WeightControlMethod.WEIGHING
     }
 
     const gearOnboardWithEISR = [{ gearMarkingIsCompliant: MissionAction.ControlCheck.YES, gearWasControlled: true }]

@@ -17,3 +17,5 @@ export const DISCARD_REASON_AS_OPTIONS: Array<Option<string>> = Object.entries(D
     value: code
   })
 )
+
+export const WEIGHT_CONTROL_METHOD_AS_OPTIONS = getOptionsFromLabelledEnum(MissionAction.WEIGHT_CONTROL_METHOD_LABEL)

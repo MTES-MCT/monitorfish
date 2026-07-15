@@ -11,8 +11,8 @@ import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
 import type { ControlCheckRow } from './ControlCheckTable'
 import type { MissionActionFormValues } from '../../types'
 
-// On land controls this check is not relevant: it is hidden and forced to N/A.
-const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['propulsionEnginePowerControl']
+// This check is hidden on both control types (regulation not mature yet) and forced to N/A.
+const NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['propulsionEnginePowerControl']
 
 export function LicencesAndLogbookField() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
@@ -20,18 +20,14 @@ export function LicencesAndLogbookField() {
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
 
   useEffect(() => {
-    if (!isLandControl) {
-      return
-    }
-
-    LAND_CONTROL_NOT_APPLICABLE_FIELDS.forEach(field => {
+    NOT_APPLICABLE_FIELDS.forEach(field => {
       if (values[field] !== MissionAction.ControlCheck.NOT_APPLICABLE) {
         setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
       }
     })
-    // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
+    // Only trigger from values of NOT_APPLICABLE_FIELDS const
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLandControl, setFieldValue, values.propulsionEnginePowerControl])
+  }, [setFieldValue, values.propulsionEnginePowerControl])
 
   const landControlFields = [
     { isRequired: true, label: 'Bonne émission VMS', name: 'emitsVms' },
@@ -55,8 +51,8 @@ export function LicencesAndLogbookField() {
             ? [
                 {
                   isRequired: true,
-                  label: 'Contrôle de la puissance du moteur de propulsion',
-                  name: 'propulsionEnginePowerControl'
+                  label: 'Echelle de coupée présente et conforme',
+                  name: 'gangwayPresentAndCompliant'
                 }
               ]
             : []),
@@ -67,8 +63,8 @@ export function LicencesAndLogbookField() {
       ? [
           {
             isRequired: true,
-            label: 'Journal de pêche complété avant le contrôle',
-            name: 'logbookFilledPriorToControl'
+            label: 'Journal de pêche ouvert avant le contrôle',
+            name: 'logbookOpenedPriorToControl'
           }
         ]
       : []),
@@ -79,23 +75,29 @@ export function LicencesAndLogbookField() {
     },
     {
       isRequired: true,
-      label: 'Autorisations de pêche (AEP) conformes à l’activité du navire',
+      label: 'Autorisations de pêche (AEP, ANP, licences locales) conformes à l’activité du navire',
       name: 'licencesMatchActivity'
     },
     ...(isEISREnabled
       ? [
           {
             isRequired: true,
-            label: 'Licence de pêche conformes à l’activité du navire',
-            name: 'fishingLicencesMatchActivity'
+            label: 'Licence de pêche européenne valide',
+            name: 'europeanFishingLicenceValid'
           },
           {
             hasBorderBottom: true,
             isRequired: true,
-            label: 'Plan d’arrimage présent et valide',
+            label: 'Plan d’arrimage présent et conforme',
             name: 'stowagePlanPresent'
           },
-          { isRequired: true, label: 'Autorisation pour la pesée à bord', name: 'onboardWeighingPermit' },
+          {
+            // N/A is not a valid answer for this check: it can only be granted or not.
+            isNotApplicableDisabled: true,
+            isRequired: true,
+            label: 'Autorisation pour la pesée à bord',
+            name: 'onboardWeighingPermit'
+          },
           ...(values.onboardWeighingPermit === MissionAction.ControlCheck.YES
             ? [
                 {

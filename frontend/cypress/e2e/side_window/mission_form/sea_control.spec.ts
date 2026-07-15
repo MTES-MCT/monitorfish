@@ -130,23 +130,23 @@ context('Side Window > Mission Form > Sea Control', () => {
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
     // Obligations déclaratives et autorisations
+    cy.fill('Echelle de coupée présente et conforme', 'Oui')
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
+    cy.fill('Journal de pêche ouvert avant le contrôle', 'Oui')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'N/A')
-    cy.fill('Autorisations de pêche (AEP) conformes à l’activité du navire ', 'Non')
-    cy.fill('Contrôle de la puissance du moteur de propulsion', 'Oui')
-    cy.fill('Licence de pêche conformes à l’activité du navire', 'Non')
-    cy.fill('Plan d’arrimage présent et valide', 'N/A')
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
+    cy.fill('Autorisations de pêche (AEP, ANP, licences locales) conformes à l’activité du navire ', 'Non')
+    // The propulsion power check is hidden (forced to N/A) since the regulation is not mature yet.
+    cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
+    cy.fill('Licence de pêche européenne valide', 'Non')
+    cy.fill('Plan d’arrimage présent et conforme', 'N/A')
+    // The N/A radio of the onboard weighing permit is disabled (options are: Oui, Non, N/A).
+    cy.get('input[name="onboardWeighingPermit"]').eq(2).should('be.disabled')
     // The weighing certificate field should not be visible initially
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Non should NOT show the cert field
     cy.fill('Autorisation pour la pesée à bord', 'Non')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-
-    // Setting onboard weighing permit to Non concerné should NOT show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Oui SHOULD show the cert field
@@ -183,16 +183,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     // FAO zones are required on every catch for completion. The risk factor prefills two catches HKE (row 0)
     // and BLI (row 1); logbook discards live in the dedicated "Rejets" card, so NEP/BIB are not rows in
     // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row, then wait for
-    // its editors to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
+    // its editors to actually mount (`.Field-Select` should('exist')) before filling: row activation is
     // debounced (hover-intent delay), so without this wait `cy.fill` runs before the row activates and fills
     // whichever row is still active. `mouseout` afterwards so its editors collapse (only one row active at a time).
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
-    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-Select').should('exist')
+    cy.fill('Zone de pêche', '27.8.b')
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
-    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-Select').should('exist')
+    cy.fill('Zone de pêche', '27.8.b')
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
     // Add COD: click the in-table "Ajouter une espèce" row to append an empty species (index 2), then pick
@@ -205,12 +205,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     // are freshly opened (empty), so no `.clear()` is needed. Présentation/Zone are filled by label while
     // only the hovered row's editor is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-Select').should('exist')
     cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
     cy.get('[id="speciesOnboard[2].controlledWeight"]').type('20', { force: true })
     cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
-    cy.fill('Présentation', ['FIL - En filets'])
-    cy.fill('Zone de pêche', ['27.8.b'])
+    cy.fill('Présentation', 'FIL - En filets')
+    cy.fill('Zone de pêche', '27.8.b')
     // Stop hovering so the catch-row editors collapse, leaving only the "Rejets" card zones in the DOM.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
@@ -223,10 +223,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une espèce rejetée')
     pickHoverEditSpecies('discarded-species-row-2', 'COD')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
-    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-Select').should('exist')
+    cy.fill('Nature du rejet', 'RET - espèces interdites')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
-    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
+    cy.fill('Zone de pêche', '27.8.b', { index: 1 })
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
 
     // This should trigger a computation of the fleet segment
@@ -302,13 +302,15 @@ context('Side Window > Mission Form > Sea Control', () => {
 
           emitsVms: 'YES',
 
+          europeanFishingLicenceValid: 'NO',
+
           externalReferenceNumber: 'TALK2ME',
 
           facade: null,
 
-          fishingLicencesMatchActivity: 'NO',
-
           flagState: 'UNDEFINED',
+
+          gangwayPresentAndCompliant: 'YES',
 
           gearOnboard: [
             {
@@ -433,7 +435,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
           portLocode: null,
 
-          propulsionEnginePowerControl: 'YES',
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
 
           segments: [],
 
@@ -559,11 +561,12 @@ context('Side Window > Mission Form > Sea Control', () => {
           districtCode: 'AY',
           emitsAis: null,
           emitsVms: null,
+          europeanFishingLicenceValid: null,
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
-          fishingLicencesMatchActivity: null,
           flagState: 'FR',
+          gangwayPresentAndCompliant: null,
           gearOnboard: [
             {
               comments: null,
@@ -591,7 +594,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           onboardWeighingPermit: null,
           otherComments: null,
           portLocode: null,
-          propulsionEnginePowerControl: null,
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
@@ -1159,13 +1162,13 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.clickButton('Ajouter')
       cy.clickButton('Ajouter un contrôle en mer')
 
-      // Gangway field
-      cy.contains('Echelle de coupée').should('not.exist')
+      // Unit boarded field
+      cy.contains('Contrôle à bord').should('not.exist')
 
       // "Obligations déclaratives et autorisations de pêche" e-ISR fields
-      cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
-      cy.contains('Licence de pêche conformes à l’activité du navire').should('not.exist')
-      cy.contains('Plan d’arrimage présent et valide').should('not.exist')
+      cy.contains('Echelle de coupée présente et conforme').should('not.exist')
+      cy.contains('Licence de pêche européenne valide').should('not.exist')
+      cy.contains('Plan d’arrimage présent et conforme').should('not.exist')
       cy.contains('Autorisation pour la pesée à bord').should('not.exist')
       cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
@@ -1187,7 +1190,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     // risk factor catches, and discard entries (one per species + nature) that feed the "Rejets" card.
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
       body: [
-        { faoZones: ['27.8.a', '27.8.b'], presentationCodes: ['WHL', 'GUT'], speciesCode: 'HKE' },
+        // The declared weight is the net weight computed from the FAR weights and conversion factors.
+        {
+          declaredWeight: 400.5,
+          faoZones: ['27.8.a', '27.8.b'],
+          presentationCodes: ['WHL', 'GUT'],
+          speciesCode: 'HKE'
+        },
         { faoZones: ['27.8.c'], presentationCodes: ['WHL'], speciesCode: 'BLI' },
         { discardReason: 'DIS', faoZones: ['27.8.a', '27.8.b'], rejectedWeight: 50.0, speciesCode: 'HKE' },
         { discardReason: 'DIM', faoZones: ['27.8.c'], rejectedWeight: 5.0, speciesCode: 'BLI' }
@@ -1236,12 +1245,14 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           speciesOnboard: [
             {
-              declaredWeight: 471.2,
+              // The prefill net declared weight overrides the risk factor live weight (471.2).
+              declaredWeight: 400.5,
               faoZones: ['27.8.a', '27.8.b'],
               presentationCodes: ['WHL', 'GUT'],
               speciesCode: 'HKE'
             },
             {
+              // No declared weight in the prefill: the risk factor weight is kept.
               declaredWeight: 13.46,
               faoZones: ['27.8.c'],
               presentationCodes: ['WHL'],

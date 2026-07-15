@@ -1,4 +1,4 @@
-import { FormikCheckPicker, Select, SimpleTable } from '@mtes-mct/monitor-ui'
+import { Select, SimpleTable } from '@mtes-mct/monitor-ui'
 import styled, { css } from 'styled-components'
 
 import type { Specy } from 'domain/types/specy'
@@ -125,14 +125,6 @@ export const SpeciesName = styled.span<{
     `}
 `
 
-export const SelectValue = styled.span`
-  display: flex;
-  overflow: hidden;
-  pointer-events: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
-
 export const TdWithoutPaddingWhenActive = styled(SimpleTable.Td)<{
   $isActive: boolean
 }>`
@@ -176,28 +168,8 @@ export const StyledSpeciesSelect = styled(Select<Specy>)<{
   }
 `
 
-export const StyledCheckPicker = styled(FormikCheckPicker)<{
+export const StyledCellSelect = styled(Select<string>)<{
   $isHovered: boolean
 }>`
-  width: 100%;
-  flex: 1;
-  min-width: 0;
-
-  .rs-picker-toggle-wrapper > [role='combobox'] {
-    background-color: ${p => (p.$isHovered ? p.theme.color.blueYonder25 : p.theme.color.white)} !important;
-    border: none !important;
-  }
-
-  .rs-picker-toggle-value {
-    padding-top: 3px;
-  }
-
-  .rs-picker-value-count {
-    margin-top: 2px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    height: 16px !important;
-    background-color: ${p => p.theme.color.white} !important;
-    color: ${p => p.theme.color.gunMetal};
-  }
+  ${selectFieldCss}
 `

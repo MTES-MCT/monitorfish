@@ -671,7 +671,7 @@
   },
   "src/features/Mission/components/MissionForm/hooks/useGetMissionActionFormikUsecases.ts": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 8
+      "count": 7
     }
   },
   "src/features/Mission/components/MissionForm/index.tsx": {

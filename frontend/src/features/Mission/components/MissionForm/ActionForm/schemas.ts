@@ -9,9 +9,8 @@ import { array, boolean, number, object, string } from 'yup'
 function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
   return isEISR
     ? object({
-        logbookFilledPriorToControl: string().required(HIDDEN_ERROR),
-        propulsionEnginePowerControl: string().required(HIDDEN_ERROR),
-        fishingLicencesMatchActivity: string().required(HIDDEN_ERROR),
+        logbookOpenedPriorToControl: string().required(HIDDEN_ERROR),
+        europeanFishingLicenceValid: string().required(HIDDEN_ERROR),
         stowagePlanPresent: string().required(HIDDEN_ERROR),
         onboardWeighingPermit: string().required(HIDDEN_ERROR),
         weighingCertificateAndSystemsValid: string().when('onboardWeighingPermit', {
@@ -19,6 +18,14 @@ function makeEIsrDeclarativeObligationsSchema(isEISR: boolean) {
           then: schema => schema.required(HIDDEN_ERROR),
           otherwise: schema => schema.notRequired()
         })
+      })
+    : object({})
+}
+
+function makeSeaControlEIsrObligationsSchema(isEISR: boolean) {
+  return isEISR
+    ? object({
+        gangwayPresentAndCompliant: string().required(HIDDEN_ERROR)
       })
     : object({})
 }
@@ -46,10 +53,9 @@ function makeLandControlEIsrSpeciesSchema(isEISR: boolean) {
     ? object({
         underSizedSeparateRecording: string().required(HIDDEN_ERROR),
         minimumConservationReferenceSizeControlled: string().required(HIDDEN_ERROR),
-        cratesWeighingSamplingControl: string().required(HIDDEN_ERROR),
-        approvedWeighingOperatorInformation: string().required(HIDDEN_ERROR),
+        weightControlMethod: string().required(HIDDEN_ERROR),
         holdControlledAfterUnloading: string().required(HIDDEN_ERROR),
-        catchesWeighedAtLanding: string().required(HIDDEN_ERROR)
+        weighingOperationsMonitoredByInspectors: string().required(HIDDEN_ERROR)
       })
     : object({})
 }
@@ -286,6 +292,7 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
     })
   )
     .concat(makeEIsrDeclarativeObligationsSchema(isEISR))
+    .concat(makeSeaControlEIsrObligationsSchema(isEISR))
     .concat(makeEIsrSpeciesSchema(isEISR))
 }
 

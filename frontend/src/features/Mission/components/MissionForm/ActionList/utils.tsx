@@ -85,7 +85,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionDatetimeUtc,
     actionType: type,
     completion: CompletionStatus.TO_COMPLETE,
-    isGangwayDeployed: E_ISR_ENABLED && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
+    isUnitBoarded: E_ISR_ENABLED && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
     isValid: false
   }
 }

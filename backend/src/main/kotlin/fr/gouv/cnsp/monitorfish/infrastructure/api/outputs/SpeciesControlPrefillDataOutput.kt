@@ -7,6 +7,7 @@ data class SpeciesControlPrefillDataOutput(
     val speciesCode: String?,
     val faoZones: List<String>?,
     val presentationCodes: List<String>?,
+    val declaredWeight: Double?,
     val rejectedWeight: Double?,
     val discardReason: DiscardReason?,
 ) {
@@ -16,6 +17,7 @@ data class SpeciesControlPrefillDataOutput(
                 speciesCode = sc.speciesCode,
                 faoZones = sc.faoZones,
                 presentationCodes = sc.presentationCodes,
+                declaredWeight = sc.declaredWeight,
                 rejectedWeight = sc.rejectedWeight,
                 discardReason = sc.discardReason,
             )

@@ -47,5 +47,19 @@ export namespace MissionAction {
     SINGLE = 'SINGLE',
     MANY = 'MANY'
   }
+
+  export enum WeightControlMethod {
+    WEIGHING = 'WEIGHING',
+    CRATE_COUNT = 'CRATE_COUNT',
+    SAMPLING = 'SAMPLING',
+    NOT_APPLICABLE = 'NOT_APPLICABLE'
+  }
+
+  export const WEIGHT_CONTROL_METHOD_LABEL: Record<WeightControlMethod, string> = {
+    [WeightControlMethod.WEIGHING]: 'Pesée',
+    [WeightControlMethod.CRATE_COUNT]: 'Décompte des caisses',
+    [WeightControlMethod.SAMPLING]: 'Échantillonnage',
+    [WeightControlMethod.NOT_APPLICABLE]: 'Non applicable'
+  }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */

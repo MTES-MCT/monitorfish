@@ -9,13 +9,10 @@ import type { MissionActionFormValues } from '../../types'
 import ControlCheck = MissionAction.ControlCheck
 
 const GANGWAY_DEPENDENT_FIELDS: Array<keyof MissionActionFormValues> = [
-  'propulsionEnginePowerControl',
-  'fishingLicencesMatchActivity',
+  'europeanFishingLicenceValid',
   'stowagePlanPresent',
   'onboardWeighingPermit',
   'weighingCertificateAndSystemsValid',
-  'emitsVms',
-  'emitsAis',
   'licencesMatchActivity',
   'logbookMatchesActivity',
   'separateStowageOfPreservedSpecies',
@@ -38,24 +35,24 @@ const inactiveStyle = {
 }
 
 export function FormikGangwayField() {
-  const [input, , helpers] = useField<MissionActionFormValues['isGangwayDeployed']>('isGangwayDeployed')
+  const [input, , helpers] = useField<MissionActionFormValues['isUnitBoarded']>('isUnitBoarded')
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const prevGangway = useRef(values.isGangwayDeployed)
+  const prevGangway = useRef(values.isUnitBoarded)
 
   useEffect(() => {
-    if (values.isGangwayDeployed === prevGangway.current) {
+    if (values.isUnitBoarded === prevGangway.current) {
       return
     }
-    prevGangway.current = values.isGangwayDeployed
+    prevGangway.current = values.isUnitBoarded
 
-    if (values.isGangwayDeployed === false) {
+    if (values.isUnitBoarded === false) {
       GANGWAY_DEPENDENT_FIELDS.forEach(field => setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE))
 
       values.gearOnboard?.forEach((_, index) => {
         setFieldValue(`gearOnboard[${index}].gearWasControlled`, false)
         setFieldValue(`gearOnboard[${index}].gearMarkingIsCompliant`, ControlCheck.NOT_APPLICABLE)
       })
-    } else if (values.isGangwayDeployed === true) {
+    } else if (values.isUnitBoarded === true) {
       GANGWAY_DEPENDENT_FIELDS.forEach(field => setFieldValue(field, undefined))
 
       values.gearOnboard?.forEach((_, index) => {
@@ -63,13 +60,13 @@ export function FormikGangwayField() {
         setFieldValue(`gearOnboard[${index}].gearMarkingIsCompliant`, undefined)
       })
     }
-  }, [values.gearOnboard, values.isGangwayDeployed, setFieldValue])
+  }, [values.gearOnboard, values.isUnitBoarded, setFieldValue])
 
   return (
     <Wrapper>
       <Text>
-        <Label $isRequired>Echelle de coupée</Label>
-        L&apos;échelle a-t-elle été mise à disposition et est-elle praticable ?
+        <Label $isRequired>Contrôle à bord</Label>
+        L&apos;unité est-elle montée à bord ?
       </Text>
       <Buttons>
         <Button

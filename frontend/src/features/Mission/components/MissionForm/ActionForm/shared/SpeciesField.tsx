@@ -23,14 +23,13 @@ import { useEffect, useState } from 'react'
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
 import { DEFAULT_SPECIES_EISR_APPLICABILITY, getSpeciesEISRApplicability } from './Species/getSpeciesEISRApplicability'
-import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
+import { getLandControlNotLandedCheckRows, getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
   DeleteCell,
   RequiredAsterisk,
-  SelectValue,
   SpeciesTableWrapper,
-  StyledCheckPicker,
+  StyledCellSelect,
   StyledPickerTd,
   TdWithoutPaddingWhenActive
 } from './Species/speciesTable.styles'
@@ -52,8 +51,11 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
   value: code
 }))
 
+// On land controls this check is hidden (pending clarification of the topic) and forced to N/A.
+const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['approvedWeighingOperatorInformation']
+
 export function SpeciesField() {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -77,9 +79,23 @@ export function SpeciesField() {
 
   const speciesEISRApplicability =
     values.vesselId !== undefined
-      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.vesselLength)
+      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.vesselLength, isLandControl)
       : DEFAULT_SPECIES_EISR_APPLICABILITY
   useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
+
+  useEffect(() => {
+    if (!isLandControl) {
+      return
+    }
+
+    LAND_CONTROL_NOT_APPLICABLE_FIELDS.forEach(field => {
+      if (values[field] !== MissionAction.ControlCheck.NOT_APPLICABLE) {
+        void setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
+      }
+    })
+    // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLandControl, setFieldValue, values.approvedWeighingOperatorInformation])
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -162,6 +178,16 @@ export function SpeciesField() {
     helper.setValue(nextSpeciesOnboard)
   }
 
+  const setSpecyRowValue = (index: number, patch: Partial<MissionAction.SpeciesOnboardControl>) => {
+    if (!input.value) {
+      throw new FrontendError('`input.value` is undefined')
+    }
+
+    void helper.setValue(
+      input.value.map((species, currentIndex) => (currentIndex === index ? { ...species, ...patch } : species))
+    )
+  }
+
   const updateNotLandedSpecy = (index: number) => {
     if (!input.value) {
       throw new FrontendError('`input.value` is undefined')
@@ -187,9 +213,10 @@ export function SpeciesField() {
     return <FieldsetGroupSpinner isLight legend={legend} />
   }
 
-  const isDisabled = values.isGangwayDeployed === false
+  const isDisabled = values.isUnitBoarded === false
   const actionColumnWidth = isLandControl ? 52 : 21
   const controlledWeightLabel = isLandControl ? 'Pesée' : 'Estimé'
+  const hasNotLandedSpecies = (input.value ?? []).some(species => species.isNotLanded)
 
   return (
     <FieldsetGroup isLight legend={legend}>
@@ -285,25 +312,21 @@ export function SpeciesField() {
                   {isEISREnabled && (
                     <StyledPickerTd $isActive={isActive}>
                       {isActive ? (
-                        <StyledCheckPicker
+                        <StyledCellSelect
                           $isHovered={isHovered}
                           cleanable={false}
                           disabled={isDisabled}
                           isLabelHidden
+                          isLight
                           label="Présentation"
                           name={`speciesOnboard[${index}].presentationCodes`}
+                          onChange={code => setSpecyRowValue(index, { presentationCodes: code ? [code] : undefined })}
                           onClose={() => handlePickerClose(index)}
                           onOpen={() => handlePickerOpen(index)}
                           options={PRESENTATION_OPTIONS}
                           popupWidth={220}
-                          renderValue={(_, items) =>
-                            items.length > 0 ? (
-                              <SelectValue>{items.map(item => item.value).join(', ')}</SelectValue>
-                            ) : (
-                              <></>
-                            )
-                          }
                           searchable
+                          value={specyOnboard.presentationCodes?.[0]}
                         />
                       ) : (
                         <Ellipsised>
@@ -319,6 +342,7 @@ export function SpeciesField() {
                       isDisabled={isDisabled}
                       isHovered={isHovered}
                       name={`speciesOnboard[${index}].faoZones`}
+                      onChange={zone => setSpecyRowValue(index, { faoZones: zone ? [zone] : undefined })}
                       onPickerClose={() => handlePickerClose(index)}
                       onPickerOpen={() => handlePickerOpen(index)}
                       options={faoAreasAsOptions}
@@ -358,6 +382,12 @@ export function SpeciesField() {
           </tbody>
         </SimpleTable.Table>
       </SpeciesTableWrapper>
+      {isLandControl && isEISREnabled && hasNotLandedSpecies && (
+        <>
+          <FieldsetGroupSeparator marginBottom={12} />
+          <ControlCheckTable rows={getLandControlNotLandedCheckRows(speciesEISRApplicability)} />
+        </>
+      )}
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" rows={2} />
       {speciesToDeleteIndex !== undefined && (

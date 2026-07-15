@@ -226,7 +226,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[data-cy="discarded-species-row-2"]').find('.Field-Select').should('exist')
     cy.fill('Nature du rejet', 'RET - espèces interdites')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
-    cy.fill('Zone de pêche', '27.8.b', { index: 1 })
+    // The catch-row zone editors collapsed with the "Ajouter une espèce rejetée" click, so the hovered
+    // discard row holds the only mounted "Zone de pêche" select (no index needed).
+    cy.fill('Zone de pêche', '27.8.b')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
 
     // This should trigger a computation of the fleet segment

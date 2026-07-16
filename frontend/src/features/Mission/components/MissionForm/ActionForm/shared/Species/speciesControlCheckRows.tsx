@@ -1,7 +1,6 @@
 import { Icon } from '@mtes-mct/monitor-ui'
 
 import { getApplicabilityByFieldName } from './getSpeciesEISRApplicability'
-import { WEIGHT_CONTROL_METHOD_AS_OPTIONS } from '../constants'
 
 import type { SpeciesEISRApplicability } from './getSpeciesEISRApplicability'
 import type { ControlCheckRow } from '../ControlCheckTable'
@@ -35,12 +34,6 @@ const LAND_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
     isRequired: true,
     label: 'Taille minimale de référence de conservation contrôlée',
     name: 'minimumConservationReferenceSizeControlled'
-  },
-  {
-    isRequired: true,
-    label: 'Type de contrôle du poids',
-    name: 'weightControlMethod',
-    selectOptions: WEIGHT_CONTROL_METHOD_AS_OPTIONS
   },
   { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
   {

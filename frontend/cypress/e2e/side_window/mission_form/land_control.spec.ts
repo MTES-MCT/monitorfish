@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('21 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -90,8 +90,9 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     // Pour les captures déchargées
     cy.fill('Taille minimale de référence de conservation contrôlée', 'Oui')
-    cy.fill('Type de contrôle du poids', 'Décompte des caisses')
-    // The approved weighing operator check is hidden (forced to N/A) pending clarification of the topic.
+    // The weight control and approved weighing operator checks are hidden (forced to N/A) pending
+    // clarification of the topic.
+    cy.contains('Type de contrôle du poids').should('not.exist')
     cy.contains("Informations sur l'opérateur de pesée agréé").should('not.exist')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Suivi des opérations de pesée par les inspecteurs', 'Non')
@@ -398,7 +399,7 @@ context('Side Window > Mission Form > Land Control', () => {
           vesselTargeted: 'YES',
           weighingCertificateAndSystemsValid: null,
           weighingOperationsMonitoredByInspectors: 'NO',
-          weightControlMethod: 'CRATE_COUNT'
+          weightControlMethod: 'NOT_APPLICABLE'
         }
       },
       5

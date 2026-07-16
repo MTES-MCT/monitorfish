@@ -24,7 +24,6 @@ export namespace MissionAction {
   export import CompletionStatus = MissionActionConstants.CompletionStatus
   export import WireType = MissionActionConstants.WireType
   export import WeightControlMethod = MissionActionConstants.WeightControlMethod
-  export import WEIGHT_CONTROL_METHOD_LABEL = MissionActionConstants.WEIGHT_CONTROL_METHOD_LABEL
 
   export type FleetSegment = z.infer<typeof FleetSegmentSchema>
   export type GearControl = z.infer<typeof GearControlSchema>

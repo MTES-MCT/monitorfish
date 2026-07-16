@@ -223,8 +223,7 @@ describe('ActionForm/schemas', () => {
       holdControlledAfterUnloading: MissionAction.ControlCheck.YES,
       minimumConservationReferenceSizeControlled: MissionAction.ControlCheck.YES,
       underSizedSeparateRecording: MissionAction.ControlCheck.YES,
-      weighingOperationsMonitoredByInspectors: MissionAction.ControlCheck.YES,
-      weightControlMethod: MissionAction.WeightControlMethod.WEIGHING
+      weighingOperationsMonitoredByInspectors: MissionAction.ControlCheck.YES
     }
 
     const gearOnboardWithEISR = [{ gearMarkingIsCompliant: MissionAction.ControlCheck.YES, gearWasControlled: true }]

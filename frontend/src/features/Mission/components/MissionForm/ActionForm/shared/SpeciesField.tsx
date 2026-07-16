@@ -51,8 +51,13 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
   value: code
 }))
 
-// On land controls this check is hidden (pending clarification of the topic) and forced to N/A.
-const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['approvedWeighingOperatorInformation']
+// On land controls these checks are hidden (pending clarification of the topic) and forced to N/A.
+// `weightControlMethod` is a WeightControlMethod (not a ControlCheck) but both enums share the
+// NOT_APPLICABLE literal.
+const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = [
+  'approvedWeighingOperatorInformation',
+  'weightControlMethod'
+]
 
 export function SpeciesField() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
@@ -64,7 +69,7 @@ export function SpeciesField() {
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
-  const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
+  const legend = isLandControl ? 'Inspection des captures' : 'Inspection des espèces'
 
   const {
     customSearch,
@@ -95,7 +100,7 @@ export function SpeciesField() {
     })
     // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLandControl, setFieldValue, values.approvedWeighingOperatorInformation])
+  }, [isLandControl, setFieldValue, values.approvedWeighingOperatorInformation, values.weightControlMethod])
 
   /**
    * This is only used to re-compute fleet segments when a species is modified

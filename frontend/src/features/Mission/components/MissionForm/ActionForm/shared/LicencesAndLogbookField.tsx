@@ -112,7 +112,7 @@ export function LicencesAndLogbookField() {
   ]
 
   return (
-    <FieldsetGroup isLight legend="Obligations déclaratives et autorisations">
+    <FieldsetGroup isLight legend="Conformité du navire">
       <ControlCheckTable rows={rows} />
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea

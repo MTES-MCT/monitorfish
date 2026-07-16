@@ -53,7 +53,6 @@ function makeLandControlEIsrSpeciesSchema(isEISR: boolean) {
     ? object({
         underSizedSeparateRecording: string().required(HIDDEN_ERROR),
         minimumConservationReferenceSizeControlled: string().required(HIDDEN_ERROR),
-        weightControlMethod: string().required(HIDDEN_ERROR),
         holdControlledAfterUnloading: string().required(HIDDEN_ERROR),
         weighingOperationsMonitoredByInspectors: string().required(HIDDEN_ERROR)
       })

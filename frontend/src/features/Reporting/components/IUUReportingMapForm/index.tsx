@@ -1,6 +1,7 @@
 import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { Bold } from '@components/style'
+import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AutoSaveTag } from '@features/Mission/components/MissionForm/shared/AutoSaveTag'
 import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
@@ -13,7 +14,7 @@ import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, Icon, IconButton, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, Icon, IconButton, Level, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -33,20 +34,25 @@ export function IUUReportingMapForm() {
   const [numberOfVessels, setNumberOfVessels] = useState<number | undefined>(undefined)
   const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
   const submitRef = useRef<(() => Promise<void>) | undefined>(undefined)
+  const duplicateRef = useRef<(() => void) | undefined>(undefined)
   const isDirtyRef = useRef(false)
   const reportingIdRef = useRef(editedReporting?.id)
   const reportingTypeRef = useRef(editedReporting?.type)
   const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
 
+  const resetLocalState = () => {
+    reportingIdRef.current = undefined
+    reportingTypeRef.current = undefined
+    setVesselName(undefined)
+    setFlagState(undefined)
+    setNumberOfVessels(undefined)
+    setAutoSavedLastUpdateDate(undefined)
+  }
+
   useEffect(() => {
     if (!editedReporting) {
-      reportingIdRef.current = undefined
-      reportingTypeRef.current = undefined
-      setVesselName(undefined)
-      setFlagState(undefined)
-      setNumberOfVessels(undefined)
-      setAutoSavedLastUpdateDate(undefined)
+      resetLocalState()
 
       return
     }
@@ -87,6 +93,40 @@ export function IUUReportingMapForm() {
     )
     dispatch(reportingActions.unsetEditedReporting())
     dispatch(deleteReporting(reportingIdRef.current, reportingTypeRef.current))
+  }
+
+  const handleDuplicate = () => {
+    if (isDirtyRef.current) {
+      setIsDraftCancellationConfirmationDialogOpen(true)
+
+      return
+    }
+
+    try {
+      duplicateRef.current?.()
+      resetLocalState()
+      dispatch(reportingActions.unsetEditedReporting())
+
+      dispatch(
+        addMainWindowBanner({
+          children: 'Le signalement a bien été dupliqué. Vous éditez maintenant le nouveau signalement.',
+          closingDelay: 6000,
+          isClosable: true,
+          level: Level.SUCCESS,
+          withAutomaticClosing: true
+        }) as any
+      )
+    } catch (err) {
+      dispatch(
+        addMainWindowBanner({
+          children: `Le signalement n'a pas pu être dupliqué: ${err instanceof Error ? err.message : `${err}`}`,
+          closingDelay: 6000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
+    }
   }
 
   const handleVesselStateChange = useCallback(
@@ -152,6 +192,7 @@ export function IUUReportingMapForm() {
             <Body>
               <StyledReportingForm
                 autoSave={!editedReporting?.isArchived}
+                duplicateRef={duplicateRef}
                 editedReporting={editedReporting}
                 hasWhiteBackground
                 hideButtons
@@ -166,15 +207,23 @@ export function IUUReportingMapForm() {
             </Body>
             <StyledFooter>
               {!!reportingIdRef.current && (
-                <DeleteButton
-                  accent={Accent.SECONDARY}
-                  color={THEME.color.maximumRed}
-                  Icon={Icon.Delete}
-                  onClick={() => {
-                    setIsDeletionConfirmationDialogOpen(true)
-                  }}
-                  title="Supprimer ce signalement"
-                />
+                <>
+                  <DeleteButton
+                    accent={Accent.SECONDARY}
+                    color={THEME.color.maximumRed}
+                    Icon={Icon.Delete}
+                    onClick={() => {
+                      setIsDeletionConfirmationDialogOpen(true)
+                    }}
+                    title="Supprimer ce signalement"
+                  />
+                  <DuplicateButton
+                    accent={Accent.PRIMARY}
+                    Icon={Icon.Duplicate}
+                    onClick={handleDuplicate}
+                    title="Dupliquer ce signalement"
+                  />
+                </>
               )}
 
               <Button accent={Accent.TERTIARY} onClick={onClose} title="Fermer">
@@ -224,7 +273,10 @@ export function IUUReportingMapForm() {
 const DeleteButton = styled(IconButton)`
   background-color: ${p => p.theme.color.cultured};
   border-color: ${p => p.theme.color.maximumRed};
-  padding: 4px;
+`
+
+const DuplicateButton = styled(IconButton)`
+  border-color: ${p => p.theme.color.white};
 `
 
 const StyledTitle = styled(MapMenuDialog.Title)`
@@ -258,8 +310,9 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
   text-align: right;
   width: unset;
   flex-direction: row;
+  gap: 4px;
 
-  button[title='Supprimer ce signalement'] {
+  button[title='Dupliquer ce signalement'] {
     margin-right: auto;
   }
 `

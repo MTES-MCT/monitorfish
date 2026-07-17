@@ -18,6 +18,7 @@ import type { FormEditedReporting, Reporting } from '../../types'
 type ReportingFormProps = {
   autoSave?: boolean
   className?: string | undefined
+  duplicateRef?: MutableRefObject<(() => void) | undefined>
   editedReporting: Reporting.EditableReporting | undefined
   hasWhiteBackground?: boolean
   hideButtons?: boolean
@@ -37,6 +38,7 @@ type ReportingFormProps = {
 export function ReportingForm({
   autoSave = false,
   className,
+  duplicateRef,
   editedReporting,
   hasWhiteBackground = false,
   hideButtons = false,
@@ -53,6 +55,7 @@ export function ReportingForm({
   const autoSavedReportingRef = useRef<Reporting.Reporting | undefined>(undefined)
   const reportingId = editedReporting?.id ?? autoSavedReportingRef.current?.id
   const reporting = editedReporting ?? autoSavedReportingRef.current
+  const childDuplicateRef = useRef<(() => void) | undefined>() // used to duplicate
 
   const displayedErrorKey =
     windowContext === WindowContext.MainWindow
@@ -112,6 +115,20 @@ export function ReportingForm({
     autoSavedReportingRef.current = undefined
   }, [editedReporting?.id])
 
+  useEffect(() => {
+    if (!duplicateRef) {
+      return
+    }
+    // eslint-disable-next-line no-param-reassign
+    duplicateRef.current = () => {
+      if (!childDuplicateRef.current) {
+        throw new Error('Erreur interne.')
+      }
+      autoSavedReportingRef.current = undefined
+      childDuplicateRef.current()
+    }
+  }, [duplicateRef])
+
   return (
     <Formik
       key={editedReporting?.id ?? 'new'}
@@ -122,6 +139,7 @@ export function ReportingForm({
       <Form
         className={className}
         displayedErrorKey={displayedErrorKey}
+        duplicateRef={childDuplicateRef}
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}

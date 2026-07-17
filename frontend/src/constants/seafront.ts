@@ -77,5 +77,10 @@ export function filterBySeafrontGroup<T>(
 }
 
 export function seafrontGroupSupportsAbsentVesselFilter(group: SeafrontGroup): boolean {
-  return [SeafrontGroup.OUTREMEROA, SeafrontGroup.OUTREMEROI, SeafrontGroup.NO_FACADE].includes(group)
+  return [
+    SeafrontGroup.OUTREMEROA,
+    SeafrontGroup.OUTREMEROI,
+    SeafrontGroup.OUTREMEROP,
+    SeafrontGroup.NO_FACADE
+  ].includes(group)
 }

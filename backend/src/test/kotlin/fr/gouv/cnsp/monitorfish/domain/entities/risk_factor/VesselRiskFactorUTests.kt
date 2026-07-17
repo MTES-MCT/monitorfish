@@ -76,7 +76,7 @@ class VesselRiskFactorUTests {
     }
 
     @Test
-    fun `effectiveControlPriorityLevel should return usualSegmentsControlPriorityLevel when speciesOnboard is empty, hasCurrentVmsFishingActivity is false and usualSegmentHighestPriority is not null`() {
+    fun `effectiveControlPriorityLevel should return defaultControlPriorityLevel when speciesOnboard is empty, hasCurrentVmsFishingActivity is false and usualSegmentHighestPriority is not null`() {
         // Given
         val vesselRiskFactor =
             VesselRiskFactor(
@@ -87,7 +87,7 @@ class VesselRiskFactorUTests {
             )
 
         // When / Then
-        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(3.0)
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(defaultControlPriorityLevel)
     }
 
     @Test

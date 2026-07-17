@@ -86,7 +86,8 @@ data class VesselRiskFactor(
             when {
                 speciesOnboard.isNotEmpty() -> controlPriorityLevel
                 hasCurrentVmsFishingActivity -> recentControlPriorityLevel
-                usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
+                // TODO : Enable priority level based on usual segments after validation of the use case with the ops team
+                // usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
                 else -> defaultControlPriorityLevel
             }
 

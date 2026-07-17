@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
@@ -30,7 +31,7 @@ class PriorityVesselGroupUTests {
         producerOrganization = null,
         riskFactor =
             VesselRiskFactor(
-                segmentHighestPriority = "MOLMOL",
+                speciesOnboard = listOf(Species(species = "COD", weight = 100.0)),
                 controlPriorityLevel = controlPriorityLevel,
             ),
         landingPort = null,

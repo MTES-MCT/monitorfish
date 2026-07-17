@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import fr.gouv.cnsp.monitorfish.domain.entities.last_position.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -135,9 +136,17 @@ class GetAllUserVesselGroupsWithVesselsUTests {
                     producerOrganization = null,
                     riskFactor =
                         when (index) {
-                            // effectiveControlPriorityLevel = controlPriorityLevel when segmentHighestPriority is set
-                            0 -> VesselRiskFactor(controlPriorityLevel = 4.0, segmentHighestPriority = "NWW03")
-                            1 -> VesselRiskFactor(controlPriorityLevel = 3.0, segmentHighestPriority = "PEL13")
+                            // effectiveControlPriorityLevel = controlPriorityLevel when speciesOnboard is not empty
+                            0 ->
+                                VesselRiskFactor(
+                                    controlPriorityLevel = 4.0,
+                                    speciesOnboard = listOf(Species(species = "COD")),
+                                )
+                            1 ->
+                                VesselRiskFactor(
+                                    controlPriorityLevel = 3.0,
+                                    speciesOnboard = listOf(Species(species = "COD")),
+                                )
                             else -> VesselRiskFactor()
                         },
                     landingPort = null,

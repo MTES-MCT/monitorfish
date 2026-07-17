@@ -200,4 +200,67 @@ context('Reporting map form', () => {
     cy.getDataCy('reporting-overlay').should('be.visible')
     cy.getDataCy('reporting-overlay').contains('Mise à jour du titre depuis le test cypress')
   })
+
+  it('Should duplicate an INN reporting', () => {
+    // NAMO area — contains the reporting for 'RENCONTRER VEILLER APPARTEMENT'
+    cy.visit('/#@-545000,6135000,10.50')
+    cy.wait('@displayReportings')
+    cy.wait(3000)
+
+    // --- Part 1: Create ---
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+
+    cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
+    cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
+    cy.clickButton('Créer un nouveau signalement INN')
+
+    cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
+    cy.get('*[data-cy="map-reporting-form"]').contains('NOUVEAU SIGNALEMENT INN')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Signalement non enregistré')
+
+    cy.get('input[name="reportingSource"][value="OTHER"]').click()
+    cy.fill('Autres types de source', 'DIRM')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
+
+    cy.clickButton('Ajouter un point')
+    cy.wait(250)
+    cy.get('body').trigger('click', { clientX: 200, clientY: 200, force: true, pointerId: 1 })
+    cy.get('body').click(150, 150)
+    cy.wait(250)
+    cy.clickButton('Valider le point de signalement')
+
+    cy.contains('Navire sans fiche').click()
+    cy.fill('Nom', 'Vouéadisparaitre')
+    cy.fill('Nationalité', 'France')
+    cy.fill('MMSI', 'Vouéadisparaitre')
+    cy.fill('IMO', 'Vouéadisparaitre')
+    cy.fill('IRCS (Call Sign)', 'Vouéadisparaitre')
+    cy.fill('Marquage extérieur', 'Vouéadisparaitre')
+    cy.fill('Engin', 'PTM')
+    cy.fill('Titre', 'Test INN - pêche illicite')
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
+
+    cy.wait('@createReporting')
+    cy.wait('@displayReportings')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
+
+    // --- Part 2: Duplicate ---
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+
+    cy.clickButton('Dupliquer ce signalement')
+
+    cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
+    cy.get('*[data-cy="map-reporting-form"]').contains('DIRM')
+    cy.get('*[data-cy="map-reporting-form"]').contains('NOUVEAU SIGNALEMENT INN')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Signalement non enregistré')
+    cy.get('*[data-cy="map-reporting-form"]').contains('France')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Vouéadisparaitre').should('not.exist')
+
+    cy.fill('Nom', 'Passeparla')
+
+    cy.wait('@createReporting')
+    cy.wait('@displayReportings')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
+  })
 })

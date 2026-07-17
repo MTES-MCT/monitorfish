@@ -59,6 +59,7 @@ const DEBOUNCE_DELAY = 1000
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
+  duplicateRef?: MutableRefObject<(() => void) | undefined>
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
@@ -75,6 +76,7 @@ type FormProps = Readonly<{
 export function Form({
   className,
   displayedErrorKey,
+  duplicateRef,
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
@@ -172,7 +174,7 @@ export function Form({
   }, [controlUnitsQuery.data])
 
   function clearVesselValues(override?: Partial<FormEditedReporting>) {
-    setValues({
+    void setValues({
       ...values,
       cfr: undefined,
       externalMarker: undefined,
@@ -197,7 +199,7 @@ export function Form({
 
       return
     }
-    setValues({
+    void setValues({
       ...values,
       cfr: vessel.internalReferenceNumber,
       externalMarker: vessel.externalReferenceNumber,
@@ -222,7 +224,7 @@ export function Form({
 
   const handleNumberOfVesselsChange = (nextValue: number | undefined) => {
     if (!isIUU || (nextValue ?? 1) <= 1) {
-      setFieldValue('numberOfVessels', nextValue)
+      void setFieldValue('numberOfVessels', nextValue)
 
       return
     }
@@ -233,25 +235,25 @@ export function Form({
 
   const handleObservationTypeSelect = (observationTitle: string | undefined) => {
     if (!observationTitle) {
-      setFieldValue('title', undefined)
+      void setFieldValue('title', undefined)
       setIsTitleDisplayed(false)
 
       return
     }
 
     if (observationTitle === OTHER_OBSERVATION_TITLE) {
-      setFieldValue('title', '')
+      void setFieldValue('title', '')
       setIsTitleDisplayed(true)
 
       return
     }
 
-    setFieldValue('title', observationTitle)
+    void setFieldValue('title', observationTitle)
     setIsTitleDisplayed(false)
   }
 
   const handleExpirationDateChange = (nextDate: string | undefined) => {
-    setValues({
+    void setValues({
       ...values,
       expirationDate: nextDate,
       validityOption: nextDate ? ReportingValidityOption.CUSTOM : undefined
@@ -259,7 +261,7 @@ export function Form({
   }
 
   const handleValidityOptionChange = (nextOption: string | undefined) => {
-    setValues({
+    void setValues({
       ...values,
       expirationDate: undefined,
       validityOption: nextOption as ReportingValidityOption | undefined
@@ -267,7 +269,7 @@ export function Form({
   }
 
   const handleReportingTypeRadio = (reportingType: string | undefined) => {
-    setFieldValue('type', reportingType)
+    void setFieldValue('type', reportingType)
 
     if (reportingType === ReportingType.OBSERVATION) {
       setIsTitleDisplayed(false)
@@ -276,6 +278,15 @@ export function Form({
         setFieldValue('infractions', [{}])
       }
     }
+  }
+
+  const handleDuplicate = () => {
+    void setFieldValue('id', undefined)
+    void setFieldValue('vesselName', undefined)
+    void setFieldValue('mmsi', undefined)
+    void setFieldValue('imo', undefined)
+    void setFieldValue('ircs', undefined)
+    void setFieldValue('externalMarker', undefined)
   }
 
   useEffect(() => {
@@ -290,6 +301,14 @@ export function Form({
       submitRef.current = submitForm
     }
   }, [submitForm, submitRef])
+
+  useEffect(() => {
+    if (!duplicateRef) {
+      return
+    }
+    // eslint-disable-next-line no-param-reassign
+    duplicateRef.current = handleDuplicate
+  })
 
   useEffect(() => {
     onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)

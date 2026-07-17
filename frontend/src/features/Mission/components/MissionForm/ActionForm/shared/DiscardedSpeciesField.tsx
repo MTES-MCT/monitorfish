@@ -78,7 +78,7 @@ export function DiscardedSpeciesField() {
       throw new FrontendError('`input.value` is undefined')
     }
 
-    void helper.setValue(
+    helper.setValue(
       input.value.map((discard, currentIndex) =>
         currentIndex === index ? { ...discard, faoZones: zone ? [zone] : undefined } : discard
       )

@@ -95,7 +95,7 @@ export function SpeciesField() {
 
     LAND_CONTROL_NOT_APPLICABLE_FIELDS.forEach(field => {
       if (values[field] !== MissionAction.ControlCheck.NOT_APPLICABLE) {
-        void setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
+        setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
       }
     })
     // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
@@ -188,7 +188,7 @@ export function SpeciesField() {
       throw new FrontendError('`input.value` is undefined')
     }
 
-    void helper.setValue(
+    helper.setValue(
       input.value.map((species, currentIndex) => (currentIndex === index ? { ...species, ...patch } : species))
     )
   }

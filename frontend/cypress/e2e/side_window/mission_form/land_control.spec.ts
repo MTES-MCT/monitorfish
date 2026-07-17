@@ -81,14 +81,14 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
-    // Inspection des captures — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
+    // Inspection des espèces — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
     // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select.
     cy.clickButton('Ajouter une espèce')
     pickHoverEditSpecies('species-onboard-row-3', 'COD')
-    // The "Pour les captures non débarquées" section only appears below the species table once a
+    // The "Pour les espèces non débarquées" section only appears below the species table once a
     // species is marked as not landed (see the HKE toggle below).
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
-    // Pour les captures déchargées
+    // Pour les espèces débarquées
     cy.fill('Taille minimale de référence de conservation contrôlée', 'Oui')
     // The weight control and approved weighing operator checks are hidden (forced to N/A) pending
     // clarification of the topic.
@@ -131,7 +131,7 @@ context('Side Window > Mission Form > Land Control', () => {
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseout', { force: true })
 
-    // Pour les captures non débarquées — the section is now visible since HKE was marked as not landed.
+    // Pour les espèces non débarquées — the section is now visible since HKE was marked as not landed.
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
 
     // The land control form has no "Rejets" card: discards are not edited here. The NEP/BIB logbook

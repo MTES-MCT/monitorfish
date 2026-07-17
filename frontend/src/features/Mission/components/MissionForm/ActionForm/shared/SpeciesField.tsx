@@ -69,7 +69,7 @@ export function SpeciesField() {
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
-  const legend = isLandControl ? 'Inspection des captures' : 'Inspection des espèces'
+  const legend = 'Inspection des espèces'
 
   const {
     customSearch,

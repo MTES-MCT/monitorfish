@@ -25,7 +25,7 @@ const LAND_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
     isSectionHeader: true,
     label: (
       <>
-        Pour les captures <u>débarquées</u>
+        Pour les espèces <u>débarquées</u>
       </>
     ),
     name: 'unloadedSection'
@@ -49,7 +49,7 @@ const LAND_CONTROL_NOT_LANDED_CHECK_ROWS: ControlCheckRow[] = [
     isSectionHeader: true,
     label: (
       <>
-        Pour les captures <u>non débarquées</u>
+        Pour les espèces <u>non débarquées</u>
       </>
     ),
     name: 'heldOnboardSection'

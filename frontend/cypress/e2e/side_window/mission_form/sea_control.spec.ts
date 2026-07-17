@@ -1165,7 +1165,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.clickButton('Ajouter un contrôle en mer')
 
       // Unit boarded field
-      cy.contains('Contrôle à bord').should('not.exist')
+      cy.contains('Accès au navire').should('not.exist')
 
       // "Obligations déclaratives et autorisations de pêche" e-ISR fields
       cy.contains('Echelle de coupée présente et conforme').should('not.exist')

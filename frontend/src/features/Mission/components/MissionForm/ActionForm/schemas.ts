@@ -206,7 +206,7 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
       logbookMatchesActivity: string().required(HIDDEN_ERROR),
       licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-      // Inspection des captures (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
+      // Inspection des espèces (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
       discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 

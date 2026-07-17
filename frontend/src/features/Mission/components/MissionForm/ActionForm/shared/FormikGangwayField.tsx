@@ -65,7 +65,7 @@ export function FormikGangwayField() {
   return (
     <Wrapper>
       <Text>
-        <Label $isRequired>Contrôle à bord</Label>
+        <Label $isRequired>Accès au navire</Label>
         L&apos;unité est-elle montée à bord ?
       </Text>
       <Buttons>

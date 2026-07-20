@@ -10,8 +10,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import java.time.ZonedDateTime
 
 data class MissionActionInfractionDataInput(

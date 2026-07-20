@@ -171,8 +171,7 @@ data class PriorityVesselGroup(
         startOfValidityUtc = startOfValidityUtc,
     ) {
     fun containsActiveVessel(activeVessel: EnrichedActiveVessel): Boolean =
-        activeVessel.riskFactor.effectiveControlPriorityLevel.toInt() == priorityLevel &&
-            (activeVessel.vessel?.let { it.underCharter == false } ?: true)
+        activeVessel.riskFactor.effectiveControlPriorityLevel.toInt() == priorityLevel
 
     companion object {
         val PRIORITY_GROUPS =

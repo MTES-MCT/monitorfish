@@ -71,12 +71,23 @@ data class VesselRiskFactor(
     val usualSegmentHighestPriority: String? = null,
     val usualSegmentsControlPriorityLevel: Double = defaultControlPriorityLevel,
 ) {
+    /**
+     * Same precedence logic as the ActivityOrigin computation: prefer the most current signal
+     * over ones that may reflect past, no-longer-relevant activity.
+     *
+     * Species onboard is used rather than segmentHighestPriority, since a vessel can have
+     * species onboard from an activity that falls under no fleet segment (segmentHighestPriority
+     * null). controlPriorityLevel is still the relevant level in that case — not
+     * recentControlPriorityLevel or usualSegmentsControlPriorityLevel, which may reflect a
+     * higher-priority activity from the past that isn't relevant to the current trip.
+     */
     val effectiveControlPriorityLevel: Double
         get() =
             when {
-                segmentHighestPriority != null -> controlPriorityLevel
-                recentSegmentHighestPriority != null -> recentControlPriorityLevel
-                usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
+                speciesOnboard.isNotEmpty() -> controlPriorityLevel
+                hasCurrentVmsFishingActivity -> recentControlPriorityLevel
+                // TODO : Enable priority level based on usual segments after validation of the use case with the ops team
+                // usualSegmentHighestPriority != null -> usualSegmentsControlPriorityLevel
                 else -> defaultControlPriorityLevel
             }
 

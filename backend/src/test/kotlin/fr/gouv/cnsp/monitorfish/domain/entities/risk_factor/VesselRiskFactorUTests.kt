@@ -16,6 +16,104 @@ import java.time.ZonedDateTime
 @ExtendWith(SpringExtension::class)
 class VesselRiskFactorUTests {
     @Test
+    fun `effectiveControlPriorityLevel should return controlPriorityLevel when speciesOnboard is not empty`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                controlPriorityLevel = 4.0,
+                speciesOnboard = listOf(Species(species = "COD", weight = 100.0)),
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(4.0)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should prioritize controlPriorityLevel over recentControlPriorityLevel and usualSegmentsControlPriorityLevel`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                controlPriorityLevel = 4.0,
+                speciesOnboard = listOf(Species(species = "COD", weight = 100.0)),
+                hasCurrentVmsFishingActivity = true,
+                usualSegmentHighestPriority = "NWW03",
+                recentControlPriorityLevel = 2.0,
+                usualSegmentsControlPriorityLevel = 3.0,
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(4.0)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should return recentControlPriorityLevel when speciesOnboard is empty and hasCurrentVmsFishingActivity is true`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                speciesOnboard = listOf(),
+                hasCurrentVmsFishingActivity = true,
+                recentControlPriorityLevel = 2.0,
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(2.0)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should prioritize recentControlPriorityLevel over usualSegmentsControlPriorityLevel`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                speciesOnboard = listOf(),
+                hasCurrentVmsFishingActivity = true,
+                recentControlPriorityLevel = 2.0,
+                usualSegmentHighestPriority = "NWW03",
+                usualSegmentsControlPriorityLevel = 3.0,
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(2.0)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should return defaultControlPriorityLevel when speciesOnboard is empty, hasCurrentVmsFishingActivity is false and usualSegmentHighestPriority is not null`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                speciesOnboard = listOf(),
+                hasCurrentVmsFishingActivity = false,
+                usualSegmentHighestPriority = "NWW03",
+                usualSegmentsControlPriorityLevel = 3.0,
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(defaultControlPriorityLevel)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should return defaultControlPriorityLevel when no condition matches`() {
+        // Given
+        val vesselRiskFactor =
+            VesselRiskFactor(
+                speciesOnboard = listOf(),
+                hasCurrentVmsFishingActivity = false,
+                usualSegmentHighestPriority = null,
+            )
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(defaultControlPriorityLevel)
+    }
+
+    @Test
+    fun `effectiveControlPriorityLevel should return defaultControlPriorityLevel for a vessel with no risk factor data`() {
+        // Given
+        val vesselRiskFactor = VesselRiskFactor()
+
+        // When / Then
+        assertThat(vesselRiskFactor.effectiveControlPriorityLevel).isEqualTo(defaultControlPriorityLevel)
+    }
+
+    @Test
     fun `isInGroup should return true when all filters match`() {
         // Given
         val vesselRiskFactor =

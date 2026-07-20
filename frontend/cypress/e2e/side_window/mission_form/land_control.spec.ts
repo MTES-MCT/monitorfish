@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('22 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -57,16 +57,17 @@ context('Side Window > Mission Form > Land Control', () => {
     // Get the actual port for this test case
     cy.fill('Port de contrôle', 'Auray')
 
-    // Obligations déclaratives et autorisations
     // The propulsion power check is not displayed on land controls (forced to N/A); VMS / AIS are controlled.
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
     cy.fill('Accès au port / autorisation de débarquement conformes', 'Non')
+    cy.fill('Journal de pêche ouvert avant le contrôle', 'Oui')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'N/A')
-    cy.fill('Autorisations de pêche (AEP) conformes à l’activité du navire ', 'Non')
-    cy.fill('Licence de pêche conformes à l’activité du navire', 'Non')
-    cy.fill('Plan d’arrimage présent et valide', 'N/A')
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
+    cy.fill('Autorisations de pêche (AEP, ANP, licences locales) conformes à l’activité du navire ', 'Non')
+    cy.fill('Licence de pêche européenne valide', 'Non')
+    cy.fill('Plan d’arrimage présent et conforme', 'N/A')
+    // The N/A radio of the onboard weighing permit is disabled.
+    cy.fill('Autorisation pour la pesée à bord', 'Non')
     cy.fill(
       'Observations (hors infractions) sur les obligations déclaratives / autorisations',
       'Une observation hors infraction sur les obligations déclaaratives.'
@@ -79,18 +80,21 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
-    // Inspection des captures — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
+    // Inspection des espèces — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
     // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select.
     cy.clickButton('Ajouter une espèce')
     pickHoverEditSpecies('species-onboard-row-3', 'COD')
-    // Pour les captures détenues à bord
-    cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
-    // Pour les captures déchargées
-    cy.fill('Taille minimale de référence de conservation contrôlée', 'Oui')
-    cy.fill('Contrôle de pesée / décompte des caisses / échantillonnage', 'Non')
-    cy.fill("Informations sur l'opérateur de pesée agréé", 'Oui')
+    // The "Pour les espèces non débarquées" section only appears below the species table once a
+    // species is marked as not landed (see the HKE toggle below).
+    cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
+    // Pour les espèces débarquées
+    cy.fill('Taille des espèces vérifiées', 'Oui')
+    // The weight-related checks are hidden (forced to N/A) pending clarification of the topic.
+    cy.contains('Poids des espèces vérifiés').should('not.exist')
+    cy.contains('Type de contrôle du poids').should('not.exist')
+    cy.contains("Informations sur l'opérateur de pesée agréé").should('not.exist')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
-    cy.fill('Pesée des captures lors du débarquement', 'Non')
+    cy.fill('Suivi des opérations de pesée par les inspecteurs', 'Non')
     // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their editors on row hover; non-hovered rows
     // show plain text. Hover a row, then wait for its editors to actually mount (`.Field-CheckPicker`
     // should('exist')) before filling: row activation is debounced (hover-intent delay), so without this
@@ -125,6 +129,9 @@ context('Side Window > Mission Form > Land Control', () => {
     // Stop hovering so the catch-row editors collapse.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseout', { force: true })
+
+    // Pour les espèces non débarquées — the section is now visible since HKE was marked as not landed.
+    cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
 
     // The land control form has no "Rejets" card: discards are not edited here. The NEP/BIB logbook
     // discards remain prefilled in the form state and are submitted as-is (see the payload assertion).
@@ -180,13 +187,11 @@ context('Side Window > Mission Form > Land Control', () => {
       {
         body: {
           actionType: 'LAND_CONTROL',
-          approvedWeighingOperatorInformation: 'YES',
-          catchesWeighedAtLanding: 'NO',
+          approvedWeighingOperatorInformation: 'NOT_APPLICABLE',
           completedBy: 'Alice',
           completion: 'COMPLETED',
           controlQualityComments: 'Une observation sur le déroulé du contrôle.',
           controlUnits: [],
-          cratesWeighingSamplingControl: 'NO',
           // NEP and BIB are prefilled from the logbook DIS (both DIM at 27.8.a). The land control form has
           // no "Rejets" card, so these prefilled discards are submitted as-is and no discard is added here.
           discardedSpecies: [
@@ -200,13 +205,13 @@ context('Side Window > Mission Form > Land Control', () => {
 
           emitsVms: 'YES',
 
+          europeanFishingLicenceValid: 'NO',
+
           externalReferenceNumber: 'DONTSINK',
 
           facade: null,
 
           faoAreas: ['27.8.b', '27.8.c'],
-
-          fishingLicencesMatchActivity: 'NO',
 
           flagState: 'FR',
 
@@ -323,13 +328,11 @@ context('Side Window > Mission Form > Land Control', () => {
 
           longitude: null,
 
-          minimumConservationReferenceSizeControlled: 'YES',
-
           missionId: 1,
 
           numberOfVesselsFlownOver: null,
 
-          onboardWeighingPermit: 'NOT_APPLICABLE',
+          onboardWeighingPermit: 'NO',
 
           otherComments: 'Une autre observation.',
 
@@ -383,6 +386,10 @@ context('Side Window > Mission Form > Land Control', () => {
 
           speciesQuantitySeized: 6289.5,
 
+          speciesSizeControlled: 'YES',
+
+          speciesWeightControlled: 'NOT_APPLICABLE',
+
           stowagePlanPresent: 'NOT_APPLICABLE',
 
           underSizedSeparateRecording: 'NO',
@@ -391,7 +398,9 @@ context('Side Window > Mission Form > Land Control', () => {
           vesselId: 1,
           vesselName: 'PHENOMENE',
           vesselTargeted: 'YES',
-          weighingCertificateAndSystemsValid: null
+          weighingCertificateAndSystemsValid: null,
+          weighingOperationsMonitoredByInspectors: 'NO',
+          weightControlMethod: 'NOT_APPLICABLE'
         }
       },
       5

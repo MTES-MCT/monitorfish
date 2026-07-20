@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
@@ -49,17 +50,17 @@ object TestUtils {
         speciesSizeControlled = ControlCheck.YES,
         separateStowageOfPreservedSpecies = ControlCheck.YES,
         propulsionEnginePowerControl = ControlCheck.YES,
-        fishingLicencesMatchActivity = ControlCheck.NO,
+        gangwayPresentAndCompliant = ControlCheck.YES,
+        europeanFishingLicenceValid = ControlCheck.NO,
         stowagePlanPresent = ControlCheck.YES,
         onboardWeighingPermit = ControlCheck.YES,
         weighingCertificateAndSystemsValid = ControlCheck.NOT_APPLICABLE,
         underSizedSeparateStowage = ControlCheck.YES,
         underSizedSeparateRecording = ControlCheck.NO,
-        minimumConservationReferenceSizeControlled = ControlCheck.YES,
-        cratesWeighingSamplingControl = ControlCheck.NO,
+        weightControlMethod = WeightControlMethod.WEIGHING,
         approvedWeighingOperatorInformation = ControlCheck.NOT_APPLICABLE,
         holdControlledAfterUnloading = ControlCheck.YES,
-        catchesWeighedAtLanding = ControlCheck.NO,
+        weighingOperationsMonitoredByInspectors = ControlCheck.NO,
         infractions =
             listOf(
                 Infraction(

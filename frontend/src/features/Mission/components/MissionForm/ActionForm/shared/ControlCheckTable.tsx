@@ -1,4 +1,5 @@
 import { CONTROL_CHECK_AS_OPTIONS } from '@features/Mission/components/MissionForm/ActionForm/shared/constants'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { Radio } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled, { css } from 'styled-components'
@@ -9,6 +10,8 @@ import type { ReactNode } from 'react'
 export type ControlCheckRow = Readonly<{
   disabled?: boolean
   hasBorderBottom?: boolean
+  // When true, the N/A radio cannot be selected (the check only accepts a Oui/Non answer).
+  isNotApplicableDisabled?: boolean
   isRequired?: boolean
   // When true, the row is rendered as a subsection title spanning the whole width (no radios).
   isSectionHeader?: boolean
@@ -28,31 +31,35 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
       <ColumnHeader>Oui</ColumnHeader>
       <ColumnHeader>Non</ColumnHeader>
       <ColumnHeader>N/A</ColumnHeader>
-      {rows.map(({ disabled, hasBorderBottom, isRequired, isSectionHeader, label, name }, index) =>
-        isSectionHeader ? (
-          <SectionHeader key={name} $isFirst={index === 0}>
-            {label}
-          </SectionHeader>
-        ) : (
-          <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
-            <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
-              <LabelText $isRequired={!!isRequired}>{label}</LabelText>
-            </RowLegend>
-            {CONTROL_CHECK_AS_OPTIONS.map(opt => (
-              <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
-                <Radio
-                  checked={(values as Record<string, unknown>)[name] === opt.value}
-                  disabled={!!disabled}
-                  labelPosition="left"
-                  name={name}
-                  onChange={() => setFieldValue(name, opt.value)}
-                >
-                  {opt.label}
-                </Radio>
-              </RadioCell>
-            ))}
-          </RowFieldset>
-        )
+      {rows.map(
+        ({ disabled, hasBorderBottom, isNotApplicableDisabled, isRequired, isSectionHeader, label, name }, index) =>
+          isSectionHeader ? (
+            <SectionHeader key={name} $isFirst={index === 0}>
+              {label}
+            </SectionHeader>
+          ) : (
+            <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
+              <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+                <LabelText $isRequired={!!isRequired}>{label}</LabelText>
+              </RowLegend>
+              {CONTROL_CHECK_AS_OPTIONS.map(opt => (
+                <RadioCell key={opt.value} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
+                  <Radio
+                    checked={(values as Record<string, unknown>)[name] === opt.value}
+                    disabled={
+                      !!disabled ||
+                      (!!isNotApplicableDisabled && opt.value === MissionAction.ControlCheck.NOT_APPLICABLE)
+                    }
+                    labelPosition="left"
+                    name={name}
+                    onChange={() => setFieldValue(name, opt.value)}
+                  >
+                    {opt.label}
+                  </Radio>
+                </RadioCell>
+              ))}
+            </RowFieldset>
+          )
       )}
     </TableGrid>
   )

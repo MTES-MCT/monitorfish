@@ -1,9 +1,4 @@
 {
-  "src/api/APIWorker.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 13
-    }
-  },
   "src/api/__tests__/geoserver.test.ts": {
     "@typescript-eslint/require-await": {
       "count": 1
@@ -12,11 +7,6 @@
   "src/api/api.ts": {
     "@typescript-eslint/require-await": {
       "count": 1
-    }
-  },
-  "src/api/geoserver.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
     }
   },
   "src/components/ConfirmationModal.tsx": {
@@ -44,11 +34,6 @@
       "count": 1
     }
   },
-  "src/features/Account/components/Account.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
   "src/features/ActivityReport/__tests__/utils.test.ts": {
     "@typescript-eslint/require-await": {
       "count": 7
@@ -59,23 +44,8 @@
       "count": 3
     }
   },
-  "src/features/AdministrativeZone/components/AdministrativeZones/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/AdministrativeZone/layers/styles/administrativeLayer.style.ts": {
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    }
-  },
-  "src/features/AdministrativeZone/layers/utils.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Alert/components/AlertsMapButton.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -84,66 +54,17 @@
       "count": 2
     }
   },
-  "src/features/Alert/components/SideWindowAlerts/AlertListAndReportingList/cells/ActionCell.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/DistrictCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/GearOnBoardCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 6
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/NationalityCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ProducerOrganizationCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/SpeciesOnBoardCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 6
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/VesselCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
   "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 6
-    },
     "@typescript-eslint/require-await": {
       "count": 1
     }
   },
-  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 7
-    }
-  },
   "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/require-await": {
       "count": 1
     }
   },
   "src/features/Alert/components/SideWindowAlerts/AlertsManagementList/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -156,21 +77,8 @@
       "count": 2
     }
   },
-  "src/features/Alert/components/SideWindowAlerts/SilencedAlerts/fields/AlertNameField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Alert/components/SideWindowAlerts/SilencedAlerts/fields/VesselField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/Alert/components/SideWindowAlerts/SilencedAlerts/index.tsx": {
     "@typescript-eslint/await-thenable": {
-      "count": 1
-    },
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -185,9 +93,6 @@
     }
   },
   "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 6
     }
@@ -197,15 +102,7 @@
       "count": 6
     }
   },
-  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/SendNotification.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     }
@@ -215,20 +112,7 @@
       "count": 3
     }
   },
-  "src/features/BeaconMalfunction/components/BeaconMalfunctionsMapButton.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/ControlObjective/components/ControlObjectiveTable/hooks/useSeafrontControlObjectives.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/ControlObjective/components/ControlObjectiveTable/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
@@ -240,21 +124,6 @@
   },
   "src/features/ControlUnit/__tests__/utils.test.ts": {
     "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
-  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/FormikEmailField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/FormikNameSelect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
-  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/FormikPhoneField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -299,9 +168,6 @@
     }
   },
   "src/features/FavoriteVessel/components/FavoriteVessels/FavoriteVessel.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
@@ -311,20 +177,7 @@
       "count": 1
     }
   },
-  "src/features/FleetSegment/components/FleetSegmentsBackoffice/CreateOrEditFleetSegmentModal.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/FleetSegment/components/FleetSegmentsBackoffice/FleetSegmentsTable.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/FleetSegment/components/FleetSegmentsBackoffice/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     }
@@ -340,9 +193,6 @@
     }
   },
   "src/features/LoadOffline/components/LoadOffline.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 3
     },
@@ -419,19 +269,11 @@
     "@typescript-eslint/await-thenable": {
       "count": 1
     },
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
     "@typescript-eslint/require-await": {
       "count": 2
-    }
-  },
-  "src/features/Logbook/useCases/getVesselLogbookByDates.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
     }
   },
   "src/features/Logbook/utils.ts": {
@@ -454,19 +296,9 @@
       "count": 1
     }
   },
-  "src/features/Map/layers/BaseLayer.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/Map/layers/styles/utils.test.ts": {
     "@typescript-eslint/require-await": {
       "count": 7
-    }
-  },
-  "src/features/Map/useCases/clickOnMapFeature.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
     }
   },
   "src/features/Measurement/layers/MeasurementLayer.tsx": {
@@ -484,104 +316,18 @@
       "count": 1
     }
   },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/DatePickerField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/DiscardedSpeciesField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FleetSegmentsField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/Mission/components/MissionForm/ActionForm/shared/FormikCoordinatesPicker.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 11
-    },
     "@typescript-eslint/require-await": {
       "count": 1
     }
   },
   "src/features/Mission/components/MissionForm/ActionForm/shared/FormikGangwayField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 4
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
     }
   },
   "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/Infraction.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/InfractionForm.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikOtherControlsCheckboxes.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikPortSelect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 5
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikRevalidationEffect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/GearsField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 6
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/LicencesAndLogbookField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/Species/WeightInput.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/SpeciesField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 8
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/VesselField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    }
-  },
-  "src/features/Mission/components/MissionForm/ActionForm/shared/VesselFleetSegmentsField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 2
     }
   },
@@ -609,9 +355,6 @@
     }
   },
   "src/features/Mission/components/MissionForm/Loader.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     },
@@ -620,9 +363,6 @@
     }
   },
   "src/features/Mission/components/MissionForm/MainForm/FormikLocationPicker.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 5
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 3
     },
@@ -630,15 +370,7 @@
       "count": 2
     }
   },
-  "src/features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/ControlUnitSelect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/ControlUnitWarningMessage.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     },
@@ -647,15 +379,7 @@
     }
   },
   "src/features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/MainForm/FormikSyncMissionFields.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -671,13 +395,10 @@
   },
   "src/features/Mission/components/MissionForm/hooks/useGetMissionActionFormikUsecases.ts": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 8
+      "count": 7
     }
   },
   "src/features/Mission/components/MissionForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 8
     }
@@ -690,16 +411,6 @@
   "src/features/Mission/components/MissionForm/shared/FormHead.ts": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    }
-  },
-  "src/features/Mission/components/MissionForm/shared/FormikIsValidEffect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Mission/components/MissionForm/useCases/__tests__/updateMissionLocation.test.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
     }
   },
   "src/features/Mission/components/MissionForm/useCases/initMissionGeometry.ts": {
@@ -725,11 +436,6 @@
       "count": 1
     }
   },
-  "src/features/Mission/components/MissionsMapMenu.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Mission/layers/MissionsLabelsLayer/MissionsLabelsLayer.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
@@ -740,20 +446,7 @@
       "count": 1
     }
   },
-  "src/features/Mission/useCases/addMission.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Mission/useCases/deleteMission.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Mission/useCases/editMission.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/require-await": {
       "count": 1
     }
@@ -766,66 +459,22 @@
       "count": 1
     }
   },
-  "src/features/NewFeatures/components/NewFeature.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/PriorNotification/components/LogbookPriorNotificationForm/Footer.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
-  "src/features/PriorNotification/components/LogbookPriorNotificationForm/Form.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
   "src/features/PriorNotification/components/LogbookPriorNotificationForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
   "src/features/PriorNotification/components/ManualPriorNotificationForm/Content.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
-  "src/features/PriorNotification/components/ManualPriorNotificationForm/fields/FormikFaoAreaSelect/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/PriorNotification/components/ManualPriorNotificationForm/fields/FormikFishingCatchesMultiSelect/FormikExtraField.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/components/ManualPriorNotificationForm/fields/FormikVesselSelect.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/components/ManualPriorNotificationForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/components/PriorNotificationList/Row.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 3
-    }
-  },
   "src/features/PriorNotification/components/PriorNotificationList/cells/ActionButtonsCell.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -835,16 +484,6 @@
   },
   "src/features/PriorNotification/components/PriorNotificationList/index.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/components/PriorNotificationListButton.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/components/PriorNotificationSubscriberForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -858,11 +497,6 @@
       "count": 1
     }
   },
-  "src/features/PriorNotification/components/shared/CardHeader.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/PriorNotification/components/shared/DownloadButton/index.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 2
@@ -873,58 +507,8 @@
       "count": 2
     }
   },
-  "src/features/PriorNotification/useCases/createOrUpdateManualPriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/PriorNotification/useCases/duplicateLogbookPriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/invalidatePriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/openLogbookPriorNotificationForm.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/openManualPriorNotificationForm.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/openPriorNotificationCard.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/PriorNotification/useCases/openPriorNotificationReportingList.ts": {
     "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/refreshPriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/updateLogbookPriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/PriorNotification/useCases/updateManualPriorNotificationComputedValues.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/PriorNotification/useCases/verifyAndSendPriorNotification.ts": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -938,11 +522,6 @@
       "count": 1
     }
   },
-  "src/features/ProducerOrganizationMembership/useCases/updateProducerOrganizationMemberships.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Regulation/components/RegulationForm/FishingPeriod/fields/DayTimeCheckbox.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
@@ -950,11 +529,6 @@
   },
   "src/features/Regulation/components/RegulationForm/FishingPeriod/hooks/usePushArrayInFishingPeriod.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    }
-  },
-  "src/features/Regulation/components/RegulationForm/GearRegulation/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -986,37 +560,12 @@
       "count": 1
     }
   },
-  "src/features/Regulation/components/RegulationForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
-  "src/features/Regulation/components/RegulationForm/regulatory_text/RemoveRegulationModal.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Regulation/components/RegulationForm/species_regulation/RegulatedSpecies.tsx": {
     "@typescript-eslint/naming-convention": {
       "count": 1
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    }
-  },
-  "src/features/Regulation/components/RegulationSearch/SearchInput.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Regulation/components/RegulationTables/LawType.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Regulation/components/RegulationTables/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
     }
   },
   "src/features/Regulation/components/RegulatoryZoneMetadata/utils.ts": {
@@ -1044,11 +593,6 @@
       "count": 1
     }
   },
-  "src/features/Regulation/useCases/createOrUpdateRegulation.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Regulation/useCases/getAllRegulatoryLayers.ts": {
     "@typescript-eslint/await-thenable": {
       "count": 1
@@ -1064,79 +608,34 @@
       "count": 1
     }
   },
-  "src/features/Regulation/useCases/getRegulatoryVectorSource.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Regulation/useCases/searchRegulatoryLayers.ts": {
     "@typescript-eslint/await-thenable": {
       "count": 1
     }
   },
   "src/features/Reporting/components/IUUReportingMapForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
-  "src/features/Reporting/components/ReportingCard/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/Reporting/components/ReportingForm/Form.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 13
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
   "src/features/Reporting/components/ReportingForm/FormikCoordinatesPicker.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/require-await": {
       "count": 1
     }
   },
-  "src/features/Reporting/components/ReportingForm/InfractionRow.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/features/Reporting/components/ReportingForm/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
   },
-  "src/features/Reporting/components/ReportingMapMenuDialog/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Reporting/components/ReportingOverlay/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    }
-  },
-  "src/features/Reporting/components/ReportingTable/cells/ActionButtonsCell.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/components/ReportingTable/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
     }
   },
   "src/features/Reporting/components/VesselReportings/ArchivedReportingList/index.tsx": {
@@ -1145,9 +644,6 @@
     }
   },
   "src/features/Reporting/components/VesselReportings/CurrentReportingList/Content.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -1163,41 +659,6 @@
   "src/features/Reporting/useCases/__tests__/archiveReporting.test.ts": {
     "@typescript-eslint/require-await": {
       "count": 2
-    }
-  },
-  "src/features/Reporting/useCases/addReporting.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/archiveReporting.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/archiveReportings.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/deleteReporting.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/deleteReportings.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/editReportingFromMap.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Reporting/useCases/updateReporting.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
     }
   },
   "src/features/RiskFactor/components/RiskFactorResume/ImpactRiskFactorDetails.tsx": {
@@ -1223,19 +684,11 @@
   "src/features/SideWindow/index.tsx": {
     "@typescript-eslint/await-thenable": {
       "count": 1
-    },
-    "@typescript-eslint/no-floating-promises": {
-      "count": 7
     }
   },
   "src/features/SideWindow/useCases/openSideWindowPath.ts": {
     "@typescript-eslint/await-thenable": {
       "count": 2
-    }
-  },
-  "src/features/Station/components/StationCard/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
     }
   },
   "src/features/Vessel/components/ExportVesselListDialog/index.tsx": {
@@ -1246,23 +699,12 @@
       "count": 3
     }
   },
-  "src/features/Vessel/components/VesselLabelOverlay/VesselLabelContent.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/components/VesselList/FilterBar.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/require-await": {
       "count": 2
     }
   },
   "src/features/Vessel/components/VesselList/cells/ActionButtonsCell.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -1275,15 +717,7 @@
       "count": 2
     }
   },
-  "src/features/Vessel/components/VesselListMapButton.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/components/VesselSearch/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -1295,9 +729,6 @@
     "@typescript-eslint/await-thenable": {
       "count": 1
     },
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }
@@ -1306,25 +737,12 @@
     "@typescript-eslint/await-thenable": {
       "count": 1
     },
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Vessel/components/VesselSidebar/components/Equipment/VesselEquipment.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
   "src/features/Vessel/components/VesselSidebar/components/Equipment/resume/BeaconMalfunctionBody.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    }
-  },
-  "src/features/Vessel/components/VesselSidebar/components/Equipment/resume/CurrentBeaconMalfunctionBody.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -1341,31 +759,13 @@
       "count": 1
     }
   },
-  "src/features/Vessel/components/VesselSidebar/components/Summary.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/components/VesselSidebar/components/Tabs.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 6
     }
   },
-  "src/features/Vessel/components/VesselSidebar/components/VesselContactToUpdateForm.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/components/VesselSidebar/components/VesselProfile/__tests__/utils.test.ts": {
     "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
-  "src/features/Vessel/components/VesselSidebar/components/VesselSidebarHeader/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -1434,21 +834,8 @@
       "count": 1
     }
   },
-  "src/features/Vessel/useCases/searchVessels.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/Vessel/useCases/showAlertInSideWindow.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/useCases/showVessel.ts": {
     "@typescript-eslint/await-thenable": {
-      "count": 1
-    },
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -1463,17 +850,11 @@
     }
   },
   "src/features/Vessel/vesselApi.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/require-await": {
       "count": 2
     }
   },
   "src/features/VesselGroup/components/EditDynamicVesselGroupDialog/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 21
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 4
     },
@@ -1499,20 +880,7 @@
       "count": 2
     }
   },
-  "src/features/VesselGroup/components/SelectedVesselGroups/useCases/addVesselToGroupFromDropdown.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/features/VesselGroup/components/SelectedVesselGroups/useCases/removeVesselFromGroup.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/features/VesselGroup/components/VesselGroupList/VesselGroupRow.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
@@ -1521,18 +889,10 @@
     }
   },
   "src/features/VesselGroup/components/VesselGroupList/cells/ActionButtonsCell.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     },
     "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
-  "src/features/VesselGroup/components/VesselGroupList/hooks/useGetVesselGroupsWithVessels.ts": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },
@@ -1542,11 +902,6 @@
     },
     "@typescript-eslint/no-misused-promises": {
       "count": 4
-    }
-  },
-  "src/features/VesselGroup/components/VesselGroupMenuDialog/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
     }
   },
   "src/features/VesselGroup/useCases/countFilteredVessels.ts": {
@@ -1570,9 +925,6 @@
     }
   },
   "src/features/VesselSearch/index.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     },
@@ -1590,33 +942,8 @@
       "count": 1
     }
   },
-  "src/hooks/useGetFilterableZonesAsTreeOptions.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/hooks/useHandleFrontendApiError.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "src/hooks/useListenForScroll.ts": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
-  "src/pages/LightBackoffice.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/pages/LightHomePage.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
-  "src/ui/formiks/FormikFilterTagBar.tsx": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 2
     }
   },
@@ -1645,21 +972,8 @@
       "count": 2
     }
   },
-  "src/workers/hooks/useGetServiceWorker.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    }
-  },
   "src/workers/serviceWorker.ts": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 2
-    },
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "src/workers/unregisterServiceWorker.ts": {
-    "@typescript-eslint/no-floating-promises": {
       "count": 1
     }
   },

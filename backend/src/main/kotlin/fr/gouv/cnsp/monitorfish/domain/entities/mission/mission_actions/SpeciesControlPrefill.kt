@@ -4,6 +4,7 @@ class SpeciesControlPrefill(
     var speciesCode: String,
     var faoZones: List<String>? = null,
     var presentationCodes: List<String>? = null,
+    var declaredWeight: Double? = null,
     var rejectedWeight: Double? = null,
     var discardReason: DiscardReason? = null,
 )

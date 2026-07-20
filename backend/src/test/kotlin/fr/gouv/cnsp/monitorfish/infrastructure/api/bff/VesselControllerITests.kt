@@ -1375,6 +1375,7 @@ class VesselControllerITests {
                 ).apply {
                     faoZones = listOf("27.8.a", "27.8.b")
                     presentationCodes = listOf("GUT")
+                    declaredWeight = 400.0
                     rejectedWeight = 50.0
                     discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
                 }
@@ -1392,6 +1393,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].speciesCode", equalTo("HKE")))
             .andExpect(jsonPath("$[0].faoZones.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].presentationCodes[0]", equalTo("GUT")))
+            .andExpect(jsonPath("$[0].declaredWeight", equalTo(400.0)))
             .andExpect(jsonPath("$[0].rejectedWeight", equalTo(50.0)))
             .andExpect(jsonPath("$[0].discardReason", equalTo("DIS")))
     }

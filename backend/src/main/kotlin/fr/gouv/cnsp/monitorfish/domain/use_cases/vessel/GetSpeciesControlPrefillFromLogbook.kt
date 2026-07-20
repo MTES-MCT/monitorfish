@@ -27,6 +27,7 @@ class GetSpeciesControlPrefillFromLogbook(
         data class FarData(
             val faoZones: MutableSet<String>,
             val presentationCodes: MutableSet<String>,
+            var declaredWeight: Double,
         )
 
         val farBySpecies = mutableMapOf<String, FarData>()
@@ -37,9 +38,15 @@ class GetSpeciesControlPrefillFromLogbook(
             .flatMap { it.catches }
             .forEach { catch ->
                 val species = catch.species ?: return@forEach
-                val data = farBySpecies.getOrPut(species) { FarData(mutableSetOf(), mutableSetOf()) }
+                val data = farBySpecies.getOrPut(species) { FarData(mutableSetOf(), mutableSetOf(), 0.0) }
                 catch.faoZone?.let { data.faoZones.add(it) }
                 catch.presentation?.let { data.presentationCodes.add(it) }
+                // FAR weights are live weight ("poids vif"): divide by the conversion factor to get the net
+                // weight, so the declared quantity is comparable with the weights measured during the control.
+                catch.weight?.let { weight ->
+                    val conversionFactor = catch.conversionFactor?.takeIf { it > 0.0 } ?: 1.0
+                    data.declaredWeight += weight / conversionFactor
+                }
             }
 
         // From DIS messages: one discard entry per (species, DiscardReason), where DiscardReason is DIM when the
@@ -68,6 +75,7 @@ class GetSpeciesControlPrefillFromLogbook(
                 SpeciesControlPrefill(speciesCode = species).apply {
                     faoZones = farData.faoZones.toList().takeIf { it.isNotEmpty() }
                     presentationCodes = farData.presentationCodes.toList().takeIf { it.isNotEmpty() }
+                    declaredWeight = farData.declaredWeight.takeIf { it > 0.0 }
                 }
             }
 

@@ -14,6 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import java.time.ZonedDateTime
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -78,24 +79,24 @@ data class MissionActionDataOutput(
     val emitsAis: ControlCheck? = null,
     val vmsEmissionControlBeforeArrival: ControlCheck? = null,
     val portEntranceAndLandingAuthorized: ControlCheck? = null,
-    val logbookFilledPriorToControl: ControlCheck? = null,
+    val logbookOpenedPriorToControl: ControlCheck? = null,
     val logbookMatchesActivity: ControlCheck? = null,
     val licencesMatchActivity: ControlCheck? = null,
     val speciesWeightControlled: ControlCheck? = null,
     val speciesSizeControlled: ControlCheck? = null,
     val separateStowageOfPreservedSpecies: ControlCheck? = null,
     val propulsionEnginePowerControl: ControlCheck? = null,
-    val fishingLicencesMatchActivity: ControlCheck? = null,
+    val gangwayPresentAndCompliant: ControlCheck? = null,
+    val europeanFishingLicenceValid: ControlCheck? = null,
     val stowagePlanPresent: ControlCheck? = null,
     val onboardWeighingPermit: ControlCheck? = null,
     val weighingCertificateAndSystemsValid: ControlCheck? = null,
     val underSizedSeparateStowage: ControlCheck? = null,
     val underSizedSeparateRecording: ControlCheck? = null,
-    val minimumConservationReferenceSizeControlled: ControlCheck? = null,
-    val cratesWeighingSamplingControl: ControlCheck? = null,
+    val weightControlMethod: WeightControlMethod? = null,
     val approvedWeighingOperatorInformation: ControlCheck? = null,
     val holdControlledAfterUnloading: ControlCheck? = null,
-    val catchesWeighedAtLanding: ControlCheck? = null,
+    val weighingOperationsMonitoredByInspectors: ControlCheck? = null,
     val licencesAndLogbookObservations: String? = null,
     val infractions: List<MissionActionInfractionDataOutput> = listOf(),
     val speciesObservations: String? = null,
@@ -129,7 +130,7 @@ data class MissionActionDataOutput(
     val isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     val isSeafarersControl: Boolean? = null,
     val isINNControl: Boolean = false,
-    val isGangwayDeployed: Boolean? = null,
+    val isUnitBoarded: Boolean? = null,
     val observationsByUnit: String? = null,
 ) {
     companion object {
@@ -155,24 +156,24 @@ data class MissionActionDataOutput(
             emitsAis = missionAction.emitsAis,
             vmsEmissionControlBeforeArrival = missionAction.vmsEmissionControlBeforeArrival,
             portEntranceAndLandingAuthorized = missionAction.portEntranceAndLandingAuthorized,
-            logbookFilledPriorToControl = missionAction.logbookFilledPriorToControl,
+            logbookOpenedPriorToControl = missionAction.logbookOpenedPriorToControl,
             logbookMatchesActivity = missionAction.logbookMatchesActivity,
             licencesMatchActivity = missionAction.licencesMatchActivity,
             speciesWeightControlled = missionAction.speciesWeightControlled,
             speciesSizeControlled = missionAction.speciesSizeControlled,
             separateStowageOfPreservedSpecies = missionAction.separateStowageOfPreservedSpecies,
             propulsionEnginePowerControl = missionAction.propulsionEnginePowerControl,
-            fishingLicencesMatchActivity = missionAction.fishingLicencesMatchActivity,
+            gangwayPresentAndCompliant = missionAction.gangwayPresentAndCompliant,
+            europeanFishingLicenceValid = missionAction.europeanFishingLicenceValid,
             stowagePlanPresent = missionAction.stowagePlanPresent,
             onboardWeighingPermit = missionAction.onboardWeighingPermit,
             weighingCertificateAndSystemsValid = missionAction.weighingCertificateAndSystemsValid,
             underSizedSeparateStowage = missionAction.underSizedSeparateStowage,
             underSizedSeparateRecording = missionAction.underSizedSeparateRecording,
-            minimumConservationReferenceSizeControlled = missionAction.minimumConservationReferenceSizeControlled,
-            cratesWeighingSamplingControl = missionAction.cratesWeighingSamplingControl,
+            weightControlMethod = missionAction.weightControlMethod,
             approvedWeighingOperatorInformation = missionAction.approvedWeighingOperatorInformation,
             holdControlledAfterUnloading = missionAction.holdControlledAfterUnloading,
-            catchesWeighedAtLanding = missionAction.catchesWeighedAtLanding,
+            weighingOperationsMonitoredByInspectors = missionAction.weighingOperationsMonitoredByInspectors,
             licencesAndLogbookObservations = missionAction.licencesAndLogbookObservations,
             infractions =
                 missionAction.infractions.map {
@@ -214,7 +215,7 @@ data class MissionActionDataOutput(
                 missionAction.isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = missionAction.isSeafarersControl,
             isINNControl = missionAction.isINNControl,
-            isGangwayDeployed = missionAction.isGangwayDeployed,
+            isUnitBoarded = missionAction.isUnitBoarded,
             observationsByUnit = missionAction.observationsByUnit,
         )
     }

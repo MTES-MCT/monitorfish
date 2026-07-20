@@ -95,8 +95,33 @@ class GetSpeciesControlPrefillFromLogbookUTests {
         assertThat(species.speciesCode).isEqualTo("HKE")
         assertThat(species.faoZones).containsExactly("27.8.a")
         assertThat(species.presentationCodes).containsExactly("GUT")
+        assertThat(species.declaredWeight).isEqualTo(500.0)
         assertThat(species.rejectedWeight).isNull()
         assertThat(species.discardReason).isNull()
+    }
+
+    @Test
+    fun `execute Should compute the net declaredWeight from FAR catches using the conversion factors`() {
+        given(logbookReportRepository.findAllTrips(any())).willReturn(listOf(trip))
+        val convertedCatch =
+            LogbookFishingCatch().also {
+                it.species = "HKE"
+                it.weight = 500.0
+                it.conversionFactor = 1.25
+            }
+        val catchWithoutFactor =
+            LogbookFishingCatch().also {
+                it.species = "HKE"
+                it.weight = 100.0
+            }
+        given(getLogbookMessages.execute(any(), any(), any(), any()))
+            .willReturn(listOf(makeFarMessage(listOf(convertedCatch, catchWithoutFactor))))
+
+        val result = GetSpeciesControlPrefillFromLogbook(logbookReportRepository, getLogbookMessages).execute(cfr)
+
+        assertThat(result).hasSize(1)
+        // 500.0 (live weight) / 1.25 + 100.0 (no conversion factor: kept as is)
+        assertThat(result.first().declaredWeight).isEqualTo(500.0)
     }
 
     @Test

@@ -102,7 +102,7 @@ export function DiscardedSpeciesField() {
     return <FieldsetGroupSpinner isLight legend="Rejets" />
   }
 
-  const isDisabled = values.isGangwayDeployed === false
+  const isDisabled = values.isUnitBoarded === false
 
   return (
     <FieldsetGroup isLight legend="Rejets">

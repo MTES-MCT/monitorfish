@@ -8,8 +8,8 @@ import type { SpeciesEISRApplicability } from './getSpeciesEISRApplicability'
 import type { MissionActionFormValues } from '../../../types'
 
 // FormikGangwayField.tsx's GANGWAY_DEPENDENT_FIELDS effect targets these same three fields for a
-// different reason (gangway not deployed) — its NOT_APPLICABLE always takes precedence, so this
-// effect never resets a field away from NOT_APPLICABLE while the gangway isn't deployed.
+// different reason (unit not boarded) — its NOT_APPLICABLE always takes precedence, so this
+// effect never resets a field away from NOT_APPLICABLE while the unit hasn't boarded.
 export function useForceSpeciesEISRFieldsNotApplicable(
   isEISREnabled: boolean,
   applicability: SpeciesEISRApplicability
@@ -29,7 +29,7 @@ export function useForceSpeciesEISRFieldsNotApplicable(
       } else if (
         isApplicable &&
         currentValue === MissionAction.ControlCheck.NOT_APPLICABLE &&
-        values.isGangwayDeployed !== false
+        values.isUnitBoarded !== false
       ) {
         void setFieldValue(field, undefined)
       }
@@ -42,7 +42,7 @@ export function useForceSpeciesEISRFieldsNotApplicable(
     applicability.isSeparateStowageOfPreservedSpeciesApplicable,
     applicability.isUnderSizedSeparateRecordingApplicable,
     applicability.isUnderSizedSeparateStowageApplicable,
-    values.isGangwayDeployed,
+    values.isUnitBoarded,
     setFieldValue
   ])
 }

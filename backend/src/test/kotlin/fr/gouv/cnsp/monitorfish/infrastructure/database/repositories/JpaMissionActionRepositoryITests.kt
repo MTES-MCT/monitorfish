@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearCont
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WireType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDummyMissionAction
 import org.assertj.core.api.Assertions.assertThat
@@ -68,7 +69,8 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
             ControlCheck.YES,
         )
         assertThat(firstControl.propulsionEnginePowerControl).isEqualTo(ControlCheck.YES)
-        assertThat(firstControl.fishingLicencesMatchActivity).isEqualTo(ControlCheck.NO)
+        assertThat(firstControl.gangwayPresentAndCompliant).isEqualTo(ControlCheck.YES)
+        assertThat(firstControl.europeanFishingLicenceValid).isEqualTo(ControlCheck.NO)
         assertThat(firstControl.stowagePlanPresent).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.onboardWeighingPermit).isEqualTo(ControlCheck.YES)
         assertThat(firstControl.weighingCertificateAndSystemsValid).isEqualTo(ControlCheck.NOT_APPLICABLE)
@@ -172,11 +174,10 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(loaded.vmsEmissionControlBeforeArrival).isEqualTo(ControlCheck.YES)
         assertThat(loaded.portEntranceAndLandingAuthorized).isEqualTo(ControlCheck.NO)
         // The land control species checks round-trip correctly
-        assertThat(loaded.minimumConservationReferenceSizeControlled).isEqualTo(ControlCheck.YES)
-        assertThat(loaded.cratesWeighingSamplingControl).isEqualTo(ControlCheck.NO)
+        assertThat(loaded.weightControlMethod).isEqualTo(WeightControlMethod.WEIGHING)
         assertThat(loaded.approvedWeighingOperatorInformation).isEqualTo(ControlCheck.NOT_APPLICABLE)
         assertThat(loaded.holdControlledAfterUnloading).isEqualTo(ControlCheck.YES)
-        assertThat(loaded.catchesWeighedAtLanding).isEqualTo(ControlCheck.NO)
+        assertThat(loaded.weighingOperationsMonitoredByInspectors).isEqualTo(ControlCheck.NO)
     }
 
     @Test

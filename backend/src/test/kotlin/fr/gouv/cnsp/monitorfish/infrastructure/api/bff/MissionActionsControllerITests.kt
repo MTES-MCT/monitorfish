@@ -240,11 +240,10 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.isSeafarersControl", equalTo(true)))
             .andExpect(jsonPath("$.vmsEmissionControlBeforeArrival", equalTo("YES")))
             .andExpect(jsonPath("$.portEntranceAndLandingAuthorized", equalTo("NO")))
-            .andExpect(jsonPath("$.minimumConservationReferenceSizeControlled", equalTo("YES")))
-            .andExpect(jsonPath("$.cratesWeighingSamplingControl", equalTo("NO")))
+            .andExpect(jsonPath("$.weightControlMethod", equalTo("WEIGHING")))
             .andExpect(jsonPath("$.approvedWeighingOperatorInformation", equalTo("NOT_APPLICABLE")))
             .andExpect(jsonPath("$.holdControlledAfterUnloading", equalTo("YES")))
-            .andExpect(jsonPath("$.catchesWeighedAtLanding", equalTo("NO")))
+            .andExpect(jsonPath("$.weighingOperationsMonitoredByInspectors", equalTo("NO")))
             .andExpect(
                 jsonPath(
                     "$.infractions[0].comments",

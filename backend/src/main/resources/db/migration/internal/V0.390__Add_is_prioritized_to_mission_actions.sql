@@ -1,1 +1,0 @@
-ALTER TABLE mission_actions ADD COLUMN is_prioritized BOOLEAN NOT NULL DEFAULT FALSE;

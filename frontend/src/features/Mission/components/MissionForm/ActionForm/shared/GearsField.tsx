@@ -158,11 +158,11 @@ export function GearsField() {
   }
 
   if (!gearsAsOptions.length) {
-    return <FieldsetGroupSpinner isLight legend="Engins à bord" />
+    return <FieldsetGroupSpinner isLight legend="Inspection des engins" />
   }
 
   return (
-    <FieldsetGroup isLight legend="Engins à bord">
+    <FieldsetGroup isLight legend="Inspection des engins">
       {input.value && input.value.length > 0 && (
         <>
           {input.value.map((gearOnboard, index) => {

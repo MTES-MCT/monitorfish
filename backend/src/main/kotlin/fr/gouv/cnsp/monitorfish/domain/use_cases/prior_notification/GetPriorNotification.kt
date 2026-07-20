@@ -5,7 +5,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import java.time.ZonedDateTime
 
 @UseCase

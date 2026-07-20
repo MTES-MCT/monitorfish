@@ -4,9 +4,11 @@ import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselAndBeacon
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given

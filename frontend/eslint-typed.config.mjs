@@ -79,7 +79,6 @@ export default [
           format: ['camelCase', 'PascalCase', 'UPPER_CASE']
         }
       ],
-      '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
       '@typescript-eslint/prefer-nullish-coalescing': 'error',

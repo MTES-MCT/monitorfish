@@ -14,7 +14,8 @@ data class PriorNotificationPortSubscriptionDataOutput(
         ): PriorNotificationPortSubscriptionDataOutput =
             PriorNotificationPortSubscriptionDataOutput(
                 controlUnitId = priorNotificationPortSubscription.controlUnitId,
-                hasSubscribedToAllPriorNotifications = priorNotificationPortSubscription.hasSubscribedToAllPriorNotifications,
+                hasSubscribedToAllPriorNotifications =
+                    priorNotificationPortSubscription.hasSubscribedToAllPriorNotifications,
                 portLocode = priorNotificationPortSubscription.portLocode,
                 portName = priorNotificationPortSubscription.portName,
             )

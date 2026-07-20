@@ -76,8 +76,8 @@ class GetAllUserVesselGroupsWithVesselsUTests {
         // Given
         val modifiedGroup =
             getFixedVesselGroups().first().copy(
+                // Add unknown vessel
                 vessels =
-                    // Add unknown vessel
                     listOf(
                         VesselIdentity(
                             vesselId = null,

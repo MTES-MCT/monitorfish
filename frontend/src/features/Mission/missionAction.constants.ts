@@ -47,5 +47,12 @@ export namespace MissionAction {
     SINGLE = 'SINGLE',
     MANY = 'MANY'
   }
+
+  export enum WeightControlMethod {
+    WEIGHING = 'WEIGHING',
+    CRATE_COUNT = 'CRATE_COUNT',
+    SAMPLING = 'SAMPLING',
+    NOT_APPLICABLE = 'NOT_APPLICABLE'
+  }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix, typescript-sort-keys/string-enum */

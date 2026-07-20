@@ -93,14 +93,24 @@ export function isUnderSizedSeparateStowageApplicable(
   return smallPelagicsShare === undefined || smallPelagicsShare <= SMALL_PELAGICS_SHARE_THRESHOLD
 }
 
-export function isUnderSizedSeparateRecordingApplicable(vesselLength: number | undefined): boolean {
-  return vesselLength === undefined || vesselLength >= UNDER_SIZED_SEPARATE_RECORDING_MIN_VESSEL_LENGTH_METERS
+// On land controls the check only concerns catches kept onboard: it is not applicable until at
+// least one species is marked as not landed.
+export function isUnderSizedSeparateRecordingApplicable(
+  speciesOnboard: MissionAction.SpeciesOnboardControl[] | undefined,
+  vesselLength: number | undefined,
+  isLandControl: boolean
+): boolean {
+  const isLongEnough =
+    vesselLength === undefined || vesselLength >= UNDER_SIZED_SEPARATE_RECORDING_MIN_VESSEL_LENGTH_METERS
+
+  return isLongEnough && (!isLandControl || (speciesOnboard ?? []).some(species => species.isNotLanded))
 }
 
 export function getSpeciesEISRApplicability(
   speciesOnboard: MissionAction.SpeciesOnboardControl[] | undefined,
   getScipSpeciesTypeFromSpecyCode: ScipSpeciesTypeLookup,
-  vesselLength: number | undefined
+  vesselLength: number | undefined,
+  isLandControl: boolean
 ): SpeciesEISRApplicability {
   return {
     isSeparateStowageOfPreservedSpeciesApplicable: isSeparateStowageOfPreservedSpeciesApplicable(
@@ -108,7 +118,11 @@ export function getSpeciesEISRApplicability(
       getScipSpeciesTypeFromSpecyCode,
       vesselLength
     ),
-    isUnderSizedSeparateRecordingApplicable: isUnderSizedSeparateRecordingApplicable(vesselLength),
+    isUnderSizedSeparateRecordingApplicable: isUnderSizedSeparateRecordingApplicable(
+      speciesOnboard,
+      vesselLength,
+      isLandControl
+    ),
     isUnderSizedSeparateStowageApplicable: isUnderSizedSeparateStowageApplicable(speciesOnboard, vesselLength)
   }
 }

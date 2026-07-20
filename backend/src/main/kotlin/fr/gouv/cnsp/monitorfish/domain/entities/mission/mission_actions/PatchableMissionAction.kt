@@ -1,7 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Optional
 
 /**
  * If the value is set as null in the JSON payload, the value will be Optional.isEmpty: we set is as null.

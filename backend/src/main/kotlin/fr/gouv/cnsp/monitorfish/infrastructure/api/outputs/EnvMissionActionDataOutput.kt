@@ -3,7 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.env_mission_action.EnvMissionActionType
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.UUID
 
 data class EnvMissionActionDataOutput(
     val id: UUID,

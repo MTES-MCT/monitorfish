@@ -25,33 +25,27 @@ const LAND_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
     isSectionHeader: true,
     label: (
       <>
-        Pour les captures <u>débarquées</u>
+        Pour les espèces <u>débarquées</u>
       </>
     ),
     name: 'unloadedSection'
   },
-  {
-    isRequired: true,
-    label: 'Taille minimale de référence de conservation contrôlée',
-    name: 'minimumConservationReferenceSizeControlled'
-  },
-  {
-    isRequired: true,
-    label: 'Contrôle de pesée / décompte des caisses / échantillonnage',
-    name: 'cratesWeighingSamplingControl'
-  },
-  {
-    isRequired: true,
-    label: "Informations sur l'opérateur de pesée agréé",
-    name: 'approvedWeighingOperatorInformation'
-  },
+  { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
   { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
-  { isRequired: true, label: 'Pesée des captures lors du débarquement', name: 'catchesWeighedAtLanding' },
+  {
+    isRequired: true,
+    label: 'Suivi des opérations de pesée par les inspecteurs',
+    name: 'weighingOperationsMonitoredByInspectors'
+  }
+]
+
+// Rendered below the species table, only when at least one species is marked as not landed.
+const LAND_CONTROL_NOT_LANDED_CHECK_ROWS: ControlCheckRow[] = [
   {
     isSectionHeader: true,
     label: (
       <>
-        Pour les captures <u>non débarquées</u>
+        Pour les espèces <u>non débarquées</u>
       </>
     ),
     name: 'heldOnboardSection'
@@ -76,6 +70,14 @@ const SEA_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
   }
 ]
 
+function disableNonApplicableRows(rows: ControlCheckRow[], applicability: SpeciesEISRApplicability): ControlCheckRow[] {
+  const isRowApplicable = getApplicabilityByFieldName(applicability)
+
+  return rows.map(row =>
+    row.name in isRowApplicable && !isRowApplicable[row.name] ? Object.assign({}, row, { disabled: true }) : row
+  )
+}
+
 export function getSpeciesControlCheckRows(
   isLandControl: boolean,
   isEISREnabled: boolean,
@@ -89,9 +91,9 @@ export function getSpeciesControlCheckRows(
     ? LAND_CONTROL_EISR_CHECK_ROWS
     : [...BASE_SPECIES_CHECK_ROWS, ...SEA_CONTROL_EISR_CHECK_ROWS]
 
-  const isRowApplicable = getApplicabilityByFieldName(applicability)
+  return disableNonApplicableRows(rows, applicability)
+}
 
-  return rows.map(row =>
-    row.name in isRowApplicable && !isRowApplicable[row.name] ? Object.assign({}, row, { disabled: true }) : row
-  )
+export function getLandControlNotLandedCheckRows(applicability: SpeciesEISRApplicability): ControlCheckRow[] {
+  return disableNonApplicableRows(LAND_CONTROL_NOT_LANDED_CHECK_ROWS, applicability)
 }

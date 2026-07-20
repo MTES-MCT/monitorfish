@@ -212,7 +212,8 @@ class ReportingMapperUTests {
                 "\"dml\": \"DML 56\"," +
                 "\"numberOfVessels\": 3," +
                 "\"infractions\": [" +
-                "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans autorisation par navire tiers\"}," +
+                "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans " +
+                "autorisation par navire tiers\"}," +
                 "{\"natinfCode\": 7059, \"threat\": \"Mesures techniques\", \"threatCharacterization\": \"Engin\"}" +
                 "]" +
                 "}"

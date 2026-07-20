@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
+import java.util.Arrays
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookTripGear as GearLogbook
 
 @Configuration

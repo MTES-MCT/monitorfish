@@ -8,6 +8,7 @@ import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchem
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
+import type { ControlledVesselSchema } from '@features/Vessel/schemas/ControlledVesselSchema'
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import type Feature from 'ol/Feature'
 import type LineString from 'ol/geom/LineString'
@@ -15,6 +16,12 @@ import type Point from 'ol/geom/Point'
 
 export namespace Vessel {
   export type SelectedVessel = z.infer<typeof VesselSchema>
+
+  /**
+   * Vessel identity enriched with the shared groups it belongs to and the reportings opened during
+   * its current trip. Returned when opening a control action form.
+   */
+  export type ControlledVessel = z.infer<typeof ControlledVesselSchema>
 
   export type ContactMethod = z.infer<typeof ContactMethodSchema>
 

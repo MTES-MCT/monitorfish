@@ -82,7 +82,9 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET main_scip_species_type = CAST(:mainScipSpeciesType AS scip_species_type) WHERE segment = :segment and year = :year",
+        value =
+            "UPDATE fleet_segments SET main_scip_species_type = CAST(:mainScipSpeciesType AS scip_species_type) " +
+                "WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
     fun updateMainScipSpeciesType(
@@ -126,7 +128,9 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET min_share_of_target_species = :minShareOfTargetSpecies WHERE segment = :segment and year = :year",
+        value =
+            "UPDATE fleet_segments SET min_share_of_target_species = :minShareOfTargetSpecies " +
+                "WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
     fun updateMinShareOfTargetSpecies(
@@ -159,7 +163,9 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET fao_areas = cast(:faoAreas AS varchar[]) WHERE segment = :segment and year = :year",
+        value =
+            "UPDATE fleet_segments SET fao_areas = cast(:faoAreas AS varchar[]) " +
+                "WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
     fun updateFAOAreas(
@@ -170,7 +176,9 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET target_species = cast(:targetSpecies AS varchar[]) WHERE segment = :segment and year = :year",
+        value =
+            "UPDATE fleet_segments SET target_species = cast(:targetSpecies AS varchar[]) " +
+                "WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
     fun updateTargetSpecies(
@@ -181,7 +189,9 @@ interface DBFleetSegmentRepository : CrudRepository<FleetSegmentEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE fleet_segments SET impact_risk_factor = :impactRiskFactor WHERE segment = :segment and year = :year",
+        value =
+            "UPDATE fleet_segments SET impact_risk_factor = :impactRiskFactor " +
+                "WHERE segment = :segment and year = :year",
         nativeQuery = true,
     )
     fun updateImpactRiskFactor(

@@ -20,6 +20,7 @@ const makePrefill = (
   speciesCode: string,
   overrides: Partial<Logbook.SpeciesControlPrefill> = {}
 ): Logbook.SpeciesControlPrefill => ({
+  declaredWeight: undefined,
   discardReason: undefined,
   faoZones: undefined,
   presentationCodes: undefined,
@@ -110,13 +111,22 @@ describe('mergeSpeciesOnboardWithPrefill()', () => {
     expect(hke.discardReason).toBe('DIS')
   })
 
-  it('should preserve declaredWeight from base species after merge', () => {
+  it('should preserve declaredWeight from base species when the prefill has none', () => {
     const base = [makeSpecies('HKE', { declaredWeight: 500 })]
     const prefill = [makePrefill('HKE', { faoZones: ['27.8.a'] })]
 
     const { nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
 
     expect(nextSpeciesOnboard[0]!.declaredWeight).toBe(500)
+  })
+
+  it('should override declaredWeight with the net weight computed from the logbook prefill', () => {
+    const base = [makeSpecies('HKE', { declaredWeight: 500 })]
+    const prefill = [makePrefill('HKE', { declaredWeight: 400 })]
+
+    const { nextSpeciesOnboard } = mergeSpeciesOnboardWithPrefill(base, prefill)
+
+    expect(nextSpeciesOnboard[0]!.declaredWeight).toBe(400)
   })
 
   it('should handle empty inputs', () => {

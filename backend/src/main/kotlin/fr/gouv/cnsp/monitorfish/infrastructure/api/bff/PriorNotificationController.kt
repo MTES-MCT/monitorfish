@@ -5,11 +5,33 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotifica
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.sorters.PriorNotificationsSortColumn
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.ComputeManualPriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreateOrUpdateManualPriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.CreatePriorNotificationUpload
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.DeletePriorNotificationUpload
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetNumberToVerify
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationPdfDocument
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationSentMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationTypes
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationUpload
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationUploads
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotifications
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.InvalidatePriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.UpdateLogbookPriorNotification
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.VerifyAndSendPriorNotification
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.LogbookPriorNotificationFormDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationComputeDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ManualPriorNotificationFormDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.*
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.LogbookPriorNotificationFormDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ManualPriorNotificationComputedValuesDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ManualPriorNotificationFormDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PaginatedListDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationListItemDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationSentMessageDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationUploadDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PriorNotificationsExtraDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestErrorCode
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
 import io.swagger.v3.oas.annotations.Operation
@@ -23,7 +45,15 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.ISO_DATE_TIME
@@ -194,7 +224,9 @@ class PriorNotificationController(
 
     @PostMapping("/manual/compute")
     @Operation(
-        summary = "Calculate manual prior notification fleet segments, prior notification types, risk factor and next state",
+        summary =
+            "Calculate manual prior notification fleet segments, prior notification types, risk factor " +
+                "and next state",
     )
     fun getManualComputation(
         @RequestBody

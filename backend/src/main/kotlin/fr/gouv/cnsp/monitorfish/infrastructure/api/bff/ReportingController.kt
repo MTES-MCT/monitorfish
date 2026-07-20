@@ -2,7 +2,15 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReporting
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DisplayedReportingDataOutput
@@ -13,7 +21,16 @@ import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import java.time.ZonedDateTime
 
 @RestController

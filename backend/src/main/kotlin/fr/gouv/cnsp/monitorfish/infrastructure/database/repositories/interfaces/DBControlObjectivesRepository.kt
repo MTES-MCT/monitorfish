@@ -8,7 +8,9 @@ import org.springframework.data.repository.CrudRepository
 interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity, Int> {
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea WHERE id = :controlObjectiveId",
+        value =
+            "UPDATE control_objectives SET target_number_of_controls_at_sea = :targetNumberOfControlsAtSea " +
+                "WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
     fun updateTargetNumberOfControlsAtSea(
@@ -18,7 +20,9 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort WHERE id = :controlObjectiveId",
+        value =
+            "UPDATE control_objectives SET target_number_of_controls_at_port = :targetNumberOfControlsAtPort " +
+                "WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
     fun updateTargetNumberOfControlsAtPort(
@@ -28,7 +32,9 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel WHERE id = :controlObjectiveId",
+        value =
+            "UPDATE control_objectives SET control_priority_level = :controlPriorityLevel " +
+                "WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
     fun updateControlPriorityLevel(
@@ -38,7 +44,9 @@ interface DBControlObjectivesRepository : CrudRepository<ControlObjectivesEntity
 
     @Modifying(clearAutomatically = true)
     @Query(
-        value = "UPDATE control_objectives SET infringement_risk_level = :infringementRiskLevel WHERE id = :controlObjectiveId",
+        value =
+            "UPDATE control_objectives SET infringement_risk_level = :infringementRiskLevel " +
+                "WHERE id = :controlObjectiveId",
         nativeQuery = true,
     )
     fun updateInfringementRiskLevel(

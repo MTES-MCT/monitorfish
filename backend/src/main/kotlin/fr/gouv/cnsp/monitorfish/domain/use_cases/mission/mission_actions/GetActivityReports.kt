@@ -9,7 +9,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionA
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.fleet_segment.hasFaoCodeIncludedIn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
@@ -156,20 +161,22 @@ class GetActivityReports(
                     val segment = getFleetSegment(control, jdp, fleetSegments)
 
                     val enrichedInfractions =
-                        control.infractions.filter { it.infractionType == InfractionType.WITH_RECORD }.mapNotNull { infraction ->
-                            val key =
-                                infraction.natinf?.let { natinf ->
-                                    Triple(natinf, infraction.threat, infraction.threatCharacterization)
-                                }
-                            val (isrCode, isrName) = key?.let { isrByNatinfAndThreat[it] } ?: Pair(null, null)
+                        control.infractions
+                            .filter { it.infractionType == InfractionType.WITH_RECORD }
+                            .mapNotNull { infraction ->
+                                val key =
+                                    infraction.natinf?.let { natinf ->
+                                        Triple(natinf, infraction.threat, infraction.threatCharacterization)
+                                    }
+                                val (isrCode, isrName) = key?.let { isrByNatinfAndThreat[it] } ?: Pair(null, null)
 
-                            return@mapNotNull isrCode?.let {
-                                ActivityReportInfraction(
-                                    isrCode = isrCode,
-                                    isrName = isrName,
-                                )
+                                return@mapNotNull isrCode?.let {
+                                    ActivityReportInfraction(
+                                        isrCode = isrCode,
+                                        isrName = isrName,
+                                    )
+                                }
                             }
-                        }
 
                     ActivityReport(
                         action = control,

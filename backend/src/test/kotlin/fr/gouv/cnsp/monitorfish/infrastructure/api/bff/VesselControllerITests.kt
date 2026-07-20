@@ -9,7 +9,19 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.*
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionActionPropertyName
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResumeAndHistory
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
@@ -20,9 +32,22 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.Voyage
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
-import fr.gouv.cnsp.monitorfish.domain.entities.reporting.*
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting.InfractionSuspicion
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingAndOccurrences
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ThreatSummary
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.VesselReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ControlledVessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselAndBeacon
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselTrackDepth
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
@@ -31,7 +56,21 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
-import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetSpeciesControlPrefillFromLogbook
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselAISPositions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselContactToUpdateByVesselId
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVMSAndAISPositions
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyageByDates
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SaveVesselContactToUpdate
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import fr.gouv.cnsp.monitorfish.fakers.VesselContactToUpdateFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.TestUtils.DUMMY_VESSEL_PROFILE
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.getDynamicVesselGroups
@@ -50,7 +89,9 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.math.BigDecimal
@@ -83,7 +124,7 @@ class VesselControllerITests {
     private lateinit var getVessel: GetVessel
 
     @MockitoBean
-    private lateinit var getVesselById: GetVesselById
+    private lateinit var getControlledVesselById: GetControlledVesselById
 
     @MockitoBean
     private lateinit var getVesselVMSAndAISPositions: GetVesselVMSAndAISPositions
@@ -204,6 +245,64 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
+    }
+
+    @Test
+    fun `Should get a controlled vessel by its id with its priority groups and current trip reportings`() {
+        // Given
+        val vessel =
+            Vessel(
+                id = 123,
+                internalReferenceNumber = "FR224226850",
+                vesselName = "MY AWESOME VESSEL",
+                flagState = CountryCode.FR,
+                hasLogbookEsacapt = false,
+            )
+        val tripReporting =
+            InfractionSuspicion(
+                id = 1,
+                vesselId = 123,
+                cfr = "FR224226850",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = ZonedDateTime.now(),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
+                isArchived = false,
+                isDeleted = false,
+                reportingSource = ReportingSource.OPS,
+                title = "Infraction suspicion",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "threat",
+                            threatCharacterization = "threat characterization",
+                        ),
+                    ),
+                createdBy = "test@example.gouv.fr",
+            )
+        givenSuspended {
+            getControlledVesselById.execute(vesselId = eq(123), userEmail = eq("email@domain-name.com"))
+        } willReturn {
+            ControlledVessel(
+                controlledVessel = vessel,
+                groups = getDynamicVesselGroups(),
+                tripReportings = listOf(tripReporting),
+            )
+        }
+
+        // When
+        api
+            .perform(get("/bff/v1/vessels/123").with(authenticatedRequest()))
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.vesselId", equalTo(123)))
+            .andExpect(jsonPath("$.internalReferenceNumber", equalTo("FR224226850")))
+            .andExpect(jsonPath("$.vesselName", equalTo("MY AWESOME VESSEL")))
+            .andExpect(jsonPath("$.groups.length()", equalTo(getDynamicVesselGroups().size)))
+            .andExpect(jsonPath("$.tripReportings.length()", equalTo(1)))
+            .andExpect(jsonPath("$.tripReportings[0].id", equalTo(1)))
     }
 
     private fun <T> givenSuspended(block: suspend () -> T) = given(runBlocking { block() })!!
@@ -1276,6 +1375,7 @@ class VesselControllerITests {
                 ).apply {
                     faoZones = listOf("27.8.a", "27.8.b")
                     presentationCodes = listOf("GUT")
+                    declaredWeight = 400.0
                     rejectedWeight = 50.0
                     discardReason = fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason.DIS
                 }
@@ -1293,6 +1393,7 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].speciesCode", equalTo("HKE")))
             .andExpect(jsonPath("$[0].faoZones.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].presentationCodes[0]", equalTo("GUT")))
+            .andExpect(jsonPath("$[0].declaredWeight", equalTo(400.0)))
             .andExpect(jsonPath("$[0].rejectedWeight", equalTo(50.0)))
             .andExpect(jsonPath("$[0].discardReason", equalTo("DIS")))
     }

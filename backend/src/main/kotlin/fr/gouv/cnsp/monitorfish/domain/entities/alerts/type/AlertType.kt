@@ -37,11 +37,14 @@ La sortie de port est détectée sur les dernières 48h, avec le navire en mer d
             PositionAlertSpecification(
                 id = null,
                 name = "FAR manquant en 24h",
-                description = """_Sur la journée de la veille_
+                description =
+                    """_Sur la journée de la veille_
 
 Pour tous les navires français et pour les navires étrangers dont on a le JPE en ZEE française (aujourd'hui les Belges), qui ont été détectés "en pêche" la veille et n'ont pas fait de FAR.
 
-Signalement archivé automatiquement dès sa création : il sert à garder une trace pour la statistique mais n'est pas utilisé directement pour l'opérationnel.""",
+""" +
+                        "Signalement archivé automatiquement dès sa création : il sert à garder une trace pour la " +
+                        "statistique mais n'est pas utilisé directement pour l'opérationnel.",
                 isUserDefined = false,
                 natinf = 27689,
                 threat = "Obligations déclaratives",

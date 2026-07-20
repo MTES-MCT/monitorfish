@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react'
 import { getDefaultFaoZones, getDefaultPresentationCodes } from '../utils'
 import { ControlCheckTable } from './ControlCheckTable'
 import { DEFAULT_SPECIES_EISR_APPLICABILITY, getSpeciesEISRApplicability } from './Species/getSpeciesEISRApplicability'
-import { getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
+import { getLandControlNotLandedCheckRows, getSpeciesControlCheckRows } from './Species/speciesControlCheckRows'
 import {
   AddSpeciesButton,
   DeleteCell,
@@ -52,8 +52,17 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
   value: code
 }))
 
+// On land controls these checks are hidden (pending clarification of the topic) and forced to N/A.
+// `weightControlMethod` is a WeightControlMethod (not a ControlCheck) but both enums share the
+// NOT_APPLICABLE literal.
+const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = [
+  'approvedWeighingOperatorInformation',
+  'speciesWeightControlled',
+  'weightControlMethod'
+]
+
 export function SpeciesField() {
-  const { values } = useFormikContext<MissionActionFormValues>()
+  const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
@@ -62,7 +71,7 @@ export function SpeciesField() {
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
-  const legend = isLandControl ? 'Inspection des captures' : 'Espèces à bord'
+  const legend = 'Inspection des espèces'
 
   const {
     customSearch,
@@ -77,9 +86,29 @@ export function SpeciesField() {
 
   const speciesEISRApplicability =
     values.vesselId !== undefined
-      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.length)
+      ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.vesselLength, isLandControl)
       : DEFAULT_SPECIES_EISR_APPLICABILITY
   useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
+
+  useEffect(() => {
+    if (!isLandControl) {
+      return
+    }
+
+    LAND_CONTROL_NOT_APPLICABLE_FIELDS.forEach(field => {
+      if (values[field] !== MissionAction.ControlCheck.NOT_APPLICABLE) {
+        setFieldValue(field, MissionAction.ControlCheck.NOT_APPLICABLE)
+      }
+    })
+    // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isLandControl,
+    setFieldValue,
+    values.approvedWeighingOperatorInformation,
+    values.speciesWeightControlled,
+    values.weightControlMethod
+  ])
 
   /**
    * This is only used to re-compute fleet segments when a species is modified
@@ -108,9 +137,9 @@ export function SpeciesField() {
     const newSpecies: MissionAction.SpeciesOnboardControl = {
       controlledWeight: undefined,
       declaredWeight: undefined,
-      faoZones: getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+      faoZones: getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.vesselLength),
       nbFish: undefined,
-      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+      presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.vesselLength),
       speciesCode: '',
       speciesName: undefined,
       underSized: false,
@@ -131,10 +160,10 @@ export function SpeciesField() {
       currentIndex === index
         ? {
             ...species,
-            faoZones: species.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.length),
+            faoZones: species.faoZones ?? getDefaultFaoZones(isEISREnabled, values.faoAreas, vessel?.vesselLength),
             presentationCodes: species.presentationCodes?.length
               ? species.presentationCodes
-              : getDefaultPresentationCodes(isEISREnabled, vessel?.length),
+              : getDefaultPresentationCodes(isEISREnabled, vessel?.vesselLength),
             speciesCode: newSpecy.code,
             speciesName: newSpecy.name
           }
@@ -187,9 +216,10 @@ export function SpeciesField() {
     return <FieldsetGroupSpinner isLight legend={legend} />
   }
 
-  const isDisabled = values.isGangwayDeployed === false
+  const isDisabled = values.isUnitBoarded === false
   const actionColumnWidth = isLandControl ? 52 : 21
   const controlledWeightLabel = isLandControl ? 'Pesée' : 'Estimé'
+  const hasNotLandedSpecies = (input.value ?? []).some(species => species.isNotLanded)
 
   return (
     <FieldsetGroup isLight legend={legend}>
@@ -331,7 +361,7 @@ export function SpeciesField() {
                       <IconButton
                         accent={Accent.TERTIARY}
                         color={specyOnboard.isNotLanded ? THEME.color.blueGray : THEME.color.lightGray}
-                        Icon={Icon.CrossedFishery}
+                        Icon={Icon.VesselPro}
                         onClick={() => updateNotLandedSpecy(index)}
                         title={specyOnboard.isNotLanded ? 'Espèce non débarquée' : 'Espèce débarquée'}
                       />
@@ -358,6 +388,12 @@ export function SpeciesField() {
           </tbody>
         </SimpleTable.Table>
       </SpeciesTableWrapper>
+      {isLandControl && isEISREnabled && hasNotLandedSpecies && (
+        <>
+          <FieldsetGroupSeparator marginBottom={12} />
+          <ControlCheckTable rows={getLandControlNotLandedCheckRows(speciesEISRApplicability)} />
+        </>
+      )}
       <FieldsetGroupSeparator marginBottom={12} />
       <FormikTextarea label="Observations (hors infraction) sur les espèces" name="speciesObservations" rows={2} />
       {speciesToDeleteIndex !== undefined && (

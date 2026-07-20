@@ -2,7 +2,7 @@ package fr.gouv.cnsp.monitorfish.domain.mappers
 
 import fr.gouv.cnsp.monitorfish.config.Patchable
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import java.util.*
+import java.util.Optional
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberProperties

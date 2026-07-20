@@ -57,7 +57,8 @@ export const updateActionSpeciesOnboard =
 
 /**
  * Splits the logbook prefill into:
- * - `nextSpeciesOnboard`: the risk factor catches enriched with FAR metadata (faoZones, presentationCodes).
+ * - `nextSpeciesOnboard`: the risk factor catches enriched with FAR metadata (faoZones, presentationCodes,
+ *   and the net declared weight computed with the logbook conversion factors).
  * - `discardedSpecies`: one entry per logbook discard (DIS/DIM), kept separate from the catches.
  */
 export function mergeSpeciesOnboardWithPrefill(
@@ -78,6 +79,7 @@ export function mergeSpeciesOnboardWithPrefill(
 
     return {
       ...specy,
+      declaredWeight: prefill.declaredWeight ?? specy.declaredWeight,
       faoZones: prefill.faoZones ?? specy.faoZones,
       presentationCodes: prefill.presentationCodes ?? specy.presentationCodes
     }

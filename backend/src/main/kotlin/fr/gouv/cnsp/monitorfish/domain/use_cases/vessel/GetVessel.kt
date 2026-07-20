@@ -11,7 +11,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.extractBossNameAndAddressFromERS
-import fr.gouv.cnsp.monitorfish.domain.repositories.*
+import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembershipRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselProfileRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -82,7 +90,7 @@ class GetVessel(
                         )
                     } ?: listOf()
                 }
-            val vesselFuture =
+            val vessel =
                 async {
                     vesselId?.let { vesselRepository.findVesselById(vesselId) }
                 }
@@ -154,7 +162,7 @@ class GetVessel(
                     beacon = beacon.await(),
                     vesselProfile = vesselProfile.await(),
                     vessel =
-                        vesselFuture.await()?.copy(
+                        vessel.await()?.copy(
                             hasVisioCaptures = hasVisioCaptures,
                             logbookSoftware = logbookSoftware,
                             bossName = bossNameAndAddress?.first,

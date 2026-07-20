@@ -4,6 +4,22 @@ import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditS
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
+const sharedGroup = (id: number, name: string, color: string, isPriorityGroup: boolean) => ({
+  color,
+  createdAtUtc: '2024-01-01T00:00:00Z',
+  createdBy: 'dummy@test.gouv.fr',
+  description: '',
+  id,
+  isDeleted: false,
+  isPriorityGroup,
+  name,
+  pointsOfAttention: '',
+  sharedTo: ['POLE_OPS_METROPOLE'],
+  sharing: 'SHARED',
+  type: 'FIXED',
+  vessels: []
+})
+
 context('Side Window > Mission Form > Sea Control', () => {
   beforeEach(() => {
     openSideWindowNewMission()
@@ -113,24 +129,23 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
-    // Obligations déclaratives et autorisations
+    cy.fill('Echelle de coupée présente et conforme', 'Oui')
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
+    cy.fill('Journal de pêche ouvert avant le contrôle', 'Oui')
     cy.fill('Déclarations journal de pêche conformes à l’activité du navire', 'N/A')
-    cy.fill('Autorisations de pêche (AEP) conformes à l’activité du navire ', 'Non')
-    cy.fill('Contrôle de la puissance du moteur de propulsion', 'Oui')
-    cy.fill('Licence de pêche conformes à l’activité du navire', 'Non')
-    cy.fill('Plan d’arrimage présent et valide', 'N/A')
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
+    cy.fill('Autorisations de pêche (AEP, ANP, licences locales) conformes à l’activité du navire ', 'Non')
+    // The propulsion power check is hidden (forced to N/A) since the regulation is not mature yet.
+    cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
+    cy.fill('Licence de pêche européenne valide', 'Non')
+    cy.fill('Plan d’arrimage présent et conforme', 'N/A')
+    // The N/A radio of the onboard weighing permit is disabled (options are: Oui, Non, N/A).
+    cy.get('input[name="onboardWeighingPermit"]').eq(2).should('be.disabled')
     // The weighing certificate field should not be visible initially
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Non should NOT show the cert field
     cy.fill('Autorisation pour la pesée à bord', 'Non')
-    cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
-
-    // Setting onboard weighing permit to Non concerné should NOT show the cert field
-    cy.fill('Autorisation pour la pesée à bord', 'N/A')
     cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
     // Setting onboard weighing permit to Oui SHOULD show the cert field
@@ -158,7 +173,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Maillage mesuré', 20, { index: 1 })
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
-    // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
@@ -208,7 +222,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     pickHoverEditSpecies('discarded-species-row-2', 'COD')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
     cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
-    cy.fill('Nature du rejet', 'RET - espèces protégées')
+    cy.fill('Nature du rejet', 'RET - espèces interdites')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
     cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
@@ -286,13 +300,15 @@ context('Side Window > Mission Form > Sea Control', () => {
 
           emitsVms: 'YES',
 
+          europeanFishingLicenceValid: 'NO',
+
           externalReferenceNumber: 'TALK2ME',
 
           facade: null,
 
-          fishingLicencesMatchActivity: 'NO',
-
           flagState: 'UNDEFINED',
+
+          gangwayPresentAndCompliant: 'YES',
 
           gearOnboard: [
             {
@@ -417,7 +433,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
           portLocode: null,
 
-          propulsionEnginePowerControl: 'YES',
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
 
           segments: [],
 
@@ -543,11 +559,12 @@ context('Side Window > Mission Form > Sea Control', () => {
           districtCode: 'AY',
           emitsAis: null,
           emitsVms: null,
+          europeanFishingLicenceValid: null,
           externalReferenceNumber: 'DONTSINK',
           facade: null,
           faoAreas: ['27.8.b', '27.8.c'],
-          fishingLicencesMatchActivity: null,
           flagState: 'FR',
+          gangwayPresentAndCompliant: null,
           gearOnboard: [
             {
               comments: null,
@@ -575,7 +592,7 @@ context('Side Window > Mission Form > Sea Control', () => {
           onboardWeighingPermit: null,
           otherComments: null,
           portLocode: null,
-          propulsionEnginePowerControl: null,
+          propulsionEnginePowerControl: 'NOT_APPLICABLE',
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
           seizureAndDiversion: false,
           seizureAndDiversionComments: null,
@@ -1143,17 +1160,15 @@ context('Side Window > Mission Form > Sea Control', () => {
       cy.clickButton('Ajouter')
       cy.clickButton('Ajouter un contrôle en mer')
 
-      // Gangway field
-      cy.contains('Echelle de coupée').should('not.exist')
+      // Unit boarded field
+      cy.contains('Accès au navire').should('not.exist')
 
-      // "Obligations déclaratives et autorisations de pêche" e-ISR fields
-      cy.contains('Contrôle de la puissance du moteur de propulsion').should('not.exist')
-      cy.contains('Licence de pêche conformes à l’activité du navire').should('not.exist')
-      cy.contains('Plan d’arrimage présent et valide').should('not.exist')
+      cy.contains('Echelle de coupée présente et conforme').should('not.exist')
+      cy.contains('Licence de pêche européenne valide').should('not.exist')
+      cy.contains('Plan d’arrimage présent et conforme').should('not.exist')
       cy.contains('Autorisation pour la pesée à bord').should('not.exist')
       cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
-      // "Espèces à bord" e-ISR fields
       cy.contains("Arrimage séparé des poissons n'ayant pas la taille requise").should('not.exist')
       cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     }
@@ -1171,7 +1186,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     // risk factor catches, and discard entries (one per species + nature) that feed the "Rejets" card.
     cy.intercept('GET', '/bff/v1/vessels/logbook/species-control-prefill*', {
       body: [
-        { faoZones: ['27.8.a', '27.8.b'], presentationCodes: ['WHL', 'GUT'], speciesCode: 'HKE' },
+        // The declared weight is the net weight computed from the FAR weights and conversion factors.
+        {
+          declaredWeight: 400.5,
+          faoZones: ['27.8.a', '27.8.b'],
+          presentationCodes: ['WHL', 'GUT'],
+          speciesCode: 'HKE'
+        },
         { faoZones: ['27.8.c'], presentationCodes: ['WHL'], speciesCode: 'BLI' },
         { discardReason: 'DIS', faoZones: ['27.8.a', '27.8.b'], rejectedWeight: 50.0, speciesCode: 'HKE' },
         { discardReason: 'DIM', faoZones: ['27.8.c'], rejectedWeight: 5.0, speciesCode: 'BLI' }
@@ -1220,12 +1241,14 @@ context('Side Window > Mission Form > Sea Control', () => {
           ],
           speciesOnboard: [
             {
-              declaredWeight: 471.2,
+              // The prefill net declared weight overrides the risk factor live weight (471.2).
+              declaredWeight: 400.5,
               faoZones: ['27.8.a', '27.8.b'],
               presentationCodes: ['WHL', 'GUT'],
               speciesCode: 'HKE'
             },
             {
+              // No declared weight in the prefill: the risk factor weight is kept.
               declaredWeight: 13.46,
               faoZones: ['27.8.c'],
               presentationCodes: ['WHL'],
@@ -1328,5 +1351,75 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait('@updateControl', { timeout: 8000 })
       .its('request.body.actionDatetimeUtc')
       .should('contain', controlDate.utcDateAsStringWithoutMs.slice(0, 10))
+  })
+
+  it('Should display the shared groups and current trip reportings as tags under the vessel search', () => {
+    fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter un contrôle en mer')
+
+    // -------------------------------------------------------------------------
+    // Real data: QUEUE DE POISSON (vessel id 117) has an effective control priority level of 4 and is
+    // not under charter, so it belongs to the shared "Segments P1" priority group. The endpoint is NOT
+    // stubbed here: the tag is built from the real backend response.
+    cy.intercept('GET', '/bff/v1/vessels/117').as('getRealControlledVessel')
+
+    cy.get('input[placeholder="Rechercher un navire..."]').type('queue de poisson').wait(250)
+    cy.getDataCy('VesselSearch-item').contains('QUEUE DE POISSON').click()
+
+    cy.wait('@getRealControlledVessel')
+
+    cy.getDataCy('mission-action-vessel-tags').should('exist')
+    cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Segments P1')
+
+    // -------------------------------------------------------------------------
+    // Stubbed data: change the vessel and stub the response to deterministically cover all tag variants
+    // (priority group, shared non-priority group and current trip reporting) with their tooltips.
+    cy.intercept('GET', '/bff/v1/vessels/2', {
+      body: {
+        externalReferenceNumber: 'TALK2ME',
+        flagState: 'FR',
+        groups: [
+          sharedGroup(101, 'Maintenance ERS à prévoir', '#1675f0', false),
+          sharedGroup(102, 'Plan cétacés - Dolphinfree', '#e1000f', true)
+        ],
+        internalReferenceNumber: 'U_W0NTFINDME',
+        ircs: 'QGDF',
+        tripReportings: [
+          {
+            createdBy: 'dummy@test.gouv.fr',
+            creationDate: '2024-01-01T00:00:00Z',
+            flagState: 'FR',
+            id: 4768,
+            isArchived: false,
+            isDeleted: false,
+            isIUU: false,
+            lastUpdateDate: '2024-01-01T00:00:00Z',
+            reportingDate: '2024-01-01T00:00:00Z',
+            type: 'INFRACTION_SUSPICION',
+            value: {
+              infractions: [],
+              title: 'Chalutage 3 milles'
+            }
+          }
+        ],
+        vesselId: 2,
+        vesselLength: 22,
+        vesselName: 'MALOTRU'
+      },
+      statusCode: 200
+    }).as('getStubbedControlledVessel')
+
+    cy.get('[aria-label="Vider le champ"]').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot').wait(250)
+    cy.contains('mark', 'MALOT').click()
+
+    cy.wait('@getStubbedControlledVessel')
+
+    cy.getDataCy('mission-action-vessel-tags').should('exist')
+    cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Plan cétacés - Dolphinfree')
+    cy.get('[title="Groupe du navire"]').should('contain', 'Maintenance ERS à prévoir')
+    cy.get('[title="Suspicion d\'infraction en cours sur la marée"]').should('contain', 'Chalutage 3 milles')
   })
 })

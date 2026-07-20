@@ -1,6 +1,11 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
-import fr.gouv.cnsp.monitorfish.domain.entities.alerts.*
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.AdministrativeAreaType
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
+import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 import java.time.ZonedDateTime
 

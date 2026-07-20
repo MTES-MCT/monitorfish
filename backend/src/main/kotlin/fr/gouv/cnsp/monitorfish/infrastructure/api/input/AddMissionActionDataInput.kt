@@ -1,8 +1,15 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.input
 
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.*
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import java.time.ZonedDateTime
 
 data class MissionActionInfractionDataInput(
@@ -52,24 +59,24 @@ data class AddMissionActionDataInput(
     var emitsAis: ControlCheck? = null,
     var vmsEmissionControlBeforeArrival: ControlCheck? = null,
     var portEntranceAndLandingAuthorized: ControlCheck? = null,
-    var logbookFilledPriorToControl: ControlCheck? = null,
+    var logbookOpenedPriorToControl: ControlCheck? = null,
     var logbookMatchesActivity: ControlCheck? = null,
     var licencesMatchActivity: ControlCheck? = null,
     var speciesWeightControlled: ControlCheck? = null,
     var speciesSizeControlled: ControlCheck? = null,
     var separateStowageOfPreservedSpecies: ControlCheck? = null,
     var propulsionEnginePowerControl: ControlCheck? = null,
-    var fishingLicencesMatchActivity: ControlCheck? = null,
+    var gangwayPresentAndCompliant: ControlCheck? = null,
+    var europeanFishingLicenceValid: ControlCheck? = null,
     var stowagePlanPresent: ControlCheck? = null,
     var onboardWeighingPermit: ControlCheck? = null,
     var weighingCertificateAndSystemsValid: ControlCheck? = null,
     var underSizedSeparateStowage: ControlCheck? = null,
     var underSizedSeparateRecording: ControlCheck? = null,
-    var minimumConservationReferenceSizeControlled: ControlCheck? = null,
-    var cratesWeighingSamplingControl: ControlCheck? = null,
+    var weightControlMethod: WeightControlMethod? = null,
     var approvedWeighingOperatorInformation: ControlCheck? = null,
     var holdControlledAfterUnloading: ControlCheck? = null,
-    var catchesWeighedAtLanding: ControlCheck? = null,
+    var weighingOperationsMonitoredByInspectors: ControlCheck? = null,
     var licencesAndLogbookObservations: String? = null,
     var infractions: List<MissionActionInfractionDataInput> = listOf(),
     var speciesObservations: String? = null,
@@ -101,7 +108,7 @@ data class AddMissionActionDataInput(
     var isSafetyEquipmentAndStandardsComplianceControl: Boolean? = null,
     var isSeafarersControl: Boolean? = null,
     var isINNControl: Boolean = false,
-    val isGangwayDeployed: Boolean? = null,
+    val isUnitBoarded: Boolean? = null,
 ) {
     fun toMissionAction() =
         MissionAction(
@@ -121,24 +128,24 @@ data class AddMissionActionDataInput(
             emitsAis = emitsAis,
             vmsEmissionControlBeforeArrival = vmsEmissionControlBeforeArrival,
             portEntranceAndLandingAuthorized = portEntranceAndLandingAuthorized,
-            logbookFilledPriorToControl = logbookFilledPriorToControl,
+            logbookOpenedPriorToControl = logbookOpenedPriorToControl,
             logbookMatchesActivity = logbookMatchesActivity,
             licencesMatchActivity = licencesMatchActivity,
             speciesWeightControlled = speciesWeightControlled,
             speciesSizeControlled = speciesSizeControlled,
             separateStowageOfPreservedSpecies = separateStowageOfPreservedSpecies,
             propulsionEnginePowerControl = propulsionEnginePowerControl,
-            fishingLicencesMatchActivity = fishingLicencesMatchActivity,
+            gangwayPresentAndCompliant = gangwayPresentAndCompliant,
+            europeanFishingLicenceValid = europeanFishingLicenceValid,
             stowagePlanPresent = stowagePlanPresent,
             onboardWeighingPermit = onboardWeighingPermit,
             weighingCertificateAndSystemsValid = weighingCertificateAndSystemsValid,
             underSizedSeparateStowage = underSizedSeparateStowage,
             underSizedSeparateRecording = underSizedSeparateRecording,
-            minimumConservationReferenceSizeControlled = minimumConservationReferenceSizeControlled,
-            cratesWeighingSamplingControl = cratesWeighingSamplingControl,
+            weightControlMethod = weightControlMethod,
             approvedWeighingOperatorInformation = approvedWeighingOperatorInformation,
             holdControlledAfterUnloading = holdControlledAfterUnloading,
-            catchesWeighedAtLanding = catchesWeighedAtLanding,
+            weighingOperationsMonitoredByInspectors = weighingOperationsMonitoredByInspectors,
             licencesAndLogbookObservations = licencesAndLogbookObservations,
             infractions = infractions.map { it.toInfraction() },
             speciesObservations = speciesObservations,
@@ -171,6 +178,6 @@ data class AddMissionActionDataInput(
             isSafetyEquipmentAndStandardsComplianceControl = isSafetyEquipmentAndStandardsComplianceControl,
             isSeafarersControl = isSeafarersControl,
             isINNControl = isINNControl,
-            isGangwayDeployed = isGangwayDeployed,
+            isUnitBoarded = isUnitBoarded,
         )
 }

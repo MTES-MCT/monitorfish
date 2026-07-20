@@ -14,7 +14,16 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.*
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.LastControlPeriod
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.Sharing
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupFilters
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselIdentity
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.ZoneFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository

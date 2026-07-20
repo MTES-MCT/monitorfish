@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.*
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationSubscriber
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.GetPriorNotificationSubscribers
+import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.UpdatePriorNotificationSubscriber
 import fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification.dtos.PriorNotificationSubscriber
 import fr.gouv.cnsp.monitorfish.fakers.FullControlUnitFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.PriorNotificationSubscriberDataInput
@@ -18,8 +20,10 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Import(
     MapperConfiguration::class,

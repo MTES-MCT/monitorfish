@@ -23,6 +23,7 @@ export namespace MissionAction {
   export import MissionActionType = MissionActionConstants.MissionActionType
   export import CompletionStatus = MissionActionConstants.CompletionStatus
   export import WireType = MissionActionConstants.WireType
+  export import WeightControlMethod = MissionActionConstants.WeightControlMethod
 
   export type FleetSegment = z.infer<typeof FleetSegmentSchema>
   export type GearControl = z.infer<typeof GearControlSchema>

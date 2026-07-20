@@ -16,13 +16,13 @@ import type { MissionAction } from '@features/Mission/missionAction.types'
 
 function makeSpecy(
   speciesCode: string,
-  weights: { controlledWeight?: number; declaredWeight?: number } = {}
+  overrides: { controlledWeight?: number; declaredWeight?: number; isNotLanded?: boolean } = {}
 ): MissionAction.SpeciesOnboardControl {
   return {
-    controlledWeight: weights.controlledWeight,
-    declaredWeight: weights.declaredWeight,
+    controlledWeight: overrides.controlledWeight,
+    declaredWeight: overrides.declaredWeight,
     faoZones: undefined,
-    isNotLanded: undefined,
+    isNotLanded: overrides.isNotLanded,
     nbFish: undefined,
     presentationCodes: undefined,
     speciesCode,
@@ -142,16 +142,30 @@ describe('getSpeciesEISRApplicability', () => {
   })
 
   describe('isUnderSizedSeparateRecordingApplicable', () => {
-    it('should be applicable for vessels >= 10m', () => {
-      expect(isUnderSizedSeparateRecordingApplicable(10)).toBe(true)
+    it('should be applicable for vessels >= 10m on sea controls', () => {
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD')], 10, false)).toBe(true)
     })
 
     it('should not be applicable for vessels < 10m', () => {
-      expect(isUnderSizedSeparateRecordingApplicable(9.9)).toBe(false)
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD')], 9.9, false)).toBe(false)
     })
 
     it('should be applicable when vessel length is unknown (conservative default)', () => {
-      expect(isUnderSizedSeparateRecordingApplicable(undefined)).toBe(true)
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD')], undefined, false)).toBe(true)
+    })
+
+    it('should not be applicable on land controls when no species is marked as not landed', () => {
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD')], 10, true)).toBe(false)
+      expect(isUnderSizedSeparateRecordingApplicable([], 10, true)).toBe(false)
+      expect(isUnderSizedSeparateRecordingApplicable(undefined, 10, true)).toBe(false)
+    })
+
+    it('should be applicable on land controls when a species is marked as not landed', () => {
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD', { isNotLanded: true })], 10, true)).toBe(true)
+    })
+
+    it('should not be applicable on land controls for vessels < 10m even with a not landed species', () => {
+      expect(isUnderSizedSeparateRecordingApplicable([makeSpecy('COD', { isNotLanded: true })], 9.9, true)).toBe(false)
     })
   })
 
@@ -159,7 +173,7 @@ describe('getSpeciesEISRApplicability', () => {
     it('should aggregate the three applicability flags', () => {
       const speciesOnboard = [makeSpecy('COD', { controlledWeight: 50 })]
 
-      expect(getSpeciesEISRApplicability(speciesOnboard, lookup, 13)).toStrictEqual({
+      expect(getSpeciesEISRApplicability(speciesOnboard, lookup, 13, false)).toStrictEqual({
         isSeparateStowageOfPreservedSpeciesApplicable: true,
         isUnderSizedSeparateRecordingApplicable: true,
         isUnderSizedSeparateStowageApplicable: true
@@ -168,9 +182,9 @@ describe('getSpeciesEISRApplicability', () => {
 
     it('should return not-applicable for separateStowageOfPreservedSpecies with no species and no vessel length', () => {
       // Callers must not invoke this before a vessel is selected — see DEFAULT_SPECIES_EISR_APPLICABILITY.
-      expect(getSpeciesEISRApplicability([], lookup, undefined).isSeparateStowageOfPreservedSpeciesApplicable).toBe(
-        false
-      )
+      expect(
+        getSpeciesEISRApplicability([], lookup, undefined, false).isSeparateStowageOfPreservedSpeciesApplicable
+      ).toBe(false)
     })
   })
 

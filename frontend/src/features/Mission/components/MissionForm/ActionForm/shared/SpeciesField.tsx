@@ -360,7 +360,7 @@ export function SpeciesField() {
                       <IconButton
                         accent={Accent.TERTIARY}
                         color={specyOnboard.isNotLanded ? THEME.color.blueGray : THEME.color.lightGray}
-                        Icon={Icon.CrossedFishery}
+                        Icon={Icon.VesselPro}
                         onClick={() => updateNotLandedSpecy(index)}
                         title={specyOnboard.isNotLanded ? 'Espèce non débarquée' : 'Espèce débarquée'}
                       />

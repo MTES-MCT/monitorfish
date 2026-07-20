@@ -52,7 +52,8 @@ function makeLandControlEIsrSpeciesSchema(isEISR: boolean) {
   return isEISR
     ? object({
         underSizedSeparateRecording: string().required(HIDDEN_ERROR),
-        minimumConservationReferenceSizeControlled: string().required(HIDDEN_ERROR),
+        speciesWeightControlled: string().required(HIDDEN_ERROR),
+        speciesSizeControlled: string().required(HIDDEN_ERROR),
         holdControlledAfterUnloading: string().required(HIDDEN_ERROR),
         weighingOperationsMonitoredByInspectors: string().required(HIDDEN_ERROR)
       })
@@ -200,13 +201,11 @@ export const LandControlFormLiveSchema = object({
 export function getLandControlFormCompletionSchema(isEISR: boolean) {
   return LandControlFormLiveSchema.concat(
     object({
-      // Obligations déclaratives et autorisations
       emitsVms: string().required(HIDDEN_ERROR),
       emitsAis: string().required(HIDDEN_ERROR),
       logbookMatchesActivity: string().required(HIDDEN_ERROR),
       licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-      // Inspection des espèces (legacy checks required only outside e-ISR, see makeNonEIsrLandSpeciesSchema)
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
       discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
@@ -221,7 +220,6 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
           infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)
         })
       ),
-      // Engins à bord
       gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Qualité du contrôle
@@ -252,20 +250,17 @@ export const SeaControlFormLiveSchema = object({
 export function getSeaControlFormCompletionSchema(isEISR: boolean) {
   return SeaControlFormLiveSchema.concat(
     object({
-      // Obligations déclaratives et autorisations
       emitsVms: string().required(HIDDEN_ERROR),
       emitsAis: string().required(HIDDEN_ERROR),
       logbookMatchesActivity: string().required(HIDDEN_ERROR),
       licencesMatchActivity: string().required(HIDDEN_ERROR),
 
-      // Espèces à bord
       speciesWeightControlled: string().required(HIDDEN_ERROR),
       speciesSizeControlled: string().required(HIDDEN_ERROR),
       separateStowageOfPreservedSpecies: string().required(HIDDEN_ERROR),
       speciesOnboard: array().of(makeEIsrSpeciesOnboardSchema(isEISR)),
       discardedSpecies: array().of(makeDiscardedSpeciesSchema(isEISR)),
 
-      // Engins à bord
       gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Quantités saisies

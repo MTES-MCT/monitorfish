@@ -59,7 +59,6 @@ export const dummyAction = {
   logbookMatchesActivity: undefined,
   logbookOpenedPriorToControl: undefined,
   longitude: -4.281934312813745,
-  minimumConservationReferenceSizeControlled: undefined,
   missionId: 123,
   numberOfVesselsFlownOver: undefined,
   observationsByUnit: undefined,

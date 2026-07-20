@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('21 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -57,7 +57,6 @@ context('Side Window > Mission Form > Land Control', () => {
     // Get the actual port for this test case
     cy.fill('Port de contrôle', 'Auray')
 
-    // Obligations déclaratives et autorisations
     // The propulsion power check is not displayed on land controls (forced to N/A); VMS / AIS are controlled.
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
@@ -89,7 +88,8 @@ context('Side Window > Mission Form > Land Control', () => {
     // species is marked as not landed (see the HKE toggle below).
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     // Pour les espèces débarquées
-    cy.fill('Taille minimale de référence de conservation contrôlée', 'Oui')
+    cy.fill('Poids des espèces vérifiés', 'Oui')
+    cy.fill('Taille des espèces vérifiées', 'Oui')
     // The weight control and approved weighing operator checks are hidden (forced to N/A) pending
     // clarification of the topic.
     cy.contains('Type de contrôle du poids').should('not.exist')
@@ -329,8 +329,6 @@ context('Side Window > Mission Form > Land Control', () => {
 
           longitude: null,
 
-          minimumConservationReferenceSizeControlled: 'YES',
-
           missionId: 1,
 
           numberOfVesselsFlownOver: null,
@@ -388,6 +386,10 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
 
           speciesQuantitySeized: 6289.5,
+
+          speciesSizeControlled: 'YES',
+
+          speciesWeightControlled: 'YES',
 
           stowagePlanPresent: 'NOT_APPLICABLE',
 

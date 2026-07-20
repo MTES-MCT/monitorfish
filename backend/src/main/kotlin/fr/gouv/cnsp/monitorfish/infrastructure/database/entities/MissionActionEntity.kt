@@ -124,9 +124,6 @@ class MissionActionEntity(
     @Column(name = "under_sized_separate_recording")
     @Enumerated(EnumType.STRING)
     val underSizedSeparateRecording: ControlCheck? = null,
-    @Column(name = "minimum_conservation_reference_size_controlled")
-    @Enumerated(EnumType.STRING)
-    val minimumConservationReferenceSizeControlled: ControlCheck? = null,
     @Column(name = "weight_control_method")
     @Enumerated(EnumType.STRING)
     val weightControlMethod: WeightControlMethod? = null,
@@ -254,7 +251,6 @@ class MissionActionEntity(
                 weighingCertificateAndSystemsValid = missionAction.weighingCertificateAndSystemsValid,
                 underSizedSeparateStowage = missionAction.underSizedSeparateStowage,
                 underSizedSeparateRecording = missionAction.underSizedSeparateRecording,
-                minimumConservationReferenceSizeControlled = missionAction.minimumConservationReferenceSizeControlled,
                 weightControlMethod = missionAction.weightControlMethod,
                 approvedWeighingOperatorInformation = missionAction.approvedWeighingOperatorInformation,
                 holdControlledAfterUnloading = missionAction.holdControlledAfterUnloading,
@@ -336,7 +332,6 @@ class MissionActionEntity(
             weighingCertificateAndSystemsValid = weighingCertificateAndSystemsValid,
             underSizedSeparateStowage = underSizedSeparateStowage,
             underSizedSeparateRecording = underSizedSeparateRecording,
-            minimumConservationReferenceSizeControlled = minimumConservationReferenceSizeControlled,
             weightControlMethod = weightControlMethod,
             approvedWeighingOperatorInformation = approvedWeighingOperatorInformation,
             holdControlledAfterUnloading = holdControlledAfterUnloading,

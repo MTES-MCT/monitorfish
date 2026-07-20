@@ -51,7 +51,6 @@ export const MissionActionSchema = z.strictObject({
   logbookMatchesActivity: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   logbookOpenedPriorToControl: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   longitude: numberOrUndefined,
-  minimumConservationReferenceSizeControlled: z.union([z.enum(MissionAction.ControlCheck), z.undefined()]),
   missionId: z.number(),
   numberOfVesselsFlownOver: numberOrUndefined,
   observationsByUnit: stringOrUndefined,

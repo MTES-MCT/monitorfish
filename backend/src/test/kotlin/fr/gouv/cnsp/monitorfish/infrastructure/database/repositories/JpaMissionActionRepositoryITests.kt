@@ -174,7 +174,6 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(loaded.vmsEmissionControlBeforeArrival).isEqualTo(ControlCheck.YES)
         assertThat(loaded.portEntranceAndLandingAuthorized).isEqualTo(ControlCheck.NO)
         // The land control species checks round-trip correctly
-        assertThat(loaded.minimumConservationReferenceSizeControlled).isEqualTo(ControlCheck.YES)
         assertThat(loaded.weightControlMethod).isEqualTo(WeightControlMethod.WEIGHING)
         assertThat(loaded.approvedWeighingOperatorInformation).isEqualTo(ControlCheck.NOT_APPLICABLE)
         assertThat(loaded.holdControlledAfterUnloading).isEqualTo(ControlCheck.YES)

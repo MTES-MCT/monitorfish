@@ -30,11 +30,8 @@ const LAND_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
     ),
     name: 'unloadedSection'
   },
-  {
-    isRequired: true,
-    label: 'Taille minimale de référence de conservation contrôlée',
-    name: 'minimumConservationReferenceSizeControlled'
-  },
+  { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
+  { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
   { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
   {
     isRequired: true,

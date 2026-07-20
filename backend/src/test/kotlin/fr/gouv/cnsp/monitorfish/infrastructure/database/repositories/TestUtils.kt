@@ -57,7 +57,6 @@ object TestUtils {
         weighingCertificateAndSystemsValid = ControlCheck.NOT_APPLICABLE,
         underSizedSeparateStowage = ControlCheck.YES,
         underSizedSeparateRecording = ControlCheck.NO,
-        minimumConservationReferenceSizeControlled = ControlCheck.YES,
         weightControlMethod = WeightControlMethod.WEIGHING,
         approvedWeighingOperatorInformation = ControlCheck.NOT_APPLICABLE,
         holdControlledAfterUnloading = ControlCheck.YES,

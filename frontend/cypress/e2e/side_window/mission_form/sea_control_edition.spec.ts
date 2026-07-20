@@ -22,10 +22,8 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.get('*[data-cy="action-list-item"]').click()
     cy.wait(500)
 
-    // Engins à bord
     cy.fill('Ajouter un engin', 'PTM')
 
-    // Espèces à bord
     cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegment')
     // Adding a species is now a two-step in-table flow: click the "Ajouter une espèce" row to append an
     // empty row (its species Select renders immediately), then pick the species in that Select.

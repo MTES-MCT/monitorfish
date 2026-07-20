@@ -40,7 +40,6 @@ data class MissionAction(
     val weighingCertificateAndSystemsValid: ControlCheck? = null,
     val underSizedSeparateStowage: ControlCheck? = null,
     val underSizedSeparateRecording: ControlCheck? = null,
-    val minimumConservationReferenceSizeControlled: ControlCheck? = null,
     val weightControlMethod: WeightControlMethod? = null,
     val approvedWeighingOperatorInformation: ControlCheck? = null,
     val holdControlledAfterUnloading: ControlCheck? = null,

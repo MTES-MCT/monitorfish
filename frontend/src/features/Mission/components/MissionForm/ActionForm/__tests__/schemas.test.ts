@@ -219,9 +219,9 @@ describe('ActionForm/schemas', () => {
     }
 
     // The land-specific species checks (two subsections), required only when e-ISR is enabled.
+    // speciesWeightControlled / speciesSizeControlled are already set in completionValuesWithoutEISR.
     const landEisrSpeciesChecks = {
       holdControlledAfterUnloading: MissionAction.ControlCheck.YES,
-      minimumConservationReferenceSizeControlled: MissionAction.ControlCheck.YES,
       underSizedSeparateRecording: MissionAction.ControlCheck.YES,
       weighingOperationsMonitoredByInspectors: MissionAction.ControlCheck.YES
     }

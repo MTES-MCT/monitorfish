@@ -47,7 +47,6 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   logbookMatchesActivity: undefined,
   logbookOpenedPriorToControl: undefined,
   longitude: undefined,
-  minimumConservationReferenceSizeControlled: undefined,
   numberOfVesselsFlownOver: undefined,
   onboardWeighingPermit: undefined,
   otherComments: undefined,

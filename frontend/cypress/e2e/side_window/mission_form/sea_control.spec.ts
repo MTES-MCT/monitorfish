@@ -129,7 +129,6 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
-    // Obligations déclaratives et autorisations
     cy.fill('Echelle de coupée présente et conforme', 'Oui')
     cy.fill('Bonne émission VMS', 'Oui')
     cy.fill('Bonne émission AIS', 'Non')
@@ -174,7 +173,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Maillage mesuré', 20, { index: 1 })
     cy.fill('MIS : autres mesures et dispositifs', 'Autres mesures.')
 
-    // Espèces à bord
     cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.fill('Taille des espèces vérifiées', 'Non')
     cy.fill('Arrimage séparé des espèces soumises à plan', 'Oui')
@@ -1167,14 +1165,12 @@ context('Side Window > Mission Form > Sea Control', () => {
       // Unit boarded field
       cy.contains('Accès au navire').should('not.exist')
 
-      // "Obligations déclaratives et autorisations de pêche" e-ISR fields
       cy.contains('Echelle de coupée présente et conforme').should('not.exist')
       cy.contains('Licence de pêche européenne valide').should('not.exist')
       cy.contains('Plan d’arrimage présent et conforme').should('not.exist')
       cy.contains('Autorisation pour la pesée à bord').should('not.exist')
       cy.contains('Certificat de pesée présent et systèmes de pesée à bord valides').should('not.exist')
 
-      // "Espèces à bord" e-ISR fields
       cy.contains("Arrimage séparé des poissons n'ayant pas la taille requise").should('not.exist')
       cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     }

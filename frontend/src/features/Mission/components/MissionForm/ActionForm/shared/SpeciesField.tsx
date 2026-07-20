@@ -56,6 +56,7 @@ const PRESENTATION_OPTIONS: Array<Option<string>> = Object.entries(LogbookSpecie
 // NOT_APPLICABLE literal.
 const LAND_CONTROL_NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = [
   'approvedWeighingOperatorInformation',
+  'speciesWeightControlled',
   'weightControlMethod'
 ]
 
@@ -100,7 +101,13 @@ export function SpeciesField() {
     })
     // Only trigger from values of LAND_CONTROL_NOT_APPLICABLE_FIELDS const
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLandControl, setFieldValue, values.approvedWeighingOperatorInformation, values.weightControlMethod])
+  }, [
+    isLandControl,
+    setFieldValue,
+    values.approvedWeighingOperatorInformation,
+    values.speciesWeightControlled,
+    values.weightControlMethod
+  ])
 
   /**
    * This is only used to re-compute fleet segments when a species is modified

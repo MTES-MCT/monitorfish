@@ -28,8 +28,9 @@ import {
   AddSpeciesButton,
   DeleteCell,
   RequiredAsterisk,
+  SelectValue,
   SpeciesTableWrapper,
-  StyledCellSelect,
+  StyledCheckPicker,
   StyledPickerTd,
   TdWithoutPaddingWhenActive
 } from './Species/speciesTable.styles'
@@ -190,16 +191,6 @@ export function SpeciesField() {
     helper.setValue(nextSpeciesOnboard)
   }
 
-  const setSpecyRowValue = (index: number, patch: Partial<MissionAction.SpeciesOnboardControl>) => {
-    if (!input.value) {
-      throw new FrontendError('`input.value` is undefined')
-    }
-
-    helper.setValue(
-      input.value.map((species, currentIndex) => (currentIndex === index ? { ...species, ...patch } : species))
-    )
-  }
-
   const updateNotLandedSpecy = (index: number) => {
     if (!input.value) {
       throw new FrontendError('`input.value` is undefined')
@@ -324,21 +315,25 @@ export function SpeciesField() {
                   {isEISREnabled && (
                     <StyledPickerTd $isActive={isActive}>
                       {isActive ? (
-                        <StyledCellSelect
+                        <StyledCheckPicker
                           $isHovered={isHovered}
                           cleanable={false}
                           disabled={isDisabled}
                           isLabelHidden
-                          isLight
                           label="Présentation"
                           name={`speciesOnboard[${index}].presentationCodes`}
-                          onChange={code => setSpecyRowValue(index, { presentationCodes: code ? [code] : undefined })}
                           onClose={() => handlePickerClose(index)}
                           onOpen={() => handlePickerOpen(index)}
                           options={PRESENTATION_OPTIONS}
                           popupWidth={220}
+                          renderValue={(_, items) =>
+                            items.length > 0 ? (
+                              <SelectValue>{items.map(item => item.value).join(', ')}</SelectValue>
+                            ) : (
+                              <></>
+                            )
+                          }
                           searchable
-                          value={specyOnboard.presentationCodes?.[0]}
                         />
                       ) : (
                         <Ellipsised>
@@ -354,7 +349,6 @@ export function SpeciesField() {
                       isDisabled={isDisabled}
                       isHovered={isHovered}
                       name={`speciesOnboard[${index}].faoZones`}
-                      onChange={zone => setSpecyRowValue(index, { faoZones: zone ? [zone] : undefined })}
                       onPickerClose={() => handlePickerClose(index)}
                       onPickerOpen={() => handlePickerOpen(index)}
                       options={faoAreasAsOptions}

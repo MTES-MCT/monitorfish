@@ -181,16 +181,16 @@ context('Side Window > Mission Form > Sea Control', () => {
     // FAO zones are required on every catch for completion. The risk factor prefills two catches HKE (row 0)
     // and BLI (row 1); logbook discards live in the dedicated "Rejets" card, so NEP/BIB are not rows in
     // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row, then wait for
-    // its editors to actually mount (`.Field-Select` should('exist')) before filling: row activation is
+    // its editors to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
     // debounced (hover-intent delay), so without this wait `cy.fill` runs before the row activates and fills
     // whichever row is still active. `mouseout` afterwards so its editors collapse (only one row active at a time).
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-Select').should('exist')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-Select').should('exist')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
     // Add COD: click the in-table "Ajouter une espèce" row to append an empty species (index 2), then pick
@@ -203,12 +203,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     // are freshly opened (empty), so no `.clear()` is needed. Présentation/Zone are filled by label while
     // only the hovered row's editor is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-Select').should('exist')
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
     cy.get('[id="speciesOnboard[2].controlledWeight"]').type('20', { force: true })
     cy.get('[id="speciesOnboard[2].underSizedWeight"]').type('5', { force: true })
-    cy.fill('Présentation', 'FIL - En filets')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.fill('Présentation', ['FIL - En filets'])
+    cy.fill('Zone de pêche', ['27.8.b'])
     // Stop hovering so the catch-row editors collapse, leaving only the "Rejets" card zones in the DOM.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
@@ -221,12 +221,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une espèce rejetée')
     pickHoverEditSpecies('discarded-species-row-2', 'COD')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-Select').should('exist')
+    cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Nature du rejet', 'RET - espèces interdites')
     cy.get('[id="discardedSpecies[2].rejectedWeight"]').type('2', { force: true })
-    // The catch-row zone editors collapsed with the "Ajouter une espèce rejetée" click, so the hovered
-    // discard row holds the only mounted "Zone de pêche" select (no index needed).
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.fill('Zone de pêche', ['27.8.b'], { index: 1 })
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseout', { force: true })
 
     // This should trigger a computation of the fleet segment

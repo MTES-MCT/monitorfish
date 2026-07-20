@@ -96,36 +96,36 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Suivi des opérations de pesée par les inspecteurs', 'Non')
     // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their editors on row hover; non-hovered rows
-    // show plain text. Hover a row, then wait for its editors to actually mount (`.Field-Select`
+    // show plain text. Hover a row, then wait for its editors to actually mount (`.Field-CheckPicker`
     // should('exist')) before filling: row activation is debounced (hover-intent delay), so without this
     // wait `cy.fill` runs before the row activates and fills whichever row is still active. Weight inputs
     // are queried by id (not `cy.fill`) because each edit fires an async fleet-segment recompute that
     // remounts the field and detaches a cached `cy.fill` element. Présentation/Zone are filled by label
     // while only the hovered row's editor is mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-Select').should('exist')
+    cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
     // HKE is a landed catch, so its controlled-weight field is labelled "Pesée". Fill it, then mark the
     // species as not landed via the "Espèce débarquée" toggle (the weight value is kept).
     cy.fill('Pesée', '500')
     cy.clickButton('Espèce débarquée')
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('10', { force: true })
-    cy.fill('Présentation', 'WHL - Entier')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.fill('Présentation', ['WHL - Entier'])
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-Select').should('exist')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.get('[data-cy="species-onboard-row-1"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-Select').should('exist')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseout', { force: true })
 
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseover', { force: true })
-    cy.get('[data-cy="species-onboard-row-3"]').find('.Field-Select').should('exist')
-    cy.fill('Zone de pêche', '27.8.b')
+    cy.get('[data-cy="species-onboard-row-3"]').find('.Field-CheckPicker').should('exist')
+    cy.fill('Zone de pêche', ['27.8.b'])
     // Stop hovering so the catch-row editors collapse.
     // React derives `onMouseLeave` from the native `mouseout` event, so trigger `mouseout` (not `mouseleave`).
     cy.get('[data-cy="species-onboard-row-3"]').trigger('mouseout', { force: true })

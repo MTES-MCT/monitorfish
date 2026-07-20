@@ -73,18 +73,6 @@ export function DiscardedSpeciesField() {
     )
   }
 
-  const setFaoZone = (index: number, zone: string | undefined) => {
-    if (!input.value) {
-      throw new FrontendError('`input.value` is undefined')
-    }
-
-    helper.setValue(
-      input.value.map((discard, currentIndex) =>
-        currentIndex === index ? { ...discard, faoZones: zone ? [zone] : undefined } : discard
-      )
-    )
-  }
-
   const removeDiscard = (index: number) => {
     if (!input.value) {
       throw new FrontendError('`input.value` is undefined')
@@ -197,7 +185,6 @@ export function DiscardedSpeciesField() {
                     isDisabled={isDisabled}
                     isHovered={isHovered}
                     name={`discardedSpecies[${index}].faoZones`}
-                    onChange={zone => setFaoZone(index, zone)}
                     onPickerClose={() => handlePickerClose(index)}
                     onPickerOpen={() => handlePickerOpen(index)}
                     options={faoAreasAsOptions}

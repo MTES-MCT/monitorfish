@@ -4,9 +4,10 @@ import { type ReactNode } from 'react'
 import {
   Kg,
   QuantityWrapper,
+  SelectValue,
   SpeciesName,
   SpeciesRow,
-  StyledCellSelect,
+  StyledCheckPicker,
   StyledPickerTd,
   StyledSpeciesSelect,
   TdWithoutPaddingWhenActive,
@@ -135,12 +136,9 @@ type FaoZonesCellProps = Readonly<{
   isDisabled: boolean
   isHovered: boolean
   name: string
-  onChange: (zone: string | undefined) => void
   onPickerClose: () => void
   onPickerOpen: () => void
   options: Array<Option<string>>
-  // The value stays an array: rows prefilled from the logbook may hold several zones,
-  // displayed joined when the row is inactive; a user change collapses it to a single zone.
   value: string[] | undefined
 }>
 export function FaoZonesCell({
@@ -148,7 +146,6 @@ export function FaoZonesCell({
   isDisabled,
   isHovered,
   name,
-  onChange,
   onPickerClose,
   onPickerOpen,
   options,
@@ -157,22 +154,22 @@ export function FaoZonesCell({
   return (
     <StyledPickerTd $isActive={isActive}>
       {isActive ? (
-        <StyledCellSelect
+        <StyledCheckPicker
           $isHovered={isHovered}
           cleanable={false}
           disabled={isDisabled}
           isLabelHidden
-          isLight
           isRequired
           label="Zone de pêche"
           name={name}
-          onChange={onChange}
           onClose={onPickerClose}
           onOpen={onPickerOpen}
           options={options}
           popupWidth={150}
+          renderValue={(_, items) =>
+            items.length > 0 ? <SelectValue>{items.map(item => item.label).join(', ')}</SelectValue> : <></>
+          }
           searchable
-          value={value?.[0]}
         />
       ) : (
         <Ellipsised>{value?.length ? value.join(', ') : '-'}</Ellipsised>

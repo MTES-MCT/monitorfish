@@ -15,5 +15,5 @@ SELECT DISTINCT ON (mmsi)
     ircs,
     length
 FROM ais_positions_hourly
-WHERE date_time >= NOW() - INTERVAL '6 hours'
+WHERE bucket >= NOW() - INTERVAL '6 hours'
 ORDER BY mmsi, date_time DESC;

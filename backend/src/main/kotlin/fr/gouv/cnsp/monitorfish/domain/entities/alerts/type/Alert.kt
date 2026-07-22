@@ -15,6 +15,7 @@ class Alert(
     val alertId: Int? = null,
     val name: String,
     val description: String? = null,
+    val depth: Double? = null,
 ) {
     init {
         if (this.type == AlertType.POSITION_ALERT) {

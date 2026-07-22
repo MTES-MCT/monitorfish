@@ -43,6 +43,7 @@ const Header = styled.span`
 const Chart = styled.div`
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 `
 
 const Bar = styled.div<{

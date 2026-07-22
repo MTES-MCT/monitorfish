@@ -764,11 +764,6 @@
       "count": 6
     }
   },
-  "src/features/Vessel/components/VesselSidebar/components/VesselProfile/__tests__/utils.test.ts": {
-    "@typescript-eslint/require-await": {
-      "count": 1
-    }
-  },
   "src/features/Vessel/layers/utils/utils.ts": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 4

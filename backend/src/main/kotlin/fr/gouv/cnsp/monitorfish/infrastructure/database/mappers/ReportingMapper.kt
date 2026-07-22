@@ -71,6 +71,7 @@ object ReportingMapper {
                         alertId = alertValue.alertId,
                         name = alertValue.name,
                         alertDescription = alertValue.description,
+                        depth = alertValue.depth,
                     )
                 }
 
@@ -207,6 +208,7 @@ object ReportingMapper {
                     alertId = reporting.alertId,
                     name = reporting.name,
                     description = reporting.alertDescription,
+                    depth = reporting.depth,
                 )
 
             is Reporting.InfractionSuspicion ->

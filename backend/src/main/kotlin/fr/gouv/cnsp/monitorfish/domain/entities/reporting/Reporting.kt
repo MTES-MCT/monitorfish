@@ -87,6 +87,7 @@ sealed class Reporting {
         val alertId: Int? = null,
         val name: String,
         val alertDescription: String? = null,
+        val depth: Double? = null,
     ) : Reporting() {
         init {
             if (this.alertType == AlertType.POSITION_ALERT) {

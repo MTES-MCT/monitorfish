@@ -35,6 +35,7 @@ import { getDate } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
+import type { RowSelectionState } from '@tanstack/react-table'
 
 type VesselGroupRowProps = {
   isFromUrl: boolean
@@ -58,6 +59,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
   const [isDeleteConfirmationModalOpen, setIsDeleteConfirmationModalOpen] = useState<boolean>(false)
   const [isEditDynamicVesselGroupOpened, setIsEditDynamicVesselGroupOpened] = useState(false)
   const [isEditFixedVesselGroupOpened, setIsEditFixedVesselGroupOpened] = useState(false)
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
   const handleDeleteVesselGroup = () => {
     if (vesselGroupWithVessels.group.type === GroupType.HARDCODED) {
@@ -122,6 +124,12 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     const date = new Date()
     const fileName = `${vesselGroupWithVessels.group.name}_${getDate(date.toISOString())}`
 
+    const selectedVesselFeatureIds = Object.keys(rowSelection).filter(vesselFeatureId => rowSelection[vesselFeatureId])
+    const vesselsToDownload =
+      selectedVesselFeatureIds.length > 0
+        ? vesselGroupWithVessels.vessels.filter(vessel => selectedVesselFeatureIds.includes(vessel.vesselFeatureId))
+        : vesselGroupWithVessels.vessels
+
     trackEvent({
       action: "Téléchargement d'un groupe de navire",
       category: 'VESSEL_GROUP',
@@ -129,7 +137,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     })
     downloadAsCsv(
       fileName,
-      vesselGroupWithVessels.vessels as Omit<Vessel.ActiveVesselEmittingPosition, 'id'>[],
+      vesselsToDownload as Omit<Vessel.ActiveVesselEmittingPosition, 'id'>[],
       VESSEL_LIST_CSV_MAP_BASE
     )
   }
@@ -180,7 +188,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               <Icon.CircleFilled color={vesselGroupWithVessels.group.color} size={16} />
             </CircleWrapper>
           )}
-          {vesselGroupWithVessels.group.name}
+          <GroupName>{vesselGroupWithVessels.group.name}</GroupName>
           <ChevronIcon $isOpen={isOpen} color={THEME.color.slateGray} />
           {isPriority && (
             <StyledTag borderColor={MONITORFISH_THEME.color.crimsonCarrot} data-cy="vessel-group-priority-tag">
@@ -274,6 +282,8 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
               isFixedGroup={vesselGroupWithVessels.group.type === GroupType.FIXED}
               isFromUrl={isFromUrl}
               isPinned={isPinned}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
               vesselGroupId={vesselGroupWithVessels.group.id}
               vessels={vesselGroupWithVessels.vessels}
             />
@@ -375,11 +385,16 @@ const Row = styled.div`
   font-size: 16px;
   padding: 8px 0 8px 0;
   user-select: none;
-  text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 500;
   cursor: pointer;
   border-bottom: 1px solid ${p => p.theme.color.lightGray};
+`
+
+const GroupName = styled.span`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const Separator = styled.span`

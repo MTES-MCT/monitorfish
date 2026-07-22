@@ -24,8 +24,6 @@ export function FormikCirclePicker() {
           '#8389f7',
           '#af6f1b',
           '#e0876c',
-          '#eabd00',
-          '#fc4c0d',
           '#0099A5',
           '#949C00',
           '#EA57CD',

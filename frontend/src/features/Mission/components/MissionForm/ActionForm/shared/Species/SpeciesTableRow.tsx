@@ -33,7 +33,8 @@ export function SpeciesTableRow({ activation, children, dataCy, index, isHovered
       data-cy={dataCy}
       onBlurCapture={event => activation.handleRowBlur(index, event)}
       onFocusCapture={event => activation.handleRowFocus(index, event)}
-      onMouseEnter={() => activation.handleRowMouseEnter(index)}
+      onMouseDown={() => activation.activateRowNow(index)}
+      onMouseEnter={event => activation.handleRowMouseEnter(index, event)}
       onMouseLeave={() => activation.handleRowMouseLeave(index)}
     >
       {children}
@@ -102,25 +103,41 @@ export function SpeciesSelectCell({
 }
 
 type WeightCellProps = Readonly<{
+  clearFocusRequest?: (() => void) | undefined
+  focusRequestId?: string | undefined
   isActive: boolean
   isDisabled: boolean
   isHovered: boolean
   label: string
   name: string
+  onNavigateRow?: ((direction: 'up' | 'down') => void) | undefined
   value: number | undefined
 }>
-export function WeightCell({ isActive, isDisabled, isHovered, label, name, value }: WeightCellProps) {
+export function WeightCell({
+  clearFocusRequest,
+  focusRequestId,
+  isActive,
+  isDisabled,
+  isHovered,
+  label,
+  name,
+  onNavigateRow,
+  value
+}: WeightCellProps) {
   return (
     <TdWithoutPaddingWhenActive $isActive={isActive}>
       <QuantityWrapper>
         {isActive ? (
           <StyledWeightInput
             $isHovered={isHovered}
+            clearFocusRequest={clearFocusRequest}
             disabled={isDisabled}
+            focusRequestId={focusRequestId}
             isLabelHidden
             isLight
             label={label}
             name={name}
+            onNavigateRow={onNavigateRow}
           />
         ) : (
           <Weight>{value ?? '-'}</Weight>

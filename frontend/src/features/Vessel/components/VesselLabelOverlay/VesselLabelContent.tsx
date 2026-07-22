@@ -111,7 +111,7 @@ export function VesselLabelContent({
                           key={vesselGroup.id}
                           color={vesselGroup.color}
                           data-cy="vessel-label-group"
-                          size={vesselGroup.isPriorityGroup ? 14 : 12}
+                          size={vesselGroup.isPriorityGroup ? 15 : 12}
                           title={vesselGroup.name}
                         />
                       )

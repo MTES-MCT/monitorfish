@@ -1,6 +1,6 @@
 import { TextInput } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 /**
@@ -13,15 +13,29 @@ import styled from 'styled-components'
  */
 type WeightInputProps = Readonly<{
   className?: string
+  clearFocusRequest?: (() => void) | undefined
   disabled?: boolean
+  focusRequestId?: string | undefined
   isLabelHidden?: boolean
   isLight?: boolean
   label: string
   name: string
+  onNavigateRow?: ((direction: 'up' | 'down') => void) | undefined
 }>
-export function WeightInput({ className, disabled, isLabelHidden, isLight, label, name }: WeightInputProps) {
+export function WeightInput({
+  className,
+  clearFocusRequest,
+  disabled,
+  focusRequestId,
+  isLabelHidden,
+  isLight,
+  label,
+  name,
+  onNavigateRow
+}: WeightInputProps) {
   const [field, , helper] = useField<number | undefined>(name)
   const [draft, setDraft] = useState<string>(field.value == null ? '' : String(field.value))
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // Resync the draft when the committed value changes from the outside (reset, prefill, recompute),
   // but preserve in-progress typing when it already represents the same number (e.g. "471." → 471).
@@ -30,10 +44,28 @@ export function WeightInput({ className, disabled, isLabelHidden, isLight, label
     setDraft(prev => (prev.trim() !== '' && Number(prev) === field.value ? prev : committed))
   }, [field.value])
 
+  // Claims a pending row-navigation focus request once mounted, instead of the caller polling for the
+  // element. Uses its own `inputRef` rather than `document.getElementById`: the mission form can be
+  // portaled into the side window's popup, where `document` would still refer to the main window.
+  useEffect(() => {
+    if (focusRequestId !== name) {
+      return
+    }
+
+    inputRef.current?.focus()
+    inputRef.current?.select()
+
+    clearFocusRequest?.()
+  }, [clearFocusRequest, focusRequestId, name])
+
   return (
     <TextInput
+      // Chrome's per-field autofill dropdown intercepts ArrowUp/ArrowDown before `onKeyDown` below sees
+      // them, breaking row navigation (Firefox doesn't do this) — `off` keeps it from appearing.
+      autoComplete="off"
       className={className ?? ''}
       disabled={disabled}
+      inputRef={inputRef}
       isLabelHidden={isLabelHidden}
       isLight={isLight}
       label={label}
@@ -43,6 +75,14 @@ export function WeightInput({ className, disabled, isLabelHidden, isLight, label
         const normalized = nextValue?.replace(',', '.').trim()
         const parsed = normalized ? Number(normalized) : undefined
         helper.setValue(parsed === undefined || Number.isNaN(parsed) ? undefined : parsed)
+      }}
+      onKeyDown={event => {
+        if (!onNavigateRow || (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')) {
+          return
+        }
+
+        event.preventDefault()
+        onNavigateRow(event.key === 'ArrowUp' ? 'up' : 'down')
       }}
       value={draft}
     />

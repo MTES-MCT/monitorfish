@@ -18,22 +18,33 @@ import { TableBodyEmptyData } from './TableBodyEmptyData'
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 
 import type { DynamicVesselGroupFilter } from '@features/VesselGroup/types'
+import type { OnChangeFn, RowSelectionState } from '@tanstack/react-table'
 
 type VesselTableProps = Readonly<{
   filters: DynamicVesselGroupFilter | undefined
   isFixedGroup: boolean
   isFromUrl: boolean
   isPinned: boolean
+  rowSelection: RowSelectionState
+  setRowSelection: OnChangeFn<RowSelectionState>
   vesselGroupId: number
   vessels: Vessel.ActiveVessel[]
 }>
 
-export function VesselTable({ filters, isFixedGroup, isFromUrl, isPinned, vesselGroupId, vessels }: VesselTableProps) {
+export function VesselTable({
+  filters,
+  isFixedGroup,
+  isFromUrl,
+  isPinned,
+  rowSelection,
+  setRowSelection,
+  vesselGroupId,
+  vessels
+}: VesselTableProps) {
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const searchQuery = useMainAppSelector(state => state.vesselGroupList.searchQuery)
   const [debouncedSearchQuery] = useDebounce(searchQuery, 250)
 
-  const [rowSelection, setRowSelection] = useState({})
   const [isInitialRender, setIsInitialRender] = useState(true)
 
   const isBodyEmptyDataVisible = !isInitialRender && !!vessels && vessels.length === 0

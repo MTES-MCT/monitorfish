@@ -105,8 +105,7 @@ context('Side Window > Mission Form > Action List', () => {
           unitWithoutOmegaGauge: false,
           userTrigram: 'JKL',
           vesselId: 2,
-          vesselName: 'MALOTRU',
-          vesselTargeted: 'YES'
+          vesselName: 'MALOTRU'
         }
       },
       5

@@ -11,22 +11,66 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Checkbox, FormikSelect, FormikTextInput, Icon, Tag, THEME, useNewWindow } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useFormikContext } from 'formik'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActionFormikUsecases'
 
 import type { MissionActionFormValues } from '../../types'
+import type {
+  MissionActionReporting,
+  MissionActionVesselGroup
+} from '@features/Mission/schemas/MissionActionSnapshotSchema'
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
+type ControlledVesselGroup = Vessel.ControlledVessel['groups'][number]
+type ControlledVesselReporting = Vessel.ControlledVessel['tripReportings'][number]
+
+const toVesselGroupSnapshot = (group: ControlledVesselGroup): MissionActionVesselGroup => ({
+  color: group.color,
+  id: group.id,
+  isPriorityGroup: isPriorityGroup(group),
+  name: group.name,
+  type: group.type
+})
+
+const toReportingSnapshot = (reporting: ControlledVesselReporting): MissionActionReporting => ({
+  id: reporting.id,
+  threats:
+    reporting.type === ReportingType.INFRACTION_SUSPICION
+      ? reporting.value.infractions.map(infraction => ({
+          natinfCode: infraction.natinfCode,
+          threat: infraction.threat,
+          threatCharacterization: infraction.threatCharacterization
+        }))
+      : [],
+  title: reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title,
+  type: reporting.type
+})
+
 export function VesselField() {
-  const { errors, setValues, values } = useFormikContext<MissionActionFormValues>()
+  const { errors, setFieldValue, setValues, values } = useFormikContext<MissionActionFormValues>()
   const { updateFieldsControlledByVessel } = useGetMissionActionFormikUsecases()
   const dispatch = useMainAppDispatch()
 
   const { newWindowContainerRef } = useNewWindow()
 
   const { data: vessel, isFetching } = useGetVesselQuery(values.vesselId ?? skipToken)
+
+  // Holds the id of a vessel just selected by the user, so re-opening a saved control does not
+  // overwrite its stored snapshot with a live re-fetch.
+  const snapshotPendingVesselIdRef = useRef<number | undefined>(undefined)
+
+  useEffect(() => {
+    if (!vessel || snapshotPendingVesselIdRef.current !== vessel.vesselId) {
+      return
+    }
+
+    void setFieldValue('vesselGroups', vessel.groups.map(toVesselGroupSnapshot))
+    void setFieldValue('tripReportings', vessel.tripReportings.map(toReportingSnapshot))
+    snapshotPendingVesselIdRef.current = undefined
+  }, [vessel, setFieldValue])
 
   const defaultValue = (function () {
     if (!values.vesselId || !values.flagState) {
@@ -61,13 +105,16 @@ export function VesselField() {
     }
     const identity = nextVessel as Partial<Vessel.VesselIdentity> | undefined
     if (!identity) {
-      setValues({
+      snapshotPendingVesselIdRef.current = undefined
+      void setValues({
         ...values,
         districtCode: undefined,
         externalReferenceNumber: undefined,
         flagState: undefined,
         internalReferenceNumber: undefined,
         ircs: undefined,
+        tripReportings: [],
+        vesselGroups: [],
         vesselId: undefined,
         vesselName: undefined
       })
@@ -80,13 +127,21 @@ export function VesselField() {
       return
     }
 
-    setValues({
+    // When the vessel is already loaded (re-selecting the same one), the query won't re-emit, so
+    // snapshot it now; otherwise defer to the effect once the query resolves.
+    const isUnknownVessel = identity.vesselId === UNKNOWN_VESSEL.vesselId
+    const isAlreadyLoaded = !isUnknownVessel && vessel?.vesselId === identity.vesselId
+    snapshotPendingVesselIdRef.current = isUnknownVessel || isAlreadyLoaded ? undefined : identity.vesselId
+
+    void setValues({
       ...values,
       districtCode: identity.districtCode,
       externalReferenceNumber: identity.externalReferenceNumber,
       flagState: identity.flagState,
       internalReferenceNumber: identity.internalReferenceNumber,
       ircs: identity.ircs,
+      tripReportings: isAlreadyLoaded && vessel ? vessel.tripReportings.map(toReportingSnapshot) : [],
+      vesselGroups: isAlreadyLoaded && vessel ? vessel.groups.map(toVesselGroupSnapshot) : [],
       vesselId: identity.vesselId,
       vesselName: identity.vesselName
     })
@@ -96,7 +151,7 @@ export function VesselField() {
       internalReferenceNumber: identity.internalReferenceNumber ?? undefined,
       vesselId: identity.vesselId ?? undefined
     }
-    updateFieldsControlledByVessel(valuesWithVessel)
+    void updateFieldsControlledByVessel(valuesWithVessel)
   }
 
   const handleIsVesselUnknownChange = (isChecked: boolean | undefined) => {
@@ -110,14 +165,16 @@ export function VesselField() {
   }
 
   const handleVesselLinkClick = (displayedVessel: Vessel.VesselIdentity) => {
-    dispatch(showVessel(displayedVessel, false))
+    void dispatch(showVessel(displayedVessel, false))
   }
 
-  const sortedGroups = [...(vessel?.groups ?? [])].sort(
-    (groupA, groupB) => Number(isPriorityGroup(groupB)) - Number(isPriorityGroup(groupA))
+  // Read from the persisted snapshot, not the live query, so a saved control keeps showing the
+  // groups and reportings as they were at the moment of control.
+  const sortedGroups = [...(values.vesselGroups ?? [])].sort(
+    (groupA, groupB) => Number(groupB.isPriorityGroup) - Number(groupA.isPriorityGroup)
   )
-  const tripReportings = vessel?.tripReportings ?? []
-  const hasTags = !isFetching && (sortedGroups.length > 0 || tripReportings.length > 0)
+  const tripReportings = values.tripReportings ?? []
+  const hasTags = sortedGroups.length > 0 || tripReportings.length > 0
 
   return (
     <>
@@ -186,9 +243,9 @@ export function VesselField() {
                 key={`group-${group.id}`}
                 backgroundColor={THEME.color.white}
                 color={THEME.color.gunMetal}
-                Icon={isPriorityGroup(group) ? Icon.Priority : Icon.CircleFilled}
+                Icon={group.isPriorityGroup ? Icon.Priority : Icon.CircleFilled}
                 iconColor={group.color}
-                title={isPriorityGroup(group) ? 'Groupe prioritaire du navire' : 'Groupe du navire'}
+                title={group.isPriorityGroup ? 'Groupe prioritaire du navire' : 'Groupe du navire'}
                 withCircleIcon
               >
                 {group.name}
@@ -203,7 +260,7 @@ export function VesselField() {
                 iconColor={THEME.color.maximumRed}
                 title="Suspicion d'infraction en cours sur la marée"
               >
-                {reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title}
+                {reporting.title}
               </StyledTag>
             ))}
           </TagsBar>

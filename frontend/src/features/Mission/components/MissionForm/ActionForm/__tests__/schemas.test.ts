@@ -137,8 +137,7 @@ describe('ActionForm/schemas', () => {
       speciesSizeControlled: MissionAction.ControlCheck.YES,
       speciesWeightControlled: MissionAction.ControlCheck.YES,
       userTrigram: 'ABC',
-      vesselId: 1,
-      vesselTargeted: MissionAction.ControlCheck.YES
+      vesselId: 1
     }
 
     const eisrFields = {
@@ -199,8 +198,7 @@ describe('ActionForm/schemas', () => {
       speciesSizeControlled: MissionAction.ControlCheck.YES,
       speciesWeightControlled: MissionAction.ControlCheck.YES,
       userTrigram: 'ABC',
-      vesselId: 1,
-      vesselTargeted: MissionAction.ControlCheck.YES
+      vesselId: 1
     }
 
     // e-ISR fields shared with the sea control.

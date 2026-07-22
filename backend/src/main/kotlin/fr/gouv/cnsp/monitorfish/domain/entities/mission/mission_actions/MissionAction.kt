@@ -59,12 +59,14 @@ data class MissionAction(
     val portLocode: String? = null,
     // This field is only used when fetching missions
     var portName: String? = null,
-    val vesselTargeted: ControlCheck? = null,
+    val isPrioritized: Boolean = false,
     val seizureAndDiversionComments: String? = null,
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesOnboardControl> = listOf(),
     val discardedSpecies: List<DiscardedSpeciesControl> = listOf(),
+    val vesselGroups: List<MissionActionVesselGroup> = listOf(),
+    val tripReportings: List<MissionActionReporting> = listOf(),
     val isFromPoseidon: Boolean,
     val isLastHaul: Boolean = false,
     /**
@@ -112,6 +114,12 @@ data class MissionAction(
             }
         }
     }
+
+    /**
+     * A control targets a prioritized vessel when, at the moment of control, the vessel belonged to a
+     * priority group or had a reporting opened during its current trip. Derived from the snapshot.
+     */
+    fun computeIsPrioritized(): Boolean = vesselGroups.any { it.isPriorityGroup } || tripReportings.isNotEmpty()
 
     fun containsNoInfractions(): Boolean = infractions.isEmpty()
 

@@ -12,7 +12,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearCont
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import java.time.ZonedDateTime
@@ -115,9 +117,11 @@ data class MissionActionDataOutput(
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesOnboardControl> = listOf(),
     val discardedSpecies: List<DiscardedSpeciesControl> = listOf(),
+    val vesselGroups: List<MissionActionVesselGroup> = listOf(),
+    val tripReportings: List<MissionActionReporting> = listOf(),
     val controlUnits: List<LegacyControlUnit> = listOf(),
     val userTrigram: String,
-    val vesselTargeted: ControlCheck? = null,
+    val isPrioritized: Boolean = false,
     val hasSomeGearsSeized: Boolean,
     val hasSomeSpeciesSeized: Boolean,
     val speciesQuantitySeized: Int? = null,
@@ -199,9 +203,11 @@ data class MissionActionDataOutput(
             gearOnboard = missionAction.gearOnboard,
             speciesOnboard = missionAction.speciesOnboard,
             discardedSpecies = missionAction.discardedSpecies,
+            vesselGroups = missionAction.vesselGroups,
+            tripReportings = missionAction.tripReportings,
             controlUnits = missionAction.controlUnits,
             userTrigram = missionAction.userTrigram,
-            vesselTargeted = missionAction.vesselTargeted,
+            isPrioritized = missionAction.isPrioritized,
             hasSomeGearsSeized = missionAction.hasSomeGearsSeized,
             hasSomeSpeciesSeized = missionAction.hasSomeSpeciesSeized,
             speciesQuantitySeized = missionAction.speciesQuantitySeized,

@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -166,7 +166,6 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Autres observations', 'Une autre observation.')
 
     // Qualité du contrôle
-    cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
     cy.fill('Last haul effectué', 'Oui')
@@ -198,23 +197,14 @@ context('Side Window > Mission Form > Land Control', () => {
             { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 5, speciesCode: 'NEP' },
             { discardReason: 'DIM', faoZones: ['27.8.a'], rejectedWeight: 3, speciesCode: 'BIB' }
           ],
-
           districtCode: 'AY',
-
           emitsAis: 'NO',
-
           emitsVms: 'YES',
-
           europeanFishingLicenceValid: 'NO',
-
           externalReferenceNumber: 'DONTSINK',
-
           facade: null,
-
           faoAreas: ['27.8.b', '27.8.c'],
-
           flagState: 'FR',
-
           gearOnboard: [
             {
               comments: null,
@@ -237,15 +227,10 @@ context('Side Window > Mission Form > Land Control', () => {
               hasUncontrolledMesh: false
             }
           ],
-
           hasSomeGearsSeized: true,
-
           hasSomeSpeciesSeized: true,
-
           holdControlledAfterUnloading: 'YES',
-
           id: 2,
-
           infractions: [
             {
               comments: 'Une observation sur l’infraction déclarative.',
@@ -311,45 +296,26 @@ context('Side Window > Mission Form > Land Control', () => {
               ]
             }
           ],
-
           internalReferenceNumber: 'FAK000999999',
-
           ircs: 'CALLME',
-
           isLastHaul: true,
-
+          isPrioritized: false,
           latitude: null,
-
           licencesAndLogbookObservations: 'Une observation hors infraction sur les obligations déclaaratives.',
-
           licencesMatchActivity: 'NO',
-
           logbookMatchesActivity: 'NOT_APPLICABLE',
-
           longitude: null,
-
           missionId: 1,
-
           numberOfVesselsFlownOver: null,
-
           onboardWeighingPermit: 'NO',
-
           otherComments: 'Une autre observation.',
-
           portEntranceAndLandingAuthorized: 'NO',
-
           portLocode: 'FRZEG',
-
           propulsionEnginePowerControl: 'NOT_APPLICABLE',
-
           segments: [{ segment: 'SWW02', segmentName: 'SWW02' }],
-
           seizureAndDiversion: true,
-
           seizureAndDiversionComments: null,
-
           speciesObservations: 'Une observation hors infraction sur les espèces.',
-
           // Catches are the risk factor species sorted by weight: HKE (471.2), NEP (235.6), BLI (13.46),
           // then the manually added COD. HKE keeps isNotLanded / underSizedWeight / presentationCodes as a
           // landed catch.
@@ -383,22 +349,15 @@ context('Side Window > Mission Form > Land Control', () => {
             },
             { controlledWeight: null, declaredWeight: null, nbFish: null, speciesCode: 'COD', underSized: false }
           ],
-
           speciesQuantitySeized: 6289.5,
-
           speciesSizeControlled: 'YES',
-
           speciesWeightControlled: 'NOT_APPLICABLE',
-
           stowagePlanPresent: 'NOT_APPLICABLE',
-
           underSizedSeparateRecording: 'NO',
           unitWithoutOmegaGauge: true,
           userTrigram: 'Marlin',
           vesselId: 1,
           vesselName: 'PHENOMENE',
-          vesselTargeted: 'YES',
-          weighingCertificateAndSystemsValid: null,
           weighingOperationsMonitoredByInspectors: 'NO',
           weightControlMethod: 'NOT_APPLICABLE'
         }

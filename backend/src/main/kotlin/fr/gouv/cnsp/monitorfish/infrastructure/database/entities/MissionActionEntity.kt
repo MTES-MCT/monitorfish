@@ -11,7 +11,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGo
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.converters.CountryCodeConverter
@@ -166,9 +168,8 @@ class MissionActionEntity(
     val latitude: Double? = null,
     @Column(name = "port_locode")
     val portLocode: String? = null,
-    @Column(name = "vessel_targeted")
-    @Enumerated(EnumType.STRING)
-    val vesselTargeted: ControlCheck? = null,
+    @Column(name = "is_prioritized")
+    val isPrioritized: Boolean = false,
     @Column(name = "seizure_and_diversion_comments")
     val seizureAndDiversionComments: String? = null,
     @Column(name = "other_comments")
@@ -182,6 +183,12 @@ class MissionActionEntity(
     @Type(JsonBinaryType::class)
     @Column(name = "discarded_species", columnDefinition = "jsonb")
     val discardedSpecies: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "vessel_groups", columnDefinition = "jsonb")
+    val vesselGroups: String? = null,
+    @Type(JsonBinaryType::class)
+    @Column(name = "trip_reportings", columnDefinition = "jsonb")
+    val tripReportings: String? = null,
     @Column(name = "is_deleted")
     val isDeleted: Boolean,
     @Column(name = "has_some_gears_seized")
@@ -268,12 +275,14 @@ class MissionActionEntity(
                 longitude = missionAction.longitude,
                 latitude = missionAction.latitude,
                 portLocode = missionAction.portLocode,
-                vesselTargeted = missionAction.vesselTargeted,
+                isPrioritized = missionAction.isPrioritized,
                 seizureAndDiversionComments = missionAction.seizureAndDiversionComments,
                 otherComments = missionAction.otherComments,
                 gearOnboard = mapper.writeValueAsString(missionAction.gearOnboard),
                 speciesOnboard = mapper.writeValueAsString(missionAction.speciesOnboard),
                 discardedSpecies = mapper.writeValueAsString(missionAction.discardedSpecies),
+                vesselGroups = mapper.writeValueAsString(missionAction.vesselGroups),
+                tripReportings = mapper.writeValueAsString(missionAction.tripReportings),
                 isFromPoseidon = missionAction.isFromPoseidon,
                 isDeleted = missionAction.isDeleted,
                 isLastHaul = missionAction.isLastHaul,
@@ -354,7 +363,7 @@ class MissionActionEntity(
             longitude = longitude,
             latitude = latitude,
             portLocode = portLocode,
-            vesselTargeted = vesselTargeted,
+            isPrioritized = isPrioritized,
             seizureAndDiversionComments = seizureAndDiversionComments,
             otherComments = otherComments,
             gearOnboard =
@@ -365,6 +374,8 @@ class MissionActionEntity(
                 ),
             speciesOnboard = deserializeJSONList(mapper, speciesOnboard, SpeciesOnboardControl::class.java),
             discardedSpecies = deserializeJSONList(mapper, discardedSpecies, DiscardedSpeciesControl::class.java),
+            vesselGroups = deserializeJSONList(mapper, vesselGroups, MissionActionVesselGroup::class.java),
+            tripReportings = deserializeJSONList(mapper, tripReportings, MissionActionReporting::class.java),
             isDeleted = isDeleted,
             isLastHaul = isLastHaul ?: false,
             hasSomeGearsSeized = hasSomeGearsSeized,

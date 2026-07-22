@@ -222,7 +222,6 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
       gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Qualité du contrôle
-      vesselTargeted: string().required(HIDDEN_ERROR),
       isLastHaul: boolean().required(HIDDEN_ERROR),
 
       // Saisi par / Complété par
@@ -277,7 +276,6 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
       ),
 
       // Qualité du contrôle
-      vesselTargeted: string().required(HIDDEN_ERROR),
       isLastHaul: boolean().required(HIDDEN_ERROR),
 
       // Saisi par / Complété par

@@ -104,7 +104,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('20 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -261,7 +261,6 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Autres observations', 'Une autre observation.')
 
     // Qualité du contrôle
-    cy.fill('Navire ciblé par le CNSP', 'Oui')
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
     cy.fill('Last haul effectué', 'Non')
@@ -490,7 +489,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           userTrigram: 'Marlin',
           vesselId: 2,
           vesselName: 'MALOTRU',
-          vesselTargeted: 'YES',
           weighingCertificateAndSystemsValid: null
         }
       },
@@ -611,7 +609,6 @@ context('Side Window > Mission Form > Sea Control', () => {
           userTrigram: 'Gaumont',
           vesselId: 1,
           vesselName: 'PHENOMENE',
-          vesselTargeted: null,
           weighingCertificateAndSystemsValid: null
         }
       },
@@ -1359,6 +1356,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
 
+    // Stub the auto-save so the control gets a deterministic id
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 1 }, statusCode: 201 }).as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/1', { statusCode: 200 }).as('updateMissionAction')
+
     // -------------------------------------------------------------------------
     // Real data: QUEUE DE POISSON (vessel id 117) has an effective control priority level of 4 and is
     // not under charter, so it belongs to the shared "Segments P1" priority group. The endpoint is NOT
@@ -1421,5 +1422,23 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.get('[title="Groupe prioritaire du navire"]').should('contain', 'Plan cétacés - Dolphinfree')
     cy.get('[title="Groupe du navire"]').should('contain', 'Maintenance ERS à prévoir')
     cy.get('[title="Suspicion d\'infraction en cours sur la marée"]').should('contain', 'Chalutage 3 milles')
+
+    // Filling a required field makes the control valid, triggering the initial auto-save (POST) that
+    // must carry the snapshot displayed above.
+    cy.fill('Saisi par', 'LTH')
+
+    cy.waitForLastRequest(
+      '@createMissionAction',
+      {
+        body: {
+          tripReportings: [{ id: 4768, threats: [], title: 'Chalutage 3 milles', type: 'INFRACTION_SUSPICION' }],
+          vesselGroups: [
+            { id: 101, isPriorityGroup: false, name: 'Maintenance ERS à prévoir' },
+            { id: 102, isPriorityGroup: true, name: 'Plan cétacés - Dolphinfree' }
+          ]
+        }
+      },
+      5
+    )
   })
 })

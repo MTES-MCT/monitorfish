@@ -55,6 +55,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isFromPoseidon: false,
         isINNControl: false,
         isLastHaul: false,
+        isPrioritized: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         isUnitBoarded: undefined,
@@ -101,8 +102,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
         vesselId: 1,
-        vesselName: 'PHENOMENE',
-        vesselTargeted: undefined
+        vesselName: 'PHENOMENE'
       }
     ]
     const originalMissionActions = [
@@ -152,6 +152,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isFromPoseidon: false,
         isINNControl: false,
         isLastHaul: false,
+        isPrioritized: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         isUnitBoarded: undefined,
@@ -201,13 +202,14 @@ describe('features/Mission/components/MissionForm/utils', () => {
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
         stowagePlanPresent: undefined,
+        tripReportings: [],
         underSizedSeparateRecording: undefined,
         underSizedSeparateStowage: undefined,
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
+        vesselGroups: [],
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: undefined,
         vmsEmissionControlBeforeArrival: undefined,
         weighingCertificateAndSystemsValid: undefined,
         weighingOperationsMonitoredByInspectors: undefined,
@@ -275,6 +277,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isFromPoseidon: false,
         isINNControl: false,
         isLastHaul: false,
+        isPrioritized: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         isUnitBoarded: undefined,
@@ -324,8 +327,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
         vesselId: 1,
-        vesselName: 'PHENOMENE',
-        vesselTargeted: undefined
+        vesselName: 'PHENOMENE'
       }
     ]
     const originalMissionActions = [
@@ -375,6 +377,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
         isFromPoseidon: false,
         isINNControl: false,
         isLastHaul: false,
+        isPrioritized: false,
         isSafetyEquipmentAndStandardsComplianceControl: undefined,
         isSeafarersControl: undefined,
         isUnitBoarded: undefined,
@@ -424,13 +427,14 @@ describe('features/Mission/components/MissionForm/utils', () => {
         speciesSizeControlled: undefined,
         speciesWeightControlled: undefined,
         stowagePlanPresent: undefined,
+        tripReportings: [],
         underSizedSeparateRecording: undefined,
         underSizedSeparateStowage: undefined,
         unitWithoutOmegaGauge: false,
         userTrigram: 'LT',
+        vesselGroups: [],
         vesselId: 1,
         vesselName: 'PHENOMENE',
-        vesselTargeted: undefined,
         vmsEmissionControlBeforeArrival: undefined,
         weighingCertificateAndSystemsValid: undefined,
         weighingOperationsMonitoredByInspectors: undefined,

@@ -82,7 +82,36 @@ export function SpeciesField() {
   } = useSpeciesAndFaoOptions()
 
   const activation = useRowActivation()
-  const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
+  const {
+    activateRowForNavigation,
+    clearFocusRequest,
+    deactivate,
+    focusRequestId,
+    handlePickerClose,
+    handlePickerOpen,
+    hoveredIndex,
+    isRowActive,
+    requestFocus
+  } = activation
+  const rowCount = input.value?.length ?? 0
+
+  // Up/Down moves the same weight field to the row above/below, spreadsheet-style. The target row's input
+  // is only mounted while its row is "active" (see `useRowActivation`), so activating it here and focusing
+  // it are two separate steps: `activateRowForNavigation` mounts it, and the pending `focusRequestId` is
+  // claimed by the input itself once it (re)renders — see `WeightInput`'s focus-request effect.
+  const navigateWeightInput = (
+    fieldKey: 'controlledWeight' | 'declaredWeight' | 'underSizedWeight',
+    currentIndex: number,
+    direction: 'up' | 'down'
+  ) => {
+    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1
+    if (targetIndex < 0 || targetIndex >= rowCount) {
+      return
+    }
+
+    activateRowForNavigation(targetIndex)
+    requestFocus(`speciesOnboard[${targetIndex}].${fieldKey}`)
+  }
 
   const speciesEISRApplicability =
     values.vesselId !== undefined
@@ -280,30 +309,39 @@ export function SpeciesField() {
                   />
 
                   <WeightCell
+                    clearFocusRequest={clearFocusRequest}
+                    focusRequestId={focusRequestId}
                     isActive={isActive}
                     isDisabled={isDisabled}
                     isHovered={isHovered}
                     label="Qté déclarée"
                     name={`speciesOnboard[${index}].declaredWeight`}
+                    onNavigateRow={direction => navigateWeightInput('declaredWeight', index, direction)}
                     value={specyOnboard.declaredWeight}
                   />
 
                   <WeightCell
+                    clearFocusRequest={clearFocusRequest}
+                    focusRequestId={focusRequestId}
                     isActive={isActive}
                     isDisabled={isDisabled}
                     isHovered={isHovered}
                     label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
                     name={`speciesOnboard[${index}].controlledWeight`}
+                    onNavigateRow={direction => navigateWeightInput('controlledWeight', index, direction)}
                     value={specyOnboard.controlledWeight}
                   />
 
                   {isEISREnabled ? (
                     <WeightCell
+                      clearFocusRequest={clearFocusRequest}
+                      focusRequestId={focusRequestId}
                       isActive={isActive}
                       isDisabled={isDisabled}
                       isHovered={isHovered}
                       label="Qté ss-taille"
                       name={`speciesOnboard[${index}].underSizedWeight`}
+                      onNavigateRow={direction => navigateWeightInput('underSizedWeight', index, direction)}
                       value={specyOnboard.underSizedWeight}
                     />
                   ) : (

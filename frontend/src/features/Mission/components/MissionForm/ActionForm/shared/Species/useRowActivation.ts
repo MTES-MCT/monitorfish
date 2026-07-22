@@ -17,6 +17,11 @@ export function useRowActivation() {
   const [hoveredIndex, setHoveredIndex] = useState<number | undefined>(undefined)
   const [focusedIndex, setFocusedIndex] = useState<number | undefined>(undefined)
   const [openPickerIndex, setOpenPickerIndex] = useState<number | undefined>(undefined)
+  // The id (DOM `name`/`id`) of a field that a `WeightInput` should self-focus once it mounts/updates as
+  // active. Keyboard row-to-row navigation can't focus the target input synchronously — it isn't in the DOM
+  // yet until the row's activation state re-renders — so it leaves this request for the input to pick up
+  // in its own effect once it exists.
+  const [focusRequestId, setFocusRequestId] = useState<string | undefined>(undefined)
 
   // Debounce hover so a cursor merely sweeping across rows doesn't mount each row's (heavy) editors.
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>()
@@ -42,13 +47,13 @@ export function useRowActivation() {
 
   const handleRowMouseEnter = (index: number) => {
     clearTimeout(hoverTimerRef.current)
-    // Hovering a new row makes it the sole active row: drop any hover/focus/picker activation still pinned
-    // to a different row. This self-heals two cases: a `mouseleave` that never fired (so a previous row
-    // stayed hovered), and a CheckPicker's `onClose` that was lost because an async re-render (e.g. a
-    // fleet-segment recompute) remounted the picker. Either would otherwise keep the previous row expanded
-    // and mount two editors for the same field.
+    // Hovering a new row drops any hover/picker activation still pinned to a different row. This self-heals
+    // two cases: a `mouseleave` that never fired (so a previous row stayed hovered), and a CheckPicker's
+    // `onClose` that was lost because an async re-render (e.g. a fleet-segment recompute) remounted the
+    // picker. Either would otherwise keep the previous row expanded and mount two editors for the same field.
+    // `focusedIndex` is deliberately left alone: it tracks real keyboard focus (released via `handleRowBlur`),
+    // so clearing it here would blank out a row the user is actively typing in just because the cursor moved.
     setHoveredIndex(prev => (prev === undefined || prev === index ? prev : undefined))
-    setFocusedIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     hoverTimerRef.current = setTimeout(() => setHoveredIndex(index), HOVER_INTENT_DELAY_MS)
   }
@@ -66,6 +71,16 @@ export function useRowActivation() {
     setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
   }
 
+  // Marks `index` as holding keyboard focus without waiting for the real DOM `focus` event — used when
+  // navigating rows with the arrow keys, where the target row's input isn't mounted (or focused) yet.
+  const activateRowForNavigation = (index: number) => {
+    clearTimeout(hoverTimerRef.current)
+    setFocusedIndex(index)
+  }
+
+  const requestFocus = (id: string) => setFocusRequestId(id)
+  const clearFocusRequest = () => setFocusRequestId(undefined)
+
   const handlePickerOpen = (index: number) => setOpenPickerIndex(index)
   const handlePickerClose = (index: number) => setOpenPickerIndex(prev => (prev === index ? undefined : prev))
 
@@ -77,8 +92,11 @@ export function useRowActivation() {
   }
 
   return {
+    activateRowForNavigation,
     activateRowNow,
+    clearFocusRequest,
     deactivate,
+    focusRequestId,
     handlePickerClose,
     handlePickerOpen,
     handleRowBlur,
@@ -86,6 +104,7 @@ export function useRowActivation() {
     handleRowMouseEnter,
     handleRowMouseLeave,
     hoveredIndex,
-    isRowActive
+    isRowActive,
+    requestFocus
   }
 }

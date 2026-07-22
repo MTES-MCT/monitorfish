@@ -1,8 +1,15 @@
-import { type FocusEvent, useEffect, useRef, useState } from 'react'
+import { type FocusEvent, type MouseEvent, useEffect, useRef, useState } from 'react'
 
 const HOVER_INTENT_DELAY_MS = 40
 
 export type RowActivation = ReturnType<typeof useRowActivation>
+
+// Rsuite pickers render their dropdown (search input + options) in a portal that sits outside the toggle's
+// own DOM subtree, under classes like `rs-picker-popup` / `rs-picker-check-menu` — never the exact
+// `rs-picker` class. A plain `.closest('.rs-picker')` check misses all of it, so anything clicked inside a
+// picker's dropdown (its search input, an option checkbox) would otherwise count as "real" row focus.
+const isRowPinningTextInput = (target: Element | null): target is HTMLInputElement =>
+  target instanceof HTMLInputElement && target.type === 'text' && !target.closest('[class*="rs-picker"]')
 
 /**
  * Tracks which row of a species table is "active" — i.e. shows its editors instead of read-only text.
@@ -32,8 +39,7 @@ export function useRowActivation() {
   // Only hold the row open for its text inputs (CheckPickers are covered by `openPickerIndex` while their
   // dropdown is open). This keeps a focused text input visible even after the cursor has left the row.
   const handleRowFocus = (index: number, event: FocusEvent<HTMLElement>) => {
-    const target = event.target
-    if (target.tagName === 'INPUT' && !target.closest('.rs-picker')) {
+    if (isRowPinningTextInput(event.target)) {
       setFocusedIndex(index)
     }
   }
@@ -45,15 +51,26 @@ export function useRowActivation() {
     }
   }
 
-  const handleRowMouseEnter = (index: number) => {
+  const handleRowMouseEnter = (index: number, event: MouseEvent<HTMLElement>) => {
     clearTimeout(hoverTimerRef.current)
     // Hovering a new row drops any hover/picker activation still pinned to a different row. This self-heals
     // two cases: a `mouseleave` that never fired (so a previous row stayed hovered), and a CheckPicker's
     // `onClose` that was lost because an async re-render (e.g. a fleet-segment recompute) remounted the
     // picker. Either would otherwise keep the previous row expanded and mount two editors for the same field.
-    // `focusedIndex` is deliberately left alone: it tracks real keyboard focus (released via `handleRowBlur`),
-    // so clearing it here would blank out a row the user is actively typing in just because the cursor moved.
     setHoveredIndex(prev => (prev === undefined || prev === index ? prev : undefined))
+    setFocusedIndex(prev => {
+      if (prev === undefined || prev === index) {
+        return prev
+      }
+
+      // A row a user is genuinely still typing in stays open even though the cursor has moved elsewhere —
+      // but only for as long as that's actually true. Verify against real DOM focus (via the row's own
+      // `ownerDocument`, so this also works when the mission form is portaled into the side-window popup)
+      // rather than trusting the flag blindly: once focus has actually moved on (e.g. the user finished
+      // typing and clicked a picker elsewhere in the row), keep the old self-heal so this row doesn't stay
+      // stuck "active" — mounting two rows' worth of same-labelled fields (e.g. two "Zone de pêche" pickers).
+      return isRowPinningTextInput(event.currentTarget.ownerDocument.activeElement) ? prev : undefined
+    })
     setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     hoverTimerRef.current = setTimeout(() => setHoveredIndex(index), HOVER_INTENT_DELAY_MS)
   }

@@ -53,6 +53,11 @@ export function useRowActivation() {
 
   const handleRowMouseEnter = (index: number, event: MouseEvent<HTMLElement>) => {
     clearTimeout(hoverTimerRef.current)
+    // React nulls out `event.currentTarget` once the synchronous dispatch of this handler returns, but a
+    // `setState` updater function (below) only runs later, during React's render phase — reading
+    // `event.currentTarget` from inside one throws (`currentTarget` is `null` by then) and crashes the whole
+    // table. Read it now, synchronously, and close over the plain value instead.
+    const activeElement = event.currentTarget.ownerDocument.activeElement
     // Hovering a new row drops any hover/picker activation still pinned to a different row. This self-heals
     // two cases: a `mouseleave` that never fired (so a previous row stayed hovered), and a CheckPicker's
     // `onClose` that was lost because an async re-render (e.g. a fleet-segment recompute) remounted the
@@ -64,12 +69,12 @@ export function useRowActivation() {
       }
 
       // A row a user is genuinely still typing in stays open even though the cursor has moved elsewhere —
-      // but only for as long as that's actually true. Verify against real DOM focus (via the row's own
-      // `ownerDocument`, so this also works when the mission form is portaled into the side-window popup)
-      // rather than trusting the flag blindly: once focus has actually moved on (e.g. the user finished
-      // typing and clicked a picker elsewhere in the row), keep the old self-heal so this row doesn't stay
-      // stuck "active" — mounting two rows' worth of same-labelled fields (e.g. two "Zone de pêche" pickers).
-      return isRowPinningTextInput(event.currentTarget.ownerDocument.activeElement) ? prev : undefined
+      // but only for as long as that's actually true. Verify against real DOM focus (captured above, so
+      // this also works when the mission form is portaled into the side-window popup) rather than trusting
+      // the flag blindly: once focus has actually moved on (e.g. the user finished typing and clicked a
+      // picker elsewhere in the row), keep the old self-heal so this row doesn't stay stuck "active" —
+      // mounting two rows' worth of same-labelled fields (e.g. two "Zone de pêche" pickers).
+      return isRowPinningTextInput(activeElement) ? prev : undefined
     })
     setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
     hoverTimerRef.current = setTimeout(() => setHoveredIndex(index), HOVER_INTENT_DELAY_MS)

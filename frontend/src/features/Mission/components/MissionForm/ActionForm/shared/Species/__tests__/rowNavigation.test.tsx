@@ -91,4 +91,37 @@ describe('species row keyboard navigation', () => {
     await user.keyboard('{ArrowUp}')
     expect(document.activeElement?.id).toBe('speciesOnboard[1].declaredWeight')
   })
+
+  it('does not crash when hovering a different row while another row has real DOM focus', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <ThemeProvider theme={THEME}>
+        <Formik
+          initialValues={{
+            speciesOnboard: [{ declaredWeight: 0 }, { declaredWeight: 1 }, { declaredWeight: 2 }]
+          }}
+          onSubmit={() => {}}
+        >
+          <Harness />
+        </Formik>
+      </ThemeProvider>
+    )
+
+    const firstRow = document.querySelector('[data-cy="species-onboard-row-0"]') as HTMLElement
+    await user.click(firstRow)
+    const firstInput = document.getElementById('speciesOnboard[0].declaredWeight') as HTMLInputElement
+    act(() => firstInput.focus())
+    expect(document.activeElement).toBe(firstInput)
+
+    // Real mouse hover of a different row while row 0's input is still genuinely focused — this exercises
+    // `handleRowMouseEnter`'s liveness check (`event.currentTarget.ownerDocument.activeElement`).
+    const secondRow = document.querySelector('[data-cy="species-onboard-row-1"]') as HTMLElement
+    await user.hover(secondRow)
+
+    // Row 0 should stay open (real focus preserved) and row 1 should not blow up the whole table.
+    expect(document.getElementById('speciesOnboard[0].declaredWeight')).not.toBeNull()
+    expect(document.querySelector('[data-cy="species-onboard-row-1"]')).not.toBeNull()
+    expect(document.querySelector('[data-cy="species-onboard-row-2"]')).not.toBeNull()
+  })
 })

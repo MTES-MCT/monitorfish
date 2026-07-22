@@ -95,10 +95,8 @@ export function SpeciesField() {
   } = activation
   const rowCount = input.value?.length ?? 0
 
-  // Up/Down moves the same weight field to the row above/below, spreadsheet-style. The target row's input
-  // is only mounted while its row is "active" (see `useRowActivation`), so activating it here and focusing
-  // it are two separate steps: `activateRowForNavigation` mounts it, and the pending `focusRequestId` is
-  // claimed by the input itself once it (re)renders — see `WeightInput`'s focus-request effect.
+  // Up/Down moves the same weight field to the row above/below, spreadsheet-style: activate the target row
+  // to mount its input, then leave a focus request for it to claim once rendered (see `WeightInput`).
   const navigateWeightInput = (
     fieldKey: 'controlledWeight' | 'declaredWeight' | 'underSizedWeight',
     currentIndex: number,

@@ -1288,14 +1288,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une espèce')
     pickHoverEditSpecies('species-onboard-row-1', 'HKE')
 
-    // Up/Down in a weight input moves focus to the same field on the row above/below, spreadsheet-style.
-    // Row 1 is deliberately left un-hovered here, to prove ArrowDown mounts and focuses it on its own.
+    // ArrowDown/ArrowUp move focus to the same weight field on the row below/above. Row 1 is deliberately
+    // left un-hovered, to prove ArrowDown mounts and focuses it on its own.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
     cy.get('[id="speciesOnboard[0].declaredWeight"]').type('12', { force: true })
     cy.get('[id="speciesOnboard[0].declaredWeight"]').type('{downarrow}', { force: true })
     cy.get('[id="speciesOnboard[1].declaredWeight"]').should('have.focus')
     cy.get('[id="speciesOnboard[1].declaredWeight"]').type('34', { force: true })
-    // ArrowUp moves focus back up — and row 0's earlier value is still there, not lost in the round trip.
     cy.get('[id="speciesOnboard[1].declaredWeight"]').type('{uparrow}', { force: true })
     cy.get('[id="speciesOnboard[0].declaredWeight"]').should('have.focus').and('have.value', '12')
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })

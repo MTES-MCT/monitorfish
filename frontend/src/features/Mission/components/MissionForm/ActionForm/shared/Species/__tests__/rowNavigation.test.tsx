@@ -67,7 +67,7 @@ describe('species row keyboard navigation', () => {
       </ThemeProvider>
     )
 
-    // Row 0 isn't active yet: clicking its cell (mousedown) should mount + focus its input, like a real click.
+    // Clicking the inactive row's cell (mousedown) should mount + focus its input, like a real click.
     const firstRow = document.querySelector('[data-cy="species-onboard-row-0"]') as HTMLElement
     await user.click(firstRow)
     const firstInput = document.getElementById('speciesOnboard[0].declaredWeight') as HTMLInputElement
@@ -114,8 +114,7 @@ describe('species row keyboard navigation', () => {
     act(() => firstInput.focus())
     expect(document.activeElement).toBe(firstInput)
 
-    // Real mouse hover of a different row while row 0's input is still genuinely focused — this exercises
-    // `handleRowMouseEnter`'s liveness check (`event.currentTarget.ownerDocument.activeElement`).
+    // Hovers a different row while row 0's input is still genuinely focused.
     const secondRow = document.querySelector('[data-cy="species-onboard-row-1"]') as HTMLElement
     await user.hover(secondRow)
 

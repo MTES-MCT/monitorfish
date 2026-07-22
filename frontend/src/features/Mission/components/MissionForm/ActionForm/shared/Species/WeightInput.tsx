@@ -44,13 +44,9 @@ export function WeightInput({
     setDraft(prev => (prev.trim() !== '' && Number(prev) === field.value ? prev : committed))
   }, [field.value])
 
-  // Arrow-key row navigation targets this input by `name` before it necessarily exists in the DOM (its row
-  // may still be mounting). Rather than the caller polling for the element, this input claims the request
-  // itself once it (re)renders as active — reliable regardless of whether it just mounted or was already up.
-  // Uses its own `inputRef` rather than `document.getElementById`: the mission form can be rendered inside
-  // the side window's popup (`NewWindow` portals into a window opened via `window.open`), where the app's JS
-  // still runs against the *main* window's `document` — a lookup through the global `document` would miss
-  // an input that actually lives in the popup's document.
+  // Claims a pending row-navigation focus request once mounted, instead of the caller polling for the
+  // element. Uses its own `inputRef` rather than `document.getElementById`: the mission form can be
+  // portaled into the side window's popup, where `document` would still refer to the main window.
   useEffect(() => {
     if (focusRequestId !== name) {
       return
@@ -64,9 +60,8 @@ export function WeightInput({
 
   return (
     <TextInput
-      // Chrome saves per-`name` field-value history and pops up a suggestion dropdown on focus; once open,
-      // ArrowUp/ArrowDown navigate that dropdown instead of reaching `onKeyDown` below, breaking row
-      // navigation (Firefox doesn't do this). `off` keeps Chrome from offering it here.
+      // Chrome's per-field autofill dropdown intercepts ArrowUp/ArrowDown before `onKeyDown` below sees
+      // them, breaking row navigation (Firefox doesn't do this) — `off` keeps it from appearing.
       autoComplete="off"
       className={className ?? ''}
       disabled={disabled}

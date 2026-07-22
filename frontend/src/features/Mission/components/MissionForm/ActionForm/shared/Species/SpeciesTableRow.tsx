@@ -33,6 +33,7 @@ export function SpeciesTableRow({ activation, children, dataCy, index, isHovered
       data-cy={dataCy}
       onBlurCapture={event => activation.handleRowBlur(index, event)}
       onFocusCapture={event => activation.handleRowFocus(index, event)}
+      onMouseDown={() => activation.activateRowNow(index)}
       onMouseEnter={() => activation.handleRowMouseEnter(index)}
       onMouseLeave={() => activation.handleRowMouseLeave(index)}
     >

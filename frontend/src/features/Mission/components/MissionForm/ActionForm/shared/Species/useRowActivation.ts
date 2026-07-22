@@ -57,6 +57,15 @@ export function useRowActivation() {
     setHoveredIndex(prev => (prev === index ? undefined : prev))
   }
 
+  // A real click shouldn't wait out the hover-intent delay: activate the row synchronously on mousedown so
+  // its editor is already mounted by the time the click reaches it, instead of requiring a second click.
+  const activateRowNow = (index: number) => {
+    clearTimeout(hoverTimerRef.current)
+    setHoveredIndex(index)
+    setFocusedIndex(prev => (prev === undefined || prev === index ? prev : undefined))
+    setOpenPickerIndex(prev => (prev === undefined || prev === index ? prev : undefined))
+  }
+
   const handlePickerOpen = (index: number) => setOpenPickerIndex(index)
   const handlePickerClose = (index: number) => setOpenPickerIndex(prev => (prev === index ? undefined : prev))
 
@@ -68,6 +77,7 @@ export function useRowActivation() {
   }
 
   return {
+    activateRowNow,
     deactivate,
     handlePickerClose,
     handlePickerOpen,

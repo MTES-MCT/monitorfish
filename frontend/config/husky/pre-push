@@ -8,14 +8,19 @@ base=$(git merge-base '@{u}' HEAD 2>/dev/null) \
   || base=$(git merge-base origin/master HEAD 2>/dev/null) \
   || base=''
 if [ -n "$base" ] && git diff --quiet "$base" HEAD -- frontend; then
+  echo "pre-push: no frontend changes, skipping type-check/lint"
   exit 0
 fi
 
 cd ./frontend
 
 # Full type-check (tsc, incremental) and type-aware lint (typescript-eslint) both need complete
-# type information and are the two slowest checks: run them in parallel, and only print their
-# output when they fail so a passing push stays silent.
+# type information and are the two slowest checks: run them in parallel. Only their output is
+# printed when they fail (kept silent on success), but we announce start/progress/end around
+# them so a slow-but-alive push is never mistaken for a hang or network error.
+echo "pre-push: running type-check + type-aware lint (frontend), this can take a while..."
+start=$(date +%s)
+
 tsc_log=$(mktemp) && lint_log=$(mktemp)
 trap 'rm -f "$tsc_log" "$lint_log"' EXIT
 
@@ -25,6 +30,13 @@ npm run test:lint:types > "$lint_log" 2>&1 &
 lint_pid=$!
 
 status=0
-wait "$tsc_pid" || { cat "$tsc_log"; status=1; }
-wait "$lint_pid" || { cat "$lint_log"; status=1; }
+wait "$tsc_pid" && echo "pre-push: type-check passed" || { echo "pre-push: type-check FAILED"; cat "$tsc_log"; status=1; }
+wait "$lint_pid" && echo "pre-push: type-aware lint passed" || { echo "pre-push: type-aware lint FAILED"; cat "$lint_log"; status=1; }
+
+elapsed=$(( $(date +%s) - start ))
+if [ "$status" = 0 ]; then
+  echo "pre-push: checks passed in ${elapsed}s, pushing..."
+else
+  echo "pre-push: checks failed after ${elapsed}s, push aborted"
+fi
 exit "$status"

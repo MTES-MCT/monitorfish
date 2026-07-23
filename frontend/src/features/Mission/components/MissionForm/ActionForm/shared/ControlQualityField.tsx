@@ -2,6 +2,7 @@ import { FormikCheckbox, FormikMultiRadio, FormikTextarea, pluralize } from '@mt
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
+import { getNumberInFrench } from './utils'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
@@ -16,6 +17,7 @@ export function ControlQualityField({ withLastHaul = false }: ControlQualityFiel
   const priorityGroups = (values.vesselGroups ?? []).filter(group => group.isPriorityGroup)
   const currentTripReportingLength = (values.tripReportings ?? []).length
   const isPriorityTarget = priorityGroups.length > 0 || currentTripReportingLength > 0
+  const reportingsText = `${getNumberInFrench(currentTripReportingLength)} ${pluralize('suspicion', currentTripReportingLength)} d’infraction est en cours sur sa marée.`
 
   return (
     <Wrapper isLight legend="Qualité du contrôle (interne CNSP)">
@@ -23,23 +25,17 @@ export function ControlQualityField({ withLastHaul = false }: ControlQualityFiel
         <PriorityTarget data-cy="mission-action-priority-target">
           {isPriorityTarget ? (
             <>
-              <strong>Le navire est une cible prioritaire : il appartient aux groupes prioritaires</strong>
-              <ul>
-                {priorityGroups
-                  .filter(group => !!group.isPriorityGroup)
-                  .map((group, index, groups) => (
-                    <li key={group.id}>
-                      “{group.name}” {groups.length > index + 1 && ' et '}
-                    </li>
-                  ))}
-                {currentTripReportingLength === 0 && '.'}
-                {currentTripReportingLength > 0 && (
-                  <li>
-                    , et {currentTripReportingLength} {pluralize('suspicion', currentTripReportingLength)} d’infraction
-                    est en cours sur sa marée.
-                  </li>
-                )}
-              </ul>
+              Le navire est une cible prioritaire :
+              {priorityGroups.length === 0 && currentTripReportingLength > 0 && ` ${reportingsText}`}
+              {priorityGroups.length > 0 &&
+                ` il appartient au${priorityGroups.length > 1 ? 'x' : ''} ${pluralize('groupe', priorityGroups.length)} ${pluralize('prioritaire', priorityGroups.length)} `}
+              {priorityGroups.map((group, index, groups) => (
+                <span key={group.id}>
+                  “{group.name}”{groups.length > index + 1 ? ' et ' : ''}
+                </span>
+              ))}
+              {priorityGroups.length > 0 && currentTripReportingLength === 0 && '.'}
+              {priorityGroups.length > 0 && currentTripReportingLength > 0 && <>, et {reportingsText}</>}
             </>
           ) : (
             <strong>Le navire n’est pas considéré comme une cible prioritaire.</strong>

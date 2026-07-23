@@ -28,6 +28,8 @@
     - [Local development](#local-development)
     - [Remote deployment](#remote-deployment)
     - [Restoring a remote dump locally (for debugging purposes)](#restoring-a-remote-dump-locally-for-debugging-purposes)
+- [Tech debt](#tech-debt)
+  - [monitor-ui box-sizing](#monitor-ui-box-sizing)
 
 ## File Structure
 
@@ -265,3 +267,9 @@ Then use SCP to download the dump locally into the `.backups/` directory and res
 tar -xvzf ./.backups/YYYY-MM-DD-[daily|weekly].tar.gz -C ./.backups
 make dev-restore-db TAG=YYYY-MM-DD-[daily|weekly]
 ```
+
+## Tech debt
+
+### monitor-ui box-sizing
+
+monitor-ui uses a global `box-sizing: border-box` on all elements that is not applied on monitorfish. Beware that components imported from monitor-ui might require adding it to function properly.

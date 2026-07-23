@@ -7,11 +7,12 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 export type ReportingState = {
   displayFilters: ApiSearchFilter
   editedReporting: Reporting.EditableReporting | undefined
-  selectedReportingFeatureIds: string[]
+  selectedReportingFeatureId: string | undefined
 }
 const INITIAL_STATE: ReportingState = {
   displayFilters: {
     endDate: undefined,
+    ids: undefined,
     isArchived: undefined,
     isIUU: undefined,
     reportingPeriod: ReportingSearchPeriod.LAST_3_MONTHS,
@@ -19,13 +20,17 @@ const INITIAL_STATE: ReportingState = {
     startDate: undefined
   },
   editedReporting: undefined,
-  selectedReportingFeatureIds: []
+  selectedReportingFeatureId: undefined
 }
 
 const reportingSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reporting',
   reducers: {
+    selectReportingFeatureId(state, action: PayloadAction<string>) {
+      state.selectedReportingFeatureId = action.payload
+    },
+
     setDisplayFilters(state, action: PayloadAction<ApiSearchFilter>) {
       state.displayFilters = action.payload
     },
@@ -35,11 +40,10 @@ const reportingSlice = createSlice({
     },
 
     toggleSelectedReportingFeatureId(state, action: PayloadAction<string>) {
-      const index = state.selectedReportingFeatureIds.indexOf(action.payload)
-      if (index === -1) {
-        state.selectedReportingFeatureIds.push(action.payload)
+      if (state.selectedReportingFeatureId === action.payload) {
+        state.selectedReportingFeatureId = undefined
       } else {
-        state.selectedReportingFeatureIds.splice(index, 1)
+        state.selectedReportingFeatureId = action.payload
       }
     },
 
@@ -47,8 +51,8 @@ const reportingSlice = createSlice({
       state.editedReporting = undefined
     },
 
-    unsetSelectedReportingFeatureIds(state) {
-      state.selectedReportingFeatureIds = []
+    unsetSelectedReportingFeatureId(state) {
+      state.selectedReportingFeatureId = undefined
     }
   }
 })

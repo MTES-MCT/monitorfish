@@ -21,6 +21,7 @@ export type DisplayedComponentState = {
   isNewFeaturesMapButtonDisplayed: boolean
   isPriorNotificationMapButtonDisplayed: boolean
   isReportingLayerDisplayed: boolean
+  isReportingListFormDisplayed: boolean
   isReportingMapButtonDisplayed: boolean
   isReportingMapFormDisplayed: boolean
   isStationLayerDisplayed: boolean
@@ -50,6 +51,7 @@ const INITIAL_STATE: DisplayedComponentState = {
   isNewFeaturesMapButtonDisplayed: true,
   isPriorNotificationMapButtonDisplayed: true,
   isReportingLayerDisplayed: false,
+  isReportingListFormDisplayed: false,
   isReportingMapButtonDisplayed: true,
   isReportingMapFormDisplayed: false,
   isStationLayerDisplayed: false,

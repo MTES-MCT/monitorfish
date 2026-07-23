@@ -182,11 +182,11 @@
   "lint-staged": {
     "*.{json,md,yaml,yml}": "prettier --write",
     "*.{js,jsx}": [
-      "oxlint --config=.oxlintrc.json --fix",
+      "bash scripts/oxlint_fix_loop.sh",
       "prettier --write"
     ],
     "*.{ts,tsx}": [
-      "oxlint --config=.oxlintrc.json --fix",
+      "bash scripts/oxlint_fix_loop.sh",
       "prettier --write"
     ]
   }

@@ -1,4 +1,6 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportings'
+import { buildReportingFeature } from '@features/Reporting/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import Feature from 'ol/Feature'
 import LineString from 'ol/geom/LineString'
@@ -9,27 +11,38 @@ import { REPORTINGS_LINE_VECTOR_SOURCE, REPORTINGS_VECTOR_SOURCE } from '../../l
 import { ReportingOverlay } from '../ReportingOverlay'
 
 export function SelectedReportingOverlay() {
-  const selectedReportingFeatureIds = useMainAppSelector(store => store.reporting.selectedReportingFeatureIds)
-  const isReportingLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isReportingLayerDisplayed)
+  const featureId = useMainAppSelector(store => store.reporting.selectedReportingFeatureId)
 
-  if (!isReportingLayerDisplayed) {
+  if (!featureId) {
     return null
   }
 
-  return (
-    <>
-      {selectedReportingFeatureIds.map(featureId => (
-        <SelectedReportingItem key={featureId} featureId={featureId} />
-      ))}
-    </>
-  )
+  return <SelectedReportingItem key={featureId} featureId={featureId} />
 }
 
 type SelectedReportingItemProps = {
   featureId: string
 }
 function SelectedReportingItem({ featureId }: SelectedReportingItemProps) {
-  const selectedFeature = useMemo(() => REPORTINGS_VECTOR_SOURCE.getFeatureById(featureId) ?? undefined, [featureId])
+  const sourceFeature = REPORTINGS_VECTOR_SOURCE.getFeatureById(featureId) ?? undefined
+
+  const reportingId = useMemo(() => {
+    const id = Number(featureId.split(':').at(-1))
+
+    return Number.isNaN(id) ? undefined : id
+  }, [featureId])
+
+  const { pinnedReportings } = usePinnedReportings()
+
+  const selectedFeature = useMemo(() => {
+    if (sourceFeature) {
+      return sourceFeature
+    }
+
+    const pinnedReporting = pinnedReportings?.find(reporting => reporting.id === reportingId)
+
+    return pinnedReporting?.coordinates?.length === 2 ? buildReportingFeature(pinnedReporting) : undefined
+  }, [sourceFeature, pinnedReportings, reportingId])
 
   const [zoomHasChanged, setZoomHasChanged] = useState<number | undefined>(undefined)
   useEffect(() => {

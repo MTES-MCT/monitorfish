@@ -1,5 +1,6 @@
 import { logbookActions } from '@features/Logbook/slice'
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
+import { reportingActions } from '@features/Reporting/slice'
 import { unsetControlSummary } from '@features/Vessel/components/VesselSidebar/control.slice'
 import { closeVesselSidebar, resetSelectedVessel } from '@features/Vessel/slice'
 
@@ -14,4 +15,5 @@ export const unselectVessel = () => dispatch => {
   dispatch(expandRightMenu())
   dispatch(resetDisplayedLogbookMessageOverlays())
   dispatch(unsetControlSummary())
+  dispatch(reportingActions.unsetSelectedReportingFeatureId())
 }

@@ -1,0 +1,71 @@
+import { SeafrontGroup } from '@constants/seafront'
+
+import { stubSideWindowOptions } from '../../support/commands'
+
+// `stubSideWindowOptions` makes the side window render in the same document instead of a real popup, so a
+// single test can drive it and then observe its effect on the main window's map.
+// The side window then sits on top of the main window, so its own actionability checks are unreliable —
+// every click inside it is forced.
+function openSideWindowReportingList() {
+  cy.clickButton('Signalements')
+  cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
+  cy.clickButton('Voir la vue détaillée des signalements')
+  cy.wait(1000)
+
+  cy.getDataCy('side-window-reporting-tab').click({ force: true })
+  cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click({ force: true })
+}
+
+context('Show reporting from the reporting list', () => {
+  beforeEach(() => {
+    cy.login('superuser')
+    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
+
+    // NAMO area — contains the reporting for 'RENCONTRER VEILLER APPARTEMENT', which has both a vessel and a position
+    cy.visit('/#@-545000,6135000,10.50', stubSideWindowOptions)
+    cy.wait('@displayReportings')
+    cy.wait(1000)
+  })
+
+  it('Should show the reporting on the map and open its vessel sidebar, even though the reportings layer is hidden by filters, keep it shown when switching vessel sidebar tabs, and stop showing it once the sidebar is closed', () => {
+    openSideWindowReportingList()
+
+    cy.clickButton('Voir sur la carte', { withinSelector: 'tr:contains("RENCONTRER VEILLER APPARTEMENT")' })
+
+    // Matching only by vessel name isn't enough to pick out a specific feature when this vessel has more
+    // than one reporting, so check that at least one of its features is the selected one
+    cy.getFeaturesFromLayer('REPORTING').should(features => {
+      const matchingFeatures = features.filter(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
+
+      assert.isNotEmpty(matchingFeatures, 'reporting feature should be force-displayed on the map')
+      expect(
+        matchingFeatures.some(f => f.get('isSelected') === true),
+        'one of its reporting features should be selected'
+      ).to.equal(true)
+    })
+
+    cy.get('*[data-cy="vessel-sidebar"]').should('exist')
+    cy.get('*[data-cy="vessel-reporting"]').should('exist')
+
+    cy.get('*[data-cy="vessel-menu-summary"]').click({ force: true })
+    cy.get('*[data-cy="vessel-summary-latitude"]').should('exist')
+    cy.get('*[data-cy="vessel-reporting"]').should('not.exist')
+
+    cy.getFeaturesFromLayer('REPORTING').should(features => {
+      const matchingFeatures = features.filter(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
+
+      expect(
+        matchingFeatures.some(f => f.get('isSelected') === true),
+        'the reporting should still be selected after switching tabs'
+      ).to.equal(true)
+    })
+
+    cy.get('*[data-cy^="vessel-search-selected-vessel-close-title"]').click({ force: true })
+
+    cy.getFeaturesFromLayer('REPORTING').should(features => {
+      const feature = features.find(f => f.get('vesselName') === 'RENCONTRER VEILLER APPARTEMENT')
+
+      assert.notExists(feature, 'reporting feature should no longer be force-displayed on the map')
+    })
+  })
+})

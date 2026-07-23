@@ -7,6 +7,54 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-07-22',
+        description: `Le tableau de saisie des espèces contrôlées (formulaires M1/M3) a été amélioré :
+
+- **Navigation au clavier** : les flèches ↑/↓ dans un champ de poids déplacent le focus vers la même colonne de la ligne au-dessus ou en-dessous,
+- **Clic pour éditer** : un simple clic sur une ligne affiche directement ses champs de saisie, sans nécessiter un second clic.`,
+        for: 'CNSP',
+        title: `Amélioration du tableau des espèces contrôlées`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-07-22',
+        description: `- L'export CSV d'un groupe de navires n'exporte désormais que les navires sélectionnés (et non plus l'ensemble du groupe),
+- Les couleurs rouge et jaune sont désormais réservées aux groupes prioritaires P1/P2 et ne sont plus proposées dans le sélecteur de couleur des groupes.`,
+        for: 'ALL',
+        title: `Corrections de l'export CSV et de l'affichage des groupes de navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-07-17',
+        description: `Les navires sous charte sont désormais pris en compte dans le calcul automatique des groupes prioritaires P1 et P2.
+Le segment habituel est retiré du calcul.`,
+        for: 'CNSP',
+        title: `Mise-à-jour du calcul des groupes prioritaires`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-07-15',
+        description: `Suite aux retours du CNSP sur la refonte des formulaires de contrôle en mer (M1) et à la débarque (M3) :
+
+- Le champ **"Poids des espèces vérifiés"** est masqué pour les contrôles à la débarque, le sujet de la pesée n'étant pas encore stabilisé,
+- Le champ **"Méthode de contrôle du poids"** est masqué.`,
+        for: 'CNSP',
+        title: `CR de contrôle – Ajustements des formulaires M1 et M3 suite aux retours du CNSP`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-07-07',
+        description: `Sous la recherche du navire dans les CR de contrôle (mer, terre, air), le navire sélectionné affiche désormais :
+
+- les **groupes** auxquels il appartient (icône cible pour les groupes prioritaires, pastille de couleur pour les autres),
+- les **signalements** ouverts pendant la marée en cours,
+
+avec une infobulle au survol de chaque étiquette.`,
+        for: 'CNSP',
+        title: `Affichage des groupes et signalements du navire dans le CR de contrôle`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-06-24',
         description: `Le formulaire des comptes rendus de contrôle (CR) en mer et à la débarque a été retravaillé pour gagner en lisibilité et préparer l'arrivée de e-ISR (**non encore activée**).
 

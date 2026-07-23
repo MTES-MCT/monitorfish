@@ -20,6 +20,7 @@ data class AlertValueDto(
     val alertId: Int? = null,
     val name: String,
     val description: String? = null,
+    val depth: Double? = null,
 ) {
     fun toAlert(): Alert =
         Alert(
@@ -33,5 +34,6 @@ data class AlertValueDto(
             alertId = alertId,
             name = name,
             description = description,
+            depth = depth,
         )
 }

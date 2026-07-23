@@ -3,7 +3,7 @@ import { describe, expect, it } from '@jest/globals'
 import { getSortedProfileBarsByDesc } from '../utils'
 
 describe('utils', () => {
-  it('getSortedProfileBarsByDesc Should return the percent of each bar', async () => {
+  it('getSortedProfileBarsByDesc Should return the percent of each bar', () => {
     const profile = {
       ANF: 0.0014431550681949913,
       BIB: 0.020464412032601107,
@@ -34,6 +34,24 @@ describe('utils', () => {
       { color: '#C9EEE8', key: 'SYC', value: '4.3' },
       { color: '#C5DADE', key: 'MUR', value: '3.3' },
       { color: '#E1F2F5', key: 'Autres', value: '17.1' }
+    ])
+  })
+
+  it('getSortedProfileBarsByDesc Should not return bars whose rounded percentage is 0.0', () => {
+    const profile = {
+      ANF: 0.0001,
+      BIB: 0.0002,
+      HKE: 0.976,
+      JOD: 0.0003
+    }
+
+    // When
+    const bars = getSortedProfileBarsByDesc(profile)
+
+    // Then
+    expect(bars).toStrictEqual([
+      { color: '#A6E3DD', key: 'HKE', value: '97.6' },
+      { color: '#E1F2F5', key: 'Autres', value: '2.4' }
     ])
   })
 })

@@ -83,6 +83,7 @@ class ReportingMapperUTests {
                 threatCharacterization = "DEP",
                 riskFactor = 2.356,
                 name = "Chalutage dans les 3 milles",
+                depth = 123.4,
             )
 
         // When
@@ -100,6 +101,7 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.Alert
         Assertions.assertThat(parsedReporting.seaFront).isEqualTo("NAMO")
         Assertions.assertThat(parsedReporting.riskFactor).isEqualTo(2.356)
+        Assertions.assertThat(parsedReporting.depth).isEqualTo(123.4)
     }
 
     @Test
@@ -258,6 +260,7 @@ class ReportingMapperUTests {
                 threat = "Obligations déclaratives",
                 threatCharacterization = "DEP",
                 name = "Chalutage dans les 3 milles",
+                depth = 123.4,
             )
 
         // When
@@ -271,6 +274,7 @@ class ReportingMapperUTests {
         Assertions.assertThat(alertValue.alertId).isEqualTo(1)
         Assertions.assertThat(alertValue.natinfCode).isEqualTo(7059)
         Assertions.assertThat(alertValue.name).isEqualTo("Chalutage dans les 3 milles")
+        Assertions.assertThat(alertValue.depth).isEqualTo(123.4)
     }
 
     @Test

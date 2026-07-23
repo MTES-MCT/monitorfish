@@ -20,7 +20,7 @@ export function VesselProfile() {
     <Wrapper data-cy="vessel-profile">
       <Header>
         Profil du navire{' '}
-        <StyledIcon size={16} title="Le profile de navire est calculé sur 1 an de déclarations de captures." />
+        <StyledIcon size={16} title="Le profil de navire est calculé sur 1 an de déclarations de captures." />
       </Header>
       {!selectedVessel?.profile?.gears &&
         !selectedVessel?.profile?.species &&

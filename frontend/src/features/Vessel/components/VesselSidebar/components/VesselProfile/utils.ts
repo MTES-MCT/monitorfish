@@ -9,7 +9,7 @@ export function getSortedProfileBarsByDesc(profile: Record<string, number>) {
       key,
       value: (profile[key] && profile[key] * 100)?.toFixed(1) ?? 0
     }))
-    .filter(bar => !!bar.value)
+    .filter(bar => Number(bar.value) > 0)
 
   const total = filteredSortedByDesc.reduce((acc, current) => acc + Number(current.value), 0)
 

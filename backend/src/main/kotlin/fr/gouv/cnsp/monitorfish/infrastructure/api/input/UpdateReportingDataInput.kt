@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
@@ -39,6 +40,7 @@ class UpdateReportingDataInput(
     val description: String? = null,
     val numberOfVessels: Int? = null,
     val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
+    val targetType: ReportingTargetType,
 ) {
     fun toUpdatedReportingValues(): ReportingUpdateCommand {
         val infractions =
@@ -82,6 +84,7 @@ class UpdateReportingDataInput(
             numberOfVessels = this.numberOfVessels,
             latitude = this.latitude,
             longitude = this.longitude,
+            targetType = this.targetType,
         )
     }
 }

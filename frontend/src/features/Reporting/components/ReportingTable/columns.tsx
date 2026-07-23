@@ -75,6 +75,8 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       cell: (info: CellContext<Reporting.Reporting, string>) => {
         const reporting = info.row.original
 
+        // TODO: handle gear target
+
         return (
           <Ellipsised>
             <StyledCountryFlag countryCode={reporting.flagState} size={[20, 14]} />
@@ -83,7 +85,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
         )
       },
       enableSorting: true,
-      header: () => 'Navire',
+      header: () => 'Cible',
       id: 'vesselName',
       size: 260 + legacyFirefoxOffset
     },

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
 
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.jpa.repository.Modifying
@@ -293,5 +294,6 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         validityOption: String?,
         flagState: String,
         isFishing: Boolean?,
+        targetType: ReportingTargetType,
     )
 }

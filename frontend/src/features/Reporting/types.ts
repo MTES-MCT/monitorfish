@@ -89,6 +89,7 @@ type FormBaseEditedFields = Pick<
   | 'vesselIdentifier'
   | 'validityOption'
   | 'vesselName'
+  | 'targetType'
 >
 
 export type FormEditedReporting =

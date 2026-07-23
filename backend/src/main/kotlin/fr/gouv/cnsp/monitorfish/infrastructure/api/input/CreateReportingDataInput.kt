@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThr
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
@@ -42,6 +43,7 @@ class CreateReportingDataInput(
     val description: String? = null,
     val numberOfVessels: Int? = null,
     val threatHierarchies: List<ThreatHierarchyDataInput> = emptyList(),
+    val targetType: ReportingTargetType,
 ) {
     fun toReporting(createdBy: String): Reporting {
         val infractions =
@@ -93,6 +95,7 @@ class CreateReportingDataInput(
                 isIUU = isIUU,
                 latitude = latitude,
                 longitude = longitude,
+                targetType = targetType,
             )
         } else {
             Reporting.Observation(
@@ -127,6 +130,7 @@ class CreateReportingDataInput(
                 isIUU = isIUU,
                 latitude = latitude,
                 longitude = longitude,
+                targetType = targetType,
             )
         }
     }

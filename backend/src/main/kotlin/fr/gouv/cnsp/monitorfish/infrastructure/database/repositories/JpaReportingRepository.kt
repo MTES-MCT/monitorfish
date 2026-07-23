@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.Alert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -84,6 +85,12 @@ class JpaReportingRepository(
                 },
             flagState = updatedReporting.flagState.name,
             isFishing = updatedReporting.isFishing,
+            targetType =
+                when (updatedReporting) {
+                    is Reporting.InfractionSuspicion -> updatedReporting.targetType
+                    is Reporting.Observation -> updatedReporting.targetType
+                    is Reporting.Alert -> ReportingTargetType.VESSEL
+                },
         )
 
         return dbReportingRepository.findById(reportingId).get().toReporting(mapper)

@@ -1,73 +1,28 @@
-import { EU_COUNTRY_CODES } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
-import { MissionAction } from '@features/Mission/missionAction.types'
-import { FormikCheckbox, FormikMultiRadio, FormikTextarea, pluralize } from '@mtes-mct/monitor-ui'
+import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { Fragment } from 'react'
 import styled from 'styled-components'
 
-import { getNumberInFrench } from './utils'
+import { getPriorityTargetReasons } from './utils'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
-import type { ReactNode } from 'react'
 
 type ControlQualityFieldProps = Readonly<{
   withLastHaul?: boolean
 }>
 
-function joinReasons(reasons: ReactNode[]): ReactNode {
-  return reasons.map((reason, index) => (
-    // eslint-disable-next-line react/no-array-index-key
-    <Fragment key={index}>
-      {index > 0 && (index === reasons.length - 1 ? ', et ' : ', ')}
-      {reason}
-    </Fragment>
-  ))
+function joinReasons(reasons: string[]): string {
+  if (reasons.length <= 1) {
+    return reasons[0] ?? ''
+  }
+
+  return `${reasons.slice(0, -1).join(', ')}, et ${reasons[reasons.length - 1]}`
 }
 
 export function ControlQualityField({ withLastHaul = false }: ControlQualityFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
 
-  const priorityGroups = (values.vesselGroups ?? []).filter(group => group.isPriorityGroup)
-  const currentTripReportingLength = (values.tripReportings ?? []).length
-  const hasGroupOrReportingReason = priorityGroups.length > 0 || currentTripReportingLength > 0
-  const isThirdCountryVesselLandingInFrance =
-    values.actionType === MissionAction.MissionActionType.LAND_CONTROL &&
-    !!values.portLocode?.startsWith('FR') &&
-    !!values.flagState &&
-    values.flagState !== 'UNDEFINED' &&
-    !EU_COUNTRY_CODES.includes(values.flagState)
-  const isPriorityTarget =
-    priorityGroups.length > 0 ||
-    currentTripReportingLength > 0 ||
-    !!values.isINNControl ||
-    isThirdCountryVesselLandingInFrance
-
-  const reasons: ReactNode[] = []
-  if (priorityGroups.length > 0) {
-    reasons.push(
-      <>
-        il appartient au{priorityGroups.length > 1 ? 'x' : ''} {pluralize('groupe', priorityGroups.length)}{' '}
-        {pluralize('prioritaire', priorityGroups.length)}{' '}
-        {priorityGroups.map((group, index, groups) => (
-          <span key={group.id}>
-            “{group.name}”{groups.length > index + 1 ? ' et ' : ''}
-          </span>
-        ))}
-      </>
-    )
-  }
-  if (currentTripReportingLength > 0) {
-    reasons.push(
-      `${getNumberInFrench(currentTripReportingLength)} ${pluralize('suspicion', currentTripReportingLength)} d’infraction est en cours sur sa marée`
-    )
-  }
-  if (values.isINNControl) {
-    reasons.push('c’est un navire INN')
-  }
-  if (isThirdCountryVesselLandingInFrance) {
-    reasons.push('c’est un navire tiers débarquant dans un port français')
-  }
+  const { hasGroupOrReportingReason, isPriorityTarget, reasons } = getPriorityTargetReasons(values)
 
   return (
     <Wrapper isLight legend="Qualité du contrôle (interne CNSP)">

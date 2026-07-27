@@ -205,11 +205,6 @@
       "count": 1
     }
   },
-  "src/features/Logbook/__tests__/utils.test.ts": {
-    "@typescript-eslint/require-await": {
-      "count": 20
-    }
-  },
   "src/features/Logbook/components/VesselLogbook/CustomDatesShowedInfo.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1

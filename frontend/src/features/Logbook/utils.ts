@@ -103,9 +103,7 @@ export const getCPSMessages = (logbookMessages: Logbook.Message[]): Logbook.CpsM
  * An invalidated PNO is only kept as a last resort.
  */
 export const getPNOMessage = (logbookMessages: Logbook.Message[]): Logbook.PnoMessage | undefined => {
-  const pnoMessages = logbookMessages.filter(
-    message => message.messageType === Logbook.MessageType.PNO
-  ) as Logbook.PnoMessage[]
+  const pnoMessages = logbookMessages.filter(message => message.messageType === Logbook.MessageType.PNO)
 
   const validPNOs = pnoMessages.filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted)
   const notInvalidatedPNOs = validPNOs.filter(message => !message.message.isInvalidated)

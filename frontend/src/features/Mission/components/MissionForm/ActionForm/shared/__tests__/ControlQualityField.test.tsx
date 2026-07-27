@@ -1,3 +1,4 @@
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { GroupType } from '@features/VesselGroup/types'
 import { describe, expect, it } from '@jest/globals'
@@ -159,6 +160,134 @@ describe('ControlQualityField', () => {
     const target = getPriorityTarget()
     expect(target.textContent).toBe(
       'Le navire est une cible prioritaire : il appartient au groupe prioritaire “Groupe A”, et deux suspicions d’infraction est en cours sur sa marée.'
+    )
+  })
+
+  it('renders the INN sentence when the action is an INN control, with no groups or reportings', () => {
+    renderControlQualityField({
+      isINNControl: true,
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    const target = getPriorityTarget()
+    expect(target.textContent).toBe('Le navire est une cible prioritaire car c’est un navire INN.')
+  })
+
+  it('renders the third-country landing sentence for a non-EU flag landing at a French port', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'MA',
+      portLocode: 'FRAUR',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    const target = getPriorityTarget()
+    expect(target.textContent).toBe(
+      'Le navire est une cible prioritaire car c’est un navire tiers débarquant dans un port français.'
+    )
+  })
+
+  it('does not render the third-country landing sentence for an EU flag', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'ES',
+      portLocode: 'FRAUR',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    expect(screen.getByText('Le navire n’est pas considéré comme une cible prioritaire.')).not.toBeNull()
+  })
+
+  it('does not render the third-country landing sentence for a non-French port', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'MA',
+      portLocode: 'ESVGO',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    expect(screen.getByText('Le navire n’est pas considéré comme une cible prioritaire.')).not.toBeNull()
+  })
+
+  it('does not render the third-country landing sentence for a non-LAND_CONTROL action', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.SEA_CONTROL,
+      flagState: 'MA',
+      portLocode: 'FRAUR',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    expect(screen.getByText('Le navire n’est pas considéré comme une cible prioritaire.')).not.toBeNull()
+  })
+
+  it('does not render the third-country landing sentence for an undefined flag state', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'UNDEFINED',
+      portLocode: 'FRAUR',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    expect(screen.getByText('Le navire n’est pas considéré comme une cible prioritaire.')).not.toBeNull()
+  })
+
+  it('joins the group reason and the INN reason with "et" when both apply', () => {
+    renderControlQualityField({
+      isINNControl: true,
+      tripReportings: [],
+      vesselGroups: [buildVesselGroup({ id: 1, isPriorityGroup: true, name: 'Groupe A' })],
+      vesselId: 123
+    })
+
+    const target = getPriorityTarget()
+    expect(target.textContent).toBe(
+      'Le navire est une cible prioritaire : il appartient au groupe prioritaire “Groupe A”, et c’est un navire INN.'
+    )
+  })
+
+  it('joins the INN reason and the third-country reason with "et" when both apply, with no groups or reportings', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'MA',
+      isINNControl: true,
+      portLocode: 'FRAUR',
+      tripReportings: [],
+      vesselGroups: [],
+      vesselId: 123
+    })
+
+    const target = getPriorityTarget()
+    expect(target.textContent).toBe(
+      'Le navire est une cible prioritaire car c’est un navire INN, et c’est un navire tiers débarquant dans un port français.'
+    )
+  })
+
+  it('joins all four reasons with commas and a final "et" when everything applies', () => {
+    renderControlQualityField({
+      actionType: MissionAction.MissionActionType.LAND_CONTROL,
+      flagState: 'MA',
+      isINNControl: true,
+      portLocode: 'FRAUR',
+      tripReportings: [buildTripReporting({ id: 1 })],
+      vesselGroups: [buildVesselGroup({ id: 1, isPriorityGroup: true, name: 'Groupe A' })],
+      vesselId: 123
+    })
+
+    const target = getPriorityTarget()
+    expect(target.textContent).toBe(
+      'Le navire est une cible prioritaire : il appartient au groupe prioritaire “Groupe A”, une suspicion d’infraction est en cours sur sa marée, c’est un navire INN, et c’est un navire tiers débarquant dans un port français.'
     )
   })
 })

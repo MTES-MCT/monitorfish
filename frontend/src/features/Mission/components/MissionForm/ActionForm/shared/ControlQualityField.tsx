@@ -1,8 +1,8 @@
-import { FormikCheckbox, FormikMultiRadio, FormikTextarea, pluralize } from '@mtes-mct/monitor-ui'
+import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
 
-import { getNumberInFrench } from './utils'
+import { getPriorityTargetReasons } from './utils'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
 
 import type { MissionActionFormValues } from '../../types'
@@ -11,13 +11,18 @@ type ControlQualityFieldProps = Readonly<{
   withLastHaul?: boolean
 }>
 
+function joinReasons(reasons: string[]): string {
+  if (reasons.length <= 1) {
+    return reasons[0] ?? ''
+  }
+
+  return `${reasons.slice(0, -1).join(', ')}, et ${reasons[reasons.length - 1]}`
+}
+
 export function ControlQualityField({ withLastHaul = false }: ControlQualityFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
 
-  const priorityGroups = (values.vesselGroups ?? []).filter(group => group.isPriorityGroup)
-  const currentTripReportingLength = (values.tripReportings ?? []).length
-  const isPriorityTarget = priorityGroups.length > 0 || currentTripReportingLength > 0
-  const reportingsText = `${getNumberInFrench(currentTripReportingLength)} ${pluralize('suspicion', currentTripReportingLength)} d’infraction est en cours sur sa marée.`
+  const { hasGroupOrReportingReason, isPriorityTarget, reasons } = getPriorityTargetReasons(values)
 
   return (
     <Wrapper isLight legend="Qualité du contrôle (interne CNSP)">
@@ -25,17 +30,8 @@ export function ControlQualityField({ withLastHaul = false }: ControlQualityFiel
         <PriorityTarget data-cy="mission-action-priority-target">
           {isPriorityTarget ? (
             <>
-              Le navire est une cible prioritaire :
-              {priorityGroups.length === 0 && currentTripReportingLength > 0 && ` ${reportingsText}`}
-              {priorityGroups.length > 0 &&
-                ` il appartient au${priorityGroups.length > 1 ? 'x' : ''} ${pluralize('groupe', priorityGroups.length)} ${pluralize('prioritaire', priorityGroups.length)} `}
-              {priorityGroups.map((group, index, groups) => (
-                <span key={group.id}>
-                  “{group.name}”{groups.length > index + 1 ? ' et ' : ''}
-                </span>
-              ))}
-              {priorityGroups.length > 0 && currentTripReportingLength === 0 && '.'}
-              {priorityGroups.length > 0 && currentTripReportingLength > 0 && <>, et {reportingsText}</>}
+              Le navire est une cible prioritaire {hasGroupOrReportingReason ? ': ' : 'car '}
+              {joinReasons(reasons)}.
             </>
           ) : (
             <strong>Le navire n’est pas considéré comme une cible prioritaire.</strong>
@@ -76,7 +72,7 @@ const Wrapper = styled(FieldsetGroup)`
 `
 
 const PriorityTarget = styled.div`
-  color: ${p => p.theme.color.gunMetal};
+  color: ${p => p.theme.color.slateGray};
   font-style: italic;
 
   > ul {

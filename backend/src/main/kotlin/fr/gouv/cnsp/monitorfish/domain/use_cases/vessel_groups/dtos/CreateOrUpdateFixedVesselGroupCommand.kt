@@ -18,6 +18,7 @@ data class CreateOrUpdateFixedVesselGroupCommand(
     val endOfValidityUtc: ZonedDateTime? = null,
     val startOfValidityUtc: ZonedDateTime? = null,
     val vessels: List<VesselIdentity>,
+    val isPriorityGroup: Boolean,
 ) {
     fun toFixedVesselGroup(
         createdBy: String,
@@ -38,5 +39,6 @@ data class CreateOrUpdateFixedVesselGroupCommand(
         endOfValidityUtc = endOfValidityUtc,
         startOfValidityUtc = startOfValidityUtc,
         vessels = vessels,
+        isPriorityGroup = isPriorityGroup,
     )
 }

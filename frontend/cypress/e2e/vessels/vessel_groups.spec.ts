@@ -285,6 +285,7 @@ context('Vessel groups', () => {
     cy.get('[title="#8c2c17"]').click()
     cy.fill('Nom du groupe', 'Dolor sit amet')
     cy.fill('Description du groupe', 'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    cy.fill('Cibles prioritaires', true)
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires fixe "Dolor sit amet" a bien été créé.').should('be.visible')
 
@@ -300,6 +301,7 @@ context('Vessel groups', () => {
       'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.'
     )
     cy.get('[title="Dolor sit amet"]').contains('G. fixe')
+    cy.get('[title="Dolor sit amet"]').contains('Cibles prio.')
 
     /**
      * Modify the created group

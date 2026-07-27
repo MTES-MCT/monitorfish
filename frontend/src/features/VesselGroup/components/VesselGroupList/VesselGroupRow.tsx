@@ -168,7 +168,7 @@ export function VesselGroupRow({ isFromUrl, isOpened, isPinned, vesselGroupWithV
     <>
       <Wrapper data-cy="vessel-group-row" title={vesselGroupWithVessels.group.name}>
         <Row onClick={toggleRow}>
-          {!isHardcoded && (
+          {!isPriority && (
             <IconButton
               accent={Accent.TERTIARY}
               aria-label="Sélectionner"

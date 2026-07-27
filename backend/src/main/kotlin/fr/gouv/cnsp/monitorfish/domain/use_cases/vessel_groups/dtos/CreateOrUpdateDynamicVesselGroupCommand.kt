@@ -15,6 +15,7 @@ data class CreateOrUpdateDynamicVesselGroupCommand(
     val color: String,
     val sharing: Sharing,
     val sharedTo: List<CnspService>?,
+    val isPriorityGroup: Boolean,
     val endOfValidityUtc: ZonedDateTime? = null,
     val startOfValidityUtc: ZonedDateTime? = null,
     val filters: VesselGroupFilters,
@@ -38,5 +39,6 @@ data class CreateOrUpdateDynamicVesselGroupCommand(
         endOfValidityUtc = endOfValidityUtc,
         startOfValidityUtc = startOfValidityUtc,
         filters = filters,
+        isPriorityGroup = isPriorityGroup,
     )
 }

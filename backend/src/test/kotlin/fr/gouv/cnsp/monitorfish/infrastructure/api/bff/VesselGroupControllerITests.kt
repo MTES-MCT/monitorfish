@@ -100,6 +100,7 @@ class VesselGroupControllerITests {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 startOfValidityUtc = null,
                 filters =
@@ -159,6 +160,7 @@ class VesselGroupControllerITests {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 startOfValidityUtc = null,
                 vessels =

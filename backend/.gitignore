@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### ktlint ###
+# Default baseline path from the ktlint-gradle plugin; not used (violations are fixed, not baselined).
+config/ktlint/

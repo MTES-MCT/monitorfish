@@ -15,10 +15,13 @@ import { addOrUpdateVesselGroup } from '@features/VesselGroup/useCases/addOrUpda
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import {
   FieldError,
+  FormikCheckbox,
   FormikDatePicker,
   FormikEffect,
   FormikTextarea,
   FormikTextInput,
+  Icon,
+  THEME,
   useNewWindow
 } from '@mtes-mct/monitor-ui'
 import { toFormikValidationSchema } from '@utils/toFormikValidationSchema'
@@ -135,6 +138,14 @@ export function VesselGroupForm({
               </Column>
             </Columns>
             <FormikSharingOptions />
+            <PriorityGroup>
+              <FormikCheckbox label="Cibles prioritaires" name="isPriorityGroup" />
+              <Icon.Info
+                color={THEME.color.blueYonder}
+                size={18}
+                title="Les navires appartenant à ce groupe seront à contrôler en priorité. Dans le CR de contrôle (et donc dans les statistiques), ils seront identifiés comme des cibles prioritaires. "
+              />
+            </PriorityGroup>
           </>
         )}
       </Formik>
@@ -144,6 +155,14 @@ export function VesselGroupForm({
 
 const StyledFormikTextInput = styled(FormikTextInput)`
   margin-top: 16px;
+`
+
+const PriorityGroup = styled.div`
+  display: flex;
+
+  .Element-IconBox {
+    margin-left: 8px;
+  }
 `
 
 const StyledFormikTextarea = styled(FormikTextarea)<{

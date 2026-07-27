@@ -873,6 +873,7 @@ object TestUtils {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
@@ -902,6 +903,7 @@ object TestUtils {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 filters =
                     VesselGroupFilters(
@@ -937,6 +939,7 @@ object TestUtils {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 vessels =
                     listOf(
@@ -969,6 +972,7 @@ object TestUtils {
                 color = "#4287f5",
                 sharing = Sharing.PRIVATE,
                 sharedTo = null,
+                isPriorityGroup = false,
                 endOfValidityUtc = null,
                 vessels =
                     listOf(

@@ -7,6 +7,7 @@ import {
   CreateOrUpdateFixedVesselGroupSchema,
   type DynamicVesselGroupFilter,
   GroupType,
+  Sharing,
   type CreateOrUpdateDynamicVesselGroup,
   type CreateOrUpdateVesselGroup,
   type VesselIdentityForVesselGroup
@@ -95,7 +96,7 @@ export function VesselGroupForm({
         onSubmit={handleOnSubmit}
         validate={validationSchema}
       >
-        {({ errors }) => (
+        {({ errors, values }) => (
           <>
             {isMainWindow && groupType === GroupType.DYNAMIC && (
               <FormikEffect
@@ -138,14 +139,16 @@ export function VesselGroupForm({
               </Column>
             </Columns>
             <FormikSharingOptions />
-            <PriorityGroup>
-              <FormikCheckbox label="Cibles prioritaires" name="isPriorityGroup" />
-              <Icon.Info
-                color={THEME.color.blueYonder}
-                size={18}
-                title="Les navires appartenant à ce groupe seront à contrôler en priorité. Dans le CR de contrôle (et donc dans les statistiques), ils seront identifiés comme des cibles prioritaires. "
-              />
-            </PriorityGroup>
+            {values.sharing === Sharing.SHARED && (
+              <PriorityGroup>
+                <FormikCheckbox label="Cibles prioritaires" name="isPriorityGroup" />
+                <Icon.Info
+                  color={THEME.color.blueYonder}
+                  size={18}
+                  title="Les navires appartenant à ce groupe seront à contrôler en priorité. Dans le CR de contrôle (et donc dans les statistiques), ils seront identifiés comme des cibles prioritaires. "
+                />
+              </PriorityGroup>
+            )}
           </>
         )}
       </Formik>

@@ -25,12 +25,14 @@ class GetAllUserVesselGroupsUTests {
     @MockitoBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
 
-    private fun authorizedUser(service: CnspService? = null) =
-        AuthorizedUser(email = "dummy@email.gouv.fr", isSuperUser = false, service = service)
+    private fun authorizedUser(
+        service: CnspService? = null,
+        isSuperUser: Boolean = false,
+    ) = AuthorizedUser(email = "dummy@email.gouv.fr", isSuperUser = isSuperUser, service = service)
 
     @Test
-    fun `execute returns the union of priority groups and user groups`() {
-        given(getAuthorizedUser.execute(any())).willReturn(authorizedUser())
+    fun `execute returns the union of priority groups and user groups for a super user`() {
+        given(getAuthorizedUser.execute(any())).willReturn(authorizedUser(isSuperUser = true))
         given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getDynamicVesselGroups())
 
         val groups = GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
@@ -40,13 +42,24 @@ class GetAllUserVesselGroupsUTests {
     }
 
     @Test
-    fun `execute returns only priority groups when the user has no groups`() {
-        given(getAuthorizedUser.execute(any())).willReturn(authorizedUser())
+    fun `execute returns only priority groups when a super user has no groups`() {
+        given(getAuthorizedUser.execute(any())).willReturn(authorizedUser(isSuperUser = true))
         given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(emptyList())
 
         val groups = GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
 
         assertThat(groups).containsExactlyInAnyOrderElementsOf(PriorityVesselGroup.PRIORITY_GROUPS)
+    }
+
+    @Test
+    fun `execute excludes priority groups for a non-super user`() {
+        given(getAuthorizedUser.execute(any())).willReturn(authorizedUser(isSuperUser = false))
+        given(vesselGroupRepository.findAllByUserAndSharing(any(), anyOrNull())).willReturn(getDynamicVesselGroups())
+
+        val groups = GetAllUserVesselGroups(vesselGroupRepository, getAuthorizedUser).execute("dummy@email.gouv.fr")
+
+        assertThat(groups).doesNotContainAnyElementsOf(PriorityVesselGroup.PRIORITY_GROUPS)
+        assertThat(groups).containsExactlyInAnyOrderElementsOf(getDynamicVesselGroups())
     }
 
     @Test

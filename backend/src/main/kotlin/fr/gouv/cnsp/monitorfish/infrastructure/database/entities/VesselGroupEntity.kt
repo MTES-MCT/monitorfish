@@ -53,6 +53,8 @@ data class VesselGroupEntity(
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     val type: GroupType,
+    @Column(name = "is_priority_group")
+    val isPriorityGroup: Boolean,
     @Column(name = "created_by")
     val createdBy: String,
     @Column(name = "created_at_utc")
@@ -82,6 +84,7 @@ data class VesselGroupEntity(
                     updatedAtUtc = updatedAtUtc,
                     endOfValidityUtc = endOfValidityUtc,
                     startOfValidityUtc = startOfValidityUtc,
+                    isPriorityGroup = isPriorityGroup,
                 )
             GroupType.FIXED ->
                 FixedVesselGroup(
@@ -99,6 +102,7 @@ data class VesselGroupEntity(
                     updatedAtUtc = updatedAtUtc,
                     endOfValidityUtc = endOfValidityUtc,
                     startOfValidityUtc = startOfValidityUtc,
+                    isPriorityGroup = isPriorityGroup,
                 )
             GroupType.HARDCODED -> throw IllegalStateException("Hard-coded groups are not stored in the database.")
         }
@@ -123,6 +127,7 @@ data class VesselGroupEntity(
             updatedAtUtc = vesselGroup.updatedAtUtc,
             endOfValidityUtc = vesselGroup.endOfValidityUtc,
             startOfValidityUtc = vesselGroup.startOfValidityUtc,
+            isPriorityGroup = vesselGroup.isPriorityGroup,
         )
 
         fun fromFixedVesselGroup(
@@ -144,6 +149,7 @@ data class VesselGroupEntity(
             updatedAtUtc = vesselGroup.updatedAtUtc,
             endOfValidityUtc = vesselGroup.endOfValidityUtc,
             startOfValidityUtc = vesselGroup.startOfValidityUtc,
+            isPriorityGroup = vesselGroup.isPriorityGroup,
         )
     }
 }

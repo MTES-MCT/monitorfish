@@ -51,6 +51,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             vessels,
             sharing,
             shared_to,
+            is_priority_group
             type,
             created_by,
             created_at_utc,
@@ -67,6 +68,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             CAST(:#{#vg.vessels} AS jsonb),
             :#{#vg.sharing.name},
             CAST(:#{#sharedTo} AS cnsp_service[]),
+            :#{#vg.isPriorityGroup}
             :#{#vg.type.name},
             :#{#vg.createdBy},
             :#{#vg.createdAtUtc},
@@ -96,6 +98,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             vessels = CAST(:#{#vg.vessels} AS jsonb),
             sharing = :#{#vg.sharing.name},
             shared_to = CAST(:#{#sharedTo} AS cnsp_service[]),
+            is_priority_group = :#{#vg.isPriorityGroup},
             type = :#{#vg.type.name},
             created_by = :#{#vg.createdBy},
             created_at_utc = :#{#vg.createdAtUtc},

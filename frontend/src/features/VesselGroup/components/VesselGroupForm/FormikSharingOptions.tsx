@@ -21,6 +21,7 @@ export function FormikSharingOptions() {
           name="sharedTo"
           options={CNSP_SERVICE_OPTIONS}
           placeholder=""
+          placement="topStart"
           searchable={false}
         />
       )}

@@ -285,6 +285,9 @@ context('Vessel groups', () => {
     cy.get('[title="#8c2c17"]').click()
     cy.fill('Nom du groupe', 'Dolor sit amet')
     cy.fill('Description du groupe', 'Consectetur adipiscing elit. Integer egestas pulvinar lacus quis fringilla.')
+    // The "Cibles prioritaires" checkbox is only displayed for shared groups
+    cy.fill('Partage du groupe', 'Groupe partagé')
+    cy.fill('Partager le groupe avec...', ['Pôle OPS métropole'])
     cy.fill('Cibles prioritaires', true)
     cy.clickButton('Créer le groupe')
     cy.contains('Le groupe de navires fixe "Dolor sit amet" a bien été créé.').should('be.visible')

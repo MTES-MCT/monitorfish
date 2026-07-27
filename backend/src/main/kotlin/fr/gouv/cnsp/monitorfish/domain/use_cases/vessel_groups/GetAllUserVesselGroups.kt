@@ -16,14 +16,18 @@ class GetAllUserVesselGroups(
     private val logger: Logger = LoggerFactory.getLogger(GetAllUserVesselGroups::class.java)
 
     fun execute(userEmail: String): List<VesselGroupBase> {
-        val userService = getAuthorizedUser.execute(userEmail).service
+        val authorizedUser = getAuthorizedUser.execute(userEmail)
 
         val userGroups =
             vesselGroupRepository.findAllByUserAndSharing(
                 user = userEmail,
-                service = userService,
+                service = authorizedUser.service,
             )
 
-        return PriorityVesselGroup.PRIORITY_GROUPS + userGroups
+        return if (authorizedUser.isSuperUser) {
+            PriorityVesselGroup.PRIORITY_GROUPS + userGroups
+        } else {
+            userGroups
+        }
     }
 }

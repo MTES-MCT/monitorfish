@@ -68,7 +68,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             CAST(:#{#vg.vessels} AS jsonb),
             :#{#vg.sharing.name},
             CAST(:#{#sharedTo} AS cnsp_service[]),
-            :#{#vg.isPriorityGroup}
+            :#{#vg.isPriorityGroup},
             :#{#vg.type.name},
             :#{#vg.createdBy},
             :#{#vg.createdAtUtc},

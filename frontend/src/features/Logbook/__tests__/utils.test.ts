@@ -39,6 +39,41 @@ describe('Logbook/utils.ts', () => {
     expect(pno?.isDeleted).toBeFalsy()
   })
 
+  it('getPNOMessage Should get the manual PNO message when the logbook PNO is invalidated', async () => {
+    const invalidatedPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      message: { ...correctedPNOMessage.message, isInvalidated: true },
+      reportId: 'INVALIDATED_PNO'
+    }
+    const manualPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      reportId: 'MANUAL_PNO'
+    }
+
+    // When (the invalidated PNO comes first, as it was reported before the manual one)
+    const pno = getPNOMessage([invalidatedPNOMessage, manualPNOMessage])
+
+    // Then
+    expect(pno?.reportId).toEqual('MANUAL_PNO')
+  })
+
+  it('getPNOMessage Should get the invalidated PNO message when there is no other PNO', async () => {
+    const invalidatedPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      message: { ...correctedPNOMessage.message, isInvalidated: true },
+      reportId: 'INVALIDATED_PNO'
+    }
+
+    // When
+    const pno = getPNOMessage([invalidatedPNOMessage])
+
+    // Then
+    expect(pno?.reportId).toEqual('INVALIDATED_PNO')
+  })
+
   it('getLANMessage Should get the first valid LAN message', async () => {
     const lansWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedLANMessage)
 

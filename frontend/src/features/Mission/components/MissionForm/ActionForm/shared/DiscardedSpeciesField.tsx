@@ -157,7 +157,6 @@ export function DiscardedSpeciesField() {
                     isHovered={isHovered}
                     label="Qté rejetée"
                     name={`discardedSpecies[${index}].rejectedWeight`}
-                    value={discard.rejectedWeight}
                   />
 
                   <StyledPickerTd $isActive={isActive}>

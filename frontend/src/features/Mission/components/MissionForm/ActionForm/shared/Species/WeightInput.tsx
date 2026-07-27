@@ -1,7 +1,7 @@
 import { TextInput } from '@mtes-mct/monitor-ui'
 import { useField } from 'formik'
 import { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 /**
  * A Formik-bound `TextInput` that stores its value as a `number` (the weight fields are typed as numbers in
@@ -21,6 +21,7 @@ type WeightInputProps = Readonly<{
   label: string
   name: string
   onNavigateRow?: ((direction: 'up' | 'down') => void) | undefined
+  placeholder?: string | undefined
 }>
 export function WeightInput({
   className,
@@ -31,7 +32,8 @@ export function WeightInput({
   isLight,
   label,
   name,
-  onNavigateRow
+  onNavigateRow,
+  placeholder
 }: WeightInputProps) {
   const [field, , helper] = useField<number | undefined>(name)
   const [draft, setDraft] = useState<string>(field.value == null ? '' : String(field.value))
@@ -84,15 +86,31 @@ export function WeightInput({
         event.preventDefault()
         onNavigateRow(event.key === 'ArrowUp' ? 'up' : 'down')
       }}
+      placeholder={placeholder}
       value={draft}
     />
   )
 }
 
 export const StyledWeightInput = styled(WeightInput)<{
+  $isActive: boolean
   $isHovered: boolean
 }>`
   > div > input {
     background-color: ${p => (p.$isHovered ? p.theme.color.blueYonder25 : p.theme.color.white)} !important;
   }
+
+  /* Weight inputs stay mounted whether or not their row is active, so a click lands straight in a real
+     input instead of one that only appears once the click has already been dispatched. On an inactive row
+     the input is flattened to read like the plain text it used to be swapped for — including on its own
+     CSS :hover, which would otherwise flash a border before the (debounced) row activation lands. */
+  ${p =>
+    !p.$isActive &&
+    css`
+      > div > input,
+      > div > input:hover {
+        background-color: transparent !important;
+        border-color: transparent !important;
+      }
+    `}
 `

@@ -7,11 +7,19 @@ export type RowActivation = ReturnType<typeof useRowActivation>
 // Rsuite pickers portal their dropdown outside the toggle's DOM subtree, under classes like
 // `rs-picker-popup` / `rs-picker-check-menu` — never the exact `rs-picker` class — so an exact match misses
 // clicks inside the dropdown (search input, option checkboxes).
-const isRowPinningTextInput = (target: Element | null): target is HTMLInputElement =>
-  target instanceof HTMLInputElement && target.type === 'text' && !target.closest('[class*="rs-picker"]')
+//
+// Duck-typed rather than `instanceof HTMLInputElement`: in the side window the form is portaled into a
+// `window.open` document, whose elements are instances of *that* window's constructors — `instanceof`
+// against this realm's `HTMLInputElement` is always false there, so no row would ever be pinned by focus.
+const isRowPinningTextInput = (target: EventTarget | Element | null): boolean => {
+  const element = target as HTMLInputElement | null
+
+  return element?.tagName === 'INPUT' && element.type === 'text' && !element.closest('[class*="rs-picker"]')
+}
 
 /**
- * Tracks which row of a species table is "active" — i.e. shows its editors instead of read-only text.
+ * Tracks which row of a species table is "active" — i.e. shows its pickers instead of read-only text. The
+ * weight cells are out of that swap: their inputs are always mounted, and merely styled flat when inactive.
  *
  * A row is active while it is hovered, OR while it holds the keyboard focus, OR while one of its pickers is
  * open. Tracking focus and picker-open separately from hover keeps the row in edit mode once the cursor

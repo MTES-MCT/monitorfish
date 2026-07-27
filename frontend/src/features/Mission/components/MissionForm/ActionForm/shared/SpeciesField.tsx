@@ -315,7 +315,6 @@ export function SpeciesField() {
                     label="Qté déclarée"
                     name={`speciesOnboard[${index}].declaredWeight`}
                     onNavigateRow={direction => navigateWeightInput('declaredWeight', index, direction)}
-                    value={specyOnboard.declaredWeight}
                   />
 
                   <WeightCell
@@ -327,7 +326,6 @@ export function SpeciesField() {
                     label={specyOnboard.isNotLanded ? 'Qté estimée' : controlledWeightLabel}
                     name={`speciesOnboard[${index}].controlledWeight`}
                     onNavigateRow={direction => navigateWeightInput('controlledWeight', index, direction)}
-                    value={specyOnboard.controlledWeight}
                   />
 
                   {isEISREnabled ? (
@@ -340,7 +338,6 @@ export function SpeciesField() {
                       label="Qté ss-taille"
                       name={`speciesOnboard[${index}].underSizedWeight`}
                       onNavigateRow={direction => navigateWeightInput('underSizedWeight', index, direction)}
-                      value={specyOnboard.underSizedWeight}
                     />
                   ) : (
                     <TdWithoutPaddingWhenActive $isActive={false}>

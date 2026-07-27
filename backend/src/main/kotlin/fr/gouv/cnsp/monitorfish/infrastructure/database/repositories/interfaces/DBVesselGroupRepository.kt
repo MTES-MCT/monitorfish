@@ -51,7 +51,7 @@ interface DBVesselGroupRepository : CrudRepository<VesselGroupEntity, Int> {
             vessels,
             sharing,
             shared_to,
-            is_priority_group
+            is_priority_group,
             type,
             created_by,
             created_at_utc,

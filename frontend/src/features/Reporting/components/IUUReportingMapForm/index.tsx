@@ -73,6 +73,7 @@ export function IUUReportingMapForm() {
       })
     )
     dispatch(reportingActions.unsetEditedReporting())
+    dispatch(reportingActions.unsetSelectedReportingFeatureId())
   }
 
   const handleDelete = () => {
@@ -86,6 +87,7 @@ export function IUUReportingMapForm() {
       })
     )
     dispatch(reportingActions.unsetEditedReporting())
+    dispatch(reportingActions.unsetSelectedReportingFeatureId())
     dispatch(deleteReporting(reportingIdRef.current, reportingTypeRef.current))
   }
 

@@ -62,6 +62,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
     state => state.beaconMalfunction.openedBeaconMalfunctionInKanban
   )
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
+  const showReportingForm = useMainAppSelector(state => state.displayedComponent.isReportingListFormDisplayed)
   const selectedPath = useMainAppSelector(state => state.sideWindow.selectedPath)
   const missionEvent = useListenToAllMissionEventsUpdates()
 
@@ -113,14 +114,14 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [])
 
   useEffect(() => {
-    if (editedReporting ?? openedBeaconMalfunctionInKanban) {
+    if ((showReportingForm && editedReporting) || openedBeaconMalfunctionInKanban) {
       setIsOverlayed(true)
 
       return
     }
 
     setIsOverlayed(false)
-  }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu])
+  }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu, showReportingForm])
 
   useEffect(() => {
     ;(async function () {

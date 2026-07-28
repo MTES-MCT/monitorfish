@@ -42,6 +42,7 @@ class GetReportingsUTests {
         isIUU: Boolean? = null,
         startDate: ZonedDateTime? = null,
         endDate: ZonedDateTime? = null,
+        ids: List<Int>? = null,
     ) = GetReportings(reportingRepository, getAllLegacyControlUnits).execute(
         isArchived = isArchived,
         isIUU = isIUU,
@@ -49,6 +50,7 @@ class GetReportingsUTests {
         reportingPeriod = reportingPeriod,
         startDate = startDate,
         endDate = endDate,
+        ids = ids,
     )
 
     // --- filter / date logic ---

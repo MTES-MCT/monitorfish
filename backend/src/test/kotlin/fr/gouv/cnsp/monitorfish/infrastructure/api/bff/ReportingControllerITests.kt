@@ -618,6 +618,7 @@ class ReportingControllerITests {
                 reportingPeriod = any(),
                 startDate = anyOrNull(),
                 endDate = anyOrNull(),
+                ids = anyOrNull(),
             ),
         ).willReturn(listOf(Pair(reporting, null)))
 

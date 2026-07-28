@@ -25,13 +25,15 @@ export type ReportingOverlayProps = {
 export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasChanged }: ReportingOverlayProps) {
   const dispatch = useMainAppDispatch()
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
-  const selectedReportingFeatureIds = useMainAppSelector(store => store.reporting.selectedReportingFeatureIds)
+  const selectedReportingFeatureId = useMainAppSelector(store => store.reporting.selectedReportingFeatureId)
 
   const featureId = feature?.getId()?.toString()
   const isReportingFeature = !!featureId?.includes(MonitorFishMap.MonitorFishLayer.REPORTING)
   // Prevent the hover overlay from stacking on top of a pinned overlay for the same feature
-  const isSuppressed = !isSelected && !!featureId && selectedReportingFeatureIds.includes(featureId)
-  const shouldShow = isReportingLayerDisplayed && isReportingFeature && !isSuppressed
+  const isSuppressed = !isSelected && !!featureId && selectedReportingFeatureId === featureId
+  // The selected reporting's popup must stay visible even if the reportings layer is hidden by filters,
+  // so it's clearly identified on the map while its form / vessel sheet is open
+  const shouldShow = (isReportingLayerDisplayed || isSelected) && isReportingFeature && !isSuppressed
 
   const olCoordinates = useMemo(() => {
     if (!shouldShow || !feature) {
@@ -85,7 +87,6 @@ export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasC
 
   const handleClose = () => {
     if (featureId) {
-      feature?.set('isSelected', false)
       dispatch(reportingActions.toggleSelectedReportingFeatureId(featureId))
     }
   }

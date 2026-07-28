@@ -90,6 +90,8 @@ class ReportingController(
         startDate: ZonedDateTime?,
         @RequestParam(required = false)
         endDate: ZonedDateTime?,
+        @RequestParam(required = false)
+        ids: List<Int>?,
     ): List<DisplayedReportingDataOutput> =
         getReportings
             .execute(
@@ -99,6 +101,7 @@ class ReportingController(
                 reportingPeriod = reportingPeriod,
                 startDate = startDate,
                 endDate = endDate,
+                ids = ids,
             ).map { (reporting, controlUnit) -> DisplayedReportingDataOutput.fromReporting(reporting, controlUnit) }
 
     @GetMapping(value = [""])

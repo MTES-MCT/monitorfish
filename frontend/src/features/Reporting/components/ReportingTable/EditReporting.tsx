@@ -1,10 +1,10 @@
 import { WindowContext } from '@api/constants'
 import { ErrorWall } from '@components/ErrorWall'
-import { reportingActions } from '@features/Reporting/slice'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { THEME } from '@mtes-mct/monitor-ui'
+import { setDisplayedComponents } from 'domain/shared_slices/DisplayedComponent'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -15,6 +15,9 @@ import { ReportingForm } from '../ReportingForm'
 export function EditReporting() {
   const dispatch = useMainAppDispatch()
   const editedReporting = useMainAppSelector(state => state.reporting.editedReporting)
+  const showTableReportingForm = useMainAppSelector(state => state.displayedComponent.isReportingListFormDisplayed)
+  const showForm = !!editedReporting && showTableReportingForm
+
   const displayedError = useMainAppSelector(
     state => state.displayedError[DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR]
   )
@@ -22,19 +25,19 @@ export function EditReporting() {
   const baseUrl = window.location.origin
 
   const closeForm = useCallback(() => {
-    dispatch(reportingActions.unsetEditedReporting())
+    dispatch(setDisplayedComponents({ isReportingListFormDisplayed: false }))
   }, [dispatch])
 
   if (displayedError) {
     return (
-      <EditReportingWrapper $isEditedInSideWindow={!!editedReporting}>
+      <EditReportingWrapper $isEditedInSideWindow={showForm}>
         <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_FORM_ERROR} isAbsolute />
       </EditReportingWrapper>
     )
   }
 
   return (
-    <EditReportingWrapper $isEditedInSideWindow={!!editedReporting}>
+    <EditReportingWrapper $isEditedInSideWindow={showForm}>
       <Header>
         <Row $topMargin={0}>
           <AlertsIcon />
@@ -42,7 +45,7 @@ export function EditReporting() {
           <CloseIcon onClick={closeForm} />
         </Row>
         <Row $topMargin={6}>
-          {editedReporting && editedReporting.flagState && (
+          {showForm && editedReporting.flagState && (
             <Flag rel="preload" src={`${baseUrl}/flags/${editedReporting.flagState.toLowerCase()}.svg`} />
           )}
           <VesselName title={editedReporting?.vesselName ?? 'Aucun nom'}>
@@ -52,7 +55,7 @@ export function EditReporting() {
         </Row>
       </Header>
       <Line />
-      {editedReporting && (
+      {showForm && (
         <StyledReportingForm
           editedReporting={editedReporting}
           hasWhiteBackground

@@ -171,6 +171,7 @@ export const OtherSourceTypeLabel: Record<OtherSourceType, string> = {
 
 export type ApiSearchFilter = {
   endDate: string | undefined
+  ids: number[] | undefined
   isArchived: boolean | undefined
   isIUU: boolean | undefined
   reportingPeriod: ReportingSearchPeriod

@@ -26,7 +26,7 @@ import {
 } from './__mocks__/logbookMessages'
 
 describe('Logbook/utils.ts', () => {
-  it('getPNOMessage Should get the first valid PNO message', async () => {
+  it('getPNOMessage Should get the first valid PNO message', () => {
     const pnosWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedPNOMessage)
 
     // When (we reverse the array to have the corrected message first)
@@ -39,7 +39,42 @@ describe('Logbook/utils.ts', () => {
     expect(pno?.isDeleted).toBeFalsy()
   })
 
-  it('getLANMessage Should get the first valid LAN message', async () => {
+  it('getPNOMessage Should get the manual PNO message when the logbook PNO is invalidated', () => {
+    const invalidatedPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      message: { ...correctedPNOMessage.message, isInvalidated: true },
+      reportId: 'INVALIDATED_PNO'
+    }
+    const manualPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      reportId: 'MANUAL_PNO'
+    }
+
+    // When (the invalidated PNO comes first, as it was reported before the manual one)
+    const pno = getPNOMessage([invalidatedPNOMessage, manualPNOMessage])
+
+    // Then
+    expect(pno?.reportId).toEqual('MANUAL_PNO')
+  })
+
+  it('getPNOMessage Should get the invalidated PNO message when there is no other PNO', () => {
+    const invalidatedPNOMessage: Logbook.PnoMessage = {
+      ...correctedPNOMessage,
+      isCorrectedByNewerMessage: false,
+      message: { ...correctedPNOMessage.message, isInvalidated: true },
+      reportId: 'INVALIDATED_PNO'
+    }
+
+    // When
+    const pno = getPNOMessage([invalidatedPNOMessage])
+
+    // Then
+    expect(pno?.reportId).toEqual('INVALIDATED_PNO')
+  })
+
+  it('getLANMessage Should get the first valid LAN message', () => {
     const lansWithAnotherCorrectedMessage = dummyLogbookMessages.concat(correctedLANMessage)
 
     // When (we reverse the array to have the corrected message first)
@@ -52,7 +87,7 @@ describe('Logbook/utils.ts', () => {
     expect(lan?.isDeleted).toBeFalsy()
   })
 
-  it('getTotalFARWeight Should get the total weight of FAR messages', async () => {
+  it('getTotalFARWeight Should get the total weight of FAR messages', () => {
     // Given there is two FAR messages but one is corrected (so not taken into account in the total)
     const farMessages = getFARMessages(dummyLogbookMessages)
 
@@ -63,7 +98,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(2256)
   })
 
-  it('getTotalDISWeight Should get the total weight of DIS messages', async () => {
+  it('getTotalDISWeight Should get the total weight of DIS messages', () => {
     // Given there is no DIS message acknowledged
     const disMessages = getDISMessages(dummyLogbookMessages)
 
@@ -74,7 +109,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(0)
   })
 
-  it('getTotalDEPWeight Should get the total weight of DEP message', async () => {
+  it('getTotalDEPWeight Should get the total weight of DEP message', () => {
     // Given
     const depMessage = getDEPMessage(dummyLogbookMessages)
 
@@ -85,7 +120,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(579)
   })
 
-  it('getTotalLANWeight Should get the total weight of LAN message', async () => {
+  it('getTotalLANWeight Should get the total weight of LAN message', () => {
     // Given
     const lanMessage = getLANMessage(dummyLogbookMessages)
 
@@ -97,7 +132,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(1918)
   })
 
-  it('getTotalPNOWeight Should get the total weight of PNO message', async () => {
+  it('getTotalPNOWeight Should get the total weight of PNO message', () => {
     // Given
     const pnoMessage = getPNOMessage(dummyLogbookMessages)
 
@@ -108,7 +143,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(1675)
   })
 
-  it('getTotalPNOWeight Should return 0 when logbookMessageValue is undefined', async () => {
+  it('getTotalPNOWeight Should return 0 when logbookMessageValue is undefined', () => {
     // When
     const weight = getTotalPNOWeight(undefined)
 
@@ -116,7 +151,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(0)
   })
 
-  it('getTotalPNOWeight Should return 0 when catchOnboard is empty', async () => {
+  it('getTotalPNOWeight Should return 0 when catchOnboard is empty', () => {
     // Given
     const pnoMessageValue = {
       catchOnboard: [],
@@ -130,7 +165,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(0)
   })
 
-  it('getTotalPNOWeight Should exclude bluefin tuna extended species codes', async () => {
+  it('getTotalPNOWeight Should exclude bluefin tuna extended species codes', () => {
     // Given
     const pnoMessageValue = {
       catchOnboard: [
@@ -166,7 +201,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(300)
   })
 
-  it('getTotalPNOWeight Should handle catches with undefined weight', async () => {
+  it('getTotalPNOWeight Should handle catches with undefined weight', () => {
     // Given
     const pnoMessageValue = {
       catchOnboard: [
@@ -194,7 +229,7 @@ describe('Logbook/utils.ts', () => {
     expect(weight).toEqual(150)
   })
 
-  it('getTotalCPSDistinctSpecies Should get the total number of distinct CPS species', async () => {
+  it('getTotalCPSDistinctSpecies Should get the total number of distinct CPS species', () => {
     // When
     const total = getCPSNumberOfDistinctSpecies([dummyCpsMessage])
 
@@ -202,7 +237,7 @@ describe('Logbook/utils.ts', () => {
     expect(total).toEqual(2)
   })
 
-  it('buildCatchArray Should get the an array of catches', async () => {
+  it('buildCatchArray Should get the an array of catches', () => {
     // When
     const catches = buildCatchArray(dummyLanMessageWithLVRCPresentationSpecies.message.catchLanded)
 
@@ -268,7 +303,7 @@ describe('Logbook/utils.ts', () => {
     })
   })
 
-  it('buildCatchArray Should return empty array for empty input', async () => {
+  it('buildCatchArray Should return empty array for empty input', () => {
     // When
     const catches = buildCatchArray([])
 
@@ -276,7 +311,7 @@ describe('Logbook/utils.ts', () => {
     expect(catches).toEqual([])
   })
 
-  it('buildCatchArray Should aggregate catches of the same species', async () => {
+  it('buildCatchArray Should aggregate catches of the same species', () => {
     // Given
     const inputCatches: Logbook.Catch[] = [
       {
@@ -320,7 +355,7 @@ describe('Logbook/utils.ts', () => {
     expect(hadCatch?.properties).toHaveLength(1)
   })
 
-  it('buildCatchArray Should sort catches by weight in descending order', async () => {
+  it('buildCatchArray Should sort catches by weight in descending order', () => {
     // Given
     const inputCatches: Logbook.Catch[] = [
       {
@@ -347,7 +382,7 @@ describe('Logbook/utils.ts', () => {
     expect(catches[2]?.species).toEqual('COD') // 100
   })
 
-  it('buildCatchArray Should handle undefined weight and nbFish', async () => {
+  it('buildCatchArray Should handle undefined weight and nbFish', () => {
     // Given
     const inputCatches: Logbook.Catch[] = [
       {
@@ -377,7 +412,7 @@ describe('Logbook/utils.ts', () => {
     expect(hadCatch?.nbFish).toEqual(5)
   })
 
-  it('buildCatchArray Should exclude BFT when extended tuna species are present', async () => {
+  it('buildCatchArray Should exclude BFT when extended tuna species are present', () => {
     // Given
     const inputCatches: Logbook.Catch[] = [
       {
@@ -407,7 +442,7 @@ describe('Logbook/utils.ts', () => {
     expect(catches.find(c => c.species === 'BFT')).toBeUndefined() // Should be excluded
   })
 
-  it('buildCatchArray Should include BFT when no extended tuna species are present', async () => {
+  it('buildCatchArray Should include BFT when no extended tuna species are present', () => {
     // Given
     const inputCatches: Logbook.Catch[] = [
       {
@@ -431,7 +466,7 @@ describe('Logbook/utils.ts', () => {
     expect(catches.find(c => c.species === 'COD')).toBeDefined()
   })
 
-  it('getFARSpeciesInsightRecord Should compute insight of species', async () => {
+  it('getFARSpeciesInsightRecord Should compute insight of species', () => {
     // Given
     const dummyTotalWeight = 6000000
 

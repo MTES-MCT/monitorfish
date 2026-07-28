@@ -98,19 +98,25 @@ export const getCPSMessages = (logbookMessages: Logbook.Message[]): Logbook.CpsM
   logbookMessages.filter(message => message.messageType === Logbook.MessageType.CPS)
 
 /**
- * Get the first valid PNO if found or return the first PNO
+ * Get the first valid PNO if found or return the first PNO.
+ *
+ * An invalidated PNO is only kept as a last resort.
  */
 export const getPNOMessage = (logbookMessages: Logbook.Message[]): Logbook.PnoMessage | undefined => {
-  const validPNOs = logbookMessages.filter(
-    message =>
-      message.messageType === Logbook.MessageType.PNO && !message.isCorrectedByNewerMessage && !message.isDeleted
-  ) as Logbook.PnoMessage[]
+  const pnoMessages = logbookMessages.filter(message => message.messageType === Logbook.MessageType.PNO)
+
+  const validPNOs = pnoMessages.filter(message => !message.isCorrectedByNewerMessage && !message.isDeleted)
+  const notInvalidatedPNOs = validPNOs.filter(message => !message.message.isInvalidated)
+
+  if (notInvalidatedPNOs.length === 1) {
+    return notInvalidatedPNOs[0]
+  }
 
   if (validPNOs.length === 1) {
     return validPNOs[0]
   }
 
-  return logbookMessages.find(message => message.messageType === Logbook.MessageType.PNO)
+  return pnoMessages[0]
 }
 
 export const getFARMessages = (logbookMessages: Logbook.Message[]): Logbook.FarMessage[] =>

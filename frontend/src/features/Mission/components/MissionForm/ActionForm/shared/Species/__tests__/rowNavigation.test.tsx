@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals'
 import { THEME, ThemeProvider } from '@mtes-mct/monitor-ui'
-import { act, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Formik } from 'formik'
 
@@ -41,7 +41,6 @@ function Harness() {
               label="Qté déclarée"
               name={`speciesOnboard[${index}].declaredWeight`}
               onNavigateRow={direction => navigate('declaredWeight', index, direction)}
-              value={index}
             />
           </SpeciesTableRow>
         ))}
@@ -50,29 +49,30 @@ function Harness() {
   )
 }
 
+function renderTable() {
+  render(
+    <ThemeProvider theme={THEME}>
+      <Formik
+        initialValues={{
+          speciesOnboard: [{ declaredWeight: 0 }, { declaredWeight: 1 }, { declaredWeight: 2 }]
+        }}
+        onSubmit={() => {}}
+      >
+        <Harness />
+      </Formik>
+    </ThemeProvider>
+  )
+}
+
 describe('species row keyboard navigation', () => {
   it('moves focus to the row below on ArrowDown', async () => {
     const user = userEvent.setup()
 
-    render(
-      <ThemeProvider theme={THEME}>
-        <Formik
-          initialValues={{
-            speciesOnboard: [{ declaredWeight: 0 }, { declaredWeight: 1 }, { declaredWeight: 2 }]
-          }}
-          onSubmit={() => {}}
-        >
-          <Harness />
-        </Formik>
-      </ThemeProvider>
-    )
+    renderTable()
 
-    // Clicking the inactive row's cell (mousedown) should mount + focus its input, like a real click.
-    const firstRow = document.querySelector('[data-cy="species-onboard-row-0"]') as HTMLElement
-    await user.click(firstRow)
     const firstInput = document.getElementById('speciesOnboard[0].declaredWeight') as HTMLInputElement
     expect(firstInput).not.toBeNull()
-    act(() => firstInput.focus())
+    await user.click(firstInput)
     expect(document.activeElement).toBe(firstInput)
 
     await user.keyboard('{ArrowDown}')
@@ -95,23 +95,10 @@ describe('species row keyboard navigation', () => {
   it('does not crash when hovering a different row while another row has real DOM focus', async () => {
     const user = userEvent.setup()
 
-    render(
-      <ThemeProvider theme={THEME}>
-        <Formik
-          initialValues={{
-            speciesOnboard: [{ declaredWeight: 0 }, { declaredWeight: 1 }, { declaredWeight: 2 }]
-          }}
-          onSubmit={() => {}}
-        >
-          <Harness />
-        </Formik>
-      </ThemeProvider>
-    )
+    renderTable()
 
-    const firstRow = document.querySelector('[data-cy="species-onboard-row-0"]') as HTMLElement
-    await user.click(firstRow)
     const firstInput = document.getElementById('speciesOnboard[0].declaredWeight') as HTMLInputElement
-    act(() => firstInput.focus())
+    await user.click(firstInput)
     expect(document.activeElement).toBe(firstInput)
 
     // Hovers a different row while row 0's input is still genuinely focused.
@@ -122,5 +109,42 @@ describe('species row keyboard navigation', () => {
     expect(document.getElementById('speciesOnboard[0].declaredWeight')).not.toBeNull()
     expect(document.querySelector('[data-cy="species-onboard-row-1"]')).not.toBeNull()
     expect(document.querySelector('[data-cy="species-onboard-row-2"]')).not.toBeNull()
+  })
+})
+
+describe('species weight cell', () => {
+  it('takes the caret on the very first click, on a row that was never hovered', async () => {
+    const user = userEvent.setup()
+
+    renderTable()
+
+    const input = document.getElementById('speciesOnboard[1].declaredWeight') as HTMLInputElement
+    expect(input).not.toBeNull()
+
+    await user.click(input)
+
+    expect(document.activeElement).toBe(input)
+    // Row 1 starts prefilled with `1`, so a caret that really landed in the input appends to it.
+    await user.keyboard('12')
+    expect(input.value).toBe('112')
+  })
+
+  it('keeps taking keystrokes once the cursor has left the row', async () => {
+    const user = userEvent.setup()
+
+    renderTable()
+
+    const input = document.getElementById('speciesOnboard[0].declaredWeight') as HTMLInputElement
+    await user.click(input)
+    await user.clear(input)
+    await user.keyboard('4')
+
+    await user.unhover(document.querySelector('[data-cy="species-onboard-row-0"]') as HTMLElement)
+    await user.keyboard('71')
+
+    // Same element throughout: leaving the row must not swap the input back out for read-only text.
+    expect(document.getElementById('speciesOnboard[0].declaredWeight')).toBe(input)
+    expect(document.activeElement).toBe(input)
+    expect(input.value).toBe('471')
   })
 })

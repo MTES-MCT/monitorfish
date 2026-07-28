@@ -96,12 +96,6 @@ export const QuantityWrapper = styled.div`
   color: ${p => p.theme.color.slateGray};
 `
 
-export const Weight = styled.div`
-  flex: 1;
-  min-width: 0;
-  color: ${p => p.theme.color.charcoal};
-`
-
 export const Kg = styled.span`
   flex: 0 0 auto;
   margin-left: auto;
@@ -131,6 +125,11 @@ export const SelectValue = styled.span`
   pointer-events: none;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+/** Its input is always mounted, so the cell keeps the input's own left padding at every row state. */
+export const WeightTd = styled(SimpleTable.Td)`
+  padding: 0 8px 0 0 !important;
 `
 
 export const TdWithoutPaddingWhenActive = styled(SimpleTable.Td)<{

@@ -10,8 +10,7 @@ import {
   StyledCheckPicker,
   StyledPickerTd,
   StyledSpeciesSelect,
-  TdWithoutPaddingWhenActive,
-  Weight
+  WeightTd
 } from './speciesTable.styles'
 import { StyledWeightInput } from './WeightInput'
 
@@ -111,7 +110,6 @@ type WeightCellProps = Readonly<{
   label: string
   name: string
   onNavigateRow?: ((direction: 'up' | 'down') => void) | undefined
-  value: number | undefined
 }>
 export function WeightCell({
   clearFocusRequest,
@@ -121,30 +119,28 @@ export function WeightCell({
   isHovered,
   label,
   name,
-  onNavigateRow,
-  value
+  onNavigateRow
 }: WeightCellProps) {
   return (
-    <TdWithoutPaddingWhenActive $isActive={isActive}>
+    <WeightTd>
       <QuantityWrapper>
-        {isActive ? (
-          <StyledWeightInput
-            $isHovered={isHovered}
-            clearFocusRequest={clearFocusRequest}
-            disabled={isDisabled}
-            focusRequestId={focusRequestId}
-            isLabelHidden
-            isLight
-            label={label}
-            name={name}
-            onNavigateRow={onNavigateRow}
-          />
-        ) : (
-          <Weight>{value ?? '-'}</Weight>
-        )}
+        <StyledWeightInput
+          $isActive={isActive}
+          $isHovered={isHovered}
+          clearFocusRequest={clearFocusRequest}
+          disabled={isDisabled}
+          focusRequestId={focusRequestId}
+          isLabelHidden
+          isLight
+          label={label}
+          name={name}
+          onNavigateRow={onNavigateRow}
+          // Stands in for the `-` an empty cell used to show while its row was inactive.
+          placeholder={isActive ? undefined : '-'}
+        />
         <Kg>kg</Kg>
       </QuantityWrapper>
-    </TdWithoutPaddingWhenActive>
+    </WeightTd>
   )
 }
 

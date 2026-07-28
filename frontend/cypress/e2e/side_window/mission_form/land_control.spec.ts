@@ -95,18 +95,19 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains("Informations sur l'opérateur de pesée agréé").should('not.exist')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
     cy.fill('Suivi des opérations de pesée par les inspecteurs', 'Non')
-    // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their editors on row hover; non-hovered rows
-    // show plain text. Hover a row, then wait for its editors to actually mount (`.Field-CheckPicker`
+    // Catch rows (HKE 0, NEP 1, BLI 2, COD 3) only render their *pickers* on row hover; non-hovered rows
+    // show plain text there. Hover a row, then wait for its pickers to actually mount (`.Field-CheckPicker`
     // should('exist')) before filling: row activation is debounced (hover-intent delay), so without this
     // wait `cy.fill` runs before the row activates and fills whichever row is still active. Weight inputs
-    // are queried by id (not `cy.fill`) because each edit fires an async fleet-segment recompute that
-    // remounts the field and detaches a cached `cy.fill` element. Présentation/Zone are filled by label
-    // while only the hovered row's editor is mounted, so no index is needed.
+    // are always mounted (on every row), so they are typed into by id — `cy.fill` by label would be
+    // ambiguous, and each edit fires an async fleet-segment recompute that detaches a cached element
+    // anyway. Présentation/Zone are filled by label while only the hovered row's picker is mounted, so no
+    // index is needed.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
     cy.get('[data-cy="species-onboard-row-0"]').find('.Field-CheckPicker').should('exist')
     // HKE is a landed catch, so its controlled-weight field is labelled "Pesée". Fill it, then mark the
     // species as not landed via the "Espèce débarquée" toggle (the weight value is kept).
-    cy.fill('Pesée', '500')
+    cy.get('[id="speciesOnboard[0].controlledWeight"]').type('500', { force: true })
     cy.clickButton('Espèce débarquée')
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('10', { force: true })
     cy.fill('Présentation', ['WHL - Entier'])

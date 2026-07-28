@@ -180,8 +180,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill("Enregistrement séparé des poissons n'ayant pas la taille requise", 'Non')
     // FAO zones are required on every catch for completion. The risk factor prefills two catches HKE (row 0)
     // and BLI (row 1); logbook discards live in the dedicated "Rejets" card, so NEP/BIB are not rows in
-    // "Espèces à bord". Each catch row only renders its editors on hover, so hover the row, then wait for
-    // its editors to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
+    // "Espèces à bord". Each catch row only renders its pickers on hover, so hover the row, then wait for
+    // them to actually mount (`.Field-CheckPicker` should('exist')) before filling: row activation is
     // debounced (hover-intent delay), so without this wait `cy.fill` runs before the row activates and fills
     // whichever row is still active. `mouseout` afterwards so its editors collapse (only one row active at a time).
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
@@ -198,10 +198,11 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une espèce')
     pickHoverEditSpecies('species-onboard-row-2', 'COD')
     // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()` instead
-    // of `cy.fill()`: each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field, and
-    // `cy.fill()` caches the element and detaches between its internal `.clear()` and `.type()`. The fields
-    // are freshly opened (empty), so no `.clear()` is needed. Présentation/Zone are filled by label while
-    // only the hovered row's editor is mounted, so no index is needed.
+    // of `cy.fill()`: the weight inputs are mounted on every row, so a label lookup would be ambiguous, and
+    // each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field — `cy.fill()` caches
+    // the element and detaches between its internal `.clear()` and `.type()`. The fields are empty, so no
+    // `.clear()` is needed. Présentation/Zone are filled by label while only the hovered row's picker is
+    // mounted, so no index is needed.
     cy.get('[data-cy="species-onboard-row-2"]').trigger('mouseover', { force: true })
     cy.get('[data-cy="species-onboard-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.get('[id="speciesOnboard[2].declaredWeight"]').type('10', { force: true })
@@ -1260,7 +1261,7 @@ context('Side Window > Mission Form > Sea Control', () => {
       .should('eq', 201)
   })
 
-  it('Should edit the sous-taille field on row hover and remove species / rejet lines through the confirmation modal', () => {
+  it('Should edit the sous-taille field without hovering and remove species / rejet lines through the confirmation modal', () => {
     fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 
     cy.clickButton('Ajouter')
@@ -1270,15 +1271,12 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter une espèce')
     pickHoverEditSpecies('species-onboard-row-0', 'COD')
 
-    // The Ss-taille weight is now an always-available inline cell: its input only renders while the
-    // row is hovered, and reverts to text once the cursor leaves.
-    cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
+    // The weight cells are real inputs at all times, hover or not: typing works on the row just picked,
+    // and moving the cursor off the row keeps both the caret and the typed value (issue #5286). React
+    // derives `onMouseLeave` from the native `mouseout` event (not `mouseleave`).
     cy.get('[id="speciesOnboard[0].underSizedWeight"]').type('5', { force: true })
-    // The row stays in edit mode while the input is focused, so blur it AND stop hovering before asserting
-    // it collapses. React derives `onMouseLeave` from the native `mouseout` event (not `mouseleave`).
-    cy.get('[id="speciesOnboard[0].underSizedWeight"]').blur({ force: true })
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseout', { force: true })
-    cy.get('[id="speciesOnboard[0].underSizedWeight"]').should('not.exist')
+    cy.get('[id="speciesOnboard[0].underSizedWeight"]').should('have.focus').and('have.value', '5')
 
     // Add a second species, then remove it through the confirmation modal: cancelling keeps the row,
     // confirming deletes only the targeted row.
@@ -1286,7 +1284,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     pickHoverEditSpecies('species-onboard-row-1', 'HKE')
 
     // ArrowDown/ArrowUp move focus to the same weight field on the row below/above. Row 1 is deliberately
-    // left un-hovered, to prove ArrowDown mounts and focuses it on its own.
+    // left un-hovered, to prove ArrowDown reaches it on its own.
     cy.get('[data-cy="species-onboard-row-0"]').trigger('mouseover', { force: true })
     cy.get('[id="speciesOnboard[0].declaredWeight"]').type('12', { force: true })
     cy.get('[id="speciesOnboard[0].declaredWeight"]').type('{downarrow}', { force: true })

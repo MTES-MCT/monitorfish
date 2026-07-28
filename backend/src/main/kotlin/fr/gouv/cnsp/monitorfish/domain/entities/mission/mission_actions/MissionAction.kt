@@ -2,6 +2,8 @@ package fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.config.Patchable
+import fr.gouv.cnsp.monitorfish.domain.EU_COUNTRY_CODES
+import fr.gouv.cnsp.monitorfish.domain.FRENCH_COUNTRY_CODES
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import java.time.ZonedDateTime
 
@@ -117,9 +119,29 @@ data class MissionAction(
 
     /**
      * A control targets a prioritized vessel when, at the moment of control, the vessel belonged to a
-     * priority group or had a reporting opened during its current trip. Derived from the snapshot.
+     * priority group or had a reporting opened during its current trip (both derived from the snapshot),
+     * when the control is an INN one, or when a third country vessel lands in a French port.
+     *
+     * /!\ Kept in sync with `getPriorityTargetReasons()` in the frontend, which displays the reasons.
      */
-    fun computeIsPrioritized(): Boolean = vesselGroups.any { it.isPriorityGroup } || tripReportings.isNotEmpty()
+    fun computeIsPrioritized(): Boolean =
+        vesselGroups.any { it.isPriorityGroup } ||
+            tripReportings.isNotEmpty() ||
+            isINNControl ||
+            isThirdCountryVesselLandingInFrance()
+
+    /**
+     * A UN/LOCODE is prefixed with the ISO alpha-2 code of the territory the port belongs to, so overseas
+     * ports carry their own code (`RE`, `GF`...) rather than `FR`.
+     */
+    private fun isThirdCountryVesselLandingInFrance(): Boolean {
+        val portCountryCode = portLocode?.take(2) ?: return false
+
+        return actionType == MissionActionType.LAND_CONTROL &&
+            FRENCH_COUNTRY_CODES.contains(portCountryCode) &&
+            flagState != CountryCode.UNDEFINED &&
+            !EU_COUNTRY_CODES.contains(flagState.alpha2)
+    }
 
     fun containsNoInfractions(): Boolean = infractions.isEmpty()
 

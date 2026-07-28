@@ -191,6 +191,25 @@ describe('ControlQualityField', () => {
     )
   })
 
+  it.each(['REPTP', 'GFCAY', 'GPPTP', 'MQFDF', 'YTMAM', 'PMFSP', 'NCNOU', 'PFPPT', 'WFMAU', 'TFPFR', 'BLGUS', 'MFMAR'])(
+    'renders the third-country landing sentence for a non-EU flag landing at the overseas French port %p',
+    portLocode => {
+      renderControlQualityField({
+        actionType: MissionAction.MissionActionType.LAND_CONTROL,
+        flagState: 'MA',
+        portLocode,
+        tripReportings: [],
+        vesselGroups: [],
+        vesselId: 123
+      })
+
+      const target = getPriorityTarget()
+      expect(target.textContent).toBe(
+        'Le navire est une cible prioritaire car c’est un navire tiers débarquant dans un port français.'
+      )
+    }
+  )
+
   it('does not render the third-country landing sentence for an EU flag', () => {
     renderControlQualityField({
       actionType: MissionAction.MissionActionType.LAND_CONTROL,

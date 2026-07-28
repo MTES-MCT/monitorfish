@@ -117,15 +117,17 @@ export function VesselGroupMenuDialog() {
               />
             </FilterRow>
           )}
-          <FilterRow>
-            <Checkbox
-              checked={filteredPriority}
-              label="Afficher uniquement les groupes prioritaires"
-              name="priority"
-              onChange={updateFilteredPriority}
-              title="Afficher uniquement les groupes prioritaires"
-            />
-          </FilterRow>
+          {isSuperUser && (
+            <FilterRow>
+              <Checkbox
+                checked={filteredPriority}
+                label="Afficher uniquement les groupes prioritaires"
+                name="priority"
+                onChange={updateFilteredPriority}
+                title="Afficher uniquement les groupes prioritaires"
+              />
+            </FilterRow>
+          )}
           <VesselGroupList data-cy="vessel-groups-list">
             {priorityVesselGroups.map((vesselGroup: VesselGroup, index: number) => (
               <VesselGroupRow

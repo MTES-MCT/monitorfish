@@ -181,21 +181,7 @@ class MissionActionUTests {
     @Test
     fun `computeIsPrioritized Should be true When the vessel is in a priority group or has a current trip reporting`() {
         // Given
-        val baseAction =
-            MissionAction(
-                id = null,
-                vesselId = 1,
-                missionId = 1,
-                actionDatetimeUtc = ZonedDateTime.now(),
-                actionType = MissionActionType.SEA_CONTROL,
-                isDeleted = false,
-                userTrigram = "LTH",
-                hasSomeGearsSeized = false,
-                hasSomeSpeciesSeized = false,
-                isFromPoseidon = false,
-                completion = Completion.TO_COMPLETE,
-                flagState = CountryCode.FR,
-            )
+        val baseAction = getBaseAction()
         val priorityGroup =
             MissionActionVesselGroup(
                 id = 1,
@@ -220,4 +206,65 @@ class MissionActionUTests {
         assertThat(baseAction.copy(vesselGroups = listOf(nonPriorityGroup)).computeIsPrioritized()).isFalse()
         assertThat(baseAction.computeIsPrioritized()).isFalse()
     }
+
+    @Test
+    fun `computeIsPrioritized Should be true When the control is an INN control`() {
+        // Given
+        val baseAction = getBaseAction()
+
+        // When / Then
+        assertThat(baseAction.copy(isINNControl = true).computeIsPrioritized()).isTrue()
+        assertThat(baseAction.computeIsPrioritized()).isFalse()
+    }
+
+    @Test
+    fun `computeIsPrioritized Should be true When a third country vessel lands in a French port`() {
+        // Given
+        val landControl =
+            getBaseAction().copy(
+                actionType = MissionActionType.LAND_CONTROL,
+                flagState = CountryCode.MA,
+                portLocode = "FRAUR",
+            )
+
+        // When / Then
+        assertThat(landControl.computeIsPrioritized()).isTrue()
+        // Overseas French ports carry their own country code in the LOCODE prefix
+        assertThat(landControl.copy(portLocode = "REPTP").computeIsPrioritized()).isTrue()
+        assertThat(landControl.copy(portLocode = "GFCAY").computeIsPrioritized()).isTrue()
+    }
+
+    @Test
+    fun `computeIsPrioritized Should be false When the third country landing conditions are not met`() {
+        // Given
+        val landControl =
+            getBaseAction().copy(
+                actionType = MissionActionType.LAND_CONTROL,
+                flagState = CountryCode.MA,
+                portLocode = "FRAUR",
+            )
+
+        // When / Then
+        assertThat(landControl.copy(flagState = CountryCode.ES).computeIsPrioritized()).isFalse()
+        assertThat(landControl.copy(flagState = CountryCode.UNDEFINED).computeIsPrioritized()).isFalse()
+        assertThat(landControl.copy(portLocode = "ESVGO").computeIsPrioritized()).isFalse()
+        assertThat(landControl.copy(portLocode = null).computeIsPrioritized()).isFalse()
+        assertThat(landControl.copy(actionType = MissionActionType.SEA_CONTROL).computeIsPrioritized()).isFalse()
+    }
+
+    private fun getBaseAction(): MissionAction =
+        MissionAction(
+            id = null,
+            vesselId = 1,
+            missionId = 1,
+            actionDatetimeUtc = ZonedDateTime.now(),
+            actionType = MissionActionType.SEA_CONTROL,
+            isDeleted = false,
+            userTrigram = "LTH",
+            hasSomeGearsSeized = false,
+            hasSomeSpeciesSeized = false,
+            isFromPoseidon = false,
+            completion = Completion.TO_COMPLETE,
+            flagState = CountryCode.FR,
+        )
 }

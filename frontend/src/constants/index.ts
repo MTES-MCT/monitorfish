@@ -27,3 +27,6 @@ export const COUNTRIES_AS_ALPHA3_OPTIONS: Option<string>[] = Object.keys(Countri
 }))
 
 export const UNKNOWN_COUNTRY_CODE = 'UNKNOWN'
+
+/** Metropolitan France and its overseas territories. Kept in sync with `FRENCH_COUNTRY_CODES` in the backend `Constants.kt`. */
+export const FRENCH_COUNTRY_CODES = ['FR', 'BL', 'GF', 'GP', 'MF', 'MQ', 'NC', 'PF', 'PM', 'RE', 'TF', 'WF', 'YT']

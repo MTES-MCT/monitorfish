@@ -1,3 +1,4 @@
+import { FRENCH_COUNTRY_CODES } from '@constants/index'
 import { EU_COUNTRY_CODES } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { getLocalizedDayjs, pluralize } from '@mtes-mct/monitor-ui'
@@ -68,7 +69,7 @@ export function getPriorityTargetReasons(
   const hasGroupOrReportingReason = priorityGroups.length > 0 || currentTripReportingLength > 0
   const isThirdCountryVesselLandingInFrance =
     values.actionType === MissionAction.MissionActionType.LAND_CONTROL &&
-    !!values.portLocode?.startsWith('FR') &&
+    FRENCH_COUNTRY_CODES.includes(values.portLocode?.slice(0, 2) ?? '') &&
     !!values.flagState &&
     values.flagState !== 'UNDEFINED' &&
     !EU_COUNTRY_CODES.includes(values.flagState)

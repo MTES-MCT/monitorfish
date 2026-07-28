@@ -81,7 +81,6 @@ export function BeaconMalfunctionCard({
         <LastPositionInfo>Dernière position {lastPositionPlace}</LastPositionInfo>
         <Resume>{getMalfunctionStartDateText(beaconMalfunctionWithDetails.beaconMalfunction)}</Resume>
         <Length>Durée : {lengthInDays}</Length>
-        <DetectedActivity>Activité détectée</DetectedActivity>
         {beaconMalfunctionWithDetails.actions.find(
           action =>
             action.propertyName === BeaconMalfunctionPropertyName.VESSEL_STATUS &&

@@ -36,11 +36,16 @@ function UnmemoizedMissionLayer() {
     const features = missions
       .map(getMissionFeaturePoint)
       .filter((feature): feature is Feature<Point> => {
-        if (missionId) {
-          return feature !== undefined && !feature.getId()?.toString().includes(missionId.toString())
+        if (!feature) {
+          return false
         }
 
-        return feature !== undefined
+        // The edited mission is only hidden while the draft feature stands in for it
+        if (!editedMissionFeaturePoint || !missionId) {
+          return true
+        }
+
+        return !feature.getId()?.toString().includes(missionId.toString())
       })
       .concat(editedMissionFeaturePoint ?? [])
     if (!features?.length) {

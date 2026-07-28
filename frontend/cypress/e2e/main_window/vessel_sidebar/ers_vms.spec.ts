@@ -52,6 +52,12 @@ context('Vessel sidebar ers/vms tab', () => {
       .eq(1)
       .contains('Aucune avarie')
 
+    // This malfunction never had its vessel status set to `ACTIVITY_DETECTED`
+    cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).should(
+      'not.contain',
+      'Activité détectée'
+    )
+
     // See the details of a beacon malfunction
     cy.get('*[data-cy="vessel-beacon-malfunction-single-history"]', { timeout: 10000 }).click({ force: true })
     cy.get('*[data-cy="vessel-malfunctions-details"]', { timeout: 10000 }).should('be.visible')

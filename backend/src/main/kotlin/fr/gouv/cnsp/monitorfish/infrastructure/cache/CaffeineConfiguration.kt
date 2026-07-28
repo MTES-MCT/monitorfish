@@ -130,8 +130,8 @@ class CaffeineConfiguration {
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
 
-        val pnoToVerifyCache = buildMinutesCache(pnoToVerify, ticker, 5)
-        val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 5)
+        val pnoToVerifyCache = buildMinutesCache(pnoToVerify, ticker, 1)
+        val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 1)
         val pnoTypesCache = buildMinutesCache(pnoTypes, ticker, 123)
         val logbookPnoTypesCache = buildMinutesCache(logbookPnoTypes, ticker, oneDay)
         val allVisioCapturesVesselsCache = buildMinutesCache(allVisioCapturesVessels, ticker, oneWeek)

@@ -108,8 +108,10 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     fun archiveReporting(id: Int)
 
     /**
-     * Search for unarchived reportings (created for max 1 hour ago) after vessels' have started a new trip.
+     * Search for unarchived ALERT reportings after vessels' have started a new trip.
      * (a DEP logbook message is received after the reporting validation_date)
+     *
+     * Only ALERT reportings are returned: the `value` column is deserialized as an alert by the caller.
      */
     @Query(
         value = """
@@ -147,6 +149,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         WHERE
             r.archived is false AND
             r.deleted is false AND
+            r.type = 'ALERT' AND
             rdp.last_dep_date_time >= r.validation_date AT TIME ZONE 'UTC' AND
             rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
         """,

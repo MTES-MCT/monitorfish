@@ -25,14 +25,16 @@ class ArchiveOutdatedReportingsUTests {
     @Test
     fun `execute Should archive outdated reportings`() {
         // Given
+        // The reporting ids are intentionally different from the alert specification ids: the archiving
+        // decision must be taken on the alert id carried by the reporting value, not on the reporting id.
         given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(
             listOf(
                 Pair(
-                    1,
+                    100,
                     Alert(
                         type = AlertType.POSITION_ALERT,
                         seaFront = NAMO.toString(),
-                        alertId = 1,
+                        alertId = DUMMY_POSITION_ALERT.id,
                         natinfCode = 7059,
                         threat = "Obligations déclaratives",
                         threatCharacterization = "DEP",
@@ -40,18 +42,18 @@ class ArchiveOutdatedReportingsUTests {
                     ),
                 ),
                 Pair(
-                    2,
+                    101,
                     Alert(
                         type = AlertType.POSITION_ALERT,
                         seaFront = NAMO.toString(),
-                        alertId = 2,
+                        alertId = 999,
                         natinfCode = 7059,
                         threat = "Obligations déclaratives",
                         threatCharacterization = "DEP",
                         name = "Pêche en zone RTC",
                     ),
                 ),
-                Pair(3, AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()),
+                Pair(102, AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()),
             ),
         )
         given(positionAlertSpecification.findAllByIsDeletedIsFalse())
@@ -64,7 +66,39 @@ class ArchiveOutdatedReportingsUTests {
         ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
 
         // Then
-        verify(reportingRepository).archiveReportings(eq(listOf(1, 3, 4, 5)))
+        verify(reportingRepository).archiveReportings(eq(listOf(100, 102, 4, 5)))
+    }
+
+    @Test
+    fun `execute Should not archive a position alert reporting when its specification has no automatic archiving`() {
+        // Given
+        given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(
+            listOf(
+                Pair(
+                    100,
+                    Alert(
+                        type = AlertType.POSITION_ALERT,
+                        seaFront = NAMO.toString(),
+                        alertId = DUMMY_POSITION_ALERT.id,
+                        natinfCode = 7059,
+                        threat = "Obligations déclaratives",
+                        threatCharacterization = "DEP",
+                        name = "Chalutage dans les 3 milles",
+                    ),
+                ),
+            ),
+        )
+        given(positionAlertSpecification.findAllByIsDeletedIsFalse())
+            .willReturn(listOf(DUMMY_POSITION_ALERT.copy(hasAutomaticArchiving = false)))
+        given(reportingRepository.findExpiredReportings()).willReturn(emptyList())
+        given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
+            .willReturn(emptyList())
+
+        // When
+        ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
+
+        // Then
+        verify(reportingRepository).archiveReportings(eq(emptyList()))
     }
 
     @Test
@@ -89,11 +123,11 @@ class ArchiveOutdatedReportingsUTests {
         given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(
             listOf(
                 Pair(
-                    1,
+                    100,
                     Alert(
                         type = AlertType.POSITION_ALERT,
                         seaFront = NAMO.toString(),
-                        alertId = 1,
+                        alertId = DUMMY_POSITION_ALERT.id,
                         natinfCode = 7059,
                         threat = "Obligations déclaratives",
                         threatCharacterization = "DEP",
@@ -112,6 +146,6 @@ class ArchiveOutdatedReportingsUTests {
         ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
 
         // Then
-        verify(reportingRepository).archiveReportings(eq(listOf(1, 2, 3, 4)))
+        verify(reportingRepository).archiveReportings(eq(listOf(100, 2, 3, 4)))
     }
 }

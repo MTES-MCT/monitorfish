@@ -34,7 +34,7 @@ export function ControlQualityField({ withLastHaul = false }: ControlQualityFiel
               {joinReasons(reasons)}.
             </>
           ) : (
-            <strong>Le navire n’est pas considéré comme une cible prioritaire.</strong>
+            'Le navire n’est pas considéré comme une cible prioritaire.'
           )}
         </PriorityTarget>
       )}
@@ -74,9 +74,4 @@ const Wrapper = styled(FieldsetGroup)`
 const PriorityTarget = styled.div`
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
-
-  > ul {
-    margin: 4px 0 0;
-    padding-left: 20px;
-  }
 `

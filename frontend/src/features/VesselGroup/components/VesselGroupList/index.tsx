@@ -107,15 +107,15 @@ export function VesselGroupList({ isFromUrl }: VesselListProps) {
                 placeholder="Groupes partagés et personnels"
                 value={filteredSharing}
               />
+              <StyledCheckbox
+                checked={filteredPriority}
+                label="Groupes de cibles prioritaires"
+                name="priority"
+                onChange={updateFilteredPriority}
+                title="Groupes de cibles prioritaires"
+              />
             </>
           )}
-          <StyledCheckbox
-            checked={filteredPriority}
-            label="Groupes de cibles prioritaires"
-            name="priority"
-            onChange={updateFilteredPriority}
-            title="Groupes de cibles prioritaires"
-          />
           <StyledCheckbox
             checked={filteredExpired}
             label="Groupes expirés"

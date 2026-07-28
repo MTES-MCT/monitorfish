@@ -1,8 +1,5 @@
 package fr.gouv.cnsp.monitorfish.domain.exceptions
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 /**
  * Exception to throw when the request is valid but the Backend failed while processing it.
  *
@@ -13,14 +10,11 @@ import org.slf4j.LoggerFactory
  * - Database data is unprocessable.
  */
 open class BackendInternalException(
-    final override val message: String = "An internal error occurred.",
-    originalException: Exception? = null,
+    final override val message: String = DEFAULT_MESSAGE,
+    cause: Throwable? = null,
     val code: BackendInternalErrorCode? = null,
-) : RuntimeException(message) {
-    private val logger: Logger = LoggerFactory.getLogger(BackendInternalException::class.java)
-
-    init {
-        logger.error("BackendInternalException: $message")
-        originalException?.let { logger.error("${it::class.simpleName}: ${it.message}") }
+) : RuntimeException(message, cause) {
+    companion object {
+        const val DEFAULT_MESSAGE = "An internal error occurred."
     }
 }

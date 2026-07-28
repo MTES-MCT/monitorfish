@@ -1,8 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.exceptions
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 /**
  * Infrastructure exception to throw when the request is invalid.
  *
@@ -15,10 +12,4 @@ open class BackendRequestException(
     val code: BackendRequestErrorCode,
     final override val message: String? = null,
     val data: Any? = null,
-) : RuntimeException(code.name) {
-    private val logger: Logger = LoggerFactory.getLogger(BackendRequestException::class.java)
-
-    init {
-        logger.warn("$code: ${message ?: "No message."}")
-    }
-}
+) : RuntimeException(code.name)

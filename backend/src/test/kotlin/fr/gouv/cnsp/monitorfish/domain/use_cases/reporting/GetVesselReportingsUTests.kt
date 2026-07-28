@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.type.AlertType
@@ -421,4 +422,72 @@ class GetVesselReportingsUTests {
         )
         assertThat(secondSummary.numberOfOccurrences).isEqualTo(3)
     }
+
+    @Test
+    fun `execute Should order alerts by creation date When an alert has no validation date`() {
+        // Given
+        val alertWithoutValidationDate =
+            createAlert(id = 1, creationDate = ZonedDateTime.now().minusDays(3), validationDate = null)
+        val validatedAlert =
+            createAlert(
+                id = 2,
+                creationDate = ZonedDateTime.now().minusDays(2),
+                validationDate = ZonedDateTime.now().minusDays(1),
+            )
+        given(reportingRepository.findCurrentAndArchivedByVesselIdentifierEquals(any(), any(), any())).willReturn(
+            listOf(alertWithoutValidationDate, validatedAlert),
+        )
+
+        // When
+        val result =
+            GetVesselReportings(
+                reportingRepository,
+                infractionRepository,
+                getAllLegacyControlUnits,
+            ).execute(
+                vesselId = null,
+                internalReferenceNumber = "FR224226850",
+                externalReferenceNumber = "1236514",
+                ircs = "IRCS",
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                fromDate = ZonedDateTime.now().minusYears(1),
+            )
+
+        // Then
+        assertThat(result.current).hasSize(1)
+        assertThat(
+            result.current
+                .first()
+                .reporting.id,
+        ).isEqualTo(2)
+        assertThat(
+            result.current
+                .first()
+                .otherOccurrencesOfSameAlert
+                .map { it.id },
+        ).isEqualTo(listOf(1))
+    }
+
+    private fun createAlert(
+        id: Int,
+        creationDate: ZonedDateTime,
+        validationDate: ZonedDateTime?,
+    ) = Reporting.Alert(
+        id = id,
+        cfr = "FR224226850",
+        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+        flagState = CountryCode.FR,
+        creationDate = creationDate,
+        lastUpdateDate = creationDate,
+        validationDate = validationDate,
+        alertType = AlertType.POSITION_ALERT,
+        alertId = 1,
+        natinfCode = 7059,
+        threat = "Obligations déclaratives",
+        threatCharacterization = "DEP",
+        name = "Chalutage dans les 3 milles",
+        isArchived = false,
+        isDeleted = false,
+        createdBy = "test@example.gouv.fr",
+    )
 }

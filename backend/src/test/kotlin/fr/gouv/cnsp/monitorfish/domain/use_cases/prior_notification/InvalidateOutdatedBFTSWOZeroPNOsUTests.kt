@@ -32,4 +32,22 @@ class InvalidateOutdatedBFTSWOZeroPNOsUTests {
             eq(fakePriorNotification.reportId!!),
         )
     }
+
+    @Test
+    fun `execute Should invalidate the next pnos When a pno has no report id`() {
+        val priorNotificationWithoutReportId = PriorNotificationFaker.fakePriorNotification(1).copy(reportId = null)
+        val nextPriorNotification = PriorNotificationFaker.fakePriorNotification(2)
+
+        // Given
+        given(manualPriorNotificationRepository.findAll(any()))
+            .willReturn(listOf(priorNotificationWithoutReportId, nextPriorNotification))
+
+        // When
+        InvalidateOutdatedBFTSWOZeroPNOs(manualPriorNotificationRepository).execute()
+
+        // Then
+        verify(manualPriorNotificationRepository).invalidate(
+            eq(nextPriorNotification.reportId!!),
+        )
+    }
 }

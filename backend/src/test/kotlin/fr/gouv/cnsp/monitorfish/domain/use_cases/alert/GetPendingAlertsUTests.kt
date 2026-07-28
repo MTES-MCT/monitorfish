@@ -97,4 +97,44 @@ class GetPendingAlertsUTests {
         )
         Mockito.verify(infractionRepository, Mockito.times(1)).findInfractionByNatinfCode(eq(7059))
     }
+
+    @Test
+    fun `execute Should resolve a built-in alert specification When a user-defined alert shares its name`() {
+        // Given
+        val builtInSpecification = AlertType.MISSING_DEP_ALERT.specification!!
+        val pendingMissingDepAlert =
+            PendingAlert(
+                internalReferenceNumber = "FRFGRGR",
+                externalReferenceNumber = "RGD",
+                ircs = "6554fEE",
+                vesselId = 123,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                tripNumber = "123456",
+                creationDate = ZonedDateTime.now(),
+                value = AlertType.MISSING_DEP_ALERT.getValue(),
+            )
+        val userDefinedAlertWithSameName =
+            DUMMY_POSITION_ALERT.copy(id = 42, name = builtInSpecification.name, isUserDefined = true)
+        given(pendingAlertRepository.findAlertsOfTypes(any())).willReturn(listOf(pendingMissingDepAlert))
+        given(getPositionAlertSpecifications.execute()).willReturn(
+            listOf(userDefinedAlertWithSameName) +
+                AlertType.entries
+                    .filter { it != AlertType.POSITION_ALERT }
+                    .mapNotNull { it.specification?.copy(type = it.name) },
+        )
+
+        // When
+        val alerts =
+            GetPendingAlerts(
+                getPositionAlertSpecifications = getPositionAlertSpecifications,
+                pendingAlertRepository = pendingAlertRepository,
+                infractionRepository = infractionRepository,
+            ).execute()
+
+        // Then
+        val alertSpecification = alerts.first().second
+        assertThat(alertSpecification.type).isEqualTo(AlertType.MISSING_DEP_ALERT.name)
+        assertThat(alertSpecification.isUserDefined).isFalse()
+    }
 }

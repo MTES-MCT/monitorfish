@@ -19,6 +19,13 @@ import java.time.ZonedDateTime
 import kotlin.collections.map
 import kotlin.time.measureTimedValue
 
+/**
+ * Date at which a reporting occurred: alerts and infraction suspicions are dated by their validation,
+ * and reportings still awaiting validation fall back to their creation.
+ */
+private val Reporting.occurrenceDate: ZonedDateTime
+    get() = validationDate ?: creationDate
+
 @UseCase
 class GetVesselReportings(
     private val reportingRepository: ReportingRepository,
@@ -57,7 +64,7 @@ class GetVesselReportings(
         val (current, currentTimeTaken) =
             measureTimedValue {
                 getReportingsAndOccurrences(reportings.filter { !it.isArchived })
-                    .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+                    .sortedWith(compareByDescending { it.reporting.occurrenceDate })
                     .map { reportingAndOccurrences ->
                         enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                     }
@@ -71,10 +78,10 @@ class GetVesselReportings(
                     val reportingsOfYear =
                         reportings
                             .filter { it.isArchived }
-                            .filter { filterByYear(it, year) }
+                            .filter { it.occurrenceDate.year == year }
 
                     return@associateWith getReportingsAndOccurrences(reportingsOfYear)
-                        .sortedWith(compareByDescending { it.reporting.validationDate ?: it.reporting.creationDate })
+                        .sortedWith(compareByDescending { it.reporting.occurrenceDate })
                         .map { reportingAndOccurrences ->
                             enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                         }
@@ -84,10 +91,7 @@ class GetVesselReportings(
 
         val twelveMonthsAgo = ZonedDateTime.now().minusMonths(12)
         val lastTwelveMonthsReportings =
-            reportings.filter { reporting ->
-                reporting.validationDate?.isAfter(twelveMonthsAgo)
-                    ?: reporting.creationDate.isAfter(twelveMonthsAgo)
-            }
+            reportings.filter { reporting -> reporting.occurrenceDate.isAfter(twelveMonthsAgo) }
 
         val infractionSuspicionsSummary =
             getThreatSummary(lastTwelveMonthsReportings.filter { it.isArchived })
@@ -153,18 +157,6 @@ class GetVesselReportings(
                         )
                     }
             }
-    }
-
-    private fun filterByYear(
-        reporting: Reporting,
-        year: Int,
-    ): Boolean {
-        val validationDate = reporting.validationDate
-        if (validationDate != null) {
-            return validationDate.year == year
-        }
-
-        return reporting.creationDate.year == year
     }
 
     private fun enrichWithInfractionAndControlUnit(
@@ -257,20 +249,12 @@ class GetVesselReportings(
                         return@flatMap listOf()
                     }
 
-                    val lastAlert =
-                        alerts.maxByOrNull { alert ->
-                            val validationDate = alert.validationDate
-                            checkNotNull(validationDate) {
-                                "An alert must have a validation date: alert ${alert.id} has no validation date ($alert)."
-                            }
-
-                            validationDate
-                        }
+                    val lastAlert = alerts.maxByOrNull { it.occurrenceDate }
                     checkNotNull(lastAlert) { "Last alert cannot be null" }
                     val otherOccurrencesOfSameAlert =
                         alerts
                             .filter { it.id != lastAlert.id }
-                            .sortedWith(compareByDescending { it.validationDate ?: it.creationDate })
+                            .sortedWith(compareByDescending { it.occurrenceDate })
 
                     return@flatMap listOf(
                         ReportingAndOccurrences(

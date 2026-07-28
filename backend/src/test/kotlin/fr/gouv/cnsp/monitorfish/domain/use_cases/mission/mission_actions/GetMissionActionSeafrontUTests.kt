@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FacadeAreasRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
@@ -62,6 +63,36 @@ class GetMissionActionSeafrontUTests {
 
         // Then
         assertThat(facade).isEqualTo(Seafront.NAMO)
+    }
+
+    @Test
+    fun `execute Should return null for a land control with a port missing from the referential`() {
+        // Given
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "UNKNOWN",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
+        given(portRepository.findByLocode(any())).willThrow(CodeNotFoundException("Port UNKNOWN not found."))
+
+        // When
+        val facade = GetMissionActionFacade(portRepository, facadeAreasRepository).execute(action)
+
+        // Then
+        assertThat(facade).isNull()
     }
 
     @Test

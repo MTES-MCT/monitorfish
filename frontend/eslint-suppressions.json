@@ -614,9 +614,6 @@
     }
   },
   "src/features/Reporting/components/ReportingForm/Form.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     }

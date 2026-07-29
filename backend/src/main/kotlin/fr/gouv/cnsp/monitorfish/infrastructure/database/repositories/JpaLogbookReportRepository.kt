@@ -204,10 +204,15 @@ class JpaLogbookReportRepository(
     override fun findLastOperationNumber(internalReferenceNumber: String): String? =
         dbLogbookReportRepository.findLastOperationNumber(internalReferenceNumber)
 
-    @Cacheable(value = ["all_visiocaptures_vessels"])
+    @Cacheable(value = ["all_visiocaptures_vessels"], sync = true)
     override fun findAllCfrWithVisioCaptures(): List<String> = dbLogbookReportRepository.findAllCfrWithVisioCaptures()
 
-    @Cacheable(value = ["last_dep_current_trips_by_cfr"])
+    /**
+     * `/bff/v1/vessels` is polled by every connected user, so without `sync` all of them run this (heavy) query
+     * concurrently as soon as the cache entry expires, and the resulting contention makes them all hit the JDBC
+     * query timeout. `cfrs` is the cache key, so callers must pass it sorted to avoid spurious misses.
+     */
+    @Cacheable(value = ["last_dep_current_trips_by_cfr"], sync = true)
     override fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime> {
         if (cfrs.isEmpty()) {
             return emptyMap()

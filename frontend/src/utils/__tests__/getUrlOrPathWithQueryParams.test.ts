@@ -30,6 +30,15 @@ describe('getUrlOrPathWithQueryParams', () => {
     expect(result).toBe('/example?name=John')
   })
 
+  it('should percent-encode values so that reserved characters do not break the query string', () => {
+    const path = '/example'
+    const queryParams = { searched: '%ARIA CE', startedAfterDateTime: '2026-07-02T00:00:00+02:00' }
+
+    const result = getUrlOrPathWithQueryParams(path, queryParams)
+
+    expect(result).toBe('/example?searched=%25ARIA%20CE&startedAfterDateTime=2026-07-02T00%3A00%3A00%2B02%3A00')
+  })
+
   it('should return the original URL if queryParamsAsObject is empty', () => {
     const path = '/example'
     const queryParams = {}

@@ -39,6 +39,7 @@ interface LogbookReportRepository {
 
     fun findAllCfrWithVisioCaptures(): List<String>
 
+    /** [cfrs] is used as a cache key: pass it sorted so that identical sets of CFRs share the same entry. */
     fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime>
 
     fun getCurrentTripDepAndPositionAtSeaDateTime(

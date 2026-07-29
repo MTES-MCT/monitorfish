@@ -83,8 +83,7 @@ data class PriorNotification(
                         PriorNotificationState.VERIFIED_AND_SENT
                     else -> {
                         logger.error(
-                            "Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",
-                            BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
+                            "[${BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA}] Impossible PriorNotification state: `reportId = $reportId`, isInVerificationScope = $isInVerificationScope`, `isVerified = $isVerified`, `isSent = $isSent`, `isBeingSent = $isBeingSent`.",
                         )
 
                         null

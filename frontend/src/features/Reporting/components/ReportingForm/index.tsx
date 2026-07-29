@@ -13,13 +13,23 @@ import { Form } from './Form'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
+import type { ReportingFormActions } from './Form'
 import type { FormEditedReporting, Reporting } from '../../types'
+
+export type { ReportingFormActions }
+
+export type ReportingFormDuplication = {
+  initialValues: FormEditedReporting
+  /** Changes on each duplication to mount a form free of the previous reporting state. */
+  sessionId: number
+}
 
 type ReportingFormProps = {
   autoSave?: boolean
   className?: string | undefined
-  duplicateRef?: MutableRefObject<(() => void) | undefined>
+  duplication?: ReportingFormDuplication | undefined
   editedReporting: Reporting.EditableReporting | undefined
+  formActionsRef?: MutableRefObject<ReportingFormActions | undefined>
   hasWhiteBackground?: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
@@ -32,14 +42,14 @@ type ReportingFormProps = {
     flagState: string | undefined,
     numberOfVessels: number | undefined
   ) => void
-  submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
   windowContext: WindowContext
 }
 export function ReportingForm({
   autoSave = false,
   className,
-  duplicateRef,
+  duplication,
   editedReporting,
+  formActionsRef,
   hasWhiteBackground = false,
   hideButtons = false,
   hideVesselSection = false,
@@ -48,14 +58,12 @@ export function ReportingForm({
   onClose,
   onIsDirty,
   onVesselStateChange,
-  submitRef,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
   const autoSavedReportingRef = useRef<Reporting.Reporting | undefined>(undefined)
   const reportingId = editedReporting?.id ?? autoSavedReportingRef.current?.id
   const reporting = editedReporting ?? autoSavedReportingRef.current
-  const childDuplicateRef = useRef<(() => void) | undefined>()
 
   const displayedErrorKey =
     windowContext === WindowContext.MainWindow
@@ -111,35 +119,22 @@ export function ReportingForm({
     [onIsDirty]
   )
 
+  // A duplication starts a new reporting, as does the edition of another one
   useEffect(() => {
     autoSavedReportingRef.current = undefined
-  }, [editedReporting?.id])
-
-  useEffect(() => {
-    if (!duplicateRef) {
-      return
-    }
-    // eslint-disable-next-line no-param-reassign
-    duplicateRef.current = () => {
-      if (!childDuplicateRef.current) {
-        throw new Error('Erreur interne.')
-      }
-      autoSavedReportingRef.current = undefined
-      childDuplicateRef.current()
-    }
-  }, [duplicateRef])
+  }, [duplication?.sessionId, editedReporting?.id])
 
   return (
     <Formik
-      key={editedReporting?.id ?? 'new'}
-      initialValues={getFormFields(editedReporting, isIUU)}
+      key={duplication ? `duplication-${duplication.sessionId}` : (editedReporting?.id ?? 'new')}
+      initialValues={duplication?.initialValues ?? getFormFields(editedReporting, isIUU)}
       onSubmit={createOrEditReporting}
       validate={toFormikValidationSchema(CreateOrEditReportingSchema)}
     >
       <Form
         className={className}
         displayedErrorKey={displayedErrorKey}
-        duplicateRef={childDuplicateRef}
+        formActionsRef={formActionsRef}
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}
@@ -149,7 +144,6 @@ export function ReportingForm({
         onClose={handleClose}
         onIsDirty={onIsDirty}
         onVesselStateChange={onVesselStateChange}
-        submitRef={submitRef}
       />
     </Formik>
   )

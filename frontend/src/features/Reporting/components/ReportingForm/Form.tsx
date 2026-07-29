@@ -6,7 +6,7 @@ import {
   InfractionRow,
   type InfractionSuspicionFormErrors
 } from '@features/Reporting/components/ReportingForm/InfractionRow'
-import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
+import { EMPTY_VESSEL_IDENTITY, updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
@@ -56,10 +56,16 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
 
+/** What a component displaying its own buttons, outside of the form, can ask it. */
+export type ReportingFormActions = {
+  getEditedValues: () => FormEditedReporting
+  submit: () => Promise<void>
+}
+
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
-  duplicateRef?: MutableRefObject<(() => void) | undefined>
+  formActionsRef?: MutableRefObject<ReportingFormActions | undefined> | undefined
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
@@ -71,12 +77,11 @@ type FormProps = Readonly<{
   onVesselStateChange?:
     | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
     | undefined
-  submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
 }>
 export function Form({
   className,
   displayedErrorKey,
-  duplicateRef,
+  formActionsRef,
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
@@ -85,8 +90,7 @@ export function Form({
   onAutoSave,
   onClose,
   onIsDirty,
-  onVesselStateChange,
-  submitRef
+  onVesselStateChange
 }: FormProps) {
   const { dirty, errors, isValid, setFieldValue, setValues, submitForm, values } =
     useFormikContext<FormEditedReporting>()
@@ -126,7 +130,7 @@ export function Form({
     values.vesselIdentifier,
     values.length
   ])
-  const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
+  const [isVesselAbsent, setIsVesselAbsent] = useState(!selectedVessel && (isEdition || !!values.isUnknownVessel))
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
   const selectedVesselHasLogbook = useMainAppSelector(state => {
     if (!state.vessel.selectedVesselIdentity) {
@@ -176,15 +180,7 @@ export function Form({
   function clearVesselValues(override?: Partial<FormEditedReporting>) {
     void setValues({
       ...values,
-      cfr: undefined,
-      externalMarker: undefined,
-      flagState: 'UNDEFINED',
-      ircs: undefined,
-      length: undefined,
-      mmsi: undefined,
-      vesselId: undefined,
-      vesselIdentifier: undefined,
-      vesselName: undefined,
+      ...EMPTY_VESSEL_IDENTITY,
       ...override
     })
   }
@@ -201,6 +197,8 @@ export function Form({
     }
     void setValues({
       ...values,
+      // The selected vessel carries no IMO: without this reset, the previous vessel one would be kept
+      ...EMPTY_VESSEL_IDENTITY,
       cfr: vessel.internalReferenceNumber,
       externalMarker: vessel.externalReferenceNumber,
       flagState: vessel.flagState ?? 'UNDEFINED',
@@ -280,15 +278,6 @@ export function Form({
     }
   }
 
-  const handleDuplicate = () => {
-    void setFieldValue('id', undefined)
-    void setFieldValue('vesselName', undefined)
-    void setFieldValue('mmsi', undefined)
-    void setFieldValue('imo', undefined)
-    void setFieldValue('ircs', undefined)
-    void setFieldValue('externalMarker', undefined)
-  }
-
   useEffect(() => {
     if (onIsDirty) {
       onIsDirty(dirty)
@@ -296,19 +285,13 @@ export function Form({
   }, [dirty, onIsDirty])
 
   useEffect(() => {
-    if (submitRef) {
-      // eslint-disable-next-line no-param-reassign
-      submitRef.current = submitForm
-    }
-  }, [submitForm, submitRef])
-
-  useEffect(() => {
-    if (!duplicateRef) {
+    if (!formActionsRef) {
       return
     }
+
     // eslint-disable-next-line no-param-reassign
-    duplicateRef.current = handleDuplicate
-  })
+    formActionsRef.current = { getEditedValues: () => values, submit: submitForm }
+  }, [formActionsRef, submitForm, values])
 
   useEffect(() => {
     onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)

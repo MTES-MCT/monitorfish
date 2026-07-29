@@ -252,15 +252,83 @@ context('Reporting map form', () => {
 
     cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
     cy.get('*[data-cy="map-reporting-form"]').contains('DIRM')
+    cy.get('[name="title"]').should('have.value', 'Test INN - pêche illicite')
     cy.get('*[data-cy="map-reporting-form"]').contains('NOUVEAU SIGNALEMENT INN')
     cy.get('*[data-cy="map-reporting-form"]').contains('Signalement non enregistré')
-    cy.get('*[data-cy="map-reporting-form"]').contains('France')
+    // The whole vessel block is reset, nationality and gear included
     cy.get('*[data-cy="map-reporting-form"]').contains('Vouéadisparaitre').should('not.exist')
+    cy.get('*[data-cy="map-reporting-form"]').contains('France').should('not.exist')
+    cy.get('*[data-cy="map-reporting-form"]').contains('PTM').should('not.exist')
 
+    cy.contains('Navire sans fiche').click()
     cy.fill('Nom', 'Passeparla')
 
-    cy.wait('@createReporting')
+    cy.wait('@createReporting').then(({ request }) => {
+      expect(request.body.title).to.equal('Test INN - pêche illicite')
+      expect(request.body.otherSourceType).to.equal('DIRM')
+      expect(request.body.vesselName).to.equal('Passeparla')
+      expect(request.body.mmsi).to.be.oneOf([null, undefined])
+      expect(request.body.gearCode).to.be.oneOf([null, undefined])
+    })
     cy.wait('@displayReportings')
     cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
+  })
+
+  it('Should duplicate an archived INN reporting opened from the map', () => {
+    // Navigate to French Guiana area — contains 'AMAZONIA QUEEN' (archived, INFRACTION_SUSPICION)
+    cy.visit('/#@-5808000,716000,10.50')
+    cy.wait('@displayReportings')
+    cy.wait(3000)
+
+    cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
+    cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
+    cy.fill('Statut', 'Archivé')
+    cy.wait('@displayReportings')
+
+    hoverReportingOverlay('AMAZONIA QUEEN', ['AMAZONIA QUEEN', 'infraction (OPS)', 'Archivé'])
+    cy.getDataCy('reporting-overlay').should('be.visible')
+
+    // Editing a saved reporting is the case where the form values come from the Redux `editedReporting`
+    cy.clickButton('Modifier le signalement')
+    cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
+    cy.get('*[data-cy="map-reporting-form"]').contains('AMAZONIA QUEEN')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Le signalement a été archivé.')
+    cy.getDataCy('reporting-overlay-close').click({ force: true })
+
+    cy.get('[name="title"]')
+      .invoke('val')
+      .then(title => {
+        cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+        cy.intercept('PUT', '/bff/v1/reportings/*').as('updateReporting')
+
+        cy.clickButton('Dupliquer ce signalement')
+
+        // Everything but the vessel is kept, and the copy is a new, unarchived reporting
+        cy.get('*[data-cy="map-reporting-form"]').contains('NOUVEAU SIGNALEMENT INN')
+        cy.get('*[data-cy="map-reporting-form"]').contains('Signalement non enregistré')
+        cy.get('*[data-cy="map-reporting-form"]').contains('Le signalement a été archivé.').should('not.exist')
+        cy.get('*[data-cy="map-reporting-form"]').contains('AMAZONIA QUEEN').should('not.exist')
+        cy.get('[name="title"]').should('have.value', title)
+
+        cy.contains('Navire sans fiche').click()
+        cy.fill('Nom', 'Navire dupliqué')
+
+        // The duplication creates a new reporting instead of updating the original one
+        cy.wait('@createReporting').then(({ request }) => {
+          expect(request.body.title).to.equal(title)
+          expect(request.body.vesselName).to.equal('Navire dupliqué')
+          expect(request.body.vesselId).to.be.oneOf([null, undefined])
+          expect(request.body.cfr).to.be.oneOf([null, undefined])
+          expect(request.body.ircs).to.be.oneOf([null, undefined])
+          expect(request.body.externalMarker).to.be.oneOf([null, undefined])
+        })
+      })
+
+    cy.wait('@displayReportings')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Dernière modif.')
+
+    // The original reporting is left untouched
+    cy.get('@updateReporting.all').should('have.length', 0)
   })
 })

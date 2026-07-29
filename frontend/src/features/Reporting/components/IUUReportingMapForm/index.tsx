@@ -6,6 +6,7 @@ import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBo
 import { AutoSaveTag } from '@features/Mission/components/MissionForm/shared/AutoSaveTag'
 import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { ReportingForm } from '@features/Reporting/components/ReportingForm'
+import { getDuplicatedFormFields } from '@features/Reporting/components/ReportingForm/utils'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
@@ -21,7 +22,16 @@ import styled from 'styled-components'
 
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 
+import type { ReportingFormActions, ReportingFormDuplication } from '@features/Reporting/components/ReportingForm'
 import type { Reporting } from '@features/Reporting/types'
+
+type ConfirmationDialog = 'DELETION' | 'DRAFT_CANCELLATION' | 'DUPLICATION'
+
+const DUPLICATION_BANNER_PROPS = {
+  closingDelay: 6000,
+  isClosable: true,
+  withAutomaticClosing: true
+}
 
 export function IUUReportingMapForm() {
   const dispatch = useMainAppDispatch()
@@ -33,13 +43,12 @@ export function IUUReportingMapForm() {
   const [flagState, setFlagState] = useState<string | undefined>(undefined)
   const [numberOfVessels, setNumberOfVessels] = useState<number | undefined>(undefined)
   const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
-  const submitRef = useRef<(() => Promise<void>) | undefined>(undefined)
-  const duplicateRef = useRef<(() => void) | undefined>(undefined)
+  const formActionsRef = useRef<ReportingFormActions | undefined>(undefined)
   const isDirtyRef = useRef(false)
   const reportingIdRef = useRef(editedReporting?.id)
   const reportingTypeRef = useRef(editedReporting?.type)
-  const [isDraftCancellationConfirmationDialogOpen, setIsDraftCancellationConfirmationDialogOpen] = useState(false)
-  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
+  const [duplication, setDuplication] = useState<ReportingFormDuplication | undefined>(undefined)
+  const [openedConfirmationDialog, setOpenedConfirmationDialog] = useState<ConfirmationDialog | undefined>(undefined)
 
   const resetLocalState = () => {
     reportingIdRef.current = undefined
@@ -57,13 +66,16 @@ export function IUUReportingMapForm() {
       return
     }
 
+    setDuplication(undefined)
     reportingIdRef.current = editedReporting?.id
     reportingTypeRef.current = editedReporting?.type
   }, [editedReporting])
 
+  const closeConfirmationDialog = () => setOpenedConfirmationDialog(undefined)
+
   const onClose = () => {
     if (isDirtyRef.current) {
-      setIsDraftCancellationConfirmationDialogOpen(true)
+      setOpenedConfirmationDialog('DRAFT_CANCELLATION')
 
       return
     }
@@ -72,7 +84,8 @@ export function IUUReportingMapForm() {
   }
 
   const handleClose = () => {
-    setIsDraftCancellationConfirmationDialogOpen(false)
+    closeConfirmationDialog()
+    setDuplication(undefined)
     dispatch(
       displayedComponentActions.setDisplayedComponents({
         isReportingMapFormDisplayed: false
@@ -83,52 +96,64 @@ export function IUUReportingMapForm() {
   }
 
   const handleDelete = () => {
-    assertNotNullish(reportingIdRef.current)
-    assertNotNullish(reportingTypeRef.current)
+    const deletedReportingId = reportingIdRef.current
+    const deletedReportingType = reportingTypeRef.current
+    assertNotNullish(deletedReportingId)
+    assertNotNullish(deletedReportingType)
 
-    setIsDeletionConfirmationDialogOpen(false)
-    dispatch(
-      displayedComponentActions.setDisplayedComponents({
-        isReportingMapFormDisplayed: false
-      })
-    )
-    dispatch(reportingActions.unsetEditedReporting())
-    dispatch(reportingActions.unsetSelectedReportingFeatureId())
-    dispatch(deleteReporting(reportingIdRef.current, reportingTypeRef.current))
+    handleClose()
+    dispatch(deleteReporting(deletedReportingId, deletedReportingType))
   }
 
-  const handleDuplicate = () => {
+  const onDuplicate = () => {
     if (isDirtyRef.current) {
-      setIsDraftCancellationConfirmationDialogOpen(true)
+      setOpenedConfirmationDialog('DUPLICATION')
 
       return
     }
 
+    duplicateReporting()
+  }
+
+  const duplicateReporting = () => {
+    closeConfirmationDialog()
+
     try {
-      duplicateRef.current?.()
+      const editedValues = formActionsRef.current?.getEditedValues()
+      assertNotNullish(editedValues)
+
+      setDuplication(previousDuplication => ({
+        initialValues: getDuplicatedFormFields(editedValues),
+        sessionId: (previousDuplication?.sessionId ?? 0) + 1
+      }))
       resetLocalState()
       dispatch(reportingActions.unsetEditedReporting())
+      dispatch(reportingActions.unsetSelectedReportingFeatureId())
 
-      dispatch(
-        addMainWindowBanner({
-          children: 'Le signalement a bien été dupliqué. Vous éditez maintenant le nouveau signalement.',
-          closingDelay: 6000,
-          isClosable: true,
-          level: Level.SUCCESS,
-          withAutomaticClosing: true
-        }) as any
-      )
-    } catch (err) {
-      dispatch(
-        addMainWindowBanner({
-          children: `Le signalement n'a pas pu être dupliqué: ${err instanceof Error ? err.message : `${err}`}`,
-          closingDelay: 6000,
-          isClosable: true,
-          level: Level.ERROR,
-          withAutomaticClosing: true
-        })
-      )
+      notifyDuplicationSucceeded()
+    } catch (error) {
+      notifyDuplicationFailed(error)
     }
+  }
+
+  const notifyDuplicationSucceeded = () => {
+    dispatch(
+      addMainWindowBanner({
+        ...DUPLICATION_BANNER_PROPS,
+        children: 'Le signalement a bien été dupliqué. Vous éditez maintenant le nouveau signalement.',
+        level: Level.SUCCESS
+      })
+    )
+  }
+
+  const notifyDuplicationFailed = (error: unknown) => {
+    dispatch(
+      addMainWindowBanner({
+        ...DUPLICATION_BANNER_PROPS,
+        children: `Le signalement n'a pas pu être dupliqué: ${error instanceof Error ? error.message : `${error}`}`,
+        level: Level.ERROR
+      })
+    )
   }
 
   const handleVesselStateChange = useCallback(
@@ -194,8 +219,9 @@ export function IUUReportingMapForm() {
             <Body>
               <StyledReportingForm
                 autoSave={!editedReporting?.isArchived}
-                duplicateRef={duplicateRef}
+                duplication={duplication}
                 editedReporting={editedReporting}
+                formActionsRef={formActionsRef}
                 hasWhiteBackground
                 hideButtons
                 isIUU
@@ -203,7 +229,6 @@ export function IUUReportingMapForm() {
                 onClose={onClose}
                 onIsDirty={handleDirty}
                 onVesselStateChange={handleVesselStateChange}
-                submitRef={submitRef}
                 windowContext={WindowContext.MainWindow}
               />
             </Body>
@@ -215,14 +240,14 @@ export function IUUReportingMapForm() {
                     color={THEME.color.maximumRed}
                     Icon={Icon.Delete}
                     onClick={() => {
-                      setIsDeletionConfirmationDialogOpen(true)
+                      setOpenedConfirmationDialog('DELETION')
                     }}
                     title="Supprimer ce signalement"
                   />
                   <DuplicateButton
                     accent={Accent.PRIMARY}
                     Icon={Icon.Duplicate}
-                    onClick={handleDuplicate}
+                    onClick={onDuplicate}
                     title="Dupliquer ce signalement"
                   />
                 </>
@@ -232,13 +257,17 @@ export function IUUReportingMapForm() {
                 Fermer
               </Button>
               {!!editedReporting?.isArchived && (
-                <Button accent={Accent.TERTIARY} onClick={() => submitRef.current?.()} title="Enregistrer et fermer">
+                <Button
+                  accent={Accent.TERTIARY}
+                  onClick={() => formActionsRef.current?.submit()}
+                  title="Enregistrer et fermer"
+                >
                   Enregistrer et fermer
                 </Button>
               )}
             </StyledFooter>
           </Wrapper>
-          {isDraftCancellationConfirmationDialogOpen && (
+          {openedConfirmationDialog === 'DRAFT_CANCELLATION' && (
             <ConfirmationModal
               confirmationButtonLabel="Quitter sans enregistrer"
               message={
@@ -247,12 +276,12 @@ export function IUUReportingMapForm() {
                   <Bold>l’édition d’un signalement.</Bold>
                 </>
               }
-              onCancel={() => setIsDraftCancellationConfirmationDialogOpen(false)}
+              onCancel={closeConfirmationDialog}
               onConfirm={handleClose}
               title="Quitter sans enregistrer"
             />
           )}
-          {isDeletionConfirmationDialogOpen && (
+          {openedConfirmationDialog === 'DELETION' && (
             <ConfirmationModal
               confirmationButtonLabel="Confirmer la suppression"
               message={
@@ -261,9 +290,23 @@ export function IUUReportingMapForm() {
                   <Bold>supprimer ce signalement ?</Bold>
                 </>
               }
-              onCancel={() => setIsDeletionConfirmationDialogOpen(false)}
+              onCancel={closeConfirmationDialog}
               onConfirm={handleDelete}
               title="Supprimer le signalement"
+            />
+          )}
+          {openedConfirmationDialog === 'DUPLICATION' && (
+            <ConfirmationModal
+              confirmationButtonLabel="Dupliquer sans enregistrer"
+              message={
+                <>
+                  <p>Les modifications en cours seront reprises dans la copie mais ne seront pas enregistrées sur</p>
+                  <Bold>le signalement d’origine.</Bold>
+                </>
+              }
+              onCancel={closeConfirmationDialog}
+              onConfirm={duplicateReporting}
+              title="Dupliquer le signalement"
             />
           )}
         </>

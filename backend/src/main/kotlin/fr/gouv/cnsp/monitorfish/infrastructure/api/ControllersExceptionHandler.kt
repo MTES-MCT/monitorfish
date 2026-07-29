@@ -10,9 +10,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendInternalErrorDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendRequestErrorDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BackendUsageErrorDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissingParameterApiError
 import fr.gouv.cnsp.monitorfish.infrastructure.exceptions.BackendRequestException
-import jakarta.annotation.Priority
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.annotation.Order
@@ -23,77 +21,107 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
+/**
+ * Maps exceptions thrown by controllers to API responses.
+ *
+ * Failures the Backend knows how to describe carry an explicit error code: [BackendUsageException],
+ * [BackendRequestException] and [BackendInternalException]. Anything else is unexpected: it is logged in full
+ * and answered with a generic message, because an exception message is written for developers, not for API
+ * consumers, and may disclose internal details.
+ *
+ * `IllegalStateException` is deliberately absent from the client-error group: `check()` and `checkNotNull()`
+ * assert Backend invariants, so breaking one is a Backend bug (500) rather than a malformed request (400).
+ *
+ * Every handler logs exactly once, and it is the only place that does so: exceptions carry data, they don't
+ * report themselves.
+ */
 @RestControllerAdvice
-@Priority(1)
 @Order(1)
 class ControllersExceptionHandler {
     private val logger: Logger = LoggerFactory.getLogger(ControllersExceptionHandler::class.java)
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BackendInternalException::class)
-    fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput =
-        BackendInternalErrorDataOutput(code = e.code, message = e.message)
+    fun handleBackendInternalException(e: BackendInternalException): BackendInternalErrorDataOutput {
+        logger.error("${e.code ?: "BACKEND_INTERNAL_ERROR"}: ${e.message}", e)
+
+        return BackendInternalErrorDataOutput(code = e.code, message = e.message)
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BackendRequestException::class)
-    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput =
-        BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
+    fun handleBackendRequestException(e: BackendRequestException): BackendRequestErrorDataOutput {
+        logger.warn("${e.code}: ${e.message ?: "No message."}", e)
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(RuntimeException::class)
-    fun handleBackendRuntimeException(e: RuntimeException): BackendInternalErrorDataOutput {
-        logger.error("Runtime exception: ${e.message}", e)
-
-        return BackendInternalErrorDataOutput(code = null, message = e.message ?: BackendInternalException().message)
+        return BackendRequestErrorDataOutput(code = e.code, data = e.data, message = e.message)
     }
 
     @ExceptionHandler(BackendUsageException::class)
     fun handleBackendUsageException(e: BackendUsageException): ResponseEntity<BackendUsageErrorDataOutput> {
-        val responseBody = BackendUsageErrorDataOutput(code = e.code, data = e.data, message = e.message)
-
-        return when (e.code) {
-            BackendUsageErrorCode.NOT_FOUND -> {
-                ResponseEntity(responseBody, HttpStatus.NOT_FOUND)
-            }
-            BackendUsageErrorCode.NOT_FOUND_BUT_OK -> {
-                ResponseEntity(responseBody, HttpStatus.OK)
-            }
-            else -> {
-                ResponseEntity(responseBody, HttpStatus.BAD_REQUEST)
-            }
+        val status = statusOf(e.code)
+        if (status.isError) {
+            logger.warn("${e.code}: ${e.message ?: "No message."}", e)
         }
+
+        return ResponseEntity(BackendUsageErrorDataOutput(code = e.code, data = e.data, message = e.message), status)
+    }
+
+    /**
+     * `NOT_FOUND_BUT_OK` answers `200` on purpose: the Frontend reads its `code` to turn an expected absence into
+     * an empty result rather than into an error. See `valueOrUndefinedIfNotFoundOrThrow` in the Frontend.
+     */
+    private fun statusOf(code: BackendUsageErrorCode): HttpStatus =
+        when (code) {
+            BackendUsageErrorCode.NOT_FOUND -> HttpStatus.NOT_FOUND
+            BackendUsageErrorCode.NOT_FOUND_BUT_OK -> HttpStatus.OK
+            else -> HttpStatus.BAD_REQUEST
+        }
+
+    /**
+     * Last-resort handler for exceptions no other handler claimed. Reaching it means the Backend failed in a way
+     * nobody described, so the cause belongs in the logs and never in the response body.
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException::class)
+    fun handleUnexpectedException(e: RuntimeException): BackendInternalErrorDataOutput {
+        logger.error("Unexpected exception.", e)
+
+        return BackendInternalErrorDataOutput(code = null, message = BackendInternalException.DEFAULT_MESSAGE)
     }
 
     // -------------------------------------------------------------------------
     // Legacy exceptions
 
+    /**
+     * A malformed NAF message answers `200` on purpose: the position sender cannot fix the message it already
+     * sent, so failing the request would only make it retry forever.
+     */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NAFMessageParsingException::class)
-    fun handleNAFMessageParsingException(e: Exception): ApiError {
-        logger.error(e.message, e.cause)
+    fun handleNAFMessageParsingException(e: NAFMessageParsingException): ApiError {
+        logger.error("Could not parse NAF message.", e)
 
-        return ApiError(IllegalArgumentException(e.message.toString(), e))
+        return ApiError(e)
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(
         IllegalArgumentException::class,
-        // IllegalStateException::class,
         CouldNotUpdateControlObjectiveException::class,
         CouldNotFindException::class,
         NoSuchElementException::class,
     )
-    fun handleIllegalArgumentException(e: Exception): ApiError {
-        logger.error(e.message, e.cause)
+    fun handleInvalidRequestException(e: RuntimeException): ApiError {
+        logger.warn("Invalid request.", e)
 
-        return ApiError(IllegalArgumentException(e.message.toString(), e))
+        return ApiError(e)
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException::class)
-    fun handleNoParameter(e: MissingServletRequestParameterException): MissingParameterApiError {
-        logger.error(e.message, e.cause)
+    fun handleMissingParameter(e: MissingServletRequestParameterException): ApiError {
+        logger.warn("Missing request parameter.", e)
 
-        return MissingParameterApiError("Parameter \"${e.parameterName}\" is missing.")
+        return ApiError(error = "Parameter \"${e.parameterName}\" is missing.", type = e::class.simpleName!!)
     }
 }

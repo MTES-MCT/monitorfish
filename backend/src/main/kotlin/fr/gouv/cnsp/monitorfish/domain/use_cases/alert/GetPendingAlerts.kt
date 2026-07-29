@@ -43,22 +43,29 @@ class GetPendingAlerts(
             }
     }
 
+    /**
+     * Specifications are matched on identity rather than on `name`: names are user-editable, so two
+     * specifications may share one.
+     */
     private fun getSpecification(
         alertSpecifications: List<PositionAlertSpecification>,
         pendingAlertWithInfraction: PendingAlert,
-    ): PositionAlertSpecification =
-        alertSpecifications.singleOrNull {
-            if (pendingAlertWithInfraction.value.alertId != null) {
-                return@singleOrNull it.id == pendingAlertWithInfraction.value.alertId
-            }
+    ): PositionAlertSpecification {
+        val alertId = pendingAlertWithInfraction.value.alertId
+        val alertTypeName = pendingAlertWithInfraction.value.type.name
 
-            return@singleOrNull it.name == pendingAlertWithInfraction.value.name
+        return alertSpecifications.firstOrNull {
+            when (alertId) {
+                null -> it.type == alertTypeName
+                else -> it.id == alertId
+            }
         } ?: throw BackendInternalException(
             message =
-                "Could not find alert specification of alertId: ${pendingAlertWithInfraction.value.alertId} " +
-                    "and alertName: ${pendingAlertWithInfraction.value.name}",
+                "Could not find alert specification of alertId: $alertId " +
+                    "and alertType: $alertTypeName",
             code = BackendInternalErrorCode.UNPROCESSABLE_RESOURCE_DATA,
         )
+    }
 
     private fun getInfraction(pendingAlert: PendingAlert): Infraction? {
         return pendingAlert.value.natinfCode?.let {

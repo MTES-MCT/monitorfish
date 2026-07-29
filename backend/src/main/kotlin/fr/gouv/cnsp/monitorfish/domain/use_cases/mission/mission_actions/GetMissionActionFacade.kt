@@ -4,16 +4,20 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FacadeAreasRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.slf4j.LoggerFactory
 
 @UseCase
 class GetMissionActionFacade(
     private val portsRepository: PortRepository,
     private val facadeAreasRepository: FacadeAreasRepository,
 ) {
+    private val logger = LoggerFactory.getLogger(GetMissionActionFacade::class.java)
+
     fun execute(action: MissionAction): Seafront? =
         when (action.actionType) {
             MissionActionType.SEA_CONTROL -> getFacadeFromCoordinates(action)
@@ -35,12 +39,18 @@ class GetMissionActionFacade(
     }
 
     private fun getFacadeFromPort(action: MissionAction): Seafront? {
-        if (action.portLocode == null) {
-            return null
-        }
-
-        val facade = portsRepository.findByLocode(action.portLocode).facade ?: return null
+        val portLocode = action.portLocode ?: return null
+        val facade = findPortFacade(portLocode) ?: return null
 
         return Seafront.from(facade)
     }
+
+    private fun findPortFacade(portLocode: String): String? =
+        try {
+            portsRepository.findByLocode(portLocode).facade
+        } catch (e: CodeNotFoundException) {
+            logger.warn(e.message)
+
+            null
+        }
 }

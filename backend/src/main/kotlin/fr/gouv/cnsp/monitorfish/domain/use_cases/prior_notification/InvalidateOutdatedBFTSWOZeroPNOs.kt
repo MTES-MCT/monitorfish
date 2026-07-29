@@ -31,7 +31,7 @@ class InvalidateOutdatedBFTSWOZeroPNOs(
             ).forEach {
                 if (it.reportId == null) {
                     logger.warn("Ignoring manual prior notification with no report id")
-                    return
+                    return@forEach
                 }
 
                 manualPriorNotificationRepository.invalidate(it.reportId)

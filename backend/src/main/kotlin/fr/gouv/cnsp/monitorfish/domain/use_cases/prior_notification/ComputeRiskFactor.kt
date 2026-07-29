@@ -9,9 +9,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfractionRat
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfringementRiskLevel
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.impactRiskFactorCoefficient
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.probabilityRiskFactorCoefficient
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import org.slf4j.LoggerFactory
 import java.time.Clock
 import java.time.ZonedDateTime
 import kotlin.math.pow
@@ -26,6 +28,8 @@ class ComputeRiskFactor(
     private val controlObjectivesRepository: ControlObjectivesRepository,
     private val clock: Clock,
 ) {
+    private val logger = LoggerFactory.getLogger(ComputeRiskFactor::class.java)
+
     fun execute(
         portLocode: String,
         fleetSegments: List<FleetSegment>,
@@ -36,7 +40,7 @@ class ComputeRiskFactor(
         }
 
         val currentYear = ZonedDateTime.now(clock).year
-        val facade = portRepository.findByLocode(portLocode).facade
+        val facade = findPortFacade(portLocode)
         val storedRiskFactor = riskFactorRepository.findByInternalReferenceNumber(vesselCfr)
 
         val highestImpactRiskFactor =
@@ -61,4 +65,17 @@ class ComputeRiskFactor(
 
         return computedRiskFactor
     }
+
+    /**
+     * An unknown port only costs us the facade-specific control objectives, so the risk factor is still
+     * computed with its default infringement risk level rather than failing the whole prior notification.
+     */
+    private fun findPortFacade(portLocode: String): String? =
+        try {
+            portRepository.findByLocode(portLocode).facade
+        } catch (e: CodeNotFoundException) {
+            logger.warn(e.message)
+
+            null
+        }
 }

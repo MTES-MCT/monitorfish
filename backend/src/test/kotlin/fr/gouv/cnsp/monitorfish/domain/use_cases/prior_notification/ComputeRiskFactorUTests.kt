@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultControlRateRi
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfractionRateRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultInfringementRiskLevel
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlObjectivesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
@@ -329,6 +330,31 @@ class ComputeRiskFactorUTests {
             2.5.pow(0.2) *
                 (1.7 * 2.0).pow(0.3) *
                 0.7.pow(0.25),
+        )
+    }
+
+    @Test
+    fun `execute Should use the default infringement risk level When the port is missing from the referential`() {
+        // Given
+        val portLocode = "UNKNOWN"
+        val vesselCfr = "CFR"
+        given(portRepository.findByLocode(portLocode)).willThrow(CodeNotFoundException("Port UNKNOWN not found."))
+        given(riskFactorRepository.findByInternalReferenceNumber(vesselCfr)).willReturn(null)
+        given(controlObjectivesRepository.findAllByYear(anyInt())).willReturn(listOf())
+
+        // When
+        val result =
+            ComputeRiskFactor(riskFactorRepository, portRepository, controlObjectivesRepository, FIXED_CLOCK).execute(
+                portLocode,
+                listOf(),
+                vesselCfr,
+            )
+
+        // Then
+        assertThat(result).isEqualTo(
+            defaultImpactRiskFactor.pow(0.2) *
+                (defaultInfractionRateRiskFactor * defaultInfringementRiskLevel).pow(0.3) *
+                defaultControlRateRiskFactor.pow(0.25),
         )
     }
 }

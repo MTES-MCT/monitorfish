@@ -36,7 +36,8 @@ class ArchiveOutdatedReportings(
         val filteredReportingIdsToArchive =
             reportingCandidatesToArchive
                 .filter {
-                    extraAlertsToArchive.contains(it.second.type) || alertSpecificationsToArchive.contains(it.first)
+                    extraAlertsToArchive.contains(it.second.type) ||
+                        alertSpecificationsToArchive.contains(it.second.alertId)
                 }.map { it.first }
 
         logger.info("Found ${filteredReportingIdsToArchive.size} alert reportings to archive after new voyage.")

@@ -560,6 +560,55 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings).hasSize(1)
         assertThat(reportings.first().first).isEqualTo(1)
         assertThat(reportings.first().second.type).isEqualTo(AlertType.POSITION_ALERT)
+        assertThat(reportings.first().second.alertId).isEqualTo(1)
+    }
+
+    @Test
+    @Transactional
+    fun `findUnarchivedReportings Should not return non-alert reportings`() {
+        // Given - An INFRACTION_SUSPICION reporting for vessel ABC000180832, which already has a recent
+        // acknowledged DEP logbook message (FAKE_OPERATION_121) in the test fixtures (V666.5.2).
+        // Its `value` column can't be deserialized as an alert, so returning it would break the whole archiving.
+        jpaReportingRepository.save(
+            Reporting.InfractionSuspicion(
+                cfr = "ABC000180832",
+                externalMarker = "VP374069",
+                ircs = "CG1312",
+                vesselId = 123456,
+                vesselName = "MARIAGE ÎLE HASARD",
+                creationDate = ZonedDateTime.now().minusDays(1),
+                validationDate = ZonedDateTime.now().minusHours(1),
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = ZonedDateTime.now(),
+                flagState = CountryCode.FR,
+                isDeleted = false,
+                isArchived = false,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                reportingSource = ReportingSource.UNIT,
+                controlUnitId = 1,
+                authorContact = "Jean Bon",
+                title = "Pêche IUU",
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 27689,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
+                seaFront = "NAMO",
+                dml = "DML 29",
+                validityOption = ReportingValidityOption.UNTIL_NEXT_DEP,
+                createdBy = "test@example.gouv.fr",
+            ),
+        )
+
+        // When
+        val reportings = jpaReportingRepository.findUnarchivedReportingsAfterNewVoyage()
+
+        // Then
+        assertThat(reportings).hasSize(1)
+        assertThat(reportings.first().first).isEqualTo(1)
     }
 
     @Test

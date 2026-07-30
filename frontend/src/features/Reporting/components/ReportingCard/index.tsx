@@ -9,10 +9,15 @@ import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, Level, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { getFrenchOrdinal, getInfractionTitle, getReportingActorLabel } from './utils'
+import {
+  getFrenchOrdinal,
+  getInfractionSuspicionThreatTitle,
+  getInfractionTitle,
+  getReportingActorLabel
+} from './utils'
 import { getDate, getDateTime } from '../../../../utils'
 import { ReportingTypeCharacteristics } from '../../types'
 import { archiveReporting } from '../../useCases/archiveReporting'
@@ -43,6 +48,8 @@ export function ReportingCard({
   const [isOtherOccurrencesDatesOpened, setIsOtherOccurrencesDatesOpened] = useState(false)
 
   const isAnInfractionSuspicion = reportingIsAnInfractionSuspicion(reporting.type)
+  const infractions = reporting.type === ReportingType.INFRACTION_SUSPICION ? reporting.value.infractions : []
+  const hasMultipleInfractions = infractions.length > 1
   const reportingName = Object.values(ReportingTypeCharacteristics).find(
     reportingType => reportingType.code === reporting.type
   )?.name
@@ -196,12 +203,10 @@ export function ReportingCard({
               </>
             )}
           </DateText>
-          {reporting.type === ReportingType.INFRACTION_SUSPICION &&
-            reporting.value.infractions.map(infraction => (
-              <Threat key={infraction.natinfCode}>{infraction.threat}</Threat>
-            ))}
+          {reporting.type === ReportingType.ALERT && <Threat>{reporting.value.threat}</Threat>}
+          {!hasMultipleInfractions && !!infractions[0] && <Threat>{infractions[0].threat}</Threat>}
           {reporting.type !== ReportingType.ALERT && (
-            <Description $marginTop={reporting.type === ReportingType.OBSERVATION ? 10 : 0}>
+            <Description $marginTop={reporting.type === ReportingType.OBSERVATION || hasMultipleInfractions ? 10 : 0}>
               {reporting.value.description}
             </Description>
           )}
@@ -213,17 +218,14 @@ export function ReportingCard({
               {reporting.value.threatCharacterization} / NATINF {reporting.value.natinfCode}
             </StyledTag>
           )}
-          {reporting.type === ReportingType.INFRACTION_SUSPICION &&
-            reporting.value.infractions.map(infraction => (
-              <StyledTag
-                key={infraction.natinfCode}
-                accent={Accent.PRIMARY}
-                isLight
-                title={getInfractionTitle(reporting)}
-              >
+          {infractions.map(infraction => (
+            <Fragment key={infraction.natinfCode}>
+              {hasMultipleInfractions && <Threat>{infraction.threat}</Threat>}
+              <StyledTag accent={Accent.PRIMARY} isLight title={getInfractionSuspicionThreatTitle(infraction)}>
                 {infraction.threatCharacterization} / NATINF {infraction.natinfCode}
               </StyledTag>
-            ))}
+            </Fragment>
+          ))}
           {reporting.type === ReportingType.ALERT && !!reporting.value.depth && (
             <Natinf>Profondeur: {reporting.value.depth}m</Natinf>
           )}

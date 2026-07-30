@@ -28,7 +28,7 @@ import type { Reporting } from '@features/Reporting/types'
 type ConfirmationDialog = 'DELETION' | 'DRAFT_CANCELLATION' | 'DUPLICATION'
 
 const DUPLICATION_BANNER_PROPS = {
-  closingDelay: 6000,
+  closingDelay: 2000,
   isClosable: true,
   withAutomaticClosing: true
 }
@@ -124,7 +124,7 @@ export function IUUReportingMapForm() {
 
       setDuplication(previousDuplication => ({
         initialValues: getDuplicatedFormFields(editedValues),
-        sessionId: (previousDuplication?.sessionId ?? 0) + 1
+        revision: (previousDuplication?.revision ?? 0) + 1
       }))
       resetLocalState()
       dispatch(reportingActions.unsetEditedReporting())

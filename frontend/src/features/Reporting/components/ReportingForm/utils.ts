@@ -8,7 +8,6 @@ import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@featu
 export const EMPTY_VESSEL_IDENTITY = {
   cfr: undefined,
   externalMarker: undefined,
-  flagState: 'UNDEFINED',
   imo: undefined,
   ircs: undefined,
   length: undefined,
@@ -99,9 +98,7 @@ export function getDuplicatedFormFields(values: FormEditedReporting): FormEdited
     expirationDate: hasExpiredValidity ? getDefaultExpirationDate() : values.expirationDate,
     gearCode: undefined,
     isArchived: false,
-    isFishing: undefined,
-    // An IUU reporting on several vessels is necessarily on unidentified ones
-    isUnknownVessel: (values.numberOfVessels ?? 1) > 1
+    isFishing: undefined
   }
 }
 

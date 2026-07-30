@@ -154,7 +154,7 @@ describe('getDuplicatedFormFields', () => {
 
     expect(fields.cfr).toBeUndefined()
     expect(fields.externalMarker).toBeUndefined()
-    expect(fields.flagState).toBe('UNDEFINED')
+    expect(fields.flagState).toBe('FR')
     expect(fields.gearCode).toBeUndefined()
     expect(fields.imo).toBeUndefined()
     expect(fields.ircs).toBeUndefined()
@@ -195,12 +195,5 @@ describe('getDuplicatedFormFields', () => {
 
     expect(fields.isArchived).toBe(false)
     expect(customDayjs().isBefore(fields.expirationDate)).toBe(true)
-  })
-
-  it('marks the vessels as unknown when the reporting is about several vessels', () => {
-    const fields = getDuplicatedFormFields({ ...iuuFormFields, numberOfVessels: 3 })
-
-    expect(fields.isUnknownVessel).toBe(true)
-    expect(fields.numberOfVessels).toBe(3)
   })
 })

@@ -56,7 +56,6 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
 
-/** What a component displaying its own buttons, outside of the form, can ask it. */
 export type ReportingFormActions = {
   getEditedValues: () => FormEditedReporting
   submit: () => Promise<void>

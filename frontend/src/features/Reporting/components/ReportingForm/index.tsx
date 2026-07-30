@@ -20,8 +20,8 @@ export type { ReportingFormActions }
 
 export type ReportingFormDuplication = {
   initialValues: FormEditedReporting
-  /** Changes on each duplication to mount a form free of the previous reporting state. */
-  sessionId: number
+  /** Incremented on each duplication to mount a form free of the previous reporting state. */
+  revision: number
 }
 
 type ReportingFormProps = {
@@ -122,11 +122,11 @@ export function ReportingForm({
   // A duplication starts a new reporting, as does the edition of another one
   useEffect(() => {
     autoSavedReportingRef.current = undefined
-  }, [duplication?.sessionId, editedReporting?.id])
+  }, [duplication?.revision, editedReporting?.id])
 
   return (
     <Formik
-      key={duplication ? `duplication-${duplication.sessionId}` : (editedReporting?.id ?? 'new')}
+      key={duplication ? `duplication-${duplication.revision}` : (editedReporting?.id ?? 'new')}
       initialValues={duplication?.initialValues ?? getFormFields(editedReporting, isIUU)}
       onSubmit={createOrEditReporting}
       validate={toFormikValidationSchema(CreateOrEditReportingSchema)}

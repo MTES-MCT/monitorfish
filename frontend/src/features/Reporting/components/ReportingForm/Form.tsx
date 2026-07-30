@@ -6,7 +6,7 @@ import {
   InfractionRow,
   type InfractionSuspicionFormErrors
 } from '@features/Reporting/components/ReportingForm/InfractionRow'
-import { updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
+import { EMPTY_VESSEL_IDENTITY, updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
@@ -56,9 +56,15 @@ import type { Option } from '@mtes-mct/monitor-ui'
 
 const DEBOUNCE_DELAY = 1000
 
+export type ReportingFormActions = {
+  getEditedValues: () => FormEditedReporting
+  submit: () => Promise<void>
+}
+
 type FormProps = Readonly<{
   className: string | undefined
   displayedErrorKey: DisplayedErrorKey
+  formActionsRef?: MutableRefObject<ReportingFormActions | undefined> | undefined
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
@@ -70,11 +76,11 @@ type FormProps = Readonly<{
   onVesselStateChange?:
     | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
     | undefined
-  submitRef?: MutableRefObject<(() => Promise<void>) | undefined> | undefined
 }>
 export function Form({
   className,
   displayedErrorKey,
+  formActionsRef,
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
@@ -83,8 +89,7 @@ export function Form({
   onAutoSave,
   onClose,
   onIsDirty,
-  onVesselStateChange,
-  submitRef
+  onVesselStateChange
 }: FormProps) {
   const { dirty, errors, isValid, setFieldValue, setValues, submitForm, values } =
     useFormikContext<FormEditedReporting>()
@@ -124,7 +129,7 @@ export function Form({
     values.vesselIdentifier,
     values.length
   ])
-  const [isVesselAbsent, setIsVesselAbsent] = useState(isEdition ? !selectedVessel : false)
+  const [isVesselAbsent, setIsVesselAbsent] = useState(!selectedVessel && (isEdition || !!values.isUnknownVessel))
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
   const selectedVesselHasLogbook = useMainAppSelector(state => {
     if (!state.vessel.selectedVesselIdentity) {
@@ -172,17 +177,9 @@ export function Form({
   }, [controlUnitsQuery.data])
 
   function clearVesselValues(override?: Partial<FormEditedReporting>) {
-    setValues({
+    void setValues({
       ...values,
-      cfr: undefined,
-      externalMarker: undefined,
-      flagState: 'UNDEFINED',
-      ircs: undefined,
-      length: undefined,
-      mmsi: undefined,
-      vesselId: undefined,
-      vesselIdentifier: undefined,
-      vesselName: undefined,
+      ...EMPTY_VESSEL_IDENTITY,
       ...override
     })
   }
@@ -197,8 +194,10 @@ export function Form({
 
       return
     }
-    setValues({
+    void setValues({
       ...values,
+      // The selected vessel carries no IMO: without this reset, the previous vessel one would be kept
+      ...EMPTY_VESSEL_IDENTITY,
       cfr: vessel.internalReferenceNumber,
       externalMarker: vessel.externalReferenceNumber,
       flagState: vessel.flagState ?? 'UNDEFINED',
@@ -222,7 +221,7 @@ export function Form({
 
   const handleNumberOfVesselsChange = (nextValue: number | undefined) => {
     if (!isIUU || (nextValue ?? 1) <= 1) {
-      setFieldValue('numberOfVessels', nextValue)
+      void setFieldValue('numberOfVessels', nextValue)
 
       return
     }
@@ -233,25 +232,25 @@ export function Form({
 
   const handleObservationTypeSelect = (observationTitle: string | undefined) => {
     if (!observationTitle) {
-      setFieldValue('title', undefined)
+      void setFieldValue('title', undefined)
       setIsTitleDisplayed(false)
 
       return
     }
 
     if (observationTitle === OTHER_OBSERVATION_TITLE) {
-      setFieldValue('title', '')
+      void setFieldValue('title', '')
       setIsTitleDisplayed(true)
 
       return
     }
 
-    setFieldValue('title', observationTitle)
+    void setFieldValue('title', observationTitle)
     setIsTitleDisplayed(false)
   }
 
   const handleExpirationDateChange = (nextDate: string | undefined) => {
-    setValues({
+    void setValues({
       ...values,
       expirationDate: nextDate,
       validityOption: nextDate ? ReportingValidityOption.CUSTOM : undefined
@@ -259,7 +258,7 @@ export function Form({
   }
 
   const handleValidityOptionChange = (nextOption: string | undefined) => {
-    setValues({
+    void setValues({
       ...values,
       expirationDate: undefined,
       validityOption: nextOption as ReportingValidityOption | undefined
@@ -267,7 +266,7 @@ export function Form({
   }
 
   const handleReportingTypeRadio = (reportingType: string | undefined) => {
-    setFieldValue('type', reportingType)
+    void setFieldValue('type', reportingType)
 
     if (reportingType === ReportingType.OBSERVATION) {
       setIsTitleDisplayed(false)
@@ -285,11 +284,13 @@ export function Form({
   }, [dirty, onIsDirty])
 
   useEffect(() => {
-    if (submitRef) {
-      // eslint-disable-next-line no-param-reassign
-      submitRef.current = submitForm
+    if (!formActionsRef) {
+      return
     }
-  }, [submitForm, submitRef])
+
+    // eslint-disable-next-line no-param-reassign
+    formActionsRef.current = { getEditedValues: () => values, submit: submitForm }
+  }, [formActionsRef, submitForm, values])
 
   useEffect(() => {
     onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)

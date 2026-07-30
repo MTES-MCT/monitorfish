@@ -13,12 +13,23 @@ import { Form } from './Form'
 import { addReporting } from '../../useCases/addReporting'
 import { updateReporting } from '../../useCases/updateReporting'
 
+import type { ReportingFormActions } from './Form'
 import type { FormEditedReporting, Reporting } from '../../types'
+
+export type { ReportingFormActions }
+
+export type ReportingFormDuplication = {
+  initialValues: FormEditedReporting
+  /** Incremented on each duplication to mount a form free of the previous reporting state. */
+  revision: number
+}
 
 type ReportingFormProps = {
   autoSave?: boolean
   className?: string | undefined
+  duplication?: ReportingFormDuplication | undefined
   editedReporting: Reporting.EditableReporting | undefined
+  formActionsRef?: MutableRefObject<ReportingFormActions | undefined>
   hasWhiteBackground?: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
@@ -31,13 +42,14 @@ type ReportingFormProps = {
     flagState: string | undefined,
     numberOfVessels: number | undefined
   ) => void
-  submitRef?: MutableRefObject<(() => Promise<void>) | undefined>
   windowContext: WindowContext
 }
 export function ReportingForm({
   autoSave = false,
   className,
+  duplication,
   editedReporting,
+  formActionsRef,
   hasWhiteBackground = false,
   hideButtons = false,
   hideVesselSection = false,
@@ -46,7 +58,6 @@ export function ReportingForm({
   onClose,
   onIsDirty,
   onVesselStateChange,
-  submitRef,
   windowContext
 }: ReportingFormProps) {
   const dispatch = useMainAppDispatch()
@@ -108,20 +119,22 @@ export function ReportingForm({
     [onIsDirty]
   )
 
+  // A duplication starts a new reporting, as does the edition of another one
   useEffect(() => {
     autoSavedReportingRef.current = undefined
-  }, [editedReporting?.id])
+  }, [duplication?.revision, editedReporting?.id])
 
   return (
     <Formik
-      key={editedReporting?.id ?? 'new'}
-      initialValues={getFormFields(editedReporting, isIUU)}
+      key={duplication ? `duplication-${duplication.revision}` : (editedReporting?.id ?? 'new')}
+      initialValues={duplication?.initialValues ?? getFormFields(editedReporting, isIUU)}
       onSubmit={createOrEditReporting}
       validate={toFormikValidationSchema(CreateOrEditReportingSchema)}
     >
       <Form
         className={className}
         displayedErrorKey={displayedErrorKey}
+        formActionsRef={formActionsRef}
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}
@@ -131,7 +144,6 @@ export function ReportingForm({
         onClose={handleClose}
         onIsDirty={onIsDirty}
         onVesselStateChange={onVesselStateChange}
-        submitRef={submitRef}
       />
     </Formik>
   )

@@ -5,6 +5,22 @@ import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { FormEditedReporting, InfractionSuspicion, Reporting } from '@features/Reporting/types'
 
+export const EMPTY_VESSEL_IDENTITY = {
+  cfr: undefined,
+  externalMarker: undefined,
+  imo: undefined,
+  ircs: undefined,
+  length: undefined,
+  mmsi: undefined,
+  vesselId: undefined,
+  vesselIdentifier: undefined,
+  vesselName: undefined
+}
+
+function getDefaultExpirationDate(): string {
+  return customDayjs().utc().add(1, 'day').toISOString()
+}
+
 export function getFormFields(
   editedReporting: Reporting.EditableReporting | undefined,
   isIUU: boolean = false
@@ -18,7 +34,7 @@ export function getFormFields(
     editedReporting?.ircs ??
     editedReporting?.externalMarker
   )
-  const defaultExpirationDate = isIUU ? customDayjs().utc().add(1, 'day').toISOString() : undefined
+  const defaultExpirationDate = isIUU ? getDefaultExpirationDate() : undefined
   const defaultValidityOption = isIUU ? ReportingValidityOption.CUSTOM : undefined
 
   const validityOption = editedReporting?.validityOption ?? defaultValidityOption
@@ -69,6 +85,20 @@ export function getFormFields(
   return {
     ...base,
     type: ReportingType.OBSERVATION
+  }
+}
+
+export function getDuplicatedFormFields(values: FormEditedReporting): FormEditedReporting {
+  // The copy is a new reporting: an expiration date inherited from an archived or expired one would never validate
+  const hasExpiredValidity = !!values.expirationDate && !customDayjs().isBefore(values.expirationDate)
+
+  return {
+    ...values,
+    ...EMPTY_VESSEL_IDENTITY,
+    expirationDate: hasExpiredValidity ? getDefaultExpirationDate() : values.expirationDate,
+    gearCode: undefined,
+    isArchived: false,
+    isFishing: undefined
   }
 }
 

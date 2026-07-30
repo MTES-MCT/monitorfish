@@ -52,6 +52,7 @@ export function buildFeature(
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
    */
   const feature = new Feature({
+    activityOrigin: vessel.activityOrigin,
     alerts: vessel.alerts,
     beaconMalfunctionId: vessel.beaconMalfunctionId,
     coordinates: vessel.coordinates,

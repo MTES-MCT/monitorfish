@@ -2,7 +2,10 @@
 
 import { BaseReportingSchema } from '@features/Reporting/schemas/BaseReportingSchema'
 import { DisplayedReportingSchema } from '@features/Reporting/schemas/DisplayedReportingSchema'
-import { InfractionSuspicionSchema } from '@features/Reporting/schemas/InfractionSuspicionSchema'
+import {
+  InfractionSuspicionSchema,
+  InfractionSuspicionThreatSchema
+} from '@features/Reporting/schemas/InfractionSuspicionSchema'
 import { ReportingCreationSchema } from '@features/Reporting/schemas/ReportingCreationSchema'
 import {
   InfractionSuspicionReportingSchema,
@@ -108,6 +111,7 @@ export type ThreatSummary = z.infer<typeof ThreatSummarySchema>
 export type ReportingAndOccurrences = z.infer<typeof ReportingAndOccurrencesSchema>
 
 export type InfractionSuspicion = z.infer<typeof InfractionSuspicionSchema>
+export type InfractionSuspicionThreat = z.infer<typeof InfractionSuspicionThreatSchema>
 export type Observation = z.infer<typeof ObservationSchema>
 
 type ReportingTypeCharacteristic = {

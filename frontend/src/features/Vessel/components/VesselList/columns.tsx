@@ -90,26 +90,22 @@ export function getTableColumns(
       },
       cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
         info.getValue() ? (
-          <Ellipsised>
+          <>
             {info.row.original.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
-              <Tag
-                backgroundColor={THEME.color.mediumSeaGreen25}
-                color={THEME.color.charcoal}
-                title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}
-              >
-                {info.getValue()}
+              <Tag backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.charcoal}>
+                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>
+                  {info.getValue()}
+                </Ellipsised>
               </Tag>
             )}
             {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
-              <Tag
-                backgroundColor={THEME.color.white}
-                color={THEME.color.charcoal}
-                title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}
-              >
-                <i>{info.getValue()}</i>
+              <Tag backgroundColor={THEME.color.white} color={THEME.color.charcoal}>
+                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>
+                  <i>{info.getValue()}</i>
+                </Ellipsised>
               </Tag>
             )}
-          </Ellipsised>
+          </>
         ) : (
           <None>Aucun segment</None>
         ),

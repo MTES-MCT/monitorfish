@@ -135,7 +135,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-spatial")
     implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.15.2")
     api("org.locationtech.jts:jts-core:1.20.0")
-    implementation("org.n52.jackson:jackson-datatype-jts:2.0.0")
+    implementation("org.n52.jackson:jackson-datatype-jts:3.0.2")
     implementation("org.locationtech.proj4j:proj4j:1.4.2")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.2")
     runtimeOnly("org.postgresql:postgresql:42.7.11")

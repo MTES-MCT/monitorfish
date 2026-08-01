@@ -33,7 +33,7 @@ class GetActiveVessels(
         val currentReportingsByCfr = currentReportings.groupBy { it.internalReferenceNumber }
         val currentReportingsByVesselIds = currentReportings.groupBy { it.vesselId }
 
-        val cfrsWithReportings = currentReportings.mapNotNull { it.internalReferenceNumber }.distinct()
+        val cfrsWithReportings = currentReportings.mapNotNull { it.internalReferenceNumber }.distinct().sorted()
         val lastDepDatetimePerCfr = logbookReportRepository.findLastDepDatetimeOfCurrentTripsPerCfr(cfrsWithReportings)
 
         val lastPositionsWithProfileAndVessel =

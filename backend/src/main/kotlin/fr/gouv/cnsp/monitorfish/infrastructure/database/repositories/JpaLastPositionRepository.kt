@@ -53,7 +53,15 @@ class JpaLastPositionRepository(
             null
         }
 
-    @Cacheable(value = ["active_vessels"])
+    /**
+     * Callers pass `now().minusMonths(1)`: without truncation the sub-second precision makes every call a distinct
+     * cache key, so the cache would never hit and each request would run this (heavy) query again.
+     */
+    @Cacheable(
+        value = ["active_vessels"],
+        key = "#dateTime.truncatedTo(T(java.time.temporal.ChronoUnit).HOURS)",
+        sync = true,
+    )
     override fun findActiveVesselWithReferentialData(dateTime: ZonedDateTime): List<EnrichedActiveVessel> =
         dbLastPositionRepository
             .findActiveVesselWithReferentialData(dateTime)

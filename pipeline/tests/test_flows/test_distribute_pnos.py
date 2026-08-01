@@ -2502,6 +2502,7 @@ def test_make_update_logbook_reports_statement(
         "    operation_datetime_utc >= '2023-06-05 12:05:06'"
         "    AND operation_datetime_utc < '2023-07-05 15:02:38'"
         "    AND report_id IN ('Report-1')"
+        "    AND (value->>'isBeingSent')::BOOLEAN IS true"
     )
 
     # Test with sent messages
@@ -2530,6 +2531,7 @@ def test_make_update_logbook_reports_statement(
         "    operation_datetime_utc >= '2023-06-05 12:05:06'"
         "    AND operation_datetime_utc < '2023-07-05 15:02:38'"
         "    AND report_id IN ('Report-1')"
+        "    AND (value->>'isBeingSent')::BOOLEAN IS true"
     )
 
 
@@ -2555,6 +2557,7 @@ def test_make_update_manual_prior_notifications_statement(
         "        false::text::jsonb"
         "   ) "
         "WHERE report_id IN ('Report-2')"
+        "    AND (value->>'isBeingSent')::BOOLEAN IS true"
     )
 
     # Test with sent messages
@@ -2577,6 +2580,7 @@ def test_make_update_manual_prior_notifications_statement(
         "        (CASE WHEN report_id IN ('Manual-Report-1') THEN 'true' ELSE 'false' END)::jsonb"
         "   ) "
         "WHERE report_id IN ('Report-2')"
+        "    AND (value->>'isBeingSent')::BOOLEAN IS true"
     )
 
 

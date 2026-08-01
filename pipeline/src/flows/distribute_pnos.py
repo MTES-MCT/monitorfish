@@ -958,7 +958,12 @@ def make_update_logbook_reports_statement(
             "WHERE "
             "   operation_datetime_utc >= :start_datetime_utc "
             "   AND operation_datetime_utc < :end_datetime_utc "
-            "   AND report_id IN :logbook_pno_report_ids"
+            "   AND report_id IN :logbook_pno_report_ids "
+            # The backend resets `isBeingSent`, `isSent` and `isVerified` to false when the PNO
+            # is edited while this flow is running. Without this guard we would then write
+            # `isSent = true` back onto a PNO the backend just reset, producing a state that the
+            # backend considers impossible (see adrs/0006).
+            "   AND (value->>'isBeingSent')::BOOLEAN IS true"
         ).bindparams(
             *bind_params,
             start_datetime_utc=start_datetime_utc,
@@ -1045,7 +1050,9 @@ def make_manual_prior_notifications_statement(
             "       '{isSent}', "
             f"{is_sent_line}"
             "   ) "
-            "WHERE report_id IN :manual_pno_report_ids"
+            "WHERE report_id IN :manual_pno_report_ids "
+            # See `make_update_logbook_reports_statement`.
+            "   AND (value->>'isBeingSent')::BOOLEAN IS true"
         ).bindparams(*bind_params)
 
         return statement

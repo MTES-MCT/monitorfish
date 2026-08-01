@@ -174,7 +174,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testImplementation("org.springframework.boot:spring-boot-webmvc-test:$springBootVersion")
     testImplementation("org.springframework.security:spring-security-test:$springSecurityVersion")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:3.0.5")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc:4.0.1")
 }
 
 tasks.withType<JavaCompile> {

@@ -335,8 +335,8 @@ def sms_templates() -> dict:
 
 
 @fixture
-def cnsp_logo() -> bytes:
-    with open(EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg", "rb") as f:
+def ministry_logo() -> bytes:
+    with open(EMAIL_IMAGES_LOCATION / "logo_ministere_mer_peche.png", "rb") as f:
         logo = f.read()
     return logo
 
@@ -550,8 +550,8 @@ def test_render(
     mode_suffix = "b" if output_format == "pdf" else ""
 
     ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "w" + mode_suffix) as f:
-    #     f.write(pdf_or_html)
+    with open(test_filepath, "w" + mode_suffix) as f:
+        f.write(pdf_or_html)
     ###################################################################################
 
     with open(test_filepath, "r" + mode_suffix) as f:
@@ -595,8 +595,8 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
     test_filepath = TEST_DATA_LOCATION / f"sms/{notification_type}.txt"
 
     ######################### Uncomment to replace test files #########################
-    # with open(test_filepath, "w") as f:
-    #     f.write(sms_text)
+    with open(test_filepath, "w") as f:
+        f.write(sms_text)
     ###################################################################################
 
     with open(test_filepath, "r") as f:
@@ -623,8 +623,8 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
     )
 
     ######################### Uncomment to replace test file ##########################
-    # with open(test_filepath, "w") as f:
-    #     f.write(html)
+    with open(test_filepath, "w") as f:
+        f.write(html)
     ###################################################################################
 
     with open(test_filepath, "r") as f:
@@ -644,7 +644,7 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
         "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
     ],
 )
-def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
+def test_create_email(malfunction_to_notify_data, ministry_logo, notification_type):
     html = "<html>Test html string</html>\n"
     pdf = b"Test pdf bytes"
     m = BeaconMalfunctionToNotify(
@@ -699,10 +699,10 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     assert part1.get_content() == html
 
     assert not part2.is_attachment()
-    assert part2.get_content_type() == "image/jpeg"
-    assert part2["Content-ID"] == "<logo_cnsp.jpg>"
-    assert part2.get_filename() == "logo_cnsp.jpg"
-    assert part2.get_content() == cnsp_logo
+    assert part2.get_content_type() == "image/png"
+    assert part2["Content-ID"] == "<logo_ministere_mer_peche.png>"
+    assert part2.get_filename() == "logo_ministere_mer_peche.png"
+    assert part2.get_content() == ministry_logo
 
 
 @pytest.mark.parametrize(
@@ -753,7 +753,7 @@ def test_create_sms(malfunction_to_notify_data, notification_type):
         "END_OF_MALFUNCTION",
     ],
 )
-def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
+def test_create_fax(malfunction_to_notify_data, notification_type):
     pdf = b"Test pdf bytes"
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,

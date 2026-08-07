@@ -9,49 +9,58 @@
     </head>
     <body>
         <header>
-            <table>
+            <table id="letterhead">
                 <tr>
                     <td>
-                       <img id="logo" src="{{ logo_src }}" alt="Logo CNSP">
+                       <img id="logo" src="{{ logo_src }}" alt="Ministère chargé de la mer et de la pêche">
                     </td>
                     <td>
                         <h1>
-                            <p class="no-vertical-margin">CENTRE NATIONAL</p>
-                            <p class="no-vertical-margin">DE SURVEILLANCE DES PÊCHES</p>
+                            <p class="no-vertical-margin">Direction générale des affaires</p>
+                            <p class="no-vertical-margin">maritimes, de la pêche et de</p>
+                            <p class="no-vertical-margin">l’aquaculture</p>
                         </h1>
                     </td>
                 </tr>
             </table>
         </header>
         <main>
-            <section class="no-vertical-margin">
-                <h3>{% block sender %}Expéditeur{% endblock %}</h3>
-                <p>CNSP / Service Système d’information Pêche (SIP)
-                <p>40, avenue Louis Bougo BP 48, 56410 Étel</p>
-                <p>cnsp-vms-ers@developpement-durable.gouv.fr</p>
-                <p>Tél : +33 2 97 29 34 27 / Fax : +33 2 97 55 23 75</p>
-            </section>
-            <section class="no-vertical-margin right-align">
-                {% block addressees %}<h3>Destinataires</h3>
-                <p>Capitaine et armateur du navire</p>
-                {% if vessel_name %}<p>{{ vessel_name }}</p>{% endif %}
-                {% if cfr %}<p>{{ cfr }}</p>{% endif %}
-                {% if beacon_number %}<p>Balise n°{{ beacon_number }}</p>{% endif %}
-                <p>Copies à l’opérateur satellitaire {{ beacon_operator if beacon_operator }}</p>
-                <p>et au service SIP du CNSP.</p>{% endblock %}
-            </section>
-            <section class="no-vertical-margin">
-                <h3>{% block subject %}Objet{% endblock %}</h3>
+            <table id="parties">
+                <tr>
+                    <td>
+                    </td>
+                    <td class="left-align">
+                        <p id="date">Étel, {% block le %}le {% endblock %}{{ notification_date }}</p>
+                        <br/>
+                        {% block addressees %}<h3>Destinataires</h3>
+                        <p>Capitaine et armateur du navire</p>
+                        {% if vessel_name %}<p>{{ vessel_name }}</p>{% endif %}
+                        {% if cfr %}<p>{{ cfr }}</p>{% endif %}
+                        {% if beacon_number %}<p>Balise n°{{ beacon_number }}</p>{% endif %}
+                        <p>Copies à l’opérateur satellitaire {{ beacon_operator if beacon_operator }}</p>
+                        <p>et au service SIP du CNSP.</p>{% endblock %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3>{% block sender %}Expéditeur{% endblock %}</h3>
+                        <p><strong>CNSP</strong> / Service Système d’information Pêche (SIP)</p>
+                        <p><strong>Tél</strong> : +33 2 97 29 34 27 &nbsp;&nbsp;<strong>Fax</strong> : +33 2 97 55 23 75</p>
+                        <p><strong>Mél</strong> : cnsp-vms-ers@developpement-durable.gouv.fr</p>
+                        <p><strong>Adresse</strong> : 40, avenue Louis Bougo BP 48, 56410 Étel</p>
+                    </td>
+                    <td class="left-align">
+                    </td>
+                </tr>
+            </table>
+            <section id="object" class="no-vertical-margin">
                 <p>{{ object }}</p>
-            </section>
-            <section id="date" class="right-align">
-                <p>Étel, {% block le %}le {% endblock %}{{ notification_date }}</p>
             </section>
             <section id="message">
                 <p>{% block bonjour %}Bonjour,{% endblock %}</p>
                 {% block message %}{% endblock %}
                 {% block salutations %}<p>Salutations,</p>
-                <p class="right-align">Le service SIP du CNSP (FMC français)</p>{% endblock %}
+                <p class="left-align">Le service SIP du CNSP (FMC français)</p>{% endblock %}
             </section>
         </main>
         {% block footer %}

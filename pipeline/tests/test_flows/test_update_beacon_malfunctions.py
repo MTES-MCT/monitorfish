@@ -88,7 +88,7 @@ def test_extract_vessels_that_should_emit(reset_test_data):
             "beacon_status": [
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
+                BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
             ],

@@ -2,7 +2,7 @@
 @font-face {
 font-family: Marianne;
 src: url({{ fonts_directory }}/Marianne/Marianne-Regular.woff2) format('woff2');
-font-weight: normal;  
+font-weight: normal;
 }
 
 @font-face {
@@ -22,6 +22,20 @@ font-family: Marianne;
 src: url({{ fonts_directory }}/Marianne/Marianne-Medium.woff2) format('woff2');
 font-weight: 500;
 }
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Regular_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: normal;
+}
+
+@font-face {
+font-family: Marianne;
+src: url({{ fonts_directory }}/Marianne/Marianne-Bold_Italic.woff2) format('woff2');
+font-style: italic;
+font-weight: 700;
+}
 {% endif %}
 
 @page {
@@ -30,46 +44,114 @@ font-weight: 500;
 }
 
 html {
-    margin: 80px 100px 36px 100px;
+    margin: 70px 90px 36px 80px;
     font: 15px Marianne, sans-serif;
-    line-height: 1.4;
-    color: #222;
+    line-height: 1.05;
+    color: #1a1a1a;
 }
 
 body {
-    max-width: 900px;
+    max-width: 1020px;
     margin: 0 auto;
 }
 
 header {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 footer {
     position: absolute;
     top: 1350px;
-    color: #666
+    color: #666;
 }
 
-h1 {
-    padding-top: 10px;
-    padding-left: 15px;
+main {
+    font-size: 1.1rem;
+}
+
+footer hr {
+    margin-bottom: 10px;
+}
+
+#letterhead {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#letterhead td {
     vertical-align: top;
-    font-weight: 500;
-    font-size: 1.7rem;
-    width: 500px;
 }
 
 #logo {
-    width: 120px;
+    width: 225px;
+    margin-left: -3px;
+}
+
+#letterhead h1 {
+    padding-top: 15px;
+    /* padding-left: 244px; */
+    font-weight: bold;
+    font-size: 1.4rem;
+    /* line-height: 1.05; */
+    /* text-transform: uppercase; */
+}
+
+#letterhead td:first-child {
+    width: 57.5%;
+}
+
+#letterhead td:last-child {
+    width: 42.5%;
+}
+
+
+#parties {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+#parties td {
+    vertical-align: top;
+}
+
+#parties td:first-child {
+    width: 57.5%;
+}
+
+#parties td:last-child {
+    width: 42.5%;
+}
+
+#parties h3 {
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+#parties p {
+    margin: 0 0 4px 0;
+    font-style: italic;
+    font-size: 0.97rem;
 }
 
 #date {
-    margin-top: 70px;
+    margin: 0 0 24px 0;
+    font-style: normal !important;
+    font-size: 1.1rem !important;
 }
 
-#date, #message {
-    font-size: 1.2rem;
+#object p {
+    margin: 50px 0 70px 0;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+#message {
+    margin-top: 25px;
 }
 
 .no-vertical-margin, .no-vertical-margin * {
@@ -77,6 +159,6 @@ h1 {
     margin-bottom: 0;
 }
 
-.right-align, .right-align * {
-    text-align: right;
+.left-align, .left-align * {
+    text-align: left;
 }

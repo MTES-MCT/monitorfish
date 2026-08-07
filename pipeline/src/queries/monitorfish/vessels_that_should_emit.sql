@@ -5,7 +5,7 @@ SELECT
     v.ircs,
     v.vessel_name,
     v.flag_state,
-    b.beacon_status,
+    'ACTIVATED' AS beacon_status,
     b.beacon_number,
     b.satellite_operator_id,
     b.logging_datetime_utc

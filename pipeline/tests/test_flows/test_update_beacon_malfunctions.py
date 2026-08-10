@@ -77,11 +77,10 @@ def test_extract_vessels_that_should_emit(reset_test_data):
     vessels_that_should_emit = extract_vessels_that_should_emit()
     expected_beacon_numbers_and_statuses = pd.DataFrame(
         {
-            "vessel_id": [2, 4, 5, 6, 8],
+            "vessel_id": [2, 4, 6, 8],
             "beacon_number": [
                 "123456",
                 "A56CZ2",
-                "BEACON_NOT_EMITTING",
                 "BEA951357",
                 "NEW_BEACON_ACT_DET",
             ],
@@ -90,9 +89,8 @@ def test_extract_vessels_that_should_emit(reset_test_data):
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
                 BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
             ],
-            "satellite_operator_id": [1, 2, 2, 2, 1],
+            "satellite_operator_id": [1, 2, 2, 1],
         }
     )
     pd.testing.assert_frame_equal(
@@ -404,14 +402,12 @@ def test_get_ended_malfunction_ids():
     (
         ids_restarted_emitting,
         ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
     ) = get_ended_malfunction_ids(
         last_emissions, known_malfunctions, malfunction_datetime_utc_threshold_at_sea
     )
 
-    assert ids_restarted_emitting == [3, 4, 6, 7]
+    assert ids_restarted_emitting == [3, 4, 5, 6, 7]
     assert ids_not_required_to_emit == [1]
-    assert ids_unsupervised_restarted_emitting == [5]
 
 
 @patch(
@@ -442,7 +438,6 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
         new_malfunctions,
         _,
         _,
-        _,
     ) = state.result()
     assert len(new_malfunctions) == 0
     assert len(final_beacons_malfunctions) == len(initial_beacons_malfunctions)
@@ -460,10 +455,10 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         db="monitorfish_remote",
     ).iloc[0, 0]
 
-    beacon_malfunction_id_to_archive = read_query(
-        "SELECT id FROM beacon_malfunctions WHERE ircs = 'RV348407'",
+    beacon_malfunction_ids_to_archive = read_query(
+        "SELECT id FROM beacon_malfunctions WHERE ircs IN ('RV348407', 'AB654321')",
         db="monitorfish_remote",
-    ).iloc[0, 0]
+    )
 
     with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
         state = update_beacon_malfunctions_flow(
@@ -479,21 +474,18 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         new_malfunctions,
         ids_restarted_emitting,
         ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
     ) = state.result()
 
     assert len(new_malfunctions) == 0
 
     assert (
         ids_restarted_emitting,
-        ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
+        sorted(ids_not_required_to_emit),
     ) == (
         [beacon_malfunction_id_to_move_to_archived_and_notify],
-        [beacon_malfunction_id_to_archive],
-        [],
+        sorted(beacon_malfunction_ids_to_archive["id"].tolist()),
     )
-    assert mock_requests.put.call_count == 3
+    assert mock_requests.put.call_count == 4
 
     mock_requests.put.assert_any_call(
         url=BEACON_MALFUNCTIONS_ENDPOINT
@@ -519,7 +511,22 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     )
 
     mock_requests.put.assert_any_call(
-        url=BEACON_MALFUNCTIONS_ENDPOINT + f"{beacon_malfunction_id_to_archive}",
+        url=BEACON_MALFUNCTIONS_ENDPOINT
+        + f"{beacon_malfunction_ids_to_archive.loc[0, 'id']}",
+        json={
+            "stage": "ARCHIVED",
+            "endOfBeaconMalfunctionReason": "BEACON_DEACTIVATED_OR_UNEQUIPPED",
+        },
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key",
+        },
+    )
+
+    mock_requests.put.assert_any_call(
+        url=BEACON_MALFUNCTIONS_ENDPOINT
+        + f"{beacon_malfunction_ids_to_archive.loc[1, 'id']}",
         json={
             "stage": "ARCHIVED",
             "endOfBeaconMalfunctionReason": "BEACON_DEACTIVATED_OR_UNEQUIPPED",
@@ -560,7 +567,6 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         new_malfunctions,
         ids_restarted_emitting,
         ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
     ) = state.result()
 
     assert len(new_malfunctions) == 1

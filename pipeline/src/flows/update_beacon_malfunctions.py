@@ -11,7 +11,6 @@ from config import (
 from src.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
-    BeaconStatus,
     EndOfMalfunctionReason,
 )
 from src.generic_tasks import extract
@@ -53,8 +52,7 @@ def extract_known_malfunctions() -> pd.DataFrame:
 def extract_vessels_that_should_emit() -> pd.DataFrame:
     """
     Extract vessels from the `vessels` table that have a beacon associated to them
-    with a status of `ACTIVATED` or `UNSUPERVISED` and with a flag_state that must be
-    monitored.
+    with a status of `ACTIVATED`.
     """
     return extract("monitorfish_remote", "monitorfish/vessels_that_should_emit.sql")
 
@@ -201,28 +199,11 @@ def get_ended_malfunction_ids(
         )
     ].reset_index(drop=True)
 
-    ids_unsupervised_restarted_emitting = set(
-        malfunctions_with_restarted_emissions.loc[
-            malfunctions_with_restarted_emissions.beacon_status
-            != BeaconStatus.ACTIVATED.value,
-            "id",
-        ]
-    )
-
-    ids_restarted_emitting = set(
-        malfunctions_with_restarted_emissions.loc[
-            (
-                malfunctions_with_restarted_emissions.beacon_status
-                == BeaconStatus.ACTIVATED.value
-            ),
-            "id",
-        ]
-    )
+    ids_restarted_emitting = set(malfunctions_with_restarted_emissions.loc[:, "id"])
 
     return (
         list(ids_restarted_emitting),
         list(ids_not_required_to_emit),
-        list(ids_unsupervised_restarted_emitting),
     )
 
 
@@ -276,7 +257,6 @@ def update_beacon_malfunctions_flow(
     (
         ids_restarted_emitting,
         ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
     ) = get_ended_malfunction_ids(
         last_emissions_of_vessels_that_should_emit,
         known_malfunctions,
@@ -296,22 +276,6 @@ def update_beacon_malfunctions_flow(
         unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
     )
 
-    # Malfunctions of unsupervised beacons are archived and automatically notified.
-    ids_unsupervised_restarted_emitting_updated = update_beacon_malfunction.map(
-        ids_unsupervised_restarted_emitting,
-        new_stage=unmapped(BeaconMalfunctionStage.ARCHIVED),
-        end_of_malfunction_reason=unmapped(EndOfMalfunctionReason.RESUMED_TRANSMISSION),
-    )
-
-    ids_unsupervised_restarted_emitting_updated = filter_results(
-        ids_unsupervised_restarted_emitting_updated
-    )
-
-    request_notification.map(
-        ids_unsupervised_restarted_emitting_updated,
-        unmapped(BeaconMalfunctionNotificationType.END_OF_MALFUNCTION),
-    )
-
     # Malfunctions for which the beacon has been deactivated or completely
     # unequipped are just archived.
     update_beacon_malfunction.map(
@@ -326,5 +290,4 @@ def update_beacon_malfunctions_flow(
         new_malfunctions,
         ids_restarted_emitting,
         ids_not_required_to_emit,
-        ids_unsupervised_restarted_emitting,
     )

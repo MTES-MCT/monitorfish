@@ -44,9 +44,9 @@ font-weight: 700;
 }
 
 html {
-    margin: 70px 90px 36px 80px;
+    margin: 70px 60px 36px 80px;
     font: 15px Marianne, sans-serif;
-    line-height: 1.05;
+    line-height: 1.35;
     color: #1a1a1a;
 }
 
@@ -56,7 +56,7 @@ body {
 }
 
 header {
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
 
 footer {
@@ -83,25 +83,25 @@ footer hr {
 }
 
 #logo {
-    width: 225px;
-    margin-left: -3px;
+    width: 226px;
+    margin-left: -4px;
 }
 
 #letterhead h1 {
-    padding-top: 15px;
+    padding-top: 21px;
     /* padding-left: 244px; */
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.23rem;
     /* line-height: 1.05; */
     /* text-transform: uppercase; */
 }
 
 #letterhead td:first-child {
-    width: 57.5%;
+    width: 55.25%;
 }
 
 #letterhead td:last-child {
-    width: 42.5%;
+    width: 44.75%;
 }
 
 
@@ -116,11 +116,11 @@ footer hr {
 }
 
 #parties td:first-child {
-    width: 57.5%;
+    width: 55.25%;
 }
 
 #parties td:last-child {
-    width: 42.5%;
+    width: 44.75%;
 }
 
 #parties h3 {
@@ -134,7 +134,7 @@ footer hr {
 #parties p {
     margin: 0 0 4px 0;
     font-style: italic;
-    font-size: 0.97rem;
+    font-size: 0.9rem;
 }
 
 #date {

@@ -5,11 +5,11 @@ SELECT
     v.ircs,
     v.vessel_name,
     v.flag_state,
-    'ACTIVATED' AS beacon_status,
+    b.beacon_status,
     b.beacon_number,
     b.satellite_operator_id,
     b.logging_datetime_utc
 FROM beacons b
 JOIN vessels v
 ON v.id = b.vessel_id
-WHERE b.beacon_status IN ('ACTIVATED', 'UNSUPERVISED')
+WHERE b.beacon_status = 'ACTIVATED'

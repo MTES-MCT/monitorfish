@@ -11,7 +11,6 @@ from src.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
-    BeaconStatus,
     EndOfMalfunctionReason,
 )
 from src.generic_tasks import load
@@ -52,27 +51,16 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
     new_malfunctions["vessel_status_last_modification_date_utc"] = now
 
     notification_to_send = {
-        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.ACTIVATED.value): (
+        BeaconMalfunctionVesselStatus.AT_SEA.value: (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION.value
         ),
-        (BeaconMalfunctionVesselStatus.AT_PORT.value, BeaconStatus.ACTIVATED.value): (
+        BeaconMalfunctionVesselStatus.AT_PORT.value: (
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value
-        ),
-        (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.UNSUPERVISED.value): (
-            BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
-        ),
-        (
-            BeaconMalfunctionVesselStatus.AT_PORT.value,
-            BeaconStatus.UNSUPERVISED.value,
-        ): (
-            BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON.value
         ),
     }
 
-    new_malfunctions["notification_requested"] = (
-        new_malfunctions[["vessel_status", "beacon_status"]]
-        .apply(lambda row: tuple(row), axis=1)
-        .map(notification_to_send)
+    new_malfunctions["notification_requested"] = new_malfunctions["vessel_status"].map(
+        notification_to_send
     )
     new_malfunctions = new_malfunctions.rename(
         columns={

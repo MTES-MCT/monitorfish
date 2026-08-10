@@ -68,18 +68,8 @@ def get_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_sea_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_port_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -108,18 +98,8 @@ def get_sms_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")

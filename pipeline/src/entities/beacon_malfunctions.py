@@ -61,15 +61,9 @@ class EndOfMalfunctionReason(Enum):
 
 class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION = "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION"
-    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
-        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
-    )
     MALFUNCTION_AT_SEA_REMINDER = "MALFUNCTION_AT_SEA_REMINDER"
     MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION = (
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
-    )
-    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
-        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
     )
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
@@ -78,10 +72,8 @@ class BeaconMalfunctionNotificationType(Enum):
     def to_notification_subject_template(self):
         type_subject_mapping = {
             "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
-            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_SEA_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
-            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
             "MALFUNCTION_AT_PORT_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption à quai des émissions VMS",
             "END_OF_MALFUNCTION": "{vessel_name} ({immat}) : reprise des émissions VMS",
             "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC": "Interruption of VMS transmissions from fishing vessel {vessel_name} ({immat})",

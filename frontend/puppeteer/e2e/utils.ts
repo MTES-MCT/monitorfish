@@ -1,6 +1,22 @@
 import assert from 'assert'
 import { Browser, type FrameWaitForFunctionOptions, Page } from 'puppeteer'
 
+const NEW_PAGE_TIMEOUT = 10 * 1000
+
+/**
+ * Console errors that must not fail a test because they are expected in the Puppeteer environment.
+ */
+const IGNORED_CONSOLE_ERRORS = [
+  // If the SSE connection fails, the browser will restart it, it is not an application error
+  '/sse',
+  // React logs its development warnings (`validateDOMNesting`, unrecognized DOM props, …) as errors.
+  // They only show up when running against the dev server, which is how these tests are run locally.
+  'Warning:',
+  // The stubbed GeoServer only serves MonitorEnv layers, so every MonitorFish map layer fails to load
+  '/geoserver/wfs',
+  "Nous n'avons pas pu récupérer"
+]
+
 class ConsoleListener {
   #isStopped = false
 
@@ -17,13 +33,7 @@ class ConsoleListener {
 
           if (messageType === 'ERR') {
             console.log(message.args(), message.stackTrace())
-            if (message.text().includes('/sse')) {
-              // If the SSE connection fails, the browser will restart it, it is not an application error
-              return
-            }
-
-            if (message.text().includes('validateDOMNesting')) {
-              // This is not a bad error
+            if (IGNORED_CONSOLE_ERRORS.some(ignoredError => message.text().includes(ignoredError))) {
               return
             }
 
@@ -80,6 +90,40 @@ export async function getFirstTab(browser: Browser) {
   const [firstTab] = await browser.pages()
 
   return firstTab as Page
+}
+
+/**
+ * Open a new tab, and prefer it over {@link getFirstTab} whenever the spec types into the page:
+ * the tab Firefox starts with intermittently stops accepting `Input.dispatchKeyEvent`.
+ */
+export async function openNewPage(browser: Browser): Promise<Page> {
+  return browser.newPage()
+}
+
+/**
+ * Wait for the next page opened by the application itself (i.e. via `window.open()`).
+ *
+ * Must be called **before** triggering the action opening that page, so that the pages already
+ * opened are known and can be discarded:
+ *
+ * ```ts
+ * const sideWindowPromise = waitForNewPage(browsers[0])
+ * await openSideWindowButton.click()
+ * const sideWindow = await sideWindowPromise
+ * ```
+ */
+export async function waitForNewPage(browser: Browser): Promise<Page> {
+  const knownTargets = new Set(browser.targets())
+
+  // `Target.opener()` is not implemented by the WebDriver BiDi (Firefox) backend, hence the diffing
+  const newTarget = await browser.waitForTarget(target => target.type() === 'page' && !knownTargets.has(target), {
+    timeout: NEW_PAGE_TIMEOUT
+  })
+
+  const newPage = await newTarget.page()
+  assert.ok(newPage, 'The newly opened target has no attached page.')
+
+  return newPage
 }
 
 export function wait(ms: number) {

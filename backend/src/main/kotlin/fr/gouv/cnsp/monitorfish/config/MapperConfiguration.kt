@@ -18,7 +18,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.ProtectedSpeciesCatch
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.IHasImplementation
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.ReportingTypeMapping
-import org.n52.jackson.datatype.jts.JtsModule
+import org.n52.jackson2.datatype.jts.JtsModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder

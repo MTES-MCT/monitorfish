@@ -77,7 +77,7 @@ class OIDCClientConfig(
         val externalIssuer = oidcProperties.issuerUriExternal
 
         return JwtDecoderFactory { clientRegistration ->
-            val jwkSetUri = clientRegistration.providerDetails.jwkSetUri
+            val jwkSetUri = validateProperty(clientRegistration.providerDetails.jwkSetUri, "JWK Set URI")
             val jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build()
 
             // ⚠️ DEVELOPMENT ONLY: Custom issuer validation for Keycloak proxy
@@ -127,10 +127,10 @@ class OIDCClientConfig(
     }
 
     private fun validateProperty(
-        value: String,
+        value: String?,
         propertyName: String,
     ): String =
-        value.takeIf { it.isNotBlank() }
+        value?.takeIf { it.isNotBlank() }
             ?: throw IllegalArgumentException(
                 "OIDC $propertyName is required but not configured. Please check your environment variables.",
             )

@@ -2345,4 +2345,8 @@ INSERT INTO public.vessel_profiles (
 ('ABC201901174', 'null', 'null', 'null', 'null', '{"FRBOL": 1.0}', 'null', 'null', 'null', 'null', 'null', 'FRBOL', 'MEMN'),
 ('ABC202001172', 'null', 'null', 'null', 'null', '{"FRBOL": 1.0}', 'null', 'null', 'null', 'null', 'null', 'FRBOL', 'MEMN'),
 ('ABC202172082', 'null', 'null', 'null', 'null', '{"FRBOL": 1.0}', 'null', 'null', 'null', 'null', 'null', 'FRBOL', 'MEMN'),
-('ABC000021994', '{"LLS": 1.0}', '{"COD": 0.00398938437320634, "HAD": 0.14371282277764746, "HKE": 0.008560858407704692, "LIN": 0.7301580085227019, "MAC": 0.02841441861258077, "POK": 0.0077287218626219695, "POL": 0.02156167268375808, "USK": 0.012956974887336834, "WHG": 0.042917137872441995}', '{"27.4.a": 1.0}', '{"NS14": 1.0}', 'null', 'null', 'null', 'null', 'null', 'null', NULL, 'Hors façade');
+('ABC000021994', '{"LLS": 1.0}', '{"COD": 0.00398938437320634, "HAD": 0.14371282277764746, "HKE": 0.008560858407704692, "LIN": 0.7301580085227019, "MAC": 0.02841441861258077, "POK": 0.0077287218626219695, "POL": 0.02156167268375808, "USK": 0.012956974887336834, "WHG": 0.042917137872441995}', '{"27.4.a": 1.0}', '{"NS14": 1.0}', 'null', 'null', 'null', 'null', 'null', 'null', NULL, 'Hors façade'),
+-- Unlike all the profiles above, these two vessels also emit positions, so their recent fleet segments
+-- are displayed on the map labels. They have `has_current_vms_fishing_activity` set in the risk factors.
+('ABC000150289', 'null', 'null', 'null', 'null', 'null', '{"GNS": 1.0}', 'null', '{"27.7.h": 1.0}', '{"NWW06": 0.6, "SWW05": 0.4}', 'null', NULL, 'Hors façade'),
+('ABC000333240', 'null', 'null', 'null', 'null', 'null', '{"GTR": 0.6, "LLS": 0.4}', 'null', '{"27.7.j.2": 1.0}', '{"NWW06": 0.35, "NWW07": 0.25, "SWW03": 0.2, "SWW04": 0.2}', 'null', NULL, 'Hors façade');

@@ -1,5 +1,6 @@
 import {
   type InfractionSuspicionReporting,
+  type InfractionSuspicionThreat,
   type PendingAlertReporting,
   ReportingOriginSourceLabel
 } from '@features/Reporting/types'
@@ -31,14 +32,12 @@ export function getFrenchOrdinal(index: number): string {
   return `${index + 1}è`
 }
 
+export const getInfractionSuspicionThreatTitle = (infraction: InfractionSuspicionThreat): string =>
+  `${infraction.threat} - ${infraction.threatCharacterization}\n${infraction.natinfCode}${infraction.infraction ? ` - ${infraction.infraction.infraction}` : ''}`
+
 export const getInfractionTitle = (reporting: InfractionSuspicionReporting | PendingAlertReporting): string => {
   if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
-    return reporting.value.infractions
-      .map(
-        i =>
-          `${i.threat} - ${i.threatCharacterization}\n${i.natinfCode}${i.infraction ? ` - ${i.infraction.infraction}` : ''}`
-      )
-      .join('\n\n')
+    return reporting.value.infractions.map(getInfractionSuspicionThreatTitle).join('\n\n')
   }
 
   return `${reporting.value.threat} - ${reporting.value.threatCharacterization}\n${reporting.value.natinfCode} - ${reporting.infraction?.infraction}`

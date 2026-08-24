@@ -215,10 +215,12 @@ context('Vessel sidebar controls tab', () => {
 
     // Click on Modify mission button
     cy.window().then(win => {
-      cy.stub(win, 'open', () => {
-        // eslint-disable-next-line no-param-reassign
-        win.location.href = '/side_window'
-      }).as('side_window')
+      cy.stub(win, 'open')
+        .callsFake(() => {
+          // eslint-disable-next-line no-param-reassign
+          win.location.href = '/side_window'
+        })
+        .as('side_window')
     })
     cy.clickButton('Ouvrir le contrôle')
     cy.get('@side_window').should('be.called')

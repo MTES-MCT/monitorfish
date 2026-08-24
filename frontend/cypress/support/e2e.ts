@@ -19,7 +19,7 @@ declare global {
 
       cleanDownloadedFiles(): void
 
-      countRequestsByAlias(alias: string, waitForInMs?: number): Cypress.Chainable<number>
+      countRequestsByAlias(alias: `@${string}`, waitForInMs?: number): Cypress.Chainable<number>
 
       dragTo(
         selector: string,
@@ -43,7 +43,7 @@ declare global {
 
       postLoginToKeycloak(user: string): void
 
-      resetCountRequestsByAlias(alias: string): void
+      resetCountRequestsByAlias(alias: `@${string}`): void
 
       /* eslint-disable typescript-sort-keys/interface */
       toMatchSnapshot(

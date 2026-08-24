@@ -374,7 +374,7 @@ context('Vessel groups', () => {
 
       return cy.exec('ls cypress/downloads', { failOnNonZeroExit: false }).then(result => {
         const downloadedCSVFilename = result.stdout.trim()
-        if (result.code !== 0 || !downloadedCSVFilename) {
+        if (result.exitCode !== 0 || !downloadedCSVFilename) {
           cy.wait(200)
 
           return readDownloadedGroupCsv(attempt + 1)

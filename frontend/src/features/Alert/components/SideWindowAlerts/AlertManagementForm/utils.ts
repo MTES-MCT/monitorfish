@@ -109,12 +109,10 @@ export const convertRegulatoryAreasArrayToTreeOptions = (
       children: Object.entries(topicGroups).map(
         ([topic, topicAreas]): TreeBranchOption =>
           ({
-            children: topicAreas.map(
-              (area): TreeLeafOption => ({
-                label: area.zone!,
-                value: area.zone!
-              })
-            ),
+            children: topicAreas.map((area): TreeLeafOption => ({
+              label: area.zone!,
+              value: area.zone!
+            })),
             label: topic,
             value: topic
           }) as TreeBranchOption
@@ -153,12 +151,10 @@ export const convertRegulatoryLayerLawTypesToTreeOptions = (
         children: Object.entries(topics).map(
           ([topic, zones]): TreeBranchOption =>
             ({
-              children: zones.map(
-                (zone): TreeLeafOption => ({
-                  label: zone.zone,
-                  value: zone.zone
-                })
-              ),
+              children: zones.map((zone): TreeLeafOption => ({
+                label: zone.zone,
+                value: zone.zone
+              })),
               label: topic,
               value: topic
             }) as TreeBranchOption

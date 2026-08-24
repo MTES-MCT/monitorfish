@@ -9,8 +9,7 @@ export function ValidateAlertToggle({
 }: {
   alertSpecification: AlertSpecification
   onToggleConfirmation?:
-    | ((alertSpecification: AlertSpecification, action: 'activate' | 'deactivate') => void)
-    | undefined
+    ((alertSpecification: AlertSpecification, action: 'activate' | 'deactivate') => void) | undefined
 }) {
   const handleChange = (checked: boolean) => {
     if (onToggleConfirmation) {

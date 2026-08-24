@@ -14,7 +14,9 @@ registerMonitorUiCustomCommands()
 
 export const stubSideWindowOptions = {
   onBeforeLoad(window) {
-    cy.stub(window, 'open', () => window).as('windowOpen')
+    cy.stub(window, 'open')
+      .callsFake(() => window)
+      .as('windowOpen')
   }
 }
 

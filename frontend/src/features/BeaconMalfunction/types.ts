@@ -46,9 +46,7 @@ export type BeaconMalfunctionAction = {
 }
 
 export type BeaconMalfunctionFollowUpItem = (
-  | BeaconMalfunctionAction
-  | BeaconMalfunctionComment
-  | BeaconMalfunctionNotification
+  BeaconMalfunctionAction | BeaconMalfunctionComment | BeaconMalfunctionNotification
 ) & {
   isBeaconCreationMessage?: boolean
   type: BeaconMalfunctionDetailsType

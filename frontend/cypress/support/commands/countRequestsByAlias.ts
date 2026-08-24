@@ -18,7 +18,7 @@ const STORE: Record<string, string[]> = {}
  * cy.countRequestByAlias('@myRequest').should('eq', 2)
  * ```
  */
-export function countRequestsByAlias(alias: string, waitForInMs: number = 0): Cypress.Chainable<number> {
+export function countRequestsByAlias(alias: `@${string}`, waitForInMs: number = 0): Cypress.Chainable<number> {
   if (waitForInMs > 0) {
     cy.wait(waitForInMs)
   }
@@ -41,6 +41,6 @@ export function countRequestsByAlias(alias: string, waitForInMs: number = 0): Cy
 /**
  * Reset the count of requests made by Cypress with the given alias.
  */
-export function resetCountRequestsByAlias(alias: string): void {
+export function resetCountRequestsByAlias(alias: `@${string}`): void {
   STORE[alias] = []
 }

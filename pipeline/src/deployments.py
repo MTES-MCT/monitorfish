@@ -57,6 +57,9 @@ from src.flows.ports import ports_flow
 from src.flows.position_alert import position_alert_flow
 from src.flows.position_alerts import position_alerts_flow
 from src.flows.recompute_controls_segments import recompute_controls_segments_flow
+from src.flows.recompute_mission_actions_facade import (
+    recompute_mission_actions_facade_flow,
+)
 from src.flows.refresh_materialized_view import refresh_materialized_view_flow
 from src.flows.regulations import regulations_flow
 from src.flows.regulations_checkup import regulations_checkup_flow
@@ -297,6 +300,7 @@ flows_to_deploy = [
         ],
     ),
     FlowAndSchedules(flow=recompute_controls_segments_flow),
+    FlowAndSchedules(flow=recompute_mission_actions_facade_flow),
     FlowAndSchedules(
         flow=refresh_materialized_view_flow,
         schedules=[

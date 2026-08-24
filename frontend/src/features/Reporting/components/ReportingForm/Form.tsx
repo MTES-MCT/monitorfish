@@ -271,6 +271,8 @@ export function Form({
     if (reportingType === ReportingType.OBSERVATION) {
       setIsTitleDisplayed(false)
     } else if (reportingType === ReportingType.INFRACTION_SUSPICION) {
+      setIsTitleDisplayed(true)
+
       if (!infractions.length) {
         setFieldValue('infractions', [{}])
       }

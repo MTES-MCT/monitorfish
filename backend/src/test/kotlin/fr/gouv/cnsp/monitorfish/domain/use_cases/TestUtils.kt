@@ -784,7 +784,7 @@ object TestUtils {
             LogbookMessage(
                 id = 5,
                 operationNumber = "90656468131",
-                reportId = null,
+                reportId = "90656468131",
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.DEL,
                 messageType = "",
@@ -1705,7 +1705,7 @@ object TestUtils {
                 id = 19,
                 operationNumber = "OOF22103048321399",
                 tripNumber = null,
-                reportId = null,
+                reportId = "OOF22103048321399",
                 referencedReportId = "OOF20190627059908",
                 operationType = LogbookOperationType.DEL,
                 messageType = "",

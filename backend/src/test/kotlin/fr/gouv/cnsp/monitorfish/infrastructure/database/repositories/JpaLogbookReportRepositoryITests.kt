@@ -313,6 +313,25 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllMessagesByTripNumberBetweenDates Should retrieve the RET of a message which report id differs from its operation number`() {
+        // Given - the COR `OOF20190227050002` has a report id (`OOF20180227051234`) that differs from
+        // its operation number, and its RET references that report id
+        val afterDate = ZonedDateTime.of(2018, 2, 17, 0, 0, 0, 0, UTC)
+        val beforeDate = ZonedDateTime.of(2018, 2, 21, 0, 0, 0, 0, UTC)
+
+        // When
+        val messages =
+            jpaLogbookReportRepository
+                .findAllMessagesByTripNumberBetweenOperationDates("U_W0NTFINDME", afterDate, beforeDate, "9463711")
+
+        // Then
+        val ret = messages.single { it.operationType == LogbookOperationType.RET }
+        assertThat(ret.referencedReportId).isEqualTo("OOF20180227051234")
+        assertThat((ret.message as Acknowledgment).returnStatus).isEqualTo("000")
+    }
+
+    @Test
+    @Transactional
     fun `findLastMessageDate Should find the last message datetime before now and not a datetime in the future`() {
         // When
         val dateTime = jpaLogbookReportRepository.findLastMessageDate()

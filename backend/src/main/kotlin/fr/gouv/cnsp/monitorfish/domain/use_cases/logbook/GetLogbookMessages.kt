@@ -115,9 +115,11 @@ class GetLogbookMessages(
             if (message.isAutoAcknowledged()) {
                 message.acknowledgment = Acknowledgment(isSuccess = true)
             } else {
-                // Acknowledgements are referenced by operation number and not by report_id !
-                val rets = retMessages.filter { ret -> ret.referencedReportId == message.operationNumber }
-                rets.forEach { ret -> message.setAcknowledge(ret) }
+                message.reportId?.let { reportId ->
+                    retMessages
+                        .filter { ret -> ret.referencedReportId == reportId }
+                        .forEach { ret -> message.setAcknowledge(ret) }
+                }
             }
         }
 

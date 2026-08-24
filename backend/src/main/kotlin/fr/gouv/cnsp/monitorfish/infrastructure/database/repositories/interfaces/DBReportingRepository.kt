@@ -116,12 +116,12 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     @Query(
         value = """
         WITH recent_dep_messages AS (
-            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
+            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.report_id, MAX(lr.operation_datetime_utc) as last_dep_date_time
             FROM logbook_reports lr
             WHERE
                 lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
                 lr.log_type = 'DEP'
-            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
+            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.report_id
         ),
 
         acknowledged_report_ids AS (
@@ -151,7 +151,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             r.deleted is false AND
             r.type = 'ALERT' AND
             rdp.last_dep_date_time >= r.validation_date AT TIME ZONE 'UTC' AND
-            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            rdp.report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
         """,
         nativeQuery = true,
     )
@@ -179,12 +179,12 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     @Query(
         value = """
         WITH recent_dep_messages AS (
-            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.operation_number, MAX(lr.operation_datetime_utc) as last_dep_date_time
+            SELECT lr.cfr, lr.ircs, lr.external_identification, lr.report_id, MAX(lr.operation_datetime_utc) as last_dep_date_time
             FROM logbook_reports lr
             WHERE
                 lr.operation_datetime_utc > NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hour' AND
                 lr.log_type = 'DEP'
-            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.operation_number
+            GROUP BY lr.cfr, lr.ircs, lr.external_identification, lr.report_id
         ),
 
         acknowledged_report_ids AS (
@@ -214,7 +214,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             r.type IN ('OBSERVATION', 'INFRACTION_SUSPICION') AND
             r.validity_option = 'UNTIL_NEXT_DEP' AND
             rdp.last_dep_date_time >= r.validation_date AT TIME ZONE 'UTC' AND
-            rdp.operation_number IN (SELECT referenced_report_id FROM acknowledged_report_ids)
+            rdp.report_id IN (SELECT referenced_report_id FROM acknowledged_report_ids)
         """,
         nativeQuery = true,
     )

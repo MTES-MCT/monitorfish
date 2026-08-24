@@ -608,7 +608,7 @@ class GetLogbookMessagesUTests {
                 id = 123,
                 operationNumber = "906564681689",
                 reportId = null,
-                referencedReportId = "ON#4",
+                referencedReportId = "REPORT_ID#4",
                 operationType = LogbookOperationType.RET,
                 messageType = "",
                 message = Acknowledgment(returnStatus = "000"),
@@ -656,6 +656,53 @@ class GetLogbookMessagesUTests {
 
         assertThat(ersMessages[2].acknowledgment?.isSuccess).isTrue
         assertThat(ersMessages[3].acknowledgment?.isSuccess).isTrue
+    }
+
+    @Test
+    fun `execute Should not acknowledge a message When the RET references its operation number`() {
+        // Given
+        val retTargetingAnOperationNumber =
+            LogbookMessage(
+                id = 123,
+                operationNumber = "906564681689",
+                reportId = null,
+                referencedReportId = "ON#4",
+                operationType = LogbookOperationType.RET,
+                messageType = "",
+                message = Acknowledgment(returnStatus = "000"),
+                reportDateTime = ZonedDateTime.of(2020, 5, 5, 3, 4, 5, 3, UTC).minusHours(12),
+                transmissionFormat = LogbookTransmissionFormat.ERS,
+                integrationDateTime = ZonedDateTime.now(),
+                isEnriched = false,
+                operationDateTime = ZonedDateTime.now(),
+            )
+        given(
+            logbookReportRepository.findAllMessagesByTripNumberBetweenOperationDates(any(), any(), any(), any()),
+        ).willReturn(
+            getDummyLogbookMessages() + retTargetingAnOperationNumber,
+        )
+
+        // When
+        val ersMessages =
+            GetLogbookMessages(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                gearRepository,
+                speciesRepository,
+                portRepository,
+                logbookRawMessageRepository,
+            ).execute(
+                internalReferenceNumber = "FR224226850",
+                firstOperationDateTime = ZonedDateTime.now().minusMinutes(5),
+                lastOperationDateTime = ZonedDateTime.now(),
+                tripNumber = "345",
+            )
+
+        // Then
+        assertThat(ersMessages).hasSize(6)
+
+        assertThat(ersMessages[2].acknowledgment).isNull()
+        assertThat(ersMessages[3].acknowledgment).isNull()
     }
 
     @Test

@@ -242,7 +242,9 @@ VALUES ('OOF20190265896325', 9463701, 'OOF', '2018-02-17T01:05:00Z', 'DAT', 'OOF
         '2019-10-30T11:32:00Z',
         null, null, null, null, null, null, '',
         null, '{"returnStatus": "000"}', '2021-01-18T07:19:28.384921Z', 'ERS', 'TurboCatch (3.7-1)'),
-       ('OOF22103048321399', null, 'OOF', '2019-10-17T11:36:00Z', 'DEL', 'OOF22103048321399', 'OOF20190627059908',
+       -- This DEL `operation_number` differs from its `report_id` on purpose: its RET acknowledges it
+       -- through the `report_id`
+       ('OOF22103048321400', null, 'OOF', '2019-10-17T11:36:00Z', 'DEL', 'OOF22103048321399', 'OOF20190627059908',
         '2019-10-30T11:32:00Z', null, null, null, null, null, null, '', null, null, '2021-01-18T07:19:28.384921Z', 'ERS',
         'TurboCatch (3.7-1)'),
         ('OOF221030483213994', null, 'OOF', '2019-10-17T11:36:00Z', 'RET', null, 'OOF22103048321399',

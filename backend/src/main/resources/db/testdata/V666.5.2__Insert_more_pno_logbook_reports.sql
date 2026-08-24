@@ -49,7 +49,7 @@ INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES ('FAKE_O
 
 INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES ('FAKE_OPERATION_111_RET', '<Flux>Message FLUX xml</Flux>');
 
-INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES ('FAKE_OPERATION_111_DEL', '<Flux>Message FLUX xml</Flux>');
+INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES ('FAKE_OPERATION_111_DEL_ON', '<Flux>Message FLUX xml</Flux>');
 
 INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES ('FAKE_OPERATION_111_DEL_RET', '<Flux>Message FLUX xml</Flux>');
 
@@ -187,7 +187,7 @@ UPDATE logbook_reports SET value = JSONB_SET(value, '{tripStartDate}', TO_JSONB(
 
 INSERT INTO logbook_reports (id, report_id, referenced_report_id, integration_datetime_utc, operation_datetime_utc, operation_number, operation_type, transmission_format, value) VALUES (1111, NULL, 'FAKE_OPERATION_111', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'FAKE_OPERATION_111_RET', 'RET', 'ERS', '{"returnStatus":"000"}');
 
-INSERT INTO logbook_reports (id, report_id, referenced_report_id, cfr, enriched, flag_state, integration_datetime_utc, log_type, operation_datetime_utc, operation_number, operation_type, report_datetime_utc, transmission_format, vessel_name, trip_gears, trip_segments, value) VALUES (2111, 'FAKE_OPERATION_111_DEL', 'FAKE_OPERATION_111', 'CFR107', false, NULL, NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', NULL, NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'FAKE_OPERATION_111_DEL', 'DEL', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'ERS', NULL, NULL, NULL, NULL);
+INSERT INTO logbook_reports (id, report_id, referenced_report_id, cfr, enriched, flag_state, integration_datetime_utc, log_type, operation_datetime_utc, operation_number, operation_type, report_datetime_utc, transmission_format, vessel_name, trip_gears, trip_segments, value) VALUES (2111, 'FAKE_OPERATION_111_DEL', 'FAKE_OPERATION_111', 'CFR107', false, NULL, NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', NULL, NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'FAKE_OPERATION_111_DEL_ON', 'DEL', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'ERS', NULL, NULL, NULL, NULL);
 
 INSERT INTO logbook_reports (id, report_id, referenced_report_id, integration_datetime_utc, operation_datetime_utc, operation_number, operation_type, transmission_format, value) VALUES (3111, NULL, 'FAKE_OPERATION_111_DEL', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes', 'FAKE_OPERATION_111_DEL_RET', 'RET', 'ERS', '{"returnStatus":"000"}');
 

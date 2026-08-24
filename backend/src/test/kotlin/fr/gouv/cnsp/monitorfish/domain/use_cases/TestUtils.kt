@@ -783,7 +783,7 @@ object TestUtils {
             ),
             LogbookMessage(
                 id = 5,
-                operationNumber = "90656468131",
+                operationNumber = "90656468132",
                 reportId = "90656468131",
                 referencedReportId = "9065646813",
                 operationType = LogbookOperationType.DEL,
@@ -1703,7 +1703,9 @@ object TestUtils {
             // DEL
             LogbookMessage(
                 id = 19,
-                operationNumber = "OOF22103048321399",
+                // The operation number differs from the report id on purpose: the RET below
+                // acknowledges this DEL through its report id
+                operationNumber = "OOF22103048321400",
                 tripNumber = null,
                 reportId = "OOF22103048321399",
                 referencedReportId = "OOF20190627059908",

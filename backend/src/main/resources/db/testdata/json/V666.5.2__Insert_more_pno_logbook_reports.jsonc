@@ -26,7 +26,7 @@
             { "operation_number": "FAKE_OPERATION_110_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_111", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_111_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
-            { "operation_number": "FAKE_OPERATION_111_DEL", "xml_message": "<Flux>Message FLUX xml</Flux>" },
+            { "operation_number": "FAKE_OPERATION_111_DEL_ON", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_111_DEL_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_112_COR_ORPHAN", "xml_message": "<Flux>Message FLUX xml</Flux>" },
             { "operation_number": "FAKE_OPERATION_112_COR_ORPHAN_RET", "xml_message": "<Flux>Message FLUX xml</Flux>" },
@@ -984,6 +984,8 @@
                     "returnStatus": "000"
                 }
             },
+            // The DEL `operation_number` differs from its `report_id` on purpose:
+            // its RET acknowledges it through the `report_id`
             {
                 "id": 2111,
                 "report_id": "FAKE_OPERATION_111_DEL",
@@ -994,7 +996,7 @@
                 "integration_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "log_type": null,
                 "operation_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
-                "operation_number": "FAKE_OPERATION_111_DEL",
+                "operation_number": "FAKE_OPERATION_111_DEL_ON",
                 "operation_type": "DEL",
                 "report_datetime_utc:sql": "NOW() AT TIME ZONE 'UTC' - INTERVAL '14 minutes'",
                 "transmission_format": "ERS",

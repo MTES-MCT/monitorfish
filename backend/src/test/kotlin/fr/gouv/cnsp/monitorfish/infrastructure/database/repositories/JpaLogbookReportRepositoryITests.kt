@@ -369,6 +369,26 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllAcknowledgedPriorNotifications Should exclude a PNO deleted by an acknowledged DEL`() {
+        // Given - the PNO 111 is deleted by a DEL whose operation number differs from its report id,
+        // and whose RET acknowledges it through that report id
+        val filter =
+            PriorNotificationsFilter(
+                willArriveAfter = ZonedDateTime.now().minusHours(24),
+                willArriveBefore = ZonedDateTime.now().plusHours(24),
+            )
+
+        // When
+        val result = jpaLogbookReportRepository.findAllAcknowledgedPriorNotifications(filter)
+
+        // Then
+        assertThat(result).hasSizeGreaterThan(0)
+        assertThat(result.map { it.logbookMessageAndValue.logbookMessage.reportId })
+            .doesNotContain("FAKE_OPERATION_111")
+    }
+
+    @Test
+    @Transactional
     fun `findAllAcknowledgedPriorNotifications Should return PNO logbook reports with or without reportings`() {
         val expectedLogbookReportIdsWithOneOrMoreReportings = listOf(102L, 104L)
 

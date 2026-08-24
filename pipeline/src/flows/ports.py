@@ -752,7 +752,7 @@ def compute_ports_zones(ports: pd.DataFrame) -> pd.DataFrame:
                 "    JOIN public.facade_areas_subdivided f "
                 "    ON ST_Intersects(p.geometry, f.geometry) "
                 "    WHERE p.country_code_iso2 IN ( "
-                "        'FR', 'GP', 'MQ', 'GF', 'RE', 'YT', 'MF', 'SX', 'BL'"
+                "        'FR', 'GP', 'MQ', 'GF', 'RE', 'YT', 'MF', 'SX', 'BL', 'MG', 'SC', 'PM'"
                 "    ) "
                 ") "
                 "UPDATE tmp_ports "

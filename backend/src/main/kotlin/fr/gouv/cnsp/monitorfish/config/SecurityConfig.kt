@@ -88,7 +88,9 @@ class SecurityConfig(
                 }
 
             private fun loadUserFromJwtUserInfo(userRequest: OidcUserRequest): OidcUser {
-                val userInfoUri = userRequest.clientRegistration.providerDetails.userInfoEndpoint.uri
+                val userInfoUri =
+                    userRequest.clientRegistration.providerDetails.userInfoEndpoint.uri
+                        ?: throw IllegalArgumentException("Missing userinfo endpoint URI")
                 val accessToken = userRequest.accessToken.tokenValue
 
                 logger.debug("Fetching JWT userinfo from: $userInfoUri")
@@ -176,9 +178,11 @@ class SecurityConfig(
         }
     }
 
-    private fun oidcLogoutSuccessHandler(): LogoutSuccessHandler {
+    private fun oidcLogoutSuccessHandler(
+        clientRegistrationRepository: ClientRegistrationRepository,
+    ): LogoutSuccessHandler {
         val oidcLogoutSuccessHandler =
-            OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository)
+            OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository)
 
         oidcLogoutSuccessHandler.setPostLogoutRedirectUri(oidcProperties.successUrl)
 
@@ -242,6 +246,9 @@ class SecurityConfig(
                 }
             }
 
+        // Bound to a local so the null check smart-casts: the Kotlin Spring plugin opens this class,
+        // which makes the property getter open.
+        val clientRegistrationRepository = this.clientRegistrationRepository
         if (oidcProperties.enabled == true && clientRegistrationRepository != null) {
             http
                 .oauth2Login { oauth2 ->
@@ -253,7 +260,7 @@ class SecurityConfig(
                         .failureHandler(authenticationFailureHandler())
                 }.logout { logout ->
                     logout
-                        .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                        .logoutSuccessHandler(oidcLogoutSuccessHandler(clientRegistrationRepository))
                         .logoutRequestMatcher(
                             PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"),
                         ).invalidateHttpSession(true)

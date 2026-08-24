@@ -55,7 +55,7 @@ class ReportingController(
         reportingInput: CreateReportingDataInput,
         @AuthenticationPrincipal principal: OidcUser,
     ): ReportingDataOutput {
-        val email = principal.email
+        val email = principal.email ?: ""
         val (createdReporting, controlUnit) =
             addReporting.execute(
                 newReporting = reportingInput.toReporting(createdBy = email),

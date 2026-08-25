@@ -129,7 +129,7 @@ export function DrawLayerModal() {
         return
       }
 
-      if (isEchoFromMapClick(drawedGeometryRef.current, latitude, longitude)) {
+      if (isEchoFromMapClick(drawedGeometryRef.current, latitude, longitude, coordinatesFormat)) {
         return
       }
 
@@ -146,7 +146,7 @@ export function DrawLayerModal() {
 
       fitMapToExtent(extent)
     },
-    [dispatch]
+    [dispatch, coordinatesFormat]
   )
 
   const labels = listener ? INTERACTION_LISTENER_LABELS[listener] : undefined

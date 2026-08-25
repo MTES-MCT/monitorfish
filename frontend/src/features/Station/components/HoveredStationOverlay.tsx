@@ -1,6 +1,6 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { useForceUpdate, type Coordinates } from '@mtes-mct/monitor-ui'
-import { useEffect, useMemo, useRef } from 'react'
+import { type Coordinates } from '@mtes-mct/monitor-ui'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { StationCard } from './StationCard'
@@ -15,7 +15,7 @@ type HoveredStationOverlayProps = {
   hoveredFeature: FeatureWithCodeAndEntityId | undefined
 }
 export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayProps) {
-  const hoverDialogElementRef = useRef<HTMLDivElement | null>(null)
+  const [hoverDialogElement, setHoverDialogElement] = useState<HTMLDivElement | null>(null)
 
   const selectedStationId = useMainAppSelector(state => state.station.selectedStationId)
   const hoveredStationId =
@@ -24,7 +24,6 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
       : undefined
 
   const { data: stations } = useGetStationsQuery()
-  const { forceUpdate } = useForceUpdate()
 
   const hoveredStation = useMemo(
     () => (hoveredStationId ? stations?.find(station => station.id === hoveredStationId) : undefined),
@@ -32,21 +31,15 @@ export function HoveredStationOverlay({ hoveredFeature }: HoveredStationOverlayP
   )
 
   const wrapperWindowPosition = useMemo(
-    () => getDialogWindowPositionFromFeature(hoveredFeature, hoverDialogElementRef.current, FEATURE_MARGINS),
+    () => getDialogWindowPositionFromFeature(hoveredFeature, hoverDialogElement, FEATURE_MARGINS),
     // Dependency optimization
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hoverDialogElementRef.current, hoveredStationId]
+    [hoverDialogElement, hoveredStationId]
   )
 
-  useEffect(() => {
-    if (hoveredStationId !== undefined) {
-      forceUpdate()
-    }
-  }, [forceUpdate, hoveredStationId])
-
   return (
-    <Wrapper $isVisible={!!hoverDialogElementRef.current} $topLeftPosition={wrapperWindowPosition}>
-      {hoveredStation && <StationCard ref={hoverDialogElementRef} station={hoveredStation} />}
+    <Wrapper $isVisible={!!hoverDialogElement} $topLeftPosition={wrapperWindowPosition}>
+      {hoveredStation && <StationCard ref={setHoverDialogElement} station={hoveredStation} />}
     </Wrapper>
   )
 }

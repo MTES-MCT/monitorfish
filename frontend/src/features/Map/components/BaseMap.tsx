@@ -46,13 +46,15 @@ export function BaseMap({
     if (!isMainApp) {
       isInitRenderDone.current = true
 
-      return
+      return undefined
     }
 
     // Wait 15 seconds to not apply any animate() before this init phase only in the homepage
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       isInitRenderDone.current = true
     }, 15000)
+
+    return () => clearTimeout(timeoutId)
   }, [isMainApp])
 
   const saveCoordinates = useCallback((event: MapBrowserEvent<any>) => {

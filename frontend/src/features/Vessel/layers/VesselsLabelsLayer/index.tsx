@@ -58,9 +58,12 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const [vesselToCoordinates, setVesselToCoordinates] = useState(new Map())
   const [vesselToRiskFactorDetailsShowed, setVesselToRiskFactorDetailsShowed] = useState(new Map())
   const isThrottled = useRef(false)
+  const throttleTimeoutIdRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [currentLabels, setCurrentLabels] = useState<JSX.Element[]>([])
 
   useMapLayer(VESSELS_LABEL_VECTOR_LAYER)
+
+  useEffect(() => () => clearTimeout(throttleTimeoutIdRef.current), [])
 
   const moveVesselLabelLine = useCallback(
     (featureId, fromCoordinates, toCoordinates, offset) => {
@@ -195,7 +198,7 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
     // End of functions definition
 
     isThrottled.current = true
-    setTimeout(() => {
+    throttleTimeoutIdRef.current = setTimeout(() => {
       addVesselLabelToAllFeaturesInExtent()
       isThrottled.current = false
     }, throttleDuration)

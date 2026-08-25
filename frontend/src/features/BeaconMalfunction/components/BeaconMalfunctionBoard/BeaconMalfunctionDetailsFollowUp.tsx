@@ -44,10 +44,14 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
     setYesterday(getDate(yesterdayDate.toISOString()))
 
     if (comments?.length && !isScrollBlocked.current) {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         scrollToRef.current?.scrollIntoView({ block: 'nearest' })
       }, 500)
+
+      return () => clearTimeout(timeoutId)
     }
+
+    return undefined
   }, [comments])
 
   const getCommentOrActionDate = date => {

@@ -50,7 +50,9 @@ export function FormikValidityPeriod() {
       })
     }
 
-    setTimeout(addIconToLabel, 200)
+    const timeoutId = setTimeout(addIconToLabel, 200)
+
+    return () => clearTimeout(timeoutId)
   }, [])
 
   const handleDateRangePickerChange = (dateRange: DateAsStringRange | undefined) => {

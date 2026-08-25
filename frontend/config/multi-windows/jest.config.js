@@ -7,6 +7,7 @@ export default {
   maxWorkers: 1,
   preset: 'ts-jest',
   rootDir: '../..',
+  setupFilesAfterEnv: ['<rootDir>/puppeteer/setupAfterEnv.ts'],
   testEnvironment: '<rootDir>/puppeteer/puppeteer_environment.ts',
   testMatch: ['<rootDir>/puppeteer/e2e/*.spec.ts'],
   transform: {

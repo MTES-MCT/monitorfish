@@ -7,13 +7,15 @@ export function useDisplayMapBox(condition: boolean) {
   useEffect(() => {
     if (condition) {
       setIsRendered(true)
-      setTimeout(() => setIsOpened(true), 50)
+      const openingTimeoutId = setTimeout(() => setIsOpened(true), 50)
 
-      return
+      return () => clearTimeout(openingTimeoutId)
     }
 
     setIsOpened(false)
-    setTimeout(() => setIsRendered(false), 300)
+    const closingTimeoutId = setTimeout(() => setIsRendered(false), 300)
+
+    return () => clearTimeout(closingTimeoutId)
   }, [condition])
 
   return {

@@ -21,10 +21,10 @@ export function ActivityVisualizationMap() {
 
   useEffect(() => {
     if (!html) {
-      return
+      return undefined
     }
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       const map = (
         document.getElementById('kepler_iframe') as HTMLIFrameElement
       ).contentWindow?.document.getElementById('kepler-gl__map')
@@ -33,6 +33,8 @@ export function ActivityVisualizationMap() {
         map.style.height = '100%'
       }
     }, 3000)
+
+    return () => clearTimeout(timeoutId)
   }, [html])
 
   if (!html) {

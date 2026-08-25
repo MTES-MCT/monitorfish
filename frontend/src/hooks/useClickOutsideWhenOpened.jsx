@@ -16,16 +16,15 @@ export const useClickOutsideWhenOpened = (ref, isOpened) => {
     if (isOpened) {
       document.addEventListener('mousedown', handleClickOutside)
 
-      return
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
     }
 
-    document.removeEventListener('mousedown', handleClickOutside)
     setClicked(null)
 
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    return undefined
   }, [ref, isOpened])
 
   return clicked

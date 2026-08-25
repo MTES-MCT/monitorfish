@@ -1,4 +1,5 @@
 import { GEAR_MARKING_NOT_APPLICABLE_CATEGORIES } from '@features/Mission/components/MissionForm/constants'
+import { hasGearMesh } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { riskFactorApi } from '@features/RiskFactor/apis'
 import { FrontendError } from '@libs/FrontendError'
@@ -46,7 +47,7 @@ export const updateActionGearsOnboard =
         averageWireThickness: undefined,
         comments: undefined,
         controlledMesh: undefined,
-        declaredMesh: gear.declaredMesh,
+        declaredMesh: hasGearMesh(gear.code, gear.category) ? gear.declaredMesh : undefined,
         gearCode: gear.code,
         gearMarkingIsCompliant: GEAR_MARKING_NOT_APPLICABLE_CATEGORIES.includes(gear.category)
           ? MissionAction.ControlCheck.NOT_APPLICABLE

@@ -2,7 +2,7 @@ import { FormError, FormErrorCode } from '@libs/FormError'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash-es'
 
-import { MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import { GEAR_CATEGORIES_WITHOUT_MESH, GEAR_CODES_WITH_MESH, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
@@ -147,4 +147,11 @@ export function getValidMissionDataControlUnit(
   }
 
   return validMissionDataControlUnit
+}
+
+/**
+ * Whether the "Maillage déclaré" and "Maillage mesuré" fields apply to this gear.
+ */
+export function hasGearMesh(gearCode: string, gearCategory: string | undefined): boolean {
+  return !GEAR_CATEGORIES_WITHOUT_MESH.includes(gearCategory ?? '') || GEAR_CODES_WITH_MESH.includes(gearCode)
 }

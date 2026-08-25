@@ -27,6 +27,7 @@ import { useGetMissionActionFormikUsecases } from '../../hooks/useGetMissionActi
 import { FieldGroup } from '../../shared/FieldGroup'
 import { FieldsetGroup, FieldsetGroupSpinner } from '../../shared/FieldsetGroup'
 import { FieldsetGroupSeparator } from '../../shared/FieldsetGroupSeparator'
+import { hasGearMesh } from '../../utils'
 
 import type { MissionActionFormValues } from '../../types'
 import type { Option } from '@mtes-mct/monitor-ui'
@@ -167,6 +168,8 @@ export function GearsField() {
         <>
           {input.value.map((gearOnboard, index) => {
             const gearCategory = gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ?? ''
+            const hasMeshFields = hasGearMesh(gearOnboard.gearCode, gearCategory)
+            const hasWireFields = isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.has(gearCategory)
 
             return (
               <Row
@@ -203,44 +206,50 @@ export function GearsField() {
                     />
                   )}
 
-                  <StyledFieldGroup isInline>
-                    <FormikNumberInput
-                      isErrorMessageHidden
-                      isRequired
-                      label="Maillage déclaré"
-                      name={`gearOnboard[${index}].declaredMesh`}
-                    />
-                    <FormikNumberInput
-                      disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
-                      isErrorMessageHidden
-                      isUndefinedWhenDisabled
-                      label="Maillage mesuré"
-                      name={`gearOnboard[${index}].controlledMesh`}
-                    />
-                    {isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.has(gearCategory) && (
-                      <>
-                        <FormikNumberInput
-                          disabled={gearOnboard.gearWasControlled === false}
-                          isErrorMessageHidden
-                          isUndefinedWhenDisabled
-                          label="Epaisseur moy. de fil"
-                          name={`gearOnboard[${index}].averageWireThickness`}
-                        />
-                        <FormikSelect
-                          disabled={gearOnboard.gearWasControlled === false}
-                          isErrorMessageHidden
-                          isUndefinedWhenDisabled
-                          label="Type de fil"
-                          name={`gearOnboard[${index}].wireType`}
-                          options={WIRE_TYPE_OPTIONS}
-                        />
-                      </>
-                    )}
-                  </StyledFieldGroup>
-                  {typedError && typedError[index]?.declaredMesh && (
+                  {(hasMeshFields || hasWireFields) && (
+                    <StyledFieldGroup isInline>
+                      {hasMeshFields && (
+                        <>
+                          <FormikNumberInput
+                            isErrorMessageHidden
+                            isRequired
+                            label="Maillage déclaré"
+                            name={`gearOnboard[${index}].declaredMesh`}
+                          />
+                          <FormikNumberInput
+                            disabled={!gearOnboard.gearWasControlled || gearOnboard.hasUncontrolledMesh}
+                            isErrorMessageHidden
+                            isUndefinedWhenDisabled
+                            label="Maillage mesuré"
+                            name={`gearOnboard[${index}].controlledMesh`}
+                          />
+                        </>
+                      )}
+                      {hasWireFields && (
+                        <>
+                          <FormikNumberInput
+                            disabled={gearOnboard.gearWasControlled === false}
+                            isErrorMessageHidden
+                            isUndefinedWhenDisabled
+                            label="Epaisseur moy. de fil"
+                            name={`gearOnboard[${index}].averageWireThickness`}
+                          />
+                          <FormikSelect
+                            disabled={gearOnboard.gearWasControlled === false}
+                            isErrorMessageHidden
+                            isUndefinedWhenDisabled
+                            label="Type de fil"
+                            name={`gearOnboard[${index}].wireType`}
+                            options={WIRE_TYPE_OPTIONS}
+                          />
+                        </>
+                      )}
+                    </StyledFieldGroup>
+                  )}
+                  {hasMeshFields && typedError && typedError[index]?.declaredMesh && (
                     <FieldError>{typedError[index]?.declaredMesh}</FieldError>
                   )}
-                  {typedError && typedError[index]?.controlledMesh && (
+                  {hasMeshFields && typedError && typedError[index]?.controlledMesh && (
                     <FieldError>{typedError[index]?.controlledMesh}</FieldError>
                   )}
 

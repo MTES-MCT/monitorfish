@@ -1096,9 +1096,11 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.wait(500)
 
-    // OTB (Chaluts category) is prefilled at index 0 — wire fields should be shown.
+    // OTB (Chaluts category) is prefilled at index 0 — wire and mesh fields should be shown.
     cy.get('[id="gearOnboard[0].averageWireThickness"]').should('exist')
     cy.get('[name="gearOnboard[0].wireType"]').should('exist')
+    cy.get('[id="gearOnboard[0].declaredMesh"]').should('exist')
+    cy.get('[id="gearOnboard[0].controlledMesh"]').should('exist')
 
     cy.fill('Engin contrôlé', 'Oui', { index: 0 })
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 0 })
@@ -1121,11 +1123,13 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Epaisseur moy. de fil  ', 1.5)
     cy.fill('Type de fil', 'Simple')
 
-    // Add an LLS gear (Lignes et hameçons category) — wire fields should NOT appear
+    // Add an LLS gear (Lignes et hameçons category) — wire and mesh fields should NOT appear
     cy.fill('Ajouter un engin', 'LLS')
     cy.wait(250)
     cy.get('[id="gearOnboard[1].averageWireThickness"]').should('not.exist')
     cy.get('[name="gearOnboard[1].wireType"]').should('not.exist')
+    cy.get('[id="gearOnboard[1].declaredMesh"]').should('not.exist')
+    cy.get('[id="gearOnboard[1].controlledMesh"]').should('not.exist')
 
     // LLS (Lignes et hameçons) is a marking-not-applicable category, so it shows no marking field
     // and defaults gearMarkingIsCompliant to NOT_APPLICABLE.

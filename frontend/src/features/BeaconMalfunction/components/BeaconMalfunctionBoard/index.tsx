@@ -43,6 +43,14 @@ const getMemoizedBeaconMalfunctionsByStage = createSelector(
 
 const baseUrl = window.location.origin
 
+const findStage = stageName => {
+  if (stageName in STAGE_RECORD) {
+    return stageName
+  }
+
+  return Object.keys(STAGE_RECORD).find(key => STAGE_RECORD[key]?.code?.includes(stageName))
+}
+
 export function BeaconMalfunctionBoard() {
   const dispatch = useMainAppDispatch()
   const { openedBeaconMalfunctionInKanban } = useMainAppSelector(state => state.beaconMalfunction)
@@ -96,14 +104,6 @@ export function BeaconMalfunctionBoard() {
 
     return searchInBeaconMalfunctions(beaconMalfunctions, searchedVessel, filteredVesselStatus)
   }, [beaconMalfunctions, searchedVessel, filteredVesselStatus])
-
-  const findStage = stageName => {
-    if (stageName in STAGE_RECORD) {
-      return stageName
-    }
-
-    return Object.keys(STAGE_RECORD).find(key => STAGE_RECORD[key]?.code?.includes(stageName))
-  }
 
   const stages: BeaconMalfunctionStageColumnValue[] = useMemo(
     () =>

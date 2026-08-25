@@ -6,6 +6,14 @@ import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
 import { useGetUserAccount } from '../hooks/useGetUserAccount'
 
+const handleRedirect = (path: string, shouldRedirect: boolean) => {
+  if (shouldRedirect) {
+    return <Navigate replace to={path} />
+  }
+
+  return null
+}
+
 export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
   const { isLoading, userAccount } = useGetUserAccount()
   if (isLoading) {
@@ -14,14 +22,6 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
         <LoadingSpinnerWall isVesselShowed />
       </LoginBackground>
     )
-  }
-
-  const handleRedirect = (path: string, shouldRedirect: boolean) => {
-    if (shouldRedirect) {
-      return <Navigate replace to={path} />
-    }
-
-    return null
   }
 
   if (!userAccount?.isAuthenticated) {

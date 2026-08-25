@@ -16,6 +16,13 @@ import { Logbook } from '../../../../Logbook.types'
 import { getLogbookMessageType } from '../../../../utils'
 import { isPnoMessage } from '../utils'
 
+const openXML = (xml: string) => {
+  const blob = new Blob([xml], { type: 'text/xml' })
+  const url = URL.createObjectURL(blob)
+  window.open(url)
+  URL.revokeObjectURL(url)
+}
+
 type LogbookMessageComponentProps = Readonly<{
   isFirst: boolean
   isManuallyCreated?: boolean
@@ -60,13 +67,6 @@ export function LogbookMessage({
       }
     }
   })()
-
-  const openXML = (xml: string) => {
-    const blob = new Blob([xml], { type: 'text/xml' })
-    const url = URL.createObjectURL(blob)
-    window.open(url)
-    URL.revokeObjectURL(url)
-  }
 
   const logbookMessageComponent = getComponentFromMessageType(logbookMessage, isManuallyCreated)
 

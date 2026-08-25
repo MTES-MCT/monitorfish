@@ -34,6 +34,15 @@ export const STUBBED_OUTSIDE_EEZ_LONGITUDE = -7.872
 export const STUBBED_EEZ_LATITUDE = 47.084
 export const STUBBED_EEZ_LONGITUDE = -3.872
 
+const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
+  if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
+    return
+  }
+
+  const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
+  fitMapToExtent(bufferedExtent)
+}
+
 export function FormikCoordinatesPicker() {
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const listener = useMainAppSelector(state => state.draw.listener)
@@ -115,15 +124,6 @@ export function FormikCoordinatesPicker() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [drawedGeometry]
   )
-
-  const handleCenterOnMap = (centeredCoordinates: Coordinate) => {
-    if (centeredCoordinates.length !== 2 || !centeredCoordinates[0] || !centeredCoordinates[1]) {
-      return
-    }
-
-    const bufferedExtent = getCoordinatesExtent(centeredCoordinates)
-    fitMapToExtent(bufferedExtent)
-  }
 
   const addOrEditCoordinates = useCallback(async () => {
     if (!longitudeValue || !latitudeValue) {

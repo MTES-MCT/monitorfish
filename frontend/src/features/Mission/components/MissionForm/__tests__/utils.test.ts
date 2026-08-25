@@ -2,7 +2,7 @@ import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 
 import { MissionAction } from '../../../missionAction.types'
-import { getMissionActionsToCreateUpdateOrDelete, getMissionDataFromMissionFormValues } from '../utils'
+import { getMissionActionsToCreateUpdateOrDelete, getMissionDataFromMissionFormValues, hasGearMesh } from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType
 import CompletionStatus = MissionAction.CompletionStatus
@@ -491,5 +491,16 @@ describe('features/Mission/components/MissionForm/utils', () => {
 
     // Then
     expect(result).toStrictEqual(missionFormWithoutIsValid)
+  })
+
+  it('hasGearMesh() should return whether the mesh fields apply to a gear', () => {
+    expect(hasGearMesh('OTB', 'Chaluts')).toBe(true)
+    expect(hasGearMesh('DRB', 'Dragues')).toBe(true)
+    expect(hasGearMesh('LLS', 'Lignes et hameçons')).toBe(false)
+    expect(hasGearMesh('FPO', 'Pièges et casiers')).toBe(false)
+    expect(hasGearMesh('NO', "Pas d'engin")).toBe(false)
+    expect(hasGearMesh('HAR', 'Engins divers')).toBe(false)
+    expect(hasGearMesh('FCN', 'Engins divers')).toBe(true)
+    expect(hasGearMesh('MDR', 'Engins divers')).toBe(true)
   })
 })

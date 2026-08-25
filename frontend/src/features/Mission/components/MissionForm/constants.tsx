@@ -141,3 +141,21 @@ export const HIDDEN_ERROR = 'HIDDEN_ERROR'
  * the field is hidden and the value is recorded as N/A (ControlCheck.NOT_APPLICABLE).
  */
 export const GEAR_MARKING_NOT_APPLICABLE_CATEGORIES = ['Lignes et hameçons', 'Engins de récolte', 'Engins divers']
+
+/**
+ * Gear categories without any mesh: the "Maillage déclaré" and "Maillage mesuré" fields are hidden for them.
+ *
+ * "Dragues" are deliberately kept out of this list: their mesh fields are used to record the ring or blade measurement.
+ */
+export const GEAR_CATEGORIES_WITHOUT_MESH = [
+  'Engins de pêche récréative',
+  'Engins de récolte',
+  'Engins divers',
+  'Lignes et hameçons',
+  'Palangres',
+  "Pas d'engin",
+  'Pièges et casiers'
+]
+
+/** Gears having a mesh although their category is listed in `GEAR_CATEGORIES_WITHOUT_MESH`. */
+export const GEAR_CODES_WITH_MESH = ['FCN', 'MDR']

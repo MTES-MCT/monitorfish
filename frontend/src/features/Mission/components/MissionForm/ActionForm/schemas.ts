@@ -1,6 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { hasGearMesh } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
@@ -132,10 +133,10 @@ export function makeGearOnboardSchema(isEISR: boolean) {
     declaredMesh: number().when(['gearCode', 'controlledMesh'], {
       is: (gearCode, controlledMesh, context) => {
         const { gears } = mainStore.getState().gear
-        const isMeshRequiredForSegment = gears.find(gear => gear.code === gearCode)?.isMeshRequiredForSegment
+        const gear = gears.find(({ code }) => code === gearCode)
         const declaredMesh = context?.parent?.declaredMesh
 
-        if (isMeshRequiredForSegment) {
+        if (gear?.isMeshRequiredForSegment && hasGearMesh(gearCode, gear.category)) {
           return controlledMesh === undefined && declaredMesh === undefined
         }
 

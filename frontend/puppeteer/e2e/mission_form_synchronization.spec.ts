@@ -18,7 +18,7 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 let pageA: Page
 let pageB: Page
 
-describe('Missions Form', () => {
+describe('Mission form synchronization', () => {
   beforeEach(async () => {
     console.log('[beforeEach] Getting first tab for browser 0')
     pageA = await getFirstTab(browsers[0])
@@ -121,9 +121,7 @@ describe('Missions Form', () => {
       // Should send the update to the second page
       const cnspValueA = await getInputContent(pageA, '[name="observationsCnsp"]')
       console.log(`[test] pageA observationsCnsp value: "${cnspValueA}"`)
-      expect(cnspValueA).toBe(
-        "A new observation, as I'm not sure of the purpose of this mission."
-      )
+      expect(cnspValueA).toBe("A new observation, as I'm not sure of the purpose of this mission.")
       // Erase the value
       console.log('[test] Erasing observationsCnsp back to "Aucune"')
       await observationsCnsp.click({ clickCount: 3, delay: 50 })

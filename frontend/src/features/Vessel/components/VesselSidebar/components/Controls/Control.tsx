@@ -135,7 +135,13 @@ export function Control({ control }: ControlProps) {
           </OtherComments>
         )}
         {isSuperUser && (
-          <StyledButton accent={Accent.SECONDARY} Icon={Icon.MissionAction} onClick={openMission} size={Size.SMALL}>
+          <StyledButton
+            accent={Accent.SECONDARY}
+            data-cy="open-control"
+            Icon={Icon.MissionAction}
+            onClick={openMission}
+            size={Size.SMALL}
+          >
             Ouvrir le contrôle
           </StyledButton>
         )}

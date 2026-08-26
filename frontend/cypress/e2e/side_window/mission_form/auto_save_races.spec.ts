@@ -6,10 +6,7 @@ import { openSideWindowNewMission } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
-/**
- * Same as `openSideWindowNewMission()`, with a mocked `EventSource` so that the test can emit the
- * mission update events MonitorEnv normally pushes.
- */
+/** Same as `openSideWindowNewMission()`, with a mocked `EventSource` the test can emit events from. */
 const openSideWindowNewMissionWithMockedEventSource = () => {
   cy.viewport(1920, 1080)
 
@@ -49,13 +46,8 @@ const emitMissionUpdate = (mission: Record<string, unknown>) => {
 /**
  * Regression tests for https://github.com/MTES-MCT/monitorfish/issues/5368.
  *
- * Auto-save fires on every typing pause, so a second save can start while the first one is still in
- * flight. The entity was then created twice — the duplicated mission and the duplicated control the
- * ops team reported — since the id of the first (unfinished) creation was not known yet, and what
- * was typed meanwhile was lost when the form was reinitialized with the values of the first save.
- *
- * The creation responses are deliberately slowed down (`delay`) to make that overlap deterministic,
- * the way a slow intranet connection makes it happen in production.
+ * The creation responses are deliberately slowed down (`delay`) so that the next edit is auto-saved
+ * while the creation is still in flight, the way a slow connection makes it happen in production.
  */
 context('Side Window > Mission Form > Auto Save Races', () => {
   it('Should create the mission only once when the form is edited while its creation is still in flight', () => {
@@ -64,7 +56,6 @@ context('Side Window > Mission Form > Auto Save Races', () => {
     const createdAtUtc = customDayjs().utc().format('YYYY-MM-DDTHH:mm:ss.000Z')
     cy.intercept('POST', '/api/v1/missions', {
       body: { createdAtUtc, id: 1, updatedAtUtc: createdAtUtc },
-      // Long enough for the next edit to be auto-saved while this creation is still in flight
       delay: 4000,
       statusCode: 201
     }).as('createMission')
@@ -81,7 +72,7 @@ context('Side Window > Mission Form > Auto Save Races', () => {
       statusCode: 200
     })
 
-    // Filling the last required field makes the main form valid, which triggers the (slow) creation
+    // Filling the last required field makes the form valid, which triggers the creation
     cy.fill(
       'Fin de mission',
       getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString()).utcDateTupleWithTime
@@ -90,20 +81,14 @@ context('Side Window > Mission Form > Auto Save Races', () => {
     cy.fill('Administration 1', 'DDTM')
     cy.fill('Unité 1', 'Cultures marines 56')
 
-    // The creation request has started but has not answered yet
     cy.wait(1500)
 
     // The operator keeps filling the left column while the mission is being created
     cy.fill('Ouvert par', 'CAR')
-
-    // Let the creation answer and every pending auto-save settle
     cy.wait(6000)
 
-    // Without the fix, this second edit would have created a whole second mission
     cy.get('@createMission.all').should('have.length', 1)
-    // ...it must still be displayed, and not silently erased once the creation answers
     cy.get('input[name="openBy"]').should('have.value', 'CAR')
-    // ...and it must have been persisted, as an update of the created mission
     cy.waitForLastRequest('@updateMission', { body: { openBy: 'CAR' } }, 5)
   })
 
@@ -138,7 +123,6 @@ context('Side Window > Mission Form > Auto Save Races', () => {
 
     cy.intercept('POST', '/bff/v1/mission_actions', {
       body: { id: 2 },
-      // Long enough for the next edit to be auto-saved while this creation is still in flight
       delay: 4000,
       statusCode: 201
     }).as('createMissionAction')
@@ -147,21 +131,15 @@ context('Side Window > Mission Form > Auto Save Races', () => {
       statusCode: 201
     }).as('updateMissionAction')
 
-    // A free note only needs its trigram to be valid, so this triggers the (slow) creation
+    // A free note only needs its trigram to be valid, so this triggers the creation
     cy.fill('Saisi par', 'CAR')
-
-    // The creation request has started but has not answered yet
     cy.wait(1500)
 
     // The operator keeps filling the action while it is being created
     cy.fill('Observations, commentaires...', 'Une observation saisie pendant la création.')
-
-    // Let the creation answer and every pending auto-save settle
     cy.wait(6000)
 
-    // Without the fix, this second edit would have created a whole second action (the duplicated control)
     cy.get('@createMissionAction.all').should('have.length', 1)
-    // ...and it must still have been persisted, as an update of the created action
     cy.waitForLastRequest(
       '@updateMissionAction',
       { body: { otherComments: 'Une observation saisie pendant la création.' } },
@@ -231,5 +209,52 @@ context('Side Window > Mission Form > Auto Save Races', () => {
 
     // Without the fix, the echo would have erased the field the operator had just filled
     cy.get('input[name="openBy"]').should('have.value', 'CAR')
+  })
+
+  it('Should collapse a burst of edits into a single save', () => {
+    openSideWindowNewMission()
+
+    cy.intercept('POST', '/api/v1/missions', { body: { id: 1 }, statusCode: 201 }).as('createMission')
+    cy.intercept('GET', '/bff/v1/missions/1', { body: { envActions: [], id: 1 }, statusCode: 200 })
+    cy.intercept('GET', '/bff/v1/mission_actions?missionId=1', { body: [], statusCode: 200 })
+
+    cy.fill(
+      'Fin de mission',
+      getUtcDateInMultipleFormats(customDayjs().utc().add(7, 'day').toISOString()).utcDateTupleWithTime
+    )
+    cy.fill('Types de mission', [Mission.MissionTypeLabel.SEA])
+    cy.fill('Administration 1', 'DDTM')
+    cy.fill('Unité 1', 'Cultures marines 56')
+    cy.wait('@createMission')
+    cy.wait(1500)
+
+    cy.clickButton('Ajouter')
+    cy.clickButton('Ajouter une note libre')
+
+    cy.intercept('POST', '/bff/v1/mission_actions', { body: { id: 2 }, statusCode: 201 }).as('createMissionAction')
+    cy.intercept('PUT', '/bff/v1/mission_actions/2', { body: { id: 2 }, delay: 1500, statusCode: 201 }).as(
+      'updateMissionAction'
+    )
+
+    cy.fill('Saisi par', 'CAR')
+    cy.wait('@createMissionAction')
+    cy.wait(1500)
+
+    // A pause shorter than the debounce delay is what typing from a paper form looks like
+    cy.get('textarea[name="otherComments"]').type("A l'eau, ")
+    cy.wait(600)
+    cy.get('textarea[name="otherComments"]').type('600 hameçons, ')
+    cy.wait(600)
+    cy.get('textarea[name="otherComments"]').type('taille n°7, ')
+    cy.wait(600)
+    cy.get('textarea[name="otherComments"]').type('conformes.')
+    cy.wait(6000)
+
+    cy.get('@updateMissionAction.all').should('have.length', 1)
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      { body: { otherComments: "A l'eau, 600 hameçons, taille n°7, conformes." } },
+      5
+    )
   })
 })

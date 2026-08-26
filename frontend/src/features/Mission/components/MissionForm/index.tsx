@@ -11,11 +11,7 @@ import {
   useDeleteMissionActionMutation,
   useUpdateMissionActionMutation
 } from '@features/Mission/missionActionApi'
-import { autoSaveMission } from '@features/Mission/useCases/autoSaveMission'
-import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
 import { deleteMission } from '@features/Mission/useCases/deleteMission'
-import { deleteMissionAction } from '@features/Mission/useCases/deleteMissionAction'
-import { saveMissionAndMissionActionsByDiff } from '@features/Mission/useCases/saveMissionAndMissionActionsByDiff'
 import { getMissionStatus } from '@features/Mission/utils'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
@@ -29,13 +25,10 @@ import { logSoftError } from '@utils/logSoftError'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
-import { getDuplicatedMissionActionFormValues, getMissionActionFormInitialValues } from './ActionList/utils'
-import { AUTO_SAVE_ENABLED } from './constants'
-import { useListenToMissionEventUpdatesById } from './hooks/useListenToMissionEventUpdatesById'
+import { useMissionFormAutoSave } from './hooks/useMissionFormAutoSave'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
 import { MainForm } from './MainForm'
 import { AutoSaveTag } from './shared/AutoSaveTag'
@@ -44,7 +37,6 @@ import { DraftCancellationConfirmationDialog } from './shared/DraftCancellationC
 import { ExternalActionsDialog } from './shared/ExternalActionsDialog'
 import { MissionStatusTag } from './shared/MissionStatusTag'
 import { missionFormActions } from './slice'
-import { getTitleFromMissionMainFormValues } from './utils'
 import {
   monitorenvMissionApi,
   useCreateMissionMutation,
@@ -52,10 +44,25 @@ import {
   useUpdateMissionMutation
 } from '../../monitorenvMissionApi'
 
-import type { MissionActionFormValues, MissionMainFormValues } from './types'
-import type { MissionWithActionsDraft } from '../../types'
+import type { MissionActionFormValues } from './types'
 
-const DEBOUNCE_DELAY = 500
+function useIsMissionSaving(): boolean {
+  const [, { isLoading: isCreatingMission }] = useCreateMissionMutation()
+  const [, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
+  const [, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
+  const [, { isLoading: isCreatingMissionAction }] = useCreateMissionActionMutation()
+  const [, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
+  const [, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
+
+  return (
+    isCreatingMission ||
+    isDeletingMission ||
+    isUpdatingMission ||
+    isCreatingMissionAction ||
+    isDeletingMissionAction ||
+    isUpdatingMissionAction
+  )
+}
 
 export function MissionForm() {
   const dispatch = useMainAppDispatch()
@@ -63,64 +70,33 @@ export function MissionForm() {
   const draft = useMainAppSelector(store => store.missionForm.draft)
   const hasEngagedControlUnit = useMainAppSelector(state => !!state.missionForm.engagedControlUnit)
   const isMissionCreatedBannerDisplayed = useMainAppSelector(state => state.missionForm.isMissionCreatedBannerDisplayed)
-  assertNotNullish(draft)
-
-  const missionCompletion = useGetMissionFrontCompletion()
-  const missionIdRef = useRef<number | undefined>(missionIdFromPath)
-
-  const [, { isLoading: isCreatingMission }] = useCreateMissionMutation()
-  const [, { isLoading: isDeletingMission }] = useDeleteMissionMutation()
-  const [, { isLoading: isCreatingMissionAction }] = useCreateMissionActionMutation()
-  const [, { isLoading: isDeletingMissionAction }] = useDeleteMissionActionMutation()
-  const [, { isLoading: isUpdatingMission }] = useUpdateMissionMutation()
-  const [, { isLoading: isUpdatingMissionAction }] = useUpdateMissionActionMutation()
-  const missionEvent = useListenToMissionEventUpdatesById(missionIdRef.current)
-
-  const isSaving =
-    isCreatingMission ||
-    isDeletingMission ||
-    isUpdatingMission ||
-    isCreatingMissionAction ||
-    isDeletingMissionAction ||
-    isUpdatingMissionAction
-
-  const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues>(draft.mainFormValues)
-  const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>(draft.actionsFormValues)
-
-  /**
-   * Always holds the values last received from the main form, which are newer than `mainFormValues`
-   * (only updated once a save resolves). `<MainForm />` is re-created whenever the mission id changes,
-   * so reinitializing it from the values of the save instead of these would drop everything typed
-   * while that save was in flight (see https://github.com/MTES-MCT/monitorfish/issues/5368).
-   */
-  const latestMainFormValuesRef = useRef<MissionMainFormValues>(draft.mainFormValues)
-
-  /**
-   * Always holds the latest actions, unlike the state captured by an async callback closure.
-   * A debounced save resolving after its closure was created must never write back an outdated
-   * list (it would drop the ids just created) nor read an outdated action id from it
-   * (see https://github.com/MTES-MCT/monitorfish/issues/5368).
-   */
-  const actionsFormValuesRef = useRef<MissionActionFormValues[]>(draft.actionsFormValues)
-  const updateActionsFormValues = useCallback(
-    (updater: (previousActionsFormValues: MissionActionFormValues[]) => MissionActionFormValues[]) => {
-      setActionsFormValues(previousActionsFormValues => {
-        const nextActionsFormValues = updater(previousActionsFormValues)
-        actionsFormValuesRef.current = nextActionsFormValues
-
-        return nextActionsFormValues
-      })
-    },
-    []
-  )
-  const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
-  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
     store => store.sideWindow.isDraftCancellationConfirmationDialogOpen
   )
+  assertNotNullish(draft)
+
+  const {
+    actionsFormValues,
+    addAction,
+    duplicateAction,
+    editedActionIndex,
+    isAutoSaveEnabled,
+    mainFormValues,
+    missionId,
+    removeAction,
+    saveEditedAction,
+    saveMainForm,
+    saveWholeMission,
+    selectAction,
+    title
+  } = useMissionFormAutoSave(draft, missionIdFromPath)
+
+  const missionCompletion = useGetMissionFrontCompletion()
+  const isSaving = useIsMissionSaving()
+
+  const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const [isExternalActionsDialogOpen, setIsExternalActionsDialogOpen] = useState(false)
   const [actionsSources, setActionsSources] = useState<Mission.MissionSource[]>([])
-  const [title, setTitle] = useState(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
 
   // We use these keys to fully control when to re-render `<ActionForm />`
   // since they are fully memoized in order to optimize their (heavy) re-rendering
@@ -138,19 +114,6 @@ export function MissionForm() {
     }
   )
 
-  const isAutoSaveEnabled = useMemo(() => {
-    if (!AUTO_SAVE_ENABLED) {
-      return false
-    }
-
-    const now = customDayjs()
-    if (mainFormValues.endDateTimeUtc && now.subtract(48, 'hours').isAfter(mainFormValues.endDateTimeUtc)) {
-      return false
-    }
-
-    return true
-  }, [mainFormValues])
-
   const isMissionFormValid = useMemo(() => {
     const isMainFormValid = MainFormLiveSchema.isValidSync(mainFormValues)
     const areAllActionsValid = actionsFormValues.every(actionFormValues =>
@@ -165,36 +128,6 @@ export function MissionForm() {
     [mainFormValues.updatedAtUtc]
   )
 
-  const updateReduxSliceDraft = useDebouncedCallback(() => {
-    dispatch(
-      missionFormActions.setDraft({
-        actionsFormValues: [...actionsFormValues],
-        mainFormValues: { ...mainFormValues }
-      })
-    )
-
-    setTitle(getTitleFromMissionMainFormValues(mainFormValues, missionIdRef.current))
-  }, 250)
-
-  /**
-   * /!\ Only used when `isAutoSaveEnabled` is false
-   */
-  const createOrUpdate = useCallback(
-    async (missionDraft: MissionWithActionsDraft) => {
-      const savedMission = await dispatch(
-        saveMissionAndMissionActionsByDiff(
-          missionDraft.mainFormValues,
-          missionDraft.actionsFormValues,
-          missionIdRef.current
-        )
-      )
-
-      setMainFormValues(savedMission)
-      missionIdRef.current = savedMission.id
-    },
-    [dispatch, missionIdRef]
-  )
-
   const goToMissionList = useCallback(async () => {
     const canExit = await dispatch(openSideWindowPath({ menu: SideWindowMenuKey.MISSION_LIST }))
     if (canExit) {
@@ -203,236 +136,19 @@ export function MissionForm() {
   }, [dispatch])
 
   const handleDelete = useCallback(async () => {
-    const isDeleted = await dispatch(deleteMission(missionIdRef.current))
+    const isDeleted = await dispatch(deleteMission(missionId))
     if (!isDeleted) {
       setIsDeletionConfirmationDialogOpen(false)
     }
-  }, [dispatch])
-
-  const updateEditedActionFormValuesCallback = useCallback(
-    async (nextActionFormValues: MissionActionFormValues) => {
-      if (editedActionIndex === undefined) {
-        return
-      }
-
-      // Read the identity from the ref: a previous save may have set the id after this callback's closure was created
-      const editedAction = actionsFormValuesRef.current[editedActionIndex]
-      const nextActionFormValuesWithId = {
-        ...nextActionFormValues,
-        draftKey: nextActionFormValues.draftKey ?? editedAction?.draftKey,
-        id: editedAction?.id
-      }
-
-      const createdId = await dispatch(
-        autoSaveMissionAction(nextActionFormValuesWithId, missionIdRef.current, isAutoSaveEnabled)
-      )
-      updateActionsFormValues(previousActionsFormValues =>
-        previousActionsFormValues.map((action, index) =>
-          index === editedActionIndex
-            ? { ...nextActionFormValues, draftKey: nextActionFormValuesWithId.draftKey, id: createdId }
-            : action
-        )
-      )
-      updateReduxSliceDraft()
-    },
-    [dispatch, updateActionsFormValues, updateReduxSliceDraft, editedActionIndex, isAutoSaveEnabled]
-  )
-
-  const updateEditedActionFormValues = useDebouncedCallback(
-    (nextActionFormValues: MissionActionFormValues) => updateEditedActionFormValuesCallback(nextActionFormValues),
-    DEBOUNCE_DELAY
-  )
-
-  /**
-   * Immediately run a pending debounced action save (and wait for it), so the caller can go on with
-   * an up-to-date, fully persisted list of actions.
-   */
-  const flushPendingActionSave = useCallback(async () => {
-    if (!updateEditedActionFormValues.isPending()) {
-      return
-    }
-
-    await updateEditedActionFormValues.flush()
-  }, [updateEditedActionFormValues])
-
-  const removeAction = useCallback(
-    async (actionIndex: number) => {
-      /**
-       * Flush any pending action save before going on, to avoid a race condition.
-       * /!\ Re-scheduling this callback instead would keep its (outdated) closure alive for as long
-       * as the user keeps typing, and eventually save outdated values or re-create an action.
-       */
-      await flushPendingActionSave()
-
-      const nextActionsFormValues = await dispatch(
-        deleteMissionAction(
-          actionsFormValuesRef.current,
-          actionIndex,
-          isAutoSaveEnabled,
-          mainFormValues.isGeometryComputedFromControls
-        )
-      )
-
-      updateActionsFormValues(() => nextActionsFormValues)
-      updateReduxSliceDraft()
-      if (editedActionIndex === actionIndex) {
-        setEditedActionIndex(undefined)
-      }
-    },
-    [
-      dispatch,
-      flushPendingActionSave,
-      updateActionsFormValues,
-      updateReduxSliceDraft,
-      mainFormValues.isGeometryComputedFromControls,
-      editedActionIndex,
-      isAutoSaveEnabled
-    ]
-  )
-
-  const addAction = useCallback(
-    async (actionType: MissionAction.MissionActionType) => {
-      // Flush any pending action save before going on, to avoid a race condition
-      await flushPendingActionSave()
-
-      const newActionFormValues = getMissionActionFormInitialValues(actionType)
-      setEditedActionIndex(0)
-
-      const createdId = await dispatch(
-        autoSaveMissionAction(newActionFormValues, missionIdRef.current, isAutoSaveEnabled)
-      )
-
-      updateActionsFormValues(previousActionsFormValues => [
-        { ...newActionFormValues, id: createdId },
-        ...previousActionsFormValues
-      ])
-      updateReduxSliceDraft()
-    },
-    [dispatch, flushPendingActionSave, updateActionsFormValues, updateReduxSliceDraft, isAutoSaveEnabled]
-  )
-
-  const duplicateAction = useCallback(
-    async (actionIndex: number) => {
-      // Flush any pending action save before going on, to avoid a race condition
-      await flushPendingActionSave()
-
-      const actionToDuplicate = actionsFormValuesRef.current[actionIndex]
-      if (!actionToDuplicate) {
-        return
-      }
-
-      const actionCopy = getDuplicatedMissionActionFormValues(actionToDuplicate)
-      setEditedActionIndex(0)
-
-      const createdId = await dispatch(autoSaveMissionAction(actionCopy, missionIdRef.current, isAutoSaveEnabled))
-
-      updateActionsFormValues(previousActionsFormValues => [
-        { ...actionCopy, id: createdId },
-        ...previousActionsFormValues
-      ])
-      updateReduxSliceDraft()
-    },
-    [dispatch, flushPendingActionSave, updateActionsFormValues, updateReduxSliceDraft, isAutoSaveEnabled]
-  )
-
-  const updateEditedActionIndex = useCallback(
-    async (nextActionIndex: number | undefined) => {
-      // Flush any pending action save before switching action, to avoid saving it to the wrong index
-      await flushPendingActionSave()
-
-      setEditedActionIndex(nextActionIndex)
-    },
-    [flushPendingActionSave]
-  )
-
-  const updateMainFormValuesCallback = useCallback(
-    async (nextMissionMainFormValues: MissionMainFormValues) => {
-      /**
-       * Flush any pending action save before going on, to avoid a race condition.
-       * /!\ Re-scheduling this callback instead would keep its (outdated) closure alive for as long
-       * as the user keeps typing, and eventually overwrite the main form with outdated values.
-       */
-      await flushPendingActionSave()
-
-      const haveMissionDatesChanged =
-        mainFormValues.startDateTimeUtc !== nextMissionMainFormValues.startDateTimeUtc ||
-        mainFormValues.endDateTimeUtc !== nextMissionMainFormValues.endDateTimeUtc
-
-      const savedMainFormValues = await dispatch(
-        autoSaveMission(nextMissionMainFormValues, mainFormValues, missionIdRef.current, isAutoSaveEnabled)
-      )
-      if (!savedMainFormValues) {
-        return
-      }
-
-      setMainFormValues({
-        ...latestMainFormValuesRef.current,
-        createdAtUtc: savedMainFormValues.createdAtUtc,
-        id: savedMainFormValues.id,
-        updatedAtUtc: savedMainFormValues.updatedAtUtc
-      })
-      missionIdRef.current = savedMainFormValues.id
-      updateReduxSliceDraft()
-
-      /**
-       * A control date must fall within the mission period, so changing the mission dates can make a
-       * previously out-of-range action valid. An action is otherwise only auto-saved when its own form
-       * changes, so we re-attempt saving the edited action here to persist a control that just became
-       * valid (without this, the user has to re-edit the control date to trigger its save).
-       */
-      if (!haveMissionDatesChanged || editedActionIndex === undefined) {
-        return
-      }
-
-      const editedActionFormValues = actionsFormValuesRef.current[editedActionIndex]
-      if (!editedActionFormValues) {
-        return
-      }
-
-      // Persist the draft synchronously so the action validation (which reads the mission dates from the
-      // draft) sees the updated dates instead of the debounced, still-stale ones.
-      dispatch(
-        missionFormActions.setDraft({
-          actionsFormValues: [...actionsFormValuesRef.current],
-          mainFormValues: { ...savedMainFormValues }
-        })
-      )
-
-      const savedActionId = await dispatch(
-        autoSaveMissionAction(editedActionFormValues, missionIdRef.current, isAutoSaveEnabled)
-      )
-      if (savedActionId !== editedActionFormValues.id) {
-        updateActionsFormValues(previousActionsFormValues =>
-          previousActionsFormValues.map((action, index) =>
-            index === editedActionIndex ? { ...editedActionFormValues, id: savedActionId } : action
-          )
-        )
-        updateReduxSliceDraft()
-      }
-    },
-    [
-      dispatch,
-      flushPendingActionSave,
-      updateActionsFormValues,
-      updateReduxSliceDraft,
-      mainFormValues,
-      isAutoSaveEnabled,
-      editedActionIndex
-    ]
-  )
-
-  const updateMainFormValues = useDebouncedCallback(
-    (nextMissionMainFormValues: MissionMainFormValues) => updateMainFormValuesCallback(nextMissionMainFormValues),
-    DEBOUNCE_DELAY
-  )
+  }, [dispatch, missionId])
 
   const toggleDeletionConfirmationDialog = useCallback(async () => {
-    if (!missionIdRef.current) {
+    if (!missionId) {
       return
     }
 
     try {
-      const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionIdRef.current))
+      const response = dispatch(monitorenvMissionApi.endpoints.canDeleteMission.initiate(missionId))
       const canDeleteMissionResponse = await response.unwrap()
       if (canDeleteMissionResponse.canDelete) {
         setIsDeletionConfirmationDialogOpen(true)
@@ -458,18 +174,7 @@ export function MissionForm() {
         originalError: error
       })
     }
-  }, [dispatch])
-
-  useEffect(() => {
-    if (!missionEvent) {
-      return
-    }
-
-    setMainFormValues(previousMainFormValues => ({
-      ...previousMainFormValues,
-      updatedAtUtc: missionEvent.updatedAtUtc
-    }))
-  }, [missionEvent])
+  }, [dispatch, missionId])
 
   useEffect(() => {
     dispatch(missionFormActions.setIsListeningToEvents(true))
@@ -526,36 +231,28 @@ export function MissionForm() {
         <Body>
           <FrontendErrorBoundary>
             <>
-              <MainForm
-                key={missionIdRef.current}
-                initialValues={mainFormValues}
-                missionId={missionIdRef.current}
-                onChange={nextMainFormValues => {
-                  latestMainFormValuesRef.current = nextMainFormValues
-                  updateMainFormValues(nextMainFormValues)
-                }}
-              />
+              <MainForm key={missionId} initialValues={mainFormValues} missionId={missionId} onChange={saveMainForm} />
               <ActionList
                 actionsFormValues={actionsFormValues}
                 currentIndex={editedActionIndex}
-                missionId={missionIdRef.current}
+                missionId={missionId}
                 missionTypes={mainFormValues.missionTypes}
                 onAdd={addAction}
                 onDuplicate={duplicateAction}
                 onRemove={removeAction}
-                onSelect={updateEditedActionIndex}
+                onSelect={selectAction}
               />
               <ActionForm
                 // We use this key to fully control when to re-render `<ActionForm />`
                 key={`action-form-${actionFormKey}`}
                 actionFormValues={formikEditedActionFormValuesRef.current}
-                onChange={updateEditedActionFormValues}
+                onChange={saveEditedAction}
               />
             </>
           </FrontendErrorBoundary>
         </Body>
         <Footer>
-          {missionIdRef.current && (
+          {missionId && (
             <DeleteButton
               accent={Accent.SECONDARY}
               disabled={isSaving || mainFormValues.missionSource !== Mission.MissionSource.MONITORFISH}
@@ -594,10 +291,7 @@ export function MissionForm() {
                 accent={Accent.PRIMARY}
                 disabled={isSaving || !isMissionFormValid}
                 onClick={async () => {
-                  await createOrUpdate({
-                    actionsFormValues,
-                    mainFormValues
-                  })
+                  await saveWholeMission()
 
                   goToMissionList()
                 }}
@@ -616,7 +310,7 @@ export function MissionForm() {
         />
       )}
       {isDraftCancellationConfirmationDialogOpen && (
-        <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} isNew={!missionIdRef.current} />
+        <DraftCancellationConfirmationDialog isAutoSaveEnabled={isAutoSaveEnabled} isNew={!missionId} />
       )}
       {isExternalActionsDialogOpen && (
         <ExternalActionsDialog onClose={() => setIsExternalActionsDialogOpen(false)} sources={actionsSources} />

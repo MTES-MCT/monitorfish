@@ -107,9 +107,7 @@ export function getUpdatedMissionFromMissionMainFormValues(
 
   return {
     ...missionData,
-    // The given id wins over the one held by the form values: while a creation is in flight, the form
-    // values do not carry the new id yet, and updating `/missions/undefined` would lose the edit
-    // (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+    // The form values still hold no id while a creation is in flight
     id: missionId
   }
 }

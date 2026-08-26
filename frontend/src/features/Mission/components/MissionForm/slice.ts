@@ -14,7 +14,7 @@ export interface MissionFormState {
   isDraftDirty: boolean
   isListeningToEvents: boolean
   isMissionCreatedBannerDisplayed: boolean
-  /** `updatedAtUtc` returned by the last mission save made from this form, used to detect stale SSE echoes. */
+  /** `updatedAtUtc` of the last save made from this form, to recognize our own SSE echoes. */
   lastSavedUpdatedAtUtc: string | undefined
   mustResetOtherControlsCheckboxes: boolean | undefined
   selectedMissionActionGeoJSON: Feature<Point> | undefined

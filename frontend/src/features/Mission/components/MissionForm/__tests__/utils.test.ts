@@ -512,8 +512,7 @@ describe('features/Mission/components/MissionForm/utils', () => {
 
 describe('features/Mission/components/MissionForm/utils.getUpdatedMissionFromMissionMainFormValues()', () => {
   it('Should use the given mission id rather than the one held by the form values', () => {
-    // Given: the form values do not carry the id yet, because the creation answered after they were built
-    // (see https://github.com/MTES-MCT/monitorfish/issues/5368)
+    // Given: the form values do not carry the id yet, the creation having answered after they were built
     const mainFormValues = {
       controlUnits: [],
       endDateTimeUtc: '2026-09-02T06:00:00Z',

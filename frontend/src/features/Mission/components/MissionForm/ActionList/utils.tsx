@@ -80,11 +80,7 @@ export function getMissionActionInfractionsFromMissionActionFormValues(
     .filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
 }
 
-/**
- * Copy an action so it is saved as a new one: the backend `id` is dropped, and the copy gets its own
- * draft key — reusing the original's key would make the auto-save update the original action instead
- * of creating the duplicate (see https://github.com/MTES-MCT/monitorfish/issues/5368).
- */
+/** Reusing the original's draft key would make the auto-save update it instead of creating the copy. */
 export function getDuplicatedMissionActionFormValues(
   actionFormValues: MissionActionFormValues
 ): MissionActionFormValues {

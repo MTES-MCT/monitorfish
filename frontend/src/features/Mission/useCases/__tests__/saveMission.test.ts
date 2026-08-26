@@ -1,5 +1,5 @@
 import { monitorenvMissionApi } from '@features/Mission/monitorenvMissionApi'
-import { saveMission } from '@features/Mission/useCases/saveMission'
+import { resetMissionSaves, saveMission } from '@features/Mission/useCases/saveMission'
 import { beforeEach, describe, expect, it } from '@jest/globals'
 
 import type { MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
@@ -61,6 +61,7 @@ describe('saveMission()', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     jest.useFakeTimers()
+    resetMissionSaves()
   })
 
   afterEach(() => {
@@ -112,5 +113,29 @@ describe('saveMission()', () => {
         action => action?.type === 'mission/setLastSavedUpdatedAtUtc' && action?.payload === '2026-08-26T07:41:50Z'
       )
     ).toBe(true)
+  })
+
+  it('Should send a single follow-up save for all the edits made while a save is in flight', async () => {
+    // Given
+    const creation = createDeferred<{ createdAtUtc: string; id: number; updatedAtUtc: string }>()
+    createMissionMock.mockReturnValue({ unwrap: () => creation.promise })
+    updateMissionMock.mockReturnValue({
+      unwrap: () => Promise.resolve({ updatedAtUtc: '2026-08-26T06:57:12Z' })
+    })
+
+    // When: the operator keeps typing while the creation is still in flight
+    const saves = [
+      saveMission(newMissionMainFormValues, undefined)(dispatch, getState, undefined),
+      saveMission({ ...newMissionMainFormValues, openBy: 'C' }, undefined)(dispatch, getState, undefined),
+      saveMission({ ...newMissionMainFormValues, openBy: 'CA' }, undefined)(dispatch, getState, undefined),
+      saveMission({ ...newMissionMainFormValues, openBy: 'CAR' }, undefined)(dispatch, getState, undefined)
+    ]
+    creation.resolve({ createdAtUtc: '2026-08-26T06:57:11Z', id: 43969, updatedAtUtc: '2026-08-26T06:57:11Z' })
+    await Promise.all(saves)
+
+    // Then: the intermediate payloads are dropped, only the latest one reaches the API
+    expect(createMissionMock).toHaveBeenCalledTimes(1)
+    expect(updateMissionMock).toHaveBeenCalledTimes(1)
+    expect(updateMissionMock).toHaveBeenCalledWith(expect.objectContaining({ id: 43969, openBy: 'CAR' }))
   })
 })

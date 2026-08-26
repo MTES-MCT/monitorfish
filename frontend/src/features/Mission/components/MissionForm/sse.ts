@@ -15,11 +15,7 @@ export const MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM = [
   'isValid'
 ]
 
-/**
- * A mission event is stale when it is not strictly newer than the last save made from this form:
- * it is then either the SSE echo of an own save, or an older update. Applying it to the form would
- * overwrite what the operator has typed since (see https://github.com/MTES-MCT/monitorfish/issues/5368).
- */
+/** An event that is not strictly newer than our last save is either our own echo, or an outdated update. */
 export function isMissionEventStale(
   missionEventUpdatedAtUtc: string | undefined,
   lastSavedUpdatedAtUtc: string | undefined

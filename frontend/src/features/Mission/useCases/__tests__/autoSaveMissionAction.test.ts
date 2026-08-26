@@ -1,6 +1,6 @@
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { missionActionApi } from '@features/Mission/missionActionApi'
-import { autoSaveMissionAction } from '@features/Mission/useCases/autoSaveMissionAction'
+import { autoSaveMissionAction, resetMissionActionSaves } from '@features/Mission/useCases/autoSaveMissionAction'
 import { beforeEach, describe, expect, it } from '@jest/globals'
 import { omit } from 'lodash-es'
 
@@ -60,6 +60,7 @@ function getDraftActionFormValues(draftKey: string): MissionActionFormValues {
 describe('autoSaveMissionAction()', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    resetMissionActionSaves()
   })
 
   it('Should create the action only once when a second auto-save fires while the creation is still in flight', async () => {
@@ -151,5 +152,59 @@ describe('autoSaveMissionAction()', () => {
     expect(failedSaveId).toBeUndefined()
     expect(retriedSaveId).toBe(20632)
     expect(createMissionActionMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('Should send a single follow-up save for all the edits made while a save is in flight', async () => {
+    // Given
+    const creation = createDeferred<{ id: number }>()
+    createMissionActionMock.mockReturnValue({ unwrap: () => creation.promise })
+    updateMissionActionMock.mockReturnValue({ unwrap: () => Promise.resolve() })
+    const draftActionFormValues = getDraftActionFormValues('draft-key-burst')
+
+    // When: the operator keeps typing while the creation is still in flight
+    const saves = [
+      autoSaveMissionAction(draftActionFormValues, 43969, true)(dispatch, getState, undefined),
+      autoSaveMissionAction({ ...draftActionFormValues, otherComments: 'A' }, 43969, true)(
+        dispatch,
+        getState,
+        undefined
+      ),
+      autoSaveMissionAction({ ...draftActionFormValues, otherComments: 'A L' }, 43969, true)(
+        dispatch,
+        getState,
+        undefined
+      ),
+      autoSaveMissionAction({ ...draftActionFormValues, otherComments: "A L'EAU" }, 43969, true)(
+        dispatch,
+        getState,
+        undefined
+      )
+    ]
+    creation.resolve({ id: 20632 })
+    await Promise.all(saves)
+
+    // Then: the intermediate payloads are dropped, only the latest one reaches the API
+    expect(createMissionActionMock).toHaveBeenCalledTimes(1)
+    expect(updateMissionActionMock).toHaveBeenCalledTimes(1)
+    expect(updateMissionActionMock).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 20632, otherComments: "A L'EAU" })
+    )
+  })
+
+  it('Should not re-send an action whose payload has not changed', async () => {
+    // Given
+    createMissionActionMock.mockReturnValue({ unwrap: () => Promise.resolve({ id: 20632 }) })
+    updateMissionActionMock.mockReturnValue({ unwrap: () => Promise.resolve() })
+    const draftActionFormValues = getDraftActionFormValues('draft-key-unchanged')
+
+    await autoSaveMissionAction(draftActionFormValues, 43969, true)(dispatch, getState, undefined)
+
+    // When: the same values are auto-saved again
+    const savedId = await autoSaveMissionAction(draftActionFormValues, 43969, true)(dispatch, getState, undefined)
+
+    // Then
+    expect(savedId).toBe(20632)
+    expect(createMissionActionMock).toHaveBeenCalledTimes(1)
+    expect(updateMissionActionMock).not.toHaveBeenCalled()
   })
 })

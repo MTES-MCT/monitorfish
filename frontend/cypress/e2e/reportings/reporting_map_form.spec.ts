@@ -260,7 +260,8 @@ context('Reporting map form', () => {
     cy.get('*[data-cy="map-reporting-form"]').contains('France').should('not.exist')
     cy.get('*[data-cy="map-reporting-form"]').contains('PTM').should('not.exist')
 
-    cy.contains('Navire sans fiche').click()
+    // The copy has no vessel identity left, so it opens with "Navire sans fiche" already checked
+    cy.get('[id="isVesselAbsent"]').should('have.attr', 'aria-checked', 'true')
     cy.fill('Nom', 'Passeparla')
 
     cy.wait('@createReporting').then(({ request }) => {
@@ -311,7 +312,7 @@ context('Reporting map form', () => {
         cy.get('*[data-cy="map-reporting-form"]').contains('AMAZONIA QUEEN').should('not.exist')
         cy.get('[name="title"]').should('have.value', title)
 
-        cy.contains('Navire sans fiche').click()
+        cy.get('[id="isVesselAbsent"]').should('have.attr', 'aria-checked', 'true')
         cy.fill('Nom', 'Navire dupliqué')
 
         // The duplication creates a new reporting instead of updating the original one

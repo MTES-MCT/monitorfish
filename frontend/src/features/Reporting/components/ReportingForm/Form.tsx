@@ -80,6 +80,7 @@ type FormProps = Readonly<{
   hasWhiteBackground: boolean
   hideButtons?: boolean
   hideVesselSection?: boolean
+  isDuplication?: boolean
   isEdition?: boolean
   isIUU: boolean
   onAutoSave?: ((values: FormEditedReporting) => void) | undefined
@@ -96,6 +97,7 @@ export function Form({
   hasWhiteBackground,
   hideButtons = false,
   hideVesselSection = false,
+  isDuplication = false,
   isEdition = false,
   isIUU,
   onAutoSave,
@@ -141,7 +143,9 @@ export function Form({
     values.vesselIdentifier,
     values.length
   ])
-  const [isVesselAbsent, setIsVesselAbsent] = useState(!selectedVessel && (isEdition || !!values.isUnknownVessel))
+  const [isVesselAbsent, setIsVesselAbsent] = useState(
+    !selectedVessel && (isEdition || isDuplication || !!values.isUnknownVessel)
+  )
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
   const selectedVesselHasLogbook = useMainAppSelector(state => {
     if (!state.vessel.selectedVesselIdentity) {

@@ -138,6 +138,7 @@ export function ReportingForm({
         hasWhiteBackground={hasWhiteBackground}
         hideButtons={hideButtons}
         hideVesselSection={hideVesselSection}
+        isDuplication={!!duplication}
         isEdition={!!editedReporting?.id}
         isIUU={isIUU}
         onAutoSave={autoSave ? handleAutoSave : undefined}

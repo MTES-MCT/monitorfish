@@ -220,7 +220,18 @@ def extracted_pnos() -> pd.DataFrame:
                 "FRA",
                 "FRA",  # Manual correction
             ],
-            "purpose": ["LAN", "ACS", "OTH", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN", "LAN"],
+            "purpose": [
+                "LAN",
+                "ACS",
+                "OTH",
+                "LAN",
+                "LAN",
+                "LAN",
+                "LAN",
+                "LAN",
+                "LAN",
+                "LAN",
+            ],
             "catch_onboard": [
                 [
                     {
@@ -417,8 +428,18 @@ def extracted_pnos() -> pd.DataFrame:
                     {"nbFish": 1, "weight": 202, "faoZone": "27.2.a", "species": "SWO"},
                 ],
                 [
-                    {'nbFish': None, 'weight': 150.0, 'faoZone': '27.8.a', 'species': 'GHL'},
-                    {'nbFish': None, 'weight': 1450.0, 'faoZone': '27.8.a', 'species': 'HKE'},
+                    {
+                        "nbFish": None,
+                        "weight": 150.0,
+                        "faoZone": "27.8.a",
+                        "species": "GHL",
+                    },
+                    {
+                        "nbFish": None,
+                        "weight": 1450.0,
+                        "faoZone": "27.8.a",
+                        "species": "HKE",
+                    },
                 ],
             ],
             "port_locode": [
@@ -445,7 +466,18 @@ def extracted_pnos() -> pd.DataFrame:
                 "Somewhere over the ocean",
                 "Somewhere over the swell",  # Manual correction
             ],
-            "facade": ["NAMO", "SA", "NAMO", "SA", None, "SA", None, "NAMO", "SA", "NAMO"],
+            "facade": [
+                "NAMO",
+                "SA",
+                "NAMO",
+                "SA",
+                None,
+                "SA",
+                None,
+                "NAMO",
+                "SA",
+                "NAMO",
+            ],
             "predicted_arrival_datetime_utc": [
                 now - relativedelta(months=1, hours=1) + relativedelta(hours=4),
                 now - relativedelta(months=1, minutes=25) + relativedelta(hours=4),
@@ -483,7 +515,9 @@ def extracted_pnos() -> pd.DataFrame:
                 [],
                 [],
                 [{"gear": "LNP"}, {"gear": "OTM", "mesh": 80}],
-                [{"gear": "OTB", "mesh": 140, "dimensions": "250.0"}],  # Manual correction
+                [
+                    {"gear": "OTB", "mesh": 140, "dimensions": "250.0"}
+                ],  # Manual correction
             ],
             "trip_segments": [
                 [
@@ -576,7 +610,11 @@ def extracted_pnos() -> pd.DataFrame:
                     },
                 ],
                 [
-                    {'pnoTypeName': 'Préavis type 2', 'hasDesignatedPorts': True, 'minimumNotificationPeriod': 4.0},
+                    {
+                        "pnoTypeName": "Préavis type 2",
+                        "hasDesignatedPorts": True,
+                        "minimumNotificationPeriod": 4.0,
+                    },
                 ],
             ],
             "note": [
@@ -589,9 +627,20 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 "Ceci est une note de préavis manuel",
-                None, # Manual correction
+                None,  # Manual correction
             ],
-            "vessel_length": [13.4, None, 17.4, 17.4, 8.58, 11.5, 12.5, 12.5, 12.5, 13.4],
+            "vessel_length": [
+                13.4,
+                None,
+                17.4,
+                17.4,
+                8.58,
+                11.5,
+                12.5,
+                12.5,
+                12.5,
+                13.4,
+            ],
             "mmsi": [None, None, None, None, None, None, None, None, None, None],
             "risk_factor": [
                 2.09885592141872,
@@ -647,8 +696,30 @@ def extracted_pnos() -> pd.DataFrame:
                     {"natinf": 22206},
                 ],  # Manual correction
             ],
-            "is_verified": [True, True, False, False, False, False, True, False, True, False],
-            "is_being_sent": [True, True, False, True, True, True, True, False, True, True],
+            "is_verified": [
+                True,
+                True,
+                False,
+                False,
+                False,
+                False,
+                True,
+                False,
+                True,
+                False,
+            ],
+            "is_being_sent": [
+                True,
+                True,
+                False,
+                True,
+                True,
+                True,
+                True,
+                False,
+                True,
+                True,
+            ],
             "source": [
                 "LOGBOOK",
                 "LOGBOOK",
@@ -659,7 +730,7 @@ def extracted_pnos() -> pd.DataFrame:
                 "MANUAL",
                 "MANUAL",
                 "MANUAL",
-                "MANUAL",   # Manual correction
+                "MANUAL",  # Manual correction
             ],
             "is_correction": [
                 False,
@@ -671,7 +742,7 @@ def extracted_pnos() -> pd.DataFrame:
                 False,
                 False,
                 False,
-                True,   # Manual correction 00000000-0000-4000-0000-000000000007
+                True,  # Manual correction 00000000-0000-4000-0000-000000000007
             ],
             "previous_notification_date_utc": [
                 None,
@@ -683,7 +754,7 @@ def extracted_pnos() -> pd.DataFrame:
                 None,
                 None,
                 None,
-                now - relativedelta(minutes=20),           # Original send date for manual PNO
+                now - relativedelta(minutes=20),  # Original send date for manual PNO
             ],
         }
     )
@@ -1124,6 +1195,16 @@ def pre_rendered_pno_2() -> PreRenderedPno:
 
 
 @pytest.fixture
+def pre_rendered_pno_2_no_previous_notification_date(
+    pre_rendered_pno_2,
+) -> PreRenderedPno:
+    return dataclasses.replace(
+        pre_rendered_pno_2,
+        previous_notification_date_utc=None,
+    )
+
+
+@pytest.fixture
 def pno_pdf_document_to_distribute_targeted_vessel_and_segments() -> RenderedPno:
     return RenderedPno(
         report_id="00000000-0000-4000-0000-000000000003",
@@ -1551,8 +1632,20 @@ def loaded_sent_messages() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "id": [1, 2, 3, 4, 5],
-            "prior_notification_report_id": ["15", "00000000-0000-4000-0000-000000000007", "Report-1", "Report-1", "Report-1"],
-            "prior_notification_source": ["LOGBOOK", "MANUAL", "LOGBOOK", "LOGBOOK", "LOGBOOK"],
+            "prior_notification_report_id": [
+                "15",
+                "00000000-0000-4000-0000-000000000007",
+                "Report-1",
+                "Report-1",
+                "Report-1",
+            ],
+            "prior_notification_source": [
+                "LOGBOOK",
+                "MANUAL",
+                "LOGBOOK",
+                "LOGBOOK",
+                "LOGBOOK",
+            ],
             "date_time_utc": [
                 now - relativedelta(months=1, minutes=35),
                 now - relativedelta(minutes=20),
@@ -1906,24 +1999,45 @@ def test_render_pno_zero_1(
     "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
     Path("/state/flags/icons/location"),
 )
+@pytest.mark.parametrize(
+    "pre_rendered_pno_fixture_name,filename_suffix,expect_previous_notification_note",
+    [
+        ("pre_rendered_pno_2", "2", True),
+        (
+            "pre_rendered_pno_2_no_previous_notification_date",
+            "2_no_previous_notification_date",
+            False,
+        ),
+    ],
+)
 def test_render_pno_2(
-    html_for_pdf_template, pre_rendered_pno_2, email_body_template, sms_template
+    request,
+    html_for_pdf_template,
+    email_body_template,
+    sms_template,
+    pre_rendered_pno_fixture_name,
+    filename_suffix,
+    expect_previous_notification_note,
 ):
+    pre_rendered_pno = request.getfixturevalue(pre_rendered_pno_fixture_name)
     pno = render_pno(
-        pno=pre_rendered_pno_2,
+        pno=pre_rendered_pno,
         html_for_pdf_template=html_for_pdf_template,
         email_body_template=email_body_template,
         sms_template=sms_template,
     )
 
     test_sms_filepath = (
-        TEST_DATA_LOCATION / "emails/prior_notifications/expected_sms_2.txt"
+        TEST_DATA_LOCATION
+        / f"emails/prior_notifications/expected_sms_{filename_suffix}.txt"
     )
     test_html_filepath = (
-        TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.html"
+        TEST_DATA_LOCATION
+        / f"emails/prior_notifications/expected_pno_{filename_suffix}.html"
     )
     test_email_body_file_path = (
-        TEST_DATA_LOCATION / "emails/prior_notifications/expected_email_body_2.html"
+        TEST_DATA_LOCATION
+        / f"emails/prior_notifications/expected_email_body_{filename_suffix}.html"
     )
 
     if should_generate_snapshots():
@@ -1983,18 +2097,38 @@ def test_render_pno_1_pdf(
     assert isinstance(pno.generation_datetime_utc, datetime)
 
 
+@pytest.mark.parametrize(
+    "pre_rendered_pno_fixture_name,expected_pdf_filename,expect_previous_notification_note",
+    [
+        ("pre_rendered_pno_2", "expected_pno_2.pdf", True),
+        (
+            "pre_rendered_pno_2_no_previous_notification_date",
+            "expected_pno_2_no_previous_notification_date.pdf",
+            False,
+        ),
+    ],
+)
 def test_render_pno_2_pdf(
-    html_for_pdf_template, pre_rendered_pno_2, email_body_template, sms_template
+    request,
+    html_for_pdf_template,
+    email_body_template,
+    sms_template,
+    pre_rendered_pno_fixture_name,
+    expected_pdf_filename,
+    expect_previous_notification_note,
 ):
+    pre_rendered_pno = request.getfixturevalue(pre_rendered_pno_fixture_name)
     pno = render_pno(
-        pno=pre_rendered_pno_2,
+        pno=pre_rendered_pno,
         html_for_pdf_template=html_for_pdf_template,
         email_body_template=email_body_template,
         sms_template=sms_template,
     )
     pdf = pypdf.PdfReader(io.BytesIO(pno.pdf_document))
 
-    test_filepath = TEST_DATA_LOCATION / "emails/prior_notifications/expected_pno_2.pdf"
+    test_filepath = (
+        TEST_DATA_LOCATION / f"emails/prior_notifications/{expected_pdf_filename}"
+    )
 
     if should_generate_snapshots():
         with open(test_filepath, "wb") as f:
@@ -2469,7 +2603,9 @@ def test_load_prior_notification_sent_messages(
 
     for col in approximate_datetime_columns:
         assert (
-            (final_sent_messages[col].dropna() - loaded_sent_messages[col].dropna()).abs()
+            (
+                final_sent_messages[col].dropna() - loaded_sent_messages[col].dropna()
+            ).abs()
             < timedelta(seconds=10)
         ).all()
 

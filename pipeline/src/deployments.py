@@ -336,10 +336,7 @@ flows_to_deploy = [
         flow=scrape_legipeche_flow,
         schedules=[Schedule(cron="15 5 * * 1,2,3,4,5")],
     ),
-    FlowAndSchedules(
-        flow=suspicions_of_under_declaration_alerts_flow,
-        schedules=[Schedule(cron="57 6 * * *")],
-    ),
+    FlowAndSchedules(flow=suspicions_of_under_declaration_alerts_flow),
     FlowAndSchedules(
         flow=trips_snapshot_flow,
         schedules=[Schedule(cron="37 4 * * *")],

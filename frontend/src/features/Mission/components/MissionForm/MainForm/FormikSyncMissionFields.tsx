@@ -1,3 +1,4 @@
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { logInDev } from '@utils/logInDev'
 import { diff } from 'deep-object-diff'
 import { useFormikContext } from 'formik'
@@ -5,7 +6,7 @@ import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 
 import { useListenToMissionEventUpdatesById } from '../hooks/useListenToMissionEventUpdatesById'
-import { MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '../sse'
+import { isMissionEventStale, MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM } from '../sse'
 
 import type { MissionMainFormValues } from '../types'
 
@@ -18,10 +19,17 @@ type FormikSyncMissionFormProps = Readonly<{
 export function FormikSyncMissionFields({ missionId }: FormikSyncMissionFormProps) {
   const { setFieldValue, values } = useFormikContext<MissionMainFormValues>()
   const missionEvent = useListenToMissionEventUpdatesById(missionId)
+  const lastSavedUpdatedAtUtc = useMainAppSelector(state => state.missionForm.lastSavedUpdatedAtUtc)
 
   useEffect(
     () => {
       if (!missionEvent) {
+        return
+      }
+
+      if (isMissionEventStale(missionEvent.updatedAtUtc, lastSavedUpdatedAtUtc)) {
+        logInDev(`SSE: skipping stale mission event (updatedAtUtc: ${missionEvent.updatedAtUtc}).`)
+
         return
       }
 

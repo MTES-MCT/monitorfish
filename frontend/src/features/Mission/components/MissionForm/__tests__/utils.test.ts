@@ -2,7 +2,12 @@ import { Mission } from '@features/Mission/mission.types'
 import { expect } from '@jest/globals'
 
 import { MissionAction } from '../../../missionAction.types'
-import { getMissionActionsToCreateUpdateOrDelete, getMissionDataFromMissionFormValues, hasGearMesh } from '../utils'
+import {
+  getMissionActionsToCreateUpdateOrDelete,
+  getMissionDataFromMissionFormValues,
+  getUpdatedMissionFromMissionMainFormValues,
+  hasGearMesh
+} from '../utils'
 
 import MissionActionType = MissionAction.MissionActionType
 import CompletionStatus = MissionAction.CompletionStatus
@@ -502,5 +507,28 @@ describe('features/Mission/components/MissionForm/utils', () => {
     expect(hasGearMesh('HAR', 'Engins divers')).toBe(false)
     expect(hasGearMesh('FCN', 'Engins divers')).toBe(true)
     expect(hasGearMesh('MDR', 'Engins divers')).toBe(true)
+  })
+})
+
+describe('features/Mission/components/MissionForm/utils.getUpdatedMissionFromMissionMainFormValues()', () => {
+  it('Should use the given mission id rather than the one held by the form values', () => {
+    // Given: the form values do not carry the id yet, because the creation answered after they were built
+    // (see https://github.com/MTES-MCT/monitorfish/issues/5368)
+    const mainFormValues = {
+      controlUnits: [],
+      endDateTimeUtc: '2026-09-02T06:00:00Z',
+      id: undefined,
+      isGeometryComputedFromControls: false,
+      isValid: true,
+      missionTypes: [MissionType.SEA],
+      openBy: 'CAR',
+      startDateTimeUtc: '2026-08-26T06:00:00Z'
+    }
+
+    // When
+    const updatedMission = getUpdatedMissionFromMissionMainFormValues(43969, mainFormValues)
+
+    // Then
+    expect(updatedMission.id).toBe(43969)
   })
 })

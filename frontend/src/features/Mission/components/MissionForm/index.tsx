@@ -26,7 +26,6 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Banner, Button, customDayjs, humanizePastDate, Icon, Level, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { logSoftError } from '@utils/logSoftError'
-import { omit } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { NoRsuiteOverrideWrapper } from 'ui/NoRsuiteOverrideWrapper'
@@ -34,7 +33,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { ActionForm } from './ActionForm'
 import { ActionList } from './ActionList'
-import { getMissionActionFormInitialValues } from './ActionList/utils'
+import { getDuplicatedMissionActionFormValues, getMissionActionFormInitialValues } from './ActionList/utils'
 import { AUTO_SAVE_ENABLED } from './constants'
 import { useListenToMissionEventUpdatesById } from './hooks/useListenToMissionEventUpdatesById'
 import { useUpdateFreezedActionFormValues } from './hooks/useUpdateFreezedActionFormValues'
@@ -87,6 +86,33 @@ export function MissionForm() {
 
   const [mainFormValues, setMainFormValues] = useState<MissionMainFormValues>(draft.mainFormValues)
   const [actionsFormValues, setActionsFormValues] = useState<MissionActionFormValues[]>(draft.actionsFormValues)
+
+  /**
+   * Always holds the values last received from the main form, which are newer than `mainFormValues`
+   * (only updated once a save resolves). `<MainForm />` is re-created whenever the mission id changes,
+   * so reinitializing it from the values of the save instead of these would drop everything typed
+   * while that save was in flight (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+   */
+  const latestMainFormValuesRef = useRef<MissionMainFormValues>(draft.mainFormValues)
+
+  /**
+   * Always holds the latest actions, unlike the state captured by an async callback closure.
+   * A debounced save resolving after its closure was created must never write back an outdated
+   * list (it would drop the ids just created) nor read an outdated action id from it
+   * (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+   */
+  const actionsFormValuesRef = useRef<MissionActionFormValues[]>(draft.actionsFormValues)
+  const updateActionsFormValues = useCallback(
+    (updater: (previousActionsFormValues: MissionActionFormValues[]) => MissionActionFormValues[]) => {
+      setActionsFormValues(previousActionsFormValues => {
+        const nextActionsFormValues = updater(previousActionsFormValues)
+        actionsFormValuesRef.current = nextActionsFormValues
+
+        return nextActionsFormValues
+      })
+    },
+    []
+  )
   const [editedActionIndex, setEditedActionIndex] = useState<number | undefined>(undefined)
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const isDraftCancellationConfirmationDialogOpen = useMainAppSelector(
@@ -189,19 +215,27 @@ export function MissionForm() {
         return
       }
 
-      const { id } = actionsFormValues.find((_, index) => index === editedActionIndex) ?? { id: undefined }
-      const nextActionFormValuesWithId = { ...nextActionFormValues, id }
+      // Read the identity from the ref: a previous save may have set the id after this callback's closure was created
+      const editedAction = actionsFormValuesRef.current[editedActionIndex]
+      const nextActionFormValuesWithId = {
+        ...nextActionFormValues,
+        draftKey: nextActionFormValues.draftKey ?? editedAction?.draftKey,
+        id: editedAction?.id
+      }
 
       const createdId = await dispatch(
         autoSaveMissionAction(nextActionFormValuesWithId, missionIdRef.current, isAutoSaveEnabled)
       )
-      const nextActionsFormValuesWithCreatedId = actionsFormValues.map((action, index) =>
-        index === editedActionIndex ? { ...nextActionFormValues, id: createdId } : action
+      updateActionsFormValues(previousActionsFormValues =>
+        previousActionsFormValues.map((action, index) =>
+          index === editedActionIndex
+            ? { ...nextActionFormValues, draftKey: nextActionFormValuesWithId.draftKey, id: createdId }
+            : action
+        )
       )
-      setActionsFormValues(nextActionsFormValuesWithCreatedId)
       updateReduxSliceDraft()
     },
-    [dispatch, updateReduxSliceDraft, editedActionIndex, actionsFormValues, isAutoSaveEnabled]
+    [dispatch, updateActionsFormValues, updateReduxSliceDraft, editedActionIndex, isAutoSaveEnabled]
   )
 
   const updateEditedActionFormValues = useDebouncedCallback(
@@ -209,28 +243,37 @@ export function MissionForm() {
     DEBOUNCE_DELAY
   )
 
+  /**
+   * Immediately run a pending debounced action save (and wait for it), so the caller can go on with
+   * an up-to-date, fully persisted list of actions.
+   */
+  const flushPendingActionSave = useCallback(async () => {
+    if (!updateEditedActionFormValues.isPending()) {
+      return
+    }
+
+    await updateEditedActionFormValues.flush()
+  }, [updateEditedActionFormValues])
+
   const removeAction = useCallback(
     async (actionIndex: number) => {
       /**
-       * If a debounce function is not yet executed, stop there to avoid race condition.
-       * /!\ This can leads to save the debounced action update to the wrong action index
+       * Flush any pending action save before going on, to avoid a race condition.
+       * /!\ Re-scheduling this callback instead would keep its (outdated) closure alive for as long
+       * as the user keeps typing, and eventually save outdated values or re-create an action.
        */
-      if (updateEditedActionFormValues.isPending()) {
-        setTimeout(() => removeAction(actionIndex), DEBOUNCE_DELAY)
-
-        return
-      }
+      await flushPendingActionSave()
 
       const nextActionsFormValues = await dispatch(
         deleteMissionAction(
-          actionsFormValues,
+          actionsFormValuesRef.current,
           actionIndex,
           isAutoSaveEnabled,
           mainFormValues.isGeometryComputedFromControls
         )
       )
 
-      setActionsFormValues(nextActionsFormValues)
+      updateActionsFormValues(() => nextActionsFormValues)
       updateReduxSliceDraft()
       if (editedActionIndex === actionIndex) {
         setEditedActionIndex(undefined)
@@ -238,10 +281,10 @@ export function MissionForm() {
     },
     [
       dispatch,
-      updateEditedActionFormValues,
+      flushPendingActionSave,
+      updateActionsFormValues,
       updateReduxSliceDraft,
       mainFormValues.isGeometryComputedFromControls,
-      actionsFormValues,
       editedActionIndex,
       isAutoSaveEnabled
     ]
@@ -249,15 +292,8 @@ export function MissionForm() {
 
   const addAction = useCallback(
     async (actionType: MissionAction.MissionActionType) => {
-      /**
-       * If a debounce function is not yet executed, stop there to avoid race condition.
-       * /!\ This can leads to save the debounced action update to the wrong action index
-       */
-      if (updateEditedActionFormValues.isPending()) {
-        setTimeout(() => addAction(actionType), DEBOUNCE_DELAY)
-
-        return
-      }
+      // Flush any pending action save before going on, to avoid a race condition
+      await flushPendingActionSave()
 
       const newActionFormValues = getMissionActionFormInitialValues(actionType)
       setEditedActionIndex(0)
@@ -266,65 +302,57 @@ export function MissionForm() {
         autoSaveMissionAction(newActionFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
 
-      const nextActionsWithIdFormValues = [{ ...newActionFormValues, id: createdId }, ...actionsFormValues]
-      setActionsFormValues(nextActionsWithIdFormValues)
+      updateActionsFormValues(previousActionsFormValues => [
+        { ...newActionFormValues, id: createdId },
+        ...previousActionsFormValues
+      ])
       updateReduxSliceDraft()
     },
-    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
+    [dispatch, flushPendingActionSave, updateActionsFormValues, updateReduxSliceDraft, isAutoSaveEnabled]
   )
 
   const duplicateAction = useCallback(
     async (actionIndex: number) => {
-      /**
-       * If a debounce function is not yet executed, stop there to avoid race condition.
-       * /!\ This can leads to save the debounced action update to the wrong action index
-       */
-      if (updateEditedActionFormValues.isPending()) {
-        setTimeout(() => duplicateAction(actionIndex), DEBOUNCE_DELAY)
+      // Flush any pending action save before going on, to avoid a race condition
+      await flushPendingActionSave()
 
+      const actionToDuplicate = actionsFormValuesRef.current[actionIndex]
+      if (!actionToDuplicate) {
         return
       }
 
-      const actionCopy: MissionActionFormValues = omit(actionsFormValues[actionIndex], ['id'])
+      const actionCopy = getDuplicatedMissionActionFormValues(actionToDuplicate)
       setEditedActionIndex(0)
 
       const createdId = await dispatch(autoSaveMissionAction(actionCopy, missionIdRef.current, isAutoSaveEnabled))
 
-      const nextActionsWithIdFormValues = [{ ...actionCopy, id: createdId }, ...actionsFormValues]
-      setActionsFormValues(nextActionsWithIdFormValues)
+      updateActionsFormValues(previousActionsFormValues => [
+        { ...actionCopy, id: createdId },
+        ...previousActionsFormValues
+      ])
       updateReduxSliceDraft()
     },
-    [dispatch, updateEditedActionFormValues, updateReduxSliceDraft, actionsFormValues, isAutoSaveEnabled]
+    [dispatch, flushPendingActionSave, updateActionsFormValues, updateReduxSliceDraft, isAutoSaveEnabled]
   )
 
   const updateEditedActionIndex = useCallback(
-    (nextActionIndex: number | undefined) => {
-      /**
-       * If a debounce function is not yet executed, stop there to avoid race condition.
-       * /!\ This can leads to save the debounced action update to the wrong action index
-       */
-      if (updateEditedActionFormValues.isPending()) {
-        setTimeout(() => updateEditedActionIndex(nextActionIndex), DEBOUNCE_DELAY)
-
-        return
-      }
+    async (nextActionIndex: number | undefined) => {
+      // Flush any pending action save before switching action, to avoid saving it to the wrong index
+      await flushPendingActionSave()
 
       setEditedActionIndex(nextActionIndex)
     },
-    [updateEditedActionFormValues]
+    [flushPendingActionSave]
   )
 
   const updateMainFormValuesCallback = useCallback(
     async (nextMissionMainFormValues: MissionMainFormValues) => {
       /**
-       * If an action debounce function is not yet executed, stop there to avoid race condition.
-       * /!\ This can leads to erase a changed action value
+       * Flush any pending action save before going on, to avoid a race condition.
+       * /!\ Re-scheduling this callback instead would keep its (outdated) closure alive for as long
+       * as the user keeps typing, and eventually overwrite the main form with outdated values.
        */
-      if (updateEditedActionFormValues.isPending()) {
-        setTimeout(() => updateMainFormValuesCallback(nextMissionMainFormValues), DEBOUNCE_DELAY)
-
-        return
-      }
+      await flushPendingActionSave()
 
       const haveMissionDatesChanged =
         mainFormValues.startDateTimeUtc !== nextMissionMainFormValues.startDateTimeUtc ||
@@ -337,7 +365,12 @@ export function MissionForm() {
         return
       }
 
-      setMainFormValues(savedMainFormValues)
+      setMainFormValues({
+        ...latestMainFormValuesRef.current,
+        createdAtUtc: savedMainFormValues.createdAtUtc,
+        id: savedMainFormValues.id,
+        updatedAtUtc: savedMainFormValues.updatedAtUtc
+      })
       missionIdRef.current = savedMainFormValues.id
       updateReduxSliceDraft()
 
@@ -351,7 +384,7 @@ export function MissionForm() {
         return
       }
 
-      const editedActionFormValues = actionsFormValues[editedActionIndex]
+      const editedActionFormValues = actionsFormValuesRef.current[editedActionIndex]
       if (!editedActionFormValues) {
         return
       }
@@ -360,7 +393,7 @@ export function MissionForm() {
       // draft) sees the updated dates instead of the debounced, still-stale ones.
       dispatch(
         missionFormActions.setDraft({
-          actionsFormValues: [...actionsFormValues],
+          actionsFormValues: [...actionsFormValuesRef.current],
           mainFormValues: { ...savedMainFormValues }
         })
       )
@@ -369,7 +402,7 @@ export function MissionForm() {
         autoSaveMissionAction(editedActionFormValues, missionIdRef.current, isAutoSaveEnabled)
       )
       if (savedActionId !== editedActionFormValues.id) {
-        setActionsFormValues(previousActionsFormValues =>
+        updateActionsFormValues(previousActionsFormValues =>
           previousActionsFormValues.map((action, index) =>
             index === editedActionIndex ? { ...editedActionFormValues, id: savedActionId } : action
           )
@@ -379,12 +412,12 @@ export function MissionForm() {
     },
     [
       dispatch,
-      updateEditedActionFormValues,
+      flushPendingActionSave,
+      updateActionsFormValues,
       updateReduxSliceDraft,
       mainFormValues,
       isAutoSaveEnabled,
-      editedActionIndex,
-      actionsFormValues
+      editedActionIndex
     ]
   )
 
@@ -497,7 +530,10 @@ export function MissionForm() {
                 key={missionIdRef.current}
                 initialValues={mainFormValues}
                 missionId={missionIdRef.current}
-                onChange={updateMainFormValues}
+                onChange={nextMainFormValues => {
+                  latestMainFormValuesRef.current = nextMainFormValues
+                  updateMainFormValues(nextMainFormValues)
+                }}
               />
               <ActionList
                 actionsFormValues={actionsFormValues}

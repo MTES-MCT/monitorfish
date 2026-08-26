@@ -1,8 +1,10 @@
 import { Flag } from '@features/commonComponents/Flag'
 import { getFlatInfractionFromThreatsHierarchy } from '@features/Mission/components/MissionForm/ActionForm/utils'
 import { E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { generateMissionActionDraftKey } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import dayjs from 'dayjs'
+import { omit } from 'lodash-es'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '../types'
@@ -78,6 +80,20 @@ export function getMissionActionInfractionsFromMissionActionFormValues(
     .filter(({ natinf }) => withPendingInfractions || Boolean(natinf))
 }
 
+/**
+ * Copy an action so it is saved as a new one: the backend `id` is dropped, and the copy gets its own
+ * draft key — reusing the original's key would make the auto-save update the original action instead
+ * of creating the duplicate (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+ */
+export function getDuplicatedMissionActionFormValues(
+  actionFormValues: MissionActionFormValues
+): MissionActionFormValues {
+  return {
+    ...omit(actionFormValues, ['id']),
+    draftKey: generateMissionActionDraftKey()
+  }
+}
+
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
   const actionDatetimeUtc = dayjs().startOf('minute').toISOString()
 
@@ -85,6 +101,7 @@ export function getMissionActionFormInitialValues(type: MissionAction.MissionAct
     actionDatetimeUtc,
     actionType: type,
     completion: CompletionStatus.TO_COMPLETE,
+    draftKey: generateMissionActionDraftKey(),
     isUnitBoarded: E_ISR_ENABLED && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
     isValid: false
   }

@@ -10,7 +10,19 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { logSoftError } from '@utils/logSoftError'
 
 import type { MissionMainFormValues, MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
+import type { Mission } from '@features/Mission/mission.types'
 import type { MainAppThunk } from '@store'
+
+/**
+ * Creation currently in flight, if any. Auto-save can fire a second save before the first `POST` has
+ * returned the mission id: without this lock, that second save would create a duplicate mission
+ * (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+ */
+let pendingMissionCreation: Promise<Mission.Mission> | undefined
+
+export function resetPendingMissionCreation() {
+  pendingMissionCreation = undefined
+}
 
 export const saveMission =
   (
@@ -23,11 +35,29 @@ export const saveMission =
 
     try {
       if (!missionId) {
-        const newMission = getMissionDataFromMissionFormValues(nextMainFormValues)
-        const createdMission = await dispatch(
-          monitorenvMissionApi.endpoints.createMission.initiate(newMission)
-        ).unwrap()
+        // A creation is already in flight: wait for it, then persist these values as an update of
+        // the created mission instead of creating a duplicate one
+        if (pendingMissionCreation) {
+          const createdMission = await pendingMissionCreation
 
+          return {
+            ...(await updateMission(createdMission.id)),
+            createdAtUtc: createdMission.createdAtUtc,
+            id: createdMission.id
+          }
+        }
+
+        const newMission = getMissionDataFromMissionFormValues(nextMainFormValues)
+        pendingMissionCreation = dispatch(monitorenvMissionApi.endpoints.createMission.initiate(newMission)).unwrap()
+
+        let createdMission: Mission.Mission
+        try {
+          createdMission = await pendingMissionCreation
+        } finally {
+          pendingMissionCreation = undefined
+        }
+
+        dispatch(missionFormActions.setLastSavedUpdatedAtUtc(createdMission.updatedAtUtc))
         initIsDraftDirtyAndListenToEvents(nextMainFormValues, actionsFormValuesFromDraft)
 
         // Wait for the mission to be updated in the form before displaying the banner
@@ -43,15 +73,7 @@ export const saveMission =
         }
       }
 
-      const nextMission = getUpdatedMissionFromMissionMainFormValues(missionId, nextMainFormValues)
-      const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
-
-      initIsDraftDirtyAndListenToEvents(nextMainFormValues, actionsFormValuesFromDraft)
-
-      return {
-        ...nextMainFormValues,
-        updatedAtUtc: updatedMission.updatedAtUtc
-      }
+      return await updateMission(missionId)
     } catch (err) {
       logSoftError({
         callback: () =>
@@ -69,6 +91,19 @@ export const saveMission =
       })
 
       return nextMainFormValues
+    }
+
+    async function updateMission(missionIdToUpdate: number): Promise<MissionMainFormValues> {
+      const nextMission = getUpdatedMissionFromMissionMainFormValues(missionIdToUpdate, nextMainFormValues)
+      const updatedMission = await dispatch(monitorenvMissionApi.endpoints.updateMission.initiate(nextMission)).unwrap()
+
+      dispatch(missionFormActions.setLastSavedUpdatedAtUtc(updatedMission.updatedAtUtc))
+      initIsDraftDirtyAndListenToEvents(nextMainFormValues, actionsFormValuesFromDraft)
+
+      return {
+        ...nextMainFormValues,
+        updatedAtUtc: updatedMission.updatedAtUtc
+      }
     }
 
     function initIsDraftDirtyAndListenToEvents(

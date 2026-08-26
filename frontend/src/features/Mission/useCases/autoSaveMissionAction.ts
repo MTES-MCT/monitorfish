@@ -12,6 +12,18 @@ import type { MainAppThunk } from '@store'
 
 import MissionActionType = MissionAction.MissionActionType
 
+/**
+ * Ids (or in-flight creations) of the mission actions created from this session, keyed by their
+ * client-side `draftKey`. Auto-save can run with form values that do not carry the created id yet
+ * (in-flight creation, stale closure): without this registry, such a save would `POST` the same
+ * draft a second time and duplicate the control (see https://github.com/MTES-MCT/monitorfish/issues/5368).
+ */
+const missionActionCreationsByDraftKey = new Map<string, number | Promise<number>>()
+
+export function resetMissionActionCreations() {
+  missionActionCreationsByDraftKey.clear()
+}
+
 export const autoSaveMissionAction =
   (
     actionFormValues: MissionActionFormValues,
@@ -33,11 +45,44 @@ export const autoSaveMissionAction =
       }
 
       const missionActionData = getMissionActionDataFromFormValues(actionFormValues, missionId)
+      const { draftKey } = actionFormValues
 
-      if (missionActionData.id === undefined) {
-        const { id } = await dispatch(
-          missionActionApi.endpoints.createMissionAction.initiate(missionActionData)
-        ).unwrap()
+      let missionActionId = missionActionData.id
+      if (missionActionId === undefined && draftKey) {
+        // The form values may not carry the created id yet (in-flight creation or stale closure):
+        // recover it from the registry so this save becomes an update instead of a duplicate creation
+        const knownCreation = missionActionCreationsByDraftKey.get(draftKey)
+        if (knownCreation !== undefined) {
+          try {
+            missionActionId = typeof knownCreation === 'number' ? knownCreation : await knownCreation
+          } catch (_pendingCreationError) {
+            // The pending creation failed: fall back to creating the action
+            missionActionCreationsByDraftKey.delete(draftKey)
+          }
+        }
+      }
+
+      if (missionActionId === undefined) {
+        const creation = dispatch(missionActionApi.endpoints.createMissionAction.initiate(missionActionData))
+          .unwrap()
+          .then(({ id }) => id)
+        if (draftKey) {
+          missionActionCreationsByDraftKey.set(draftKey, creation)
+        }
+
+        let id: number
+        try {
+          id = await creation
+        } catch (creationError) {
+          if (draftKey) {
+            missionActionCreationsByDraftKey.delete(draftKey)
+          }
+
+          throw creationError
+        }
+        if (draftKey) {
+          missionActionCreationsByDraftKey.set(draftKey, id)
+        }
 
         dispatch(missionFormActions.setIsDraftDirty(false))
 
@@ -47,7 +92,7 @@ export const autoSaveMissionAction =
       await dispatch(
         missionActionApi.endpoints.updateMissionAction.initiate({
           ...missionActionData,
-          id: missionActionData.id,
+          id: missionActionId,
 
           /**
            * The last haul control is only required for controls at sea or land
@@ -68,7 +113,7 @@ export const autoSaveMissionAction =
 
       dispatch(missionFormActions.setIsDraftDirty(false))
 
-      return missionActionData.id
+      return missionActionId
     } catch (err) {
       logSoftError({
         callback: () =>

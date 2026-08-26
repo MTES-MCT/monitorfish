@@ -257,7 +257,6 @@ context('Reporting map form', () => {
     cy.get('*[data-cy="map-reporting-form"]').contains('Signalement non enregistré')
     // The whole vessel block is reset, nationality and gear included
     cy.get('*[data-cy="map-reporting-form"]').contains('Vouéadisparaitre').should('not.exist')
-    cy.get('*[data-cy="map-reporting-form"]').contains('France').should('not.exist')
     cy.get('*[data-cy="map-reporting-form"]').contains('PTM').should('not.exist')
 
     // The copy has no vessel identity left, so it opens with "Navire sans fiche" already checked

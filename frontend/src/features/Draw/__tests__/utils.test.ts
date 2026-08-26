@@ -1,48 +1,76 @@
+import { CoordinatesFormat } from '@features/Map/constants'
 import { expect } from '@jest/globals'
 
-import { DMS_ROUNDTRIP_TOLERANCE, isEchoFromMapClick, roundCoordinates, swapToLatLon } from '../utils'
+import { isEchoFromMapClick, roundCoordinates, swapToLatLon } from '../utils'
 
-const POINT_GEOMETRY = { coordinates: [-5.2, 47.4], type: 'Point' as const }
+const { DECIMAL_DEGREES, DEGREES_MINUTES_DECIMALS, DEGREES_MINUTES_SECONDS } = CoordinatesFormat
+
+// 46° 20′ 40″ N 007° 47′ 37″ W, as the DMS CoordinatesInput emits it (decimal degrees, 6 decimals)
+const POINT_GEOMETRY = { coordinates: [-7.793611, 46.344444], type: 'Point' as const }
 
 describe('Draw/isEchoFromMapClick()', () => {
   it('returns false when geometry is undefined', () => {
-    expect(isEchoFromMapClick(undefined, 47.4, -5.2)).toBe(false)
+    expect(isEchoFromMapClick(undefined, 47.4, -5.2, DEGREES_MINUTES_SECONDS)).toBe(false)
   })
 
   it('returns false when geometry is null', () => {
-    expect(isEchoFromMapClick(null, 47.4, -5.2)).toBe(false)
+    expect(isEchoFromMapClick(null, 47.4, -5.2, DEGREES_MINUTES_SECONDS)).toBe(false)
   })
 
   it('returns false when geometry type is not Point', () => {
     const multiPolygon = { coordinates: [], type: 'MultiPolygon' as const }
 
-    expect(isEchoFromMapClick(multiPolygon, 47.4, -5.2)).toBe(false)
+    expect(isEchoFromMapClick(multiPolygon, 47.4, -5.2, DEGREES_MINUTES_SECONDS)).toBe(false)
   })
 
   it('returns true when coordinates match exactly', () => {
-    expect(isEchoFromMapClick(POINT_GEOMETRY, 47.4, -5.2)).toBe(true)
-  })
-
-  it('returns true when coordinates differ by less than DMS_ROUNDTRIP_TOLERANCE', () => {
-    const almostSame = DMS_ROUNDTRIP_TOLERANCE * 0.99
-
-    expect(isEchoFromMapClick(POINT_GEOMETRY, 47.4 + almostSame, -5.2 + almostSame)).toBe(true)
-  })
-
-  it('returns false when latitude differs by more than DMS_ROUNDTRIP_TOLERANCE', () => {
-    const over = DMS_ROUNDTRIP_TOLERANCE * 1.01
-
-    expect(isEchoFromMapClick(POINT_GEOMETRY, 47.4 + over, -5.2)).toBe(false)
-  })
-
-  it('returns false when longitude differs by more than DMS_ROUNDTRIP_TOLERANCE', () => {
-    const over = DMS_ROUNDTRIP_TOLERANCE * 1.01
-
-    expect(isEchoFromMapClick(POINT_GEOMETRY, 47.4, -5.2 + over)).toBe(false)
+    expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344444, -7.793611, DEGREES_MINUTES_SECONDS)).toBe(true)
   })
 
   it('returns false for clearly different coordinates', () => {
-    expect(isEchoFromMapClick(POINT_GEOMETRY, 48.85, 2.35)).toBe(false)
+    expect(isEchoFromMapClick(POINT_GEOMETRY, 48.85, 2.35, DEGREES_MINUTES_SECONDS)).toBe(false)
+  })
+
+  describe('in DMS', () => {
+    // A map click lands on a full-precision point that the input displays rounded to whole seconds,
+    // so the echo comes back off by up to half a second.
+    it('returns true for the second-rounded echo of a map click', () => {
+      const clicked = { coordinates: [-7.7936543, 46.3444321], type: 'Point' as const }
+
+      expect(isEchoFromMapClick(clicked, 46.344444, -7.793611, DEGREES_MINUTES_SECONDS)).toBe(true)
+    })
+
+    it('returns false when the user bumps two seconds (40″ → 42″)', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.345, -7.793611, DEGREES_MINUTES_SECONDS)).toBe(false)
+    })
+
+    it('returns false when the user bumps the smallest typable step (40″ → 41″)', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344722, -7.793611, DEGREES_MINUTES_SECONDS)).toBe(false)
+    })
+
+    it('returns false when only the longitude changes (37″ → 38″)', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344444, -7.793889, DEGREES_MINUTES_SECONDS)).toBe(false)
+    })
+  })
+
+  describe('in DMD', () => {
+    it('returns true below a thousandth of a minute, which the input cannot display', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344449, -7.793611, DEGREES_MINUTES_DECIMALS)).toBe(true)
+    })
+
+    it('returns false when the user bumps a thousandth of a minute', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344461, -7.793611, DEGREES_MINUTES_DECIMALS)).toBe(false)
+    })
+  })
+
+  describe('in DD', () => {
+    it('returns false when the user edits the fourth decimal place', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.345244, -7.793611, DECIMAL_DEGREES)).toBe(false)
+    })
+
+    it('returns false when the user edits the sixth decimal place', () => {
+      expect(isEchoFromMapClick(POINT_GEOMETRY, 46.344445, -7.793611, DECIMAL_DEGREES)).toBe(false)
+    })
   })
 })
 

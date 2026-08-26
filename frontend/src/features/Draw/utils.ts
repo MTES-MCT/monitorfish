@@ -1,23 +1,36 @@
-import { OpenLayersGeometryType } from '@features/Map/constants'
+import { CoordinatesFormat, OpenLayersGeometryType } from '@features/Map/constants'
 
 import type { GeoJsonObject, Point as GeoJSONPoint } from 'geojson'
 
-// Tolerance in decimal degrees for detecting a programmatic IMask echo vs. genuine user input.
-// DMS seconds are integer-rounded, so round-trip error can reach up to 0.5/3600 ≈ 0.000139°.
-export const DMS_ROUNDTRIP_TOLERANCE = 0.001
+/**
+ * Number of steps per degree the CoordinatesInput display snaps to, per format: whole seconds in
+ * DMS, thousandths of a minute in DMD, 6 decimal places in DD.
+ */
+const DISPLAY_STEPS_PER_DEGREE: Record<CoordinatesFormat, number> = {
+  [CoordinatesFormat.DECIMAL_DEGREES]: 1e6,
+  [CoordinatesFormat.DEGREES_MINUTES_DECIMALS]: 60 * 1e3,
+  [CoordinatesFormat.DEGREES_MINUTES_SECONDS]: 3600
+}
+
+/** Snaps a coordinate in decimal degrees to the grid the given format displays it on. */
+function toDisplayStep(degrees: number, coordinatesFormat: CoordinatesFormat): number {
+  return Math.round(degrees * DISPLAY_STEPS_PER_DEGREE[coordinatesFormat])
+}
 
 /**
  * Detects whether coordinates received by a CoordinatesInput onChange handler are an IMask echo
  * of a programmatic update (e.g. a map click) rather than genuine manual user input.
  *
  * When drawedGeometry changes, CoordinatesInput's defaultValue updates, causing IMask to fire a
- * `complete` event that calls the onChange handler with the same coordinates. Comparing against
- * the current geometry lets callers skip redundant fitToExtent dispatches in that case.
+ * `complete` event that calls the onChange handler with the displayed coordinates. Those are the
+ * geometry snapped to the format's display grid, so comparing both sides on that grid tells an
+ * echo apart from an edit — down to the smallest change the user can actually type.
  */
 export function isEchoFromMapClick(
   geometry: GeoJsonObject | null | undefined,
   latitude: number,
-  longitude: number
+  longitude: number,
+  coordinatesFormat: CoordinatesFormat
 ): boolean {
   if (geometry?.type !== OpenLayersGeometryType.POINT) {
     return false
@@ -27,8 +40,8 @@ export function isEchoFromMapClick(
   const [geometryLon, geometryLat] = (geometry as GeoJSONPoint).coordinates as [number, number]
 
   return (
-    Math.abs(geometryLat - latitude) < DMS_ROUNDTRIP_TOLERANCE &&
-    Math.abs(geometryLon - longitude) < DMS_ROUNDTRIP_TOLERANCE
+    toDisplayStep(geometryLat, coordinatesFormat) === toDisplayStep(latitude, coordinatesFormat) &&
+    toDisplayStep(geometryLon, coordinatesFormat) === toDisplayStep(longitude, coordinatesFormat)
   )
 }
 

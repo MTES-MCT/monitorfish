@@ -12,7 +12,7 @@
 
         <header>
         <h1>
-            <p>PRÉAVIS - {{ purpose }}{{ " (préavis zéro)" if is_zero else "" }}</p>
+            <p>PRÉAVIS{{ " (correction)" if is_correction else "" }} - {{ purpose }}{{ " (préavis zéro)" if is_zero else "" }}</p>
             <p>
                 {{ vessel_name }}
                 <img id="state_flag_icon", src="{{ state_flag_icon_src }}" alt="Pavillon">
@@ -30,9 +30,9 @@
         </header>
 
         <main>
-            {% if is_correction %}
+            {% if previous_notification_date_utc %}
             <p id="correction">
-                Ce préavis remplace celui diffusé précédemment{{ " le {}".format(previous_notification_date_utc) if previous_notification_date_utc else "" }}
+                Ce préavis remplace celui diffusé précédemment le {{ previous_notification_date_utc }}.
             </p>
             {% endif %}
             <section>

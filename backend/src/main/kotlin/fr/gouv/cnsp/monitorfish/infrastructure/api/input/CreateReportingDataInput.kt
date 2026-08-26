@@ -46,15 +46,12 @@ class CreateReportingDataInput(
     fun toReporting(createdBy: String): Reporting {
         val infractions =
             threatHierarchies.map { threatHierarchy ->
+                val leaf = threatHierarchy.toLeaf()
+
                 InfractionSuspicionThreat(
-                    natinfCode =
-                        threatHierarchy.children
-                            .single()
-                            .children
-                            .single()
-                            .value,
-                    threat = threatHierarchy.value,
-                    threatCharacterization = threatHierarchy.children.single().value,
+                    natinfCode = leaf.natinfCode,
+                    threat = leaf.threat,
+                    threatCharacterization = leaf.threatCharacterization,
                 )
             }
 

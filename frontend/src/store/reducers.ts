@@ -24,6 +24,7 @@ import { regulationReducer, type RegulationState } from '@features/Regulation/sl
 import { reportingTableFiltersReducer } from '@features/Reporting/components/ReportingTable/Filters/slice'
 import { reportingReducer, type ReportingState } from '@features/Reporting/slice'
 import { sideWindowReducer } from '@features/SideWindow/slice'
+import { startupNotificationReducer, type StartupNotificationState } from '@features/StartupNotification/slice'
 import { stationReducer } from '@features/Station/slice'
 import { vesselListReducer } from '@features/Vessel/components/VesselList/slice'
 import { controlReducer } from '@features/Vessel/components/VesselSidebar/control.slice'
@@ -159,6 +160,14 @@ export const mainReducer = {
   ),
   reportingTableFilters: reportingTableFiltersReducer,
   sideWindow: sideWindowReducer,
+  startupNotification: persistReducerTyped(
+    {
+      ...getCommonPersistReducerConfig<StartupNotificationState>('mainPersistorStartupNotification', [
+        'isSurveyModalDisplayed'
+      ])
+    },
+    startupNotificationReducer
+  ),
   station: stationReducer,
   vessel: persistReducerTyped(
     {

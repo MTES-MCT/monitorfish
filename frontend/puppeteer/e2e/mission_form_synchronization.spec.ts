@@ -18,6 +18,12 @@ const URL = `http://${WEBAPP_HOST}:${WEBAPP_PORT}/side_window`
 let pageA: Page
 let pageB: Page
 
+/**
+ * A form update reaches the other window once the auto-save debounce has elapsed, the save has
+ * answered and the SSE event has been applied: comfortably longer than the debounce itself.
+ */
+const SAVE_AND_SYNC_DELAY = 3000
+
 describe('Mission form synchronization', () => {
   beforeEach(async () => {
     console.log('[beforeEach] Getting first tab for browser 0')
@@ -87,7 +93,7 @@ describe('Mission form synchronization', () => {
       await controlUnitContact.type('A new tel. number', { delay: 50 })
       // Wait for the update to be sent
       console.log('[test] Waiting 1s for update to propagate')
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
       // Should send the update to the second page
       const contactValueB = await getInputContent(pageB, '[name="mission_control_unit_contact_0"]')
       console.log(`[test] pageB contact value: "${contactValueB}" (expected: "A new tel. number")`)
@@ -96,7 +102,7 @@ describe('Mission form synchronization', () => {
       console.log('[test] Erasing contact value back to "contact"')
       await controlUnitContact.click({ clickCount: 3, delay: 50 })
       await controlUnitContact.type('contact', { delay: 50 })
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
 
       /**
        * User B modify "Observations CNSP"
@@ -117,7 +123,7 @@ describe('Mission form synchronization', () => {
       await observationsCnsp.type("A new observation, as I'm not sure of the purpose of this mission.", { delay: 25 })
       // Wait for the update to be sent
       console.log('[test] Waiting 1s for update to propagate')
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
       // Should send the update to the second page
       const cnspValueA = await getInputContent(pageA, '[name="observationsCnsp"]')
       console.log(`[test] pageA observationsCnsp value: "${cnspValueA}"`)
@@ -126,7 +132,7 @@ describe('Mission form synchronization', () => {
       console.log('[test] Erasing observationsCnsp back to "Aucune"')
       await observationsCnsp.click({ clickCount: 3, delay: 50 })
       await observationsCnsp.type('Aucune', { delay: 50 })
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
 
       /**
        * User A modify "Observations CACEM"
@@ -147,7 +153,7 @@ describe('Mission form synchronization', () => {
       await observationsCacem.type('A new observation for this mission.', { delay: 25 })
       // Wait for the update to be sent
       console.log('[test] Waiting 1s for update to propagate')
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
       // Should send the update to the second page
       const cacemValueB = await getInputContent(pageB, '[name="observationsCacem"]')
       console.log(`[test] pageB observationsCacem value: "${cacemValueB}"`)
@@ -156,7 +162,7 @@ describe('Mission form synchronization', () => {
       console.log('[test] Erasing observationsCacem back to "Aucune"')
       await observationsCacem.click({ clickCount: 3 })
       await observationsCacem.type('Aucune', { delay: 50 })
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
 
       /**
        * User B modify "Open By"
@@ -177,7 +183,7 @@ describe('Mission form synchronization', () => {
       await openBy.type('LTH', { delay: 50 })
       // Wait for the update to be sent
       console.log('[test] Waiting 1s for update to propagate')
-      await wait(1000)
+      await wait(SAVE_AND_SYNC_DELAY)
       // Should send the update to the second page
       const openByValueA = await getInputContent(pageA, '[name="openBy"]')
       console.log(`[test] pageA openBy value: "${openByValueA}" (expected: "LTH")`)

@@ -1,52 +1,54 @@
 type Persist<Payload, Result> = (payload: Payload) => Promise<Result>
 
-type QueuedSave<Payload, Result> = {
+type RequestedSave<Payload, Result> = {
   payload: Payload
   persist: Persist<Payload, Result>
 }
 
 /**
- * Runs a single save per key at a time. The saves asked for while one is running are superseded by
- * the next one, since only the latest payload is worth persisting: this caps the request rate at one
- * round-trip per key, whatever the typing rhythm, and keeps two saves of a same entity from overlapping.
+ * Runs a single save per key at a time. A save requested while one is running supersedes the one
+ * waiting before it, since only the latest payload is worth persisting: the request rate is capped
+ * at one round-trip per key, whatever the typing rhythm.
  */
 export function createLatestOnlySaver<Payload, Result>() {
-  const runningByKey = new Map<string, Promise<Result>>()
-  const queuedByKey = new Map<string, QueuedSave<Payload, Result>>()
+  const runningSaveByKey = new Map<string, Promise<Result>>()
+  const latestSaveByKey = new Map<string, RequestedSave<Payload, Result>>()
 
-  async function runQueuedSaves(key: string): Promise<Result> {
-    let result: Result | undefined
+  /** Claiming the save before awaiting it leaves the slot free for the ones requested meanwhile. */
+  function claimLatestSave(key: string): RequestedSave<Payload, Result> | undefined {
+    const latestSave = latestSaveByKey.get(key)
+    latestSaveByKey.delete(key)
 
-    let queued = queuedByKey.get(key)
-    while (queued) {
-      queuedByKey.delete(key)
-      // The saves of a same entity must not overlap, hence the sequential loop
-      // eslint-disable-next-line no-await-in-loop
-      result = await queued.persist(queued.payload)
-      queued = queuedByKey.get(key)
-    }
+    return latestSave
+  }
 
-    return result as Result
+  async function saveUntilCaughtUp(key: string, requestedSave: RequestedSave<Payload, Result>): Promise<Result> {
+    const result = await requestedSave.persist(requestedSave.payload)
+    const latestSave = claimLatestSave(key)
+
+    return latestSave ? saveUntilCaughtUp(key, latestSave) : result
   }
 
   return {
     reset() {
-      runningByKey.clear()
-      queuedByKey.clear()
+      runningSaveByKey.clear()
+      latestSaveByKey.clear()
     },
 
     save(key: string, payload: Payload, persist: Persist<Payload, Result>): Promise<Result> {
-      queuedByKey.set(key, { payload, persist })
+      const requestedSave = { payload, persist }
 
-      const running = runningByKey.get(key)
-      if (running) {
-        return running
+      const runningSave = runningSaveByKey.get(key)
+      if (runningSave) {
+        latestSaveByKey.set(key, requestedSave)
+
+        return runningSave
       }
 
-      const started = runQueuedSaves(key).finally(() => runningByKey.delete(key))
-      runningByKey.set(key, started)
+      const startedSave = saveUntilCaughtUp(key, requestedSave).finally(() => runningSaveByKey.delete(key))
+      runningSaveByKey.set(key, startedSave)
 
-      return started
+      return startedSave
     }
   }
 }

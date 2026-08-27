@@ -1,7 +1,7 @@
 import { Mission } from '@features/Mission/mission.types'
 import { SideWindowMenuLabel } from '@features/SideWindow/constants'
 
-import { openSideWindowNewMission } from './utils'
+import { getMissionSseSource, openSideWindowNewMission } from './utils'
 import { SeafrontGroup } from '../../../../src/constants/seafront'
 import { FAKE_MISSION_WITH_EXTERNAL_ACTIONS, FAKE_MISSION_WITHOUT_EXTERNAL_ACTIONS } from '../../constants'
 import { customDayjs } from '../../utils/customDayjs'
@@ -286,6 +286,9 @@ context('Side Window > Mission Form > Main Form', () => {
     editSideWindowMissionListMissionWithId(2, SeafrontGroup.MEMN)
     const endDate = customDayjs().utc().add(7, 'day')
     cy.fill('Fin de mission', getUtcDateInMultipleFormats(endDate.toISOString()).utcDateTupleWithTime)
+    // The mission had ended, so auto-save only turns back on once this new end date has reached the
+    // component state: without this pause both edits share one debounce and nothing is ever saved
+    cy.wait(1200)
 
     cy.intercept('POST', '/api/v1/missions/2', {
       body: {
@@ -343,7 +346,8 @@ context('Side Window > Mission Form > Main Form', () => {
     // We remove a required field
     cy.fill('Unité 1', '')
 
-    cy.wait(500)
+    // Longer than the auto-save debounce: the draft only turns dirty once the debounced save has run
+    cy.wait(1200)
 
     cy.clickButton(SideWindowMenuLabel.MISSION_LIST)
 
@@ -523,10 +527,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local : //localhost:8081/api/v1/missions/sse
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
+        getMissionSseSource(mockEventSources).emitOpen()
+        getMissionSseSource(mockEventSources).emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({
@@ -575,7 +577,8 @@ context('Side Window > Mission Form > Main Form', () => {
           })
         )
       })
-    cy.wait(500)
+    // Longer than the auto-save debounce: the debounced save must have run before the next assertions
+    cy.wait(1200)
 
     cy.clickButton('Supprimer l’action')
     cy.clickButton('Confirmer la suppression')
@@ -588,6 +591,9 @@ context('Side Window > Mission Form > Main Form', () => {
     // We modify the comment
     cy.wait(250)
     cy.fill('CNSP : orientations, observations', '')
+    // The mission had ended, so auto-save only turns back on once the end date received over SSE has
+    // reached the component state, which takes one debounced save
+    cy.wait(1200)
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
 
     cy.waitForLastRequest(
@@ -644,10 +650,8 @@ context('Side Window > Mission Form > Main Form', () => {
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse'
-        // URL en local :  //localhost:8081/api/v1/missions/sse
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
+        getMissionSseSource(mockEventSources).emitOpen()
+        getMissionSseSource(mockEventSources).emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({
@@ -696,7 +700,8 @@ context('Side Window > Mission Form > Main Form', () => {
           })
         )
       })
-    cy.wait(500)
+    // Longer than the auto-save debounce: the debounced save must have run before the next assertions
+    cy.wait(1200)
 
     cy.clickButton('Supprimer l’action')
     cy.clickButton('Confirmer la suppression')
@@ -709,15 +714,16 @@ context('Side Window > Mission Form > Main Form', () => {
     // We modify the comment
     cy.wait(250)
     cy.fill('CNSP : orientations, observations', '')
+    // The mission had ended, so auto-save only turns back on once the end date received over SSE has
+    // reached the component state, which takes one debounced save
+    cy.wait(1200)
     cy.fill('CNSP : orientations, observations', 'Une autre note.')
 
     cy.window()
       .its('mockEventSources' as any)
       .then(mockEventSources => {
-        // URL sur la CI : http://0.0.0.0:8081/api/v1/missions/sse
-        // URL en local : //localhost:8081/api/v1/missions/sse
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emitOpen()
-        mockEventSources['http://0.0.0.0:8081/api/v1/missions/sse'].emit(
+        getMissionSseSource(mockEventSources).emitOpen()
+        getMissionSseSource(mockEventSources).emit(
           'MISSION_UPDATE',
           new MessageEvent('MISSION_UPDATE', {
             data: JSON.stringify({

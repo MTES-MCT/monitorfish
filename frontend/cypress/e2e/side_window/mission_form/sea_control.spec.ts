@@ -917,7 +917,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.wait(500)
 
     cy.fill('Saisi par', 'Marlin')
-    cy.wait(500)
+    // The action becomes valid here: pause so it is created before the control unit changes,
+    // otherwise the whole form is auto-saved as a single creation and never updated
+    cy.wait(1200)
 
     // Remove the PAM control unit
     cy.fill('Administration 1', undefined)

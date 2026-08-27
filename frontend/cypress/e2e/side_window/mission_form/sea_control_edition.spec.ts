@@ -306,8 +306,9 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       // Saisi par
       cy.fill('Saisi par', 'Marlin')
 
-      // We need to wait for some time because there is a throttle on the form
-      cy.wait(500)
+      // We need to wait for some time because there is a throttle on the form, and the "Enregistrer"
+      // button stays disabled until the debounced form values have reached the component state
+      cy.wait(1200)
       cy.clickButton('Enregistrer')
 
       // -------------------------------------------------------------------------

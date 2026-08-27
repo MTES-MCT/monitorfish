@@ -81,6 +81,7 @@ export function MissionForm() {
     duplicateAction,
     editedActionIndex,
     isAutoSaveEnabled,
+    mainFormInitialValues,
     mainFormValues,
     missionId,
     removeAction,
@@ -231,7 +232,12 @@ export function MissionForm() {
         <Body>
           <FrontendErrorBoundary>
             <>
-              <MainForm key={missionId} initialValues={mainFormValues} missionId={missionId} onChange={saveMainForm} />
+              <MainForm
+                key={missionId}
+                initialValues={mainFormInitialValues}
+                missionId={missionId}
+                onChange={saveMainForm}
+              />
               <ActionList
                 actionsFormValues={actionsFormValues}
                 currentIndex={editedActionIndex}

@@ -57,12 +57,10 @@ export function useMissionFormAutoSave(draft: MissionWithActionsDraft, missionId
 
   const updateActionsFormValues = useCallback(
     (updater: (previousActionsFormValues: MissionActionFormValues[]) => MissionActionFormValues[]) => {
-      setActionsFormValues(previousActionsFormValues => {
-        const nextActionsFormValues = updater(previousActionsFormValues)
-        actionsFormValuesRef.current = nextActionsFormValues
+      const nextActionsFormValues = updater(actionsFormValuesRef.current)
+      actionsFormValuesRef.current = nextActionsFormValues
 
-        return nextActionsFormValues
-      })
+      setActionsFormValues(nextActionsFormValues)
     },
     []
   )
@@ -246,13 +244,23 @@ export function useMissionFormAutoSave(draft: MissionWithActionsDraft, missionId
         return
       }
 
+      /**
+       * A mission that has been created never becomes unsaved again. `autoSaveMission()` hands back
+       * the form values untouched when it does not save (invalid form, auto-save off), and those
+       * never carry the id: taking it as is would lose the mission, and with it the ability to save
+       * any of its actions.
+       */
+      const savedMissionId = savedMainFormValues.id ?? missionIdRef.current
+
+      // Holds what was saved, not what has been typed since: `autoSaveMission()` compares the next
+      // values against it, and would take an edit made during this save for an already saved one.
       setMainFormValues({
-        ...latestMainFormValuesRef.current,
-        createdAtUtc: savedMainFormValues.createdAtUtc,
-        id: savedMainFormValues.id,
-        updatedAtUtc: savedMainFormValues.updatedAtUtc
+        ...savedMainFormValues,
+        createdAtUtc: savedMainFormValues.createdAtUtc ?? mainFormValues.createdAtUtc,
+        id: savedMissionId,
+        updatedAtUtc: savedMainFormValues.updatedAtUtc ?? mainFormValues.updatedAtUtc
       })
-      missionIdRef.current = savedMainFormValues.id
+      missionIdRef.current = savedMissionId
       updateReduxSliceDraft()
 
       if (haveMissionDatesChanged) {
@@ -281,13 +289,16 @@ export function useMissionFormAutoSave(draft: MissionWithActionsDraft, missionId
 
   /** /!\ Only used when `isAutoSaveEnabled` is false */
   const saveWholeMission = useCallback(async () => {
+    // Saving on demand must not drop the edit the user made just before asking for it
+    await flushPendingActionSave()
+
     const savedMission = await dispatch(
       saveMissionAndMissionActionsByDiff(mainFormValues, actionsFormValuesRef.current, missionIdRef.current)
     )
 
     setMainFormValues(savedMission)
     missionIdRef.current = savedMission.id
-  }, [dispatch, mainFormValues])
+  }, [dispatch, flushPendingActionSave, mainFormValues])
 
   useEffect(() => {
     if (!missionEvent) {
@@ -306,6 +317,16 @@ export function useMissionFormAutoSave(draft: MissionWithActionsDraft, missionId
     duplicateAction,
     editedActionIndex,
     isAutoSaveEnabled,
+    /**
+     * `<MainForm />` is re-created whenever the mission id changes: seeding it with the values of
+     * the save that just answered would drop everything typed while it was running.
+     */
+    mainFormInitialValues: {
+      ...latestMainFormValuesRef.current,
+      createdAtUtc: mainFormValues.createdAtUtc,
+      id: missionIdRef.current,
+      updatedAtUtc: mainFormValues.updatedAtUtc
+    },
     mainFormValues,
     missionId: missionIdRef.current,
     removeAction,

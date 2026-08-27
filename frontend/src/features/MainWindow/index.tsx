@@ -3,11 +3,14 @@ import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
+import { SurveyModal } from '@features/StartupNotification/components/SurveyModal'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { trackEvent } from '@hooks/useTracking'
 import { getEnvironmentBorderStyle } from '@utils/getEnvironmentBorderStyle'
 import { getEnvironmentData } from '@utils/getEnvironmentData'
+import { isCypress } from '@utils/isCypress'
+import { isPuppeteer } from '@utils/isPuppeteer'
 import { useCallback, useEffect } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -33,6 +36,7 @@ export function MainWindow() {
   const isDrawLayerModalDisplayed = useMainAppSelector(state => state.displayedComponent.isDrawLayerModalDisplayed)
   const isDraftDirty = useMainAppSelector(state => state.missionForm.isDraftDirty)
   const status = useMainAppSelector(state => state.sideWindow.status)
+  const isSurveyModalDisplayed = useMainAppSelector(state => state.startupNotification.isSurveyModalDisplayed)
 
   useEffect(() => {
     trackEvent({
@@ -66,6 +70,7 @@ export function MainWindow() {
       <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible} id="mainWindowWrapper">
         <EnvironmentBox />
         <BannerStack />
+        {!isSurveyModalDisplayed && !isCypress() && !isPuppeteer() && <SurveyModal />}
 
         <VesselFiltersHeadband />
 

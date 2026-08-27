@@ -17,7 +17,7 @@ describe('createLatestOnlySaver()', () => {
     const saver = createLatestOnlySaver<string, string>()
 
     // When
-    const result = await saver.save('a', 'first', async payload => `saved ${payload}`)
+    const result = await saver.save('a', 'first', payload => Promise.resolve(`saved ${payload}`))
 
     // Then
     expect(result).toBe('saved first')
@@ -28,10 +28,10 @@ describe('createLatestOnlySaver()', () => {
     const saver = createLatestOnlySaver<string, string>()
     const firstSave = createDeferred<string>()
     const savedPayloads: string[] = []
-    const saveOne = async (payload: string) => {
+    const saveOne = (payload: string) => {
       savedPayloads.push(payload)
 
-      return payload === 'first' ? firstSave.promise : `saved ${payload}`
+      return payload === 'first' ? firstSave.promise : Promise.resolve(`saved ${payload}`)
     }
 
     // When: three more edits happen while the first save is still running
@@ -52,10 +52,10 @@ describe('createLatestOnlySaver()', () => {
     const firstSave = createDeferred<string>()
 
     // When
-    const running = saver.save('a', 'first', async payload =>
-      payload === 'first' ? firstSave.promise : `saved ${payload}`
+    const running = saver.save('a', 'first', payload =>
+      payload === 'first' ? firstSave.promise : Promise.resolve(`saved ${payload}`)
     )
-    const queued = saver.save('a', 'second', async payload => `saved ${payload}`)
+    const queued = saver.save('a', 'second', payload => Promise.resolve(`saved ${payload}`))
     firstSave.resolve('saved first')
 
     // Then
@@ -67,10 +67,10 @@ describe('createLatestOnlySaver()', () => {
     // Given
     const saver = createLatestOnlySaver<string, string>()
     const savedPayloads: string[] = []
-    const saveOne = async (payload: string) => {
+    const saveOne = (payload: string) => {
       savedPayloads.push(payload)
 
-      return payload
+      return Promise.resolve(payload)
     }
 
     // When
@@ -84,10 +84,10 @@ describe('createLatestOnlySaver()', () => {
     // Given
     const saver = createLatestOnlySaver<string, string>()
     const savedPayloads: string[] = []
-    const saveOne = async (payload: string) => {
+    const saveOne = (payload: string) => {
       savedPayloads.push(payload)
 
-      return payload
+      return Promise.resolve(payload)
     }
 
     // When

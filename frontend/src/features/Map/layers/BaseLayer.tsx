@@ -12,6 +12,8 @@ import { monitorfishMap } from '../monitorfishMap'
 import type { ImageTile } from 'ol'
 import type Tile from 'ol/Tile'
 
+const CARTO_KEY = import.meta.env.FRONTEND_CARTO_KEY
+
 function UnmemoizedBaseLayer() {
   const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
@@ -51,7 +53,7 @@ function UnmemoizedBaseLayer() {
             maxZoom: 19,
             tileLoadFunction: loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
-              subdomain => `https://${subdomain}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`
+              subdomain => `https://${subdomain}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=${CARTO_KEY}`
             ),
             wrapX: false
           }),
@@ -67,7 +69,7 @@ function UnmemoizedBaseLayer() {
             maxZoom: isInLightMode ? 11 : 19,
             tileLoadFunction: isInLightMode ? undefined : loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
-              subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`
+              subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${CARTO_KEY}`
             ),
             wrapX: false
           }),

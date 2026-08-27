@@ -9,6 +9,8 @@ import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/V
 import { trackEvent } from '@hooks/useTracking'
 import { getEnvironmentBorderStyle } from '@utils/getEnvironmentBorderStyle'
 import { getEnvironmentData } from '@utils/getEnvironmentData'
+import { isCypress } from '@utils/isCypress'
+import { isPuppeteer } from '@utils/isPuppeteer'
 import { useCallback, useEffect } from 'react'
 import { useBeforeUnload } from 'react-router-dom'
 import styled from 'styled-components'
@@ -68,7 +70,7 @@ export function MainWindow() {
       <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible} id="mainWindowWrapper">
         <EnvironmentBox />
         <BannerStack />
-        {!isSurveyModalDisplayed && <SurveyModal />}
+        {!isSurveyModalDisplayed && !isCypress() && !isPuppeteer() && <SurveyModal />}
 
         <VesselFiltersHeadband />
 

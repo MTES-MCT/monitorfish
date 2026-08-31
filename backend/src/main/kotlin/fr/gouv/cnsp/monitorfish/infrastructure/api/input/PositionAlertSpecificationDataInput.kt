@@ -30,23 +30,16 @@ data class PositionAlertSpecificationDataInput(
     val producerOrganizations: List<String> = listOf(),
 ) {
     fun toPositionAlertSpecification(): PositionAlertSpecification {
-        val threat = threatHierarchy.value
-        val threatCharacterization = threatHierarchy.children.single().value
-        val natinf =
-            threatHierarchy.children
-                .single()
-                .children
-                .single()
-                .value
+        val leaf = threatHierarchy.toLeaf()
 
         return PositionAlertSpecification(
             name = this.name,
             type = this.type,
             description = this.description,
             isUserDefined = true,
-            natinf = natinf,
-            threat = threat,
-            threatCharacterization = threatCharacterization,
+            natinf = leaf.natinfCode,
+            threat = leaf.threat,
+            threatCharacterization = leaf.threatCharacterization,
             validityStartDatetimeUtc = this.validityStartDatetimeUtc,
             validityEndDatetimeUtc = this.validityEndDatetimeUtc,
             repeatEachYear = this.repeatEachYear,

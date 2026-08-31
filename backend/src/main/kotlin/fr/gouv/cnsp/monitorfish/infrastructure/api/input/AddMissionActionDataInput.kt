@@ -24,21 +24,13 @@ data class MissionActionInfractionDataInput(
             return Infraction(infractionType = infractionType, comments = comments)
         }
 
-        val threat = threats.single()
-        val threatName = threat.value
-        val threatCharacterization = threat.children.single().value
-        val natinf =
-            threat.children
-                .single()
-                .children
-                .single()
-                .value
+        val leaf = threats.toSingleLeaf()
 
         return Infraction(
             infractionType = this.infractionType,
-            natinf = natinf,
-            threat = threatName,
-            threatCharacterization = threatCharacterization,
+            natinf = leaf.natinfCode,
+            threat = leaf.threat,
+            threatCharacterization = leaf.threatCharacterization,
             comments = this.comments,
         )
     }

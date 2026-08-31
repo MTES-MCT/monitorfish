@@ -25,6 +25,9 @@ export enum Seafront {
   MEMN = 'MEMN',
   NAMO = 'NAMO',
   POLYNESIE_FRANCAISE = 'Polynésie Française',
+  // Split into POLYNESIE_FRANCAISE and CLIPPERTON, but still stored by the CROSS referential and by rows
+  // predating the split, so reading it must keep working
+  POLYNESIE_ET_CLIPPERTON = 'Polynésie et Clipperton',
   NOUVELLE_CALEDONIE = 'Nouvelle Calédonie',
   CLIPPERTON = 'Clipperton',
   WALLIS_FUTUNA = 'Wallis et Futuna',
@@ -50,7 +53,13 @@ export const SEAFRONT_GROUP_SEAFRONTS: Record<SeafrontGroup, Seafront[]> = {
     Seafront.MARTINIQUE
   ],
   OUTREMEROI: [Seafront.OI_HORS_ZEE, Seafront.LA_REUNION, Seafront.MAYOTTE, Seafront.SUD_OCEAN_INDIEN, Seafront.TAAF],
-  OUTREMEROP: [Seafront.POLYNESIE_FRANCAISE, Seafront.NOUVELLE_CALEDONIE, Seafront.CLIPPERTON, Seafront.WALLIS_FUTUNA],
+  OUTREMEROP: [
+    Seafront.POLYNESIE_FRANCAISE,
+    Seafront.POLYNESIE_ET_CLIPPERTON,
+    Seafront.NOUVELLE_CALEDONIE,
+    Seafront.CLIPPERTON,
+    Seafront.WALLIS_FUTUNA
+  ],
   SA: [Seafront.SA]
 }
 

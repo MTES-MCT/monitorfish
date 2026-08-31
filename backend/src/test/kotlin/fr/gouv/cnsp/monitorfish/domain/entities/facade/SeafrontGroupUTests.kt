@@ -17,6 +17,18 @@ class SeafrontGroupUTests {
     }
 
     @Test
+    fun `fromSeafront should return OUTREMEROP with the legacy Polynésie et Clipperton seafront`() {
+        // Given
+        val seafront = Seafront.POLYNESIE_ET_CLIPPERTON
+
+        // When
+        val result = SeafrontGroup.fromSeafront(seafront)
+
+        // Then
+        assertThat(result).isEqualTo(SeafrontGroup.OUTREMEROP)
+    }
+
+    @Test
     fun `fromSeafront should return NO_FACADE with a null seafront`() {
         // When
         val result = SeafrontGroup.fromSeafront(null)
@@ -118,6 +130,7 @@ class SeafrontGroupUTests {
         // Then
         assertThat(result).containsExactlyInAnyOrder(
             Seafront.POLYNESIE_FRANCAISE,
+            Seafront.POLYNESIE_ET_CLIPPERTON,
             Seafront.NOUVELLE_CALEDONIE,
             Seafront.CLIPPERTON,
             Seafront.WALLIS_FUTUNA,

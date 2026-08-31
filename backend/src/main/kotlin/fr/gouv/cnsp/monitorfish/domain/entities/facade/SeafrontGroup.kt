@@ -40,6 +40,7 @@ enum class SeafrontGroup {
                 OUTREMEROP to
                     listOf(
                         Seafront.POLYNESIE_FRANCAISE,
+                        Seafront.POLYNESIE_ET_CLIPPERTON,
                         Seafront.NOUVELLE_CALEDONIE,
                         Seafront.CLIPPERTON,
                         Seafront.WALLIS_FUTUNA,

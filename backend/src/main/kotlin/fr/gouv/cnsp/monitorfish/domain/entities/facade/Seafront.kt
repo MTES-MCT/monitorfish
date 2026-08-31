@@ -20,6 +20,10 @@ enum class Seafront(
     OI_HORS_ZEE("Océan Indien Hors ZEE"),
     LA_REUNION("La Réunion"),
     POLYNESIE_FRANCAISE("Polynésie Française"),
+
+    // Split into POLYNESIE_FRANCAISE and CLIPPERTON, but still stored by the CROSS referential and by rows
+    // predating the split, so reading it must keep working
+    POLYNESIE_ET_CLIPPERTON("Polynésie et Clipperton"),
     NOUVELLE_CALEDONIE("Nouvelle Calédonie"),
     CLIPPERTON("Clipperton"),
     WALLIS_FUTUNA("Wallis et Futuna"),

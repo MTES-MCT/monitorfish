@@ -1,4 +1,5 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
+import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
@@ -81,6 +82,8 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
             <hr />
 
             <VesselFleetSegmentsField label="Segment de flotte" />
+
+            <FormikINNRadio />
 
             <ControlQualityField withLastHaul />
 

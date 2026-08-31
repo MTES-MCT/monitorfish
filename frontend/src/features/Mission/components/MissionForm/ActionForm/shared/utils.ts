@@ -99,3 +99,17 @@ export function getPriorityTargetReasons(
     reasons
   }
 }
+
+/** A flagless vessel or a vessel flying a non-EU flag — a “navire tiers ou sans pavillon”. */
+export function isThirdCountryOrFlaglessVessel(flagState: string | undefined): boolean {
+  return !flagState || flagState === 'UNDEFINED' || !EU_COUNTRY_CODES.includes(flagState)
+}
+
+/**
+ * A UN/LOCODE is prefixed with the ISO alpha-2 code of the territory the port belongs to, so overseas
+ * ports carry their own code (`RE`, `GF`...) rather than `FR`: any port but a metropolitan French one
+ * is either in overseas waters or outside the French EEZ.
+ */
+export function isPortInInnArea(portLocode: string | undefined): boolean {
+  return !!portLocode && !portLocode.startsWith('FR')
+}

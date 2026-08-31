@@ -171,6 +171,10 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
     cy.fill('Last haul effectué', 'Oui')
 
+    // INN
+    // The vessel flies an EU flag and the port is a metropolitan French one.
+    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 0)
+
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
     // The action becomes valid here: pause so it is created before the last field is filled,
@@ -414,6 +418,13 @@ context('Side Window > Mission Form > Land Control', () => {
     // Port de contrôle
     cy.fill('Port de contrôle', 'Auray')
 
+    // INN
+    // The vessel flies an EU flag, so the field stays hidden even in a foreign port.
+    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 0)
+    cy.fill('Port de contrôle', 'Abu Musa')
+    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 0)
+    cy.fill('Port de contrôle', 'Auray')
+
     // A mission zone should be automatically added
     cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')
     cy.get('*[data-cy="mission-main-form-location"]').should(
@@ -434,14 +445,19 @@ context('Side Window > Mission Form > Land Control', () => {
     // Navire
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('FR263418260').wait(250)
-    cy.contains('mark', 'FR263418260').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot').wait(250)
+    cy.contains('mark', 'MALOT').click()
 
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
 
     // Port de contrôle
     cy.fill('Port de contrôle', 'Abu Musa')
+
+    // INN
+    // The vessel is flagless and the port is outside the French EEZ.
+    cy.get('legend').filter(':contains("Contrôle INN")').should('exist')
+    cy.fill('Contrôle INN', 'Oui', { index: 1 })
 
     // The mission zone should be automatically updated
     cy.get('.Component-Banner').contains('Une zone de mission a été modifiée à partir des contrôles de la mission')

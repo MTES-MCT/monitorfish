@@ -190,6 +190,7 @@ describe('ActionForm/schemas', () => {
       emitsAis: MissionAction.ControlCheck.NOT_APPLICABLE,
       emitsVms: MissionAction.ControlCheck.NOT_APPLICABLE,
       gearOnboard: [{ gearWasControlled: true }],
+      isINNControl: false,
       isLastHaul: false,
       licencesMatchActivity: MissionAction.ControlCheck.YES,
       logbookMatchesActivity: MissionAction.ControlCheck.YES,

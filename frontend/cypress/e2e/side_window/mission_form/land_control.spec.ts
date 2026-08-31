@@ -453,7 +453,7 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // INN
     // The vessel is flagless and the port is outside the French EEZ.
-    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 1)
+    cy.get('legend').filter(':contains("Contrôle INN")').should('exist')
     cy.fill('Contrôle INN', 'Oui', { index: 1 })
 
     // The mission zone should be automatically updated

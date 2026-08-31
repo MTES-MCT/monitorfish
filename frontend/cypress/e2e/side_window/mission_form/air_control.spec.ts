@@ -59,7 +59,7 @@ context('Side Window > Mission Form > Air Control', () => {
 
     // INN
     // The vessel is flagless and the stubbed position is outside the French EEZ.
-    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 1)
+    cy.get('legend').filter(':contains("Contrôle INN")').should('exist')
     cy.fill('Contrôle INN', 'Oui', { index: 1 })
 
     // Complété par

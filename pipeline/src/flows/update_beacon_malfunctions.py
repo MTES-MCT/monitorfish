@@ -32,7 +32,7 @@ from src.shared_tasks.healthcheck import (
 @task
 def extract_last_positions() -> pd.DataFrame:
     """
-    Extract the last emission date of each vessel in the `last_positions` table.
+    Extract the last emission date of each vessel in the `last_positions_vms` table.
     """
     return extract(
         "monitorfish_remote",

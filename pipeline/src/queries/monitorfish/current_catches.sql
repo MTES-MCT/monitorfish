@@ -36,7 +36,7 @@ corrected_messages AS (
         AND operation_type ='COR'
         AND (
             flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
-            OR report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+            OR operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
         )   
 ),
 
@@ -63,7 +63,7 @@ ordered_deps AS (
         )
         AND (
             flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
-            OR report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+            OR operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
         )
         -- Exclude data that is not real-time electronic logbook data
         AND (
@@ -124,7 +124,7 @@ catches AS (
         )
         AND (
             flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
-            OR report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+            OR operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
         )
         AND (software IS NULL OR software NOT LIKE '%VISIOCaptures%')
 ),

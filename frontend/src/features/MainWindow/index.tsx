@@ -70,7 +70,7 @@ export function MainWindow() {
       <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible} id="mainWindowWrapper">
         <EnvironmentBox />
         <BannerStack />
-        {!isSurveyModalDisplayed && !isCypress() && !isPuppeteer() && <SurveyModal />}
+        {!isSurveyModalDisplayed && !isCypress() && !isPuppeteer() && !isSuperUser && <SurveyModal />}
 
         <VesselFiltersHeadband />
 

@@ -7,6 +7,8 @@ export type MissionActionFormValues = PartialExcept<
   MissionAction.MissionActionData,
   'actionType' | 'actionDatetimeUtc'
 > & {
+  /** Identifies a draft before it has a backend `id`, so the auto-save updates it instead of re-creating it. */
+  draftKey?: string | undefined
   isValid: boolean
 }
 

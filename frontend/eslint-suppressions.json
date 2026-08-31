@@ -395,7 +395,7 @@
   },
   "src/features/Mission/components/MissionForm/index.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 8
+      "count": 4
     }
   },
   "src/features/Mission/components/MissionForm/shared/DeletionConfirmationDialog.tsx": {

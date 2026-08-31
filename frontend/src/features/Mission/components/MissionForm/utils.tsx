@@ -42,6 +42,10 @@ export function getMissionActionsToCreateUpdateOrDelete(
   }
 }
 
+export function generateMissionActionDraftKey(): string {
+  return `mission-action-draft-${Date.now()}-${Math.random().toString(36).slice(2)}`
+}
+
 export function getMissionActionDataFromFormValues(
   missionActionFormValues: MissionActionFormValues,
   missionId: MissionAction.MissionAction['missionId']
@@ -51,7 +55,11 @@ export function getMissionActionDataFromFormValues(
     ...missionActionFormValues
   }
 
-  const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, ['isValid', 'isVesselUnknown'])
+  const maybeValidMissionActionData = omit(missionActionFormValuesWithAllProps, [
+    'draftKey',
+    'isValid',
+    'isVesselUnknown'
+  ])
   const validMissionActionData = getValidMissionActionData(maybeValidMissionActionData as MissionActionFormValues)
 
   return {
@@ -98,8 +106,9 @@ export function getUpdatedMissionFromMissionMainFormValues(
   const missionData = getMissionDataFromMissionFormValues(mainFormValues)
 
   return {
-    id: missionId,
-    ...missionData
+    ...missionData,
+    // The form values still hold no id while a creation is in flight
+    id: missionId
   }
 }
 

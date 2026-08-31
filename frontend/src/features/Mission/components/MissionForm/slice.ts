@@ -14,6 +14,8 @@ export interface MissionFormState {
   isDraftDirty: boolean
   isListeningToEvents: boolean
   isMissionCreatedBannerDisplayed: boolean
+  /** `updatedAtUtc` of the last save made from this form, to recognize our own SSE echoes. */
+  lastSavedUpdatedAtUtc: string | undefined
   mustResetOtherControlsCheckboxes: boolean | undefined
   selectedMissionActionGeoJSON: Feature<Point> | undefined
   selectedMissionGeoJSON: Feature<Point> | undefined
@@ -25,6 +27,7 @@ const INITIAL_STATE: MissionFormState = {
   isDraftDirty: false,
   isListeningToEvents: false,
   isMissionCreatedBannerDisplayed: false,
+  lastSavedUpdatedAtUtc: undefined,
   mustResetOtherControlsCheckboxes: undefined,
   selectedMissionActionGeoJSON: undefined,
   selectedMissionGeoJSON: undefined
@@ -42,6 +45,7 @@ const missionFormSlice = createSlice({
       state.geometryComputedFromControls = undefined
       state.isDraftDirty = false
       state.isMissionCreatedBannerDisplayed = false
+      state.lastSavedUpdatedAtUtc = undefined
     },
 
     mustResetOtherControlsCheckboxes(state, action: PayloadAction<boolean>) {
@@ -61,6 +65,7 @@ const missionFormSlice = createSlice({
       state.geometryComputedFromControls = undefined
       state.isDraftDirty = false
       state.isMissionCreatedBannerDisplayed = false
+      state.lastSavedUpdatedAtUtc = undefined
     },
 
     /**
@@ -98,6 +103,10 @@ const missionFormSlice = createSlice({
 
     setIsMissionCreatedBannerDisplayed(state, action: PayloadAction<boolean>) {
       state.isMissionCreatedBannerDisplayed = action.payload
+    },
+
+    setLastSavedUpdatedAtUtc(state, action: PayloadAction<string | undefined>) {
+      state.lastSavedUpdatedAtUtc = action.payload
     },
 
     /**

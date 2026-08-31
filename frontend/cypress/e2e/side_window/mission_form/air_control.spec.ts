@@ -56,6 +56,9 @@ context('Side Window > Mission Form > Air Control', () => {
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
+    // The action becomes valid here: pause so it is created before the last fields are filled,
+    // otherwise the whole form is auto-saved as a single creation and never updated
+    cy.wait(1200)
 
     // INN
     cy.fill('Contrôle INN', 'Non', { index: 1 })

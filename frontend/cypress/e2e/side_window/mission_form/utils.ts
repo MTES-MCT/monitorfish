@@ -24,6 +24,17 @@ export const pickHoverEditSpecies = (rowDataCy: string, code: string) => {
     })
 }
 
+/**
+ * The mocked `EventSource` is keyed by the URL the app connected to, which depends on
+ * `FRONTEND_MONITORENV_URL` (`http://0.0.0.0:8081` on the CI, `//localhost:8081` locally).
+ */
+export const getMissionSseSource = (mockEventSources: Record<string, any>) => {
+  const sseUrl = Object.keys(mockEventSources).find(url => url.includes('/api/v1/missions/sse'))
+  assert.isDefined(sseUrl, 'The app should have opened an SSE connection to the missions endpoint.')
+
+  return mockEventSources[sseUrl!]
+}
+
 export const openSideWindowNewMission = () => {
   cy.viewport(1920, 1080)
 

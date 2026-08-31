@@ -1,3 +1,4 @@
+import { customDayjs } from '@mtes-mct/monitor-ui'
 import { logInDev } from '@utils/logInDev'
 import { undefinedize } from '@utils/undefinedize'
 
@@ -13,6 +14,18 @@ export const MISSION_EVENT_UNSYNCHRONIZED_PROPERTIES_IN_FORM = [
   // For internal validation only
   'isValid'
 ]
+
+/** An event that is not strictly newer than our last save is either our own echo, or an outdated update. */
+export function isMissionEventStale(
+  missionEventUpdatedAtUtc: string | undefined,
+  lastSavedUpdatedAtUtc: string | undefined
+): boolean {
+  if (!missionEventUpdatedAtUtc || !lastSavedUpdatedAtUtc) {
+    return false
+  }
+
+  return !customDayjs(missionEventUpdatedAtUtc).isAfter(customDayjs(lastSavedUpdatedAtUtc))
+}
 
 export const missionEventListener = (callback: (mission: Mission.Mission) => void) => (event: MessageEvent) => {
   const mission = undefinedize(JSON.parse(event.data)) as Mission.Mission

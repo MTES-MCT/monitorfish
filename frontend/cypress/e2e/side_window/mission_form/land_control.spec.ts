@@ -173,6 +173,9 @@ context('Side Window > Mission Form > Land Control', () => {
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
+    // The action becomes valid here: pause so it is created before the last field is filled,
+    // otherwise the whole form is auto-saved as a single creation and never updated
+    cy.wait(1200)
 
     // Complété par
     cy.fill('Complété par', 'Alice', { index: 1 })

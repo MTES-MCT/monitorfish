@@ -1,3 +1,4 @@
+import { ResetButton } from '@components/ResetButton'
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import {
   DEFAULT_VESSEL_LIST_FILTER_VALUES,
@@ -196,37 +197,32 @@ export function FilterTags({
 
         {!isReadOnly && !areListFilterValuesEqualToDefaultOnes && (
           <StyledLink>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <Link data-cy="vessel-list-reset-filters" onClick={() => onReset?.()}>
-              <Icon.Reset size={14} /> Réinitialiser les filtres
-            </Link>
+            <ResetButton data-cy="vessel-list-reset-filters" onClick={() => onReset?.()} />
           </StyledLink>
         )}
 
         {!isReadOnly && areMoreFiltersDisplayable && areFiltersDisplayed && (
           <StyledLink>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <Link
+            <ResetButton
               data-cy="vessel-list-hide-filters"
+              Icon={Icon.Hide}
+              label={'Masquer les filtres'}
               onClick={() => {
                 dispatch(vesselListActions.setAreFiltersDisplayed(false))
               }}
-            >
-              <Icon.Hide size={14} /> Masquer les filtres
-            </Link>
+            />
           </StyledLink>
         )}
         {!isReadOnly && areMoreFiltersDisplayable && !areFiltersDisplayed && (
           <StyledLink>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <Link
+            <ResetButton
               data-cy="vessel-list-show-filters"
+              Icon={Icon.Display}
+              label={'Afficher les filtres'}
               onClick={() => {
                 dispatch(vesselListActions.setAreFiltersDisplayed(true))
               }}
-            >
-              <Icon.Display size={14} /> Afficher les filtres
-            </Link>
+            />
           </StyledLink>
         )}
       </Row>
@@ -238,10 +234,6 @@ const StyledLink = styled.div`
   height: 24px;
   margin-right: 8px;
   margin-left: 8px;
-
-  .Element-IconBox {
-    margin-right: 4px;
-  }
 `
 
 const Row = styled.div<{
@@ -269,12 +261,4 @@ const Row = styled.div<{
       }}
     }
   }
-`
-
-const Link = styled.a`
-  align-items: center;
-  color: ${p => p.theme.color.charcoal};
-  cursor: pointer;
-  line-height: 1;
-  text-decoration: underline;
 `

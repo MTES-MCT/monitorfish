@@ -1,3 +1,4 @@
+import { ResetButton } from '@components/ResetButton'
 import { COUNTRIES_AS_ALPHA3_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { useGetPriorNotificationTypesAsOptions } from '@features/PriorNotification/hooks/useGetPriorNotificationTypesAsOptions'
@@ -7,7 +8,7 @@ import { useGetPortsAsTreeOptions } from '@hooks/useGetPortsAsTreeOptions'
 import { useGetSpeciesAsOptions } from '@hooks/useGetSpeciesAsOptions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { SingleTag, getSelectedOptionFromOptionValueInTree } from '@mtes-mct/monitor-ui'
+import { getSelectedOptionFromOptionValueInTree, SingleTag } from '@mtes-mct/monitor-ui'
 import { isEqual, omit } from 'lodash-es'
 import styled from 'styled-components'
 
@@ -122,10 +123,7 @@ export function FilterTags() {
 
       {!areListFilterValuesEqualToDefaultOnes && (
         <Row>
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <Link data-cy="prior-notification-reset-filters" onClick={reset}>
-            Réinitialiser les filtres
-          </Link>
+          <ResetButton data-cy="prior-notification-reset-filters" onClick={reset} />
         </Row>
       )}
     </>
@@ -141,12 +139,4 @@ const Row = styled.div`
   > .Component-SingleTag {
     margin: 0 8px 8px 0;
   }
-`
-
-const Link = styled.a`
-  align-items: center;
-  color: ${p => p.theme.color.charcoal};
-  cursor: pointer;
-  line-height: 1;
-  text-decoration: underline;
 `

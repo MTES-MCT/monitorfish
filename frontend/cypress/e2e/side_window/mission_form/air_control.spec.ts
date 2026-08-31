@@ -36,8 +36,8 @@ context('Side Window > Mission Form > Air Control', () => {
 
     // TODO Handle Automplete in custom `cy.fill()` command once it's used via monitor-ui.
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    cy.get('input[placeholder="Rechercher un navire..."]').type('pheno')
-    cy.contains('mark', 'PHENO').click()
+    cy.get('input[placeholder="Rechercher un navire..."]').type('malot')
+    cy.contains('mark', 'MALOT').click()
 
     // Date et heure du contrôle
     cy.fill('Date et heure du contrôle', now.utcDateTupleWithTime)
@@ -56,6 +56,11 @@ context('Side Window > Mission Form > Air Control', () => {
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
+
+    // INN
+    // The vessel is flagless and the stubbed position is outside the French EEZ.
+    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 1)
+    cy.fill('Contrôle INN', 'Oui', { index: 1 })
 
     // Complété par
     cy.fill('Complété par', 'Alice', { index: 1 })
@@ -76,9 +81,9 @@ context('Side Window > Mission Form > Air Control', () => {
           districtCode: 'AY',
           emitsAis: null,
           emitsVms: null,
-          externalReferenceNumber: 'DONTSINK',
+          externalReferenceNumber: 'TALK2ME',
           facade: null,
-          flagState: 'FR',
+          flagState: 'UNDEFINED',
           gearOnboard: [],
           id: 2,
           infractions: [
@@ -106,9 +111,9 @@ context('Side Window > Mission Form > Air Control', () => {
               ]
             }
           ],
-          internalReferenceNumber: 'FAK000999999',
-          ircs: 'CALLME',
-          isINNControl: false,
+          internalReferenceNumber: 'U_W0NTFINDME',
+          ircs: 'QGDF',
+          isINNControl: true,
           latitude: 47.084,
           licencesAndLogbookObservations: null,
           licencesMatchActivity: null,
@@ -128,8 +133,8 @@ context('Side Window > Mission Form > Air Control', () => {
           speciesWeightControlled: null,
           unitWithoutOmegaGauge: null,
           userTrigram: 'Marlin',
-          vesselId: 1,
-          vesselName: 'PHENOMENE'
+          vesselId: 2,
+          vesselName: 'MALOTRU'
         }
       },
       5

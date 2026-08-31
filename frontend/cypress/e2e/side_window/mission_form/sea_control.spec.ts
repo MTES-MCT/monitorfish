@@ -335,6 +335,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
     cy.fill('Last haul effectué', 'Non')
 
+    // INN
+    // The vessel is flagless but the stubbed position is inside the French EEZ.
+    cy.get('legend').filter(':contains("Contrôle INN")').should('have.length', 0)
+
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 

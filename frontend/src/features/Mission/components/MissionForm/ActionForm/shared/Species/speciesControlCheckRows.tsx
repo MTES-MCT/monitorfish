@@ -6,6 +6,7 @@ import type { SpeciesEISRApplicability } from './getSpeciesEISRApplicability'
 import type { ControlCheckRow } from '../ControlCheckTable'
 
 const BASE_SPECIES_CHECK_ROWS: ControlCheckRow[] = [
+  { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
   { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
   {
     isRequired: true,
@@ -29,6 +30,7 @@ const LAND_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
     ),
     name: 'unloadedSection'
   },
+  { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
   { isRequired: true, label: 'Taille des espèces vérifiées', name: 'speciesSizeControlled' },
   { isRequired: true, label: 'Cale contrôlée après déchargement', name: 'holdControlledAfterUnloading' },
   {
@@ -57,7 +59,6 @@ const LAND_CONTROL_NOT_LANDED_CHECK_ROWS: ControlCheckRow[] = [
 ]
 
 const SEA_CONTROL_EISR_CHECK_ROWS: ControlCheckRow[] = [
-  { isRequired: true, label: 'Poids des espèces vérifiés', name: 'speciesWeightControlled' },
   {
     isRequired: true,
     label: "Arrimage séparé des poissons n'ayant pas la taille requise",

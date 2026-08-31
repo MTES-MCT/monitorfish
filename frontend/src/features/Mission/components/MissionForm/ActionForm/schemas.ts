@@ -215,6 +215,8 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
         then: schema => schema.required(HIDDEN_ERROR)
       }),
 
+      isINNControl: boolean().required(HIDDEN_ERROR),
+
       infractions: array().of(
         object({
           infractionType: string().required().notOneOf([MissionAction.InfractionType.PENDING], HIDDEN_ERROR)

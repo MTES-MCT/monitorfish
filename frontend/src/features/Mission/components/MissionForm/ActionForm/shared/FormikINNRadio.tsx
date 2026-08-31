@@ -1,3 +1,8 @@
+import {
+  isPortInInnArea,
+  isThirdCountryOrFlaglessVessel
+} from '@features/Mission/components/MissionForm/ActionForm/shared/utils'
+import { MissionAction } from '@features/Mission/missionAction.types'
 import { useGetIsInInnAreaQuery } from '@features/Mission/missionActionApi'
 import { FormikMultiRadio } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -12,8 +17,11 @@ import type { MissionActionFormValues } from '../../types'
 export function FormikINNRadio() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
 
+  const isEligibleVessel = isThirdCountryOrFlaglessVessel(values.flagState)
+  const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
+
   const { data } = useGetIsInInnAreaQuery(
-    values.latitude && values.longitude
+    !isLandControl && isEligibleVessel && values.latitude && values.longitude
       ? {
           latitude: values.latitude,
           longitude: values.longitude
@@ -21,15 +29,17 @@ export function FormikINNRadio() {
       : skipToken
   )
 
+  const isInInnArea = isLandControl ? isPortInInnArea(values.portLocode) : data?.isInInnArea === true
+  // Not the negation of `isInInnArea`: for a sea or air control, the area is unknown until the query resolves
+  const isNotInInnArea = isLandControl ? !isPortInInnArea(values.portLocode) : data?.isInInnArea === false
+
   useEffect(() => {
-    if (data?.isInInnArea === false) {
+    if (!isEligibleVessel || isNotInInnArea) {
       setFieldValue('isINNControl', false)
     }
-  }, [data?.isInInnArea, setFieldValue])
+  }, [isEligibleVessel, isNotInInnArea, setFieldValue])
 
-  const isNotInInnArea = data?.isInInnArea === undefined || data?.isInInnArea === false
-
-  if (isNotInInnArea) {
+  if (!isEligibleVessel || !isInInnArea) {
     return null
   }
 

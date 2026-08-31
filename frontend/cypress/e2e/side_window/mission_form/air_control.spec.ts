@@ -57,9 +57,6 @@ context('Side Window > Mission Form > Air Control', () => {
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
 
-    // INN
-    cy.fill('Contrôle INN', 'Non', { index: 1 })
-
     // Complété par
     cy.fill('Complété par', 'Alice', { index: 1 })
 

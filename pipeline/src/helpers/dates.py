@@ -115,7 +115,13 @@ def get_datetime_intervals(
     )
 
     if unit:
-        intervals = intervals.map(lambda dt: dt.total_seconds())
+        # NB: `.dt.total_seconds()` is used instead of `.map(lambda dt: dt.total_seconds())`
+        # because `.map()` on an empty Series does not invoke the mapping function and
+        # returns the input unchanged, leaving the dtype as `timedelta64[ns]` (or `object`,
+        # if `s` was empty with no explicit dtype) instead of `float64`. This caused errors
+        # downstream when dividing by this Series. `.astype("timedelta64[ns]")` normalizes
+        # the dtype (a no-op when it is already timedelta64) so `.dt` can be used safely.
+        intervals = intervals.astype("timedelta64[ns]").dt.total_seconds()
         if unit == "h":
             intervals = intervals / 3600
         elif unit == "min":

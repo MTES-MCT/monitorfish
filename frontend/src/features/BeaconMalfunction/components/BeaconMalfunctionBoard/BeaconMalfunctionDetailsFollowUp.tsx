@@ -1,8 +1,7 @@
-import { COLORS } from '@constants/constants'
 import { useListenForScroll } from '@hooks/useListenForScroll'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, Toggle } from '@mtes-mct/monitor-ui'
+import { customDayjs, THEME, Toggle } from '@mtes-mct/monitor-ui'
 import { pushToObjectAtIndex } from '@utils/pushToObjectAtIndex'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -243,22 +242,22 @@ const AddCommentRow = styled.div`
 const SubmitComment = styled.button``
 const submitCommentStyle = {
   ':disabled': {
-    background: COLORS.lightGray,
-    border: `1px solid ${COLORS.lightGray}`,
-    color: COLORS.white
+    background: THEME.color.lightGray,
+    border: `1px solid ${THEME.color.lightGray}`,
+    color: THEME.color.white
   },
   ':hover, :focus': {
-    background: COLORS.charcoal
+    background: THEME.color.charcoal
   },
-  background: COLORS.charcoal,
-  color: COLORS.gainsboro,
+  background: THEME.color.charcoal,
+  color: THEME.color.gainsboro,
   marginLeft: 'auto',
   padding: '6px 12px 6px 12px'
 }
 
 const SubmitCommentRow = styled.div``
 const submitCommentRowStyle = {
-  color: COLORS.slateGray,
+  color: THEME.color.slateGray,
   display: 'flex',
   font: 'normal normal normal 13px/18px Marianne',
   marginTop: 5,
@@ -267,7 +266,7 @@ const submitCommentRowStyle = {
 
 const AddComment = styled.textarea``
 const addCommentStyle = userType => ({
-  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
+  background: `${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray} 0% 0% no-repeat padding-box`,
   border: '1px solid #9DC0D2',
   height: 50,
   marginBottom: 5,
@@ -289,7 +288,7 @@ const commentsAndActionsStyle: (isSmall: boolean, textAreaHeight: number) => CSS
 
 const NumberComments = styled.span``
 const numberCommentsStyle = {
-  color: COLORS.slateGray,
+  color: THEME.color.slateGray,
   display: 'inline-block',
   font: 'normal normal normal 11px/15px Marianne',
   letterSpacing: 0,

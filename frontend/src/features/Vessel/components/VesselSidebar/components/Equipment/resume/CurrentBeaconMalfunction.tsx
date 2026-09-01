@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/constants'
 import { SidebarHeader, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { CurrentBeaconMalfunctionBody } from './CurrentBeaconMalfunctionBody'
@@ -55,13 +55,13 @@ const Arrow = styled(ArrowSVG)`
 `
 
 const ShowBeaconMalfunction = styled.a`
+  color: ${THEME.color.slateGray};
+  cursor: pointer;
+  font-size: 11px;
+  margin-left: auto;
+  margin-top: 4px;
   text-align: right;
   text-decoration: underline;
-  font-size: 11px;
   line-height: 10px;
-  color: ${COLORS.slateGray};
-  margin-left: auto;
-  cursor: pointer;
   width: 150px;
-  margin-top: 4px;
 `

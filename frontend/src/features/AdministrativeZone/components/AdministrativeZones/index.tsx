@@ -1,12 +1,12 @@
 import { StyledTransparentButton, Title } from '@features/LayersSidebar/components/style'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { AdministrativeZone } from './AdministrativeZone'
 import { AdministrativeZonesGroup } from './AdministrativeZonesGroup'
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { ChevronIconButton } from '../../../commonStyles/icons/ChevronIconButton'
@@ -86,7 +86,7 @@ const List = styled.ul<{
   overflow-x: hidden;
   max-height: 48vh;
   height: ${p => (p.$isOpened && p.$zonesLength ? 36 * p.$zonesLength : 0)}px;
-  background: ${COLORS.white};
+  background: ${THEME.color.white};
   transition: 0.5s all;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -100,6 +100,6 @@ const Row = styled.li`
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
-  color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.lightGray};
+  color: ${THEME.color.gunMetal};
+  border-bottom: 1px solid ${THEME.color.lightGray};
 `

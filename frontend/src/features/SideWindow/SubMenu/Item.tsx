@@ -72,14 +72,14 @@ const MenuButton = styled.div<{
 }>`
   align-items: center;
   background: ${p => (p.$isSelected ? p.theme.color.lightGray : 'unset')};
-  color: ${p => (p.$isSelected ? p.theme.color.gunMetal : p.theme.color.slateGray)};
   border-bottom: 0.5px solid ${p => p.theme.color.lightGray};
+  color: ${p => (p.$isSelected ? p.theme.color.gunMetal : p.theme.color.slateGray)};
   cursor: pointer;
   display: flex;
   height: 47px;
   justify-content: space-between;
-  opacity: 1;
   padding: 0 16px;
+  opacity: 1;
   transition: all 0.5s ease;
   width: ${p => p.$width - 32}px;
 
@@ -92,12 +92,12 @@ const MenuButton = styled.div<{
 const CircleWithKeyMetric = styled.span<{
   $isSelected: boolean
 }>`
-  position: relative;
   background: ${p => (p.$isSelected ? p.theme.color.charcoal : p.theme.color.lightGray)};
   border-radius: 2px;
   color: ${p => (p.$isSelected ? p.theme.color.white : p.theme.color.slateGray)};
   font-size: 13px;
   line-height: 1;
   padding: 1px 4px 4px;
+  position: relative;
   transition: opacity 0.5s ease;
 `

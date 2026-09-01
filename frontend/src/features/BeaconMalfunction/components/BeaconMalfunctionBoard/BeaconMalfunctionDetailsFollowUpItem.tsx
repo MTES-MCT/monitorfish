@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionDetailsType } from './utils'
@@ -52,8 +52,8 @@ const itemRow = {
 
 const CommentText = styled.div``
 const commentTextStyle = userType => ({
-  background: `${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray} 0% 0% no-repeat padding-box`,
-  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : COLORS.lightGray}`,
+  background: `${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray} 0% 0% no-repeat padding-box`,
+  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray}`,
   marginTop: 10,
   maxWidth: 480,
   padding: '10px 15px'
@@ -61,7 +61,7 @@ const commentTextStyle = userType => ({
 
 const ActionText = styled.div``
 const actionTextStyle = {
-  border: `2px solid ${COLORS.lightGray}`,
+  border: `2px solid ${THEME.color.lightGray}`,
   marginTop: 10,
   maxWidth: 480,
   padding: '10px 15px'
@@ -69,7 +69,7 @@ const actionTextStyle = {
 
 const ItemUserType = styled.div``
 const itemUserTypeStyle = {
-  color: COLORS.slateGray,
+  color: THEME.color.slateGray,
   font: 'normal normal normal 11px/15px Marianne',
   marginTop: 2
 }

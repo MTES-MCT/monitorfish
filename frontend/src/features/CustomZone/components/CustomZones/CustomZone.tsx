@@ -2,7 +2,6 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
 import { editName } from '../../useCases/editName'
 import { fitToView } from '../../useCases/fitToView'
@@ -94,32 +93,32 @@ const EditIcon = styled(Icon.EditUnbordered)<{
 `
 
 const Icons = styled.span`
-  float: right;
   display: flex;
-  justify-content: flex-end;
+  float: right;
   flex: 1;
+  justify-content: flex-end;
   margin-right: 6px;
 `
 
 const ZoneName = styled.span`
   display: inline-block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding-top: 5px;
   max-width: 200px;
+  padding-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 `
 
 const Wrapper = styled.li`
-  line-height: 18px;
-  text-align: left;
-  list-style-type: none;
-  color: ${COLORS.gunMetal};
-  border-bottom: 1px solid ${COLORS.lightGray};
-  padding: 4px 0 4px 16px;
+  border-bottom: 1px solid ${THEME.color.lightGray};
+  color: ${THEME.color.gunMetal};
   display: block;
-  user-select: none;
   font-weight: 500;
+  line-height: 18px;
+  list-style-type: none;
+  padding: 4px 0 4px 16px;
+  text-align: left;
+  user-select: none;
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
@@ -133,12 +132,12 @@ const ZonePreview = styled.div<{
   color: string
   stroke: string
 }>`
-  width: 15px;
-  height: 15px;
   background: ${p => p.color};
   border: 1px solid ${p => p.stroke};
+  cursor: zoom-in;
   display: inline-block;
+  height: 15px;
   margin-right: 8px;
   margin-bottom: 2px;
-  cursor: zoom-in;
+  width: 15px;
 `

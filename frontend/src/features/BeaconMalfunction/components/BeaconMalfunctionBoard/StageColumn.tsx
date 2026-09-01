@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
@@ -70,7 +70,7 @@ const ScrollableContainer = styled.div`
 
 const Wrapper = styled.div``
 const wrapperStyle = {
-  border: `1px solid ${COLORS.lightGray}`,
+  border: `1px solid ${THEME.color.lightGray}`,
   height: 'calc(100vh - 100px)',
   width: 267
 }

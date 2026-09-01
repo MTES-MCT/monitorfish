@@ -1,6 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { getCoordinates } from '@mtes-mct/monitor-ui'
+import { getCoordinates, THEME } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -65,12 +64,12 @@ export function VesselEstimatedPositionOverlay({ feature }) {
 }
 
 const VesselEstimatedPositionCardOverlayComponent = styled.div`
-  position: absolute;
-  top: -39px;
-  left: -155px;
-  width: 310px;
-  text-align: center;
-  background-color: ${COLORS.gainsboro};
+  background-color: ${THEME.color.gainsboro};
   border-radius: 2px;
+  left: -155px;
+  position: absolute;
+  text-align: center;
+  top: -39px;
+  width: 310px;
   z-index: 100;
 `

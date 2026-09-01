@@ -1,9 +1,9 @@
-import { COLORS } from '@constants/constants'
 import { addVesselToFavorites, removeVesselFromFavorites } from '@features/FavoriteVessel/slice'
 import { unselectVessel } from '@features/Vessel/useCases/unselectVessel'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
 import { useMemo } from 'react'
 import styled from 'styled-components'
@@ -84,62 +84,62 @@ function getVesselName(selectedVesselIdentity) {
 const Wrapper = styled.div<{
   $isOpen: boolean
 }>`
-  box-sizing: border-box;
-  font-weight: bolder;
-  margin: 0;
   background-color: ${p => p.theme.color.charcoal};
   border: none;
   border-radius: 2px 2px 0 0;
+  box-sizing: border-box;
   color: ${p => p.theme.color.gainsboro};
-  height: 40px;
-  width: ${p => (p.$isOpen ? 500 : 320)}px;
-  padding: 0 0 0 10px;
-  flex: 3;
-  text-align: left;
   cursor: text;
+  font-weight: bolder;
+  flex: 3;
+  height: 40px;
+  margin: 0;
+  padding: 0 0 0 10px;
+  text-align: left;
   transition: width 0.7s ease forwards;
+  width: ${p => (p.$isOpen ? 500 : 320)}px;
 `
 
 const FavoriteIcon = styled(FavoriteSVG)<{
   $isFavorite: boolean
   $isFlagShown: boolean
 }>`
-  width: 23px;
-  height: 23px;
-  vertical-align: middle;
-  margin-left: ${p => (p.$isFlagShown ? 7 : 0)}px;
   cursor: pointer;
+  height: 23px;
+  margin-left: ${p => (p.$isFlagShown ? 7 : 0)}px;
+  vertical-align: middle;
+  width: 23px;
   path {
-    fill: ${p => (p.$isFavorite ? COLORS.gainsboro : 'none')};
+    fill: ${p => (p.$isFavorite ? THEME.color.gainsboro : 'none')};
   }
 `
 
 const Flag = styled.img`
-  vertical-align: middle;
-  font-size: 27px;
-  margin-left: 0px;
   display: inline-block;
+  font-size: 27px;
   height: 24px;
+  margin-left: 0px;
+  vertical-align: middle;
 `
 
 const Name = styled.span`
   display: inline-block;
   color: ${p => p.theme.color.gainsboro};
-  margin-left: 7px;
-  line-height: 39px;
-  font-weight: 500;
-  vertical-align: middle;
   font-size: 22px;
+  font-weight: 500;
+  line-height: 39px;
+  margin-left: 7px;
   max-width: 375px;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
   white-space: nowrap;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 20px;
-  float: right;
-  padding: 9px 9px 7px 7px;
-  height: 24px;
   cursor: pointer;
+  float: right;
+  height: 24px;
+  padding: 9px 9px 7px 7px;
+  width: 20px;
 `

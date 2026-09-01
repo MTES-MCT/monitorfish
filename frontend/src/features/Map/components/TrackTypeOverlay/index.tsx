@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -79,12 +79,12 @@ export function TrackTypeOverlay({ feature }: TrackTypeOverlayProps) {
 }
 
 const TrackTypeCardOverlayComponent = styled.div`
-  position: absolute;
-  top: -39px;
-  left: -56px;
-  width: 100px;
-  text-align: left;
-  background-color: ${COLORS.gainsboro};
+  background-color: ${THEME.color.gainsboro};
   border-radius: 2px;
+  left: -56px;
+  position: absolute;
+  text-align: left;
+  top: -39px;
+  width: 100px;
   z-index: 100;
 `

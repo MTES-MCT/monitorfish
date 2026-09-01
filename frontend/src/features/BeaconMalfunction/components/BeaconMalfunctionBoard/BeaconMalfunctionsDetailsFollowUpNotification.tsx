@@ -1,10 +1,10 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import NotOkSVG from '../../../icons/Icon_not_OK.svg?react'
 import OkSVG from '../../../icons/Icon_OK.svg?react'
-import { NOTIFICATION_RECIPIENT_FUNCTION, NOTIFICATION_TYPE, COMMUNICATION_MEAN } from '../../constants'
+import { COMMUNICATION_MEAN, NOTIFICATION_RECIPIENT_FUNCTION, NOTIFICATION_TYPE } from '../../constants'
 
 import type { CSSProperties } from 'react'
 
@@ -109,7 +109,7 @@ const followUpMessageStyle: CSSProperties = {
 
 const ShowDetails = styled.div``
 const showDetailsStyle = {
-  color: COLORS.gunMetal,
+  color: THEME.color.gunMetal,
   cursor: 'pointer',
   font: 'normal normal medium 13px/22px Marianne',
   textDecoration: 'underline'
@@ -145,7 +145,7 @@ const Key = styled.th``
 const keyStyle = {
   background: 'none',
   border: 'none',
-  color: COLORS.slateGray,
+  color: THEME.color.slateGray,
   display: 'inline-block',
   fontSize: 13,
   fontWeight: 'normal',
@@ -158,7 +158,7 @@ const Value = styled.td``
 const valueStyle: CSSProperties = {
   background: 'none',
   border: 'none',
-  color: COLORS.gunMetal,
+  color: THEME.color.gunMetal,
   fontSize: 13,
   fontWeight: 500,
   lineHeight: 'normal',

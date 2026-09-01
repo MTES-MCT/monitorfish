@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Stroke from 'ol/style/Stroke'
 
@@ -16,7 +16,7 @@ export const getLabelLineStyle = feature => {
   }
 
   if (!labelLineStyleCache.has(key)) {
-    const colorWithAlpha = getColorWithAlpha(COLORS.slateGray, opacity)
+    const colorWithAlpha = getColorWithAlpha(THEME.color.slateGray, opacity)
 
     const style = new Style({
       stroke: new Stroke({

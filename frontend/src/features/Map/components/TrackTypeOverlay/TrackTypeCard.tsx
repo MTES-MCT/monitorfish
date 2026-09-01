@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export function TrackTypeCard({ trackType }) {
@@ -16,43 +16,43 @@ export function TrackTypeCard({ trackType }) {
 }
 
 const Text = styled.div`
-  vertical-align: middle;
   display: inline-block;
   font-size: 13px;
   padding-bottom: 2px;
-`
-
-const Square = styled.div`
-  margin: 5px 7px 5px 7px;
-  background: ${props => (props.color ? props.color : 'white')};
-  width: 14px;
-  height: 14px;
-  display: inline-block;
   vertical-align: middle;
 `
 
+const Square = styled.div`
+  background: ${props => (props.color ? props.color : 'white')};
+  display: inline-block;
+  height: 14px;
+  margin: 5px 7px 5px 7px;
+  vertical-align: middle;
+  width: 14px;
+`
+
 const TrianglePointer = styled.div`
+  height: auto;
   margin-left: auto;
   margin-right: auto;
-  height: auto;
   width: auto;
 `
 
 const TriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.gainsboro} transparent transparent transparent;
+  border-color: ${THEME.color.gainsboro} transparent transparent transparent;
+  clear: top;
+  height: 0;
   margin-left: 50px;
   margin-top: -1px;
-  clear: top;
+  position: absolute;
+  width: 0;
 `
 
 const Body = styled.div`
+  color: ${THEME.color.slateGray};
   font-size: 13px;
-  color: ${COLORS.slateGray};
   padding-top: 2px;
   padding-bottom: 2px;
 `

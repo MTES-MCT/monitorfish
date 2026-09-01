@@ -1,16 +1,16 @@
-import { COLORS } from '@constants/constants'
+import { getNumberOfSeaAndLandBeaconMalfunctions } from '@features/BeaconMalfunction/utils'
 import {
   YearListChevronIcon,
   YearListTitle,
   YearListTitleText
 } from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
-import { getNumberOfSeaAndLandBeaconMalfunctions } from '../../../../../../BeaconMalfunction/utils'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../BeaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '@features/BeaconMalfunction/types'
 
 type YearBeaconMalfunctionsProps = {
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void
@@ -72,43 +72,43 @@ export function YearBeaconMalfunctions({
 }
 
 const AtSeaCircle = styled.span`
-  height: 10px;
-  width: 10px;
-  margin-left: 2px;
-  margin-right: 7px;
   background-color: #9ed7d9;
   border-radius: 50%;
   display: inline-block;
+  height: 10px;
+  margin-left: 2px;
+  margin-right: 7px;
+  width: 10px;
 `
 
 const AtPortCircle = styled.span`
-  height: 10px;
-  width: 10px;
-  margin-left: 2px;
   background-color: #f4deaf;
   border-radius: 50%;
   display: inline-block;
+  height: 10px;
+  margin-left: 2px;
+  width: 10px;
 `
 
 const Year = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-size: 16px;
 `
 
 const YearResume = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   margin-left: 15px;
   vertical-align: text-bottom;
 `
 
 const Row = styled.div`
-  display: flex;
   align-items: center;
-  white-space: nowrap;
   background: ${p => p.theme.color.white};
   color: ${p => p.theme.color.gunMetal};
+  display: flex;
   line-height: 1.9em;
+  white-space: nowrap;
 `
 
 const Column = styled(Row)`

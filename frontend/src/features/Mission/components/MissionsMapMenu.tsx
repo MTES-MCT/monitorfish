@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
@@ -96,8 +95,8 @@ const MissionsMenuBox = styled(MapToolBox)`
 `
 
 const MissionsMenuWrapper = styled.div`
+  background-color: ${THEME.color.white};
   width: 320px;
-  background-color: ${COLORS.white};
 `
 
 const CloseButton = styled(MapMenuDialog.CloseButton)`
@@ -113,7 +112,7 @@ const Section = styled.div`
   padding: 12px;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${COLORS.gainsboro};
+    border-bottom: 1px solid ${THEME.color.gainsboro};
   }
 `
 

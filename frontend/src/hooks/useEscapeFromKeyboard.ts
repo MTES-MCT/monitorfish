@@ -6,18 +6,18 @@ export const useEscapeFromKeyboard = () => {
   } | null>(null)
 
   useEffect(() => {
+    const escapeFromKeyboard = event => {
+      if (event.key === 'Escape') {
+        setEscape({ dummyTrigger: true })
+      }
+    }
+
     document.addEventListener('keydown', escapeFromKeyboard, false)
 
     return () => {
       document.removeEventListener('keydown', escapeFromKeyboard, false)
     }
   }, [])
-
-  const escapeFromKeyboard = event => {
-    if (event.key === 'Escape') {
-      setEscape({ dummyTrigger: true })
-    }
-  }
 
   return escape
 }

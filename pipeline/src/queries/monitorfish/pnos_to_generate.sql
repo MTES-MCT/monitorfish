@@ -108,7 +108,7 @@ WHERE
         )
     AND (
         r.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
-        OR report_id IN (SELECT referenced_report_id FROM acknowledged_messages)
+        OR operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
         OR (value->>'isVerified')::BOOLEAN IS true
     )
     AND (

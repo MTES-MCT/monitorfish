@@ -1,16 +1,42 @@
-WITH deleted_corrected_or_rejected_messages AS (
+WITH acknowledged_messages AS (
     SELECT referenced_report_id
     FROM logbook_reports
     WHERE
         operation_datetime_utc >= :min_trip_date - INTERVAL '1 day'
         AND operation_datetime_utc <= :max_pno_date + INTERVAL '1 week'
-        AND 
-            (
-            operation_type IN ('COR', 'DEL')
-            OR (
-                operation_type = 'RET'
-                AND value->>'returnStatus' = '002'
-            )
+        AND operation_type ='RET'
+        AND value->>'returnStatus' = '000'
+),
+
+deleted_messages AS (
+    SELECT
+        operation_number,
+        referenced_report_id
+    FROM logbook_reports
+    WHERE
+        operation_datetime_utc >= :min_trip_date - INTERVAL '1 day'
+        AND operation_datetime_utc <= :max_pno_date + INTERVAL '1 week'
+        AND operation_type ='DEL'
+),
+
+acknowledged_deleted_messages AS (
+    SELECT referenced_report_id
+    FROM deleted_messages
+    WHERE
+        operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
+),
+
+corrected_messages AS (
+    SELECT
+        referenced_report_id
+    FROM logbook_reports
+    WHERE
+        operation_datetime_utc >= :min_trip_date - INTERVAL '1 day'
+        AND operation_datetime_utc <= :max_pno_date + INTERVAL '1 week'
+        AND operation_type ='COR'
+        AND (
+            flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
+            OR operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
         )
 ),
 
@@ -70,7 +96,18 @@ far_gears AS (
         AND far.operation_datetime_utc < :max_trip_date
         AND far.log_type = 'FAR'
         AND far.cfr = t.cfr
-        AND far.report_id NOT IN (SELECT referenced_report_id FROM deleted_corrected_or_rejected_messages)
+        AND far.report_id NOT IN (SELECT referenced_report_id FROM corrected_messages)
+        AND NOT (
+            far.report_id IN (SELECT referenced_report_id FROM acknowledged_deleted_messages)
+            OR (
+                far.report_id IN (SELECT referenced_report_id FROM deleted_messages)
+                AND far.flag_state NOT IN ('FRA', 'GUF', 'VEN')
+            )
+        )
+        AND (
+            far.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
+            OR far.operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
+        )
         AND CASE
             WHEN (t.trip_number IS NULL OR t.trip_number_was_computed) THEN true 
             ELSE t.trip_number = far.trip_number 
@@ -98,7 +135,18 @@ dep_gears AS (
         AND dep.operation_datetime_utc < :max_trip_date
         AND dep.log_type = 'DEP'
         AND dep.cfr = t.cfr
-        AND dep.report_id NOT IN (SELECT referenced_report_id FROM deleted_corrected_or_rejected_messages)
+        AND dep.report_id NOT IN (SELECT referenced_report_id FROM corrected_messages)
+        AND NOT (
+            dep.report_id IN (SELECT referenced_report_id FROM acknowledged_deleted_messages)
+            OR (
+                dep.report_id IN (SELECT referenced_report_id FROM deleted_messages)
+                AND dep.flag_state NOT IN ('FRA', 'GUF', 'VEN')
+            )
+        )
+        AND (
+            dep.flag_state NOT IN ('FRA', 'GUF', 'VEN') -- Flag states for which we receive RET
+            OR dep.operation_number IN (SELECT referenced_report_id FROM acknowledged_messages)
+        )
         -- sometimes the tripStartDate of PNO messages is rounded a few hours after the actual departure. Adding a 24h buffer is a safety measure to find the DEP in these cases.
         -- Taking the most recent one (with DISTINCT ON / ORDER BY) avoids taking a dep from the previous trip.
         AND (value->>'departureDatetimeUtc')::TIMESTAMPTZ >= t.trip_start_date - INTERVAL '24 hours' 

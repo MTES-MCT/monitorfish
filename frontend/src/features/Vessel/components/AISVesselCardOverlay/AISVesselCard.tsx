@@ -7,7 +7,7 @@ import styled, { useTheme } from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { AIS_CARD_WIDTH, AIS_VESSEL_OVERLAY_CARD_MARGIN } from './constants'
-import { extractAISVesselPropertiesFromFeature, getAISShipTypeLabel } from './utils'
+import { extractAISVesselPropertiesFromFeature, getAISShipTypeLabel, getFlagStateFromMmsi } from './utils'
 import { timeagoFrenchLocale } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
@@ -37,12 +37,17 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
     'vesselName'
   ])
   const featureCoordinates = feature.getGeometry()?.getCoordinates() ?? [0, 0]
+  const flagState = getFlagStateFromMmsi(vesselProperties.mmsi)
 
   return (
     <>
       <CardWrapper>
         <VesselCardHeader>
-          <VesselCardTitle data-cy="vessel-card-name">{vesselProperties.vesselName ?? 'NOM INCONNU'}</VesselCardTitle>
+          {!!flagState && <Flag alt={flagState} rel="preload" src={`flags/${flagState}.svg`} />}
+          <VesselCardTitle data-cy="vessel-card-name">
+            {vesselProperties.vesselName ?? 'NOM INCONNU'}
+            {!!flagState && ` (${flagState.toUpperCase()})`}
+          </VesselCardTitle>
         </VesselCardHeader>
         <ThreeColumnsBody>
           <LatLon>
@@ -213,6 +218,14 @@ const VesselCardHeader = styled.div`
   background: ${p => p.theme.color.charcoal};
   border-radius: 2px 2px 0 0;
   color: ${p => p.theme.color.gainsboro};
+`
+
+const Flag = styled.img<{
+  rel?: 'preload'
+}>`
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
 `
 
 const VesselCardTitle = styled.span`

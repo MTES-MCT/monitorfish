@@ -1,6 +1,6 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
 
-import { SHIP_TYPE_RANGES } from './constants'
+import { COUNTRY_CODE_BY_MID, SHIP_TYPE_RANGES } from './constants'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type Feature from 'ol/Feature'
@@ -30,4 +30,10 @@ export function extractAISVesselPropertiesFromFeature<K extends keyof AISVessel.
 
 export function getAISShipTypeLabel(code: number): string | undefined {
   return SHIP_TYPE_RANGES.find(({ max, min }) => code >= min && code <= max)?.label
+}
+
+export function getFlagStateFromMmsi(mmsi: number | undefined): string | undefined {
+  const mid = String(mmsi).slice(0, 3)
+
+  return COUNTRY_CODE_BY_MID[mid]
 }

@@ -15,7 +15,12 @@ export function getUrlOrPathWithQueryParams(urlOrPath: string, queryParamsAsObje
         return queryParamsAsStringAcc
       }
 
-      const queryParamAsString = Array.isArray(value) ? `${key}=${[...value].sort().join(',')}` : `${key}=${value}`
+      const queryParamAsString = Array.isArray(value)
+        ? `${encodeURIComponent(key)}=${[...value]
+            .sort()
+            .map(item => encodeURIComponent(item))
+            .join(',')}`
+        : `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
 
       return `${queryParamsAsStringAcc}${queryParamsAsStringAcc ? '&' : ''}${queryParamAsString}`
     }, '')

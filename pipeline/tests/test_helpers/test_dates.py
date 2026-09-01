@@ -93,6 +93,18 @@ def test_get_datetime_intervals():
         get_datetime_intervals(s, how="incorrect")
 
 
+def test_get_datetime_intervals_with_empty_series():
+    # An empty input must still yield a float64 Series when `unit` is provided,
+    # not a timedelta64 one, otherwise dividing by the result raises a
+    # `UFuncTypeError` downstream.
+    s = pd.Series([], dtype="datetime64[ns]")
+
+    intervals = get_datetime_intervals(s, unit="h", how="backward")
+
+    assert intervals.dtype == np.float64
+    assert len(intervals) == 0
+
+
 def test_make_periods():
     with pytest.raises(ValueError):
         make_periods(

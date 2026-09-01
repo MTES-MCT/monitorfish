@@ -351,7 +351,7 @@ const LogbookMessages = styled.ul`
 const Text = styled.div<{
   $hasTwoLines?: boolean
 }>`
-  color: ${p => p.theme.color.slateGray};
+  color: ${p => p.theme.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   padding-top: ${p => (p.$hasTwoLines ? '5px' : '0')};

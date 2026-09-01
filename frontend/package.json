@@ -134,7 +134,7 @@
     "codecov": "3.8.3",
     "cypress": "15.21.0",
     "cypress-axe": "1.7.0",
-    "dotenv": "16.5.0",
+    "dotenv": "17.4.2",
     "eslint": "9.39.4",
     "eslint-plugin-cypress": "3.5.0",
     "eslint-plugin-import": "2.32.0",

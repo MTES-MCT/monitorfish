@@ -127,8 +127,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.5.1")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:12.11.0")
-    implementation("org.flywaydb:flyway-database-postgresql:12.11.0")
+    implementation("org.flywaydb:flyway-core:13.1.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.1.0")
     implementation("org.hibernate.validator:hibernate-validator:9.1.1.Final")
     // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
     // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).

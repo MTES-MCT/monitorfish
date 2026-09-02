@@ -169,6 +169,7 @@ export function SpeciesField() {
       presentationCodes: getDefaultPresentationCodes(isEISREnabled, vessel?.vesselLength),
       speciesCode: '',
       speciesName: undefined,
+      toleranceMargin: undefined,
       underSized: false,
       underSizedWeight: undefined
     }

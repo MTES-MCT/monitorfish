@@ -41,6 +41,7 @@ export const updateActionSpeciesOnboard =
         nbFish: undefined,
         speciesCode: specy.species,
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       }))

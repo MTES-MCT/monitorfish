@@ -43,6 +43,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'HKE',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: true,
         underSizedWeight: undefined
       },
@@ -53,6 +54,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'BLI',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       },
@@ -63,6 +65,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'COD',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       },
@@ -73,6 +76,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'ANZ',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       },
@@ -83,6 +87,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'FMI',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       }
@@ -111,6 +116,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'HKE',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: true,
         underSizedWeight: undefined
       },
@@ -121,6 +127,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'BLI',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       },
@@ -131,6 +138,7 @@ describe('utils', () => {
         rejectedWeight: undefined,
         speciesCode: 'ANZ',
         speciesName: undefined,
+        toleranceMargin: undefined,
         underSized: false,
         underSizedWeight: undefined
       }

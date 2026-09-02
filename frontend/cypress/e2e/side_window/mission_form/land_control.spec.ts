@@ -89,8 +89,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     // Pour les espèces débarquées
     cy.fill('Taille des espèces vérifiées', 'Oui')
-    // The weight-related checks are hidden (forced to N/A) pending clarification of the topic.
-    cy.contains('Poids des espèces vérifiés').should('not.exist')
+    cy.fill('Poids des espèces vérifiées', 'Oui')
     cy.contains('Type de contrôle du poids').should('not.exist')
     cy.contains("Informations sur l'opérateur de pesée agréé").should('not.exist')
     cy.fill('Cale contrôlée après déchargement', 'Oui')
@@ -359,7 +358,7 @@ context('Side Window > Mission Form > Land Control', () => {
           ],
           speciesQuantitySeized: 6289.5,
           speciesSizeControlled: 'YES',
-          speciesWeightControlled: 'NOT_APPLICABLE',
+          speciesWeightControlled: 'YES',
           stowagePlanPresent: 'NOT_APPLICABLE',
           underSizedSeparateRecording: 'NO',
           unitWithoutOmegaGauge: true,

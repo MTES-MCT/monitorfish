@@ -173,6 +173,7 @@ export function getSpeciesOnboardWithUntargetedSpeciesGrouped(
     nbFish: undefined,
     speciesCode: UNTARGETED_SPECIES_CODE,
     speciesName: undefined,
+    toleranceMargin: undefined,
     underSized: undefined,
     underSizedWeight: undefined
   }

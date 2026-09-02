@@ -11,6 +11,8 @@ export const SpeciesOnboardControlSchema = z.strictObject({
   presentationCodes: z.array(z.string()).optional(),
   speciesCode: z.string(),
   speciesName: stringOrUndefined,
+  // Set by the e-ISR API only, and never edited in the mission form: it must survive the round-trip untouched
+  toleranceMargin: numberOrUndefined,
   underSized: booleanOrUndefined,
   underSizedWeight: numberOrUndefined
 })

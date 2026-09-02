@@ -11,4 +11,5 @@ class SpeciesOnboardControl {
     var underSizedWeight: Double? = null
     var presentationCodes: List<String>? = null
     var faoZones: List<String>? = null
+    var toleranceMargin: Double? = null
 }

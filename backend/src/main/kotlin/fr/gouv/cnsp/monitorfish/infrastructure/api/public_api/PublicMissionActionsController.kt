@@ -3,7 +3,9 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichPublicMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.UpdateMissionActionSpeciesOnboard
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.PatchableMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.UpdateMissionActionSpeciesOnboardDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.outputs.PublicMissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -26,6 +29,7 @@ class PublicMissionActionsController(
     private val getMissionActions: GetMissionActions,
     private val patchMissionAction: PatchMissionAction,
     private val enrichPublicMissionAction: EnrichPublicMissionAction,
+    private val updateMissionActionSpeciesOnboard: UpdateMissionActionSpeciesOnboard,
 ) {
     @GetMapping("")
     @Operation(summary = "Get mission actions of specified mission")
@@ -49,6 +53,29 @@ class PublicMissionActionsController(
         actionInput: PatchableMissionActionDataInput,
     ): PublicMissionActionDataOutput {
         val updatedMissionAction = patchMissionAction.execute(actionId, actionInput.toPatchableMissionAction())
+
+        return PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(updatedMissionAction))
+    }
+
+    @PutMapping(value = ["/{actionId}/species_onboard/{speciesIndex}"], consumes = ["application/json"])
+    @Operation(summary = "Update a mission action species")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateMissionActionSpeciesOnboard(
+        @PathParam("Action id")
+        @PathVariable(name = "actionId")
+        actionId: Int,
+        @PathParam("Species index")
+        @PathVariable(name = "speciesIndex")
+        speciesIndex: Int,
+        @RequestBody
+        actionInput: UpdateMissionActionSpeciesOnboardDataInput,
+    ): PublicMissionActionDataOutput {
+        val updatedMissionAction =
+            updateMissionActionSpeciesOnboard.execute(
+                id = actionId,
+                speciesIndex = speciesIndex,
+                toleranceMargin = actionInput.toleranceMargin,
+            )
 
         return PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(updatedMissionAction))
     }

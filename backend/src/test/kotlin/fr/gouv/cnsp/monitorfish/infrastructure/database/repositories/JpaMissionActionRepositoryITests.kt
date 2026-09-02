@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionA
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionReportingThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WeightControlMethod
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.WireType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -211,6 +212,32 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
         assertThat(loadedGear.gearMarkingIsCompliant).isEqualTo(ControlCheck.YES)
         assertThat(loadedGear.averageWireThickness).isEqualTo(1.5)
         assertThat(loadedGear.wireType).isEqualTo(WireType.SINGLE)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should persist the species onboard tolerance margin and round-trip it correctly`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val speciesOnboard =
+            SpeciesOnboardControl().also {
+                it.speciesCode = "MNZ"
+                it.declaredWeight = 302.5
+                it.controlledWeight = 450.0
+                it.toleranceMargin = 10.0
+            }
+        val newMission = getDummyMissionAction(dateTime).copy(speciesOnboard = listOf(speciesOnboard))
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.speciesOnboard).hasSize(1)
+        val loadedSpecies = loaded.speciesOnboard.first()
+        assertThat(loadedSpecies.speciesCode).isEqualTo("MNZ")
+        assertThat(loadedSpecies.declaredWeight).isEqualTo(302.5)
+        assertThat(loadedSpecies.toleranceMargin).isEqualTo(10.0)
     }
 
     @Test

@@ -39,6 +39,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInp
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.GearControlDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.MissionActionInfractionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SpeciesOnboardControlDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatHierarchyDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
@@ -499,6 +500,61 @@ class MissionActionsControllerITests {
         runBlocking {
             Mockito.verify(updateMissionAction).execute(eq(123), any())
         }
+    }
+
+    @Test
+    fun `Should keep the species onboard tolerance margin When updating a mission action`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        given(updateMissionAction.execute(any(), any())).willReturn(TestUtils.getDummyMissionAction(dateTime))
+
+        // When
+        api
+            .perform(
+                put("/bff/v1/mission_actions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.LAND_CONTROL,
+                                speciesOnboard =
+                                    listOf(
+                                        SpeciesOnboardControlDataInput(
+                                            speciesCode = "MNZ",
+                                            nbFish = null,
+                                            declaredWeight = 302.5,
+                                            controlledWeight = 450.0,
+                                            underSized = false,
+                                            underSizedWeight = null,
+                                            presentationCodes = listOf("WHL"),
+                                            faoZones = listOf("27.8.b"),
+                                            toleranceMargin = 10.0,
+                                        ),
+                                    ),
+                                hasSomeGearsSeized = false,
+                                hasSomeSpeciesSeized = false,
+                                isFromPoseidon = true,
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isCreated)
+
+        val actionCaptor = argumentCaptor<MissionAction>()
+        Mockito.verify(updateMissionAction).execute(eq(123), actionCaptor.capture())
+        Assertions.assertThat(actionCaptor.firstValue.speciesOnboard).hasSize(1)
+        Assertions
+            .assertThat(
+                actionCaptor.firstValue.speciesOnboard
+                    .first()
+                    .toleranceMargin,
+            ).isEqualTo(10.0)
     }
 
     @Test

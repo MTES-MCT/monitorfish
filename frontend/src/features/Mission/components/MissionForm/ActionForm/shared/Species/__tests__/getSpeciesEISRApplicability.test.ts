@@ -27,6 +27,7 @@ function makeSpecy(
     presentationCodes: undefined,
     speciesCode,
     speciesName: undefined,
+    toleranceMargin: undefined,
     underSized: false,
     underSizedWeight: undefined
   }

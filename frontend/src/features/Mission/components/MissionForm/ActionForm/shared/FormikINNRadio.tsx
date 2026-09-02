@@ -20,7 +20,7 @@ export function FormikINNRadio() {
   const isEligibleVessel = isThirdCountryOrFlaglessVessel(values.flagState)
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
 
-  const { data, isFetching } = useGetIsInInnAreaQuery(
+  const { data, isError } = useGetIsInInnAreaQuery(
     !isLandControl && isEligibleVessel && values.latitude && values.longitude
       ? {
           latitude: values.latitude,
@@ -30,16 +30,18 @@ export function FormikINNRadio() {
   )
 
   const isInInnArea = isLandControl ? isPortInInnArea(values.portLocode) : data?.isInInnArea === true
-  const isApplicable = isEligibleVessel && isInInnArea
+  // Not the negation of `isInInnArea`: for a sea or air control, the area is unknown until the query
+  // resolves, and a failed query never resolves — so an error counts as “not in an INN area”, otherwise
+  // `isINNControl` stays unanswerable and blocks the completion behind a field nobody can see
+  const isNotInInnArea = isLandControl ? !isPortInInnArea(values.portLocode) : data?.isInInnArea === false || isError
 
   useEffect(() => {
-    // `isINNControl` is required to complete the control, and a hidden field can never be answered
-    if (!isApplicable && !isFetching) {
+    if (!isEligibleVessel || isNotInInnArea) {
       setFieldValue('isINNControl', false)
     }
-  }, [isApplicable, isFetching, setFieldValue])
+  }, [isEligibleVessel, isNotInInnArea, setFieldValue])
 
-  if (!isApplicable) {
+  if (!isEligibleVessel || !isInInnArea) {
     return null
   }
 

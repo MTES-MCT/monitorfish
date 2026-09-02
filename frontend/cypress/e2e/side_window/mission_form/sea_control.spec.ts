@@ -925,22 +925,15 @@ context('Side Window > Mission Form > Sea Control', () => {
     // otherwise the whole form is auto-saved as a single creation and never updated
     cy.wait(1200)
 
-    // Editing the unit contact does not change the attached unit, so the control keeps its answers
+    // Editing the unit contact does not change the attached unit, so the control keeps its answers.
+    // Only the action form auto-saves the action, hence the assertion on the checkboxes themselves.
     cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
     cy.wait(1200)
 
-    cy.waitForLastRequest(
-      '@updateMissionAction',
-      {
-        body: {
-          isAdministrativeControl: true,
-          isComplianceWithWaterRegulationsControl: false,
-          isSafetyEquipmentAndStandardsComplianceControl: false,
-          isSeafarersControl: true
-        }
-      },
-      5
-    )
+    cy.get('input[name="isAdministrativeControl"]').should('be.checked')
+    cy.get('input[name="isComplianceWithWaterRegulationsControl"]').should('not.be.checked')
+    cy.get('input[name="isSeafarersControl"]').should('be.checked')
+    cy.get('input[name="isSafetyEquipmentAndStandardsComplianceControl"]').should('not.be.checked')
 
     // Remove the PAM control unit
     cy.fill('Administration 1', undefined)

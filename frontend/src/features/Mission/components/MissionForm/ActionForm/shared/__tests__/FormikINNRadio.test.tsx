@@ -46,7 +46,7 @@ function getIsINNControl(): string {
 describe('<FormikINNRadio />', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: undefined, isFetching: false })
+    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: undefined, isError: false })
   })
 
   it('Should default `isINNControl` to false When the vessel flies an EU flag', () => {
@@ -61,7 +61,9 @@ describe('<FormikINNRadio />', () => {
     expect(getIsINNControl()).toEqual('false')
   })
 
-  it('Should default `isINNControl` to false When the area query gives no answer', () => {
+  it('Should default `isINNControl` to false When the area query fails', () => {
+    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: undefined, isError: true })
+
     renderFormikINNRadio({
       actionType: MissionAction.MissionActionType.SEA_CONTROL,
       flagState: NON_EU_FLAG_STATE,
@@ -73,9 +75,7 @@ describe('<FormikINNRadio />', () => {
     expect(getIsINNControl()).toEqual('false')
   })
 
-  it('Should NOT answer for the operator While the area query is in flight', () => {
-    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: undefined, isFetching: true })
-
+  it('Should NOT answer for the operator While the area query has yet to resolve', () => {
     renderFormikINNRadio({
       actionType: MissionAction.MissionActionType.SEA_CONTROL,
       flagState: NON_EU_FLAG_STATE,
@@ -87,8 +87,18 @@ describe('<FormikINNRadio />', () => {
     expect(getIsINNControl()).toEqual('undefined')
   })
 
+  it('Should NOT answer for the operator While the control location is unknown', () => {
+    renderFormikINNRadio({
+      actionType: MissionAction.MissionActionType.SEA_CONTROL,
+      flagState: NON_EU_FLAG_STATE
+    })
+
+    expect(screen.queryByText('Contrôle INN')).toBeNull()
+    expect(getIsINNControl()).toEqual('undefined')
+  })
+
   it('Should display the radio When a third country vessel is controlled in an INN area', () => {
-    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: { isInInnArea: true }, isFetching: false })
+    mockUseGetIsInInnAreaQuery.mockReturnValue({ data: { isInInnArea: true }, isError: false })
 
     renderFormikINNRadio({
       actionType: MissionAction.MissionActionType.SEA_CONTROL,

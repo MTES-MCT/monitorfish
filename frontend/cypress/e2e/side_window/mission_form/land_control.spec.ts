@@ -89,7 +89,7 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')
     // Pour les espèces débarquées
     cy.fill('Taille des espèces vérifiées', 'Oui')
-    cy.fill('Poids des espèces vérifiées', 'Oui')
+    cy.fill('Poids des espèces vérifiés', 'Oui')
     cy.contains('Type de contrôle du poids').should('not.exist')
     cy.contains("Informations sur l'opérateur de pesée agréé").should('not.exist')
     cy.fill('Cale contrôlée après déchargement', 'Oui')

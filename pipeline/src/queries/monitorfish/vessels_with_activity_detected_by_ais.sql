@@ -11,13 +11,12 @@ SELECT DISTINCT ON (ais.cfr)
     ais.latitude,
     ais.longitude,
     v.id AS vessel_id,
-    b.beacon_status,
     b.beacon_number,
     vms.last_position_datetime_utc AS vms_last_position_datetime_utc,
     ais.date_time AS triggering_behaviour_datetime_utc
 FROM ais_positions_hourly ais
 JOIN vessels v ON v.cfr = ais.cfr
-JOIN beacons b ON b.vessel_id = v.id AND b.beacon_status = 'ACTIVATED'
+JOIN beacons b ON b.vessel_id = v.id
 LEFT JOIN last_positions_vms vms ON vms.cfr = ais.cfr
 LEFT JOIN last_positions lp ON lp.cfr = ais.cfr
 LEFT JOIN districts d ON d.district_code = v.district_code

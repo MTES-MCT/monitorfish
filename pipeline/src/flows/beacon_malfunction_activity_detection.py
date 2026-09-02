@@ -4,7 +4,6 @@ import pandas as pd
 from prefect import flow, task, unmapped
 
 from src.entities.alerts import AlertType
-from src.entities.beacon_malfunctions import BeaconStatus
 from src.generic_tasks import extract
 from src.shared_tasks.alerts import (
     extract_active_reportings,
@@ -81,7 +80,6 @@ def get_vessels_without_malfunction(
 @task
 def add_malfunction_start_fields(vessels: pd.DataFrame) -> pd.DataFrame:
     vessels = vessels.copy(deep=True)
-    vessels["beacon_status"] = BeaconStatus.ACTIVATED.value
     vessels = vessels.rename(
         columns={"vms_last_position_datetime_utc": "malfunction_start_date_utc"}
     )

@@ -15,25 +15,6 @@ from config import (
 from src.entities.communication_means import CommunicationMeans
 
 
-class BeaconStatus(Enum):
-    ACTIVATED = "ACTIVATED"
-    DEACTIVATED = "DEACTIVATED"
-    IN_TEST = "IN_TEST"
-    NON_APPROVED = "NON_APPROVED"
-    UNSUPERVISED = "UNSUPERVISED"
-
-    @staticmethod
-    def from_poseidon_status(poseidon_status: str):
-        mapping = {
-            "Activée": BeaconStatus.ACTIVATED,
-            "Désactivée": BeaconStatus.DEACTIVATED,
-            "En test": BeaconStatus.IN_TEST,
-            "Non agréée": BeaconStatus.NON_APPROVED,
-            "Non surveillée": BeaconStatus.UNSUPERVISED,
-        }
-        return mapping[poseidon_status]
-
-
 class BeaconMalfunctionStage(Enum):
     INITIAL_ENCOUNTER = "INITIAL_ENCOUNTER"
     FOUR_HOUR_REPORT = "FOUR_HOUR_REPORT"

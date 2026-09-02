@@ -66,7 +66,6 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         columns={
             "cfr": "internal_reference_number",
             "external_immatriculation": "external_reference_number",
-            "beacon_status": "beacon_status_at_malfunction_creation",
         }
     )
 
@@ -87,7 +86,6 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         "latitude",
         "longitude",
         "beacon_number",
-        "beacon_status_at_malfunction_creation",
         "initial_vessel_status",
         "is_followed",
         "creation_datetime_utc",

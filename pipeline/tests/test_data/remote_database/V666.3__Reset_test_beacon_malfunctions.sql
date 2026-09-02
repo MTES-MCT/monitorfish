@@ -20,7 +20,6 @@ INSERT INTO beacon_malfunctions (
     latitude,
     longitude,
     beacon_number,
-    beacon_status_at_malfunction_creation,
     initial_vessel_status,
     creation_datetime_utc,
     is_followed
@@ -45,7 +44,6 @@ INSERT INTO beacon_malfunctions (
     45.236,
     -3.569,
     '123456',
-    'ACTIVATED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days 4 hours',
     true
@@ -70,7 +68,6 @@ INSERT INTO beacon_malfunctions (
     42.843,
     -8.568,
     'A56CZ2',
-    'UNSUPERVISED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days 4 hours',
     false
@@ -95,7 +92,6 @@ INSERT INTO beacon_malfunctions (
     -8.569,
     -23.1569,
     'BEA951357',
-    'ACTIVATED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '16 hours 10 minutes',
     true
@@ -120,7 +116,6 @@ INSERT INTO beacon_malfunctions (
     -6.862,
     51.1686,
     'BEACON_NOT_EMITTING',
-    'ACTIVATED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes',
     true
@@ -145,7 +140,6 @@ INSERT INTO beacon_malfunctions (
     -6.162,
     50.185,
     '987654',
-    'ACTIVATED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
     true
@@ -170,7 +164,6 @@ INSERT INTO beacon_malfunctions (
     0.0,
     0.0,
     'NEW_BEACON_ACT_DET',
-    'ACTIVATED',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '6 hours',
     false

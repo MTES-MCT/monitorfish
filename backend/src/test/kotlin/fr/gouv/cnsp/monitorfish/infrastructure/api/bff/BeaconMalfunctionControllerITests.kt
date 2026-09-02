@@ -19,7 +19,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotifications
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -103,7 +102,6 @@ class BeaconMalfunctionControllerITests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 123,
                 ),
             ),
@@ -141,7 +139,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -233,7 +230,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
@@ -327,7 +323,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -386,7 +381,6 @@ class BeaconMalfunctionControllerITests {
                         null,
                         ZonedDateTime.now(),
                         beaconNumber = "123465",
-                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                         vesselId = 123,
                     ),
                 comments =

@@ -2,7 +2,6 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -59,9 +58,6 @@ data class BeaconMalfunctionEntity(
     val requestedNotificationForeignFmcCode: String?,
     @Column(name = "beacon_number")
     val beaconNumber: String,
-    @Enumerated(EnumType.STRING)
-    @Column(name = "beacon_status_at_malfunction_creation")
-    val beaconStatusAtMalfunctionCreation: BeaconStatus,
     @Column(name = "is_followed")
     val isFollowed: Boolean,
 ) {
@@ -84,7 +80,6 @@ data class BeaconMalfunctionEntity(
             notificationRequested = notificationRequested,
             requestedNotificationForeignFmcCode = requestedNotificationForeignFmcCode,
             beaconNumber = beaconNumber,
-            beaconStatusAtMalfunctionCreation = beaconStatusAtMalfunctionCreation,
             isFollowed = isFollowed,
         )
 }

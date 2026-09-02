@@ -925,6 +925,23 @@ context('Side Window > Mission Form > Sea Control', () => {
     // otherwise the whole form is auto-saved as a single creation and never updated
     cy.wait(1200)
 
+    // Editing the unit contact does not change the attached unit, so the control keeps its answers
+    cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
+    cy.wait(1200)
+
+    cy.waitForLastRequest(
+      '@updateMissionAction',
+      {
+        body: {
+          isAdministrativeControl: true,
+          isComplianceWithWaterRegulationsControl: false,
+          isSafetyEquipmentAndStandardsComplianceControl: false,
+          isSeafarersControl: true
+        }
+      },
+      5
+    )
+
     // Remove the PAM control unit
     cy.fill('Administration 1', undefined)
     cy.fill('Unité 1', 'Cultures marines 56')

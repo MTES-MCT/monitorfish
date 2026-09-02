@@ -1023,6 +1023,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionActionOne')
+    // MALOTRU is flagless: with the INN area left unresolved, the hidden INN field must still be answered
+    cy.intercept('GET', '/bff/v1/mission_actions/is-in-inn-area*', { statusCode: 500 })
 
     // -------------------------------------------------------------------------
     // Form
@@ -1057,7 +1059,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
       cy.fill('Saisi par', 'Marlin CROSS')
 
-      cy.wait('@updateMissionAction')
+      cy.waitForLastRequest('@updateMissionAction', { body: { isINNControl: false } }, 5)
     })
   })
 

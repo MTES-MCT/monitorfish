@@ -42,3 +42,12 @@ SET creation_datetime_utc = malfunction_start_date_utc + INTERVAL '60 hours'
 WHERE initial_vessel_status = 'AT_PORT'::beacon_malfunctions_vessel_status;
 
 ALTER TABLE beacon_malfunctions ALTER COLUMN creation_datetime_utc SET NOT NULL;
+
+-- Update is_followed attribute
+UPDATE beacon_malfunctions
+SET is_followed = 
+WHERE initial_vessel_status = 'AT_SEA'::beacon_malfunctions_vessel_status;
+
+-- Drop unused column
+ALTER TABLE beacon_malfunctions
+DROP COLUMN beacon_status_at_malfunction_creation;

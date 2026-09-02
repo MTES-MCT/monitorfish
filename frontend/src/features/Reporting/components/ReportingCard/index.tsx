@@ -63,8 +63,10 @@ export function ReportingCard({
   const canBeArchived = !(
     reporting.type === ReportingType.ALERT && reporting.value.type === PendingAlertValueType.MISSING_FAR_48_HOURS_ALERT
   )
-  const alertDateTime = getDateTime(
-    reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate,
+
+  const reportingDateTime = getDateTime(
+    reporting.reportingDate ||
+      (reporting.type === ReportingType.ALERT ? reporting.validationDate : reporting.creationDate),
     true
   )
   const otherOccurrencesDates = otherOccurrencesOfSameAlert.map((alert, index, array) => {
@@ -181,7 +183,7 @@ export function ReportingCard({
             {reportingActor} / {reporting.type === ReportingType.ALERT ? reporting.value.name : reporting.value.title}
           </Title>
           <DateText>
-            {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {alertDateTime}
+            {otherOccurrencesOfSameAlert.length > 0 ? 'Dernière alerte le' : 'Le'} {reportingDateTime}
             {otherOccurrencesOfSameAlert.length > 0 && (
               <>
                 {isOtherOccurrencesDatesOpened ? (

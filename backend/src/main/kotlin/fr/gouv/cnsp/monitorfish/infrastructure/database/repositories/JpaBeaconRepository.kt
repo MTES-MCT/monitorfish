@@ -29,5 +29,4 @@ class JpaBeaconRepository(
         }
     }
 
-    override fun findActivatedBeaconNumbers(): List<String> = dbBeaconRepository.findActivatedBeaconNumbers()
 }

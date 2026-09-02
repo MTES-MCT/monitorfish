@@ -5,7 +5,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionActionPropertyName
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -57,7 +56,6 @@ class GetVesselBeaconMalfunctionsUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 1,
                 ),
                 BeaconMalfunction(
@@ -74,7 +72,6 @@ class GetVesselBeaconMalfunctionsUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 1,
                 ),
             ),

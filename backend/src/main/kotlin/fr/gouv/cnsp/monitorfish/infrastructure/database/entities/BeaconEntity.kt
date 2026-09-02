@@ -1,11 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.Instant
@@ -19,9 +16,6 @@ data class BeaconEntity(
     val beaconNumber: String,
     @Column(name = "vessel_id")
     val vesselId: Int? = null,
-    @Column(name = "beacon_status")
-    @Enumerated(EnumType.STRING)
-    val beaconStatus: BeaconStatus? = null,
     @Column(name = "satellite_operator_id")
     val satelliteOperatorId: Int? = null,
     @Column(name = "is_coastal")
@@ -33,7 +27,6 @@ data class BeaconEntity(
         Beacon(
             beaconNumber = beaconNumber,
             vesselId = vesselId,
-            beaconStatus = beaconStatus,
             satelliteOperatorId = satelliteOperatorId,
             isCoastal = isCoastal,
             loggingDatetimeUtc = loggingDatetimeUtc?.atZone(ZoneOffset.UTC),

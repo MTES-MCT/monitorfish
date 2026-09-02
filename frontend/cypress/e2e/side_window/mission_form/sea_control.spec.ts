@@ -925,8 +925,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // otherwise the whole form is auto-saved as a single creation and never updated
     cy.wait(1200)
 
-    // Editing the unit contact does not change the attached unit, so the control keeps its answers.
-    // Only the action form auto-saves the action, hence the assertion on the checkboxes themselves.
+    // An action only auto-saves on its own form changes, so a unit edit sends no request to assert on
     cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
     cy.wait(1200)
 

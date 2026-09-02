@@ -70,11 +70,10 @@ export function FormikMultiControlUnitPicker({
       index: number,
       nextControlUnit: LegacyControlUnit.LegacyControlUnit | LegacyControlUnit.LegacyControlUnitDraft
     ) => {
-      const previousControlUnit = values[name][index]
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      // Resetting on any edit of the unit erases the checkboxes at each keystroke in its contact
-      if (previousControlUnit?.id !== nextControlUnit.id) {
+      // Resetting on any edit would erase the checkboxes at each keystroke in the unit contact
+      if (values[name][index]?.id !== nextControlUnit.id) {
         updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAMOrULAM)
       }
 

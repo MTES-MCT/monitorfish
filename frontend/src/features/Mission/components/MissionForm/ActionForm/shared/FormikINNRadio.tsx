@@ -29,17 +29,15 @@ export function FormikINNRadio() {
       : skipToken
   )
 
-  const isInInnArea = isLandControl ? isPortInInnArea(values.portLocode) : data?.isInInnArea === true
-  // Not the negation of `isInInnArea`: for a sea or air control, the area is unknown until the query
-  // resolves, and a failed query never resolves — so an error counts as “not in an INN area”, otherwise
-  // `isINNControl` stays unanswerable and blocks the completion behind a field nobody can see
-  const isNotInInnArea = isLandControl ? !isPortInInnArea(values.portLocode) : data?.isInInnArea === false || isError
+  // `undefined` until a sea or air control area query resolves, hence the explicit `=== false` below
+  const isInInnArea = isLandControl ? isPortInInnArea(values.portLocode) : data?.isInInnArea
 
   useEffect(() => {
-    if (!isEligibleVessel || isNotInInnArea) {
+    // A failed query never resolves, and an unanswered `isINNControl` blocks the completion for good
+    if (!isEligibleVessel || isInInnArea === false || isError) {
       setFieldValue('isINNControl', false)
     }
-  }, [isEligibleVessel, isNotInInnArea, setFieldValue])
+  }, [isEligibleVessel, isInInnArea, isError, setFieldValue])
 
   if (!isEligibleVessel || !isInInnArea) {
     return null

@@ -8,7 +8,6 @@ from config import BEACON_MALFUNCTIONS_ENDPOINT
 from src.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionVesselStatus,
-    BeaconStatus,
 )
 from src.exceptions import MonitorfishHealthError
 from src.flows.update_beacon_malfunctions import (
@@ -84,19 +83,13 @@ def test_extract_vessels_that_should_emit(reset_test_data):
                 "BEA951357",
                 "NEW_BEACON_ACT_DET",
             ],
-            "beacon_status": [
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-            ],
             "satellite_operator_id": [1, 2, 2, 1],
         }
     )
     pd.testing.assert_frame_equal(
         (
             vessels_that_should_emit[
-                ["vessel_id", "beacon_number", "beacon_status", "satellite_operator_id"]
+                ["vessel_id", "beacon_number", "satellite_operator_id"]
             ]
             .sort_values("vessel_id")
             .reset_index(drop=True)
@@ -362,22 +355,6 @@ def test_get_ended_malfunction_ids():
                 False,
                 False,
             ],
-            "beacon_status": [
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-            ],
             "vessel_status": [
                 BeaconMalfunctionVesselStatus.AT_SEA.value,
                 BeaconMalfunctionVesselStatus.NO_NEWS.value,
@@ -579,9 +556,6 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         {
             "vessel_id": [2],
             "beacon_number": ["123456"],
-            "beacon_status_at_malfunction_creation": [
-                BeaconStatus.ACTIVATED.value,
-            ],
             "notification_requested": [
                 BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION.value,
             ],

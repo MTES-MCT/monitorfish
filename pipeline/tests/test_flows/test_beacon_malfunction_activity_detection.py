@@ -4,7 +4,6 @@ from unittest.mock import patch
 import pandas as pd
 
 from config import BEACON_MALFUNCTIONS_ENDPOINT
-from src.entities.beacon_malfunctions import BeaconStatus
 from src.flows.beacon_malfunction_activity_detection import (
     add_malfunction_start_fields,
     beacon_malfunction_activity_detection_flow,
@@ -74,7 +73,7 @@ def test_get_vessels_without_malfunction_when_all_have_malfunctions():
     assert get_vessels_without_malfunction(vessels, malfunctions).empty
 
 
-def test_add_malfunction_start_fields_sets_beacon_status_and_renames_vms_date():
+def test_add_malfunction_start_fields_renames_vms_date():
     vms_date = datetime(2026, 1, 1, 10, 0, 0)
     vessels = pd.DataFrame(
         {
@@ -85,11 +84,9 @@ def test_add_malfunction_start_fields_sets_beacon_status_and_renames_vms_date():
     )
     result = add_malfunction_start_fields(vessels)
 
-    assert (result["beacon_status"] == BeaconStatus.ACTIVATED.value).all()
     assert "malfunction_start_date_utc" in result.columns
     assert "vms_last_position_datetime_utc" not in result.columns
     assert result.loc[0, "malfunction_start_date_utc"] == vms_date
-    assert "beacon_status" not in vessels.columns  # original not mutated
 
 
 # ─── Flow integration tests ────────────────────────────────────────────────────

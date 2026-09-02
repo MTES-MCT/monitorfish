@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.given
@@ -12,11 +13,15 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completi
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.SpeciesOnboardControl
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichPublicMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichedMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.UpdateMissionActionSpeciesOnboard
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -33,6 +38,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
@@ -56,6 +62,9 @@ class PublicMissionActionsControllerITests {
 
     @MockitoBean
     private lateinit var enrichPublicMissionAction: EnrichPublicMissionAction
+
+    @MockitoBean
+    private lateinit var updateMissionActionSpeciesOnboard: UpdateMissionActionSpeciesOnboard
 
     private fun <T> givenSuspended(block: suspend () -> T) = BDDMockito.given(runBlocking { block() })!!
 
@@ -211,5 +220,96 @@ class PublicMissionActionsControllerITests {
         assertThat(patchCaptor.firstValue.actionEndDatetimeUtc)
             .isEqualTo(Optional.of(ZonedDateTime.parse("2026-06-10T09:30:59Z")))
         assertThat(patchCaptor.firstValue.observationsByUnit).isEqualTo(Optional.empty<String>())
+    }
+
+    @Test
+    fun `Should update the tolerance margin of a species onboard`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val speciesOnboard =
+            SpeciesOnboardControl().also {
+                it.speciesCode = "MNZ"
+                it.toleranceMargin = 12.5
+            }
+        val updatedAction = TestUtils.getDummyMissionAction(dateTime).copy(speciesOnboard = listOf(speciesOnboard))
+        given(updateMissionActionSpeciesOnboard.execute(any(), any(), any())).willReturn(updatedAction)
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(missionAction = invocation.getArgument(0))
+        }
+
+        // When
+        api
+            .perform(
+                put("/api/v1/mission_actions/123/species_onboard/1")
+                    .content(
+                        """
+                        {
+                            "toleranceMargin": 12.5
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.speciesOnboard[0].speciesCode", equalTo("MNZ")))
+            .andExpect(jsonPath("$.speciesOnboard[0].toleranceMargin", equalTo(12.5)))
+
+        Mockito.verify(updateMissionActionSpeciesOnboard).execute(eq(123), eq(1), eq(12.5))
+    }
+
+    @Test
+    fun `Should erase the tolerance margin of a species onboard`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val updatedAction = TestUtils.getDummyMissionAction(dateTime)
+        given(updateMissionActionSpeciesOnboard.execute(any(), any(), anyOrNull())).willReturn(updatedAction)
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(missionAction = invocation.getArgument(0))
+        }
+
+        // When
+        api
+            .perform(
+                put("/api/v1/mission_actions/123/species_onboard/0")
+                    .content(
+                        """
+                        {
+                            "toleranceMargin": null
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+
+        Mockito.verify(updateMissionActionSpeciesOnboard).execute(eq(123), eq(0), eq<Double?>(null))
+    }
+
+    @Test
+    fun `Should return 404 When the species onboard is not found`() {
+        // Given
+        given(updateMissionActionSpeciesOnboard.execute(any(), any(), any()))
+            .willThrow(
+                BackendUsageException(
+                    BackendUsageErrorCode.NOT_FOUND,
+                    message = "Species index 5 not found in action 123",
+                ),
+            )
+
+        // When
+        api
+            .perform(
+                put("/api/v1/mission_actions/123/species_onboard/5")
+                    .content(
+                        """
+                        {
+                            "toleranceMargin": 12.5
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isNotFound)
+            .andExpect(jsonPath("$.code", equalTo("NOT_FOUND")))
     }
 }

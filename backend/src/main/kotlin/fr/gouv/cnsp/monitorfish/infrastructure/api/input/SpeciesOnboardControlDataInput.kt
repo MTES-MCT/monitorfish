@@ -12,6 +12,7 @@ data class SpeciesOnboardControlDataInput(
     val underSizedWeight: Double?,
     val presentationCodes: List<String>?,
     val faoZones: List<String>?,
+    val toleranceMargin: Double? = null,
 ) {
     fun toSpeciesOnboardControl() =
         SpeciesOnboardControl().also { speciesControl ->
@@ -24,5 +25,6 @@ data class SpeciesOnboardControlDataInput(
             speciesControl.underSizedWeight = underSizedWeight
             speciesControl.presentationCodes = presentationCodes
             speciesControl.faoZones = faoZones
+            speciesControl.toleranceMargin = toleranceMargin
         }
 }

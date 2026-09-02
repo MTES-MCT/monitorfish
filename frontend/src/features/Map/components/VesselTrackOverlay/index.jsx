@@ -1,10 +1,10 @@
 import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
+import { THEME } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { VesselTrackCard } from './VesselTrackCard'
-import { COLORS } from '../../../../constants/constants'
+import { VesselTrackCard } from './VesselTrackCard.jsx'
 import { LayerProperties } from '../../constants'
 import { monitorfishMap } from '../../monitorfishMap'
 import { getMapResolution } from '../../utils'
@@ -86,12 +86,12 @@ export function VesselTrackOverlay({ feature }) {
 }
 
 const VesselTrackCardOverlayComponent = styled.div`
-  position: absolute;
-  top: ${props => props.$overlayTopLeftMargin[0]}px;
-  left: ${props => props.$overlayTopLeftMargin[1]}px;
-  width: 350px;
-  text-align: left;
-  background-color: ${COLORS.gainsboro};
+  background-color: ${THEME.color.gainsboro};
   border-radius: 2px;
+  left: ${props => props.$overlayTopLeftMargin[1]}px;
+  position: absolute;
+  text-align: left;
+  top: ${props => props.$overlayTopLeftMargin[0]}px;
+  width: 350px;
   z-index: 300;
 `

@@ -5,7 +5,6 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { AdministrativeZone } from './AdministrativeZone'
-import { COLORS } from '../../../../constants/constants'
 import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -50,34 +49,34 @@ export function AdministrativeZonesGroup({ group, zones }: AdministrativeZonesGr
 }
 
 const Row = styled.div`
-  width: 100%;
   display: block;
+  width: 100%;
 `
 
 const Text = styled.span`
-  padding-left: 20px;
-  width: 100%;
   display: inline-block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding-bottom: 5px;
-  padding-top: 8px;
+  flex: content;
   font-weight: 500;
   line-height: 20px;
-  flex: content;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-bottom: 5px;
+  padding-top: 8px;
+  text-overflow: ellipsis;
+  width: 100%;
 `
 
 const Zone = styled.span<{
   $isOpen: boolean
 }>`
+  display: flex;
+  padding-bottom: 2px;
   width: 100%;
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  display: flex;
-  padding-bottom: 2px;
 
-  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${COLORS.lightGray};`)}
+  ${p => (!p.$isOpen ? null : `border-bottom: 1px solid ${THEME.color.lightGray};`)}
   &:hover {
     background: ${THEME.color.blueGray25};
   }

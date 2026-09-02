@@ -1,8 +1,8 @@
 // TODO Remove temporary `as any` and `@ts-ignore` (fresh migration to TS).
 
-import { COLORS } from '@constants/constants'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { BACKOFFICE_SEARCH_PROPERTIES } from 'domain/entities/backoffice'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -86,40 +86,40 @@ export function SearchRegulations({ regulatoryZoneListByRegTerritory, setFoundRe
 }
 
 const SearchContainer = styled.div`
+  background-color: white;
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 25px 40px 0;
-  background-color: white;
 `
 
 const SearchBox = styled.div`
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  border: 1px ${COLORS.lightGray} solid;
+  border: 1px ${THEME.color.lightGray} solid;
   border-radius: 0;
   background-color: white;
+  display: flex;
+  flex-direction: row;
   margin-right: 10px;
   width: 100%;
 `
 
 const SearchBoxInput = styled.input`
-  margin: 0;
-  color: ${COLORS.gunMetal};
-  font-size: 13px;
-  height: 40px;
-  width: 100%;
-  padding: 0 5px 0 10px;
+  color: ${THEME.color.gunMetal};
   background-color: white;
   border: none;
+  font-size: 13px;
+  height: 40px;
+  margin: 0;
+  padding: 0 5px 0 10px;
+  width: 100%;
 `
 
 const SearchIcon = styled(SearchIconSVG)`
-  width: 24px;
+  color: ${THEME.color.lightGray};
+  float: right;
   height: 24px;
   margin-top: 2px;
   margin-right: 8px;
-  float: right;
-  color: ${COLORS.lightGray};
+  width: 24px;
 `

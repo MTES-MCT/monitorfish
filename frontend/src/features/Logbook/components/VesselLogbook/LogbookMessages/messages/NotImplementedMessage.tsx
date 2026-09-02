@@ -1,6 +1,5 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
-
-import { COLORS } from '../../../../../../constants/constants'
 
 export function NotImplementedMessage() {
   return (
@@ -11,21 +10,19 @@ export function NotImplementedMessage() {
 }
 
 const Zone = styled.div`
-  padding: 5px 10px 0px 10px;
-  margin-top: 10px;
-  text-align: left;
+  background: ${THEME.color.white};
   display: flex;
   flex-wrap: wrap;
-  background: ${COLORS.white};
+  margin-top: 10px;
+  padding: 5px 10px 0px 10px;
+  text-align: left;
 `
 
 const Message = styled.div`
+  color: ${THEME.color.slateGray};
+  display: table;
+  margin: 5px 0;
+  min-width: 40%;
   padding: 5px;
   width: inherit;
-  display: table;
-  margin: 0;
-  min-width: 40%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  color: ${COLORS.slateGray};
 `

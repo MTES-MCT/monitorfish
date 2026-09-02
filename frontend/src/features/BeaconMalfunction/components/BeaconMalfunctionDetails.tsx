@@ -1,10 +1,10 @@
-import { COLORS } from '@constants/constants'
 import { BeaconMalfunctionDetailsFollowUp } from '@features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp'
 import { EquipmentTab } from '@features/BeaconMalfunction/constants'
 import { BeaconMalfunctionBody } from '@features/Vessel/components/VesselSidebar/components/Equipment/resume/BeaconMalfunctionBody'
 import { CurrentBeaconMalfunctionBody } from '@features/Vessel/components/VesselSidebar/components/Equipment/resume/CurrentBeaconMalfunctionBody'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { setBeaconMalfunctionsTab } from '../../../domain/shared_slices/BeaconMalfunction'
@@ -66,7 +66,7 @@ const Arrow = styled(ArrowSVG)`
 `
 
 const Previous = styled.a`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   cursor: pointer;
   display: inline-block;
   font-size: 13px;
@@ -75,7 +75,7 @@ const Previous = styled.a`
 `
 
 const Zone = styled.div`
-  background: ${COLORS.white};
+  background: ${THEME.color.white};
   margin-top: 10px;
   margin-bottom: 10px;
   padding-bottom: 10px;
@@ -84,8 +84,8 @@ const Zone = styled.div`
 `
 
 const Title = styled.div`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.white};
+  background: ${THEME.color.charcoal};
+  color: ${THEME.color.white};
   font-size: 13px;
   font-weight: 500;
   margin-bottom: 10px;

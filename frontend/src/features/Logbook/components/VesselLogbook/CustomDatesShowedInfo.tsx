@@ -1,10 +1,10 @@
 import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from '../../../../constants/constants'
-import { useMainAppDispatch } from '../../../../hooks/useMainAppDispatch'
-import { useMainAppSelector } from '../../../../hooks/useMainAppSelector'
 import { getDate } from '../../../../utils'
 import { getTrackRequestFromTrackDepth } from '../../../Vessel/types/vesselTrackDepth'
 
@@ -44,9 +44,9 @@ export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
 }
 
 const ShowLastPositions = styled.a`
-  float: right;
   cursor: pointer;
   color: ${p => p.theme.color.gainsboro};
+  float: right;
   text-decoration: underline;
 
   &:hover {
@@ -61,9 +61,9 @@ const TrackDepthInfo = styled.span`
 const Wrapper = styled.div<{
   width?: number | undefined
 }>`
-  width: ${p => (p.width ? p.width : 480)}px;
+  background: ${THEME.color.slateGray};
+  color: ${p => p.theme.color.gainsboro};
   margin: 0;
   padding: 10px 10px 10px 10px;
-  color: ${p => p.theme.color.gainsboro};
-  background: ${COLORS.slateGray};
+  width: ${p => (p.width ? p.width : 480)}px;
 `

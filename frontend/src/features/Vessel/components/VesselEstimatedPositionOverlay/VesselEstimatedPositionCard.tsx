@@ -1,5 +1,4 @@
-import { COLORS } from '@constants/constants'
-import React from 'react'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const VesselEstimatedPositionCard = ({ coordinates }) => {
@@ -21,34 +20,34 @@ export const VesselEstimatedPositionCard = ({ coordinates }) => {
 }
 
 const Text = styled.div`
-  vertical-align: middle;
   display: inline-block;
   font-size: 13px;
   padding-bottom: 2px;
+  vertical-align: middle;
 `
 
 const TrianglePointer = styled.div`
+  height: auto;
   margin-left: auto;
   margin-right: auto;
-  height: auto;
   width: auto;
 `
 
 const TriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.gainsboro} transparent transparent transparent;
+  border-color: ${THEME.color.gainsboro} transparent transparent transparent;
+  clear: top;
+  height: 0;
   margin-left: 150px;
   margin-top: -1px;
-  clear: top;
+  position: absolute;
+  width: 0;
 `
 
 const Body = styled.div`
+  color: ${THEME.color.slateGray};
   font-size: 13px;
-  color: ${COLORS.slateGray};
   padding-top: 2px;
   padding-bottom: 2px;
 `

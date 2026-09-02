@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useDroppable } from '@dnd-kit/core'
+import { THEME } from '@mtes-mct/monitor-ui'
 
 export function Droppable({ children, disabled, id, index }) {
   const { isOver, setNodeRef } = useDroppable({
@@ -10,7 +10,7 @@ export function Droppable({ children, disabled, id, index }) {
     id
   })
   const style = {
-    background: isOver ? COLORS.lightGray : COLORS.gainsboro,
+    background: isOver ? THEME.color.lightGray : THEME.color.gainsboro,
     height: 'calc(100vh - 100px)',
     margin: '10px 5px',
     transition: '0.5s all'

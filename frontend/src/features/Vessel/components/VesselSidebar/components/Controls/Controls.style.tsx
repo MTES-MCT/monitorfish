@@ -1,20 +1,20 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export const Red = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  background-color: #e1000f;
+  background-color: ${THEME.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
+  height: 8px;
+  margin-left: 5px;
+  width: 8px;
 `
 
 export const Green = styled.span`
-  height: 8px;
-  width: 8px;
-  margin-left: 5px;
-  background-color: ${COLORS.mediumSeaGreen};
+  background-color: ${THEME.color.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
+  height: 8px;
+  margin-left: 5px;
+  width: 8px;
 `

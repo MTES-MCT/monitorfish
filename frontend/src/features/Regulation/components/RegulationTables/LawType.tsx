@@ -1,7 +1,7 @@
-import { COLORS } from '@constants/constants'
 import { useBackofficeAppDispatch } from '@hooks/useBackofficeAppDispatch'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
-import { useState, useEffect } from 'react'
+import { THEME } from '@mtes-mct/monitor-ui'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { EmptyResult } from '../../../commonStyles/Text.style'
@@ -92,59 +92,56 @@ export function LawType({ isEditable, lawType, regZoneByLawType, territory }: La
 }
 
 const LawTypeContainer = styled.div`
-  margin-top: 10px;
   display: flex;
-  min-height: 40px;
   flex-direction: column;
+  margin-top: 10px;
+  min-height: 40px;
   overflow: hidden;
 `
 
 const LawTypeName = styled.div`
-  display: flex;
-  font-size: 16px;
-  color: ${COLORS.gunMetal};
   border-bottom: 2px solid ${p => p.theme.color.lightGray};
+  display: flex;
+  color: ${THEME.color.gunMetal};
+  cursor: pointer;
+  font-size: 16px;
   font-weight: 700;
+  padding-bottom: 5px;
   text-align: left;
   text-transform: uppercase;
-  cursor: pointer;
-  padding-bottom: 5px;
 `
 
 const LawTypeText = styled.div`
   flex: 1;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const RegulatoryZoneLayerList = styled.ul<{
   $isOpen: boolean
 }>`
-  margin: 0;
-  overflow-y: auto;
-  overflow-x: unset;
-  flex: 1;
-  background-color: ${COLORS.white};
-  border-radius: 0;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  padding: 0;
-  color: ${COLORS.gunMetal};
+  background-color: ${THEME.color.white};
+  border-radius: 0 0 2px 2px;
+  color: ${THEME.color.gunMetal};
   height: ${props => (props.$isOpen ? 'unset' : '0')};
-  opacity: ${props => (props.$isOpen ? '1' : '0')};
-  transition: all 0.5s;
-  overflow-x: hidden;
+  flex: 1;
+  margin: 0;
   max-width: 100%;
+  opacity: ${props => (props.$isOpen ? '1' : '0')};
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0;
+  transition: all 0.5s;
 `
 
 const ChevronIcon = styled(ChevronIconSVG)<{
   $isOpen: boolean
 }>`
-  transform: ${props => (props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
-  width: 17px;
   float: right;
   margin-right: 10px;
   margin-top: 5px;
+  transform: ${props => (props.$isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
   transition: all 0.5s;
+  width: 17px;
 `

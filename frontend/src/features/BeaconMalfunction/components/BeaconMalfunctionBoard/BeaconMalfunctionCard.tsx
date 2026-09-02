@@ -1,5 +1,5 @@
-import { COLORS } from '@constants/constants'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
@@ -161,16 +161,16 @@ const Wrapper = styled.div<{
   $isMalfunctionEnded: boolean
 }>`
   animation: ${p => (p.$isDroppedId ? 'blink 1s' : 'unset')};
-  background: ${p => (p.$isActive ? COLORS.lightGray : COLORS.white)};
+  background: ${p => (p.$isActive ? THEME.color.lightGray : THEME.color.white)};
   border: 1px solid ${p => p.theme.color.lightGray};
   border-radius: 2px;
-  box-shadow: ${p => (p.$isDragging ? `0px 0px 10px -3px ${COLORS.gunMetal}` : 'unset')};
+  box-shadow: ${p => (p.$isDragging ? `0px 0px 10px -3px ${THEME.color.gunMetal}` : 'unset')};
   height: ${p => (p.$isMalfunctionEnded ? '163px' : '133px')};
   width: ${p => (p.$hasScroll ? '230px' : '245px')};
 `
 
 const Header = styled.div`
-  border-bottom: 1px solid ${COLORS.lightGray};
+  border-bottom: 1px solid ${THEME.color.lightGray};
   padding: 0 12px 8px;
 `
 

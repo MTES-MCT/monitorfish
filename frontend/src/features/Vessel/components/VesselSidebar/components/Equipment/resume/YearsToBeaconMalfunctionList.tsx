@@ -1,10 +1,10 @@
-import { COLORS } from '@constants/constants'
 import { ListItem, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { YearBeaconMalfunctions } from './YearBeaconMalfunctions'
 
-import type { BeaconMalfunctionResumeAndDetails } from '../../../../../../BeaconMalfunction/types'
+import type { BeaconMalfunctionResumeAndDetails } from '@features/BeaconMalfunction/types'
 
 type YearsToBeaconMalfunctionListProps = {
   setIsCurrentBeaconMalfunctionDetails: (boolean) => void
@@ -52,22 +52,21 @@ const List = styled.ul`
 `
 
 const NoBeaconMalfunction = styled.div`
-  text-align: center;
-  padding: 10px 0 10px 0;
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
+  padding: 10px 0 10px 0;
+  text-align: center;
   width: 100%;
 `
 
 const Title = styled.div`
-  color: ${COLORS.slateGray};
-  background: ${COLORS.lightGray};
-  padding: 8.5px 10px 8px 20px;
-  font-size: 13px;
+  color: ${THEME.color.slateGray};
+  background: ${THEME.color.lightGray};
+  display: flex;
   flex-shrink: 0;
   flex-grow: 2;
-  display: flex;
-  width: 400px;
   font-size: 13px;
+  padding: 8.5px 10px 8px 20px;
+  width: 400px;
   font-weight: 500;
 `

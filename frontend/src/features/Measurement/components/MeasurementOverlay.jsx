@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
 import React, { createRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -44,52 +44,51 @@ export function MeasurementOverlay({ coordinates, deleteFeature, id, measurement
 }
 
 const TrianglePointer = styled.div`
+  height: auto;
   margin-left: auto;
   margin-right: auto;
-  height: auto;
   width: auto;
 `
 
 const TriangleShadow = styled.div`
-  width: 0;
-  height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.gainsboro} transparent;
+  border-color: ${THEME.color.gainsboro} transparent;
+  height: 0;
+  margin: -3px auto auto;
   text-align: center;
-  margin: auto;
-  margin-top: -3px;
+  width: 0;
 `
 
 const MeasurementOverlayElement = styled.div``
 
 const ZoneText = styled.span`
+  display: inline-block;
+  height: 30px;
   padding-bottom: 5px;
   vertical-align: middle;
-  height: 30px;
-  display: inline-block;
   user-select: none;
 `
 
 const ZoneSelected = styled.span`
-  background: ${COLORS.gainsboro};
+  background: ${THEME.color.gainsboro};
   border-radius: 2px;
-  color: ${COLORS.slateGray};
-  margin-left: 0;
+  color: ${THEME.color.slateGray};
+  display: inline-block;
   font-size: 13px;
+  height: 30px;
+  margin-left: 0;
   padding: 0px 3px 0px 7px;
   vertical-align: top;
-  height: 30px;
-  display: inline-block;
   user-select: none;
 `
 
 const CloseIcon = styled(CloseIconSVG)`
-  width: 13px;
-  vertical-align: text-bottom;
-  cursor: pointer;
   border-left: 1px solid white;
+  cursor: pointer;
   height: 30px;
   margin: 0 6px 0 7px;
   padding-left: 7px;
+  vertical-align: text-bottom;
+  width: 13px;
 `

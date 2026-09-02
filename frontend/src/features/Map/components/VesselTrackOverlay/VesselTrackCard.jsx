@@ -1,11 +1,9 @@
 import { OverlayPosition } from '@features/Map/components/Overlay/types.ts'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { getCoordinates } from '@mtes-mct/monitor-ui'
-import React from 'react'
+import { getCoordinates, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
-import { COLORS } from '../../../../constants/constants'
 import { getDateTime, timeagoFrenchLocale } from '../../../../utils'
 import { OPENLAYERS_PROJECTION } from '../../constants'
 
@@ -67,7 +65,7 @@ export function VesselTrackCard({ feature, overlayPosition }) {
 }
 
 const Gray = styled.span`
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-weight: 300;
 `
 
@@ -84,118 +82,118 @@ const BottomTriangleShadow = styled.div`
   height: 0;
   border-style: solid;
   border-width: 11px 6px 0 6px;
-  border-color: ${COLORS.gainsboro} transparent transparent transparent;
+  border-color: ${THEME.color.gainsboro} transparent transparent transparent;
   margin-left: 170px;
   margin-top: -1px;
   clear: top;
 `
 
 const TopTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
+  clear: top;
   border-top: transparent;
   border-right: 6px solid transparent;
-  border-bottom: 11px solid ${COLORS.gainsboro};
+  border-bottom: 11px solid ${THEME.color.gainsboro};
   border-left: 6px solid transparent;
+  height: 0;
   margin-left: 170px;
   margin-top: -166px;
-  clear: top;
+  position: absolute;
+  width: 0;
 `
 
 const RightTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
   border-right: transparent;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
-  border-left: 11px solid ${COLORS.gainsboro};
+  border-left: 11px solid ${THEME.color.gainsboro};
+  clear: top;
+  height: 0;
   margin-left: 387px;
   margin-top: -134px;
-  clear: top;
+  position: absolute;
+  width: 0;
 `
 
 const LeftTriangleShadow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
   border-style: solid;
   border-top: 6px solid transparent;
-  border-right: 11px solid ${COLORS.gainsboro};
+  border-right: 11px solid ${THEME.color.gainsboro};
   border-bottom: 6px solid transparent;
   border-left: transparent;
+  clear: top;
+  height: 0;
   margin-left: -11px;
   margin-top: -74px;
-  clear: top;
+  position: absolute;
+  width: 0;
 `
 
 const NoValue = styled.span`
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-weight: 300;
-  margin: 0;
   line-height: normal;
+  margin: 0;
 `
 
 const FieldName = styled.div`
-  margin-top: 9px;
-  color: ${COLORS.slateGray};
+  color: ${THEME.color.slateGray};
   font-size: 13px;
   font-weight: normal;
+  margin-top: 9px;
 `
 
 const FieldValue = styled.div`
-  color: ${COLORS.gunMetal};
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
 `
 
 const LatLon = styled.div`
+  background: ${THEME.color.white};
   flex-grow: 1;
-  order: 1;
-  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
+  order: 1;
   padding-bottom: 10px;
 `
 
 const Course = styled.div`
+  background: ${THEME.color.white};
   flex-grow: 1;
   order: 2;
-  background: ${COLORS.white};
   margin: 5px 0 5px 5px;
   padding-bottom: 10px;
 `
 
 const Position = styled.div`
+  background: ${THEME.color.white};
   flex-grow: 1;
-  order: 3;
-  background: ${COLORS.white};
   margin: 5px 5px 5px 5px;
+  order: 3;
   padding-bottom: 10px;
 `
 
 const VesselCardHeader = styled.div`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  padding: 5px 5px 6px 5px;
+  background: ${THEME.color.charcoal};
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+  color: ${THEME.color.gainsboro};
+  padding: 5px 5px 6px 5px;
 `
 
 const VesselCardTitle = styled.span`
-  margin-left: 5px;
   display: inline-block;
   font-size: 0.9em;
+  margin-left: 5px;
 `
 
 const TimeAgo = styled.span`
-  float: right;
-  margin-right: 5px;
   display: inline-block;
-  vertical-align: middle;
-  margin-top: 0;
+  float: right;
   font-size: 13px;
+  margin-right: 5px;
+  margin-top: 0;
+  vertical-align: middle;
 `
 
 const VesselCardBody = styled.div`

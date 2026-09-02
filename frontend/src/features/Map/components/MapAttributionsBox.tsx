@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -39,12 +39,12 @@ const Button = styled.button`
 `
 
 const List = styled.ul`
-  font-size: 0.9em;
-  background-color: ${COLORS.charcoal};
-  height: 21px;
-  line-height: 1;
+  background-color: ${THEME.color.charcoal};
   border: none;
   border-radius: 0;
+  font-size: 0.9em;
+  height: 21px;
+  line-height: 1;
   margin: 2px 2px 2px 34px;
   padding: 4px 6px 0px 6px;
 `
@@ -56,11 +56,11 @@ const ListItem = styled.li`
 `
 
 const Link = styled.a`
-  color: ${COLORS.lightGray};
+  color: ${THEME.color.lightGray};
 
   &:active,
   &:hover,
   &:visited {
-    color: ${COLORS.lightGray};
+    color: ${THEME.color.lightGray};
   }
 `

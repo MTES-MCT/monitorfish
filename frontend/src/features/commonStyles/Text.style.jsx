@@ -1,10 +1,9 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants/constants'
-
 export const EmptyResult = styled.div`
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
-  color: ${COLORS.gunMetal};
-  text-align: left;
   margin-top: 25px;
+  text-align: left;
 `

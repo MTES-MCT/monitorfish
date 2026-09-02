@@ -1,4 +1,4 @@
-import { COLORS } from '@constants/constants'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 export function BeaconMalfunctionDetailsFollowUpRow({ children, date, hoveredDate, index, smallSize }) {
@@ -29,7 +29,7 @@ const RowDate = styled.div``
 const rowDateStyle = (isToday, isYesterday, smallSize) => {
   const style = {
     background: 'white',
-    color: COLORS.slateGray,
+    color: THEME.color.slateGray,
     marginTop: -23,
     padding: 10,
     width: 'fit-content'
@@ -57,6 +57,6 @@ const rowDateStyle = (isToday, isYesterday, smallSize) => {
 
 const Line = styled.div``
 const lineStyle = smallSize => ({
-  borderBottom: `1px solid ${COLORS.lightGray}`,
+  borderBottom: `1px solid ${THEME.color.lightGray}`,
   width: smallSize ? 445 : 558
 })

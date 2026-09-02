@@ -1,4 +1,3 @@
-import { COLORS } from '@constants/constants'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
@@ -102,33 +101,31 @@ export function FavoriteVessels() {
 }
 
 const List = styled.ul`
-  margin: 0;
   background-color: ${p => p.theme.color.white};
-  border-radius: 0;
-  border-bottom-left-radius: 2px;
-  border-bottom-right-radius: 2px;
-  padding: 0;
+  border-radius: 0 0 2px 2px;
+  color: ${THEME.color.gunMetal};
+  margin: 0;
   max-height: 550px;
   overflow-x: hidden;
-  color: ${COLORS.gunMetal};
+  padding: 0;
 `
 
 const NoVesselInFavorites = styled.div`
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
   margin: 15px;
-  color: ${COLORS.gunMetal};
 `
 
 const Header = styled.div<{
   $isFirst: boolean
 }>`
-  background: ${COLORS.charcoal};
-  color: ${COLORS.gainsboro};
-  padding: 9px 0 7px 15px;
-  font-size: 16px;
-  text-align: left;
+  background: ${THEME.color.charcoal};
   border-top-left-radius: ${p => (p.$isFirst ? '2px' : '0')};
   border-top-right-radius: ${p => (p.$isFirst ? '2px' : '0')};
+  color: ${THEME.color.gainsboro};
+  font-size: 16px;
+  padding: 9px 0 7px 15px;
+  text-align: left;
 `
 
 const FavoriteVesselsBox = styled(MapToolBox)`

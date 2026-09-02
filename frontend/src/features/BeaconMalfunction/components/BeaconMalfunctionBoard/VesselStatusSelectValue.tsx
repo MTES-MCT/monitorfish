@@ -4,16 +4,16 @@ export function VesselStatusSelectValue({ item, textColor }) {
   const { icon } = item
 
   return (
-    <Value data-cy="side-window-beacon-malfunctions-vessel-status" textColor={textColor}>
+    <Value $textColor={textColor} data-cy="side-window-beacon-malfunctions-vessel-status">
       <div>{icon}</div>
       <Text title={item.label}>{item.label}</Text>
     </Value>
   )
 }
 
-const Value = styled.div<{ textColor: string }>`
+const Value = styled.div<{ $textColor: string }>`
   align-items: center;
-  color: ${p => p.textColor} !important;
+  color: ${p => p.$textColor} !important;
   display: flex;
 `
 

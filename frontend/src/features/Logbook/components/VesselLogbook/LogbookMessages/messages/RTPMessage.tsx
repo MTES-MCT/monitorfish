@@ -1,8 +1,8 @@
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { getCodeWithNameOrDash, getDatetimeOrDash } from './utils'
-import { COLORS } from '../../../../../../constants/constants'
 import { NoValue, Table, TableBody, TableKey, TableRow, TableValue, Zone } from '../styles'
 
 import type { Logbook } from '@features/Logbook/Logbook.types'
@@ -80,19 +80,19 @@ const SubField = styled.div`
 `
 
 const Gear = styled.div`
+  margin: 5px;
   width: -moz-available;
   width: -webkit-fill-available;
-  margin: 5px;
 `
 
 const SubKey = styled.span`
+  color: ${THEME.color.slateGray};
   font-size: 13px;
-  color: ${COLORS.slateGray};
   margin-right: 10px;
 `
 
 const SubValue = styled.span`
+  color: ${THEME.color.gunMetal};
   font-size: 13px;
-  color: ${COLORS.gunMetal};
   margin-right: 10px;
 `

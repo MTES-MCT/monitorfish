@@ -8,7 +8,6 @@ from src.entities.beacon_malfunctions import (
     BeaconMalfunctionNotificationType,
     BeaconMalfunctionStage,
     BeaconMalfunctionVesselStatus,
-    BeaconStatus,
     EndOfMalfunctionReason,
 )
 from src.read_query import read_query
@@ -173,12 +172,6 @@ def test_prepare_new_beacon_malfunctions():
             "latitude": [45.23, -12.256, -12.56, 12.8],
             "longitude": [12.8, -2.961, 8.52, -5.6],
             "beacon_number": ["beacon_1", "beacon_2", "beacon_3", "beacon_4"],
-            "beacon_status": [
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-            ],
         }
     )
 
@@ -232,12 +225,6 @@ def test_prepare_new_beacon_malfunctions():
             "latitude": [45.23, -12.256, -12.56, 12.8],
             "longitude": [12.8, -2.961, 8.52, -5.6],
             "beacon_number": ["beacon_1", "beacon_2", "beacon_3", "beacon_4"],
-            "beacon_status_at_malfunction_creation": [
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-            ],
             "initial_vessel_status": [
                 "AT_PORT",
                 "AT_SEA",
@@ -388,16 +375,6 @@ def test_load_new_beacon_malfunctions(reset_test_data):
                 "beacon_6",
                 "beacon_7",
                 "beacon_8",
-            ],
-            "beacon_status_at_malfunction_creation": [
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-                BeaconStatus.IN_TEST.value,
-                BeaconStatus.NON_APPROVED.value,
-                BeaconStatus.DEACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
-                BeaconStatus.ACTIVATED.value,
-                BeaconStatus.UNSUPERVISED.value,
             ],
             "initial_vessel_status": [
                 "AT_PORT",

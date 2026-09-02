@@ -29,7 +29,7 @@ class GetAllBeaconMalfunctionsUTests {
     private lateinit var beaconRepository: BeaconRepository
 
     @Test
-    fun `execute Should return the beacon malfunctions filtered and enriched with the risk factor found in the last position table`() {
+    fun `execute Should return the beacon malfunctions enriched with the risk factor found in the last position table`() {
         // Given
         val riskFactors =
             listOf(
@@ -121,7 +121,7 @@ class GetAllBeaconMalfunctionsUTests {
             ).execute()
 
         // Then
-        assertThat(filteredAndEnrichedBeaconMalfunctions).hasSize(3)
+        assertThat(filteredAndEnrichedBeaconMalfunctions).hasSize(4)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().id).isEqualTo(1)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().riskFactor).isEqualTo(1.23)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().internalReferenceNumber).isEqualTo("FR224226850")

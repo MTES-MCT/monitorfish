@@ -80,4 +80,19 @@ class AddFavoriteVesselUTests {
         assertThat(vessels).containsExactly(phenomene, malotru)
         verify(favoriteVesselsRepository, never()).upsert(any())
     }
+
+    @Test
+    fun `execute should be idempotent When the already favorite vessel is submitted with only its CFR identity`() {
+        given(favoriteVesselsRepository.findAllByHashedEmail(hashedEmail))
+            .willReturn(FavoriteVessels(hashedEmail = hashedEmail, vessels = listOf(phenomene, malotru)))
+
+        val phenomeneRebuiltFromSearch =
+            phenomene.copy(vesselId = null, ircs = null, externalIdentification = null, name = null)
+
+        val vessels =
+            AddFavoriteVessel(favoriteVesselsRepository).execute("dummy@email.gouv.fr", phenomeneRebuiltFromSearch)
+
+        assertThat(vessels).containsExactly(phenomene, malotru)
+        verify(favoriteVesselsRepository, never()).upsert(any())
+    }
 }

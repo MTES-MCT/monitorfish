@@ -1,9 +1,8 @@
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
+
 import type { FavoriteVesselVesselIdentity } from './types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-/**
- * Map a favorite vessel (backend shape) to the `Vessel.VesselIdentity` shape used by the map/sidebar use cases.
- */
 export function getVesselIdentityFromFavoriteVessel(
   favoriteVessel: FavoriteVesselVesselIdentity
 ): Vessel.VesselIdentity {
@@ -22,9 +21,6 @@ export function getVesselIdentityFromFavoriteVessel(
   }
 }
 
-/**
- * Map a `Vessel.VesselIdentity` to the favorite vessel (backend shape) sent to the favorite vessels API.
- */
 export function getFavoriteVesselFromVesselIdentity(
   vesselIdentity: Vessel.VesselIdentity
 ): FavoriteVesselVesselIdentity {
@@ -36,5 +32,26 @@ export function getFavoriteVesselFromVesselIdentity(
     name: vesselIdentity.vesselName,
     vesselId: vesselIdentity.vesselId,
     vesselIdentifier: vesselIdentity.vesselIdentifier
+  }
+}
+
+/**
+ * Whether both identities designate the same vessel: by `vesselId` when both carry one, else by the
+ * identifier field designated by `vesselIdentifier`. Mirrors the backend `VesselIdentity.isSameVesselAs`.
+ */
+export function isSameVesselIdentity(first: Vessel.VesselIdentity, second: Vessel.VesselIdentity): boolean {
+  if (first.vesselId !== undefined && second.vesselId !== undefined) {
+    return first.vesselId === second.vesselId
+  }
+
+  switch (first.vesselIdentifier ?? second.vesselIdentifier) {
+    case VesselIdentifier.INTERNAL_REFERENCE_NUMBER:
+      return !!first.internalReferenceNumber && first.internalReferenceNumber === second.internalReferenceNumber
+    case VesselIdentifier.IRCS:
+      return !!first.ircs && first.ircs === second.ircs
+    case VesselIdentifier.EXTERNAL_REFERENCE_NUMBER:
+      return !!first.externalReferenceNumber && first.externalReferenceNumber === second.externalReferenceNumber
+    default:
+      return false
   }
 }

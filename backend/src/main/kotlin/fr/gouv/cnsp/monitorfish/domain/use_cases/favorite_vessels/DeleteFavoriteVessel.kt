@@ -16,7 +16,7 @@ class DeleteFavoriteVessel(
     ): List<VesselIdentity> {
         val hashedEmail = hash(email)
         val currentVessels = favoriteVesselsRepository.findAllByHashedEmail(hashedEmail)?.vessels ?: listOf()
-        val updatedVessels = currentVessels.filterNot { it == vessel }
+        val updatedVessels = currentVessels.filterNot { it.isSameVesselAs(vessel) }
 
         favoriteVesselsRepository.upsert(FavoriteVessels(hashedEmail = hashedEmail, vessels = updatedVessels))
 

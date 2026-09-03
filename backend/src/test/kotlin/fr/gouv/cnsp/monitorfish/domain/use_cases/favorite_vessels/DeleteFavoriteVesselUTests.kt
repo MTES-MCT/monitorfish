@@ -68,6 +68,23 @@ class DeleteFavoriteVesselUTests {
     }
 
     @Test
+    fun `execute should remove the vessel When it is submitted with only its CFR identity`() {
+        given(favoriteVesselsRepository.findAllByHashedEmail(hashedEmail))
+            .willReturn(FavoriteVessels(hashedEmail = hashedEmail, vessels = listOf(phenomene, malotru)))
+
+        val phenomeneRebuiltFromSearch =
+            phenomene.copy(vesselId = null, ircs = null, externalIdentification = null, name = null)
+
+        val vessels =
+            DeleteFavoriteVessel(favoriteVesselsRepository).execute("dummy@email.gouv.fr", phenomeneRebuiltFromSearch)
+
+        assertThat(vessels).containsExactly(malotru)
+        verify(favoriteVesselsRepository).upsert(
+            FavoriteVessels(hashedEmail = hashedEmail, vessels = listOf(malotru)),
+        )
+    }
+
+    @Test
     fun `execute should leave the favorites unchanged When the vessel is not a favorite`() {
         given(favoriteVesselsRepository.findAllByHashedEmail(hashedEmail))
             .willReturn(FavoriteVessels(hashedEmail = hashedEmail, vessels = listOf(phenomene)))

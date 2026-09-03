@@ -17,7 +17,7 @@ class AddFavoriteVessel(
         val hashedEmail = hash(email)
         val currentVessels = favoriteVesselsRepository.findAllByHashedEmail(hashedEmail)?.vessels ?: listOf()
 
-        if (currentVessels.contains(vessel)) {
+        if (currentVessels.any { it.isSameVesselAs(vessel) }) {
             return currentVessels
         }
 

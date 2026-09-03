@@ -193,11 +193,14 @@ interface DBLogbookReportRepository :
 
     @Query(
         value = """
-            SELECT * FROM get_active_trips(string_to_array(:cfrsAsString, ','))
+            SELECT * FROM get_active_trips(string_to_array(:cfrsAsString, ','), (:nowUtc)::TIMESTAMP)
         """,
         nativeQuery = true,
     )
-    fun getActiveTrips(cfrsAsString: String): List<Array<Any>>
+    fun getActiveTrips(
+        cfrsAsString: String,
+        nowUtc: LocalDateTime,
+    ): List<Array<Any>>
 
     @Query(
         value = """
@@ -210,8 +213,8 @@ interface DBLogbookReportRepository :
                     ROW_NUMBER() OVER (PARTITION BY p.internal_reference_number ORDER BY date_time DESC) AS dep_rank
                 FROM positions p
                 WHERE
-                    p.date_time >= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - make_interval(hours => :hoursFromNow)
-                    AND p.date_time < CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - INTERVAL '2 hours'
+                    p.date_time >= (:nowUtc)::TIMESTAMP - make_interval(hours => :hoursFromNow)
+                    AND p.date_time < (:nowUtc)::TIMESTAMP - INTERVAL '2 hours'
                     AND p.is_at_port = false
                     AND time_emitting_at_sea = 0
                     AND p.flag_state IN ('FR', 'VE')
@@ -221,7 +224,7 @@ interface DBLogbookReportRepository :
             SELECT
                 gat.last_dep_datetime,
                 drd.date_time as trip_first_position_at_sea_datetime
-            FROM get_active_trips(string_to_array(:cfr, ',')) gat
+            FROM get_active_trips(string_to_array(:cfr, ','), (:nowUtc)::TIMESTAMP) gat
             LEFT JOIN detected_recent_deps drd ON
                 drd.cfr = gat.cfr AND
                 drd.dep_rank = 1
@@ -231,5 +234,6 @@ interface DBLogbookReportRepository :
     fun getCurrentTripDepAndPositionAtSeaDateTime(
         cfr: String,
         hoursFromNow: Int,
+        nowUtc: LocalDateTime,
     ): List<Array<Any>>
 }

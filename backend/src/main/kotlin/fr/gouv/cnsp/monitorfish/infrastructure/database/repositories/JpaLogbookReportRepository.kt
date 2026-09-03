@@ -218,9 +218,13 @@ class JpaLogbookReportRepository(
             return emptyMap()
         }
 
-        return dbLogbookReportRepository.getActiveTrips(cfrs.joinToString(",")).associate { row ->
-            (row[0] as String) to (row[1] as LocalDateTime).atZone(UTC)
-        }
+        return dbLogbookReportRepository
+            .getActiveTrips(
+                cfrsAsString = cfrs.joinToString(","),
+                nowUtc = LocalDateTime.now(UTC),
+            ).associate { row ->
+                (row[0] as String) to (row[1] as LocalDateTime).atZone(UTC)
+            }
     }
 
     override fun getCurrentTripDepAndPositionAtSeaDateTime(
@@ -228,8 +232,11 @@ class JpaLogbookReportRepository(
         hoursFromNow: Int,
     ): CurrentTripDepAndPositionAtSea? =
         dbLogbookReportRepository
-            .getCurrentTripDepAndPositionAtSeaDateTime(cfr, hoursFromNow)
-            .firstOrNull()
+            .getCurrentTripDepAndPositionAtSeaDateTime(
+                cfr = cfr,
+                hoursFromNow = hoursFromNow,
+                nowUtc = LocalDateTime.now(UTC),
+            ).firstOrNull()
             ?.let { row ->
                 CurrentTripDepAndPositionAtSea(
                     departureDateTime = (row[0] as LocalDateTime).atZone(UTC),

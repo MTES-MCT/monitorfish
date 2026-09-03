@@ -1,3 +1,6 @@
+import { useGetFavoriteVesselsQuery } from '@features/FavoriteVessel/apis'
+import { initFavoriteVessels } from '@features/FavoriteVessel/useCases/initFavoriteVessels'
+import { getVesselIdentityFromFavoriteVessel } from '@features/FavoriteVessel/utils'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
@@ -6,8 +9,11 @@ import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
+import { localStorageManager } from '@libs/LocalStorageManager'
+import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
 import { Icon, THEME } from '@mtes-mct/monitor-ui'
 import { sortBy } from 'lodash-es'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { FavoriteVessel } from './FavoriteVessel'
@@ -18,23 +24,44 @@ import HidingOtherTracksSVG from '../../../icons/Bouton_masquer_pistes_actif.svg
 import ShowingOtherTracksSVG from '../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 import { setHideNonSelectedVessels } from '../../../Vessel/slice'
 
+import type { Vessel } from '@features/Vessel/Vessel.types'
+
 export function FavoriteVessels() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
-  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
   const { hideNonSelectedVessels, selectedVesselIdentity, vesselsTracksShowed } = useMainAppSelector(
     state => state.vessel
   )
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const { isOpened, isRendered } = useDisplayMapBox(leftMapBoxOpened === MapBox.FAVORITE_VESSELS)
+  const { data: favoriteVessels, isSuccess: areFavoriteVesselsFetched } = useGetFavoriteVesselsQuery()
+  const favoriteVesselsCount = favoriteVessels?.length ?? 0
+
+  const storedInLocalStorage = useMemo(
+    () => localStorageManager.get<Array<Vessel.VesselIdentity>>(LocalStorageKey.FavoriteVessels, []),
+    []
+  )
+
+  /**
+   * Seed the user favorite vessels from the browser local storage, once, the first time the list is
+   * fetched empty. If the user has several browsers with saved local storages, only the first one used
+   * after this migration is taken into account.
+   */
+  useEffect(() => {
+    if (!areFavoriteVesselsFetched || !!favoriteVessels?.length || !storedInLocalStorage.length) {
+      return
+    }
+
+    dispatch(initFavoriteVessels(storedInLocalStorage))
+  }, [areFavoriteVesselsFetched, dispatch, favoriteVessels, storedInLocalStorage])
 
   return (
     <>
       <MapToolButton
         badgeBackgroundColor={isOpened ? THEME.color.charcoal : THEME.color.gainsboro}
         badgeColor={isOpened ? THEME.color.white : THEME.color.gunMetal}
-        badgeNumber={favorites?.length || undefined}
+        badgeNumber={favoriteVesselsCount > 0 ? favoriteVesselsCount : undefined}
         data-cy="favorite-vessels"
         Icon={Icon.Favorite}
         isActive={isOpened}
@@ -59,10 +86,12 @@ export function FavoriteVessels() {
           isOpen={isOpened}
         >
           <Header $isFirst>Mes navires suivis</Header>
-          {favorites?.length ? (
+          {favoriteVessels?.length ? (
             <List>
-              {sortBy(favorites, favorite => favorite.vesselName).map((favoriteVessel, index) => {
-                const vesselCompositeIdentifier = getVesselCompositeIdentifier(favoriteVessel)
+              {sortBy(favoriteVessels, favorite => favorite.name).map((favoriteVessel, index) => {
+                const vesselCompositeIdentifier = getVesselCompositeIdentifier(
+                  getVesselIdentityFromFavoriteVessel(favoriteVessel)
+                )
                 const isTrackShowed = !!Object.values(vesselsTracksShowed)?.find(
                   vessel => vessel.vesselCompositeIdentifier === vesselCompositeIdentifier
                 )
@@ -70,8 +99,8 @@ export function FavoriteVessels() {
                 return (
                   <FavoriteVessel
                     key={vesselCompositeIdentifier}
-                    favorite={favoriteVessel}
-                    isLastItem={favorites.length === index + 1}
+                    favoriteVessel={favoriteVessel}
+                    isLastItem={favoriteVessels.length === index + 1}
                     isTrackShowed={isTrackShowed}
                     isVesselShowed={
                       selectedVesselIdentity
@@ -88,7 +117,7 @@ export function FavoriteVessels() {
           )}
           <MapPropertyTrigger
             booleanProperty={hideNonSelectedVessels}
-            disabled={!favorites?.length}
+            disabled={!favoriteVessels?.length}
             IconSVG={hideNonSelectedVessels ? ShowingOtherTracksSVG : HidingOtherTracksSVG}
             inverse
             text="les navires non sélectionnés"

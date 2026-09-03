@@ -1,4 +1,9 @@
-import { addVesselToFavorites, removeVesselFromFavorites } from '@features/FavoriteVessel/slice'
+import { useDeleteFavoriteVesselMutation, useGetFavoriteVesselsQuery } from '@features/FavoriteVessel/apis'
+import { addFavoriteVessel } from '@features/FavoriteVessel/useCases/addFavoriteVessel'
+import {
+  getFavoriteVesselFromVesselIdentity,
+  getVesselIdentityFromFavoriteVessel
+} from '@features/FavoriteVessel/utils'
 import { unselectVessel } from '@features/Vessel/useCases/unselectVessel'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -15,24 +20,30 @@ export function VesselName({ focusOnVesselSearchInput }) {
   const dispatch = useMainAppDispatch()
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
-  const favorites = useMainAppSelector(state => state.favoriteVessel.favorites)
+  const { data: favoriteVessels } = useGetFavoriteVesselsQuery()
+  const [deleteFavoriteVessel] = useDeleteFavoriteVesselMutation()
   const isFavorite = useMemo(
     () =>
-      selectedVesselIdentity &&
-      !!favorites.find(
+      !!selectedVesselIdentity &&
+      (favoriteVessels ?? []).some(
         favoriteVessel =>
-          getVesselCompositeIdentifier(favoriteVessel) === getVesselCompositeIdentifier(selectedVesselIdentity)
+          getVesselCompositeIdentifier(getVesselIdentityFromFavoriteVessel(favoriteVessel)) ===
+          getVesselCompositeIdentifier(selectedVesselIdentity)
       ),
-    [selectedVesselIdentity, favorites]
+    [favoriteVessels, selectedVesselIdentity]
   )
 
   const addOrRemoveToFavorites = function (e) {
     e.stopPropagation()
 
+    if (!selectedVesselIdentity) {
+      return
+    }
+
     if (isFavorite) {
-      dispatch(removeVesselFromFavorites(getVesselCompositeIdentifier(selectedVesselIdentity)))
+      deleteFavoriteVessel(getFavoriteVesselFromVesselIdentity(selectedVesselIdentity))
     } else {
-      dispatch(addVesselToFavorites(selectedVesselIdentity))
+      dispatch(addFavoriteVessel(selectedVesselIdentity))
     }
   }
 

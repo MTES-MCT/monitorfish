@@ -1,9 +1,6 @@
 import { useDeleteFavoriteVesselMutation, useGetFavoriteVesselsQuery } from '@features/FavoriteVessel/apis'
 import { addFavoriteVessel } from '@features/FavoriteVessel/useCases/addFavoriteVessel'
-import {
-  getFavoriteVesselFromVesselIdentity,
-  getVesselIdentityFromFavoriteVessel
-} from '@features/FavoriteVessel/utils'
+import { getVesselIdentityFromFavoriteVessel } from '@features/FavoriteVessel/utils'
 import { unselectVessel } from '@features/Vessel/useCases/unselectVessel'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -22,16 +19,22 @@ export function VesselName({ focusOnVesselSearchInput }) {
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const { data: favoriteVessels } = useGetFavoriteVesselsQuery()
   const [deleteFavoriteVessel] = useDeleteFavoriteVesselMutation()
-  const isFavorite = useMemo(
-    () =>
-      !!selectedVesselIdentity &&
-      (favoriteVessels ?? []).some(
-        favoriteVessel =>
-          getVesselCompositeIdentifier(getVesselIdentityFromFavoriteVessel(favoriteVessel)) ===
-          getVesselCompositeIdentifier(selectedVesselIdentity)
-      ),
-    [favoriteVessels, selectedVesselIdentity]
-  )
+
+  // The stored favorite vessel matching the selected one, if any. Removal sends this exact record back
+  // so it matches server-side, whatever shape the selected vessel identity was built from.
+  const selectedFavoriteVessel = useMemo(() => {
+    if (!selectedVesselIdentity) {
+      return undefined
+    }
+
+    return favoriteVessels?.find(
+      favoriteVessel =>
+        getVesselCompositeIdentifier(getVesselIdentityFromFavoriteVessel(favoriteVessel)) ===
+        getVesselCompositeIdentifier(selectedVesselIdentity)
+    )
+  }, [favoriteVessels, selectedVesselIdentity])
+
+  const isFavorite = !!selectedFavoriteVessel
 
   const addOrRemoveToFavorites = function (e) {
     e.stopPropagation()
@@ -40,8 +43,8 @@ export function VesselName({ focusOnVesselSearchInput }) {
       return
     }
 
-    if (isFavorite) {
-      deleteFavoriteVessel(getFavoriteVesselFromVesselIdentity(selectedVesselIdentity))
+    if (selectedFavoriteVessel) {
+      deleteFavoriteVessel(selectedFavoriteVessel)
     } else {
       dispatch(addFavoriteVessel(selectedVesselIdentity))
     }

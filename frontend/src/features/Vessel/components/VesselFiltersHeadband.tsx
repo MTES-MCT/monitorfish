@@ -1,9 +1,10 @@
+import { ResetButton } from '@components/ResetButton'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { countVesselListFilter } from '@features/Vessel/components/VesselList/utils'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Link, pluralize } from '@mtes-mct/monitor-ui'
+import { pluralize } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 import styled from 'styled-components'
 
@@ -27,8 +28,7 @@ export function VesselFiltersHeadband() {
         <Wrapper $hasHealthcheckWarning={hasHealthcheckWarning}>
           {numberOfFilters} {pluralize('filtre', numberOfFilters)} {numberOfFilters > 1 ? 'sont' : 'est'}{' '}
           {pluralize('appliqué', numberOfFilters)} sur les navires affichés.
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}{' '}
-          <StyledLink onClick={reset}>Réinitialiser les filtres</StyledLink>
+          <ResetButton onClick={reset} />
         </Wrapper>
       )}
     </>
@@ -49,11 +49,4 @@ const Wrapper = styled.div<{
   padding: 13px;
   z-index: 1;
   color: ${p => p.theme.color.gainsboro};
-`
-
-const StyledLink = styled(Link)`
-  color: ${p => p.theme.color.gainsboro} !important;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
 `

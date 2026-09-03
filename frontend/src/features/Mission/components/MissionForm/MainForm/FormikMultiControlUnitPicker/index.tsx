@@ -72,7 +72,11 @@ export function FormikMultiControlUnitPicker({
     ) => {
       const nextControlUnits = update(index, nextControlUnit, values[name])
 
-      updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAMOrULAM)
+      // Resetting on any edit would erase the checkboxes at each keystroke in the unit contact
+      if (values[name][index]?.id !== nextControlUnit.id) {
+        updateMissionActionOtherControlsCheckboxes(values, isPreviousControlUnitPAMOrULAM)
+      }
+
       setFieldValue(name, nextControlUnits)
       forceUpdate()
     },

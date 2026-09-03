@@ -925,6 +925,15 @@ context('Side Window > Mission Form > Sea Control', () => {
     // otherwise the whole form is auto-saved as a single creation and never updated
     cy.wait(1200)
 
+    // An action only auto-saves on its own form changes, so a unit edit sends no request to assert on
+    cy.fill('Contact de l’unité 1', 'Tel. 06 88 65 66 66')
+    cy.wait(1200)
+
+    cy.get('input[name="isAdministrativeControl"]').should('be.checked')
+    cy.get('input[name="isComplianceWithWaterRegulationsControl"]').should('not.be.checked')
+    cy.get('input[name="isSeafarersControl"]').should('be.checked')
+    cy.get('input[name="isSafetyEquipmentAndStandardsComplianceControl"]').should('not.be.checked')
+
     // Remove the PAM control unit
     cy.fill('Administration 1', undefined)
     cy.fill('Unité 1', 'Cultures marines 56')
@@ -1023,6 +1032,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.clickButton('Ajouter un contrôle en mer')
 
     cy.intercept('POST', '/bff/v1/mission_actions').as('createMissionActionOne')
+    // MALOTRU is flagless: with the INN area left unresolved, the hidden INN field must still be answered
+    cy.intercept('GET', '/bff/v1/mission_actions/is-in-inn-area*', { statusCode: 500 })
 
     // -------------------------------------------------------------------------
     // Form
@@ -1057,7 +1068,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
       cy.fill('Saisi par', 'Marlin CROSS')
 
-      cy.wait('@updateMissionAction')
+      cy.waitForLastRequest('@updateMissionAction', { body: { isINNControl: false } }, 5)
     })
   })
 

@@ -4,8 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecificatio
 import java.time.ZonedDateTime
 
 enum class
-
-
 AlertType(
     val specification: PositionAlertSpecification?,
 ) {

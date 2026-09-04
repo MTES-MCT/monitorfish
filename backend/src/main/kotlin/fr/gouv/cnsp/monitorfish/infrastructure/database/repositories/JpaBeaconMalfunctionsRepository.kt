@@ -74,7 +74,10 @@ class JpaBeaconMalfunctionsRepository(
             }
 
     @Transactional
-    override fun updateIsFollowed(id: Int, isFollowed: Boolean) {
+    override fun updateIsFollowed(
+        id: Int,
+        isFollowed: Boolean,
+    ) {
         dbBeaconMalfunctionsRepository.updateIsFollowed(id, isFollowed)
     }
 

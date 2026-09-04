@@ -335,8 +335,8 @@ def sms_templates() -> dict:
 
 
 @fixture
-def cnsp_logo() -> bytes:
-    with open(EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg", "rb") as f:
+def ministry_logo() -> bytes:
+    with open(EMAIL_IMAGES_LOCATION / "logo_ministere_mer_peche.png", "rb") as f:
         logo = f.read()
     return logo
 
@@ -516,14 +516,10 @@ def expected_notifications(request) -> list:
     [
         ("MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION", "html"),
         ("MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION", "pdf"),
-        ("MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON", "html"),
-        ("MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON", "pdf"),
         ("MALFUNCTION_AT_SEA_REMINDER", "html"),
         ("MALFUNCTION_AT_SEA_REMINDER", "pdf"),
         ("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION", "html"),
         ("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION", "pdf"),
-        ("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON", "html"),
-        ("MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON", "pdf"),
         ("MALFUNCTION_AT_PORT_REMINDER", "html"),
         ("MALFUNCTION_AT_PORT_REMINDER", "pdf"),
         ("END_OF_MALFUNCTION", "html"),
@@ -644,7 +640,7 @@ def test_render_with_null_values(malfunction_to_notify_data_with_nulls, template
         "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
     ],
 )
-def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
+def test_create_email(malfunction_to_notify_data, ministry_logo, notification_type):
     html = "<html>Test html string</html>\n"
     pdf = b"Test pdf bytes"
     m = BeaconMalfunctionToNotify(
@@ -699,10 +695,10 @@ def test_create_email(malfunction_to_notify_data, cnsp_logo, notification_type):
     assert part1.get_content() == html
 
     assert not part2.is_attachment()
-    assert part2.get_content_type() == "image/jpeg"
-    assert part2["Content-ID"] == "<logo_cnsp.jpg>"
-    assert part2.get_filename() == "logo_cnsp.jpg"
-    assert part2.get_content() == cnsp_logo
+    assert part2.get_content_type() == "image/png"
+    assert part2["Content-ID"] == "<logo_ministere_mer_peche.png>"
+    assert part2.get_filename() == "logo_ministere_mer_peche.png"
+    assert part2.get_content() == ministry_logo
 
 
 @pytest.mark.parametrize(
@@ -753,7 +749,7 @@ def test_create_sms(malfunction_to_notify_data, notification_type):
         "END_OF_MALFUNCTION",
     ],
 )
-def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
+def test_create_fax(malfunction_to_notify_data, notification_type):
     pdf = b"Test pdf bytes"
     m = BeaconMalfunctionToNotify(
         **malfunction_to_notify_data,
@@ -993,8 +989,8 @@ def test_flow(reset_test_data):
     ).all()
 
     # Check that malfunctions' `notification_requested` field is reset to nulls.
-    assert len(initial_malfunctions) == 5
-    assert initial_malfunctions.notification_requested.notnull().all()
+    assert len(initial_malfunctions) == 6
+    assert initial_malfunctions.notification_requested.notnull().any()
     assert final_malfunctions.notification_requested.isna().all()
     assert final_malfunctions.requested_notification_foreign_fmc_code.isna().all()
 

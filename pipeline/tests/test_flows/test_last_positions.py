@@ -69,7 +69,7 @@ def test_extract_last_positions(reset_test_data):
 
 def test_extract_beacon_malfunctions(reset_test_data):
     malfunctions = extract_beacon_malfunctions()
-    assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
+    assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000", "ZZZ99"}
 
 
 def test_extract_reportings(reset_test_data):
@@ -93,7 +93,7 @@ def test_extract_reportings(reset_test_data):
 
 def test_extract_ais_last_positions(reset_test_data):
     res = extract_ais_last_positions()
-    assert len(res) == 13
+    assert len(res) == 14
 
 
 def test_load_last_positions(reset_test_data):
@@ -716,7 +716,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "ZZTOPACDC",
     }
     assert len(initial_last_positions_ais) == 0
-    assert len(final_last_positions_ais) == 13
+    assert len(final_last_positions_ais) == 14
 
     assert len(initial_last_positions_vms) == 4
     assert len(final_last_positions_vms) == 4

@@ -20,10 +20,8 @@ class GetAllBeaconMalfunctions(
 
         val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllExceptArchived()
         val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchived()
-        val activatedBeaconNumbers = beaconRepository.findActivatedBeaconNumbers()
 
         return (beaconMalfunctionsExceptArchived + lastSixtyArchived)
-            .filter { activatedBeaconNumbers.contains(it.beaconNumber) }
             .map { beaconMalfunction ->
                 val riskFactor =
                     riskFactors

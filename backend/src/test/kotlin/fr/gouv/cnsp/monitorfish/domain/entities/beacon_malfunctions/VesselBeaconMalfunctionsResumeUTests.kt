@@ -32,7 +32,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             now.minusYears(2),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -71,7 +70,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             now.minusMinutes(23),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -110,7 +108,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             now.minusMinutes(5),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -156,7 +153,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             lastBeaconDateTime,
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -221,7 +217,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             lastBeaconDateTime,
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -251,7 +246,6 @@ class VesselBeaconMalfunctionsResumeUTests {
                             null,
                             now,
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =

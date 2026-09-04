@@ -10,11 +10,11 @@ from prefect import allow_failure, flow, get_run_logger, task, unmapped
 from sqlalchemy import Table, update
 
 from config import (
-    CNSP_LOGO_PATH,
     CNSP_SIP_DEPARTMENT_EMAIL,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    MINISTRY_LOGO_PATH,
     SMS_TEMPLATES_LOCATION,
 )
 from src.entities.beacon_malfunctions import (
@@ -67,18 +67,8 @@ def get_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_sea_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_port_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -107,18 +97,8 @@ def get_sms_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -175,11 +155,11 @@ def render(
     if output_format == "html":
         # Fonts shall not be included in email body
         fonts_directory = None
-        logo_src = f"cid:{CNSP_LOGO_PATH.name}"
+        logo_src = f"cid:{MINISTRY_LOGO_PATH.name}"
 
     else:
         fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
-        logo_src = CNSP_LOGO_PATH.as_uri()
+        logo_src = MINISTRY_LOGO_PATH.as_uri()
 
     html = template.render(
         fonts_directory=fonts_directory,
@@ -264,7 +244,7 @@ def create_email(
             cc=cc,
             subject=m.get_notification_subject(),
             html=html,
-            images=[CNSP_LOGO_PATH],
+            images=[MINISTRY_LOGO_PATH],
             attachments=[("Notification.pdf", pdf)],
             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
         )

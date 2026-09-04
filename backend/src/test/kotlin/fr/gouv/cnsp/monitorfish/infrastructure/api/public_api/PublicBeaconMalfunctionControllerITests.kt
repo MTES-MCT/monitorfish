@@ -13,7 +13,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -21,7 +20,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunctionIsFollowed
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionIsFollowedDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -32,6 +33,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -49,6 +51,9 @@ class PublicBeaconMalfunctionControllerITests {
 
     @MockitoBean
     private lateinit var updateBeaconMalfunction: UpdateBeaconMalfunction
+
+    @MockitoBean
+    private lateinit var updateBeaconMalfunctionIsFollowed: UpdateBeaconMalfunctionIsFollowed
 
     @MockitoBean
     private lateinit var requestNotification: RequestNotification
@@ -76,7 +81,6 @@ class PublicBeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -145,6 +149,24 @@ class PublicBeaconMalfunctionControllerITests {
             )
             // Then
             .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `Should return No content When is_followed is updated`() {
+        // When
+        api
+            .perform(
+                patch("/api/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionIsFollowedDataInput(isFollowed = false),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isNoContent)
+
+        verify(updateBeaconMalfunctionIsFollowed).execute(eq(123), eq(false))
     }
 
     @Test

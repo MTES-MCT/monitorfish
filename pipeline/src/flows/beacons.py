@@ -1,7 +1,6 @@
 import pandas as pd
 from prefect import flow, get_run_logger, task
 
-from src.entities.beacon_malfunctions import BeaconStatus
 from src.generic_tasks import extract, load
 from src.processing import zeros_ones_to_bools
 
@@ -21,25 +20,17 @@ def extract_satellite_operators():
 
 @task
 def transform_beacons(beacons: pd.DataFrame) -> pd.DataFrame:
-    """Maps Posedion beacon status to Monitorfish `BeaconStatus` and maps the
-    1, 0 and `np.nan` values in `is_coastal` to `True`, `False` and `None`
+    """Maps the 1, 0 and `np.nan` values in `is_coastal` to `True`, `False` and `None`
     respectively.
 
     Args:
         beacons (pd.DataFrame): DataFrame of beacons extracted from Poseidon
 
     Returns:
-        pd.DataFrame: beacons with status mapped to `BeaconStatus` and `is_coastal`
-          mapped to `True`, `False` and `None`.
+        pd.DataFrame: beacons with `is_coastal` mapped to `True`, `False` and `None`.
     """
     beacons = beacons.copy(deep=True)
-
-    beacons["beacon_status"] = beacons.beacon_status.map(
-        BeaconStatus.from_poseidon_status, na_action="ignore"
-    ).map(lambda beacon_status: beacon_status.value, na_action="ignore")
-
     beacons["is_coastal"] = zeros_ones_to_bools(beacons.is_coastal)
-
     return beacons
 
 

@@ -46,7 +46,7 @@ INSERT INTO beacon_malfunctions (
     '123456',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days 4 hours',
-    true
+    false
 ),
 (
     2,
@@ -70,7 +70,7 @@ INSERT INTO beacon_malfunctions (
     'A56CZ2',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '1 month 3 days 4 hours',
-    false
+    true
 ),
 (
     3,
@@ -118,7 +118,7 @@ INSERT INTO beacon_malfunctions (
     'BEACON_NOT_EMITTING',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '10 hours 10 minutes',
-    true
+    false
 ),
 (
     5,
@@ -166,7 +166,7 @@ INSERT INTO beacon_malfunctions (
     'NEW_BEACON_ACT_DET',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '6 hours',
-    false
+    true
 );
 
 ALTER SEQUENCE beacon_malfunctions_id_seq RESTART WITH 7;

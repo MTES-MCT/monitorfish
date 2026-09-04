@@ -1,14 +1,18 @@
 from datetime import datetime
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import pandas as pd
+import pytest
+from sqlalchemy import text
 
 from config import BEACON_MALFUNCTIONS_ENDPOINT
+from src.db_config import create_engine
 from src.flows.beacon_malfunction_activity_detection import (
     add_malfunction_start_fields,
     beacon_malfunction_activity_detection_flow,
     filter_vessels_at_sea,
-    get_malfunction_ids_to_follow,
+    get_malfunction_ids_not_already_followed,
+    get_malfunction_ids_with_activity,
     get_vessels_without_malfunction,
 )
 from src.read_query import read_query
@@ -28,7 +32,7 @@ def test_filter_vessels_at_sea_all_at_port():
     assert filter_vessels_at_sea(vessels).empty
 
 
-def test_get_malfunction_ids_to_follow_returns_matching_ids():
+def test_get_malfunction_ids_with_activity_returns_matching_ids():
     vessels = pd.DataFrame({"cfr": ["ABC000306959", "SOME_OTHER_CFR"]})
     malfunctions = pd.DataFrame(
         {
@@ -37,24 +41,39 @@ def test_get_malfunction_ids_to_follow_returns_matching_ids():
             "beacon_number": ["987654", "XXXXX"],
         }
     )
-    assert get_malfunction_ids_to_follow(vessels, malfunctions) == [5]
+    assert get_malfunction_ids_with_activity(vessels, malfunctions) == [5]
 
 
-def test_get_malfunction_ids_to_follow_returns_empty_when_no_cfr_match():
+def test_get_malfunction_ids_with_activity_returns_empty_when_no_cfr_match():
     vessels = pd.DataFrame({"cfr": ["NO_MATCH_CFR"]})
     malfunctions = pd.DataFrame(
         {"id": [5], "cfr": ["DIFFERENT_CFR"], "beacon_number": ["987654"]}
     )
-    assert get_malfunction_ids_to_follow(vessels, malfunctions) == []
+    assert get_malfunction_ids_with_activity(vessels, malfunctions) == []
 
 
-def test_get_malfunction_ids_to_follow_returns_empty_when_vessels_is_empty():
-    assert get_malfunction_ids_to_follow(pd.DataFrame(), pd.DataFrame()) == []
+def test_get_malfunction_ids_with_activity_returns_empty_when_vessels_is_empty():
+    assert get_malfunction_ids_with_activity(pd.DataFrame(), pd.DataFrame()) == []
 
 
-def test_get_malfunction_ids_to_follow_returns_empty_when_malfunctions_is_empty():
+def test_get_malfunction_ids_with_activity_returns_empty_when_malfunctions_is_empty():
     vessels = pd.DataFrame({"cfr": ["ABC000306959"]})
-    assert get_malfunction_ids_to_follow(vessels, pd.DataFrame()) == []
+    assert get_malfunction_ids_with_activity(vessels, pd.DataFrame()) == []
+
+
+def test_get_malfunction_ids_not_already_followed_keeps_only_unfollowed():
+    malfunctions = pd.DataFrame({"id": [1, 2, 3], "is_followed": [True, False, False]})
+    assert get_malfunction_ids_not_already_followed(malfunctions) == [2, 3]
+
+
+def test_get_malfunction_ids_not_already_followed_returns_empty_when_all_followed():
+    malfunctions = pd.DataFrame({"id": [1, 2], "is_followed": [True, True]})
+    assert get_malfunction_ids_not_already_followed(malfunctions) == []
+
+
+def test_get_malfunction_ids_not_already_followed_returns_empty_when_no_malfunction():
+    malfunctions = pd.DataFrame({"id": [], "is_followed": []})
+    assert get_malfunction_ids_not_already_followed(malfunctions) == []
 
 
 def test_get_vessels_without_malfunction():
@@ -96,7 +115,7 @@ def test_flow(reset_test_data):
     """
     CFR='GBR000888888' has an AIS position 2 hours ago (in test data) and a
     non-archived malfunction (id=6). The flow should PATCH that malfunction with
-    isFollowed=True and add a pendoing alert for that vessel.
+    isFollowed=True and add a pending alert for that vessel.
     """
     initial_pending_alerts = read_query(
         "SELECT * FROM pending_alerts", db="monitorfish_remote"
@@ -123,3 +142,82 @@ def test_flow(reset_test_data):
     assert len(final_pending_alerts) == len(initial_pending_alerts) + 1
     assert "AIS ACTIVITY VESSEL" not in initial_pending_alerts.vessel_name.values
     assert "AIS ACTIVITY VESSEL" in final_pending_alerts.vessel_name.values
+
+
+@pytest.fixture
+def reset_test_data_with_declared_activity(reset_test_data):
+    """
+    Malfunction id=5 (CFR 'ABC000306959', stage INITIAL_ENCOUNTER,
+    vessel_status_last_modification_date_utc 2h10 ago) is followed in the test data.
+    Unfollow it and add a recent FAR declaration for that vessel so the flow
+    re-follows it based on the declared fishing activity.
+    """
+    e = create_engine(db="monitorfish_remote")
+    with e.begin() as con:
+        con.execute(
+            text("UPDATE beacon_malfunctions SET is_followed = false WHERE id = 5")
+        )
+        con.execute(
+            text(
+                "INSERT INTO logbook_raw_messages (operation_number, xml_message) "
+                "VALUES ('DECL_ACT_TEST_1', '<ERS>Message ERS xml</ERS>')"
+            )
+        )
+        con.execute(
+            text(
+                """
+            INSERT INTO logbook_reports (
+                operation_number, operation_datetime_utc, operation_type,
+                cfr, log_type, value, activity_datetime_utc, transmission_format,
+                integration_datetime_utc
+            ) VALUES (
+                'DECL_ACT_TEST_1',
+                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
+                'DAT',
+                'ABC000306959',
+                'FAR',
+                '{}',
+                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
+                'ERS',
+                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour'
+            )
+        """
+            )
+        )
+
+
+def test_flow_follows_malfunction_with_declared_activity(
+    reset_test_data_with_declared_activity,
+):
+    """
+    On top of the AIS path (malfunction id=6, see `test_flow`), the flow follows
+    non-archived, not-yet-followed malfunctions during which the vessel recently
+    declared fishing activity (malfunction id=5).
+    """
+    headers = {
+        "Accept": "application/json, text/plain",
+        "Content-Type": "application/json;charset=UTF-8",
+        "X-API-KEY": "backend_api_key",
+    }
+
+    with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
+        state = beacon_malfunction_activity_detection_flow(return_state=True)
+
+    assert state.is_completed()
+
+    mock_requests.patch.assert_has_calls(
+        [
+            call(
+                url=BEACON_MALFUNCTIONS_ENDPOINT + "6",
+                json={"isFollowed": True},
+                headers=headers,
+            ),
+            call(
+                url=BEACON_MALFUNCTIONS_ENDPOINT + "5",
+                json={"isFollowed": True},
+                headers=headers,
+            ),
+        ],
+        any_order=True,
+    )
+    assert mock_requests.patch.call_count == 2

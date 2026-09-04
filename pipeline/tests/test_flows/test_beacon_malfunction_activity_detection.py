@@ -2,11 +2,8 @@ from datetime import datetime
 from unittest.mock import call, patch
 
 import pandas as pd
-import pytest
-from sqlalchemy import text
 
 from config import BEACON_MALFUNCTIONS_ENDPOINT
-from src.db_config import create_engine
 from src.entities.alerts import AlertType
 from src.flows.beacon_malfunction_activity_detection import (
     add_malfunction_start_fields,
@@ -111,98 +108,26 @@ def test_add_malfunction_start_fields_renames_vms_date():
 
 # ─── Flow integration tests ────────────────────────────────────────────────────
 
-
-def test_flow(reset_test_data):
-    """
-    CFR='GBR000888888' has an AIS position 2 hours ago (in test data) and a
-    non-archived malfunction (id=6). The flow should PATCH that malfunction with
-    isFollowed=True and add a pending alert for that vessel.
-    """
-    initial_pending_alerts = read_query(
-        "SELECT * FROM pending_alerts", db="monitorfish_remote"
-    )
-
-    with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
-        state = beacon_malfunction_activity_detection_flow(return_state=True)
-
-    assert state.is_completed()
-
-    mock_requests.patch.assert_called_once_with(
-        url=BEACON_MALFUNCTIONS_ENDPOINT + "6",
-        json={"isFollowed": True},
-        headers={
-            "Accept": "application/json, text/plain",
-            "Content-Type": "application/json;charset=UTF-8",
-            "X-API-KEY": "backend_api_key",
-        },
-    )
-
-    final_pending_alerts = read_query(
-        "SELECT * FROM pending_alerts", db="monitorfish_remote"
-    )
-    assert len(final_pending_alerts) == len(initial_pending_alerts) + 1
-    assert "AIS ACTIVITY VESSEL" not in initial_pending_alerts.vessel_name.values
-    assert "AIS ACTIVITY VESSEL" in final_pending_alerts.vessel_name.values
-
-
-@pytest.fixture
-def reset_test_data_with_declared_activity(reset_test_data):
-    """
-    Malfunction id=5 (CFR 'ABC000306959', stage INITIAL_ENCOUNTER,
-    vessel_status_last_modification_date_utc 2h10 ago) is followed in the test data.
-    Unfollow it and add a recent FAR declaration for that vessel so the flow
-    re-follows it and raises an alert based on the declared fishing activity.
-    """
-    e = create_engine(db="monitorfish_remote")
-    with e.begin() as con:
-        con.execute(
-            text("UPDATE beacon_malfunctions SET is_followed = false WHERE id = 5")
-        )
-        con.execute(
-            text(
-                "INSERT INTO logbook_raw_messages (operation_number, xml_message) "
-                "VALUES ('DECL_ACT_TEST_1', '<ERS>Message ERS xml</ERS>')"
-            )
-        )
-        con.execute(
-            text(
-                """
-            INSERT INTO logbook_reports (
-                operation_number, operation_datetime_utc, operation_type,
-                cfr, log_type, value, activity_datetime_utc, transmission_format,
-                integration_datetime_utc
-            ) VALUES (
-                'DECL_ACT_TEST_1',
-                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
-                'DAT',
-                'ABC000306959',
-                'FAR',
-                '{}',
-                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
-                'ERS',
-                (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour'
-            )
-        """
-            )
-        )
-
-
 DECLARED_ACTIVITY_ALERT = (
     AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
 )
+SALE_ALERT = AlertType.SALE_DURING_BEACON_MALFUNCTION.value
 
 
-def test_flow_follows_malfunction_with_declared_activity(
-    reset_test_data_with_declared_activity,
-):
+def test_flow(reset_test_data):
     """
-    On top of the AIS path (malfunction id=6, see `test_flow`), for every
-    non-archived malfunction during which the vessel recently declared fishing
-    activity (malfunction id=5), the flow:
+    Exercises the flow's three ways of detecting activity on a vessel with an active,
+    non-archived beacon malfunction (see V666.3, V666.5 and V666.51 for the test
+    data):
 
-      - follows the malfunction if it is not already followed
-      - raises a DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION pending alert
-        for the vessel
+      - AIS: CFR 'GBR000888888' (malfunction id=6) has a recent AIS position and no
+        recent VMS emission.
+      - Declared fishing activity: CFR 'ABC000306959' (malfunction id=5) has a recent
+        FAR declaration.
+      - Sale: CFR 'ABC000306959' (malfunction id=5) also has a recent sales note.
+
+    In each case, the flow should follow the malfunction (PATCH isFollowed=True) and
+    raise a pending alert for the vessel.
     """
     headers = {
         "Accept": "application/json, text/plain",
@@ -213,15 +138,14 @@ def test_flow_follows_malfunction_with_declared_activity(
     initial_pending_alerts = read_query(
         "SELECT * FROM pending_alerts", db="monitorfish_remote"
     )
-    assert (
-        DECLARED_ACTIVITY_ALERT not in initial_pending_alerts.alert_config_name.values
-    )
 
     with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
         state = beacon_malfunction_activity_detection_flow(return_state=True)
 
     assert state.is_completed()
 
+    # Malfunction id=6 is followed once (AIS); id=5 is followed twice, once for the
+    # declared-activity path and once for the sale path.
     mock_requests.patch.assert_has_calls(
         [
             call(
@@ -234,14 +158,26 @@ def test_flow_follows_malfunction_with_declared_activity(
                 json={"isFollowed": True},
                 headers=headers,
             ),
+            call(
+                url=BEACON_MALFUNCTIONS_ENDPOINT + "5",
+                json={"isFollowed": True},
+                headers=headers,
+            ),
         ],
         any_order=True,
     )
-    assert mock_requests.patch.call_count == 2
+    assert mock_requests.patch.call_count == 3
 
     final_pending_alerts = read_query(
         "SELECT * FROM pending_alerts", db="monitorfish_remote"
     )
+    assert len(final_pending_alerts) == len(initial_pending_alerts) + 3
+
+    ais_alerts = final_pending_alerts.loc[
+        final_pending_alerts.vessel_name == "AIS ACTIVITY VESSEL"
+    ]
+    assert ais_alerts.internal_reference_number.tolist() == ["GBR000888888"]
+
     declared_activity_alerts = final_pending_alerts.loc[
         final_pending_alerts.alert_config_name == DECLARED_ACTIVITY_ALERT
     ]
@@ -249,3 +185,9 @@ def test_flow_follows_malfunction_with_declared_activity(
         "ABC000306959"
     ]
     assert declared_activity_alerts.iloc[0].value["type"] == DECLARED_ACTIVITY_ALERT
+
+    sale_alerts = final_pending_alerts.loc[
+        final_pending_alerts.alert_config_name == SALE_ALERT
+    ]
+    assert sale_alerts.internal_reference_number.tolist() == ["ABC000306959"]
+    assert sale_alerts.iloc[0].value["type"] == SALE_ALERT

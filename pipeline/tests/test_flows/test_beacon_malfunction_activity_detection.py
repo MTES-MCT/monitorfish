@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from config import BEACON_MALFUNCTIONS_ENDPOINT
 from src.db_config import create_engine
+from src.entities.alerts import AlertType
 from src.flows.beacon_malfunction_activity_detection import (
     add_malfunction_start_fields,
     beacon_malfunction_activity_detection_flow,
@@ -186,7 +187,9 @@ def reset_test_data_with_declared_activity(reset_test_data):
         )
 
 
-DECLARED_ACTIVITY_ALERT = "DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION"
+DECLARED_ACTIVITY_ALERT = (
+    AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
+)
 
 
 def test_flow_follows_malfunction_with_declared_activity(
@@ -245,4 +248,4 @@ def test_flow_follows_malfunction_with_declared_activity(
     assert declared_activity_alerts.internal_reference_number.tolist() == [
         "ABC000306959"
     ]
-    assert declared_activity_alerts.iloc[0].value == DECLARED_ACTIVITY_ALERT
+    assert declared_activity_alerts.iloc[0].value["type"] == DECLARED_ACTIVITY_ALERT

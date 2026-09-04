@@ -359,7 +359,7 @@ def current_segments() -> pd.DataFrame:
             ],
             "last_logbook_message_datetime_utc": [
                 now - relativedelta.relativedelta(months=1, minutes=27),
-                now - datetime.timedelta(days=1, hours=6),
+                now - datetime.timedelta(hours=1),
                 now - datetime.timedelta(weeks=1, days=3),
                 now - relativedelta.relativedelta(months=1, minutes=14),
                 now - relativedelta.relativedelta(months=1, minutes=30),

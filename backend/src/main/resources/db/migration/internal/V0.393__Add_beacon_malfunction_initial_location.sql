@@ -1,7 +1,3 @@
--- Add is_followed column
-ALTER TABLE beacon_malfunctions
-    ADD COLUMN is_followed BOOLEAN NOT NULL DEFAULT true;
-
 -- Add initial_vessel_status and fill in legacy data
 ALTER TABLE beacon_malfunctions
     ADD COLUMN initial_vessel_status beacon_malfunctions_vessel_status;
@@ -43,10 +39,20 @@ WHERE initial_vessel_status = 'AT_PORT'::beacon_malfunctions_vessel_status;
 
 ALTER TABLE beacon_malfunctions ALTER COLUMN creation_datetime_utc SET NOT NULL;
 
--- Update is_followed attribute
+-- Add is_followed column
+ALTER TABLE beacon_malfunctions
+    ADD COLUMN is_followed BOOLEAN;
+
 UPDATE beacon_malfunctions
-SET is_followed = 
+SET is_followed = true
 WHERE initial_vessel_status = 'AT_SEA'::beacon_malfunctions_vessel_status;
+
+UPDATE beacon_malfunctions
+SET is_followed = false
+WHERE initial_vessel_status != 'AT_SEA'::beacon_malfunctions_vessel_status;
+
+ALTER TABLE beacon_malfunctions
+ALTER COLUMN is_followed SET NOT NULL;
 
 -- Drop unused column
 ALTER TABLE beacon_malfunctions

@@ -50,6 +50,19 @@ def extract_beacon_malfunctions_with_declared_activity() -> pd.DataFrame:
 
 
 @task
+def extract_beacon_malfunctions_with_sale() -> pd.DataFrame:
+    """
+    Extract current beacon malfunctions during which the vessel recently sold fish
+    (a sales note was emitted), along with the vessel data required to build alerts.
+    """
+    return extract(
+        "monitorfish_remote",
+        "monitorfish/beacon_malfunctions_with_sale.sql",
+        params={"utcnow": datetime.utcnow()},
+    )
+
+
+@task
 def filter_vessels_at_sea(vessels: pd.DataFrame) -> pd.DataFrame:
     return vessels.loc[vessels["is_at_port"] == False].reset_index(drop=True)
 
@@ -113,6 +126,7 @@ def beacon_malfunction_activity_detection_flow():
     current_malfunctions_with_declared_activity = (
         extract_beacon_malfunctions_with_declared_activity.submit()
     )
+    current_malfunctions_with_sale = extract_beacon_malfunctions_with_sale.submit()
     ais_silenced_alerts = extract_silenced_alerts.submit(
         AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value,
         number_of_hours=4,
@@ -131,6 +145,15 @@ def beacon_malfunction_activity_detection_flow():
     declared_activity_active_reportings = extract_active_reportings.submit(
         AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
     )
+    sale_silenced_alerts = extract_silenced_alerts.submit(
+        AlertType.SALE_DURING_BEACON_MALFUNCTION.value,
+        # Sales notes may be received several months after the event (in particular
+        # paper sales notes), and we should be able to detect those cases.
+        number_of_hours=24 * 365,
+    )
+    sale_active_reportings = extract_active_reportings.submit(
+        AlertType.SALE_DURING_BEACON_MALFUNCTION.value
+    )
 
     # Tag is_at_port using port H3 referential, then keep only at-sea vessels
     vessels_with_recent_ais = tag_positions_at_port(vessels_with_recent_ais)
@@ -147,6 +170,9 @@ def beacon_malfunction_activity_detection_flow():
         get_malfunction_ids_not_already_followed(
             current_malfunctions_with_declared_activity
         )
+    )
+    current_malfunctions_with_sale_to_follow = get_malfunction_ids_not_already_followed(
+        current_malfunctions_with_sale
     )
     malfunction_candidates = add_malfunction_start_fields(vessels_without_malfunction)
     new_malfunctions = prepare_new_beacon_malfunctions(malfunction_candidates)
@@ -174,6 +200,19 @@ def beacon_malfunction_activity_detection_flow():
         declared_activity_silenced_alerts,
         declared_activity_active_reportings,
     )
+    sale_alerts = make_alerts(
+        current_malfunctions_with_sale,
+        AlertType.SALE_DURING_BEACON_MALFUNCTION.value,
+        "Note de vente pendant une avarie VMS",
+        natinf_code=27688,
+        threat="Mesures techniques et de conservation",
+        threat_characterization="VMS - absence",
+    )
+    filtered_sale_alerts = filter_alerts(
+        sale_alerts,
+        sale_silenced_alerts,
+        sale_active_reportings,
+    )
 
     # Load
     update_beacon_malfunction_is_followed.map(
@@ -182,6 +221,10 @@ def beacon_malfunction_activity_detection_flow():
     )
     update_beacon_malfunction_is_followed.map(
         current_malfunctions_with_declared_activity_to_follow,
+        is_followed=unmapped(True),
+    )
+    update_beacon_malfunction_is_followed.map(
+        current_malfunctions_with_sale_to_follow,
         is_followed=unmapped(True),
     )
     load_new_beacon_malfunctions(new_malfunctions)
@@ -194,4 +237,8 @@ def beacon_malfunction_activity_detection_flow():
         alert_config_name=(
             AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
         ),
+    )
+    load_alerts(
+        filtered_sale_alerts,
+        alert_config_name=AlertType.SALE_DURING_BEACON_MALFUNCTION.value,
     )

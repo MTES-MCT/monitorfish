@@ -394,3 +394,26 @@ VALUES
     (           '28',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP,          'RET',                  '6', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 4 days')::TIMESTAMP,               'ERS'),
     (           '29',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP,          'RET',                  '7', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 week 3 days')::TIMESTAMP,               'ERS'),
     (           '30',             'OOF',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 6 days')::TIMESTAMP,          'RET',                  '9', '{"returnStatus": "000"}',  ((now() AT TIME ZONE 'UTC') - INTERVAL '1 year 6 days')::TIMESTAMP,               'ERS');
+
+-- A recent FAR declaration for CFR 'ABC000306959', which has an active, non-archived
+-- beacon malfunction (see V666.3). Used by
+-- test_beacon_malfunction_activity_detection.py to check that the flow follows the
+-- malfunction and raises a DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION alert.
+-- The 'BMF_' operation_number prefix is excluded from other tests' assertions on the
+-- full contents of this table (see test_sales_and_logbook.py).
+INSERT INTO logbook_raw_messages (operation_number, xml_message) VALUES
+    ('BMF_DECL_ACT_01', '<ERS>Message ERS xml</ERS>');
+
+INSERT INTO logbook_reports (
+    operation_number, operation_country, operation_datetime_utc, operation_type,
+    report_id, report_datetime_utc, cfr, ircs, external_identification, vessel_name,
+    flag_state, log_type, value, activity_datetime_utc, integration_datetime_utc,
+    trip_number, transmission_format
+) VALUES (
+    'BMF_DECL_ACT_01', 'OOF', (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour', 'DAT',
+    'BMF_DECL_ACT_01', (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
+    'ABC000306959', 'LLUK', 'RV348407', 'ÉTABLIR IMPRESSION LORSQUE', 'FR', 'FAR',
+    '{"hauls": [{"gear": "OTM", "mesh": 80.0, "farDatetimeUtc": "2018-07-21T17:45:00Z"}]}',
+    (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour',
+    (NOW() AT TIME ZONE 'UTC') - INTERVAL '1 hour', '20260001', 'ERS'
+);

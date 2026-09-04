@@ -142,7 +142,7 @@ INSERT INTO beacon_malfunctions (
     '987654',
     'AT_SEA',
     (NOW() AT TIME ZONE 'UTC')::TIMESTAMP - INTERVAL '12 hours 10 minutes',
-    true
+    false
 ),
 (
     6,

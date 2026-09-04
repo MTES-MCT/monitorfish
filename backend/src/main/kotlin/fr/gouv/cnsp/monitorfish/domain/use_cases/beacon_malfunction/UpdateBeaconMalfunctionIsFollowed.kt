@@ -7,7 +7,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
 class UpdateBeaconMalfunctionIsFollowed(
     private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
 ) {
-    fun execute(id: Int, isFollowed: Boolean) {
+    fun execute(
+        id: Int,
+        isFollowed: Boolean,
+    ) {
         beaconMalfunctionsRepository.updateIsFollowed(id, isFollowed)
     }
 }

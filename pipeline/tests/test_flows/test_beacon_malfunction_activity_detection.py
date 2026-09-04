@@ -150,7 +150,7 @@ def reset_test_data_with_declared_activity(reset_test_data):
     Malfunction id=5 (CFR 'ABC000306959', stage INITIAL_ENCOUNTER,
     vessel_status_last_modification_date_utc 2h10 ago) is followed in the test data.
     Unfollow it and add a recent FAR declaration for that vessel so the flow
-    re-follows it based on the declared fishing activity.
+    re-follows it and raises an alert based on the declared fishing activity.
     """
     e = create_engine(db="monitorfish_remote")
     with e.begin() as con:
@@ -186,19 +186,33 @@ def reset_test_data_with_declared_activity(reset_test_data):
         )
 
 
+DECLARED_ACTIVITY_ALERT = "DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION"
+
+
 def test_flow_follows_malfunction_with_declared_activity(
     reset_test_data_with_declared_activity,
 ):
     """
-    On top of the AIS path (malfunction id=6, see `test_flow`), the flow follows
-    non-archived, not-yet-followed malfunctions during which the vessel recently
-    declared fishing activity (malfunction id=5).
+    On top of the AIS path (malfunction id=6, see `test_flow`), for every
+    non-archived malfunction during which the vessel recently declared fishing
+    activity (malfunction id=5), the flow:
+
+      - follows the malfunction if it is not already followed
+      - raises a DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION pending alert
+        for the vessel
     """
     headers = {
         "Accept": "application/json, text/plain",
         "Content-Type": "application/json;charset=UTF-8",
         "X-API-KEY": "backend_api_key",
     }
+
+    initial_pending_alerts = read_query(
+        "SELECT * FROM pending_alerts", db="monitorfish_remote"
+    )
+    assert (
+        DECLARED_ACTIVITY_ALERT not in initial_pending_alerts.alert_config_name.values
+    )
 
     with patch("src.shared_tasks.beacon_malfunctions.requests") as mock_requests:
         state = beacon_malfunction_activity_detection_flow(return_state=True)
@@ -221,3 +235,14 @@ def test_flow_follows_malfunction_with_declared_activity(
         any_order=True,
     )
     assert mock_requests.patch.call_count == 2
+
+    final_pending_alerts = read_query(
+        "SELECT * FROM pending_alerts", db="monitorfish_remote"
+    )
+    declared_activity_alerts = final_pending_alerts.loc[
+        final_pending_alerts.alert_config_name == DECLARED_ACTIVITY_ALERT
+    ]
+    assert declared_activity_alerts.internal_reference_number.tolist() == [
+        "ABC000306959"
+    ]
+    assert declared_activity_alerts.iloc[0].value == DECLARED_ACTIVITY_ALERT

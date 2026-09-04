@@ -39,7 +39,7 @@ def extract_vessels_with_recent_ais() -> pd.DataFrame:
 def extract_beacon_malfunctions_with_declared_activity() -> pd.DataFrame:
     """
     Extract current beacon malfunctions during which the vessel recently declared
-    fishing activity (DEP, FAR).
+    fishing activity (DEP, FAR), along with the vessel data required to build alerts.
     This also works on vessels with paper logbook, although with some delay.
     """
     return extract(
@@ -120,6 +120,17 @@ def beacon_malfunction_activity_detection_flow():
     ais_active_reportings = extract_active_reportings.submit(
         AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value
     )
+    declared_activity_silenced_alerts = extract_silenced_alerts.submit(
+        AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value,
+        # Fishing activity data may be received several months after the event,
+        # and we should be able to detect those cases - i.e. a vessel that hasn't
+        # emitted for 6 months and for which we receive today a declaration of
+        # activity that took place 3 months must trigger the alert.
+        number_of_hours=24 * 365,
+    )
+    declared_activity_active_reportings = extract_active_reportings.submit(
+        AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
+    )
 
     # Tag is_at_port using port H3 referential, then keep only at-sea vessels
     vessels_with_recent_ais = tag_positions_at_port(vessels_with_recent_ais)
@@ -147,8 +158,21 @@ def beacon_malfunction_activity_detection_flow():
         threat="Mesures techniques et de conservation",
         threat_characterization="VMS - absence",
     )
-    filtered_alerts = filter_alerts(
+    filtered_ais_alerts = filter_alerts(
         ais_alerts, ais_silenced_alerts, ais_active_reportings
+    )
+    declared_activity_alerts = make_alerts(
+        current_malfunctions_with_declared_activity,
+        AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value,
+        "Activité de pêche déclarée pendant une avarie VMS",
+        natinf_code=27688,
+        threat="Mesures techniques et de conservation",
+        threat_characterization="VMS - absence",
+    )
+    filtered_declared_activity_alerts = filter_alerts(
+        declared_activity_alerts,
+        declared_activity_silenced_alerts,
+        declared_activity_active_reportings,
     )
 
     # Load
@@ -162,6 +186,12 @@ def beacon_malfunction_activity_detection_flow():
     )
     load_new_beacon_malfunctions(new_malfunctions)
     load_alerts(
-        filtered_alerts,
+        filtered_ais_alerts,
         alert_config_name=AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value,
+    )
+    load_alerts(
+        filtered_declared_activity_alerts,
+        alert_config_name=(
+            AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.value
+        ),
     )

@@ -54,6 +54,6 @@ WHERE initial_vessel_status != 'AT_SEA'::beacon_malfunctions_vessel_status;
 ALTER TABLE beacon_malfunctions
 ALTER COLUMN is_followed SET NOT NULL;
 
--- Drop unused column
+-- Drop unused columns
 ALTER TABLE beacon_malfunctions
 DROP COLUMN beacon_status_at_malfunction_creation;

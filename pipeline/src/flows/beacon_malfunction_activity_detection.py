@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 import pandas as pd
@@ -19,9 +20,6 @@ from src.shared_tasks.beacon_malfunctions import (
 )
 from src.shared_tasks.positions import tag_positions_at_port
 
-ALERT_CONFIG_NAME = AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value
-ALERT_NAME = "Activité AIS détectée sans émission VMS"
-
 
 @task
 def extract_vessels_with_recent_ais() -> pd.DataFrame:
@@ -34,6 +32,20 @@ def extract_vessels_with_recent_ais() -> pd.DataFrame:
     return extract(
         "monitorfish_remote",
         "monitorfish/vessels_with_activity_detected_by_ais.sql",
+    )
+
+
+@task
+def extract_beacon_malfunctions_with_declared_activity() -> pd.DataFrame:
+    """
+    Extract current beacon malfunctions during which the vessel recently declared
+    fishing activity (DEP, FAR).
+    This also works on vessels with paper logbook, although with some delay.
+    """
+    return extract(
+        "monitorfish_remote",
+        "monitorfish/beacon_malfunctions_with_declared_activity.sql",
+        params={"utcnow": datetime.utcnow()},
     )
 
 
@@ -51,7 +63,7 @@ def extract_non_archived_malfunctions() -> pd.DataFrame:
 
 
 @task
-def get_malfunction_ids_to_follow(
+def get_malfunction_ids_with_activity(
     vessels_with_activity: pd.DataFrame,
     non_archived_malfunctions: pd.DataFrame,
 ) -> List[int]:
@@ -64,6 +76,13 @@ def get_malfunction_ids_to_follow(
         how="inner",
     )
     return merged["id"].tolist()
+
+
+@task
+def get_malfunction_ids_not_already_followed(
+    malfunctions: pd.DataFrame,
+) -> List[int]:
+    return malfunctions.loc[~malfunctions.is_followed, "id"].tolist()
 
 
 @task
@@ -91,39 +110,58 @@ def beacon_malfunction_activity_detection_flow():
     # Extract
     vessels_with_recent_ais = extract_vessels_with_recent_ais.submit()
     non_archived_malfunctions = extract_non_archived_malfunctions.submit()
-    silenced_alerts = extract_silenced_alerts.submit(
-        ALERT_CONFIG_NAME,
+    current_malfunctions_with_declared_activity = (
+        extract_beacon_malfunctions_with_declared_activity.submit()
+    )
+    ais_silenced_alerts = extract_silenced_alerts.submit(
+        AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value,
         number_of_hours=4,
     )
-    active_reportings = extract_active_reportings.submit(ALERT_CONFIG_NAME)
+    ais_active_reportings = extract_active_reportings.submit(
+        AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value
+    )
 
     # Tag is_at_port using port H3 referential, then keep only at-sea vessels
     vessels_with_recent_ais = tag_positions_at_port(vessels_with_recent_ais)
-    vessels_with_activity = filter_vessels_at_sea(vessels_with_recent_ais)
+    vessels_with_recent_ais_at_sea = filter_vessels_at_sea(vessels_with_recent_ais)
 
     # Transform
-    ids_to_follow = get_malfunction_ids_to_follow(
-        vessels_with_activity, non_archived_malfunctions
+    ids_to_follow = get_malfunction_ids_with_activity(
+        vessels_with_recent_ais_at_sea, non_archived_malfunctions
     )
     vessels_without_malfunction = get_vessels_without_malfunction(
-        vessels_with_activity, non_archived_malfunctions
+        vessels_with_recent_ais_at_sea, non_archived_malfunctions
+    )
+    current_malfunctions_with_declared_activity_to_follow = (
+        get_malfunction_ids_not_already_followed(
+            current_malfunctions_with_declared_activity
+        )
     )
     malfunction_candidates = add_malfunction_start_fields(vessels_without_malfunction)
     new_malfunctions = prepare_new_beacon_malfunctions(malfunction_candidates)
-    alerts = make_alerts(
-        vessels_with_activity,
-        ALERT_CONFIG_NAME,
-        ALERT_NAME,
+    ais_alerts = make_alerts(
+        vessels_with_recent_ais_at_sea,
+        AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value,
+        "Activité AIS détectée sans émission VMS",
         natinf_code=27688,
         threat="Mesures techniques et de conservation",
         threat_characterization="VMS - absence",
     )
-    filtered_alerts = filter_alerts(alerts, silenced_alerts, active_reportings)
+    filtered_alerts = filter_alerts(
+        ais_alerts, ais_silenced_alerts, ais_active_reportings
+    )
 
     # Load
     update_beacon_malfunction_is_followed.map(
         ids_to_follow,
         is_followed=unmapped(True),
     )
+    update_beacon_malfunction_is_followed.map(
+        current_malfunctions_with_declared_activity_to_follow,
+        is_followed=unmapped(True),
+    )
     load_new_beacon_malfunctions(new_malfunctions)
-    load_alerts(filtered_alerts, alert_config_name=ALERT_CONFIG_NAME)
+    load_alerts(
+        filtered_alerts,
+        alert_config_name=AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.value,
+    )

@@ -13,6 +13,25 @@ data class VesselIdentity(
     val flagState: CountryCode,
     val vesselIdentifier: VesselIdentifier?,
 ) {
+    /**
+     * Whether this identity and [other] designate the same vessel: by `vesselId` when both carry one, else
+     * by the identifier field designated by `vesselIdentifier` (this one's, or [other]'s as a fallback).
+     */
+    fun isSameVesselAs(other: VesselIdentity): Boolean {
+        if (this.vesselId != null && other.vesselId != null) {
+            return this.vesselId == other.vesselId
+        }
+
+        return when (this.vesselIdentifier ?: other.vesselIdentifier) {
+            VesselIdentifier.INTERNAL_REFERENCE_NUMBER -> !this.cfr.isNullOrEmpty() && this.cfr == other.cfr
+            VesselIdentifier.IRCS -> !this.ircs.isNullOrEmpty() && this.ircs == other.ircs
+            VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                !this.externalIdentification.isNullOrEmpty() &&
+                    this.externalIdentification == other.externalIdentification
+            null -> false
+        }
+    }
+
     fun isEqualToActiveVessel(activeVessel: EnrichedActiveVessel): Boolean {
         if (activeVessel.lastPosition != null) {
             return when {

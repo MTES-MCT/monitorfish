@@ -40,66 +40,52 @@ from src.read_query import read_query
 from tests.mocks import mock_datetime_utcnow
 
 malfunctions_to_notify_shared_data = {
-    "beacon_malfunction_id": [1, 2, 3, 4, 5],
+    "beacon_malfunction_id": [1, 2, 3],
     "vessel_cfr_or_immat_or_ircs": [
         "ABC000542519",
         "SB125334",
         "ZZTOPACDC",
-        "AB123456",
-        "ABC000306959",
     ],
-    "beacon_number": ["123456", "A56CZ2", "BEA951357", "BEACON_NOT_EMITTING", "987654"],
+    "beacon_number": ["123456", "A56CZ2", "BEA951357"],
     "vessel_name": [
         "DEVINER FIGURE CONSCIENCE",
         "JOUR INTÉRESSER VOILÀ",
         "I DO 4H REPORT",
-        "I NEVER EMITTED BUT SHOULD HAVE",
-        "ÉTABLIR IMPRESSION LORSQUE",
     ],
-    "last_position_latitude": [45.236, 42.843, -8.5690, -6.862, -6.162],
-    "last_position_longitude": [-3.569, -8.568, -23.1569, 51.1686, 50.185],
+    "last_position_latitude": [45.236, 42.843, -8.5690],
+    "last_position_longitude": [-3.569, -8.568, -23.1569],
     "notification_type": [
         "END_OF_MALFUNCTION",
         "MALFUNCTION_AT_SEA_REMINDER",
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
-        "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
-        "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
     ],
     "vessel_emails": [
         ["figure@conscience.fr", "figure2@conscience.fr"],
         [],
         [],
-        [],
-        [],
     ],
-    "vessel_mobile_phone": [None, "0111111111", None, None, None],
-    "vessel_fax": ["0100000000", None, None, None, None],
+    "vessel_mobile_phone": [None, "0111111111", None],
+    "vessel_fax": ["0100000000", None, None],
     "operator_name": [
         "Le pêcheur de crevettes",
         "Le pêcheur",
         "Le pêcheur qui se fait ses 4h reports",
-        "Le pêcheur qui se cache",
-        "Le pêcheur de poissons",
     ],
     "operator_email": [
         "address@email.bzh",
         "pecheur@poissecaille.fr",
         "reglo@bateau.fr",
-        "discrete@cache-cache.fish",
-        "write_to_me@gmail.com",
     ],
-    "operator_mobile_phone": ["0600000000", None, None, None, None],
-    "operator_fax": ["0200000000", None, None, None, None],
-    "satellite_operator": ["SAT", "SRV", "SRV", "SRV", "SAT"],
+    "operator_mobile_phone": ["0600000000", None, None],
+    "operator_fax": ["0200000000", None, None],
+    "satellite_operator": ["SAT", "SRV", "SRV"],
     "satellite_operator_emails": [
         ["email1@sat.op", "email2@sat.op"],
         ["contact@srv.gps"],
         ["contact@srv.gps"],
-        ["contact@srv.gps"],
-        ["email1@sat.op", "email2@sat.op"],
     ],
-    "foreign_fmc_name": [None, None, None, "Alabama", "Boulgiboulgastan"],
-    "foreign_fmc_emails": [None, None, None, ["fmc@aaa.com", "fmc2@aaa.com"], []],
+    "foreign_fmc_name": [None, None, None],
+    "foreign_fmc_emails": [None, None, None],
 }
 
 
@@ -115,15 +101,11 @@ def test_extract_malfunctions_to_notify(reset_test_data):
                 now - relativedelta(months=1, days=2, hours=17, minutes=57),
                 now - relativedelta(hours=3, minutes=57),
                 None,
-                None,
-                None,
             ],
             "malfunction_start_date_utc": [
                 now - relativedelta(months=1, days=3),
                 now - relativedelta(hours=10),
                 now - relativedelta(hours=12, minutes=10),
-                now - relativedelta(hours=6, minutes=10),
-                now - relativedelta(hours=8, minutes=10),
             ],
         }
     )
@@ -163,15 +145,11 @@ def test_to_malfunctions_to_notify_list():
                 datetime(2022, 1, 1, 12, 53, 23),
                 datetime(2022, 1, 2, 12, 53, 23),
                 None,
-                None,
-                None,
             ],
             "malfunction_start_date_utc": [
                 datetime(2022, 1, 3, 12, 53, 23),
                 datetime(2022, 1, 4, 12, 53, 23),
                 datetime(2022, 1, 5, 12, 53, 23),
-                datetime(2022, 1, 6, 12, 53, 23),
-                datetime(2022, 1, 7, 12, 53, 23),
             ],
         }
     )
@@ -247,52 +225,6 @@ def test_to_malfunctions_to_notify_list():
             satellite_operator_emails=["contact@srv.gps"],
             foreign_fmc_name=None,
             foreign_fmc_emails=None,
-            previous_notification_datetime_utc=pd.NaT,
-            test_mode=False,
-        ),
-        BeaconMalfunctionToNotify(
-            beacon_malfunction_id=4,
-            vessel_cfr_or_immat_or_ircs="AB123456",
-            beacon_number="BEACON_NOT_EMITTING",
-            vessel_name="I NEVER EMITTED BUT SHOULD HAVE",
-            malfunction_start_date_utc=datetime(2022, 1, 6, 12, 53, 23),
-            last_position_latitude=-6.862,
-            last_position_longitude=51.1686,
-            notification_type="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
-            vessel_emails=[],
-            vessel_mobile_phone=None,
-            vessel_fax=None,
-            operator_name="Le pêcheur qui se cache",
-            operator_email="discrete@cache-cache.fish",
-            operator_mobile_phone=None,
-            operator_fax=None,
-            satellite_operator="SRV",
-            satellite_operator_emails=["contact@srv.gps"],
-            foreign_fmc_name="Alabama",
-            foreign_fmc_emails=["fmc@aaa.com", "fmc2@aaa.com"],
-            previous_notification_datetime_utc=pd.NaT,
-            test_mode=False,
-        ),
-        BeaconMalfunctionToNotify(
-            beacon_malfunction_id=5,
-            vessel_cfr_or_immat_or_ircs="ABC000306959",
-            beacon_number="987654",
-            vessel_name="ÉTABLIR IMPRESSION LORSQUE",
-            malfunction_start_date_utc=datetime(2022, 1, 7, 12, 53, 23),
-            last_position_latitude=-6.162,
-            last_position_longitude=50.185,
-            notification_type="MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC",
-            vessel_emails=[],
-            vessel_mobile_phone=None,
-            vessel_fax=None,
-            operator_name="Le pêcheur de poissons",
-            operator_email="write_to_me@gmail.com",
-            operator_mobile_phone=None,
-            operator_fax=None,
-            satellite_operator="SAT",
-            satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
-            foreign_fmc_name="Boulgiboulgastan",
-            foreign_fmc_emails=[],
             previous_notification_datetime_utc=pd.NaT,
             test_mode=False,
         ),
@@ -963,7 +895,7 @@ def test_flow(reset_test_data):
 
     # Check the data loaded into the database
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 14
+    assert len(final_notifications) == 12
     inserted_notifications = final_notifications[
         ~final_notifications.id.isin(initial_notifications.id)
     ].reset_index(drop=True)

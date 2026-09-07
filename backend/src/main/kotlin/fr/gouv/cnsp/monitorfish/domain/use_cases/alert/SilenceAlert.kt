@@ -68,6 +68,14 @@ class SilenceAlert(
                 AlertType.MISSING_DEP_ALERT -> AlertType.MISSING_DEP_ALERT.getValue()
                 AlertType.MISSING_FAR_ALERT -> AlertType.MISSING_FAR_ALERT.getValue()
                 AlertType.MISSING_FAR_48_HOURS_ALERT -> AlertType.MISSING_FAR_48_HOURS_ALERT.getValue()
+                AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT ->
+                    AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT.getValue()
+                AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT ->
+                    AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT.getValue()
+                AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION ->
+                    AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION.getValue()
+                AlertType.SALE_DURING_BEACON_MALFUNCTION ->
+                    AlertType.SALE_DURING_BEACON_MALFUNCTION.getValue()
                 else -> {
                     throw IllegalArgumentException(
                         "The alert type '${silencedAlert.value.type}' could not be silenced.",

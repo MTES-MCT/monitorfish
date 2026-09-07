@@ -2720,7 +2720,26 @@ def test_make_update_manual_prior_notifications_statement(
     )
 
 
+def make_fake_rendered_pdf() -> bytes:
+    """
+    A minimal, valid PDF that `resize_pdf_to_A4` can read and resize. Used to stub
+    out `weasyprint.HTML.write_pdf` in the flow-level tests below: none of them
+    assert on PDF byte content (that's covered by `test_render_pno_*_pdf`), and
+    real weasyprint rendering is by far the slowest part of these tests (~1-1.5s
+    per document, run for every generated PNO).
+    """
+    writer = pypdf.PdfWriter()
+    writer.add_blank_page(width=595, height=842)
+    buf = io.BytesIO()
+    writer.write(buf)
+    return buf.getvalue()
+
+
+FAKE_RENDERED_PDF = make_fake_rendered_pdf()
+
+
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2730,6 +2749,7 @@ def test_flow(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
@@ -2851,6 +2871,7 @@ def test_flow(
 
 @pytest.mark.parametrize("zero_pno_types", ["manual", "logbook", "both"])
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2860,6 +2881,7 @@ def test_flow_with_zero_pno_to_generate(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
@@ -2919,6 +2941,7 @@ def test_flow_with_zero_pno_to_generate(
 
 
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2928,6 +2951,7 @@ def test_flow_with_zero_pno_to_send(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,

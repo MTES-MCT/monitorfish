@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, sort-keys-fix/sort-keys-fix */
+/* eslint-disable import-js/no-extraneous-dependencies, sort-keys-fix/sort-keys-fix */
 
 import importMetaEnv from '@import-meta-env/unplugin'
 import replace from '@rollup/plugin-replace'
@@ -21,8 +21,15 @@ export default defineConfig({
         index: './index.html'
       },
       output: {
-        manualChunks: {
-          'monitor-ui': ['@mtes-mct/monitor-ui']
+        // Vite 8 bundles with Rolldown, which replaces Rollup's `manualChunks` by `codeSplitting`
+        codeSplitting: {
+          includeDependenciesRecursively: true,
+          groups: [
+            {
+              name: 'monitor-ui',
+              test: /node_modules[\\/]@mtes-mct[\\/]monitor-ui[\\/]/
+            }
+          ]
         }
       }
     },

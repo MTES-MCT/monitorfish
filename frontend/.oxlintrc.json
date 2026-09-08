@@ -71,6 +71,11 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
 
+    // styled-components 6.5 added a named `styled` export alongside its default one, and OxLint 1.80
+    // implemented this rule: `import styled from 'styled-components'` is the library's documented
+    // usage, so the ~470 reports it raises are all noise.
+    "import/no-named-as-default": "off",
+
     "unicorn/no-thenable": "off",
     "unicorn/no-empty-file": "off",
     // Their fixers rewrite .sort()/.reverse() into ES2023 toSorted()/toReversed(), which
@@ -115,6 +120,127 @@
     ]
   },
   "overrides": [
+    // OxLint 1.80 promoted the React Compiler diagnostics to the `correctness` category, which this
+    // config maps to "error". They report 126 pre-existing violations that predate the rules and are
+    // unrelated to any React Compiler adoption (the compiler is not enabled here). Rather than
+    // switching the rules off wholesale, the offending files are baselined below so the rules still
+    // gate every new file — shrink these lists, never extend them.
+    {
+      // @tanstack/react-table and @tanstack/react-virtual mutate during render; the incompatibility is
+      // in the libraries, so there is nothing to fix on our side until they support the compiler.
+      "files": [
+        "src/features/Alert/components/SideWindowAlerts/AlertListAndReportingList/PendingAlertsList.tsx",
+        "src/features/Alert/components/SideWindowAlerts/AlertsManagementList/index.tsx",
+        "src/features/Reporting/components/ReportingTable/index.tsx",
+        "src/features/Vessel/components/VesselList/index.tsx",
+        "src/features/Vessel/components/VesselSidebar/components/TrackRequest/PositionsTable.tsx",
+        "src/features/VesselGroup/components/VesselGroupList/VesselTable.tsx",
+        "src/hooks/useTableVirtualizer.ts"
+      ],
+      "rules": { "react/incompatible-library": "off" }
+    },
+    {
+      // The compiler cannot prove these useMemo/useCallback dependencies stable (optional chaining, or a
+      // ref read inside the memo). The memoization is correct today; rewriting it is a behaviour risk.
+      "files": [
+        "src/features/Mission/components/MissionUnitLabelOverlay/index.tsx",
+        "src/features/PriorNotification/components/shared/DownloadButton/index.tsx",
+        "src/features/Reporting/components/VesselReportings/CurrentReportingList/Content.tsx",
+        "src/features/Vessel/components/VesselSidebar/components/Equipment/resume/EquipmentResume.tsx"
+      ],
+      "rules": { "react/preserve-manual-memoization": "off" }
+    },
+    {
+      // Reading a ref during render. Most of these are API shapes we do not own — monitor-ui's
+      // `useNewWindow()` hands back a `newWindowContainerRef` whose `.current` is what `baseContainer`
+      // expects, and OpenLayers overlays are built from `ref.current` — plus deliberate render-phase
+      // caches (`useLoadingState`, `usePreviousIf`, `useListPagination`).
+      "files": [
+        "src/features/ActivityReport/components/ExportActivityReportsDialog/index.tsx",
+        "src/features/Alert/components/SideWindowAlerts/AlertListAndReportingList/SilenceAlertMenu.tsx",
+        "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/FormikValidityPeriod.tsx",
+        "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionCard.tsx",
+        "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp.tsx",
+        "src/features/Draw/components/DrawModal.tsx",
+        "src/features/InterestPoint/layers/InterestPointLayer.tsx",
+        "src/features/Logbook/overlays/LogbookMessageOverlay.tsx",
+        "src/features/Map/components/ControlOverlay/index.tsx",
+        "src/features/Map/components/RightClickMapMenu.tsx",
+        "src/features/Map/layers/hooks/useIsZooming.ts",
+        "src/features/Measurement/components/MeasurementOverlay.jsx",
+        "src/features/Mission/components/MissionForm/ActionForm/shared/DatePickerField.tsx",
+        "src/features/Mission/components/MissionForm/ActionList/FishActionCard.tsx",
+        "src/features/Mission/components/MissionForm/ActionList/index.tsx",
+        "src/features/Mission/components/MissionForm/MainForm/FormikDoubleDatePicker.tsx",
+        "src/features/Mission/components/MissionForm/hooks/useMissionFormAutoSave.ts",
+        "src/features/Mission/components/MissionForm/index.tsx",
+        "src/features/Mission/components/MissionList/FilterBar.tsx",
+        "src/features/Mission/components/MissionOverlay/index.tsx",
+        "src/features/Mission/components/MissionUnitLabelOverlay/index.tsx",
+        "src/features/Mission/layers/MissionsLabelsLayer/MissionsLabelsLayer.tsx",
+        "src/features/PriorNotification/components/ManualPriorNotificationForm/Form.tsx",
+        "src/features/PriorNotification/components/PriorNotificationList/FilterBar.tsx",
+        "src/features/Reporting/components/IUUReportingMapForm/index.tsx",
+        "src/features/Reporting/components/ReportingForm/Form.tsx",
+        "src/features/Reporting/components/ReportingForm/index.tsx",
+        "src/features/RiskFactor/components/RiskFactorResume/ImpactRiskFactorDetails.tsx",
+        "src/features/Station/components/SelectedStationOverlay.tsx",
+        "src/features/Station/components/StationLayer/index.ts",
+        "src/features/Vessel/components/VesselSearch/index.tsx",
+        "src/features/VesselSearch/index.tsx",
+        "src/hooks/useListPagination.ts",
+        "src/hooks/useLoadingState.ts",
+        "src/hooks/usePreviousIfTrue.ts"
+      ],
+      "rules": { "react/refs": "off" }
+    },
+    {
+      // Props/state synchronisation effects. Each is a real behaviour change to untangle (derive during
+      // render instead), so they are burnt down per feature rather than in a dependency bump.
+      "files": [
+        "src/api/APIWorker.tsx",
+        "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp.tsx",
+        "src/features/ControlObjective/components/ControlObjectiveTable/index.tsx",
+        "src/features/FleetSegment/components/FleetSegmentsBackoffice/index.tsx",
+        "src/features/Logbook/components/VesselLogbook/LogbookSummary/summaries/FARMessageResume.tsx",
+        "src/features/Map/components/ControlOverlay/index.tsx",
+        "src/features/Map/components/RightClickMapMenuOverlay.jsx",
+        "src/features/Map/components/TrackTypeOverlay/index.tsx",
+        "src/features/Map/components/VesselTrackOverlay/index.jsx",
+        "src/features/Mission/components/MissionForm/ActionForm/shared/Species/WeightInput.tsx",
+        "src/features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates.ts",
+        "src/features/Mission/components/MissionForm/hooks/useMissionFormAutoSave.ts",
+        "src/features/Mission/components/MissionOverlay/index.tsx",
+        "src/features/Mission/components/MissionUnitLabelOverlay/index.tsx",
+        "src/features/Regulation/components/RegulationForm/GearRegulation/index.tsx",
+        "src/features/Regulation/components/RegulationForm/identification/RegulationTopicLine.tsx",
+        "src/features/Regulation/components/RegulationForm/index.tsx",
+        "src/features/Regulation/components/RegulationForm/species_regulation/SpeciesRegulation.tsx",
+        "src/features/Regulation/components/RegulationSearch/SearchInput.tsx",
+        "src/features/Regulation/components/RegulationTables/LawType.tsx",
+        "src/features/Regulation/components/RegulationTables/RegulatoryTopicInput.tsx",
+        "src/features/Reporting/components/IUUReportingMapForm/index.tsx",
+        "src/features/Station/components/StationCard/index.tsx",
+        "src/features/Vessel/components/VesselEstimatedPositionOverlay/index.jsx",
+        "src/features/Vessel/components/VesselList/FilterBar.tsx",
+        "src/features/Vessel/components/VesselLoader.tsx",
+        "src/features/Vessel/components/VesselSearch/index.tsx",
+        "src/features/Vessel/components/VesselSidebar/components/Summary.tsx",
+        "src/features/VesselGroup/components/VesselGroupList/hooks/useGetVesselGroupsWithVessels.ts",
+        "src/features/VesselSearch/index.tsx",
+        "src/hooks/useClickOutsideWhenOpened.jsx",
+        "src/hooks/useDisplayMapBox.ts",
+        "src/hooks/useListenForDrawing.ts",
+        "src/hooks/useTable/index.tsx"
+      ],
+      "rules": { "react/set-state-in-effect": "off" }
+    },
+    {
+      // `getIconFromControlUnitResourceType` selects a stable monitor-ui icon from a switch; the compiler
+      // just cannot prove it. No component is actually created during render.
+      "files": ["src/features/ControlUnit/components/ControlUnitDialog/ControlUnitResourceList/Placeholder.tsx"],
+      "rules": { "react/static-components": "off" }
+    },
     {
       "files": [
         "src/domain/shared_slices/**/*.ts",

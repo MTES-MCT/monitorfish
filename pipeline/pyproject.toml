@@ -6,7 +6,7 @@ authors = ["Vincent <vincent.chery@m4x.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.13.5"
+python = "3.14.7"
 pandas = {extras = ["postgresql"], version = "^2.3.3"}
 black = "^26.5.1"
 isort = "^6.0.1"
@@ -29,10 +29,17 @@ css-inline = "^0.21.0"
 requests-mock = "^1.11.0"
 h3 = "^4.5.0"
 pypdf = "^6.14.2"
-fiona = "^1.10.1"
 clickhouse-connect = "^0.15.1"
 pyarrow = "^22.0.0"
 prefect = {version = "3.6.9", extras = ["docker"]}
+# Prefect is pinned to 3.6.9 (must match the deployed Prefect server) and only
+# constrains fastapi as >=0.111,<1. FastAPI's include_router internals were
+# rewritten around 0.136 (_IncludedRouter / effective_candidates), which
+# Prefect 3.6.9's PrefectRouter subclass is not compatible with -> the test
+# harness server crashes with "'PrefectRouter' object has no attribute 'routes'".
+# 0.135.0 is the last verified-good version. Prefect 3.8.0 is what adopts the
+# new FastAPI generation; drop this pin if/when Prefect can be upgraded.
+fastapi = ">=0.116.1,<0.136"
 duckdb = "^1.5.4"
 oracledb = "^3.4.2"
 
@@ -45,7 +52,7 @@ matplotlib = "^3.11.0"
 openpyxl = "^3.1.5"
 matplotlib-venn = "^1.1.2"
 seaborn = "^0.13.0"
-line-profiler = "^4.2.0"
+line-profiler = "^5.0.2"
 xlrd = "^2.0.1"
 tabula-py = "^2.8.2"
 grip = "^4.6.2"

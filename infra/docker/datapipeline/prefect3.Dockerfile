@@ -1,4 +1,4 @@
-FROM python:3.13.5-slim-bullseye AS base
+FROM python:3.14.7-slim-trixie AS base
 
 ENV VIRTUAL_ENV="/opt/venv" \
     # paths

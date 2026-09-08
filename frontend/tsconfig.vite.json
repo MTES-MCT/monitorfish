@@ -1,0 +1,11 @@
+{
+  // Vite 8 and its plugins are ESM-only packages exposing their types through `exports` maps, which the
+  // "Node" resolution used for the app sources cannot read. They are type-checked in their own project.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vite.tsbuildinfo"
+  },
+  "include": ["vite.config.ts"],
+  "exclude": []
+}

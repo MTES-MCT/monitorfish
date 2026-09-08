@@ -47,6 +47,14 @@ export function VesselTrackOverlay({ feature }) {
     monitorfishMap.addOverlay(overlayObjectRef.current)
   }, [overlayObjectRef])
 
+  function getNextOverlayPosition() {
+    const [x, y] = feature.getGeometry().getCoordinates()
+    const extent = monitorfishMap.getView().calculateExtent()
+    const boxSize = getMapResolution() * overlayBoxSize
+
+    return getOverlayPosition(boxSize, x, y, extent)
+  }
+
   useEffect(() => {
     if (overlayRef.current && overlayObjectRef.current) {
       // TODO Refactor: clean nullish checks & useEffect usage
@@ -67,14 +75,6 @@ export function VesselTrackOverlay({ feature }) {
       }
     }
   }, [setVesselFeatureToShowOnCard, feature, overlayRef, overlayObjectRef])
-
-  function getNextOverlayPosition() {
-    const [x, y] = feature.getGeometry().getCoordinates()
-    const extent = monitorfishMap.getView().calculateExtent()
-    const boxSize = getMapResolution() * overlayBoxSize
-
-    return getOverlayPosition(boxSize, x, y, extent)
-  }
 
   return (
     <VesselTrackCardOverlayComponent ref={overlayCallback} $overlayTopLeftMargin={overlayTopLeftMargin}>

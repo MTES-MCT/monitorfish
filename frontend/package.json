@@ -35,7 +35,7 @@
     "test:lint:types:prune": "eslint --no-inline-config --config eslint-typed.config.mjs --prune-suppressions src",
     "test:format": "prettier --check ./src",
     "format": "prettier --write ./src",
-    "test:type": "tsc",
+    "test:type": "tsc && tsc -p tsconfig.vite.json",
     "test:unit": "jest --config=./config/jest.config.js --detectOpenHandles",
     "test:unit:watch": "npm run test:unit -- --watch"
   },
@@ -128,7 +128,7 @@
     "@types/react-highlight-words": "0.20.1",
     "@types/styled-components": "5.1.36",
     "@typescript-eslint/eslint-plugin": "8.68.0",
-    "@typescript-eslint/parser": "8.67.0",
+    "@typescript-eslint/parser": "8.68.0",
     "@vitejs/plugin-react": "6.0.5",
     "assert": "2.1.0",
     "codecov": "3.8.3",

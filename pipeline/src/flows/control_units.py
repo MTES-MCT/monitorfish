@@ -49,10 +49,7 @@ def load_analytics_control_units_and_administrations(
 
 
 @flow(name="Monitorfish - Control units")
-def control_units_flow(
-    extract_control_units_fn=extract_control_units,
-    extract_administrations_fn=extract_administrations,
-):
-    control_units = extract_control_units_fn()
-    administrations = extract_administrations_fn()
+def control_units_flow():
+    control_units = extract_control_units()
+    administrations = extract_administrations()
     load_analytics_control_units_and_administrations(control_units, administrations)

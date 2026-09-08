@@ -557,10 +557,9 @@ def activity_visualizations_flow(
     start_months_ago: int = 12,
     end_months_ago: int = 0,
     truncate_table: bool = False,
-    get_utcnow_fn=get_utcnow,
 ):
     # Extract
-    now = get_utcnow_fn()
+    now = get_utcnow()
     today = date_trunc(now, "DAY")
     from_datetime_utc = today - make_relativedelta(months=start_months_ago)
     to_datetime_utc = today - make_relativedelta(months=end_months_ago)

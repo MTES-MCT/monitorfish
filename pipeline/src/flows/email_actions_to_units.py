@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from email.message import EmailMessage
-from typing import Callable, List
+from typing import List
 
 import css_inline
 import pandas as pd
@@ -428,7 +428,6 @@ def email_actions_to_units_flow(
     is_integration: bool,
     start_days_ago: int,
     end_days_ago: int,
-    fetch_control_units_fn: Callable = fetch_control_units,
 ):
     template = get_template()
     utcnow = get_utcnow()
@@ -439,7 +438,7 @@ def email_actions_to_units_flow(
         end_days_ago=end_days_ago,
     )
     mission_actions = extract_mission_actions(period=period)
-    all_control_units = fetch_control_units_fn()
+    all_control_units = fetch_control_units()
 
     control_unit_ids = get_control_unit_ids(mission_actions)
     control_units_with_emails = filter_control_units(

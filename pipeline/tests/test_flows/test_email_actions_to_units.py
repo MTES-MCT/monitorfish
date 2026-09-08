@@ -736,6 +736,7 @@ def test_load_emails_sent_to_control_units(
     assert 2 * len(emails_after_one_run) == len(emails_after_two_runs) == 4
 
 
+@patch("src.flows.email_actions_to_units.fetch_control_units", mock_fetch_control_units)
 def test_flow(reset_test_data):
     start_days_ago = 365
     end_days_ago = 0
@@ -748,7 +749,6 @@ def test_flow(reset_test_data):
         is_integration=True,
         start_days_ago=start_days_ago,
         end_days_ago=end_days_ago,
-        fetch_control_units_fn=mock_fetch_control_units,
         return_state=True,
     )
     assert state.is_completed()

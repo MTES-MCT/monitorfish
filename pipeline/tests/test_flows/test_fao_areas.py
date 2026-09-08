@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import geopandas as gpd
 from prefect import task
 
@@ -50,13 +52,12 @@ def mock_extract_fao_areas(url: str, proxies: dict) -> gpd.GeoDataFrame:
     return fao_areas
 
 
+@patch("src.flows.fao_areas.extract_fao_areas", mock_extract_fao_areas)
 def test_flow(reset_test_data):
     query = "SELECT * FROM fao_areas"
     initial_fao_areas = read_query(query, db="monitorfish_remote")
 
-    state = fao_areas_flow(
-        extract_fao_areas_fn=mock_extract_fao_areas, return_state=True
-    )
+    state = fao_areas_flow(return_state=True)
     assert state.is_completed()
 
     # Check loaded ports

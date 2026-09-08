@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Callable, Optional, Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -456,7 +456,6 @@ def request_notification(
 def update_beacon_malfunctions_flow(
     max_hours_without_emission_at_sea: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
     max_hours_without_emission_at_port: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,
-    extract_satellite_operators_statuses_fn: Callable = extract_satellite_operators_statuses,
 ):
     # Healthcheck
     healthcheck = get_monitorfish_healthcheck()
@@ -468,7 +467,7 @@ def update_beacon_malfunctions_flow(
     vessels_that_should_emit = extract_vessels_that_should_emit.submit()
     known_malfunctions = extract_known_malfunctions.submit()
 
-    satellite_operators_statuses = extract_satellite_operators_statuses_fn.submit()
+    satellite_operators_statuses = extract_satellite_operators_statuses.submit()
 
     # Transform
     non_emission_at_sea_max_duration = make_timedelta(

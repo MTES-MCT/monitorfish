@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest.mock import patch
 
 import pandas as pd
 from pytest import fixture
@@ -106,13 +107,14 @@ def expected_vessel_profiles():
     )
 
 
+@patch(
+    "src.flows.vessel_profiles.get_utcnow",
+    get_utcnow_mock_factory(datetime(2050, 5, 15, 11, 14)),
+)
 def test_flow(
     reset_test_data, add_enriched_catches, add_landings, expected_vessel_profiles
 ):
-    state = vessel_profiles_flow(
-        get_utcnow_fn=get_utcnow_mock_factory(datetime(2050, 5, 15, 11, 14)),
-        return_state=True,
-    )
+    state = vessel_profiles_flow(return_state=True)
     assert state.is_completed()
 
     query = "SELECT * FROM vessel_profiles ORDER BY cfr"

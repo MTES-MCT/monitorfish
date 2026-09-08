@@ -74,6 +74,8 @@ def test_extract_administrations(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
+@patch("src.flows.control_units.extract_administrations", mock_extract_administrations)
+@patch("src.flows.control_units.extract_control_units", mock_extract_control_units)
 def test_flow(reset_test_data, administrations, control_units):
     administrations_query = "SELECT * FROM analytics_administrations ORDER BY id"
     control_units_query = "SELECT * FROM analytics_control_units ORDER BY id"
@@ -81,11 +83,7 @@ def test_flow(reset_test_data, administrations, control_units):
     initial_administrations = read_query(administrations_query, db="monitorfish_remote")
     initial_control_units = read_query(control_units_query, db="monitorfish_remote")
 
-    state = control_units_flow(
-        extract_administrations_fn=mock_extract_administrations,
-        extract_control_units_fn=mock_extract_control_units,
-        return_state=True,
-    )
+    state = control_units_flow(return_state=True)
     assert state.is_completed()
 
     final_administrations = read_query(administrations_query, db="monitorfish_remote")

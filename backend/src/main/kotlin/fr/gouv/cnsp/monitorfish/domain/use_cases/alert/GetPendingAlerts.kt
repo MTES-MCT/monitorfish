@@ -30,6 +30,9 @@ class GetPendingAlerts(
                     AlertType.MISSING_DEP_ALERT,
                     AlertType.MISSING_FAR_48_HOURS_ALERT,
                     AlertType.SUSPICION_OF_UNDER_DECLARATION_ALERT,
+                    AlertType.AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT,
+                    AlertType.DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION,
+                    AlertType.SALE_DURING_BEACON_MALFUNCTION,
                 ),
             ).map { pendingAlert ->
                 val pendingAlertWithInfraction =

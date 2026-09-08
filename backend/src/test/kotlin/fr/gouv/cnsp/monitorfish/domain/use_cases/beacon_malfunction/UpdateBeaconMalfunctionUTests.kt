@@ -13,7 +13,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotifications
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -96,7 +95,6 @@ class UpdateBeaconMalfunctionUTests {
                 null,
                 ZonedDateTime.now(),
                 beaconNumber = "123465",
-                beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                 vesselId = 123,
             ),
         )
@@ -130,7 +128,6 @@ class UpdateBeaconMalfunctionUTests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =

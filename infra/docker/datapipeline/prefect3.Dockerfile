@@ -9,7 +9,9 @@ ENV VIRTUAL_ENV="/opt/venv" \
 
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-RUN apt-get update && apt-get install -y \
+# `Check-Valid-Until=false` works around transient expiry of the Debian
+# bullseye-security Release file on the mirrors.
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y \
     # libpq-dev is required both for compiling and for running psycopg2
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -32,7 +34,7 @@ ENV POETRY_NO_INTERACTION=1 \
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y \
     # Compilation of psycopg2 requires a C compiler
     build-essential \
     # To convert the Oracle Instant Client .rpm file into a .deb file
@@ -71,7 +73,7 @@ WORKDIR $ORACLE_INSTANT_CLIENT_LOCATION
 COPY --from=builder $ORACLE_INSTANT_CLIENT_LOCATION $ORACLE_INSTANT_CLIENT_LOCATION
 RUN dpkg -i oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y \
     # pango is required by weasyprint
     pango1.0-tools \
     # libaio1 is required by Oracle Instant Client

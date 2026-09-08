@@ -2,7 +2,6 @@ WITh t AS (
 SELECT
     n.id_nav_flotteur as vessel_id,
     b.numero as beacon_number,
-    cst.libelle AS beacon_status,
     b.id_fmc_operateur_satellite AS satellite_operator_id,
     bn.date_debut AS logging_datetime_utc,
     ctb.libelle AS beacon_type,
@@ -18,8 +17,6 @@ LEFT JOIN FMC2.FMC_NAVIRE n
 ON n.id_fmc_navire = bn.id_fmc_navire
 LEFT JOIN FMC2.FMC_BALISE_STATUT st
 ON st.id_fmc_balise_statut = bn.id_fmc_balise_statut
-LEFT JOIN FMC2.FMC_CODE_STATUT_BALISE cst
-ON cst.idc_fmc_statut_balise = st.idc_fmc_statut_balise
 LEFT JOIN FMC2.FMC_CODE_TYPE_BALISE ctb
 ON ctb.idc_fmc_type_balise = b.idc_fmc_type_balise
 )
@@ -30,7 +27,6 @@ SELECT
         WHEN nb = 1 THEN beacon_number
         ELSE beacon_number || ' (' || rk || '/' || nb || ')'
     END AS beacon_number,
-    beacon_status,
     satellite_operator_id,
     logging_datetime_utc,
     beacon_type,

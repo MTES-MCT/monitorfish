@@ -108,6 +108,77 @@ Les navires remontent si kg des FAR < 0,015 kg x effort de pêche (kW/h)_
                 createdAtUtc = ZonedDateTime.parse("2025-09-11T10:24:46.021615+02:00"),
             ),
     ),
+    AIS_ACTIVITY_ON_VESSEL_NOT_EMITTING_VMS_ALERT(
+        specification =
+            PositionAlertSpecification(
+                id = null,
+                name = "Activité AIS détectée sans émission VMS",
+                description =
+                    """_Sur les positions AIS reçues entre 1h et 4h._
+
+Pour les navires en mer qui émettent des positions AIS alors qu'ils n'ont pas émis de position VMS depuis plus de 4h.""",
+                isUserDefined = false,
+                natinf = 27688,
+                threat = "Mesures techniques et de conservation",
+                threatCharacterization = "VMS - absence",
+                isActivated = true,
+                repeatEachYear = false,
+                trackAnalysisDepth = 0.0,
+                hasAutomaticArchiving = true,
+                onlyFishingPositions = false,
+                flagStatesIso2 = listOf(),
+                createdBy = "MonitorFish",
+                createdAtUtc = ZonedDateTime.parse("2026-06-29T16:16:39+02:00"),
+            ),
+    ),
+    DECLARED_FISHING_ACTIVITY_DURING_BEACON_MALFUNCTION(
+        specification =
+            PositionAlertSpecification(
+                id = null,
+                name = "Activité de pêche déclarée pendant une avarie VMS",
+                description =
+                    """_Sur les messages JPE (DEP, FAR) reçus récemment._
+
+Pour les navires qui déclarent une activité de pêche pendant une avarie VMS en cours.
+Fonctionne aussi pour les navires au JPE papier, avec un délai.""",
+                isUserDefined = false,
+                natinf = 27688,
+                threat = "Mesures techniques et de conservation",
+                threatCharacterization = "VMS - absence",
+                isActivated = true,
+                repeatEachYear = false,
+                trackAnalysisDepth = 0.0,
+                hasAutomaticArchiving = true,
+                onlyFishingPositions = false,
+                flagStatesIso2 = listOf(),
+                createdBy = "MonitorFish",
+                createdAtUtc = ZonedDateTime.parse("2026-06-29T16:16:39+02:00"),
+            ),
+    ),
+    SALE_DURING_BEACON_MALFUNCTION(
+        specification =
+            PositionAlertSpecification(
+                id = null,
+                name = "Note de vente pendant une avarie VMS",
+                description =
+                    """_Sur les notes de vente reçues récemment._
+
+Pour les navires pour lesquels une note de vente est émise pendant une avarie VMS en cours.
+Fonctionne aussi pour les notes de vente papier, avec un délai.""",
+                isUserDefined = false,
+                natinf = 27688,
+                threat = "Mesures techniques et de conservation",
+                threatCharacterization = "VMS - absence",
+                isActivated = true,
+                repeatEachYear = false,
+                trackAnalysisDepth = 0.0,
+                hasAutomaticArchiving = true,
+                onlyFishingPositions = false,
+                flagStatesIso2 = listOf(),
+                createdBy = "MonitorFish",
+                createdAtUtc = ZonedDateTime.parse("2026-06-29T16:16:39+02:00"),
+            ),
+    ),
     ;
 
     fun getValue(): Alert =

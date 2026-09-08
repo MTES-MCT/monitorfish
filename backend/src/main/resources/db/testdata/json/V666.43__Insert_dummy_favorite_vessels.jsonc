@@ -1,0 +1,51 @@
+[
+    {
+        "table": "favorite_vessels",
+        "beforeAll": "TRUNCATE TABLE favorite_vessels;",
+        "data": [
+            /**
+            ** SHA256 of dummy@email.gouv.fr — the "super-user" from user_authorizations
+            **/
+            {
+                "hashed_email": "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                "vessels:jsonb": [
+                    {
+                        "vesselId": 1,
+                        "cfr": "FAK000999999",
+                        "ircs": "CALLME",
+                        "externalIdentification": "DONTSINK",
+                        "name": "PHENOMENE",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    },
+                    {
+                        "vesselId": 2,
+                        "cfr": "U_W0NTFINDME",
+                        "ircs": "QGDF",
+                        "externalIdentification": "TALK2ME",
+                        "name": "MALOTRU",
+                        "flagState": "UNDEFINED",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    }
+                ]
+            },
+            /**
+            ** SHA256 of another@email.com — the non-super "user" from user_authorizations
+            **/
+            {
+                "hashed_email": "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
+                "vessels:jsonb": [
+                    {
+                        "vesselId": 3,
+                        "cfr": "FR263418260",
+                        "ircs": "IR12A",
+                        "externalIdentification": "08FR65324",
+                        "name": "LE b@TO",
+                        "flagState": "FR",
+                        "vesselIdentifier": "INTERNAL_REFERENCE_NUMBER"
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -5,7 +5,6 @@ import { controlUnitDialogReducer } from '@features/ControlUnit/components/Contr
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
-import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer, type InterestPointState } from '@features/InterestPoint/slice'
 import { logbookReducer, type LogbookState } from '@features/Logbook/slice'
 import { mainWindowBannerReducer } from '@features/MainWindow/slice'
@@ -111,7 +110,6 @@ export const mainReducer = {
     displayedComponentReducer
   ),
   draw: drawReducer,
-  favoriteVessel: favoriteVesselReducer,
   fishingActivities: persistReducerTyped(
     { ...getCommonPersistReducerConfig<LogbookState>('mainPersistorLogbook', ['areFishingActivitiesShowedOnMap']) },
     logbookReducer

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
-import { addVesselToFavorites } from '../../FavoriteVessel/slice'
+import { addFavoriteVessel } from '../../FavoriteVessel/useCases/addFavoriteVessel'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
 import { showVesselTrack } from '../../Vessel/useCases/showVesselTrack'
@@ -135,7 +135,10 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
                     <FirstColumnMenu>
                       <Menu
                         data-cy="add-vessel-to-favorites"
-                        onClick={() => dispatch(addVesselToFavorites(vessel)) && setIsOpen(false)}
+                        onClick={() => {
+                          dispatch(addFavoriteVessel(vessel))
+                          setIsOpen(false)
+                        }}
                         onMouseEnter={() => setShowTrackDepthSubMenu(false)}
                       >
                         Ajouter le navire aux navires suivis

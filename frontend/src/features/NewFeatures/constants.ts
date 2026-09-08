@@ -7,6 +7,13 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-09-08',
+        description: `La sauvegarde de vos navires suivis a été améliorée : ils sont désormais rattachés à votre compte utilisateur et donc accessibles depuis toute session, sur tout ordinateur.`,
+        for: 'ALL',
+        title: `Sauvegarde des navires suivis`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-07-22',
         description: `Le tableau de saisie des espèces contrôlées (formulaires M1/M3) a été amélioré :
 

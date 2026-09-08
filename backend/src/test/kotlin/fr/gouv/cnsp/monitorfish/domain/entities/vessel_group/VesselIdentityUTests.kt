@@ -58,7 +58,7 @@ class VesselIdentityUTests {
     }
 
     @Test
-    fun `isSameVesselAs should use its own vesselIdentifier When the other identity has none`() {
+    fun `isSameVesselAs should not match When this has a vesselIdentifier but the other does not`() {
         val bareCfr =
             VesselIdentity(
                 vesselId = null,
@@ -70,7 +70,7 @@ class VesselIdentityUTests {
                 vesselIdentifier = null,
             )
 
-        assertThat(phenomene.isSameVesselAs(bareCfr)).isTrue()
+        assertThat(phenomene.copy(vesselId = null).isSameVesselAs(bareCfr)).isFalse()
     }
 
     @Test
@@ -81,7 +81,41 @@ class VesselIdentityUTests {
     }
 
     @Test
-    fun `isSameVesselAs should not match When neither a vesselId nor a vesselIdentifier is available`() {
+    fun `isSameVesselAs should not match When vesselIdentifiers differ even if a shared identifier field is equal`() {
+        val sameIrcsButDifferentDesignatedIdentifier =
+            VesselIdentity(
+                vesselId = null,
+                cfr = null,
+                ircs = "CALLME",
+                externalIdentification = null,
+                name = null,
+                flagState = CountryCode.FR,
+                vesselIdentifier = VesselIdentifier.IRCS,
+            )
+
+        assertThat(
+            phenomene.copy(vesselId = null).isSameVesselAs(sameIrcsButDifferentDesignatedIdentifier),
+        ).isFalse()
+    }
+
+    @Test
+    fun `isSameVesselAs should not match When vesselIdentifiers differ and shared identifier fields differ`() {
+        val otherVessel =
+            VesselIdentity(
+                vesselId = null,
+                cfr = null,
+                ircs = "SOMEONE_ELSE",
+                externalIdentification = null,
+                name = null,
+                flagState = CountryCode.FR,
+                vesselIdentifier = VesselIdentifier.IRCS,
+            )
+
+        assertThat(phenomene.copy(vesselId = null, cfr = null).isSameVesselAs(otherVessel)).isFalse()
+    }
+
+    @Test
+    fun `isSameVesselAs should match on a shared identifier field When neither identity has a vesselIdentifier`() {
         val bare =
             VesselIdentity(
                 vesselId = null,
@@ -92,7 +126,25 @@ class VesselIdentityUTests {
                 flagState = CountryCode.UNDEFINED,
                 vesselIdentifier = null,
             )
+        val sameCfrDifferentName = bare.copy(name = "OTHER_NAME")
 
-        assertThat(bare.isSameVesselAs(bare)).isFalse()
+        assertThat(bare.isSameVesselAs(sameCfrDifferentName)).isTrue()
+    }
+
+    @Test
+    fun `isSameVesselAs should not match When neither identity has a vesselIdentifier and no field is shared`() {
+        val bare =
+            VesselIdentity(
+                vesselId = null,
+                cfr = "FAK000999999",
+                ircs = null,
+                externalIdentification = null,
+                name = null,
+                flagState = CountryCode.UNDEFINED,
+                vesselIdentifier = null,
+            )
+        val differentCfr = bare.copy(cfr = "OTHER_CFR")
+
+        assertThat(bare.isSameVesselAs(differentCfr)).isFalse()
     }
 }

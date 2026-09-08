@@ -37,21 +37,44 @@ export function getFavoriteVesselFromVesselIdentity(
 
 /**
  * Whether both identities designate the same vessel: by `vesselId` when both carry one, else by the
- * identifier field designated by `vesselIdentifier`. Mirrors the backend `VesselIdentity.isSameVesselAs`.
+ * identifier field designated by `vesselIdentifier` when both agree, else by any identifier field shared
+ * by both. Mirrors the backend `VesselIdentity.isSameVesselAs`.
  */
 export function isSameVesselIdentity(first: Vessel.VesselIdentity, second: Vessel.VesselIdentity): boolean {
   if (first.vesselId !== undefined && second.vesselId !== undefined) {
     return first.vesselId === second.vesselId
   }
 
-  switch (first.vesselIdentifier ?? second.vesselIdentifier) {
-    case VesselIdentifier.INTERNAL_REFERENCE_NUMBER:
-      return !!first.internalReferenceNumber && first.internalReferenceNumber === second.internalReferenceNumber
-    case VesselIdentifier.IRCS:
-      return !!first.ircs && first.ircs === second.ircs
-    case VesselIdentifier.EXTERNAL_REFERENCE_NUMBER:
-      return !!first.externalReferenceNumber && first.externalReferenceNumber === second.externalReferenceNumber
-    default:
-      return false
+  if (first.vesselIdentifier !== undefined) {
+    switch (first.vesselIdentifier) {
+      case VesselIdentifier.INTERNAL_REFERENCE_NUMBER:
+        return (
+          first.vesselIdentifier === second.vesselIdentifier &&
+          first.internalReferenceNumber === second.internalReferenceNumber
+        )
+      case VesselIdentifier.IRCS:
+        return first.vesselIdentifier === second.vesselIdentifier && first.ircs === second.ircs
+      case VesselIdentifier.EXTERNAL_REFERENCE_NUMBER:
+        return (
+          first.vesselIdentifier === second.vesselIdentifier &&
+          first.externalReferenceNumber === second.externalReferenceNumber
+        )
+      default:
+        return false
+    }
   }
+
+  if (first.internalReferenceNumber && second.internalReferenceNumber) {
+    return first.internalReferenceNumber === second.internalReferenceNumber
+  }
+
+  if (first.ircs && second.ircs) {
+    return first.ircs === second.ircs
+  }
+
+  if (first.externalReferenceNumber && second.externalReferenceNumber) {
+    return first.externalReferenceNumber === second.externalReferenceNumber
+  }
+
+  return false
 }

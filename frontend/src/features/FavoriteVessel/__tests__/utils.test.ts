@@ -39,7 +39,7 @@ describe('isSameVesselIdentity()', () => {
     expect(isSameVesselIdentity({ ...PHENOMENE, vesselId: undefined }, rebuiltFromSearch)).toBe(true)
   })
 
-  it('Should use its own vesselIdentifier when the other identity has none', () => {
+  it('Should not match when this has a vesselIdentifier but the other does not', () => {
     const bareCfr: Vessel.VesselIdentity = {
       ...PHENOMENE,
       ircs: undefined,
@@ -47,7 +47,7 @@ describe('isSameVesselIdentity()', () => {
       vesselIdentifier: undefined
     }
 
-    expect(isSameVesselIdentity(PHENOMENE, bareCfr)).toBe(true)
+    expect(isSameVesselIdentity({ ...PHENOMENE, vesselId: undefined }, bareCfr)).toBe(false)
   })
 
   it('Should not match when the vesselIdentifier field differs', () => {
@@ -59,13 +59,36 @@ describe('isSameVesselIdentity()', () => {
     ).toBe(false)
   })
 
-  it('Should not match when neither a vesselId nor a vesselIdentifier is available', () => {
+  it('Should not match when vesselIdentifiers differ even if a shared identifier field is equal', () => {
+    const sameIrcsButDifferentDesignatedIdentifier: Vessel.VesselIdentity = {
+      ...PHENOMENE,
+      internalReferenceNumber: undefined,
+      vesselId: undefined,
+      vesselIdentifier: VesselIdentifier.IRCS
+    }
+
+    expect(isSameVesselIdentity({ ...PHENOMENE, vesselId: undefined }, sameIrcsButDifferentDesignatedIdentifier)).toBe(
+      false
+    )
+  })
+
+  it('Should match on a shared identifier field when neither identity has a vesselIdentifier', () => {
     const bare: Vessel.VesselIdentity = {
       ...PHENOMENE,
       vesselId: undefined,
       vesselIdentifier: undefined
     }
 
-    expect(isSameVesselIdentity(bare, bare)).toBe(false)
+    expect(isSameVesselIdentity(bare, { ...bare, vesselName: 'OTHER_NAME' })).toBe(true)
+  })
+
+  it('Should not match when neither identity has a vesselIdentifier and no field is shared', () => {
+    const bare: Vessel.VesselIdentity = {
+      ...PHENOMENE,
+      vesselId: undefined,
+      vesselIdentifier: undefined
+    }
+
+    expect(isSameVesselIdentity(bare, { ...bare, internalReferenceNumber: 'OTHER_CFR' })).toBe(false)
   })
 })

@@ -2,7 +2,12 @@ import { openVesselBySearch } from './utils'
 
 /**
  * The `superuser` profile is seeded (see `V666.43__Insert_dummy_favorite_vessels`) with two favorite
- * vessels: MALOTRU and PHENOMENE. Each test restores that baseline so specs stay order-independent.
+ * vessels: MALOTRU and PHENOMENE.
+ *
+ * All scenarios run inside a single `it()` (rather than one `it()` per scenario) to avoid paying the
+ * login/visit/wait setup cost of `beforeEach` multiple times, which was inflating CI run time. The
+ * scenarios are order-dependent: each one starts from the favorite-vessels state left behind by the
+ * previous one.
  */
 context('Favorite Vessel', () => {
   beforeEach(() => {
@@ -15,7 +20,7 @@ context('Favorite Vessel', () => {
     cy.wait(3000)
   })
 
-  it('The favorite vessels saved on the user profile Should be listed', () => {
+  it('Should list, add, remove and show the tracks of favorite vessels', () => {
     /**
      * Opening the box Should close other boxes
      */
@@ -26,7 +31,7 @@ context('Favorite Vessel', () => {
     cy.clickButton('Arbre des couches', { withoutScroll: true })
     cy.get('*[data-cy="favorite-vessels-box"]').should('not.exist')
 
-    // Re-open the favorite vessels box
+    // Re-open the favorite vessels box (left open for the rest of the scenarios)
     cy.clickButton('Mes navires suivis', { withoutScroll: true })
     cy.get('*[data-cy="layers-sidebar-box"]').should('not.exist')
 
@@ -37,12 +42,10 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').eq(0).should('contain', 'MALOTRU')
     cy.get('*[data-cy="favorite-vessel-name"]').eq(1).should('contain', 'PHENOMENE')
     cy.get('*[title="Mes navires suivis"]').prev().contains(2)
-  })
 
-  it('A favorite vessel Should be removed with the delete button and re-added from the map', () => {
-    cy.clickButton('Mes navires suivis', { withoutScroll: true })
-    cy.get('*[data-cy="favorite-vessel-name"]').should('have.length', 2)
-
+    /**
+     * A favorite vessel Should be removed with the delete button and re-added from the map
+     */
     // When removing PHENOMENE (last row, list is sorted by name)
     cy.get('*[data-cy="favorite-vessel-delete-vessel"]').last().click()
     cy.wait('@deleteFavoriteVessel')
@@ -61,11 +64,10 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="favorite-vessel-name"]').should('have.length', 2)
     cy.get('*[data-cy="favorite-vessel-name"]').eq(1).should('contain', 'PHENOMENE')
     cy.get('*[title="Mes navires suivis"]').prev().contains(2)
-  })
 
-  it('A favorite vessel Should be toggled from the vessel sidebar star', () => {
-    cy.clickButton('Mes navires suivis', { withoutScroll: true })
-
+    /**
+     * A favorite vessel Should be toggled from the vessel sidebar star
+     */
     // Given PHENOMENE is a favorite, its sidebar star is filled
     openVesselBySearch('Pheno')
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
@@ -87,11 +89,11 @@ context('Favorite Vessel', () => {
     cy.get('*[data-cy="sidebar-add-vessel-to-favorites"]').children().should('have.css', 'fill', 'rgb(229, 229, 235)')
     cy.get('*[data-cy="favorite-vessel-name"]').should('have.length', 2)
     cy.get('*[title="Mes navires suivis"]').prev().contains(2)
-  })
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
 
-  it('A favorite vessel track Should be shown and then the vessel sidebar opened', () => {
-    cy.clickButton('Mes navires suivis', { withoutScroll: true })
-
+    /**
+     * A favorite vessel track Should be shown and then the vessel sidebar opened
+     */
     // PHENOMENE is the last row (list is sorted by name)
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').last().click()
     cy.get('*[data-cy="close-vessel-track"]').should('have.length', 1)
@@ -102,14 +104,14 @@ context('Favorite Vessel', () => {
     // Then the track is replaced by the sidebar
     cy.get('*[data-cy="close-vessel-track"]').should('have.length', 0)
     cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
-  })
 
-  it('A favorite vessel track Should be seen on the map and the global track depth Should update the track', () => {
+    /**
+     * A favorite vessel track Should be seen on the map and the global track depth Should update the track
+     */
     // Given
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '12 heures')
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.clickButton('Mes navires suivis', { withoutScroll: true })
 
     // When (PHENOMENE is the last row, list is sorted by name)
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').last().click()

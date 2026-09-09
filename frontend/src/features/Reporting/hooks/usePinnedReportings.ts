@@ -33,17 +33,21 @@ export function usePinnedReportings() {
     [editedReportingId, selectedReportingId]
   )
 
-  const { data: pinnedReportings, error: pinnedReportingsError } = useDisplayReportingsQuery({
-    endDate: undefined,
-    ids: pinnedReportingIds,
-    isArchived: undefined,
-    isIUU: undefined,
-    origin: undefined,
-    reportingPeriod: ReportingSearchPeriod.CUSTOM,
-    reportingType: undefined,
-    startDate: undefined,
-    zone: undefined
-  })
+  const { data: pinnedReportings, error: pinnedReportingsError } = useDisplayReportingsQuery(
+    {
+      endDate: undefined,
+      ids: pinnedReportingIds,
+      isArchived: undefined,
+      isIUU: undefined,
+      origin: undefined,
+      reportingPeriod: ReportingSearchPeriod.CUSTOM,
+      reportingType: undefined,
+      startDate: undefined,
+      zone: undefined
+    },
+    // Without ids, this query has no filter at all and would fetch every reporting.
+    { skip: pinnedReportingIds.length === 0 }
+  )
 
   return { pinnedReportings, pinnedReportingsError, selectedReportingId }
 }

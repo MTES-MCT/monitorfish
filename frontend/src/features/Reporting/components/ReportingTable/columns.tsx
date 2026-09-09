@@ -48,7 +48,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       size: 25 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.reportingDate,
+      accessorFn: row => row.reportingDate ?? row.validationDate ?? row.creationDate,
       cell: (info: CellContext<Reporting.Reporting, string | undefined>) => {
         const reportingDate = info.getValue()
 

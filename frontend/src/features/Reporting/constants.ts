@@ -45,5 +45,4 @@ export const REPORTING_TYPE_OPTIONS = [
 
 export const MANUAL_ZONE_LABEL = 'Zone de filtre manuelle'
 
-/** Number of reportings loaded per page in the reporting list. */
 export const DEFAULT_PAGE_SIZE = 50

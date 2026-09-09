@@ -4,10 +4,6 @@ import { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { expect } from '@jest/globals'
 
-/**
- * The map menu and the reporting list read and write these same filters, so a change made on one
- * side is what the other side renders and queries with. These tests pin that single source down.
- */
 describe('features/Reporting/slice', () => {
   const initialState = reportingReducer(undefined, { type: '@@INIT' })
 

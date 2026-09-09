@@ -74,6 +74,11 @@ context('Side Window > Reporting List > Actions', () => {
 
   it('A Reporting Should be edited', () => {
     cy.intercept('PUT', 'bff/v1/reportings/7').as('updateReporting')
+    cy.intercept({
+      method: 'GET',
+      pathname: '/bff/v1/reportings',
+      query: { isArchived: 'false' }
+    }).as('getCurrentReportings')
 
     // Given
     cy.login('superuser')
@@ -81,6 +86,9 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
     cy.getDataCy('side-window-sub-menu-NAMO').click()
+    // Leaves reporting 7 as the only row of that vessel: the previous test archived the one it created.
+    cy.fill('Statut', 'En cours')
+    cy.wait('@getCurrentReportings')
 
     // When
     cy.clickButton('Editer le signalement', {

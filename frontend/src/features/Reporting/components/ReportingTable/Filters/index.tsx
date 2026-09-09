@@ -22,9 +22,6 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import type { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
-import type { ReportingType } from '@features/Reporting/types/ReportingType'
-
 type FiltersProps = Readonly<{
   selectedSeafrontGroup: SeafrontGroup
 }>
@@ -122,7 +119,7 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
           isTransparent
           label="Type de signalement"
           name="reportingType"
-          onChange={value => updateReportingType(value as ReportingType | undefined)}
+          onChange={value => updateReportingType(value)}
           options={REPORTING_TYPE_OPTIONS}
           placeholder="Type de signalement"
           value={filters.reportingType}
@@ -142,7 +139,7 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
           isTransparent
           label="Source"
           name="origin"
-          onChange={value => updateOrigin(value as ReportingOrigin | undefined)}
+          onChange={value => updateOrigin(value)}
           options={REPORTING_ORIGIN_AS_OPTIONS}
           placeholder="Source"
           value={filters.origin}

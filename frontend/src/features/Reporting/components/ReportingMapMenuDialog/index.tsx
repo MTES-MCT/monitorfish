@@ -27,8 +27,6 @@ import styled from 'styled-components'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
-import type { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
-
 export function ReportingMapMenuDialog() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
@@ -149,7 +147,7 @@ export function ReportingMapMenuDialog() {
               isLight
               label="Source"
               name="origin"
-              onChange={value => updateOrigin(value as ReportingOrigin | undefined)}
+              onChange={value => updateOrigin(value)}
               options={REPORTING_ORIGIN_AS_OPTIONS}
               placeholder="Source"
               value={filters.origin}

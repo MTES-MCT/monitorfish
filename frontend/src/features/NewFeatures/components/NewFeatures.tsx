@@ -3,12 +3,13 @@ import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToo
 import { MapBox } from '@features/Map/constants'
 import { NewFeature } from '@features/NewFeatures/components/NewFeature'
 import { NEW_FEATURES } from '@features/NewFeatures/constants'
-import { getFeaturesByMonths, isFeatureDisplayed } from '@features/NewFeatures/utils'
+import { getFeaturesByMonths } from '@features/NewFeatures/utils'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { Icon, MapMenuDialog, THEME } from '@mtes-mct/monitor-ui'
+import { isDisplayedForUser } from '@utils/isDisplayedForUser'
 import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -36,7 +37,7 @@ export function NewFeatures() {
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.NEW_FEATURES ? undefined : MapBox.NEW_FEATURES))
   }
 
-  const authorizedFeatures = useMemo(() => NEW_FEATURES.filter(isFeatureDisplayed(isSuperUser)), [isSuperUser])
+  const authorizedFeatures = useMemo(() => NEW_FEATURES.filter(isDisplayedForUser(isSuperUser)), [isSuperUser])
 
   const features = useMemo(() => {
     const featuresByMonths = getFeaturesByMonths(authorizedFeatures)

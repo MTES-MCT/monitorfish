@@ -3,18 +3,22 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export type StartupNotificationState = {
-  isSurveyModalDisplayed: boolean
+  dismissedIds: string[]
 }
 const INITIAL_STATE: StartupNotificationState = {
-  isSurveyModalDisplayed: false
+  dismissedIds: []
 }
 
 const startupNotificationSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'startupNotification',
   reducers: {
-    setIsSurveyModalDisplayed(state, action: PayloadAction<boolean>) {
-      state.isSurveyModalDisplayed = action.payload
+    dismiss(state, action: PayloadAction<string>) {
+      if (state.dismissedIds.includes(action.payload)) {
+        return
+      }
+
+      state.dismissedIds = state.dismissedIds.concat(action.payload)
     }
   }
 })

@@ -49,7 +49,7 @@ const WIRE_FIELDS_GEAR_CATEGORIES = new Set(['Chaluts', 'Sennes traînantes'])
 
 export function GearsField() {
   const { values } = useFormikContext<MissionActionFormValues>()
-  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc, values.isEISR)
   const [input, meta, helper] = useField<MissionActionFormValues['gearOnboard']>('gearOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()

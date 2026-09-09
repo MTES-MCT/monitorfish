@@ -36,6 +36,7 @@ export const MISSION_ACTION_FORM_VALUES_SKELETON: Undefine<MissionActionFormValu
   infractions: [],
   isAdministrativeControl: undefined,
   isComplianceWithWaterRegulationsControl: undefined,
+  isEISR: undefined,
   isINNControl: undefined,
   isPrioritized: false,
   isSafetyEquipmentAndStandardsComplianceControl: undefined,

@@ -74,8 +74,9 @@ RUN dpkg -i oracle-instantclient19.8-basic_19.8.0.0.0-2_amd64.deb
 RUN apt-get update && apt-get install -y \
     # pango is required by weasyprint
     pango1.0-tools \
-    # libaio1 is required by Oracle Instant Client
-    libaio1 \
+    # libaio is required by Oracle Instant Client (package renamed to libaio1t64 in Debian Trixie
+    # as part of the 64-bit time_t transition; the SONAME libaio.so.1 is unchanged)
+    libaio1t64 \
     && rm -rf /var/lib/apt/lists/*
 
 # copy in our built venv

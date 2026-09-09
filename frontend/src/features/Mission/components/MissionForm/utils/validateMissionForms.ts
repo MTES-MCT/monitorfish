@@ -34,7 +34,7 @@ export function validateMissionForms(
 
   // eslint-disable-next-line no-restricted-syntax
   const nextActionsFormValues = actionsFormValues.map(actionFormValues => {
-    const isEISR = computeIsEISREnabled(controlUnitIds, actionFormValues.actionDatetimeUtc)
+    const isEISR = computeIsEISREnabled(controlUnitIds, actionFormValues.actionDatetimeUtc, actionFormValues.isEISR)
 
     switch (actionFormValues.actionType) {
       case MissionAction.MissionActionType.AIR_CONTROL:

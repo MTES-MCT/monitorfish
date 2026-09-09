@@ -65,7 +65,7 @@ export function SpeciesField() {
   const [input, , helper] = useField<MissionActionFormValues['speciesOnboard']>('speciesOnboard')
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
-  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc, values.isEISR)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 

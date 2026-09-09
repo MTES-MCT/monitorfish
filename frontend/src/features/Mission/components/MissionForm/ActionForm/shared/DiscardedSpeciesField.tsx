@@ -33,7 +33,7 @@ import type { Specy } from 'domain/types/specy'
 export function DiscardedSpeciesField() {
   const { values } = useFormikContext<MissionActionFormValues>()
   const [input, , helper] = useField<MissionActionFormValues['discardedSpecies']>('discardedSpecies')
-  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc, values.isEISR)
   const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
   const [discardToDeleteIndex, setDiscardToDeleteIndex] = useState<number | undefined>(undefined)
 

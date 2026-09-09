@@ -49,6 +49,30 @@ describe('computeIsEISREnabled', () => {
     expect(computeIsEISREnabled([], '2020-01-01')).toBe(true)
   })
 
+  describe('with a mode stamped on the action', () => {
+    it('should return true When e-ISR is globally disabled', () => {
+      mockConstants.E_ISR_ENABLED = false
+
+      expect(computeIsEISREnabled([10499], '2026-06-15', true)).toBe(true)
+    })
+
+    it('should return true When the control date is before the application date', () => {
+      expect(computeIsEISREnabled([10499], '2026-05-31', true)).toBe(true)
+    })
+
+    it('should return true When the control unit is not whitelisted', () => {
+      mockConstants.E_ISR_CONTROL_UNITS_FOR_TEST = [10499]
+
+      expect(computeIsEISREnabled([1], '2026-06-15', true)).toBe(true)
+    })
+
+    it('should fall back to the environment rule When the action carries no stamp', () => {
+      mockConstants.E_ISR_ENABLED = false
+
+      expect(computeIsEISREnabled([10499], '2026-06-15', undefined)).toBe(false)
+    })
+  })
+
   describe('with a control unit restriction', () => {
     beforeEach(() => {
       mockConstants.E_ISR_CONTROL_UNITS_FOR_TEST = [10499]

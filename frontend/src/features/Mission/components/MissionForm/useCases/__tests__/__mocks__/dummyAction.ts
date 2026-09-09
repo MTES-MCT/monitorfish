@@ -46,6 +46,7 @@ export const dummyAction = {
   ircs: 'CALLME',
   isAdministrativeControl: undefined,
   isComplianceWithWaterRegulationsControl: undefined,
+  isEISR: undefined,
   isFromPoseidon: false,
   isINNControl: false,
   isLastHaul: false,

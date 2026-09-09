@@ -135,6 +135,7 @@ data class MissionActionDataOutput(
     val isSeafarersControl: Boolean? = null,
     val isINNControl: Boolean = false,
     val isUnitBoarded: Boolean? = null,
+    val isEISR: Boolean? = null,
     val observationsByUnit: String? = null,
 ) {
     companion object {
@@ -222,6 +223,7 @@ data class MissionActionDataOutput(
             isSeafarersControl = missionAction.isSeafarersControl,
             isINNControl = missionAction.isINNControl,
             isUnitBoarded = missionAction.isUnitBoarded,
+            isEISR = missionAction.isEISR,
             observationsByUnit = missionAction.observationsByUnit,
         )
     }

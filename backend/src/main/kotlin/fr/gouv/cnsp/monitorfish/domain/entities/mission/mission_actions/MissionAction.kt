@@ -88,6 +88,7 @@ data class MissionAction(
     val isSeafarersControl: Boolean? = null,
     val isINNControl: Boolean = false,
     val isUnitBoarded: Boolean? = null,
+    val isEISR: Boolean? = null,
     @Patchable
     var observationsByUnit: String? = null,
 ) {

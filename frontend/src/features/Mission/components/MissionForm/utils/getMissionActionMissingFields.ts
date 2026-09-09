@@ -17,7 +17,8 @@ export function getMissionActionMissingFields(
   const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
   const isEISR = computeIsEISREnabled(
     controlUnits.map(cu => cu.id),
-    actionFormValues.actionDatetimeUtc
+    actionFormValues.actionDatetimeUtc,
+    actionFormValues.isEISR
   )
 
   try {

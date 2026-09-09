@@ -288,22 +288,23 @@ def zeros_ones_to_bools(
     x: Union[pd.Series, pd.DataFrame]
 ) -> Union[pd.Series, pd.DataFrame]:
     """
-    Converts a pandas DataFrame or Series containing `str`, `int` or `float` values,
-    possibly including null (`None` and `np.nan`) values to a DataFrame with False,
-    True and `np.nan` values respectively.
+    Converts a pandas `Series` or `DataFrame` containing `str`, `int` or `float`
+    values, possibly including null (`None` and `np.nan`) values, to the nullable
+    `"boolean"` dtype.
 
-    Values 1, 1.0, "1", any non zero number... is converted to `True`.
+    Values 1, 1.0, "1", any non zero number... are converted to `True`.
     Values 0, 0.0, "0" are converted to `False`.
-    Values `None` and `np.nan` are converted to `np.nan`.
+    Values `None` and `np.nan` are converted to `pd.NA`.
+
+    The result always has the nullable `"boolean"` dtype, so downstream code can rely
+    on an explicit type rather than on pandas' implicit downcasting rules (the numpy
+    `bool` dtype is not nullable, and this can be tricky to handle).
 
     Useful to convert boolean data extracted from Oracle databases, since Oracle does
-    not have a boolean data type and boolean data is often stored as "0"s and "1"s,
-    or to handle sitations in which pandas data structures should contain nullable
-    boolean data (in pandas / numpy, the `bool` dtype is not nullable, and this can
-    be tricky to handle).
+    not have a boolean data type and boolean data is often stored as "0"s and "1"s.
     """
-    tmp = x.astype(float)
-    return tmp.where(~((tmp > 0) | (tmp < 0)), True).replace([0.0], False)
+    floats = x.astype(float)
+    return (floats != 0).astype("boolean").mask(floats.isna(), pd.NA)
 
 
 def to_pgarr(
@@ -358,8 +359,10 @@ def to_pgarr(
 
     def _quote(s: str) -> str:
         # Elements containing PostgreSQL array special characters must be double-quoted.
-        if any(c in s for c in (',', '"', '\\', '{', '}', ' ', '\t', '\n', '\r', '\x00')):
-            return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
+        if any(
+            c in s for c in (",", '"', "\\", "{", "}", " ", "\t", "\n", "\r", "\x00")
+        ):
+            return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
         return s
 
     elements = [

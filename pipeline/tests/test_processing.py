@@ -180,13 +180,14 @@ def test_zeros_ones_to_bools():
             "floats_0_1_2": [False, True, False, True, True],
             "str_0_1": [False, True, False, True, True],
             "str_0_1_2": [False, True, False, True, True],
-            "ints_0_1_nan": [False, True, np.nan, True, np.nan],
-            "ints_0_1_2_nan": [False, True, np.nan, True, np.nan],
-            "str_0_1_nan": [False, True, np.nan, True, np.nan],
-            "str_0_1_2_nan": [False, True, np.nan, True, np.nan],
-            "all_nan": [np.nan, np.nan, np.nan, np.nan, np.nan],
-            "all_none": [np.nan, np.nan, np.nan, np.nan, np.nan],
-        }
+            "ints_0_1_nan": [False, True, pd.NA, True, pd.NA],
+            "ints_0_1_2_nan": [False, True, pd.NA, True, pd.NA],
+            "str_0_1_nan": [False, True, pd.NA, True, pd.NA],
+            "str_0_1_2_nan": [False, True, pd.NA, True, pd.NA],
+            "all_nan": [pd.NA, pd.NA, pd.NA, pd.NA, pd.NA],
+            "all_none": [pd.NA, pd.NA, pd.NA, pd.NA, pd.NA],
+        },
+        dtype="boolean",
     )
 
     pd.testing.assert_frame_equal(res, expected_res)
@@ -200,15 +201,16 @@ def test_zeros_ones_to_bools():
             False,
             False,
             False,
-            np.nan,
-            np.nan,
+            pd.NA,
+            pd.NA,
             True,
             True,
             True,
             True,
             True,
             True,
-        ]
+        ],
+        dtype="boolean",
     )
 
     pd.testing.assert_series_equal(res, expected_res)

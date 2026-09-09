@@ -42,6 +42,13 @@ prefect = {version = "3.6.9", extras = ["docker"]}
 fastapi = ">=0.116.1,<0.136"
 duckdb = "^1.5.4"
 oracledb = "^3.4.2"
+# Prefect 3.6.9's prefect/workers/base.py imports `importlib_metadata`
+# unconditionally (instead of the stdlib importlib.metadata) but does not
+# declare it as a dependency. It used to be pulled in transitively; on Python
+# 3.14 nothing installs it any more, so the `prefect` CLI crashes at import
+# with ModuleNotFoundError. Declare it explicitly. Can be dropped once Prefect
+# is upgraded to a version that uses importlib.metadata directly.
+importlib-metadata = "^8.7.0"
 
 
 [tool.poetry.group.dev.dependencies]

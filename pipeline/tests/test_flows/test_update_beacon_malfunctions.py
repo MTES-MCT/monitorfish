@@ -30,7 +30,7 @@ from src.read_query import read_query
 from tests.mocks import (
     extract_satellite_operators_statuses_mock_factory,
     get_monitorfish_healthcheck_mock_factory,
-    mock_datetime_utcnow,
+    mock_utcnow,
 )
 
 mock_get_monitorfish_healthcheck = get_monitorfish_healthcheck_mock_factory()
@@ -407,8 +407,8 @@ def test_get_ended_malfunction_ids():
 
 
 @patch(
-    "src.flows.update_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.flows.update_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_prepare_new_beacon_malfunctions():
     new_malfunctions = pd.DataFrame(
@@ -798,6 +798,10 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
     "src.flows.update_beacon_malfunctions.get_monitorfish_healthcheck",
     mock_get_monitorfish_healthcheck,
 )
+@patch(
+    "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
+    mock_extract_satellite_operators_statuses,
+)
 def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emitted(
     reset_test_data,
 ):
@@ -808,7 +812,6 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=24,
-            extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
             return_state=True,
         )
 
@@ -833,6 +836,10 @@ def test_update_beacon_malfunctions_flow_doesnt_create_malfunctions_if_never_emi
     "src.flows.update_beacon_malfunctions.get_monitorfish_healthcheck",
     mock_get_monitorfish_healthcheck,
 )
+@patch(
+    "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
+    mock_extract_satellite_operators_statuses,
+)
 def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunction(
     reset_test_data,
 ):
@@ -850,7 +857,6 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=12,
             max_hours_without_emission_at_port=24,
-            extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
             return_state=True,
         )
 
@@ -920,6 +926,10 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     "src.flows.update_beacon_malfunctions.get_monitorfish_healthcheck",
     mock_get_monitorfish_healthcheck,
 )
+@patch(
+    "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
+    mock_extract_satellite_operators_statuses,
+)
 def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_data):
     initial_beacon_malfunctions = read_query(
         ("SELECT * FROM beacon_malfunctions " "WHERE stage != 'ARCHIVED'"),
@@ -930,7 +940,6 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=1,
-            extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
             return_state=True,
         )
     loaded_beacon_malfunctions = read_query(
@@ -985,7 +994,6 @@ def test_update_beacon_malfunctions_flow_inserts_new_malfunctions(reset_test_dat
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=1,
-            extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
             return_state=True,
         )
 
@@ -1017,11 +1025,16 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
         db="monitorfish_remote",
     )
 
-    with patch("src.flows.update_beacon_malfunctions.requests"):
+    with (
+        patch("src.flows.update_beacon_malfunctions.requests"),
+        patch(
+            "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
+            mock_extract_satellite_operators_statuses,
+        ),
+    ):
         state = update_beacon_malfunctions_flow(
             max_hours_without_emission_at_sea=6,
             max_hours_without_emission_at_port=24,
-            extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
             return_state=True,
         )
 
@@ -1043,6 +1056,10 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
         last_position_updated_by_prefect_minutes_ago=15
     ),
 )
+@patch(
+    "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
+    mock_extract_satellite_operators_statuses,
+)
 def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
     initial_beacons_malfunctions = read_query(
         "SELECT * FROM beacon_malfunctions ORDER BY id",
@@ -1050,7 +1067,6 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
     )
 
     state = update_beacon_malfunctions_flow(
-        extract_satellite_operators_statuses_fn=mock_extract_satellite_operators_statuses,
         return_state=True,
     )
 

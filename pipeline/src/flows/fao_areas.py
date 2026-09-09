@@ -1,6 +1,6 @@
 import geopandas as gpd
 import requests
-from prefect import Task, flow, get_run_logger, task
+from prefect import flow, get_run_logger, task
 
 from config import FAO_AREAS_URL, PROXIES
 from src.generic_tasks import load
@@ -60,8 +60,7 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
 def fao_areas_flow(
     url: str = FAO_AREAS_URL,
     proxies: dict = PROXIES,
-    extract_fao_areas_fn: Task = extract_fao_areas,
 ):
-    fao_areas = extract_fao_areas_fn(url=url, proxies=proxies)
+    fao_areas = extract_fao_areas(url=url, proxies=proxies)
     fao_areas = transform_fao_areas(fao_areas)
     load_fao_areas(fao_areas)

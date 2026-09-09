@@ -1,5 +1,5 @@
 import dataclasses
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from smtplib import SMTPDataError
 from typing import List
@@ -69,7 +69,7 @@ def mock_fetch_control_units():
 
 @pytest.fixture
 def expected_mission_actions() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     return pd.DataFrame(
         {
@@ -227,7 +227,7 @@ def expected_mission_actions() -> pd.DataFrame:
 
 @pytest.fixture
 def sample_mission_actions(expected_mission_actions) -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     df = pd.concat(
         [
@@ -467,7 +467,7 @@ def test_get_actions_period():
 
 def test_extract_mission_actions(reset_test_data, expected_mission_actions):
     # Dates with some data
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     y = relativedelta.relativedelta(years=1)
     actions = extract_mission_actions(period=Period(start=now - y, end=now))
     pd.testing.assert_frame_equal(
@@ -736,6 +736,7 @@ def test_load_emails_sent_to_control_units(
     assert 2 * len(emails_after_one_run) == len(emails_after_two_runs) == 4
 
 
+@patch("src.flows.email_actions_to_units.fetch_control_units", mock_fetch_control_units)
 def test_flow(reset_test_data):
     start_days_ago = 365
     end_days_ago = 0
@@ -748,7 +749,6 @@ def test_flow(reset_test_data):
         is_integration=True,
         start_days_ago=start_days_ago,
         end_days_ago=end_days_ago,
-        fetch_control_units_fn=mock_fetch_control_units,
         return_state=True,
     )
     assert state.is_completed()

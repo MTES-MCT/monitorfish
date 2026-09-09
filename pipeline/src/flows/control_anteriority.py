@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.processing import remove_nones_from_list, try_get_factory
 
 ######## Parameters for control rate and infraction rate risk factor components ########
@@ -257,7 +258,7 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 
     controls_ = controls[columns].copy(deep=True)
 
-    now = pytz.utc.localize(datetime.utcnow())
+    now = pytz.utc.localize(utcnow())
 
     # Compute the number of "recent controls" of each vessen with a discount
     # coefficient on control dates and get the datetime of the last control of each
@@ -450,7 +451,7 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
         controls[
             (
                 controls.control_datetime_utc
-                > pytz.utc.localize(datetime.utcnow()) - relativedelta(years=3)
+                > pytz.utc.localize(utcnow()) - relativedelta(years=3)
             )
         ]
         .groupby("vessel_id")["id"]

@@ -10,6 +10,7 @@ from prefect import task
 
 from src.entities.monitorfish_healthcheck import MonitorfishHealthcheck
 from src.generic_tasks import extract
+from src.helpers.dates import utcnow
 from src.shared_tasks.datagouv import update_resource
 
 
@@ -52,10 +53,13 @@ def mock_extract_side_effect(
     )
 
 
-def mock_datetime_utcnow(utcnow: datetime):
-    mock_datetime = MagicMock()
-    mock_datetime.utcnow = MagicMock(return_value=utcnow)
-    return mock_datetime
+def mock_utcnow(utcnow: datetime):
+    """Replacement for `src.helpers.dates.utcnow` returning a fixed naive datetime.
+
+    Use it to patch the `utcnow` name as imported into the module under test, e.g.
+    `@patch("src.flows.some_flow.utcnow", mock_utcnow(datetime(2021, 1, 1)))`.
+    """
+    return MagicMock(return_value=utcnow)
 
 
 def get_utcnow_mock_factory(utcnow: datetime):
@@ -74,13 +78,13 @@ def get_monitorfish_healthcheck_mock_factory(
 ):
     @task
     def get_monitorfish_healthcheck() -> MonitorfishHealthcheck:
-        utcnow = datetime.utcnow()
+        now = utcnow()
         return MonitorfishHealthcheck(
-            date_last_position_updated_by_prefect=utcnow
+            date_last_position_updated_by_prefect=now
             - timedelta(minutes=last_position_updated_by_prefect_minutes_ago),
-            date_last_position_received_by_api=utcnow
+            date_last_position_received_by_api=now
             - timedelta(minutes=last_position_received_by_api_minutes_ago),
-            date_logbook_message_received=utcnow
+            date_logbook_message_received=now
             - timedelta(minutes=logbook_message_received_minutes_ago),
         )
 

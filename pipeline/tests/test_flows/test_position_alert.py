@@ -1,10 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List
 from unittest.mock import patch
 
 import pandas as pd
 import pytest
-import pytz
 from geoalchemy2 import Geometry
 from pytest import fixture
 from sqlalchemy import (
@@ -991,7 +990,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     with e.begin() as connection:
         connection.execute(text("DELETE FROM silenced_alerts;"))
 
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     track_analysis_depth = 48
     only_fishing_positions = False
@@ -1130,7 +1129,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (
@@ -1148,7 +1147,7 @@ def test_flow_inserts_new_pending_alerts(reset_test_data):
 
 
 def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data):
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     alert_id = 1
     alert_config_name = f"POSITION_ALERT/{alert_id}"
@@ -1266,7 +1265,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (
@@ -1284,7 +1283,7 @@ def test_flow_inserts_new_pending_alerts_without_silenced_alerts(reset_test_data
 
 
 def test_flow_filters_on_gears(reset_test_data):
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     alert_id = 1
     alert_config_name = f"POSITION_ALERT/{alert_id}"
@@ -1374,7 +1373,7 @@ def test_flow_filters_on_gears(reset_test_data):
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (
@@ -1392,7 +1391,7 @@ def test_flow_filters_on_gears(reset_test_data):
 
 
 def test_flow_filters_on_time(reset_test_data):
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     alert_id = 1
     alert_config_name = f"POSITION_ALERT/{alert_id}"
@@ -1494,7 +1493,7 @@ def test_flow_filters_on_time(reset_test_data):
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (
@@ -1512,7 +1511,7 @@ def test_flow_filters_on_time(reset_test_data):
 
 
 def test_flow_filters_on_flag_states(reset_test_data):
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     alert_id = 1
     alert_config_name = f"POSITION_ALERT/{alert_id}"
@@ -1598,7 +1597,7 @@ def test_flow_filters_on_flag_states(reset_test_data):
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (
@@ -1622,7 +1621,7 @@ def test_flow_filters_on_depth(reset_test_data):
     with e.begin() as connection:
         connection.execute(text("DELETE FROM silenced_alerts;"))
 
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
     alert_id = 1
     alert_config_name = f"POSITION_ALERT/{alert_id}"
     track_analysis_depth = 48
@@ -1728,7 +1727,7 @@ def test_flow_filters_on_depth(reset_test_data):
     )
 
     # Dates inserted in the database test data by `CURRENT_TIMESTAMP` cannot be mocked
-    # and are not exactly equal to `datetime.utcnow()` above, so we need to make an
+    # and are not exactly equal to `datetime.now(timezone.utc).replace(tzinfo=None)` above, so we need to make an
     # 'almost equal' check.
     assert (
         (

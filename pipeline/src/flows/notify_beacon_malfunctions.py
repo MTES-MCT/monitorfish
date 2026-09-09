@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List, Union
 
 import css_inline
@@ -25,6 +24,7 @@ from src.entities.beacon_malfunctions import (
 )
 from src.entities.communication_means import CommunicationMeans
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.helpers.emails import (
     create_fax_email,
     create_html_email,
@@ -184,7 +184,7 @@ def render(
     html = template.render(
         fonts_directory=fonts_directory,
         logo_src=logo_src,
-        notification_date=datetime.utcnow().strftime("%d/%m/%Y"),
+        notification_date=utcnow().strftime("%d/%m/%Y"),
         previous_notification_datetime_utc=previous_notification_datetime_utc,
         object=m.get_notification_subject(),
         vessel_name=m.vessel_name,
@@ -336,7 +336,7 @@ def send_beacon_malfunction_message(
     send_errors = send_email_or_sms_or_fax_message(
         msg, communication_means, is_integration, logger
     )
-    now = datetime.utcnow()
+    now = utcnow()
 
     notifications = []
 

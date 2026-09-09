@@ -67,8 +67,11 @@ from src.flows.distribute_pnos import (
     to_pnos_to_render,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
-from tests.test_helpers.test_snapshots import should_generate_snapshots
+from tests.mocks import mock_utcnow
+from tests.test_helpers.test_snapshots import (
+    normalize_extracted_pdf_text,
+    should_generate_snapshots,
+)
 
 
 @pytest.fixture
@@ -119,7 +122,7 @@ def fishing_gear_names() -> dict:
 
 @pytest.fixture
 def extracted_pnos() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     return pd.DataFrame(
         {
             "id": [35.0, 36.0, 37.0, 38.0, 40.0, None, None, None, None, None],
@@ -1628,7 +1631,7 @@ def some_more_sent_messages(
 
 @pytest.fixture
 def loaded_sent_messages() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     return pd.DataFrame(
         {
             "id": [1, 2, 3, 4, 5],
@@ -2089,8 +2092,12 @@ def test_render_pno_1_pdf(
     with open(test_filepath, "rb") as f:
         expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
-    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[1].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[1].extract_text())
 
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK
@@ -2138,7 +2145,9 @@ def test_render_pno_2_pdf(
     with open(test_filepath, "rb") as f:
         expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_res.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
 
     assert pno.report_id == "12"
     assert pno.source == PnoSource.LOGBOOK
@@ -2168,8 +2177,12 @@ def test_render_pno_zero_1_pdf(
     with open(test_filepath, "rb") as f:
         expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
-    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[1].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[1].extract_text())
 
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK
@@ -2556,8 +2569,8 @@ def test_create_sms_with_no_phone_addressees_returns_none(
 
 
 @patch(
-    "src.flows.distribute_pnos.datetime",
-    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+    "src.flows.distribute_pnos.utcnow",
+    mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
 @patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
 def test_send_pno_message_by_email(
@@ -2571,8 +2584,8 @@ def test_send_pno_message_by_email(
 
 
 @patch(
-    "src.flows.distribute_pnos.datetime",
-    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+    "src.flows.distribute_pnos.utcnow",
+    mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
 @patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
 def test_send_pno_message_by_sms(mock_send, pno_to_send_by_sms, messages_sent_by_sms):
@@ -2720,7 +2733,26 @@ def test_make_update_manual_prior_notifications_statement(
     )
 
 
+def make_fake_rendered_pdf() -> bytes:
+    """
+    A minimal, valid PDF that `resize_pdf_to_A4` can read and resize. Used to stub
+    out `weasyprint.HTML.write_pdf` in the flow-level tests below: none of them
+    assert on PDF byte content (that's covered by `test_render_pno_*_pdf`), and
+    real weasyprint rendering is by far the slowest part of these tests (~1-1.5s
+    per document, run for every generated PNO).
+    """
+    writer = pypdf.PdfWriter()
+    writer.add_blank_page(width=595, height=842)
+    buf = io.BytesIO()
+    writer.write(buf)
+    return buf.getvalue()
+
+
+FAKE_RENDERED_PDF = make_fake_rendered_pdf()
+
+
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2730,6 +2762,7 @@ def test_flow(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
@@ -2755,7 +2788,7 @@ def test_flow(
 
     # start_hours_ago to query PNOs to generate since January 1st 2020
     start_datetime_utc = datetime(2020, 1, 1)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
 
     # Initial data status
@@ -2851,6 +2884,7 @@ def test_flow(
 
 @pytest.mark.parametrize("zero_pno_types", ["manual", "logbook", "both"])
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2860,6 +2894,7 @@ def test_flow_with_zero_pno_to_generate(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
@@ -2878,7 +2913,7 @@ def test_flow_with_zero_pno_to_generate(
 
     # start_hours_ago to query PNOs to generate since January 1st 2020
     start_datetime_utc = datetime(2020, 1, 1)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
 
     # Mock call to Monitorenv API for control units contacts
@@ -2919,6 +2954,7 @@ def test_flow_with_zero_pno_to_generate(
 
 
 @pytest.mark.parametrize("is_integration", [True, False])
+@patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
 @patch("src.helpers.emails.send_fax")
@@ -2928,6 +2964,7 @@ def test_flow_with_zero_pno_to_send(
     mock_send_fax,
     mock_send_sms,
     mock_send_email,
+    mock_write_pdf,
     monitorenv_control_units_api_response,
     reset_test_data,
     is_integration,
@@ -2956,7 +2993,7 @@ def test_flow_with_zero_pno_to_send(
         )
 
     # Compute start_hours_ago to query PNO with report_id '13'
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_datetime_utc = now - relativedelta(months=1, hours=2, minutes=15)
     end_datetime_utc = now - relativedelta(months=1, hours=1, minutes=45)
 

@@ -347,7 +347,7 @@ def expected_current_segments() -> pd.DataFrame:
 
 @pytest.fixture
 def current_segments() -> pd.DataFrame:
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     return pd.DataFrame(
         {
             "cfr": [

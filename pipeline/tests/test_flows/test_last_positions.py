@@ -93,7 +93,7 @@ def test_extract_reportings(reset_test_data):
 
 def test_extract_ais_last_positions(reset_test_data):
     res = extract_ais_last_positions()
-    assert len(res) == 13
+    assert len(res) == 14
 
 
 def test_load_last_positions(reset_test_data):
@@ -434,10 +434,11 @@ def test_concatenate():
     assert last_positions.equals(expected_last_positions)
 
 
-@patch("src.flows.last_positions.datetime")
-def test_estimate_current_positions(mock_datetime):
-    mock_datetime.utcnow = lambda: datetime(2021, 10, 1, 10, 0, 0)
-
+@patch(
+    "src.flows.last_positions.utcnow",
+    lambda: datetime(2021, 10, 1, 10, 0, 0),
+)
+def test_estimate_current_positions():
     last_positions = pd.DataFrame(
         {
             "latitude": [45, 45.1, 45.2, 45.3],
@@ -716,7 +717,7 @@ def test_last_positions_flow_resets_last_positions_when_action_is_replace(
         "ZZTOPACDC",
     }
     assert len(initial_last_positions_ais) == 0
-    assert len(final_last_positions_ais) == 13
+    assert len(final_last_positions_ais) == 14
 
     assert len(initial_last_positions_vms) == 4
     assert len(final_last_positions_vms) == 4

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from logging import Logger
 
 import numpy as np
@@ -53,7 +53,7 @@ def sample_control_anteriority() -> pd.DataFrame:
 
 @pytest.fixture
 def expected_infringement_risk_levels() -> pd.DataFrame:
-    current_year = datetime.utcnow().year
+    current_year = datetime.now(timezone.utc).replace(tzinfo=None).year
 
     return pd.DataFrame(
         {
@@ -1144,7 +1144,7 @@ def test_flow(reset_test_data):
 
     initial_pnos = read_query(query, db="monitorfish_remote")
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     pno_start_date = datetime(2020, 5, 5)
     pno_end_date = datetime(2020, 5, 7)
 
@@ -1253,7 +1253,7 @@ def test_flow_with_no_pno_in_period_does_nothing(reset_test_data):
 
 
 def test_flow_when_ports_are_unknown(reset_test_data):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     engine = create_engine("monitorfish_remote")
     with engine.begin() as con:
         con.execute(text("DELETE FROM ports"))

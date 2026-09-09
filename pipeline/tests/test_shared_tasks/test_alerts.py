@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pandas as pd
@@ -17,7 +17,7 @@ from src.shared_tasks.alerts import (
     make_alerts,
     validate_pending_alert,
 )
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 
 
 def test_extract_silenced_alerts(reset_test_data):
@@ -28,7 +28,7 @@ def test_extract_silenced_alerts(reset_test_data):
     silenced_alerts = extract_silenced_alerts(
         AlertType.POSITION_ALERT.value, alert_id=1
     )
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     d = timedelta(days=1)
     h = timedelta(hours=1)
 
@@ -158,8 +158,8 @@ def test_archive_reporting(requests_mock):
 
 
 @patch(
-    "src.shared_tasks.alerts.datetime",
-    mock_datetime_utcnow(datetime(2020, 5, 3, 8, 0, 0)),
+    "src.shared_tasks.alerts.utcnow",
+    mock_utcnow(datetime(2020, 5, 3, 8, 0, 0)),
 )
 def test_make_alerts():
     date_1 = datetime(2020, 1, 2, 11, 12, 30)

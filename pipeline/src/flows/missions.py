@@ -138,12 +138,10 @@ def load_missions_and_missions_control_units(
 @flow(name="Monitorfish - missions")
 def missions_flow(
     number_of_months: int,
-    extract_missions_fn=extract_missions,
-    extract_missions_control_units_fn=extract_missions_control_units,
 ):
     # Extract
-    missions = extract_missions_fn.submit(number_of_months=number_of_months)
-    missions_control_units = extract_missions_control_units_fn.submit()
+    missions = extract_missions.submit(number_of_months=number_of_months)
+    missions_control_units = extract_missions_control_units.submit()
     analytics_missions_table = get_table("analytics_missions")
     analytics_missions_control_units_table = get_table(
         "analytics_missions_control_units"

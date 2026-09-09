@@ -47,6 +47,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import {
   MAIN_PERSISTOR_MISSION_MIGRATIONS,
+  MAIN_PERSISTOR_STARTUP_NOTIFICATION_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_MIGRATIONS
@@ -160,9 +161,9 @@ export const mainReducer = {
   sideWindow: sideWindowReducer,
   startupNotification: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<StartupNotificationState>('mainPersistorStartupNotification', [
-        'isSurveyModalDisplayed'
-      ])
+      ...getCommonPersistReducerConfig<StartupNotificationState>('mainPersistorStartupNotification', ['dismissedIds']),
+      migrate: createMigrate(MAIN_PERSISTOR_STARTUP_NOTIFICATION_MIGRATIONS),
+      version: 0
     },
     startupNotificationReducer
   ),

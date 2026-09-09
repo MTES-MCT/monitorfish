@@ -13,7 +13,7 @@ export const STARTUP_NOTIFICATIONS: StartupNotification[] = [
 
 Ce webinaire permettra de vous présenter en direct les différents modules de MonitorFish et de répondre à vos questions.
 
-Le webinaire aura lieu le **mardi 15 septembre de 10h à 12h**, et sera accessible en visio conférence au lien ci-dessous.`,
+Le webinaire aura lieu le **mardi 15 septembre de 10h à 12h (HL)**, et sera accessible en visio conférence au lien ci-dessous.`,
     for: 'ALL',
     id: 'webinaire-2026-09',
     link: {

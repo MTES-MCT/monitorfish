@@ -5,7 +5,6 @@ import { getSilencedAlerts } from '@features/Alert/useCases/getSilencedAlerts'
 import { MissionForm } from '@features/Mission/components/MissionForm'
 import { useListenToAllMissionEventsUpdates } from '@features/Mission/components/MissionForm/hooks/useListenToAllMissionEventsUpdates'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
-import { reportingApi } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
 import { SIDE_WINDOW_EXTERNAL_USER_PATH, SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -134,7 +133,6 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
         dispatch(getOperationalAlerts())
         dispatch(getAllBeaconMalfunctions())
         dispatch(getSilencedAlerts())
-        dispatch(reportingApi.endpoints.getReportings.initiate())
       }
 
       const vessels = await dispatch(vesselApi.endpoints.getActiveVessels.initiate()).unwrap()

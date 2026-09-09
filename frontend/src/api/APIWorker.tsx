@@ -6,7 +6,6 @@ import { getVesselBeaconMalfunctions } from '@features/BeaconMalfunction/useCase
 import { openBeaconMalfunctionInKanban } from '@features/BeaconMalfunction/useCases/openBeaconMalfunctionInKanban'
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
-import { reportingApi } from '@features/Reporting/reportingApi'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
@@ -52,7 +51,6 @@ export function APIWorker() {
     if (isSuperUser) {
       dispatch(fleetSegmentApi.endpoints.getFleetSegments.initiate())
       dispatch(getOperationalAlerts())
-      dispatch(reportingApi.endpoints.getReportings.initiate())
       dispatch(getSilencedAlerts())
       dispatch(getAllBeaconMalfunctions())
     }

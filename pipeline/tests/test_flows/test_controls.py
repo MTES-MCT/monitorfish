@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pandas as pd
@@ -19,7 +19,7 @@ from src.flows.controls import (
 from src.read_query import read_query
 from tests.mocks import mock_extract_side_effect
 
-y = datetime.utcnow().year
+y = datetime.now(timezone.utc).replace(tzinfo=None).year
 
 controls_df = pd.DataFrame(
     {

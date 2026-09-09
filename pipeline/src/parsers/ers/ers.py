@@ -1,7 +1,6 @@
 import logging
 import xml
 import xml.etree.ElementTree as ET
-from datetime import datetime
 from functools import partial
 from typing import List
 from xml.etree.ElementTree import ParseError
@@ -9,6 +8,7 @@ from xml.etree.ElementTree import ParseError
 import pandas as pd
 
 from src.entities.data_exchange_standards import DataDomain
+from src.helpers.dates import utcnow
 from src.parsers.ers.log_parsers import (
     default_log_parser,
     parse_coe,
@@ -360,7 +360,7 @@ def batch_parse(xml_messages: List[str], data_domain: DataDomain) -> dict:
             metadata, data_iterator = parse_xml_string(
                 xml_message, data_domain=data_domain
             )
-            now = datetime.utcnow()
+            now = utcnow()
             raw = {
                 "operation_number": metadata.get("operation_number"),
                 "xml_message": xml_message,

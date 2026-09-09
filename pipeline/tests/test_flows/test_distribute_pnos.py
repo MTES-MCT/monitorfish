@@ -67,7 +67,7 @@ from src.flows.distribute_pnos import (
     to_pnos_to_render,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 from tests.test_helpers.test_snapshots import should_generate_snapshots
 
 
@@ -119,7 +119,7 @@ def fishing_gear_names() -> dict:
 
 @pytest.fixture
 def extracted_pnos() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     return pd.DataFrame(
         {
             "id": [35.0, 36.0, 37.0, 38.0, 40.0, None, None, None, None, None],
@@ -1628,7 +1628,7 @@ def some_more_sent_messages(
 
 @pytest.fixture
 def loaded_sent_messages() -> pd.DataFrame:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     return pd.DataFrame(
         {
             "id": [1, 2, 3, 4, 5],
@@ -2556,8 +2556,8 @@ def test_create_sms_with_no_phone_addressees_returns_none(
 
 
 @patch(
-    "src.flows.distribute_pnos.datetime",
-    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+    "src.flows.distribute_pnos.utcnow",
+    mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
 @patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
 def test_send_pno_message_by_email(
@@ -2571,8 +2571,8 @@ def test_send_pno_message_by_email(
 
 
 @patch(
-    "src.flows.distribute_pnos.datetime",
-    mock_datetime_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
+    "src.flows.distribute_pnos.utcnow",
+    mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
 @patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
 def test_send_pno_message_by_sms(mock_send, pno_to_send_by_sms, messages_sent_by_sms):
@@ -2775,7 +2775,7 @@ def test_flow(
 
     # start_hours_ago to query PNOs to generate since January 1st 2020
     start_datetime_utc = datetime(2020, 1, 1)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
 
     # Initial data status
@@ -2900,7 +2900,7 @@ def test_flow_with_zero_pno_to_generate(
 
     # start_hours_ago to query PNOs to generate since January 1st 2020
     start_datetime_utc = datetime(2020, 1, 1)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_hours_ago = (now - start_datetime_utc).total_seconds() / 3600
 
     # Mock call to Monitorenv API for control units contacts
@@ -2980,7 +2980,7 @@ def test_flow_with_zero_pno_to_send(
         )
 
     # Compute start_hours_ago to query PNO with report_id '13'
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     start_datetime_utc = now - relativedelta(months=1, hours=2, minutes=15)
     end_datetime_utc = now - relativedelta(months=1, hours=1, minutes=45)
 

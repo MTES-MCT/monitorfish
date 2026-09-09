@@ -30,7 +30,7 @@ from src.read_query import read_query
 from tests.mocks import (
     extract_satellite_operators_statuses_mock_factory,
     get_monitorfish_healthcheck_mock_factory,
-    mock_datetime_utcnow,
+    mock_utcnow,
 )
 
 mock_get_monitorfish_healthcheck = get_monitorfish_healthcheck_mock_factory()
@@ -407,8 +407,8 @@ def test_get_ended_malfunction_ids():
 
 
 @patch(
-    "src.flows.update_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.flows.update_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_prepare_new_beacon_malfunctions():
     new_malfunctions = pd.DataFrame(

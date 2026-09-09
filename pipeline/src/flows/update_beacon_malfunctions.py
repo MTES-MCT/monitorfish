@@ -20,6 +20,7 @@ from src.entities.beacon_malfunctions import (
     EndOfMalfunctionReason,
 )
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.processing import join_on_multiple_keys
 from src.shared_tasks.control_flow import filter_results
 from src.shared_tasks.dates import get_utcnow, make_timedelta
@@ -257,7 +258,7 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
     new_malfunctions["stage"] = BeaconMalfunctionStage.INITIAL_ENCOUNTER.value
 
     new_malfunctions["malfunction_end_date_utc"] = pd.NaT
-    new_malfunctions["vessel_status_last_modification_date_utc"] = datetime.utcnow()
+    new_malfunctions["vessel_status_last_modification_date_utc"] = utcnow()
 
     notification_to_send = {
         (BeaconMalfunctionVesselStatus.AT_SEA.value, BeaconStatus.ACTIVATED.value): (

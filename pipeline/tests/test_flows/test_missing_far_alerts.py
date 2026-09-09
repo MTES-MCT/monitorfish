@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pandas as pd
@@ -18,7 +18,7 @@ from src.flows.missing_far_alerts import (
     missing_far_alerts_flow,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 
 
 @pytest.fixture
@@ -117,8 +117,8 @@ def expected_vessels_at_sea_4_days(expected_vessels_at_sea_1_day) -> pd.DataFram
 
 
 @patch(
-    "src.flows.missing_far_alerts.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
+    "src.flows.missing_far_alerts.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
 def test_get_dates():
     (
@@ -272,7 +272,7 @@ def test_make_positions_at_sea_query():
 
 
 def test_extract_vessels_that_emitted_fars(reset_test_data):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     vessels_that_emitted_fars = extract_vessels_that_emitted_fars(
         declaration_min_datetime_utc=now - timedelta(days=2),

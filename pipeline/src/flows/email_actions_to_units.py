@@ -20,7 +20,7 @@ from src.entities.control_units import (
 )
 from src.entities.missions import FlightGoal, MissionActionType
 from src.generic_tasks import extract, load
-from src.helpers.dates import Period
+from src.helpers.dates import Period, utcnow
 from src.helpers.emails import create_html_email, send_email_or_sms_or_fax_message
 from src.shared_tasks.control_flow import filter_results, flatten
 from src.shared_tasks.control_units import fetch_control_units
@@ -363,7 +363,7 @@ def send_mission_actions_email(
         logger=logger,
     )
 
-    now = datetime.utcnow()
+    now = utcnow()
 
     sent_messages = []
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Tuple
 
 import pandas as pd
@@ -6,6 +5,7 @@ from prefect import flow, get_run_logger, task
 
 from config import CURRENT_POSITION_ESTIMATION_MAX_HOURS, default_risk_factors
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.helpers.spatial import estimate_current_position
 from src.processing import (
     coalesce,
@@ -341,7 +341,7 @@ def estimate_current_positions(
     """
 
     last_positions = last_positions.copy(deep=True)
-    now = datetime.utcnow()
+    now = utcnow()
 
     estimated_position_cols = [
         "estimated_current_latitude",

@@ -27,7 +27,7 @@ def expected_missing_deps() -> pd.DataFrame:
             "flag_state": ["FR"],
             "risk_factor": [2.58],
             "triggering_behaviour_datetime_utc": [
-                datetime.utcnow() - timedelta(hours=2)
+                datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(hours=2)
             ],
             "latitude": [49.606],
             "longitude": [-0.736],

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pandas as pd
@@ -17,7 +17,7 @@ from src.flows.control_anteriority import (
     transform_vessels_most_recent_control,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 
 
 @pytest.fixture
@@ -400,7 +400,7 @@ def control_statistics() -> pd.DataFrame:
 
 @pytest.fixture
 def loaded_control_anteriority() -> pd.DataFrame:
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
 
     return pd.DataFrame(
         {
@@ -493,7 +493,7 @@ def loaded_control_anteriority() -> pd.DataFrame:
 
 
 def test_extract_last_5_years_controls(reset_test_data, last_years_controls):
-    now = pytz.utc.localize(datetime.utcnow())
+    now = datetime.now(timezone.utc)
     five_years = timedelta(days=5 * 366)
 
     controls = extract_last_years_controls(years=5)
@@ -538,8 +538,8 @@ def test_compute_control_rate_risk_factors(
     last_years_controls, control_rate_risk_factors
 ):
     with patch(
-        "src.flows.control_anteriority.datetime",
-        mock_datetime_utcnow(datetime(2023, 12, 31)),
+        "src.flows.control_anteriority.utcnow",
+        mock_utcnow(datetime(2023, 12, 31)),
     ):
         res = compute_control_rate_risk_factors(last_years_controls)
 
@@ -559,8 +559,8 @@ def test_compute_infraction_rate_risk_factors(
 
 def test_test_compute_control_statistics(last_years_controls, control_statistics):
     with patch(
-        "src.flows.control_anteriority.datetime",
-        mock_datetime_utcnow(datetime(2023, 12, 31)),
+        "src.flows.control_anteriority.utcnow",
+        mock_utcnow(datetime(2023, 12, 31)),
     ):
         stats = compute_control_statistics(last_years_controls)
 

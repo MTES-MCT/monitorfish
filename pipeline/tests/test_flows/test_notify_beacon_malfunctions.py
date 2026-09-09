@@ -1,6 +1,6 @@
 import io
 from copy import deepcopy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -37,7 +37,7 @@ from src.flows.notify_beacon_malfunctions import (
     to_malfunctions_to_notify_list,
 )
 from src.read_query import read_query
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 
 malfunctions_to_notify_shared_data = {
     "beacon_malfunction_id": [1, 2, 3, 4, 5],
@@ -104,7 +104,7 @@ malfunctions_to_notify_shared_data = {
 
 
 def test_extract_malfunctions_to_notify(reset_test_data):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     malfunctions_to_notify = extract_malfunctions_to_notify()
 
@@ -533,8 +533,8 @@ def expected_notifications(request) -> list:
     ],
 )
 @patch(
-    "src.flows.notify_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.flows.notify_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_render(
     malfunction_to_notify_data, templates, notification_type, output_format
@@ -581,8 +581,8 @@ def test_render(
     ],
 )
 @patch(
-    "src.flows.notify_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.flows.notify_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type):
     m = BeaconMalfunctionToNotify(
@@ -606,8 +606,8 @@ def test_render_sms(malfunction_to_notify_data, sms_templates, notification_type
 
 
 @patch(
-    "src.flows.notify_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.flows.notify_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_render_with_null_values(malfunction_to_notify_data_with_nulls, templates):
     m = BeaconMalfunctionToNotify(
@@ -799,8 +799,8 @@ def test_create_fax(malfunction_to_notify_data, cnsp_logo, notification_type):
     indirect=["expected_notifications"],
 )
 @patch(
-    "src.flows.notify_beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
+    "src.flows.notify_beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 16, 10, 0)),
 )
 @patch("src.helpers.emails.send_email")
 def test_send_beacon_malfunction_message(
@@ -976,7 +976,9 @@ def test_flow(reset_test_data):
         parse_dates=["date_time_utc"],
     )
 
-    expected_inserted_notifications["date_time_utc"] = datetime.utcnow()
+    expected_inserted_notifications["date_time_utc"] = datetime.now(
+        timezone.utc
+    ).replace(tzinfo=None)
     pd.testing.assert_frame_equal(
         inserted_notifications.drop(columns=["date_time_utc"]).convert_dtypes(),
         expected_inserted_notifications.drop(

@@ -434,10 +434,11 @@ def test_concatenate():
     assert last_positions.equals(expected_last_positions)
 
 
-@patch("src.flows.last_positions.datetime")
-def test_estimate_current_positions(mock_datetime):
-    mock_datetime.utcnow = lambda: datetime(2021, 10, 1, 10, 0, 0)
-
+@patch(
+    "src.flows.last_positions.utcnow",
+    lambda: datetime(2021, 10, 1, 10, 0, 0),
+)
+def test_estimate_current_positions():
     last_positions = pd.DataFrame(
         {
             "latitude": [45, 45.1, 45.2, 45.3],

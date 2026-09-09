@@ -1,8 +1,17 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Union
 
 import pandas as pd
+
+
+def utcnow() -> datetime:
+    """Naive `datetime` at the current UTC time.
+
+    Drop-in replacement for the deprecated `datetime.utcnow()`: returns a timezone
+    naive `datetime` whose wall-clock value is the current UTC time.
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 @dataclass

@@ -15,7 +15,8 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Type de signalement', "Suspicions d'infraction")
+      cy.fill('Type de signalement', "Suspicion d'infraction")
+      cy.fill('Statut', 'En cours')
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -47,7 +48,7 @@ context('Side Window > Reporting List > Actions', () => {
       cy.visit('/side_window')
       cy.getDataCy('side-window-reporting-tab').click()
       cy.getDataCy('side-window-sub-menu-NAMO').click()
-      cy.fill('Type de signalement', "Suspicions d'infraction")
+      cy.fill('Type de signalement', "Suspicion d'infraction")
 
       cy.getDataCy('ReportingTable-reporting').then($reportingRows => {
         const numberOfReportings = $reportingRows.length
@@ -102,7 +103,6 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(200)
 
     cy.getDataCy('ReportingTable-reporting').should('have.length.greaterThan', 1)
-    cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('DML 56')
     cy.get('tr:contains("COURANT MAIN PROFESSEUR")').contains('Transbordement')
 
     /**
@@ -189,7 +189,7 @@ context('Side Window > Reporting List > Actions', () => {
       if ($number.text().includes('1')) {
         downloadReporting(
           'NAMO',
-          '"DML 29","Cross Etel","Pêche sans VMS ni JPE","Pêche thon rouge sans VMS détecté ni JPE",27689,"FR","RENCONTRER VEILLER APPARTEMENT""","ABC000597493","JL026591","CMQ7994","NON","NAMO"'
+          '"Cross Etel","Pêche sans VMS ni JPE","Pêche thon rouge sans VMS détecté ni JPE",27689,"FR","RENCONTRER VEILLER APPARTEMENT""","ABC000597493","JL026591","CMQ7994","NON","NAMO"'
         )
 
         return
@@ -204,7 +204,9 @@ context('Side Window > Reporting List > Actions', () => {
 
   function downloadReporting(seafront, csvValues) {
     cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
-    cy.fill('Type de signalement', "Suspicions d'infraction")
+    cy.fill('Type de signalement', "Suspicion d'infraction")
+    // Keeps the single-reporting expectation below: archived reportings are listed by default.
+    cy.fill('Statut', 'En cours')
     cy.get('table .rs-checkbox-control').eq(0).click({ force: true })
 
     // When
@@ -219,7 +221,7 @@ context('Side Window > Reporting List > Actions', () => {
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should(
           'contains',
-          'Ouvert le,DML concernée,Origine,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade'
+          'Date début,Source,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade,Statut,INN'
         )
         .should('contains', csvValues)
     })

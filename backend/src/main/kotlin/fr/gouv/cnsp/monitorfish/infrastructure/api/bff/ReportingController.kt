@@ -1,23 +1,32 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.bff
 
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingOrigin
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingsFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.sorters.ReportingsSortColumn
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReportings
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingsList
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.DisplayedReportingDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PaginatedListDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReportingsExtraDataOutput
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
+import org.locationtech.jts.io.WKTReader
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
@@ -42,7 +51,7 @@ class ReportingController(
     private val updateReporting: UpdateReporting,
     private val deleteReporting: DeleteReporting,
     private val deleteReportings: DeleteReportings,
-    private val getAllCurrentReportings: GetAllCurrentReportings,
+    private val getReportingsList: GetReportingsList,
     private val addReporting: AddReporting,
     private val getReportings: GetReportings,
     private val getReporting: GetReporting,
@@ -76,7 +85,7 @@ class ReportingController(
     }
 
     @GetMapping(value = ["/display"])
-    @Operation(summary = "Get reportings to be displayed by filter")
+    @Operation(summary = "Get reportings to be displayed on the map by filter")
     fun getReportings(
         @RequestParam(required = false)
         isArchived: Boolean?,
@@ -90,33 +99,133 @@ class ReportingController(
         startDate: ZonedDateTime?,
         @RequestParam(required = false)
         endDate: ZonedDateTime?,
+        @Parameter(description = "Source of the reporting")
+        @RequestParam(required = false)
+        origin: ReportingOrigin?,
+        @Parameter(description = "Zone to filter the reportings in, as a WKT geometry")
+        @RequestParam(required = false)
+        zone: String?,
         @RequestParam(required = false)
         ids: List<Int>?,
     ): List<DisplayedReportingDataOutput> =
         getReportings
             .execute(
-                isArchived = isArchived,
-                isIUU = isIUU,
-                reportingType = reportingType,
-                reportingPeriod = reportingPeriod,
-                startDate = startDate,
-                endDate = endDate,
-                ids = ids,
+                toReportingsFilter(
+                    isArchived = isArchived,
+                    isIUU = isIUU,
+                    reportingType = reportingType,
+                    reportingPeriod = reportingPeriod,
+                    startDate = startDate,
+                    endDate = endDate,
+                    origin = origin,
+                    zone = zone,
+                    ids = ids,
+                ),
             ).map { (reporting, controlUnit) -> DisplayedReportingDataOutput.fromReporting(reporting, controlUnit) }
 
     @GetMapping(value = [""])
-    @Operation(summary = "Get all current reportings")
+    @Operation(summary = "Get a page of the reporting list by filter")
     fun getAllReportings(
         @RequestParam(required = false)
+        isArchived: Boolean?,
+        @RequestParam(required = false)
+        isIUU: Boolean?,
+        @RequestParam(required = false)
+        reportingType: ReportingType?,
+        @RequestParam(required = true)
+        reportingPeriod: ReportingPeriod,
+        @RequestParam(required = false)
+        startDate: ZonedDateTime?,
+        @RequestParam(required = false)
+        endDate: ZonedDateTime?,
+        @Parameter(description = "Source of the reporting")
+        @RequestParam(required = false)
+        origin: ReportingOrigin?,
+        @Parameter(description = "Zone to filter the reportings in, as a WKT geometry")
+        @RequestParam(required = false)
+        zone: String?,
+        @Parameter(description = "Only keep the reportings of vessels without a vessel record")
+        @RequestParam(required = false)
         absentVessel: Boolean?,
-    ): List<ReportingDataOutput> =
-        getAllCurrentReportings.execute(absentVessel).map {
-            ReportingDataOutput.fromReporting(
-                reporting = it.first,
-                controlUnit = it.second,
-                useThreatHierarchyForForm = true,
+        @Parameter(description = "Seafront group")
+        @RequestParam(required = true)
+        seafrontGroup: SeafrontGroup,
+        @RequestParam(required = false)
+        searchQuery: String?,
+        @Parameter(description = "Sort column")
+        @RequestParam(required = true)
+        sortColumn: ReportingsSortColumn,
+        @Parameter(description = "Sort order")
+        @RequestParam(required = true)
+        sortDirection: Sort.Direction,
+        @Parameter(description = "Number of items per page")
+        @RequestParam(required = true)
+        pageSize: Int,
+        @Parameter(description = "Page number (0-indexed)")
+        @RequestParam(required = true)
+        pageNumber: Int,
+    ): PaginatedListDataOutput<ReportingDataOutput, ReportingsExtraDataOutput> {
+        val page =
+            getReportingsList.execute(
+                filter =
+                    toReportingsFilter(
+                        isArchived = isArchived,
+                        isIUU = isIUU,
+                        reportingType = reportingType,
+                        reportingPeriod = reportingPeriod,
+                        startDate = startDate,
+                        endDate = endDate,
+                        origin = origin,
+                        zone = zone,
+                        ids = null,
+                    ),
+                seafrontGroup = seafrontGroup,
+                searchQuery = searchQuery,
+                absentVessel = absentVessel,
+                sortColumn = sortColumn,
+                sortDirection = sortDirection,
+                pageNumber = pageNumber,
+                pageSize = pageSize,
             )
-        }
+
+        return PaginatedListDataOutput(
+            data =
+                page.data.map { (reporting, controlUnit) ->
+                    ReportingDataOutput.fromReporting(
+                        reporting = reporting,
+                        controlUnit = controlUnit,
+                        useThreatHierarchyForForm = true,
+                    )
+                },
+            extraData = ReportingsExtraDataOutput.fromReportingStats(page.extraData),
+            lastPageNumber = page.lastPageNumber,
+            pageNumber = page.pageNumber,
+            pageSize = page.pageSize,
+            totalLength = page.totalLength,
+        )
+    }
+
+    private fun toReportingsFilter(
+        isArchived: Boolean?,
+        isIUU: Boolean?,
+        reportingType: ReportingType?,
+        reportingPeriod: ReportingPeriod,
+        startDate: ZonedDateTime?,
+        endDate: ZonedDateTime?,
+        origin: ReportingOrigin?,
+        zone: String?,
+        ids: List<Int>?,
+    ) = ReportingsFilter(
+        reportingPeriod = reportingPeriod,
+        startDate = startDate,
+        endDate = endDate,
+        isArchived = isArchived,
+        isIUU = isIUU,
+        reportingType = reportingType,
+        origin = origin,
+        zone = zone?.takeIf { it.isNotBlank() }?.let { WKTReader().read(it) },
+        ids = ids,
+    )
 
     @PutMapping(value = ["/{reportingId}/archive"])
     @Operation(summary = "Archive a reporting")

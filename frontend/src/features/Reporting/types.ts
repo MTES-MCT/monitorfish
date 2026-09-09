@@ -18,11 +18,13 @@ import {
   ThreatSummarySchema,
   type VesselReportingsSchema
 } from '@features/Reporting/schemas/VesselReportingsSchema'
+import { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
 
 import type { OtherSourceType } from './types/OtherSourceType'
+import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { ObservationSchema } from '@features/Reporting/schemas/ObservationSchema'
 import type { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
 import type Feature from 'ol/Feature'
@@ -173,14 +175,21 @@ export const OtherSourceTypeLabel: Record<OtherSourceType, string> = {
 
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
-export type ApiSearchFilter = {
+/**
+ * Filters shared by the reporting map layer and the reporting list, so that both views always
+ * agree on what a given filter selects. Sent as-is as query params to both endpoints.
+ */
+export type ReportingsFilter = {
   endDate: string | undefined
   ids: number[] | undefined
   isArchived: boolean | undefined
   isIUU: boolean | undefined
+  origin: ReportingOrigin | undefined
   reportingPeriod: ReportingSearchPeriod
   reportingType: ReportingType | undefined
   startDate: string | undefined
+  /** Zone drawn on the map, as a WKT geometry. */
+  zone: string | undefined
 }
 
 export enum ReportingSearchPeriod {
@@ -193,6 +202,22 @@ export enum ReportingSearchPeriod {
   TODAY = 'TODAY'
 }
 
-export type AllReportingsFilter = {
+/** Filters that only make sense for the reporting list. */
+export type ReportingsListFilter = {
   absentVessel: true | undefined
+  seafrontGroup: SeafrontGroup
+  searchQuery: string | undefined
+}
+
+export enum ReportingsSortColumn {
+  ORIGIN = 'ORIGIN',
+  REPORTING_DATE = 'REPORTING_DATE',
+  THREAT = 'THREAT',
+  TITLE = 'TITLE',
+  TYPE = 'TYPE',
+  VESSEL_NAME = 'VESSEL_NAME'
+}
+
+export type ReportingsExtraData = {
+  perSeafrontGroupCount: Record<AllSeafrontGroup | SeafrontGroup, number>
 }

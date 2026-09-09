@@ -1,13 +1,21 @@
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
+import { ReportingZoneFilter } from '@features/Reporting/components/ReportingZoneFilter'
 import {
   IUU_OPTIONS,
+  REPORTING_ORIGIN_AS_OPTIONS,
+  REPORTING_SEARCH_PERIOD_AS_OPTIONS,
   REPORTING_TYPE_OPTIONS,
   STATUS_OPTIONS
-} from '@features/Reporting/components/ReportingMapMenuDialog/constants'
-import { REPORTING_SEARCH_PERIOD_AS_OPTIONS } from '@features/Reporting/constants'
+} from '@features/Reporting/constants'
+import {
+  getArchivedValue,
+  getCustomPeriodValue,
+  getIUUValue,
+  useReportingsFilters
+} from '@features/Reporting/hooks/useReportingsFilters'
 import { reportingActions } from '@features/Reporting/slice'
-import { type ApiSearchFilter, ReportingSearchPeriod } from '@features/Reporting/types'
+import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
@@ -19,64 +27,24 @@ import styled from 'styled-components'
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
 import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMapBoxDisplayed'
 
-import type { ReportingType } from '@features/Reporting/types/ReportingType'
-import type { DateAsStringRange } from '@mtes-mct/monitor-ui/types/definitions'
+import type { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
 
 export function ReportingMapMenuDialog() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
-  const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
+
+  const {
+    filters,
+    updateCustomPeriod,
+    updateIsIUU,
+    updateOrigin,
+    updateReportingPeriod,
+    updateReportingStatus,
+    updateReportingType
+  } = useReportingsFilters()
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.REPORTINGS)
-
-  const applyFilter = (nextFilter: ApiSearchFilter) => {
-    dispatch(reportingActions.setDisplayFilters(nextFilter))
-  }
-
-  const updateReportingType = (nextReportingType: ReportingType | undefined) => {
-    applyFilter({ ...displayFilters, reportingType: nextReportingType })
-  }
-
-  const updateReportingStatus = (nextValue: string | undefined) => {
-    const nextIsArchived = (function () {
-      if (nextValue === 'ARCHIVED') {
-        return true
-      }
-
-      if (nextValue === 'NOT_ARCHIVED') {
-        return false
-      }
-
-      return undefined
-    })()
-
-    applyFilter({ ...displayFilters, isArchived: nextIsArchived })
-  }
-
-  const updateReportingPeriod = (nextReportingPeriod: ReportingSearchPeriod) => {
-    applyFilter({ ...displayFilters, reportingPeriod: nextReportingPeriod })
-  }
-
-  const updateIsIUU = (nextValue: string | undefined) => {
-    const nextIsIUU = (function () {
-      if (nextValue === 'IUU') {
-        return true
-      }
-
-      if (nextValue === 'NOT_IUU') {
-        return false
-      }
-
-      return undefined
-    })()
-
-    applyFilter({ ...displayFilters, isIUU: nextIsIUU })
-  }
-
-  const updateCustomPeriod = (nextCustomPeriod: DateAsStringRange | undefined) => {
-    applyFilter({ ...displayFilters, endDate: nextCustomPeriod?.[1], startDate: nextCustomPeriod?.[0] })
-  }
 
   const toggleMenu = () => {
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.REPORTINGS ? undefined : MapBox.REPORTINGS))
@@ -100,34 +68,9 @@ export function ReportingMapMenuDialog() {
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }
 
-  const iuuValue = (function () {
-    if (displayFilters.isIUU === true) {
-      return 'IUU'
-    }
-
-    if (displayFilters.isIUU === false) {
-      return 'NOT_IUU'
-    }
-
-    return undefined
-  })()
-
-  const archivedValue = (function () {
-    if (displayFilters.isArchived === true) {
-      return 'ARCHIVED'
-    }
-
-    if (displayFilters.isArchived === false) {
-      return 'NOT_ARCHIVED'
-    }
-
-    return undefined
-  })()
-
-  const customValue =
-    displayFilters.startDate && displayFilters.endDate
-      ? ([displayFilters.startDate, displayFilters.endDate] as DateAsStringRange)
-      : undefined
+  const iuuValue = getIUUValue(filters.isIUU)
+  const archivedValue = getArchivedValue(filters.isArchived)
+  const customValue = getCustomPeriodValue(filters)
 
   return (
     isRendered && (
@@ -153,9 +96,9 @@ export function ReportingMapMenuDialog() {
               onChange={value => updateReportingPeriod(value as ReportingSearchPeriod)}
               options={REPORTING_SEARCH_PERIOD_AS_OPTIONS}
               placeholder="Période"
-              value={displayFilters.reportingPeriod}
+              value={filters.reportingPeriod}
             />
-            {displayFilters.reportingPeriod === ReportingSearchPeriod.CUSTOM && (
+            {filters.reportingPeriod === ReportingSearchPeriod.CUSTOM && (
               <StyledCustomPeriodContainer>
                 <DateRangePicker
                   defaultValue={customValue}
@@ -189,7 +132,7 @@ export function ReportingMapMenuDialog() {
               onChange={value => updateReportingType(value)}
               options={REPORTING_TYPE_OPTIONS}
               placeholder="Type"
-              value={displayFilters.reportingType}
+              value={filters.reportingType}
             />
             <Select
               isLabelHidden
@@ -201,6 +144,17 @@ export function ReportingMapMenuDialog() {
               placeholder="INN / non INN"
               value={iuuValue}
             />
+            <Select
+              isLabelHidden
+              isLight
+              label="Source"
+              name="origin"
+              onChange={value => updateOrigin(value as ReportingOrigin | undefined)}
+              options={REPORTING_ORIGIN_AS_OPTIONS}
+              placeholder="Source"
+              value={filters.origin}
+            />
+            <ReportingZoneFilter />
           </FilterRow>
           <StyledFooter>
             <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={toggleCreateReporting}>

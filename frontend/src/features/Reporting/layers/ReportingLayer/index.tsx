@@ -19,7 +19,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 function UnmemoizedReportingLayer() {
   const dispatch = useMainAppDispatch()
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
-  const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
+  const filters = useMainAppSelector(state => state.reporting.filters)
   const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
   const { pinnedReportings, pinnedReportingsError } = usePinnedReportings()
 
@@ -32,11 +32,9 @@ function UnmemoizedReportingLayer() {
     trySetFeatureSelected(selectedReportingFeatureId, true)
   }, [selectedReportingFeatureId])
 
-  const skipQuery =
-    displayFilters.reportingPeriod === ReportingSearchPeriod.CUSTOM &&
-    (!displayFilters.startDate || !displayFilters.endDate)
+  const skipQuery = filters.reportingPeriod === ReportingSearchPeriod.CUSTOM && (!filters.startDate || !filters.endDate)
 
-  const { data: filteredReportings, error: filteredReportingsError } = useDisplayReportingsQuery(displayFilters, {
+  const { data: filteredReportings, error: filteredReportingsError } = useDisplayReportingsQuery(filters, {
     skip: skipQuery
   })
 

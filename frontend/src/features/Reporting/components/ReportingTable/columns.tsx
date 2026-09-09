@@ -4,17 +4,21 @@ import { Titled } from '@components/Titled'
 import { HiddenText } from '@features/commonStyles/HiddenText'
 import { getInfractionTitle } from '@features/Reporting/components/ReportingCard/utils'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
-import { type Reporting, ReportingTypeCharacteristics } from '@features/Reporting/types'
+import { type Reporting, ReportingsSortColumn, ReportingTypeCharacteristics } from '@features/Reporting/types'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Accent, Tag, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
+import dayjs from 'dayjs'
 import styled from 'styled-components'
-import * as timeago from 'timeago.js'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 
-import type { CellContext, ColumnDef, Row } from '@tanstack/react-table'
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
+/**
+ * Sortable columns are identified by their backend sort column, as `useListSorting` sends the
+ * `react-table` column id straight to the API.
+ */
 export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Reporting.Reporting, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
 
@@ -44,18 +48,15 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       size: 25 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.validationDate ?? row.creationDate,
+      accessorFn: row => row.reportingDate,
       cell: (info: CellContext<Reporting.Reporting, string | undefined>) => {
-        const validationDate = info.getValue()
-        if (!validationDate) {
-          return ''
-        }
+        const reportingDate = info.getValue()
 
-        return timeago.format(validationDate, 'fr').replace('il y a ', '')
+        return reportingDate ? dayjs(reportingDate).format('DD/MM/YYYY') : ''
       },
       enableSorting: true,
-      header: () => 'Depuis...',
-      id: 'date',
+      header: () => 'Date début',
+      id: ReportingsSortColumn.REPORTING_DATE,
       size: 100 + legacyFirefoxOffset
     },
     {
@@ -65,9 +66,9 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
 
         return <Ellipsised>{getReportingOrigin(reporting)}</Ellipsised>
       },
-      enableSorting: false,
-      header: () => 'Origine',
-      id: 'origin',
+      enableSorting: true,
+      header: () => 'Source',
+      id: ReportingsSortColumn.ORIGIN,
       size: 132 + legacyFirefoxOffset
     },
     {
@@ -84,24 +85,26 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       },
       enableSorting: true,
       header: () => 'Navire',
-      id: 'vesselName',
-      size: 260 + legacyFirefoxOffset
+      id: ReportingsSortColumn.VESSEL_NAME,
+      size: 280 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row.type,
-      cell: (info: CellContext<Reporting.Reporting, string>) => {
-        const reportingType = info.getValue()
-        const { isInfractionSuspicion } = ReportingTypeCharacteristics[reportingType]
+      cell: (info: CellContext<Reporting.Reporting, ReportingType>) => {
+        const { isInfractionSuspicion } = ReportingTypeCharacteristics[info.getValue()]
+        const typeLabel = isInfractionSuspicion ? "Susp. d'infraction" : 'Observation'
 
-        if (isInfractionSuspicion) {
-          return "Susp. d'infraction"
-        }
-
-        return 'Observation'
+        return (
+          <TypeAndStatus>
+            <TypeDot $isInfractionSuspicion={isInfractionSuspicion} title={typeLabel} />
+            <HiddenText>{typeLabel}</HiddenText>
+            {info.row.original.isArchived ? 'Archivé' : 'En cours'}
+          </TypeAndStatus>
+        )
       },
       enableSorting: true,
-      header: () => 'Type',
-      id: 'type',
+      header: () => 'Type et statut',
+      id: ReportingsSortColumn.TYPE,
       size: 140 + legacyFirefoxOffset
     },
     {
@@ -109,18 +112,17 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       cell: (info: CellContext<Reporting.Reporting, Reporting.Reporting>) => {
         const reporting = info.getValue()
 
-        return <Ellipsised>{getReportingTitle(reporting)}</Ellipsised>
+        return (
+          <TitleCell>
+            {reporting.isIUU && <Tag accent={Accent.PRIMARY}>INN</Tag>}
+            <Ellipsised>{getReportingTitle(reporting)}</Ellipsised>
+          </TitleCell>
+        )
       },
       enableSorting: true,
       header: () => 'Titre',
-      id: 'title',
-      size: 265 + legacyFirefoxOffset,
-      sortingFn: (rowA: Row<any>, rowB: Row<any>) => {
-        const titleA = rowA.original.value.title ?? rowA.original.value.type
-        const titleB = rowB.original.value.title ?? rowB.original.value.type
-
-        return titleA.localeCompare(titleB)
-      }
+      id: ReportingsSortColumn.TITLE,
+      size: 315 + legacyFirefoxOffset
     },
     {
       accessorFn: row => {
@@ -158,17 +160,8 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       },
       enableSorting: true,
       header: () => 'Type d’infraction',
-      id: 'threat',
-      size: 190
-    },
-    {
-      accessorFn: row =>
-        row.type === ReportingType.INFRACTION_SUSPICION || row.type === ReportingType.ALERT ? row.value.dml : '',
-      cell: (info: CellContext<Reporting.Reporting, string | undefined>) => info.getValue(),
-      enableSorting: true,
-      header: () => 'DML',
-      id: 'dml',
-      size: 90 + legacyFirefoxOffset
+      id: ReportingsSortColumn.THREAT,
+      size: 210
     },
     {
       accessorFn: row => row.id,
@@ -184,4 +177,28 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
 export const StyledCountryFlag = styled(CountryFlag)`
   margin-right: 8px;
   vertical-align: -2px;
+`
+
+const TypeAndStatus = styled.span`
+  align-items: center;
+  display: flex;
+`
+
+const TypeDot = styled.span<{
+  $isInfractionSuspicion: boolean
+}>`
+  background-color: ${p => (p.$isInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.opal)};
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 8px;
+  margin-right: 8px;
+  width: 8px;
+`
+
+const TitleCell = styled.span`
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
 `

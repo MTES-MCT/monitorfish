@@ -38,9 +38,11 @@ export function usePinnedReportings() {
     ids: pinnedReportingIds,
     isArchived: undefined,
     isIUU: undefined,
+    origin: undefined,
     reportingPeriod: ReportingSearchPeriod.CUSTOM,
     reportingType: undefined,
-    startDate: undefined
+    startDate: undefined,
+    zone: undefined
   })
 
   return { pinnedReportings, pinnedReportingsError, selectedReportingId }

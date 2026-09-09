@@ -5,10 +5,9 @@ import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
-  creationDate: 'Ouvert le',
-  'value.dml': 'DML concernée',
+  reportingDate: 'Date début',
   type: {
-    label: 'Origine',
+    label: 'Source',
     transform: getReportingOrigin
   },
   'value.type': {
@@ -26,6 +25,14 @@ export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
     label: 'Navire sous charte',
     transform: reporting => (reporting.underCharter ? 'OUI' : 'NON')
   },
-  'value.seaFront': 'Façade'
+  'value.seaFront': 'Façade',
+  isArchived: {
+    label: 'Statut',
+    transform: reporting => (reporting.isArchived ? 'Archivé' : 'En cours')
+  },
+  isIUU: {
+    label: 'INN',
+    transform: reporting => (reporting.isIUU ? 'OUI' : 'NON')
+  }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

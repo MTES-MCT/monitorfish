@@ -2,25 +2,13 @@ import { setInteractionTypeAndListener } from '@features/Draw/slice'
 import { InteractionListener, InteractionType } from '@features/Map/constants'
 import { openDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
 import { reportingActions } from '@features/Reporting/slice'
-import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { GeoJSON, WKT } from 'ol/format'
-import { useEffect } from 'react'
 
 import type { ReportingsFilter } from '@features/Reporting/types'
 import type { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
 import type { ReportingType } from '@features/Reporting/types/ReportingType'
 import type { DateAsStringRange } from '@mtes-mct/monitor-ui/types/definitions'
-import type { Geometry } from 'geojson'
-
-const geoJSONFormat = new GeoJSON()
-const wktFormat = new WKT()
-
-/** The drawn geometry is stored as WGS84 GeoJSON, which is also what the backend expects. */
-function toWkt(geometry: Geometry): string {
-  return wktFormat.writeGeometry(geoJSONFormat.readGeometry(geometry))
-}
 
 function toIsArchived(value: string | undefined): boolean | undefined {
   if (value === 'ARCHIVED') {
@@ -54,27 +42,9 @@ export function useReportingsFilters() {
   const dispatch = useMainAppDispatch()
   const filters = useMainAppSelector(state => state.reporting.filters)
 
-  const { drawedGeometry } = useListenForDrawedGeometry(InteractionListener.REPORTINGS_ZONE)
-
   const applyFilter = (nextFilter: Partial<ReportingsFilter>) => {
     dispatch(reportingActions.setFilters({ ...filters, ...nextFilter }))
   }
-
-  useEffect(() => {
-    if (!drawedGeometry) {
-      return
-    }
-
-    dispatch(
-      reportingActions.setFilters({
-        ...filters,
-        zone: toWkt(drawedGeometry)
-      })
-    )
-    // `filters` is intentionally left out: re-running on every filter change would re-apply a
-    // stale drawn geometry.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, drawedGeometry])
 
   return {
     drawZone: () => {

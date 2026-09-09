@@ -68,7 +68,10 @@ from src.flows.distribute_pnos import (
 )
 from src.read_query import read_query
 from tests.mocks import mock_utcnow
-from tests.test_helpers.test_snapshots import should_generate_snapshots
+from tests.test_helpers.test_snapshots import (
+    normalize_extracted_pdf_text,
+    should_generate_snapshots,
+)
 
 
 @pytest.fixture
@@ -2089,8 +2092,12 @@ def test_render_pno_1_pdf(
     with open(test_filepath, "rb") as f:
         expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
-    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[1].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[1].extract_text())
 
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK
@@ -2138,7 +2145,9 @@ def test_render_pno_2_pdf(
     with open(test_filepath, "rb") as f:
         expected_res = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_res.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
 
     assert pno.report_id == "12"
     assert pno.source == PnoSource.LOGBOOK
@@ -2168,8 +2177,12 @@ def test_render_pno_zero_1_pdf(
     with open(test_filepath, "rb") as f:
         expected_pdf = pypdf.PdfReader(io.BytesIO(f.read()))
 
-    assert expected_pdf.pages[0].extract_text() == pdf.pages[0].extract_text()
-    assert expected_pdf.pages[1].extract_text() == pdf.pages[1].extract_text()
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[0].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
+    assert normalize_extracted_pdf_text(
+        expected_pdf.pages[1].extract_text()
+    ) == normalize_extracted_pdf_text(pdf.pages[1].extract_text())
 
     assert pno.report_id == "11"
     assert pno.source == PnoSource.LOGBOOK

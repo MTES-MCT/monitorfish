@@ -38,6 +38,7 @@ from src.flows.notify_beacon_malfunctions import (
 )
 from src.read_query import read_query
 from tests.mocks import mock_utcnow
+from tests.test_helpers.test_snapshots import normalize_extracted_pdf_text
 
 malfunctions_to_notify_shared_data = {
     "beacon_malfunction_id": [1, 2, 3, 4, 5],
@@ -567,7 +568,11 @@ def test_render(
         # The `.extract_text` method yields weird results that do not correspond to the
         # actual textual content of the pdf, but we use it here as a kind of hash
         # function for the pdf's content to test that the result is as expected.
-        assert expected_res.pages[0].extract_text() == pdf.pages[0].extract_text()
+        # Whitespace is normalized so the assertion tolerates line-break shifts
+        # from the system Pango / HarfBuzz stack across Debian releases.
+        assert normalize_extracted_pdf_text(
+            expected_res.pages[0].extract_text()
+        ) == normalize_extracted_pdf_text(pdf.pages[0].extract_text())
 
 
 @pytest.mark.parametrize(

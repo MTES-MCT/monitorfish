@@ -33,7 +33,8 @@ export function usePinnedReportings() {
     [editedReportingId, selectedReportingId]
   )
 
-  const { data: pinnedReportings, error: pinnedReportingsError } = useDisplayReportingsQuery(
+  // `currentData`, and not `data`: a skipped query keeps returning the last reportings it fetched.
+  const { currentData: pinnedReportings, error: pinnedReportingsError } = useDisplayReportingsQuery(
     {
       endDate: undefined,
       ids: pinnedReportingIds,

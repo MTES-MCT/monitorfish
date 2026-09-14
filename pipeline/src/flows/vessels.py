@@ -301,6 +301,7 @@ def clean_vessels(all_vessels: pd.DataFrame) -> pd.DataFrame:
     }
 
     for col_name, cols_list in combine_cols.items():
+        breakpoint()
         res.loc[:, col_name] = coalesce(res[cols_list])
     logger.info("Columns combined into single values.")
 

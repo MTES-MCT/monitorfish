@@ -240,8 +240,8 @@ def pre_render_pno(
             df.groupby(["species_name_code", "fao_area"], dropna=False)
             .agg(
                 {
-                    "weight": sum,
-                    "number_of_fish": sum,
+                    "weight": "sum",
+                    "number_of_fish": "sum",
                     "statistical_rectangle": "unique",
                 }
             )
@@ -262,7 +262,7 @@ def pre_render_pno(
         )
         sum_by_species = (
             sum_by_area.groupby("species_name_code")
-            .agg({"area_sr": list, "weight": sum, "number_of_fish": sum})
+            .agg({"area_sr": list, "weight": "sum", "number_of_fish": "sum"})
             .reset_index()
             .sort_values("weight", ascending=False)
             .reset_index(drop=True)

@@ -433,6 +433,7 @@ cleaned_vessels_dtype = {
     "under_charter": bool,
     "operator_address": "category",
     "operator_nationality": "category",
+    "has_esacapt": "boolean",
 }
 
 

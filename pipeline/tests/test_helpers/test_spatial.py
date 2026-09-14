@@ -352,28 +352,31 @@ def test_detect_fishing_activity_1():
     )
 
     expected_positions_is_fishing = positions.copy(deep=True)
-    expected_positions_is_fishing["is_fishing"] = [
-        False,
-        False,
-        False,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        True,
-        False,
-        False,
-        False,
-        True,
-        True,
-        False,
-    ]
+    expected_positions_is_fishing["is_fishing"] = pd.array(
+        [
+            False,
+            False,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            False,
+            False,
+            True,
+            True,
+            False,
+        ],
+        dtype="boolean",
+    )
 
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
 
@@ -416,28 +419,31 @@ def test_detect_fishing_activity_2():
     )
 
     expected_positions_is_fishing = positions.copy(deep=True)
-    expected_positions_is_fishing["is_fishing"] = [
-        False,
-        np.nan,
-        False,
-        True,
-        True,
-        True,
-        True,
-        True,
-        False,
-        False,
-        False,
-        True,
-        True,
-        True,
-        False,
-        False,
-        False,
-        False,
-        False,
-        np.nan,
-    ]
+    expected_positions_is_fishing["is_fishing"] = pd.array(
+        [
+            False,
+            np.nan,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            False,
+            False,
+            True,
+            True,
+            True,
+            False,
+            False,
+            False,
+            False,
+            False,
+            np.nan,
+        ],
+        dtype="boolean",
+    )
 
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
 
@@ -468,11 +474,14 @@ def test_detect_fishing_activity_3():
     )
 
     expected_positions_is_fishing = positions.copy(deep=True)
-    expected_positions_is_fishing["is_fishing"] = [
-        np.nan,
-        np.nan,
-        np.nan,
-    ]
+    expected_positions_is_fishing["is_fishing"] = pd.array(
+        [
+            np.nan,
+            np.nan,
+            np.nan,
+        ],
+        dtype="boolean",
+    )
 
     pd.testing.assert_frame_equal(positions_is_fishing, expected_positions_is_fishing)
 
@@ -655,7 +664,9 @@ def test_enrich_positions():
         6.600547067159087,
     ]
 
-    expected_res["is_fishing"] = [False, False, False, False, False, False, False]
+    expected_res["is_fishing"] = pd.array(
+        [False, False, False, False, False, False, False], dtype="boolean"
+    )
 
     expected_res["time_emitting_at_sea"] = [0, 0, 0, 0, 2, 3, 4]
 
@@ -692,7 +703,9 @@ def test_enrich_positions():
         max_fishing_speed_threshold=7.1,
     )
 
-    expected_res["is_fishing"] = [False, False, False, False, np.nan, np.nan, np.nan]
+    expected_res["is_fishing"] = pd.array(
+        [False, False, False, False, np.nan, np.nan, np.nan], dtype="boolean"
+    )
 
     pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
 
@@ -704,7 +717,9 @@ def test_enrich_positions():
         max_fishing_speed_threshold=7.1,
     )
 
-    expected_res["is_fishing"] = [False, False, False, False, False, True, True]
+    expected_res["is_fishing"] = pd.array(
+        [False, False, False, False, False, True, True], dtype="boolean"
+    )
 
     pd.testing.assert_frame_equal(res, expected_res, check_dtype=False)
 

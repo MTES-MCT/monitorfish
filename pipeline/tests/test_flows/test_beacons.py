@@ -81,7 +81,7 @@ def transformed_beacons(logging_datetime_utc) -> pd.DataFrame:
             "beacon_type": ["A1", "B", "A2", None, "A1", "B", "A2"],
             "is_coastal": [False, True, False, None, False, True, False],
         }
-    )
+    ).astype({"is_coastal": "boolean"})
 
 
 @pytest.fixture
@@ -127,7 +127,7 @@ def test_load_beacons(reset_test_data, transformed_beacons):
 
     loaded_beacons = read_query(
         "SELECT * FROM beacons ORDER BY beacon_number", db="monitorfish_remote"
-    )
+    ).astype({"is_coastal": "boolean"})
 
     pd.testing.assert_frame_equal(loaded_beacons, transformed_beacons)
 

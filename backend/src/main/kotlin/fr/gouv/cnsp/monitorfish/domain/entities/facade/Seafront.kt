@@ -35,11 +35,12 @@ enum class Seafront(
 
     companion object {
         infix fun from(storedValue: String): Seafront =
-            try {
-                entries.first { it.storedValue == storedValue }
-            } catch (e: NoSuchElementException) {
-                throw NoSuchElementException("Seafront $storedValue not found.", e)
-            }
+            fromOrNull(storedValue)
+                ?: throw NoSuchElementException("Seafront $storedValue not found.")
+
+        /** Lenient counterpart of [from], for the free-form seafront strings stored in jsonb columns. */
+        fun fromOrNull(storedValue: String?): Seafront? =
+            storedValue?.let { value -> entries.firstOrNull { it.storedValue == value } }
     }
 
     override fun toString(): String = storedValue

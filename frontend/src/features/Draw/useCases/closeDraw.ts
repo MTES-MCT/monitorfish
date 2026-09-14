@@ -1,5 +1,6 @@
 import { InteractionListener } from '@features/Map/constants'
 import { closeDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
+import { applyDrawedZoneFilter } from '@features/Reporting/useCases/applyDrawedZoneFilter'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { resetInteraction } from '../slice'
@@ -19,6 +20,14 @@ export const closeDraw = (listener?: InteractionListener) => (dispatch, getState
    */
   if (listener === InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG) {
     return
+  }
+
+  /**
+   * The reporting map menu is hidden while drawing, so no mounted component can read the drawn
+   * geometry before it is reset below.
+   */
+  if (listener === InteractionListener.REPORTINGS_ZONE) {
+    dispatch(applyDrawedZoneFilter())
   }
 
   dispatch(resetInteraction())

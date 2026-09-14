@@ -117,3 +117,38 @@ export const DUMMY_LAST_POSITIONS: Vessel.ActiveVessel[] = [
     vesselName: 'A BOAT'
   }
 ]
+
+export const DUMMY_LOGBOOK_BASED_VESSEL: Vessel.ActiveVessel = {
+  activityOrigin: ActivityOrigin.FROM_RECENT_PROFILE,
+  activityType: ActivityType.LOGBOOK_BASED,
+  detectabilityRiskFactor: 1.5811,
+  district: 'Saint Malo',
+  districtCode: 'SM',
+  emitsPositions: false,
+  externalReferenceNumber: 'SM561631',
+  flagState: 'FR',
+  gearsArray: [],
+  hasCurrentTripInfractionSuspicion: false,
+  hasInfractionSuspicion: false,
+  id: 158,
+  impactRiskFactor: 1.0,
+  internalReferenceNumber: 'FRA000561631',
+  ircs: 'FJ9112',
+  isAtPort: false,
+  isFiltered: 0,
+  lastControlAtQuayDateTime: '2026-04-09T09:27:00Z',
+  lastControlAtSeaDateTime: '2022-10-27T16:28:00Z',
+  length: 11.95,
+  mmsi: '227319040',
+  probabilityRiskFactor: 1.4142,
+  producerOrganization: 'HORS OP',
+  riskFactor: 1.3952,
+  segments: [],
+  speciesArray: [],
+  speciesOnboard: [],
+  underCharter: false,
+  vesselFeatureId: 'VESSELS:FRA000561631/FJ9112/SM561631',
+  vesselId: 1225156,
+  vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+  vesselName: 'AD GLORIAM'
+}

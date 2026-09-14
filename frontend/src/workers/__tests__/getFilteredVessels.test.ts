@@ -7,7 +7,7 @@ import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vess
 import { describe, expect, it } from '@jest/globals'
 
 import { MonitorFishWebWorker } from '../MonitorFishWebWorker'
-import { DUMMY_LAST_POSITIONS } from './__mocks__/dummyLastPositions'
+import { DUMMY_LAST_POSITIONS, DUMMY_LOGBOOK_BASED_VESSEL } from './__mocks__/dummyLastPositions'
 
 describe('MonitorFishWebWorker.getFilteredVessels', () => {
   it('should return vessels When there is only default filter', () => {
@@ -151,6 +151,49 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toStrictEqual(['vessel1', 'vessel2'])
+  })
+
+  it('should exclude logbook based vessels When filtering by emitsPositions (YES)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      emitsPositions: [VesselEmitsPosition.YES],
+      lastPositionHoursAgo: undefined,
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(
+      [...DUMMY_LAST_POSITIONS, DUMMY_LOGBOOK_BASED_VESSEL],
+      filters
+    )
+    expect(result).toStrictEqual(['vessel3'])
+  })
+
+  it('should include logbook based vessels When filtering by emitsPositions (NO)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      emitsPositions: [VesselEmitsPosition.NO],
+      lastPositionHoursAgo: undefined,
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(
+      [...DUMMY_LAST_POSITIONS, DUMMY_LOGBOOK_BASED_VESSEL],
+      filters
+    )
+    expect(result).toStrictEqual(['vessel1', 'vessel2', 'VESSELS:FRA000561631/FJ9112/SM561631'])
+  })
+
+  it('should not return a logbook based vessel When filtering by districtCodes and emitsPositions (YES)', () => {
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      districtCodes: ['SM'],
+      emitsPositions: [VesselEmitsPosition.YES],
+      lastPositionHoursAgo: undefined,
+      vesselsLocation: []
+    }
+    const result = MonitorFishWebWorker.getFilteredVessels(
+      [...DUMMY_LAST_POSITIONS, DUMMY_LOGBOOK_BASED_VESSEL],
+      filters
+    )
+    expect(result).toStrictEqual([])
   })
 
   it('should filters by producerOrganizations', () => {

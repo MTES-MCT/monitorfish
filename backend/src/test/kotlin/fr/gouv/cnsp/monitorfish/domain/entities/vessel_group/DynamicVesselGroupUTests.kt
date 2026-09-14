@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.vessel_group
 
 import com.neovisionaries.i18n.CountryCode
+import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
@@ -25,6 +26,7 @@ class DynamicVesselGroupUTests {
                 .map {
                     EnrichedActiveVessel(
                         lastPosition = it,
+                        beacon = Beacon(beaconNumber = "FR224226850", vesselId = 1),
                         vesselProfile = null,
                         vessel = null,
                         producerOrganization = null,
@@ -77,6 +79,134 @@ class DynamicVesselGroupUTests {
 
         // Then
         assertThat(containsVessel).isTrue
+    }
+
+    @Test
+    fun `containsActiveVessel should not match a French vessel having a position but no beacon`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        beacon = null,
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                        landingPort = null,
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(VesselEmitsPositions.YES),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlAtQuayPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        landingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
+
+    @Test
+    fun `containsActiveVessel should not match a vessel emitting positions When the filter is NO`() {
+        // Given
+        val vessel =
+            TestUtils
+                .getDummyLastPositions()
+                .map {
+                    EnrichedActiveVessel(
+                        lastPosition = it,
+                        beacon = Beacon(beaconNumber = "FR224226850", vesselId = 1),
+                        vesselProfile = null,
+                        vessel = null,
+                        producerOrganization = null,
+                        riskFactor = VesselRiskFactor(),
+                        landingPort = null,
+                    )
+                }.first()
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(CountryCode.FR),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(VesselEmitsPositions.NO),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlAtQuayPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        landingPortLocodes = emptyList(),
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
     }
 
     @Test
@@ -220,6 +350,7 @@ class DynamicVesselGroupUTests {
                 .map {
                     EnrichedActiveVessel(
                         lastPosition = it,
+                        beacon = Beacon(beaconNumber = "FR224226850", vesselId = 1),
                         vesselProfile = null,
                         vessel = null,
                         producerOrganization =

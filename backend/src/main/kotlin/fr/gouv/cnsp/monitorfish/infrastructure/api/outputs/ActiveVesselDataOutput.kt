@@ -47,6 +47,7 @@ sealed class ActiveVesselBaseDataOutput(
     open val producerOrganization: String? = null,
     // Properties for efficient filtering in frontend
     open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
+    open val emitsPositions: Boolean,
     open val gearsArray: List<String>,
     open val hasInfractionSuspicion: Boolean,
     open val speciesArray: List<String>,
@@ -182,6 +183,7 @@ sealed class ActiveVesselBaseDataOutput(
                     activityType = enrichedActiveVessel.activityType,
                     activityOrigin = enrichedActiveVessel.activityOrigin,
                     landingPortLocode = enrichedActiveVessel.landingPort?.locode,
+                    emitsPositions = enrichedActiveVessel.emitsPositions,
                     hasCurrentTripInfractionSuspicion = enrichedActiveVessel.hasCurrentTripInfractionSuspicion,
                 )
             }
@@ -222,6 +224,7 @@ data class ActiveVesselEmittingPositionDataOutput(
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
     override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
+    override val emitsPositions: Boolean,
     override val landingPortLocode: String?,
     override val hasCurrentTripInfractionSuspicion: Boolean,
     val alerts: List<String>,
@@ -236,7 +239,6 @@ data class ActiveVesselEmittingPositionDataOutput(
     val dateTime: ZonedDateTime,
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
-    val emitsPositions: Boolean,
     // Properties for WebGL
     val coordinates: List<Double>?,
     val hasBeaconMalfunction: Boolean,
@@ -269,6 +271,7 @@ data class ActiveVesselEmittingPositionDataOutput(
         underCharter = underCharter,
         isAtPort = isAtPort,
         isFiltered = isFiltered,
+        emitsPositions = emitsPositions,
         producerOrganization = producerOrganization,
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
@@ -314,6 +317,7 @@ data class ActiveVesselEmittingLogbookDataOutput(
     override val gearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
+    override val emitsPositions: Boolean,
     override val hasCurrentTripInfractionSuspicion: Boolean,
 ) : ActiveVesselBaseDataOutput(
         id = id,
@@ -346,6 +350,7 @@ data class ActiveVesselEmittingLogbookDataOutput(
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
         isFiltered = isFiltered,
+        emitsPositions = emitsPositions,
         activityType = activityType,
         activityOrigin = activityOrigin,
         landingPortLocode = landingPortLocode,

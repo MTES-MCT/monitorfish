@@ -240,7 +240,7 @@ export function EditDynamicVesselGroupDialog({
 
   const updateEmitsNoPositions = (value: boolean | undefined) => {
     const nextEmitsNoPositions = value ? [VesselEmitsPosition.NO] : []
-    const previousEmitsPositions = emitsNoPositions ? [VesselEmitsPosition.YES] : []
+    const previousEmitsPositions = emitsPositions ? [VesselEmitsPosition.YES] : []
     const nextListFilterValues = {
       ...listFilterValues,
       emitsPositions: previousEmitsPositions.concat(nextEmitsNoPositions)

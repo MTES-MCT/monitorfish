@@ -413,6 +413,7 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
 
     control_statistics_5_years = (
         controls.fillna({"seizure_and_diversion": False})
+        .astype({"seizure_and_diversion": bool})
         .assign(
             number_infractions_last_5_years=lambda x: x.infractions_natinf_codes.map(
                 len

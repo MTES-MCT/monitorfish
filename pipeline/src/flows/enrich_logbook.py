@@ -534,7 +534,7 @@ def flag_pnos_to_verify_and_send(
         )
         logbook_reports_targeting_segment_ids = set(
             segment_matches.loc[
-                segment_matches.is_target_segment.fillna(False),
+                segment_matches.is_target_segment.fillna(False).astype(bool),
                 "logbook_reports_pno_id",
             ]
         )

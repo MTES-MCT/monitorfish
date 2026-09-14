@@ -149,7 +149,9 @@ def concat_merge_vessels(
         how="left",
     )
 
-    all_vessels = all_vessels.fillna({"under_charter": False})
+    all_vessels = all_vessels.fillna({"under_charter": False}).astype(
+        {"under_charter": bool}
+    )
 
     try:
         assert not all_vessels.duplicated(subset="id").any()

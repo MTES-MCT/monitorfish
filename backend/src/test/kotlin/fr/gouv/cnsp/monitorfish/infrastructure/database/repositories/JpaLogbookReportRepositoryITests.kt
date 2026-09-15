@@ -17,6 +17,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LAN
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.RTP
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.within
 import org.junit.jupiter.api.AfterEach
@@ -51,7 +52,13 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("ers")?.clear()
+        cacheManager.getCache(CacheName.ALL_TRIPS)?.clear()
+        cacheManager.getCache(CacheName.LAST_DEP_CURRENT_TRIPS_BY_CFR)?.clear()
+        cacheManager.getCache(CacheName.LAST_LOGBOOK_OPERATION_DATETIME_UTC)?.clear()
+        cacheManager.getCache(CacheName.LOGBOOK_MESSAGES)?.clear()
+        cacheManager.getCache(CacheName.LOGBOOK_PNO_TYPES)?.clear()
+        cacheManager.getCache(CacheName.PNO_FOR_ACTIVE_VESSELS)?.clear()
+        cacheManager.getCache(CacheName.PNO_TO_VERIFY)?.clear()
     }
 
     @AfterEach

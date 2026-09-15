@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -21,7 +22,7 @@ class JpaLogbookRawMessageRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("logbook_raw_message")?.clear()
+        cacheManager.getCache(CacheName.LOGBOOK_RAW_MESSAGE)?.clear()
     }
 
     @Test

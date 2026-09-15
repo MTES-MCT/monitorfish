@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -18,8 +19,8 @@ class JpaSpeciesRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("all_species")?.clear()
-        cacheManager.getCache("species")?.clear()
+        cacheManager.getCache(CacheName.ALL_SPECIES)?.clear()
+        cacheManager.getCache(CacheName.SPECIES)?.clear()
     }
 
     @Test

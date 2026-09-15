@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoTypeRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPnoTypeRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Repository
 class JpaPnoTypeRepository(
     private val dbPnoTypeRepository: DBPnoTypeRepository,
 ) : PnoTypeRepository {
-    @Cacheable(value = ["pno_types"])
+    @Cacheable(value = [CacheName.PNO_TYPES], sync = true)
     override fun findAll(): List<PnoType> = dbPnoTypeRepository.findAll().map { it.toPnoType() }
 }

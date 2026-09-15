@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBSpeciesRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Repository
 class JpaSpeciesRepository(
     private val dbSpeciesRepository: DBSpeciesRepository,
 ) : SpeciesRepository {
-    @Cacheable(value = ["all_species"])
+    @Cacheable(value = [CacheName.ALL_SPECIES], sync = true)
     override fun findAll(): List<Species> =
         dbSpeciesRepository.findAll().map {
             it.toSpecies()
         }
 
-    @Cacheable(value = ["species"])
+    @Cacheable(value = [CacheName.SPECIES])
     override fun findByCode(code: String): Species =
         try {
             dbSpeciesRepository.findByCodeEquals(code).toSpecies()

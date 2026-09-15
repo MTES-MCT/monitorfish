@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionThreatCharacterization
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NatinfCodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBInfractionRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
@@ -13,13 +14,13 @@ import org.springframework.stereotype.Repository
 class JpaInfractionRepository(
     private val dbInfractionRepository: DBInfractionRepository,
 ) : InfractionRepository {
-    @Cacheable(value = ["infractions"])
+    @Cacheable(value = [CacheName.INFRACTIONS], sync = true)
     override fun findAll(): List<Infraction> =
         dbInfractionRepository.findAll().map {
             it.toInfraction()
         }
 
-    @Cacheable(value = ["infraction"])
+    @Cacheable(value = [CacheName.INFRACTION])
     override fun findInfractionByNatinfCode(natinfCode: Int): Infraction =
         try {
             dbInfractionRepository.findByNatinfCodeEquals(natinfCode).toInfraction()
@@ -27,7 +28,7 @@ class JpaInfractionRepository(
             throw NatinfCodeNotFoundException("NATINF code $natinfCode not found")
         }
 
-    @Cacheable(value = ["threat_characterization"])
+    @Cacheable(value = [CacheName.THREAT_CHARACTERIZATION], sync = true)
     override fun findInfractionsThreatCharacterization(): List<InfractionThreatCharacterization> =
         dbInfractionRepository.findInfractionsThreatCharacterization().map {
             InfractionThreatCharacterization(

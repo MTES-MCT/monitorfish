@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.repositories.ControlUnitRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.dtos.FullControlUnit
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.FullControlUnitDataResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -23,7 +24,7 @@ class APIControlUnitRepository(
     @Volatile
     private var lastKnownControlUnits: List<FullControlUnit> = listOf()
 
-    @Cacheable(value = ["control_units"], unless = "#result.isEmpty()")
+    @Cacheable(value = [CacheName.CONTROL_UNITS], unless = "#result.isEmpty()")
     override fun findAll(): List<FullControlUnit> =
         runBlocking {
             val controlUnitsUrl = "${monitorenvProperties.url}/api/v2/control_units"

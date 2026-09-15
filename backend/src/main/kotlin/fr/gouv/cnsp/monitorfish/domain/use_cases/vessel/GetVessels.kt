@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable
 class GetVessels(
     private val vesselRepository: VesselRepository,
 ) {
-    @Cacheable(value = ["identifiable_vessels"])
+    @Cacheable(value = ["identifiable_vessels"], sync = true)
     fun execute(): List<Vessel> =
         vesselRepository.findAll().filter {
             it.isIdentifiable()

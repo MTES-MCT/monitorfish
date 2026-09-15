@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Beacon
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBBeaconRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.EmptyResultDataAccessException
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Repository
 class JpaBeaconRepository(
     private val dbBeaconRepository: DBBeaconRepository,
 ) : BeaconRepository {
-    @Cacheable(value = ["search_beacons"])
+    @Cacheable(value = [CacheName.SEARCH_BEACONS])
     override fun search(searched: String): List<Beacon> {
         if (searched.isEmpty()) {
             return listOf()
@@ -20,7 +21,7 @@ class JpaBeaconRepository(
         return dbBeaconRepository.searchBy(searched).map { it.toBeacon() }
     }
 
-    @Cacheable(value = ["find_beacon"])
+    @Cacheable(value = [CacheName.FIND_BEACON])
     override fun findBeaconByVesselId(vesselId: Int): Beacon? {
         return try {
             dbBeaconRepository.findByVesselId(vesselId).toBeacon()

@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotDeleteException
 import fr.gouv.cnsp.monitorfish.domain.repositories.FleetSegmentRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.FleetSegmentEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBFleetSegmentRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
@@ -21,13 +22,13 @@ class JpaFleetSegmentRepository(
             it.toFleetSegment()
         }
 
-    @Cacheable(value = ["segments_by_year"])
+    @Cacheable(value = [CacheName.SEGMENTS_BY_YEAR])
     override fun findAllByYear(year: Int): List<FleetSegment> =
         dbFleetSegmentRepository.findAllByYearEquals(year).map {
             it.toFleetSegment()
         }
 
-    @Cacheable(value = ["segments_with_gears_mesh_condition"])
+    @Cacheable(value = [CacheName.SEGMENTS_WITH_GEARS_MESH_CONDITION])
     override fun findAllSegmentsGearsWithRequiredMesh(year: Int): List<String> =
         dbFleetSegmentRepository.findAllSegmentsGearsHavingMinOrMaxMesh(year)
 

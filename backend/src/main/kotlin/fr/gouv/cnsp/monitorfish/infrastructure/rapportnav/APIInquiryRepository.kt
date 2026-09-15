@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.config.RapportnavProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.Inquiry
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.rapportnav.responses.InquiryDataResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -28,13 +29,13 @@ class APIInquiryRepository(
 ) : InquiryRepository {
     private val logger: Logger = LoggerFactory.getLogger(APIInquiryRepository::class.java)
 
-    @Cacheable(value = ["vessel_inquiries"], sync = true)
+    @Cacheable(CacheName.VESSEL_INQUIRIES, sync = true)
     override fun findAllByVesselId(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
     ): List<Inquiry> {
         val inquiriesUrl = "${rapportnavProperties.url}/api/v1/public/inquiries"
-        val lastKnownCache = cacheManager.getCache(VESSEL_INQUIRIES_LAST_KNOWN)
+        val lastKnownCache = cacheManager.getCache(CacheName.VESSEL_INQUIRIES_LAST_KNOWN)
         val cacheKey = SimpleKey(vesselId, afterDateTime)
 
         return try {
@@ -72,6 +73,5 @@ class APIInquiryRepository(
 
     companion object {
         const val API_KEY_HEADER = "X-API-Key"
-        const val VESSEL_INQUIRIES_LAST_KNOWN = "vessel_inquiries_last_known"
     }
 }

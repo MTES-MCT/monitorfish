@@ -1,5 +1,5 @@
 -- Drop and recreate find_all_enriched_pno_references_and_related_operations with forced
--- MATERIALIZED on all CTEs in order to avoid flaky and crappy query plans with no 
+-- MATERIALIZED on all CTEs in order to avoid flaky and crappy query plans with no
 -- materialization of CTEs that get used in loops later on.
 
 DROP FUNCTION find_all_enriched_pno_references_and_related_operations;
@@ -39,7 +39,7 @@ RETURNS TABLE (
     integration_datetime_utc timestamp without time zone,
     trip_number character varying(100),
     trip_number_was_computed boolean,
-    transmission_format public.logbook_message_transmission_format,
+    transmission_format public.data_transmission_format,
     software character varying(100),
     enriched boolean,
     trip_gears jsonb,

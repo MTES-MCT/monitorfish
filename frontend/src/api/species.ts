@@ -15,7 +15,7 @@ async function getAllSpeciesFromAPI() {
   try {
     return await monitorfishApiKy.get(`/bff/v1/species`).json<SpeciesAndSpeciesGroupsAPIData>()
   } catch (err) {
-    throw new FrontendApiError(SPECIES_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new FrontendApiError(SPECIES_ERROR_MESSAGE, (err as FrontendApiError).originalError ?? (err as Error))
   }
 }
 

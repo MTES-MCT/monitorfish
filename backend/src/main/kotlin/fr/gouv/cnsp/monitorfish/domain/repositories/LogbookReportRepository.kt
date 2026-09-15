@@ -62,6 +62,8 @@ interface LogbookReportRepository {
 
     fun findAllPriorNotificationsToVerify(): List<PriorNotification>
 
+    fun findAllAcknowledgedPriorNotificationsForActiveVessels(): List<PriorNotification>
+
     fun updatePriorNotificationNote(
         reportId: String,
         operationDate: ZonedDateTime,

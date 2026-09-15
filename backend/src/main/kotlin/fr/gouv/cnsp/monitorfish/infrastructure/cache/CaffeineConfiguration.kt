@@ -44,6 +44,8 @@ class CaffeineConfiguration {
     val logbookPnoTypes = "logbook_pno_types"
     val pnoToVerify = "pno_to_verify"
     val manualPnoToVerify = "manual_pno_to_verify"
+    val pnoForActiveVessels = "pno_for_active_vessels"
+    val manualPnoForActiveVessels = "manual_pno_for_active_vessels"
     val allVisioCapturesVessels = "all_visiocaptures_vessels"
     val lastDepByCfr = "last_dep_current_trips_by_cfr"
 
@@ -130,8 +132,13 @@ class CaffeineConfiguration {
         val logbookCache = buildMinutesCache(logbook, ticker, 10)
         val logbookRawMessageCache = buildMinutesCache(logbookRawMessage, ticker, oneWeek)
 
+        // Keep these at 1 minute: the side window PNO list is not cached at all, so any longer TTL
+        // makes the map badge lag behind the list (#5285). `sync = true` on the cached repository
+        // methods is what keeps one expiry from triggering one query per caller.
         val pnoToVerifyCache = buildMinutesCache(pnoToVerify, ticker, 1)
         val manualPnoToVerifyCache = buildMinutesCache(manualPnoToVerify, ticker, 1)
+        val pnoForActiveVesselsCache = buildMinutesCache(pnoForActiveVessels, ticker, 1)
+        val manualPnoForActiveVesselsCache = buildMinutesCache(manualPnoForActiveVessels, ticker, 1)
         val pnoTypesCache = buildMinutesCache(pnoTypes, ticker, 123)
         val logbookPnoTypesCache = buildMinutesCache(logbookPnoTypes, ticker, oneDay)
         val allVisioCapturesVesselsCache = buildMinutesCache(allVisioCapturesVessels, ticker, oneWeek)
@@ -222,6 +229,8 @@ class CaffeineConfiguration {
                 lastDepByCfrCache,
                 pnoToVerifyCache,
                 manualPnoToVerifyCache,
+                pnoForActiveVesselsCache,
+                manualPnoForActiveVesselsCache,
                 portCache,
                 portsCache,
                 riskFactorByCfrCache,

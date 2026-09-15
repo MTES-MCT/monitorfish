@@ -21,6 +21,8 @@ interface ManualPriorNotificationRepository {
 
     fun findAllToVerify(): List<PriorNotification>
 
+    fun findAllForActiveVessels(): List<PriorNotification>
+
     fun findAllByCfrAndTripNumber(
         cfr: String,
         tripNumber: String,

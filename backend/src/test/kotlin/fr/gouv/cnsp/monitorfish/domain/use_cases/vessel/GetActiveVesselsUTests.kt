@@ -1388,7 +1388,7 @@ class GetActiveVesselsUTests {
                 .fakePriorNotification()
                 .copy(vessel = vessel)
 
-        given(logbookReportRepository.findAllAcknowledgedPriorNotifications(any())).willReturn(
+        given(logbookReportRepository.findAllAcknowledgedPriorNotificationsForActiveVessels()).willReturn(
             listOf(
                 fakePriorNotification,
             ),
@@ -1399,7 +1399,7 @@ class GetActiveVesselsUTests {
                 .copy(
                     vessel = vessel,
                 )
-        given(manualPriorNotificationRepository.findAll(any())).willReturn(
+        given(manualPriorNotificationRepository.findAllForActiveVessels()).willReturn(
             listOf(
                 fakeManualPriorNotification,
             ),

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,8 +21,10 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("vessels_positions")?.clear()
-        cacheManager.getCache("active_vessels")?.clear()
+        cacheManager.getCache(CacheName.ACTIVE_VESSEL)?.clear()
+        cacheManager.getCache(CacheName.ACTIVE_VESSELS)?.clear()
+        cacheManager.getCache(CacheName.LATEST_LAST_POSITION_DATE)?.clear()
+        cacheManager.getCache(CacheName.VESSELS_ALL_POSITION)?.clear()
     }
 
     @Test
@@ -66,7 +69,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
     fun `findLastPositionDate Should return a dummy date When there is no row in the last_position table`() {
         // Given
         jpaLastPositionRepository.deleteAll()
-        cacheManager.getCache("latest_last_position_date")?.clear()
+        cacheManager.getCache(CacheName.LATEST_LAST_POSITION_DATE)?.clear()
 
         // When
         val dateTime = jpaLastPositionRepository.findLastPositionDate()
@@ -82,7 +85,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000926735" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
         assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
-        cacheManager.getCache("vessels_all_position")?.clear()
+        cacheManager.getCache(CacheName.VESSELS_ALL_POSITION)?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
@@ -106,7 +109,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000339263" }!!
         assertThat(previousLastPosition.alerts).hasSize(1)
         assertThat(previousLastPosition.alerts).contains("Chalutage dans les 3 milles")
-        cacheManager.getCache("vessels_all_position")?.clear()
+        cacheManager.getCache(CacheName.VESSELS_ALL_POSITION)?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(
@@ -130,7 +133,7 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val previousLastPosition = previousLastPositions.find { it.internalReferenceNumber == "ABC000498845" }!!
         assertThat(previousLastPosition.alerts).hasSize(2)
         assertThat(previousLastPosition.alerts).contains("FAR manquant en 24h")
-        cacheManager.getCache("vessels_all_position")?.clear()
+        cacheManager.getCache(CacheName.VESSELS_ALL_POSITION)?.clear()
 
         // When
         jpaLastPositionRepository.removeAlertToLastPositionByVesselIdentifierEquals(

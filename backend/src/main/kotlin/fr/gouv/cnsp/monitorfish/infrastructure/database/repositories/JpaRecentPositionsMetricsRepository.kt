@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.repositories.RecentPositionsMetricsRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBRecentPositionsMetricsRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository
 class JpaRecentPositionsMetricsRepository(
     private val recentPositionsMetricsRepository: DBRecentPositionsMetricsRepository,
 ) : RecentPositionsMetricsRepository {
-    @Cacheable(value = ["sudden_drop_of_positions_received"])
+    @Cacheable(value = [CacheName.SUDDEN_DROP_OF_POSITIONS_RECEIVED], sync = true)
     override fun findSuddenDropOfPositionsReceived(): Boolean =
         recentPositionsMetricsRepository.findSuddenDropOfPositionsReceived()
 }

@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBRiskFactorRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,13 +18,13 @@ class JpaRiskFactorRepository(
 ) : RiskFactorRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaRiskFactorRepository::class.java)
 
-    @Cacheable(value = ["risk_factors"])
+    @Cacheable(value = [CacheName.RISK_FACTORS], sync = true)
     override fun findAll(): List<VesselRiskFactor> {
         // TODO For some reason, `it` can be null here with staging data. Investigate why.
         return dbRiskFactorRepository.findAll().mapNotNull { it?.toVesselRiskFactor(mapper) }
     }
 
-    @Cacheable(value = ["risk_factor_by_cfr"])
+    @Cacheable(value = [CacheName.RISK_FACTOR_BY_CFR])
     override fun findByInternalReferenceNumber(internalReferenceNumber: String): VesselRiskFactor? {
         try {
             return dbRiskFactorRepository.findByCfr(internalReferenceNumber).toVesselRiskFactor(mapper)
@@ -34,7 +35,7 @@ class JpaRiskFactorRepository(
         return null
     }
 
-    @Cacheable(value = ["risk_factor_by_vessel_id"])
+    @Cacheable(value = [CacheName.RISK_FACTOR_BY_VESSEL_ID])
     override fun findByVesselId(vesselId: Int): VesselRiskFactor? {
         try {
             return dbRiskFactorRepository.findByVesselId(vesselId).toVesselRiskFactor(mapper)

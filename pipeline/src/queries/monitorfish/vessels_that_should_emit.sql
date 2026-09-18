@@ -11,3 +11,4 @@ SELECT
 FROM beacons b
 JOIN vessels v
 ON v.id = b.vessel_id
+WHERE v.flag_state IN ('FR', 'VE', 'GD')

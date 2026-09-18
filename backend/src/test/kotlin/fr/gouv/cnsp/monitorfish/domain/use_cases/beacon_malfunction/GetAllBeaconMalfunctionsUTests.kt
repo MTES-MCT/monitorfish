@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -30,7 +29,7 @@ class GetAllBeaconMalfunctionsUTests {
     private lateinit var beaconRepository: BeaconRepository
 
     @Test
-    fun `execute Should return the beacon malfunctions filtered and enriched with the risk factor found in the last position table`() {
+    fun `execute Should return the beacon malfunctions enriched with the risk factor found in the last position table`() {
         // Given
         val riskFactors =
             listOf(
@@ -55,7 +54,6 @@ class GetAllBeaconMalfunctionsUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 123,
                 ),
                 BeaconMalfunction(
@@ -72,7 +70,6 @@ class GetAllBeaconMalfunctionsUTests {
                     ZonedDateTime.now(),
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
                     vesselId = 123,
                 ),
@@ -90,7 +87,6 @@ class GetAllBeaconMalfunctionsUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "the now unsupervised beacon",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 123,
                 ),
             ),
@@ -111,13 +107,10 @@ class GetAllBeaconMalfunctionsUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "another active beacon",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 123,
                 ),
             ),
         )
-        // Only the beacon of Bidibule should be supervised
-        given(beaconRepository.findActivatedBeaconNumbers()).willReturn(listOf("123465", "another active beacon"))
 
         // When
         val filteredAndEnrichedBeaconMalfunctions =
@@ -128,7 +121,7 @@ class GetAllBeaconMalfunctionsUTests {
             ).execute()
 
         // Then
-        assertThat(filteredAndEnrichedBeaconMalfunctions).hasSize(3)
+        assertThat(filteredAndEnrichedBeaconMalfunctions).hasSize(4)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().id).isEqualTo(1)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().riskFactor).isEqualTo(1.23)
         assertThat(filteredAndEnrichedBeaconMalfunctions.first().internalReferenceNumber).isEqualTo("FR224226850")

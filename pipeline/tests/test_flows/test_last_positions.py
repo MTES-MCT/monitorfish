@@ -69,7 +69,7 @@ def test_extract_last_positions(reset_test_data):
 
 def test_extract_beacon_malfunctions(reset_test_data):
     malfunctions = extract_beacon_malfunctions()
-    assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000"}
+    assert set(malfunctions.ircs) == {"OLY7853", "ZZ000000", "ZZZ99"}
 
 
 def test_extract_reportings(reset_test_data):

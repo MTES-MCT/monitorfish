@@ -31,17 +31,6 @@ class JpaBeaconRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findActivatedBeaconNumbers Should return beacon numbers of activated beacons`() {
-        // When
-        val beaconNumbers = jpaBeaconRepository.findActivatedBeaconNumbers()
-
-        assertThat(beaconNumbers).isEqualTo(
-            listOf("FGEDX85", "123456", "ETETE4", "A56CZ2", "NB56FR8", "PO8U9U4", "ABC1234"),
-        )
-    }
-
-    @Test
-    @Transactional
     fun `findBeaconNumberByVesselId Should return null When no beacon is found`() {
         // When
         val beaconNumber = jpaBeaconRepository.findBeaconByVesselId(666)

@@ -16,7 +16,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionCommentUserType
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionWithDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.EndOfBeaconMalfunctionReason
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
@@ -894,7 +893,6 @@ class VesselControllerITests {
                                     vesselStatusLastModificationDateTime = ZonedDateTime.now(),
                                     endOfBeaconMalfunctionReason = EndOfBeaconMalfunctionReason.RESUMED_TRANSMISSION,
                                     beaconNumber = "123465",
-                                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                                     vesselId = 123,
                                 ),
                             comments =
@@ -935,7 +933,6 @@ class VesselControllerITests {
                                 malfunctionEndDateTime = null,
                                 vesselStatusLastModificationDateTime = ZonedDateTime.now(),
                                 beaconNumber = "123465",
-                                beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                                 vesselId = 123,
                             ),
                         comments =

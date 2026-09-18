@@ -42,8 +42,8 @@ class GetPositionAlertSpecificationsUTests {
         val alerts = GetPositionAlertSpecifications(positionAlertSpecification, vesselRepository).execute()
 
         // Then
-        assertThat(alerts).hasSize(6)
-        assertThat(alerts.last().name).isEqualTo("Suspicion de sous-déclaration")
+        assertThat(alerts).hasSize(9)
+        assertThat(alerts.last().name).isEqualTo("Note de vente pendant une avarie VMS")
 
         val positionAlert = alerts.first { it.type == AlertType.POSITION_ALERT.name }
         assertThat(positionAlert.vessels).hasSize(3)

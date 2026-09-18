@@ -17,7 +17,7 @@ from src.shared_tasks.beacon_malfunctions import (
     update_beacon_malfunction,
     update_beacon_malfunction_is_followed,
 )
-from tests.mocks import mock_datetime_utcnow
+from tests.mocks import mock_utcnow
 
 
 @patch("src.shared_tasks.beacon_malfunctions.requests")
@@ -144,8 +144,8 @@ def test_update_beacon_malfunction_raises_if_no_stage_and_no_status(mock_request
 
 
 @patch(
-    "src.shared_tasks.beacon_malfunctions.datetime",
-    mock_datetime_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
+    "src.shared_tasks.beacon_malfunctions.utcnow",
+    mock_utcnow(datetime(2021, 1, 1, 1, 1, 1)),
 )
 def test_prepare_new_beacon_malfunctions():
     new_malfunctions = pd.DataFrame(

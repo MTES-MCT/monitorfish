@@ -621,7 +621,7 @@ def test_flow_does_not_create_malfunctions_for_operators_that_are_not_up(
     )
 
     with (
-        patch("src.flows.update_beacon_malfunctions.requests"),
+        patch("src.shared_tasks.beacon_malfunctions.requests"),
         patch(
             "src.flows.update_beacon_malfunctions.extract_satellite_operators_statuses",
             mock_extract_satellite_operators_statuses,

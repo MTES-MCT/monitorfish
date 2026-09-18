@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Optional
 
 import numpy as np
@@ -14,6 +13,7 @@ from src.entities.beacon_malfunctions import (
     EndOfMalfunctionReason,
 )
 from src.generic_tasks import load
+from src.helpers.dates import utcnow
 
 
 @task
@@ -42,7 +42,7 @@ def prepare_new_beacon_malfunctions(new_malfunctions: pd.DataFrame) -> pd.DataFr
         ],
     )
 
-    now = datetime.utcnow()
+    now = utcnow()
     new_malfunctions["creation_datetime_utc"] = now
 
     new_malfunctions["stage"] = BeaconMalfunctionStage.INITIAL_ENCOUNTER.value

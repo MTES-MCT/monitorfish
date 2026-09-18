@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List
 
 import pandas as pd
@@ -6,6 +5,7 @@ from prefect import flow, task, unmapped
 
 from src.entities.alerts import AlertType
 from src.generic_tasks import extract
+from src.helpers.dates import utcnow
 from src.shared_tasks.alerts import (
     extract_active_reportings,
     extract_silenced_alerts,
@@ -45,7 +45,7 @@ def extract_beacon_malfunctions_with_declared_activity() -> pd.DataFrame:
     return extract(
         "monitorfish_remote",
         "monitorfish/beacon_malfunctions_with_declared_activity.sql",
-        params={"utcnow": datetime.utcnow()},
+        params={"utcnow": utcnow()},
     )
 
 
@@ -58,7 +58,7 @@ def extract_beacon_malfunctions_with_sale() -> pd.DataFrame:
     return extract(
         "monitorfish_remote",
         "monitorfish/beacon_malfunctions_with_sale.sql",
-        params={"utcnow": datetime.utcnow()},
+        params={"utcnow": utcnow()},
     )
 
 

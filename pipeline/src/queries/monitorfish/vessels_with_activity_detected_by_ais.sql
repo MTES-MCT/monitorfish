@@ -23,8 +23,10 @@ LEFT JOIN districts d ON d.district_code = v.district_code
 LEFT JOIN facade_areas_subdivided f
     ON ST_Intersects(ST_SetSRID(ST_Point(lp.longitude, lp.latitude), 4326), f.geometry)
 WHERE
-    ais.cfr IS NOT NULL
-    AND ais.date_time >= NOW() - INTERVAL '4 hours'
+    ais.bucket >= NOW() - INTERVAL '4 hours'
+    AND ais.bucket < NOW() - INTERVAL '1 hour'
+    AND ais.cfr IS NOT NULL
+    AND ais.date_time >= NOW() - INTERVAL '3 hours'
     AND ais.date_time < NOW() - INTERVAL '1 hour'
     AND (
         vms.last_position_datetime_utc IS NULL

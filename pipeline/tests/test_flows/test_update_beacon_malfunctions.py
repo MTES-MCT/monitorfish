@@ -76,14 +76,13 @@ def test_extract_vessels_that_should_emit(reset_test_data):
     vessels_that_should_emit = extract_vessels_that_should_emit()
     expected_beacon_numbers_and_statuses = pd.DataFrame(
         {
-            "vessel_id": [2, 4, 6, 8],
+            "vessel_id": [2, 4, 6],
             "beacon_number": [
                 "123456",
                 "A56CZ2",
                 "BEA951357",
-                "NEW_BEACON_ACT_DET",
             ],
-            "satellite_operator_id": [1, 2, 2, 1],
+            "satellite_operator_id": [1, 2, 2],
         }
     )
     pd.testing.assert_frame_equal(
@@ -440,7 +439,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     ).iloc[0, 0]
 
     beacon_malfunction_ids_to_archive = read_query(
-        "SELECT id FROM beacon_malfunctions WHERE ircs IN ('RV348407', 'AB654321')",
+        "SELECT id FROM beacon_malfunctions WHERE ircs IN ('RV348407', 'AB654321', 'ZZZ99')",
         db="monitorfish_remote",
     )
 
@@ -468,7 +467,7 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
         [beacon_malfunction_id_to_move_to_archived_and_notify],
         sorted(beacon_malfunction_ids_to_archive["id"].tolist()),
     )
-    assert mock_requests.put.call_count == 4
+    assert mock_requests.put.call_count == 5
 
     mock_requests.put.assert_any_call(
         url=BEACON_MALFUNCTIONS_ENDPOINT
@@ -510,6 +509,20 @@ def test_update_beacon_malfunctions_flow_moves_malfunctions_to_end_of_malfunctio
     mock_requests.put.assert_any_call(
         url=BEACON_MALFUNCTIONS_ENDPOINT
         + f"{beacon_malfunction_ids_to_archive.loc[1, 'id']}",
+        json={
+            "stage": "ARCHIVED",
+            "endOfBeaconMalfunctionReason": "BEACON_DEACTIVATED_OR_UNEQUIPPED",
+        },
+        headers={
+            "Accept": "application/json, text/plain",
+            "Content-Type": "application/json;charset=UTF-8",
+            "X-API-KEY": "backend_api_key",
+        },
+    )
+
+    mock_requests.put.assert_any_call(
+        url=BEACON_MALFUNCTIONS_ENDPOINT
+        + f"{beacon_malfunction_ids_to_archive.loc[2, 'id']}",
         json={
             "stage": "ARCHIVED",
             "endOfBeaconMalfunctionReason": "BEACON_DEACTIVATED_OR_UNEQUIPPED",

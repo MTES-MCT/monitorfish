@@ -55,17 +55,6 @@ const beaconMalfunctionSlice = createSlice({
     },
 
     /**
-     * Reset selected vessel beacon malfunctions resume and history
-     *
-     * @param {Object=} state
-     */
-    resetVesselBeaconMalfunctionsResumeAndHistory(state) {
-      state.vesselBeaconMalfunctionsResumeAndHistory = null
-      state.openedBeaconMalfunction = null
-      state.loadingVesselBeaconMalfunctions = false
-    },
-
-    /**
      * Remove a single beacon malfunction from the kanban (e.g. when it is no longer followed)
      *
      * @param {Object=} state
@@ -79,6 +68,17 @@ const beaconMalfunctionSlice = createSlice({
       if (state.openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === action.payload) {
         state.openedBeaconMalfunctionInKanban = null
       }
+    },
+
+    /**
+     * Reset selected vessel beacon malfunctions resume and history
+     *
+     * @param {Object=} state
+     */
+    resetVesselBeaconMalfunctionsResumeAndHistory(state) {
+      state.vesselBeaconMalfunctionsResumeAndHistory = null
+      state.openedBeaconMalfunction = null
+      state.loadingVesselBeaconMalfunctions = false
     },
 
     /**

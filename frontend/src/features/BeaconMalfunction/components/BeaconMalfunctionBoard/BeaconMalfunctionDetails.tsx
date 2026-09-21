@@ -1,5 +1,7 @@
+import { ConfirmationModal } from '@components/ConfirmationModal'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useRef } from 'react'
+import { Accent, Button } from '@mtes-mct/monitor-ui'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
@@ -11,9 +13,11 @@ import { closeBeaconMalfunctionInKanban } from '../../../../domain/shared_slices
 import { getDateTime } from '../../../../utils'
 import CloseIconSVG from '../../../icons/Croix_grise.svg?react'
 import AlertsSVG from '../../../icons/Icone_alertes_gris.svg?react'
+import ForbiddenIconSVG from '../../../icons/Icone_ne_plus_suivre.svg?react'
 import TimeAgoSVG from '../../../icons/Label_horaire_VMS.svg?react'
 import { showVesselFromBeaconMalfunctionsKanban } from '../../../Vessel/useCases/showVesselFromBeaconMalfunctionsKanban'
 import { VESSEL_STATUS } from '../../constants'
+import { stopFollowingBeaconMalfunction } from '../../useCases/stopFollowingBeaconMalfunction'
 import { getFirstVesselStatus, getMalfunctionStartDateText } from '../../utils'
 
 import type { BeaconMalfunction, BeaconMalfunctionResumeAndDetails } from '../../types'
@@ -32,6 +36,15 @@ export function BeaconMalfunctionDetails({
   const vesselStatus = VESSEL_STATUS.find(_vesselStatus => _vesselStatus.value === beaconMalfunction?.vesselStatus)
   const baseUrl = window.location.origin
   const vesselStatusRef = useRef<HTMLDivElement>(null)
+  const [isStopFollowingConfirmationModalOpen, setIsStopFollowingConfirmationModalOpen] = useState(false)
+
+  const confirmStopFollowing = () => {
+    setIsStopFollowingConfirmationModalOpen(false)
+
+    if (beaconMalfunction) {
+      dispatch(stopFollowingBeaconMalfunction(beaconMalfunction.id))
+    }
+  }
 
   return (
     <BeaconMalfunctionDetailsWrapper
@@ -85,6 +98,14 @@ export function BeaconMalfunctionDetails({
             {getMalfunctionStartDateText(beaconMalfunction)}
           </LastPosition>
           <SendNotification key={beaconMalfunction?.id} beaconMalfunction={beaconMalfunction} />
+          <StopFollowingButton
+            accent={Accent.SECONDARY}
+            data-cy="side-window-beacon-malfunctions-stop-following"
+            Icon={StopFollowingIcon}
+            onClick={() => setIsStopFollowingConfirmationModalOpen(true)}
+          >
+            Ne plus suivre cette avarie
+          </StopFollowingButton>
         </FirstColumn>
         <SecondColumn>
           <ColumnTitle>AVARIES DE LA DERNIÈRE ANNÉE</ColumnTitle>
@@ -122,6 +143,21 @@ export function BeaconMalfunctionDetails({
         firstStatus={getFirstVesselStatus(beaconMalfunctionWithDetails)}
         smallSize={false}
       />
+      {isStopFollowingConfirmationModalOpen && (
+        <ConfirmationModal
+          confirmationButtonLabel="Ne plus suivre"
+          message={
+            <>
+              <p>Êtes-vous sûr de vouloir </p>
+              <Bold>ne plus suivre cette avarie ?</Bold>
+              <p>Elle disparaîtra du tableau de suivi des avaries.</p>
+            </>
+          }
+          onCancel={() => setIsStopFollowingConfirmationModalOpen(false)}
+          onConfirm={confirmStopFollowing}
+          title="Ne plus suivre cette avarie"
+        />
+      )}
     </BeaconMalfunctionDetailsWrapper>
   )
 }
@@ -198,6 +234,19 @@ const LastPosition = styled.div`
 `
 
 const Malfunctioning = styled.div``
+
+const StopFollowingButton = styled(Button)`
+  margin-top: 10px;
+  width: 220px;
+`
+
+const StopFollowingIcon = styled(ForbiddenIconSVG)`
+  margin-right: 6px;
+`
+
+const Bold = styled.span`
+  font-weight: 700;
+`
 
 const ColumnTitle = styled.div`
   color: ${p => p.theme.color.slateGray};

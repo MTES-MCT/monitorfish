@@ -15,6 +15,7 @@ export type BeaconMalfunction = {
   id: number
   internalReferenceNumber: string
   ircs: string
+  isFollowed: boolean
   malfunctionEndDateTime: string | undefined
   malfunctionStartDateTime: string
   notificationRequested: string | undefined

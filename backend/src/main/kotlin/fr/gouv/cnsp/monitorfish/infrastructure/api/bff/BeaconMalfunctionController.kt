@@ -6,8 +6,10 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMal
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunctionIsFollowed
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionIsFollowedDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionResumeAndDetailsDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController
 class BeaconMalfunctionController(
     private val getAllBeaconMalfunctions: GetAllBeaconMalfunctions,
     private val updateBeaconMalfunction: UpdateBeaconMalfunction,
+    private val updateBeaconMalfunctionIsFollowed: UpdateBeaconMalfunctionIsFollowed,
     private val getBeaconMalfunction: GetBeaconMalfunction,
     private val saveBeaconMalfunctionComment: SaveBeaconMalfunctionComment,
     private val requestNotification: RequestNotification,
@@ -60,6 +64,20 @@ class BeaconMalfunctionController(
             ).let {
                 BeaconMalfunctionResumeAndDetailsDataOutput.fromBeaconMalfunctionResumeAndDetails(it)
             }
+
+    @PatchMapping(value = ["/{beaconMalfunctionId}"], consumes = ["application/json"])
+    @Operation(summary = "Update is_followed of a beacon malfunction")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateBeaconMalfunctionIsFollowed(
+        @PathParam("Beacon malfunction id")
+        @PathVariable(name = "beaconMalfunctionId")
+        beaconMalfunctionId: Int,
+        @RequestBody
+        updateBeaconMalfunctionIsFollowedData: UpdateBeaconMalfunctionIsFollowedDataInput,
+    ) = updateBeaconMalfunctionIsFollowed.execute(
+        id = beaconMalfunctionId,
+        isFollowed = updateBeaconMalfunctionIsFollowedData.isFollowed,
+    )
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = ["/{beaconMalfunctionId}/comments"], consumes = ["application/json"])

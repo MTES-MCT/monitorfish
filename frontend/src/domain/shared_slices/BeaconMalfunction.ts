@@ -66,6 +66,22 @@ const beaconMalfunctionSlice = createSlice({
     },
 
     /**
+     * Remove a single beacon malfunction from the kanban (e.g. when it is no longer followed)
+     *
+     * @param {Object=} state
+     * @param {{payload: number}} action - the id of the beacon malfunction to remove
+     */
+    removeLocalBeaconMalfunction(state, action: PayloadAction<number>) {
+      state.beaconMalfunctions = state.beaconMalfunctions.filter(
+        beaconMalfunction => beaconMalfunction.id !== action.payload
+      )
+
+      if (state.openedBeaconMalfunctionInKanban?.beaconMalfunction?.id === action.payload) {
+        state.openedBeaconMalfunctionInKanban = null
+      }
+    },
+
+    /**
      * Set window malfunctions showed in the side window kanban
      *
      * @param {Object=} state
@@ -190,6 +206,7 @@ const beaconMalfunctionSlice = createSlice({
 export const {
   closeBeaconMalfunctionInKanban,
   loadVesselBeaconMalfunctions,
+  removeLocalBeaconMalfunction,
   resetVesselBeaconMalfunctionsResumeAndHistory,
   setBeaconMalfunctions,
   setBeaconMalfunctionsTab,

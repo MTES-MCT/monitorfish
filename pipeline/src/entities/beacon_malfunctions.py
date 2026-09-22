@@ -7,11 +7,7 @@ from typing import List
 
 import pandas as pd
 
-from config import (
-    CNSP_SIP_DEPARTMENT_EMAIL,
-    CNSP_SIP_DEPARTMENT_FAX,
-    CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
-)
+from config import CNSP_SIP_DEPARTMENT_EMAIL, CNSP_SIP_DEPARTMENT_MOBILE_PHONE
 from src.entities.communication_means import CommunicationMeans
 
 
@@ -89,11 +85,9 @@ class BeaconMalfunctionToNotify:
     notification_type: BeaconMalfunctionNotificationType
     vessel_emails: List[str]
     vessel_mobile_phone: str
-    vessel_fax: str
     operator_name: str
     operator_email: str
     operator_mobile_phone: str
-    operator_fax: str
     satellite_operator: str
     satellite_operator_emails: List[str]
     foreign_fmc_name: str
@@ -141,45 +135,6 @@ class BeaconMalfunctionToNotify:
                     )
                 ]
                 if CNSP_SIP_DEPARTMENT_MOBILE_PHONE
-                else []
-            )
-        return addressees
-
-    def get_fax_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-        if not self.test_mode:
-            addressees = []
-
-            if self.notification_type is not (
-                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
-            ):
-                if self.vessel_fax:
-                    addressees.append(
-                        BeaconMalfunctionNotificationAddressee(
-                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                            name=None,
-                            address_or_number=self.vessel_fax,
-                        )
-                    )
-
-                if self.operator_fax:
-                    addressees.append(
-                        BeaconMalfunctionNotificationAddressee(
-                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                            name=self.operator_name,
-                            address_or_number=self.operator_fax,
-                        )
-                    )
-
-        else:
-            addressees = (
-                [
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.FMC,
-                        name="CNSP",
-                        address_or_number=CNSP_SIP_DEPARTMENT_FAX,
-                    )
-                ]
-                if CNSP_SIP_DEPARTMENT_FAX
                 else []
             )
         return addressees
@@ -297,8 +252,6 @@ class BeaconMalfunctionMessageToSend:
             return self.beacon_malfunction_to_notify.get_email_addressees()
         elif self.communication_means is CommunicationMeans.SMS:
             return self.beacon_malfunction_to_notify.get_sms_addressees()
-        elif self.communication_means is CommunicationMeans.FAX:
-            return self.beacon_malfunction_to_notify.get_fax_addressees()
         else:
             raise ValueError(
                 f"Unexpected communication_means {self.communication_means}"

@@ -22,9 +22,6 @@ from config import (
     MONITORFISH_EMAIL_ADDRESS,
     MONITORFISH_EMAIL_SERVER_PORT,
     MONITORFISH_EMAIL_SERVER_URL,
-    MONITORFISH_FAX_DOMAIN,
-    MONITORFISH_FAX_SERVER_PORT,
-    MONITORFISH_FAX_SERVER_URL,
     MONITORFISH_SMS_DOMAIN,
     MONITORFISH_SMS_SERVER_PORT,
     MONITORFISH_SMS_SERVER_URL,
@@ -195,49 +192,6 @@ def create_sms_email(
     return msg
 
 
-def create_fax_email(
-    to: Union[str, List[str]],
-    pdf: bytes,
-    from_: str = MONITORFISH_EMAIL_ADDRESS,
-) -> EmailMessage:
-    """
-    Creates a `email.EmailMessage` with the defined parameters.
-
-    Args:
-        to (Union[str, List[str]]): email address or list of email addresses of
-          recipient(s)
-        pdf (bytes): `bytes` pdf object
-        from_ (str, optional): `From` field. Defaults to MONITORFISH_EMAIL_ADDRESS env
-          var.
-
-    Returns:
-        EmailMessage
-    """
-    assert isinstance(to, (str, list))
-    assert MONITORFISH_FAX_DOMAIN
-
-    if isinstance(to, str):
-        to = f"{to}@{MONITORFISH_FAX_DOMAIN}"
-
-    if isinstance(to, list):
-        to = [f"{phone_number}@{MONITORFISH_FAX_DOMAIN}" for phone_number in to]
-        to = ", ".join(to)
-
-    msg = EmailMessage()
-    msg["Subject"] = "FAX"
-    msg["From"] = from_
-    msg["To"] = to
-
-    msg.add_attachment(
-        pdf,
-        maintype="application",
-        subtype="octet-stream",
-        filename="FAX.pdf",
-    )
-
-    return msg
-
-
 def send_email(msg: EmailMessage) -> dict:
     """
     Sends input email using the contents of `From` header as sender and `To`, `Cc`
@@ -292,22 +246,7 @@ def send_sms(msg: EmailMessage) -> dict:
     return send_errors
 
 
-def send_fax(msg: EmailMessage) -> dict:
-    """
-    Same as `send_email`, using fax server.
-    """
-
-    assert MONITORFISH_FAX_SERVER_URL is not None
-    assert MONITORFISH_FAX_SERVER_PORT is not None
-
-    with smtplib.SMTP(
-        host=MONITORFISH_FAX_SERVER_URL, port=MONITORFISH_FAX_SERVER_PORT
-    ) as server:
-        send_errors = server.send_message(msg)
-    return send_errors
-
-
-def send_email_or_sms_or_fax_message(
+def send_email_or_sms_message(
     msg: EmailMessage,
     communication_means: CommunicationMeans,
     is_integration: bool,
@@ -316,7 +255,6 @@ def send_email_or_sms_or_fax_message(
     send_functions = {
         CommunicationMeans.EMAIL: send_email,
         CommunicationMeans.SMS: send_sms,
-        CommunicationMeans.FAX: send_fax,
     }
 
     send = send_functions[communication_means]
@@ -402,8 +340,6 @@ def send_email_or_sms_or_fax_message(
     match communication_means:
         case CommunicationMeans.SMS:
             suffix = f"@{MONITORFISH_SMS_DOMAIN}"
-        case CommunicationMeans.FAX:
-            suffix = f"@{MONITORFISH_FAX_DOMAIN}"
         case CommunicationMeans.EMAIL:
             suffix = ""
 

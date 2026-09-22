@@ -10,6 +10,7 @@ from sdk_entrepot_gpf.workflow.Workflow import Workflow
 
 from config import GEOPLATEFORME_WORKFLOWS_LOCATION
 from src.shared_tasks.geoplateforme import (
+    PrefectOutputManager,
     delete_data_store_stored_data,
     deliver_to_data_store,
     geoplateforme_config,
@@ -348,4 +349,110 @@ def test_delete_data_store_stored_data(mock_stored_data, mock_config):
 def test_delete_data_store_stored_data_without_id(mock_stored_data, mock_config):
     with disable_run_logger():
         delete_data_store_stored_data.fn(stored_data_id=None, mock_update=False)
+    mock_stored_data.api_get.assert_not_called()
+
+
+def test_prefect_output_manager_forwards_to_the_logger():
+    logger = Mock()
+    output_manager = PrefectOutputManager(logger)
+
+    output_manager.debug("debug message")
+    output_manager.info("info message", green_colored=True)
+    output_manager.warning("warning message")
+    output_manager.error("error message")
+    output_manager.critical("critical message")
+    # Accepted and ignored: the Prefect logger handles levels and flushing itself.
+    output_manager.set_log_level("DEBUG")
+    output_manager._force_flush()
+
+    logger.debug.assert_called_once_with("debug message")
+    logger.info.assert_called_once_with("info message")
+    logger.warning.assert_called_once_with("warning message")
+    logger.error.assert_called_once_with("error message")
+    logger.critical.assert_called_once_with("critical message")
+
+
+@patch("src.shared_tasks.geoplateforme.Config")
+@patch("src.shared_tasks.geoplateforme.ResolveCli")
+@patch("src.shared_tasks.geoplateforme.Workflow")
+def test_run_data_store_workflow_logs_the_processing_execution(
+    mock_workflow, mock_resolve_cli, mock_config
+):
+    mock_workflow.return_value.validate.return_value = []
+
+    with disable_run_logger():
+        run_data_store_workflow.fn(
+            workflow_file=REGULATIONS_WORKFLOW_FILE,
+            step="creation-base",
+            params={},
+            tags=None,
+            comments=None,
+            mock_update=False,
+        )
+
+    callback = mock_workflow.return_value.run_step.call_args.args[1]
+
+    # Logs of a running processing execution are not always available, and a failure to
+    # fetch them must not interrupt the monitoring.
+    with disable_run_logger():
+        callback(Mock(api_logs=Mock(return_value="some logs")))
+        callback(Mock(api_logs=Mock(side_effect=Exception("not available yet"))))
+
+
+@patch("src.shared_tasks.geoplateforme.Config")
+@patch("src.shared_tasks.geoplateforme.Configuration")
+@patch("src.shared_tasks.geoplateforme.StoredData")
+def test_swap_configuration_stored_data_when_mock_update_is_true(
+    mock_stored_data, mock_configuration, mock_config
+):
+    with disable_run_logger():
+        previous = swap_configuration_stored_data.fn(
+            configuration_id="some-configuration",
+            offering_id="some-offering",
+            stored_data_name="some-stored-data",
+            mock_update=True,
+        )
+
+    assert previous is None
+    mock_stored_data.api_list.assert_not_called()
+    mock_configuration.api_get.assert_not_called()
+
+
+@patch("src.shared_tasks.geoplateforme.Config")
+@patch("src.shared_tasks.geoplateforme.Offering")
+@patch("src.shared_tasks.geoplateforme.Configuration")
+@patch("src.shared_tasks.geoplateforme.StoredData")
+def test_swap_configuration_stored_data_raises_when_several_stored_data_were_served(
+    mock_stored_data, mock_configuration, mock_offering, mock_config
+):
+    mock_stored_data.api_list.return_value = [Mock(id="new-stored-data")]
+    mock_configuration.api_get.return_value.get_store_properties.return_value = {
+        "type_infos": {
+            "used_data": [
+                {"stored_data": "first-stored-data"},
+                {"stored_data": "second-stored-data"},
+            ]
+        }
+    }
+
+    with disable_run_logger():
+        with pytest.raises(RuntimeError):
+            swap_configuration_stored_data.fn(
+                configuration_id="some-configuration",
+                offering_id="some-offering",
+                stored_data_name="some-stored-data",
+                mock_update=False,
+            )
+
+
+@patch("src.shared_tasks.geoplateforme.Config")
+@patch("src.shared_tasks.geoplateforme.StoredData")
+def test_delete_data_store_stored_data_when_mock_update_is_true(
+    mock_stored_data, mock_config
+):
+    with disable_run_logger():
+        delete_data_store_stored_data.fn(
+            stored_data_id="some-stored-data", mock_update=True
+        )
+
     mock_stored_data.api_get.assert_not_called()

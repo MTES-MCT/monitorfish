@@ -1,0 +1,45 @@
+{
+    "workflow": {
+        "steps": {
+            // Crée une nouvelle Donnée Stockée à partir de la dernière livraison.
+            //
+            // L'intégration en base de la Géoplateforme est incrémentale : rejouée sur
+            // une Donnée Stockée existante, elle ajoute les lignes livrées aux lignes
+            // déjà présentes. Comme le flow livre à chaque fois la totalité de la
+            // réglementation, une nouvelle Donnée Stockée est créée à chaque exécution,
+            // puis la Configuration du flux WFS est basculée dessus.
+            "creation-base": {
+                "actions": [
+                    {
+                        "type": "processing-execution",
+                        "body_parameters": {
+                            "processing": "{store_entity.processing.infos._id [INFOS(name=Intégration de données vecteur livrées en base)]}",
+                            "inputs": {
+                                "upload": [
+                                    "{store_entity.upload.infos._id [INFOS(name={params.upload_name})]}"
+                                ]
+                            },
+                            "output": {
+                                "stored_data": {
+                                    "name": "{params.stored_data_name}",
+                                    "storage_type": "POSTGRESQL"
+                                }
+                            },
+                            "parameters": {}
+                        },
+                        "comments": [
+                            "Créée par le flow Prefect « Monitorfish - Regulations open data »"
+                        ],
+                        "tags": {
+                            "source": "monitorfish",
+                            "datasheet_name": "{params.datasheet_name}",
+                            "producer": "{params.producer}",
+                            "production_year": "{params.production_year}"
+                        }
+                    }
+                ],
+                "parents": []
+            }
+        }
+    }
+}

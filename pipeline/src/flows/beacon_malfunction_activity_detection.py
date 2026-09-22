@@ -25,7 +25,7 @@ from src.shared_tasks.positions import tag_positions_at_port
 def extract_vessels_with_recent_ais() -> pd.DataFrame:
     """
     Extract vessels that have at least one AIS position
-    between 1 and 4 hours ago, and a last VMS position older than 4 hours (or none).
+    between 1 and 3 hours ago, and a last VMS position older than 4 hours (or none).
     One row per vessel (most recent AIS position in the window).
     The is_at_port field is not yet set — call tag_positions_at_port next.
     """

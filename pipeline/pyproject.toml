@@ -49,6 +49,7 @@ oracledb = "^3.4.2"
 # with ModuleNotFoundError. Declare it explicitly. Can be dropped once Prefect
 # is upgraded to a version that uses importlib.metadata directly.
 importlib-metadata = "^8.7.0"
+sdk-entrepot-gpf = "^0.1.44"
 
 
 [tool.poetry.group.dev.dependencies]

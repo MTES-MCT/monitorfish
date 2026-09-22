@@ -24,7 +24,6 @@ from src.entities.beacon_malfunctions import (
 from src.entities.communication_means import CommunicationMeans
 from src.flows.notify_beacon_malfunctions import (
     create_email,
-    create_fax,
     create_sms,
     extract_malfunctions_to_notify,
     get_sms_templates,
@@ -66,7 +65,6 @@ malfunctions_to_notify_shared_data = {
         [],
     ],
     "vessel_mobile_phone": [None, "0111111111", None],
-    "vessel_fax": ["0100000000", None, None],
     "operator_name": [
         "Le pêcheur de crevettes",
         "Le pêcheur",
@@ -78,7 +76,6 @@ malfunctions_to_notify_shared_data = {
         "reglo@bateau.fr",
     ],
     "operator_mobile_phone": ["0600000000", None, None],
-    "operator_fax": ["0200000000", None, None],
     "satellite_operator": ["SAT", "SRV", "SRV"],
     "satellite_operator_emails": [
         ["email1@sat.op", "email2@sat.op"],
@@ -171,11 +168,9 @@ def test_to_malfunctions_to_notify_list():
             notification_type="END_OF_MALFUNCTION",
             vessel_emails=["figure@conscience.fr", "figure2@conscience.fr"],
             vessel_mobile_phone=None,
-            vessel_fax="0100000000",
             operator_name="Le pêcheur de crevettes",
             operator_email="address@email.bzh",
             operator_mobile_phone="0600000000",
-            operator_fax="0200000000",
             satellite_operator="SAT",
             satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
             foreign_fmc_name=None,
@@ -194,11 +189,9 @@ def test_to_malfunctions_to_notify_list():
             notification_type="MALFUNCTION_AT_SEA_REMINDER",
             vessel_emails=[],
             vessel_mobile_phone="0111111111",
-            vessel_fax=None,
             operator_name="Le pêcheur",
             operator_email="pecheur@poissecaille.fr",
             operator_mobile_phone=None,
-            operator_fax=None,
             satellite_operator="SRV",
             satellite_operator_emails=["contact@srv.gps"],
             foreign_fmc_name=None,
@@ -217,11 +210,9 @@ def test_to_malfunctions_to_notify_list():
             notification_type="MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
             vessel_emails=[],
             vessel_mobile_phone=None,
-            vessel_fax=None,
             operator_name="Le pêcheur qui se fait ses 4h reports",
             operator_email="reglo@bateau.fr",
             operator_mobile_phone=None,
-            operator_fax=None,
             satellite_operator="SRV",
             satellite_operator_emails=["contact@srv.gps"],
             foreign_fmc_name=None,
@@ -286,11 +277,9 @@ def malfunction_to_notify_data() -> dict:
         last_position_longitude=-3.569,
         vessel_emails=["figure@conscience.fr", "figure2@conscience.fr"],
         vessel_mobile_phone="0699999999",
-        vessel_fax="0100000000",
         operator_name="Le pêcheur de crevettes",
         operator_email="address@email.bzh",
         operator_mobile_phone="0600000000",
-        operator_fax="0200000000",
         satellite_operator="SAT",
         satellite_operator_emails=["email1@sat.op", "email2@sat.op"],
         foreign_fmc_name="Saturne",
@@ -311,11 +300,9 @@ def malfunction_to_notify_data_with_nulls() -> dict:
         last_position_longitude=float("nan"),
         vessel_emails=[],
         vessel_mobile_phone=None,
-        vessel_fax=None,
         operator_name=None,
         operator_email=None,
         operator_mobile_phone=None,
-        operator_fax=None,
         satellite_operator=None,
         satellite_operator_emails=[],
         foreign_fmc_emails=[],
@@ -416,28 +403,6 @@ def expected_notifications(request) -> list:
             recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
             recipient_name="Le pêcheur de crevettes",
             recipient_address_or_number="0600000000",
-            success=False,
-            error_message="Other error: [Errno -2] Name or service not known",
-        ),
-        BeaconMalfunctionNotification(
-            beacon_malfunction_id=1,
-            date_time_utc=request.param,
-            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
-            communication_means=CommunicationMeans.FAX,
-            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-            recipient_name=None,
-            recipient_address_or_number="0100000000",
-            success=False,
-            error_message="Other error: [Errno -2] Name or service not known",
-        ),
-        BeaconMalfunctionNotification(
-            beacon_malfunction_id=1,
-            date_time_utc=request.param,
-            notification_type=BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER,
-            communication_means=CommunicationMeans.FAX,
-            recipient_function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-            recipient_name="Le pêcheur de crevettes",
-            recipient_address_or_number="0200000000",
             success=False,
             error_message="Other error: [Errno -2] Name or service not known",
         ),
@@ -677,57 +642,12 @@ def test_create_sms(malfunction_to_notify_data, notification_type):
 
 
 @pytest.mark.parametrize(
-    "notification_type",
-    [
-        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION",
-        "MALFUNCTION_AT_SEA_REMINDER",
-        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION",
-        "MALFUNCTION_AT_PORT_REMINDER",
-        "END_OF_MALFUNCTION",
-    ],
-)
-def test_create_fax(malfunction_to_notify_data, notification_type):
-    pdf = b"Test pdf bytes"
-    m = BeaconMalfunctionToNotify(
-        **malfunction_to_notify_data,
-        notification_type=notification_type,
-        test_mode=False,
-    )
-
-    fax_to_send = create_fax(pdf=pdf, m=m)
-
-    malfunction_to_notify = fax_to_send.beacon_malfunction_to_notify
-    communication_means = fax_to_send.communication_means
-    fax = fax_to_send.message
-
-    assert communication_means is CommunicationMeans.FAX
-    assert malfunction_to_notify is m
-
-    assert fax["Subject"] == "FAX"
-    assert fax["From"] == "monitorfish@test.email"
-    assert fax["To"] == "0100000000@test.fax, 0200000000@test.fax"
-    assert fax["Cc"] is None
-    assert fax.get_content_type() == "multipart/mixed"
-
-    attachments = list(fax.iter_attachments())
-    assert len(attachments) == 1
-
-    attachment = attachments[0]
-    assert attachment.get_content_disposition() == "attachment"
-    assert attachment.get_content_type() == "application/octet-stream"
-    assert attachment.get_filename() == "FAX.pdf"
-    assert attachment.get_content() == pdf
-
-
-@pytest.mark.parametrize(
     "expected_notifications,communication_means,is_integration",
     [
         (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL, False),
         (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS, False),
-        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX, False),
         (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.EMAIL, True),
         (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.SMS, True),
-        (datetime(2021, 1, 1, 16, 10, 0), CommunicationMeans.FAX, True),
     ],
     indirect=["expected_notifications"],
 )
@@ -751,7 +671,7 @@ def test_send_beacon_malfunction_message(
     )
     msg = email_message
 
-    # send_fax and send_sms are not mocked, they are expected to fail as a result of
+    # send_sms is not mocked, it is expected to fail as a result of
     # using incorrect server url and port in test data - hence the `success=False` in
     # expected_notifications.
     mock_send_email.return_value = {
@@ -806,7 +726,7 @@ def test_load_notifications(reset_test_data, expected_notifications):
         db="monitorfish_remote",
     )
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 11
+    assert len(final_notifications) == 9
     assert final_notifications.loc[5].to_dict() == {
         "id": 6,
         "beacon_malfunction_id": 1,
@@ -864,15 +784,10 @@ def test_flow(reset_test_data):
         }
         mock_send_sms = MagicMock()
         mock_send_sms.return_value = {}
-        mock_send_fax = MagicMock()
-        mock_send_fax.return_value = {}
 
-        with patch("src.helpers.emails.send_fax", mock_send_fax):
-            with patch("src.helpers.emails.send_sms", mock_send_sms):
-                with patch("src.helpers.emails.send_email", mock_send_email):
-                    return send_beacon_malfunction_message.fn(
-                        msg_to_send, is_integration
-                    )
+        with patch("src.helpers.emails.send_sms", mock_send_sms):
+            with patch("src.helpers.emails.send_email", mock_send_email):
+                return send_beacon_malfunction_message.fn(msg_to_send, is_integration)
 
     with patch(
         "src.flows.notify_beacon_malfunctions.send_beacon_malfunction_message",
@@ -900,7 +815,7 @@ def test_flow(reset_test_data):
 
     # Check the data loaded into the database
     assert len(initial_notifications) == 2
-    assert len(final_notifications) == 12
+    assert len(final_notifications) == 10
     inserted_notifications = final_notifications[
         ~final_notifications.id.isin(initial_notifications.id)
     ].reset_index(drop=True)

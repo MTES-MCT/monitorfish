@@ -26,11 +26,10 @@ from src.entities.communication_means import CommunicationMeans
 from src.generic_tasks import extract, load
 from src.helpers.dates import utcnow
 from src.helpers.emails import (
-    create_fax_email,
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
-    send_email_or_sms_or_fax_message,
+    send_email_or_sms_message,
 )
 from src.helpers.spatial import Position, position_to_position_representation
 from src.shared_tasks.control_flow import filter_results, flatten
@@ -275,22 +274,6 @@ def create_sms(
 
 
 @task
-def create_fax(
-    pdf: bytes, m: BeaconMalfunctionToNotify
-) -> BeaconMalfunctionMessageToSend:
-    to = [fax_addressee.address_or_number for fax_addressee in m.get_fax_addressees()]
-
-    if to:
-        return BeaconMalfunctionMessageToSend(
-            message=create_fax_email(to=to, pdf=pdf),
-            beacon_malfunction_to_notify=m,
-            communication_means=CommunicationMeans.FAX,
-        )
-    else:
-        return None
-
-
-@task
 def send_beacon_malfunction_message(
     msg_to_send: BeaconMalfunctionMessageToSend, is_integration: bool
 ) -> List[BeaconMalfunctionNotification]:
@@ -313,7 +296,7 @@ def send_beacon_malfunction_message(
     communication_means = msg_to_send.communication_means
     logger = get_run_logger()
 
-    send_errors = send_email_or_sms_or_fax_message(
+    send_errors = send_email_or_sms_message(
         msg, communication_means, is_integration, logger
     )
     now = utcnow()
@@ -416,10 +399,7 @@ def notify_beacon_malfunctions_flow(
     sms = create_sms.map(text=sms_text, m=malfunctions_to_notify)
     sms = filter_results(allow_failure(sms))
 
-    fax = create_fax.map(pdf=pdf, m=malfunctions_to_notify)
-    fax = filter_results(allow_failure(fax))
-
-    messages_to_send = flatten([email, sms, fax])
+    messages_to_send = flatten([email, sms])
 
     notifications = send_beacon_malfunction_message.map(
         messages_to_send, is_integration=unmapped(is_integration)

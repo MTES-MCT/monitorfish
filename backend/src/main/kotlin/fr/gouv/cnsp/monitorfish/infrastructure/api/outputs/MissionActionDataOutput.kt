@@ -5,7 +5,6 @@ import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck
-import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardedSpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FlightGoal
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.GearControl
@@ -116,7 +115,7 @@ data class MissionActionDataOutput(
     val otherComments: String? = null,
     val gearOnboard: List<GearControl> = listOf(),
     val speciesOnboard: List<SpeciesOnboardControl> = listOf(),
-    val discardedSpecies: List<DiscardedSpeciesControl> = listOf(),
+    val discardedSpecies: List<DiscardedSpeciesControlDataOutput> = listOf(),
     val vesselGroups: List<MissionActionVesselGroup> = listOf(),
     val tripReportings: List<MissionActionReporting> = listOf(),
     val controlUnits: List<LegacyControlUnit> = listOf(),
@@ -203,7 +202,10 @@ data class MissionActionDataOutput(
             otherComments = missionAction.otherComments,
             gearOnboard = missionAction.gearOnboard,
             speciesOnboard = missionAction.speciesOnboard,
-            discardedSpecies = missionAction.discardedSpecies,
+            discardedSpecies =
+                missionAction.discardedSpecies.map {
+                    DiscardedSpeciesControlDataOutput.fromDiscardedSpeciesControl(it)
+                },
             vesselGroups = missionAction.vesselGroups,
             tripReportings = missionAction.tripReportings,
             controlUnits = missionAction.controlUnits,

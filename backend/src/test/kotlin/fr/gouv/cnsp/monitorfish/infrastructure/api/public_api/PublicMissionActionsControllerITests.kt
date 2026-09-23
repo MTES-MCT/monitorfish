@@ -10,6 +10,8 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardedSpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.PatchableMissionAction
@@ -86,6 +88,11 @@ class PublicMissionActionsControllerITests {
                     flagState = CountryCode.FR,
                     userTrigram = "LTH",
                     completion = Completion.TO_COMPLETE,
+                    discardedSpecies =
+                        listOf(
+                            DiscardedSpeciesControl(speciesCode = "HKE", discardReason = DiscardReason.DIM),
+                            DiscardedSpeciesControl(speciesCode = "XXX", discardReason = DiscardReason.RET),
+                        ),
                 ),
             ),
         )
@@ -117,6 +124,7 @@ class PublicMissionActionsControllerITests {
                 lastDeparturePortLocode = "FRLEH",
                 lastDeparturePortName = "Le Havre",
                 lastDepartureDateTime = ZonedDateTime.parse("2020-10-01T08:00Z"),
+                discardedSpeciesNamesByCode = mapOf("HKE" to "MERLU EUROPÉEN"),
             )
         }
 
@@ -149,6 +157,13 @@ class PublicMissionActionsControllerITests {
             .andExpect(jsonPath("$[0].lastDeparturePortLocode", equalTo("FRLEH")))
             .andExpect(jsonPath("$[0].lastDeparturePortName", equalTo("Le Havre")))
             .andExpect(jsonPath("$[0].lastDepartureDateTime", equalTo("2020-10-01T08:00:00Z")))
+            // Discarded species names
+            .andExpect(jsonPath("$[0].discardedSpecies[0].speciesCode", equalTo("HKE")))
+            .andExpect(jsonPath("$[0].discardedSpecies[0].speciesName", equalTo("MERLU EUROPÉEN")))
+            .andExpect(jsonPath("$[0].discardedSpecies[0].discardReason", equalTo("DIM")))
+            .andExpect(jsonPath("$[0].discardedSpecies[0].discardReasonName", equalTo("de minimis")))
+            .andExpect(jsonPath("$[0].discardedSpecies[1].speciesName").doesNotExist())
+            .andExpect(jsonPath("$[0].discardedSpecies[1].discardReasonName", equalTo("espèces interdites")))
 
         runBlocking {
             Mockito.verify(getMissionActions).execute(123)

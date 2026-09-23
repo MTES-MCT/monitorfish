@@ -1,7 +1,9 @@
 from unittest.mock import patch
 
 import pandas as pd
+from prefect.logging import disable_run_logger
 
+from src.helpers.requests_rate_limiter import RateLimitedSession
 from src.shared_tasks.positions import (
     add_depth,
     add_vessel_identifier,
@@ -151,7 +153,27 @@ def test_add_depth():
     df_with_depth = add_depth(df)
     pd.testing.assert_frame_equal(df_with_depth, expected_df_with_depth)
 
-    df_with_depth_empty_input = add_depth.fn(df.head(0))
+    with disable_run_logger():
+        df_with_depth_empty_input = add_depth.fn(df.head(0))
     pd.testing.assert_frame_equal(
         df_with_depth_empty_input, expected_df_with_depth.head(0)
     )
+
+
+@patch("src.shared_tasks.positions.get_depth")
+def test_add_depth_calls_get_depth_with_a_rate_limited_session(mock_get_depth):
+    mock_get_depth.return_value = 42.0
+    df = pd.DataFrame({"latitude": [48.5], "longitude": [-4.5]})
+
+    with disable_run_logger():
+        add_depth.fn(df)
+
+    assert mock_get_depth.call_count == 1
+    _, kwargs = mock_get_depth.call_args
+    assert kwargs["lon"] == -4.5
+    assert kwargs["lat"] == 48.5
+
+    session = kwargs["session"]
+    assert isinstance(session, RateLimitedSession)
+    # The run logger is wired onto the session so that 429 retries get logged.
+    assert session.logger is not None

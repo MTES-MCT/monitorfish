@@ -30,9 +30,14 @@ context('Reportings filters are shared by the map and the list', () => {
     }).as('displayArchivedAlertReportings')
     cy.intercept({
       method: 'GET',
+      pathname: '/bff/v1/reportings/display',
+      query: { isArchived: 'true', origin: 'ALERT', zone: /^POLYGON/ }
+    }).as('displayArchivedAlertReportingsInZone')
+    cy.intercept({
+      method: 'GET',
       pathname: '/bff/v1/reportings',
-      query: { isArchived: 'true', origin: 'ALERT', seafrontGroup: SeafrontGroup.NAMO }
-    }).as('getArchivedAlertReportings')
+      query: { isArchived: 'true', origin: 'ALERT', seafrontGroup: SeafrontGroup.NAMO, zone: /^POLYGON/ }
+    }).as('getArchivedAlertReportingsInZone')
 
     cy.clickButton('Signalements')
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
@@ -44,16 +49,45 @@ context('Reportings filters are shared by the map and the list', () => {
     cy.fill('Source', 'Alerte auto.')
     cy.wait('@displayArchivedAlertReportings')
 
+    cy.clickButton('Définir une zone de filtre manuelle')
+    cy.get('body').click(490, 580)
+    cy.get('body').click(420, 635)
+    cy.get('body').dblclick(560, 620)
+    cy.clickButton('Valider la zone de filtre')
+    cy.wait('@displayArchivedAlertReportingsInZone')
+
+    cy.get('*[data-cy="reporting-map-menu-box"]').within(() => {
+      cy.contains('Polygone dessiné').should('be.visible')
+      cy.contains('button', 'Définir une zone de filtre manuelle').should('be.disabled')
+    })
+
     cy.clickButton('Voir la vue détaillée des signalements')
     cy.wait(1000)
     cy.getDataCy('side-window-reporting-tab').click({ force: true })
     cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click({ force: true })
 
     // Then the list queries with the very filters set on the map side...
-    cy.wait('@getArchivedAlertReportings')
+    cy.wait('@getArchivedAlertReportingsInZone')
 
     // ...and shows them as its own selected values.
     cy.get('*[data-cy="side-window-reporting-list"]').should('exist')
+    cy.get('*[data-cy="side-window-reporting-list"]').contains('Polygone dessiné').should('be.visible')
+
+    // When the zone is removed from the list
+    // Intercepted only now, so that the request awaited is the one sent without the zone.
+    cy.intercept({
+      method: 'GET',
+      pathname: '/bff/v1/reportings',
+      query: { isArchived: 'true', origin: 'ALERT', seafrontGroup: SeafrontGroup.NAMO }
+    }).as('getArchivedAlertReportings')
+    cy.get('*[data-cy="side-window-reporting-list"]').find('[title="Supprimer cette zone"]').click()
+
+    // Then
+    cy.wait('@getArchivedAlertReportings').its('request.query').should('not.have.property', 'zone')
+    cy.get('*[data-cy="side-window-reporting-list"]').within(() => {
+      cy.contains('Polygone dessiné').should('not.exist')
+      cy.contains('button', 'Définir une zone de filtre manuelle').should('not.be.disabled')
+    })
     cy.getDataCy('ReportingTable-reporting').should('have.length.to.be.greaterThan', 0)
     cy.getDataCy('ReportingTable-reporting').each($row => {
       cy.wrap($row).contains('Archivé')

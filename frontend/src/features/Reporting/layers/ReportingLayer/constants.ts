@@ -1,4 +1,5 @@
 import { LayerProperties } from '@features/Map/constants'
+import { dottedLayerStyle } from '@features/Map/layers/styles/dottedLayer.style'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { reportingLineStyle, reportingWebGLStyle } from '@features/Reporting/layers/style'
 import { Vector } from 'ol/layer'
@@ -25,4 +26,12 @@ export const REPORTINGS_LINE_VECTOR_LAYER = new Vector({
   source: REPORTINGS_LINE_VECTOR_SOURCE,
   style: reportingLineStyle,
   zIndex: (LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex ?? 500) - 1
+})
+
+export const REPORTINGS_ZONE_FILTER_VECTOR_SOURCE = new VectorSource({ wrapX: false })
+
+export const REPORTINGS_ZONE_FILTER_VECTOR_LAYER = new Vector({
+  source: REPORTINGS_ZONE_FILTER_VECTOR_SOURCE,
+  style: dottedLayerStyle,
+  zIndex: (LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex ?? 500) - 2
 })

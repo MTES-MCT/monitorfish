@@ -5,7 +5,9 @@ import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportin
 import {
   REPORTINGS_LINE_VECTOR_LAYER,
   REPORTINGS_VECTOR_LAYER,
-  REPORTINGS_VECTOR_SOURCE
+  REPORTINGS_VECTOR_SOURCE,
+  REPORTINGS_ZONE_FILTER_VECTOR_LAYER,
+  REPORTINGS_ZONE_FILTER_VECTOR_SOURCE
 } from '@features/Reporting/layers/ReportingLayer/constants'
 import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
@@ -13,8 +15,12 @@ import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { buildReportingFeature } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Level } from '@mtes-mct/monitor-ui'
+import { Level, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { Feature } from 'ol'
+import { WKT } from 'ol/format'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+
+const wktFormat = new WKT()
 
 function UnmemoizedReportingLayer() {
   const dispatch = useMainAppDispatch()
@@ -52,6 +58,20 @@ function UnmemoizedReportingLayer() {
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
   useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
   useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
+  useMapLayer(REPORTINGS_ZONE_FILTER_VECTOR_LAYER)
+
+  useEffect(() => {
+    REPORTINGS_ZONE_FILTER_VECTOR_SOURCE.clear(true)
+    if (!isReportingLayerDisplayed || !filters.zone) {
+      return
+    }
+
+    const geometry = wktFormat.readGeometry(filters.zone, {
+      dataProjection: WSG84_PROJECTION,
+      featureProjection: OPENLAYERS_PROJECTION
+    })
+    REPORTINGS_ZONE_FILTER_VECTOR_SOURCE.addFeature(new Feature(geometry))
+  }, [filters.zone, isReportingLayerDisplayed])
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
     const id = selectedReportingFeatureIdRef.current

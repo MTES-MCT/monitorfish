@@ -1,6 +1,6 @@
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
-import { ReportingZoneFilter } from '@features/Reporting/components/ReportingZoneFilter'
+import { ReportingZoneFilter } from '@features/Reporting/components/ReportingMapMenuDialog/ReportingZoneFilter'
 import {
   IUU_OPTIONS,
   REPORTING_ORIGIN_AS_OPTIONS,
@@ -85,6 +85,8 @@ export function ReportingMapMenuDialog() {
         </Header>
         <StyledBody>
           <FilterRow>
+            <ReportingZoneFilter />
+
             <Select
               isCleanable={false}
               isLabelHidden
@@ -152,7 +154,6 @@ export function ReportingMapMenuDialog() {
               placeholder="Source"
               value={filters.origin}
             />
-            <ReportingZoneFilter />
           </FilterRow>
           <StyledFooter>
             <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={toggleCreateReporting}>

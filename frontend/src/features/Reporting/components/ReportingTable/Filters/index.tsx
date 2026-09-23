@@ -1,6 +1,6 @@
 import { SeafrontGroup, seafrontGroupSupportsAbsentVesselFilter } from '@constants/seafront'
+import { ReportingZoneFilter } from '@features/Reporting/components/ReportingMapMenuDialog/ReportingZoneFilter'
 import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
-import { ReportingZoneFilter } from '@features/Reporting/components/ReportingZoneFilter'
 import {
   IUU_OPTIONS,
   REPORTING_ORIGIN_AS_OPTIONS,

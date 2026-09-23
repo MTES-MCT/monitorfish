@@ -42,7 +42,7 @@ let valuesHistory: CheckValues[]
 
 function ValuesRecorder() {
   const { values } = useFormikContext<MissionActionFormValues>()
-  valuesHistory.push(Object.fromEntries(CHECK_FIELDS.map(field => [field, values[field]])) as CheckValues)
+  valuesHistory.push(Object.fromEntries(CHECK_FIELDS.map(field => [field, values[field]])))
 
   return null
 }

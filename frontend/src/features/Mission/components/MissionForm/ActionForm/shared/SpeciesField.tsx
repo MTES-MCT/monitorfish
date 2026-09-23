@@ -66,7 +66,7 @@ export function SpeciesField() {
   const previousValue = usePrevious(input.value)
   const { updateSegments } = useGetMissionActionFormikUsecases()
   const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc, values.isEISR)
-  const { data: vessel } = useGetVesselQuery(values.vesselId ?? skipToken)
+  const { data: vessel, isLoading: isVesselLoading } = useGetVesselQuery(values.vesselId ?? skipToken)
   const [speciesToDeleteIndex, setSpeciesToDeleteIndex] = useState<number | undefined>(undefined)
 
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
@@ -77,6 +77,7 @@ export function SpeciesField() {
     faoAreasAsOptions,
     getScipSpeciesTypeFromSpecyCode,
     getSpecyNameFromSpecyCode,
+    isSpeciesLoaded,
     speciesAsOptions
   } = useSpeciesAndFaoOptions()
 
@@ -114,7 +115,8 @@ export function SpeciesField() {
     values.vesselId !== undefined
       ? getSpeciesEISRApplicability(input.value, getScipSpeciesTypeFromSpecyCode, vessel?.vesselLength, isLandControl)
       : DEFAULT_SPECIES_EISR_APPLICABILITY
-  useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability)
+  const isSpeciesEISRApplicabilityResolved = values.vesselId === undefined || (!isVesselLoading && isSpeciesLoaded)
+  useForceSpeciesEISRFieldsNotApplicable(isEISREnabled, speciesEISRApplicability, isSpeciesEISRApplicabilityResolved)
 
   useEffect(() => {
     if (!isLandControl) {

@@ -296,6 +296,41 @@ REGULATIONS_GEOPACKAGE_RESOURCE_ID = "12d32a68-e245-4e19-9215-7d07c699b6c0"
 REGULATIONS_CSV_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.csv"
 REGULATIONS_GEOPACKAGE_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.gpkg"
 
+# Géoplateforme configuration
+GEOPLATEFORME_API_ROOT_URL = "https://data.geopf.fr/api"
+GEOPLATEFORME_TOKEN_URL = (
+    "https://sso.geopf.fr/realms/geoplateforme/protocol/openid-connect/token"
+)
+GEOPLATEFORME_LOGIN = get_key(DOTENV_PATH, "GEOPLATEFORME_LOGIN")
+GEOPLATEFORME_PASSWORD = get_key(DOTENV_PATH, "GEOPLATEFORME_PASSWORD")
+# Only for a service account. Left empty, the SDK authenticates with the login and the
+# password above, using the public client shipped in its default configuration.
+GEOPLATEFORME_CLIENT_ID = get_key(DOTENV_PATH, "GEOPLATEFORME_CLIENT_ID")
+GEOPLATEFORME_CLIENT_SECRET = get_key(DOTENV_PATH, "GEOPLATEFORME_CLIENT_SECRET")
+# Obtained by running `python -m sdk_entrepot_gpf me` once the credentials above are set.
+GEOPLATEFORME_DATASTORE_ID = get_key(DOTENV_PATH, "GEOPLATEFORME_DATASTORE_ID")
+GEOPLATEFORME_WORKFLOWS_LOCATION = STATIC_LOCATION / Path("geoplateforme")
+
+REGULATIONS_GEOPLATEFORME_UPLOAD_NAME = "reglementation_des_peches_cartographiee"
+REGULATIONS_GEOPLATEFORME_CSV_FILENAME = "reglementation_des_peches_cartographiee.csv"
+REGULATIONS_GEOPLATEFORME_SRS = "EPSG:4326"
+# Name of the stored data behind the published WFS, as listed by
+# `python -m sdk_entrepot_gpf stored_data`.
+# Base name of the stored data. Each run creates a new one, suffixed with the run date,
+# because the Géoplateforme's integration appends to an existing stored data.
+REGULATIONS_GEOPLATEFORME_STORED_DATA_NAME = "reglementation_des_peches_cartographiee"
+# Geoservice configuration and publication to point at the newly created stored data,
+# as listed by `python -m sdk_entrepot_gpf configuration` and `... offering`. They are
+# read from the environment because they change whenever the geoservice is recreated.
+REGULATIONS_GEOPLATEFORME_CONFIGURATION_ID = get_key(
+    DOTENV_PATH, "REGULATIONS_GEOPLATEFORME_CONFIGURATION_ID"
+)
+REGULATIONS_GEOPLATEFORME_OFFERING_ID = get_key(
+    DOTENV_PATH, "REGULATIONS_GEOPLATEFORME_OFFERING_ID"
+)
+REGULATIONS_GEOPLATEFORME_DATASHEET_NAME = "regulation-int"
+REGULATIONS_GEOPLATEFORME_PRODUCER = "MonitorFish"
+
 CONTROLS_STATISTICS_DATASET_ID = "637c9225bad9521cdab12ba2"
 CONTROLS_STATISTICS_CSV_RESOURCE_ID = "e370fae2-9397-4fbd-bdc9-4f574b49d503"
 CONTROLS_STATISTICS_CSV_RESOURCE_TITLE = "statistiques-de-controle-des-peches.csv"

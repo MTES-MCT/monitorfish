@@ -57,6 +57,7 @@ export function useSpeciesAndFaoOptions() {
     faoAreasAsOptions,
     getScipSpeciesTypeFromSpecyCode,
     getSpecyNameFromSpecyCode,
+    isSpeciesLoaded: getSpeciesApiQuery.data !== undefined,
     speciesAsOptions
   }
 }

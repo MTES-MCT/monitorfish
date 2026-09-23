@@ -41,10 +41,21 @@ data class PublicMissionActionDataOutput(
         fun fromEnriched(enriched: EnrichedMissionAction) =
             PublicMissionActionDataOutput(
                 missionAction =
-                    MissionActionDataOutput.fromMissionAction(
-                        missionAction = enriched.missionAction,
-                        useThreatHierarchyForForm = false,
-                    ),
+                    MissionActionDataOutput
+                        .fromMissionAction(
+                            missionAction = enriched.missionAction,
+                            useThreatHierarchyForForm = false,
+                        ).let { output ->
+                            output.copy(
+                                discardedSpecies =
+                                    output.discardedSpecies.map {
+                                        it.copy(
+                                            speciesName = enriched.discardedSpeciesNamesByCode[it.speciesCode],
+                                            discardReasonName = it.discardReason?.label,
+                                        )
+                                    },
+                            )
+                        },
                 vesselLength = enriched.vessel?.length,
                 vesselType = enriched.vessel?.vesselType,
                 imo = enriched.vessel?.imo,

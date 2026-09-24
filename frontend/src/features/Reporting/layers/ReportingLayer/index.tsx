@@ -5,7 +5,9 @@ import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportin
 import {
   REPORTINGS_LINE_VECTOR_LAYER,
   REPORTINGS_VECTOR_LAYER,
-  REPORTINGS_VECTOR_SOURCE
+  REPORTINGS_VECTOR_SOURCE,
+  REPORTINGS_ZONE_FILTER_VECTOR_LAYER,
+  REPORTINGS_ZONE_FILTER_VECTOR_SOURCE
 } from '@features/Reporting/layers/ReportingLayer/constants'
 import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
 import { reportingActions } from '@features/Reporting/slice'
@@ -13,13 +15,17 @@ import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { buildReportingFeature } from '@features/Reporting/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Level } from '@mtes-mct/monitor-ui'
+import { Level, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@mtes-mct/monitor-ui'
+import { Feature } from 'ol'
+import { WKT } from 'ol/format'
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+
+const wktFormat = new WKT()
 
 function UnmemoizedReportingLayer() {
   const dispatch = useMainAppDispatch()
   const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
-  const displayFilters = useMainAppSelector(state => state.reporting.displayFilters)
+  const filters = useMainAppSelector(state => state.reporting.filters)
   const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
   const { pinnedReportings, pinnedReportingsError } = usePinnedReportings()
 
@@ -32,11 +38,9 @@ function UnmemoizedReportingLayer() {
     trySetFeatureSelected(selectedReportingFeatureId, true)
   }, [selectedReportingFeatureId])
 
-  const skipQuery =
-    displayFilters.reportingPeriod === ReportingSearchPeriod.CUSTOM &&
-    (!displayFilters.startDate || !displayFilters.endDate)
+  const skipQuery = filters.reportingPeriod === ReportingSearchPeriod.CUSTOM && (!filters.startDate || !filters.endDate)
 
-  const { data: filteredReportings, error: filteredReportingsError } = useDisplayReportingsQuery(displayFilters, {
+  const { data: filteredReportings, error: filteredReportingsError } = useDisplayReportingsQuery(filters, {
     skip: skipQuery
   })
 
@@ -54,6 +58,20 @@ function UnmemoizedReportingLayer() {
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
   useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
   useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
+  useMapLayer(REPORTINGS_ZONE_FILTER_VECTOR_LAYER)
+
+  useEffect(() => {
+    REPORTINGS_ZONE_FILTER_VECTOR_SOURCE.clear(true)
+    if (!isReportingLayerDisplayed || !filters.zone) {
+      return
+    }
+
+    const geometry = wktFormat.readGeometry(filters.zone, {
+      dataProjection: WSG84_PROJECTION,
+      featureProjection: OPENLAYERS_PROJECTION
+    })
+    REPORTINGS_ZONE_FILTER_VECTOR_SOURCE.addFeature(new Feature(geometry))
+  }, [filters.zone, isReportingLayerDisplayed])
 
   const hideDisplayedOverlaysWhenFeatureFiltered = useCallback(() => {
     const id = selectedReportingFeatureIdRef.current

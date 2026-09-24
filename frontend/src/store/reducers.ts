@@ -153,7 +153,7 @@ export const mainReducer = {
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<ReportingState>('mainPersistorReporting', ['displayFilters'])
+      ...getCommonPersistReducerConfig<ReportingState>('mainPersistorReporting', ['filters'])
     },
     reportingReducer
   ),

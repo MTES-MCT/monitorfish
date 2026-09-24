@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.JpaLogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
@@ -47,8 +48,8 @@ class PriorNotificationCacheUTests {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("pno_to_verify")?.clear()
-        cacheManager.getCache("pno_for_active_vessels")?.clear()
+        cacheManager.getCache(CacheName.PNO_TO_VERIFY)?.clear()
+        cacheManager.getCache(CacheName.PNO_FOR_ACTIVE_VESSELS)?.clear()
     }
 
     @Test

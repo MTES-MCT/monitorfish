@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBVesselRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,10 +18,10 @@ class JpaVesselRepository(
 ) : VesselRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselRepository::class.java)
 
-    @Cacheable(value = ["vessels"])
+    @Cacheable(value = [CacheName.VESSELS], sync = true)
     override fun findAll(): List<Vessel> = dbVesselRepository.findAll().map { it.toVessel() }
 
-    @Cacheable(value = ["vessel"])
+    @Cacheable(value = [CacheName.VESSEL])
     override fun findVessel(
         internalReferenceNumber: String?,
         externalReferenceNumber: String?,
@@ -60,17 +61,17 @@ class JpaVesselRepository(
     override fun findFirstByInternalReferenceNumber(internalReferenceNumber: String): Vessel? =
         dbVesselRepository.findFirstByCfr(internalReferenceNumber)?.toVessel()
 
-    @Cacheable(value = ["vessels_by_ids"])
+    @Cacheable(value = [CacheName.VESSELS_BY_IDS])
     override fun findVesselsByIds(ids: List<Int>): List<Vessel> =
         dbVesselRepository.findAllByIds(ids).map { it.toVessel() }
 
-    @Cacheable(value = ["vessels_by_internal_reference_numbers"])
+    @Cacheable(value = [CacheName.VESSELS_BY_INTERNAL_REFERENCE_NUMBERS])
     override fun findVesselsByInternalReferenceNumbers(internalReferenceNumbers: List<String>): List<Vessel> =
         dbVesselRepository.findAllByInternalReferenceNumbers(internalReferenceNumbers).map { it.toVessel() }
 
     override fun findVesselById(vesselId: Int): Vessel? = dbVesselRepository.findById(vesselId).getOrNull()?.toVessel()
 
-    @Cacheable(value = ["search_vessels"])
+    @Cacheable(value = [CacheName.SEARCH_VESSELS])
     override fun search(searched: String): List<Vessel> {
         if (searched.isEmpty()) {
             return listOf()
@@ -81,7 +82,7 @@ class JpaVesselRepository(
             .map { it.toVessel() }
     }
 
-    @Cacheable(value = ["vessel_charter"])
+    @Cacheable(value = [CacheName.VESSEL_CHARTER])
     override fun findUnderCharterForVessel(
         vesselIdentifier: VesselIdentifier,
         value: String,

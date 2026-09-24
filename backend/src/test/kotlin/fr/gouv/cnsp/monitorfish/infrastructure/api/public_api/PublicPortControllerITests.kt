@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.cache.CaffeineConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -63,8 +64,8 @@ class PublicPortControllerITests {
     @Test
     fun `Should invalidate the cache`() {
         // Given
-        cacheManager.getCache("ports")?.put("PORT123", PortFaker.fakePort(locode = "AY", name = "Auray"))
-        assertThat(cacheManager.getCache("ports")?.get("PORT123")).isNotNull()
+        cacheManager.getCache(CacheName.PORTS)?.put("PORT123", PortFaker.fakePort(locode = "AY", name = "Auray"))
+        assertThat(cacheManager.getCache(CacheName.PORTS)?.get("PORT123")).isNotNull()
 
         // When
         api
@@ -72,7 +73,7 @@ class PublicPortControllerITests {
             .andExpect(status().isOk)
 
         // Then
-        val cache = cacheManager.getCache("ports")?.get("PORT123")
+        val cache = cacheManager.getCache(CacheName.PORTS)?.get("PORT123")
         assertThat(cache).isNull()
     }
 }

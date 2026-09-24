@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.cache
 
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.slf4j.LoggerFactory
 import org.springframework.cache.CacheManager
 import org.springframework.scheduling.annotation.Scheduled
@@ -16,7 +17,7 @@ class UpdateCache(
     // At every 2 days, after 1 minute of initial delay
     @Scheduled(fixedDelay = 173000000, initialDelay = 6000)
     fun execute() {
-        cacheManager.getCache("all_visiocaptures_vessels")?.invalidate()
+        cacheManager.getCache(CacheName.ALL_VISIOCAPTURES_VESSELS)?.invalidate()
 
         logbookReportRepository.findAllCfrWithVisioCaptures()
 

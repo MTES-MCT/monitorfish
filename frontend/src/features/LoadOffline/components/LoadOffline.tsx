@@ -28,6 +28,16 @@ export function LoadOffline() {
 
   const percent = ((cachedRequestsLength * 100) / TOTAL_DOWNLOAD_REQUESTS).toFixed(1)
 
+  const getStorage = () => {
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      navigator.storage.estimate().then(({ usage: nextUsage }) => {
+        if (nextUsage) {
+          setUsage((nextUsage * BYTE_TO_MEGA_BYTE_FACTOR).toFixed(1))
+        }
+      })
+    }
+  }
+
   useEffect(() => {
     getStorage()
     const intervalId = setInterval(() => {
@@ -47,15 +57,6 @@ export function LoadOffline() {
     }
   }, [])
 
-  const getStorage = () => {
-    if ('storage' in navigator && 'estimate' in navigator.storage) {
-      navigator.storage.estimate().then(({ usage: nextUsage }) => {
-        if (nextUsage) {
-          setUsage((nextUsage * BYTE_TO_MEGA_BYTE_FACTOR).toFixed(1))
-        }
-      })
-    }
-  }
   const downloadAll = async () => {
     const zoomToRequestPaths = getZoomToRequestPaths()
     const zoomToRequestPathsToDownload = IS_CYPRESS ? zoomToRequestPaths.slice(0, 6) : zoomToRequestPaths

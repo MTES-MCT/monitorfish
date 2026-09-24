@@ -9,4 +9,4 @@ JOIN beacons b
 ON b.beacon_number = bm.beacon_number
 WHERE
     bm.stage != 'ARCHIVED' AND
-    b.beacon_status = 'ACTIVATED'
+    bm.is_followed

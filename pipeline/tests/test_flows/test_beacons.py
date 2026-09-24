@@ -43,15 +43,6 @@ def beacons(logging_datetime_utc) -> pd.DataFrame:
         {
             "beacon_number": ["A", "B", "C", "D", "E", "F", "G"],
             "vessel_id": [1, 2, 3, 4, 5, 6, None],
-            "beacon_status": [
-                "Activée",
-                "Désactivée",
-                "En test",
-                "Non agréée",
-                "Non surveillée",
-                None,
-                None,
-            ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
             "logging_datetime_utc": [d, d, d, d, d, d, None],
             "beacon_type": ["A1", "B", "A2", None, "A1", "B", "A2"],
@@ -67,15 +58,6 @@ def transformed_beacons(logging_datetime_utc) -> pd.DataFrame:
         {
             "beacon_number": ["A", "B", "C", "D", "E", "F", "G"],
             "vessel_id": [1, 2, 3, 4, 5, 6, None],
-            "beacon_status": [
-                "ACTIVATED",
-                "DEACTIVATED",
-                "IN_TEST",
-                "NON_APPROVED",
-                "UNSUPERVISED",
-                None,
-                None,
-            ],
             "satellite_operator_id": [1, 1, 2, 2, 3, None, None],
             "logging_datetime_utc": [d, d, d, d, d, d, None],
             "beacon_type": ["A1", "B", "A2", None, "A1", "B", "A2"],

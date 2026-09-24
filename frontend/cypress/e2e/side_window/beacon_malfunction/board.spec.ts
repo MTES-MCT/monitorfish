@@ -19,12 +19,12 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 6)
+      .should('have.length', 8)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 0)
+      .should('have.length', 1)
     cy.intercept('PUT', 'bff/v1/beacon_malfunctions/1').as('moveBeaconMalfunctionCardInColumn')
 
     // When
@@ -42,11 +42,11 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 7)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-AT_QUAY"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
+      .should('have.length', 2)
 
     // -------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-header"]')
-      .contains('5')
+      .contains('7')
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -70,14 +70,14 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-header"]')
-      .contains('1')
+      .contains('2')
 
     // Count the number of cards in the columns' body
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(0)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 7)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
       .children()
       .eq(1)
@@ -87,7 +87,7 @@ context('Side Window > Beacon Malfunction Board', () => {
       .children()
       .eq(2)
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
+      .should('have.length', 2)
 
     // Inspect the card body
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns"]')
@@ -320,10 +320,12 @@ context('Side Window > Beacon Malfunction Board', () => {
      * Beacon malfunction archived reason Should be showed
      */
     // In the board
+    // The ARCHIVED column now also contains malfunction id=5 (followed, sorted first as it was
+    // modified more recently), so the PHENOMENE malfunction with the notification history is at index 1.
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .first()
+      .eq(1)
       .find('*[data-cy="side-window-beacon-malfunctions-end-of-malfunction"]')
       .contains('Reprise des émissions')
 
@@ -331,7 +333,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-ARCHIVED"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .eq(0)
+      .eq(1)
       .scrollIntoView()
       .find('*[data-cy="side-window-beacon-malfunctions-card-vessel-name"]')
       .click()
@@ -418,7 +420,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 7)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -432,7 +434,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 1)
+      .should('have.length', 3)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
@@ -443,7 +445,7 @@ context('Side Window > Beacon Malfunction Board', () => {
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-INITIAL_ENCOUNTER"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')
-      .should('have.length', 5)
+      .should('have.length', 7)
     cy.get('*[data-cy="side-window-beacon-malfunctions-columns-FOUR_HOUR_REPORT"]')
       .children()
       .find('*[data-cy="side-window-beacon-malfunctions-card"]')

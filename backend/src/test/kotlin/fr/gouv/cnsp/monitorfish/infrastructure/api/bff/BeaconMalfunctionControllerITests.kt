@@ -19,7 +19,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotifications
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionResumeAndDetails
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselBeaconMalfunctionsResume
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
@@ -31,10 +30,12 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.GetBeaconMal
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.RequestNotification
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.SaveBeaconMalfunctionComment
 import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunction
+import fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction.UpdateBeaconMalfunctionIsFollowed
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.infrastructure.api.ControllersExceptionHandler
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.SaveBeaconMalfunctionCommentDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.input.UpdateBeaconMalfunctionIsFollowedDataInput
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -46,6 +47,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -68,6 +70,9 @@ class BeaconMalfunctionControllerITests {
 
     @MockitoBean
     private lateinit var updateBeaconMalfunction: UpdateBeaconMalfunction
+
+    @MockitoBean
+    private lateinit var updateBeaconMalfunctionIsFollowed: UpdateBeaconMalfunctionIsFollowed
 
     @MockitoBean
     private lateinit var getBeaconMalfunction: GetBeaconMalfunction
@@ -103,7 +108,6 @@ class BeaconMalfunctionControllerITests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 123,
                 ),
             ),
@@ -141,7 +145,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -213,6 +216,24 @@ class BeaconMalfunctionControllerITests {
     }
 
     @Test
+    fun `Should return No content When is_followed is updated`() {
+        // When
+        api
+            .perform(
+                patch("/bff/v1/beacon_malfunctions/123")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            UpdateBeaconMalfunctionIsFollowedDataInput(isFollowed = false),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isNoContent)
+
+        verify(updateBeaconMalfunctionIsFollowed).execute(eq(123), eq(false))
+    }
+
+    @Test
     fun `Should return a beacon malfunction`() {
         val dateTimeUtc = ZonedDateTime.now()
         given(this.getBeaconMalfunction.execute(eq(123)))
@@ -233,7 +254,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     resume = VesselBeaconMalfunctionsResume(1, 2, null, null),
@@ -327,7 +347,6 @@ class BeaconMalfunctionControllerITests {
                             null,
                             ZonedDateTime.now(),
                             beaconNumber = "123465",
-                            beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                             vesselId = 123,
                         ),
                     comments =
@@ -386,7 +405,6 @@ class BeaconMalfunctionControllerITests {
                         null,
                         ZonedDateTime.now(),
                         beaconNumber = "123465",
-                        beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                         vesselId = 123,
                     ),
                 comments =

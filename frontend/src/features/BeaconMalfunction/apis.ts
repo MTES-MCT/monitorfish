@@ -18,6 +18,8 @@ export const SAVE_BEACON_MALFUNCTION_COMMENT_ERROR_MESSAGE =
   "Nous n'avons pas pu ajouter le commentaire sur l'avarie VMS"
 export const GET_VESSEL_BEACON_MALFUNCTIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les avaries de ce navire"
 export const SEND_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu envoyer la notification"
+export const UPDATE_BEACON_MALFUNCTION_IS_FOLLOWED_ERROR_MESSAGE =
+  "Nous n'avons pas pu arrêter le suivi de cette avarie"
 
 export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
   endpoints: builder => ({
@@ -88,6 +90,16 @@ export const beaconMalfunctionApi = monitorfishApi.injectEndpoints({
         url: `/beacon_malfunctions/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_BEACON_MALFUNCTIONS_ERROR_MESSAGE, response)
+    }),
+
+    updateBeaconMalfunctionIsFollowed: builder.mutation<void, { id: number; isFollowed: boolean }>({
+      query: ({ id, isFollowed }) => ({
+        body: { isFollowed },
+        method: 'PATCH',
+        url: `/beacon_malfunctions/${id}`
+      }),
+      transformErrorResponse: response =>
+        new FrontendApiError(UPDATE_BEACON_MALFUNCTION_IS_FOLLOWED_ERROR_MESSAGE, response)
     })
   })
 })

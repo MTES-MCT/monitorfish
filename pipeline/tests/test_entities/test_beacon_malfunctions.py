@@ -29,11 +29,9 @@ def malfunction_to_notify_data() -> dict:
         foreign_fmc_name="Foreign FMC",
         vessel_emails=["vessel_a@email.com", "vessel_a2@email.com"],
         vessel_mobile_phone="0600000000",
-        vessel_fax="0700011111",
         operator_name="Operator_vessel_A",
         operator_email="operator@vessel.a",
         operator_mobile_phone="0688888888",
-        operator_fax="0788888888",
         satellite_operator="SAT_vessel_A",
         satellite_operator_emails=["sat@a.com", "sat1@a.com"],
         previous_notification_datetime_utc=datetime(2020, 1, 2, 15, 14, 0),
@@ -55,11 +53,9 @@ def malfunction_to_notify_data_no_contact_info() -> dict:
         foreign_fmc_name="Foreign FMC",
         vessel_emails=[],
         vessel_mobile_phone=None,
-        vessel_fax=None,
         operator_name="Operator_vessel_A",
         operator_email=None,
         operator_mobile_phone=None,
-        operator_fax=None,
         satellite_operator="SAT_vessel_A",
         satellite_operator_emails=[],
         previous_notification_datetime_utc=datetime(2020, 1, 2, 15, 14, 0),
@@ -113,19 +109,6 @@ def test_beacon_malfunction_to_notify(malfunction_to_notify_data):
         ),
     ]
 
-    assert m.get_fax_addressees() == [
-        BeaconMalfunctionNotificationAddressee(
-            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-            name=None,
-            address_or_number="0700011111",
-        ),
-        BeaconMalfunctionNotificationAddressee(
-            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-            name="Operator_vessel_A",
-            address_or_number="0788888888",
-        ),
-    ]
-
 
 def test_beacon_malfunction_to_notify_no_contact_info(
     malfunction_to_notify_data_no_contact_info,
@@ -137,7 +120,6 @@ def test_beacon_malfunction_to_notify_no_contact_info(
 
     assert m.get_email_addressees() == []
     assert m.get_sms_addressees() == []
-    assert m.get_fax_addressees() == []
 
 
 def test_beacon_malfunction_to_notify_test_mode(malfunction_to_notify_data):
@@ -162,16 +144,7 @@ def test_beacon_malfunction_to_notify_test_mode(malfunction_to_notify_data):
         )
     ]
 
-    assert m.get_fax_addressees() == [
-        BeaconMalfunctionNotificationAddressee(
-            function=BeaconMalfunctionNotificationRecipientFunction.FMC,
-            name="CNSP",
-            address_or_number="9876543210",
-        )
-    ]
 
-
-@patch("src.entities.beacon_malfunctions.CNSP_SIP_DEPARTMENT_FAX", None)
 @patch("src.entities.beacon_malfunctions.CNSP_SIP_DEPARTMENT_EMAIL", None)
 @patch("src.entities.beacon_malfunctions.CNSP_SIP_DEPARTMENT_MOBILE_PHONE", None)
 def test_beacon_malfunction_to_notify_test_mode_without_cnsp_contact_info(
@@ -184,7 +157,6 @@ def test_beacon_malfunction_to_notify_test_mode_without_cnsp_contact_info(
 
     assert m.get_email_addressees() == []
     assert m.get_sms_addressees() == []
-    assert m.get_fax_addressees() == []
 
 
 def test_beacon_malfunction_message_to_send(malfunction_to_notify_data):
@@ -239,19 +211,5 @@ def test_beacon_malfunction_message_to_send(malfunction_to_notify_data):
             function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
             name="Operator_vessel_A",
             address_or_number="0688888888",
-        ),
-    ]
-
-    msg_to_send.communication_means = CommunicationMeans.FAX
-    assert msg_to_send.get_addressees() == [
-        BeaconMalfunctionNotificationAddressee(
-            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-            name=None,
-            address_or_number="0700011111",
-        ),
-        BeaconMalfunctionNotificationAddressee(
-            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-            name="Operator_vessel_A",
-            address_or_number="0788888888",
         ),
     ]

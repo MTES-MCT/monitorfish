@@ -4,6 +4,7 @@ import * as timeago from 'timeago.js'
 import type { Healthcheck } from './types'
 
 const TEN_MINUTES = 10
+const TWENTY_MINUTES = 20
 
 export function getHealthcheckWarnings(healthcheck: Healthcheck): string[] {
   const now = customDayjs()
@@ -26,7 +27,7 @@ export function getHealthcheckWarnings(healthcheck: Healthcheck): string[] {
       )} (ni sur la carte, ni dans la liste des navires).`
     },
     {
-      isWarn: logbookMessagesReceivedMinutesAgo > TEN_MINUTES,
+      isWarn: logbookMessagesReceivedMinutesAgo > TWENTY_MINUTES,
       message: `Nous ne recevons plus aucun message JPE depuis ${getTimeAgo(healthcheck.dateLogbookMessageReceived)}.`
     },
     {

@@ -141,6 +141,7 @@ sealed class Reporting {
         val description: String? = null,
         val infractions: List<InfractionSuspicionThreat>,
         val numberOfVessels: Int? = null,
+        val targetType: ReportingTargetType,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -192,7 +193,9 @@ sealed class Reporting {
                         longitude = command.longitude,
                         otherSourceType = command.otherSourceType,
                         satelliteType = command.satelliteType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.OBSERVATION ->
                     Observation(
                         id = this.id,
@@ -227,9 +230,11 @@ sealed class Reporting {
                         description = command.description,
                         satelliteType = command.satelliteType,
                         otherSourceType = command.otherSourceType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.ALERT -> throw NotImplementedError()
-                else -> error("Invalid target type: ${command.type}")
+                else -> error("Invalid reporting type: ${command.type}")
             }
     }
 
@@ -272,6 +277,7 @@ sealed class Reporting {
         val title: String,
         val description: String? = null,
         val numberOfVessels: Int? = null,
+        val targetType: ReportingTargetType,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -321,7 +327,9 @@ sealed class Reporting {
                         otherSourceType = command.otherSourceType,
                         satelliteType = command.satelliteType,
                         numberOfVessels = command.numberOfVessels,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.INFRACTION_SUSPICION ->
                     InfractionSuspicion(
                         id = this.id,
@@ -358,9 +366,11 @@ sealed class Reporting {
                         infractions = command.infractions,
                         satelliteType = command.satelliteType,
                         otherSourceType = command.otherSourceType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.ALERT -> throw NotImplementedError()
-                else -> error("Invalid target type: ${command.type}")
+                else -> error("Invalid reporting type: ${command.type}")
             }
     }
 }

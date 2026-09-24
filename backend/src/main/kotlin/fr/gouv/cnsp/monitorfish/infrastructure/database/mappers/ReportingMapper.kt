@@ -138,6 +138,7 @@ object ReportingMapper {
                         numberOfVessels = infractionSuspicionValue.numberOfVessels,
                         seaFront = infractionSuspicionValue.seaFront,
                         dml = infractionSuspicionValue.dml,
+                        targetType = infractionSuspicionValue.targetType,
                     )
                 }
 
@@ -182,6 +183,7 @@ object ReportingMapper {
                         numberOfVessels = observationValue.numberOfVessels,
                         seaFront = observationValue.seaFront,
                         dml = observationValue.dml,
+                        targetType = observationValue.targetType,
                     )
                 }
             }
@@ -231,6 +233,7 @@ object ReportingMapper {
                                 threatCharacterization = it.threatCharacterization,
                             )
                         },
+                    targetType = reporting.targetType,
                 )
 
             is Reporting.Observation ->
@@ -245,6 +248,7 @@ object ReportingMapper {
                     numberOfVessels = reporting.numberOfVessels,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
+                    targetType = reporting.targetType,
                 )
         }
 }

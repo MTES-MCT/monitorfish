@@ -6,6 +6,7 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('A regulation Should be searched, added to My Zones and showed on the map with the Zone button', () => {
+    enableUserLayersPersistence()
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait(5000)
 
@@ -296,12 +297,11 @@ context('Sidebars > Regulatory Layers', () => {
   })
 
   it('An administrative zone Should be showed and hidden', () => {
-    const LOCALSTORAGE_URL = Cypress.config().baseUrl
-    if (!LOCALSTORAGE_URL) {
-      throw new Error('`baseUrl` is not defined')
-    }
-
+    enableUserLayersPersistence()
     cy.visit('/#@-224002.65,6302673.54,8.70')
+    cy.wait('@getUserLayers').then(({ response }) => {
+      expect(response?.body.administrativeLayers).to.be.empty
+    })
     cy.wait(5000)
 
     // TODO Investigate why there is white space in the Cypress iframe when hiding vessels which breaks the entire test.
@@ -309,46 +309,61 @@ context('Sidebars > Regulatory Layers', () => {
     // cy.contains('Masquer les navires non sélectionnés').click()
     // cy.clickButton('Affichage des dernières positions')
 
-    cy.getAllLocalStorage().then(localStorages => {
-      const testLocalStorage = localStorages[LOCALSTORAGE_URL]
-      const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
-      expect(showedLayers).to.be.empty
-    })
-
     // When
     cy.get('[title="Arbre des couches"]').click()
     cy.wait(500)
     cy.clickButton('Zones administratives')
-    cy.get('[title="Zones ZEE monde"]')
-      .click()
-      .then(() => {
-        cy.getAllLocalStorage().then(localStorages => {
-          const testLocalStorage = localStorages[LOCALSTORAGE_URL]
-          const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
-          expect(showedLayers).length(1)
-          expect(showedLayers[0].type).equal('eez_areas')
-        })
-      })
-    cy.wait(500)
+    cy.get('[title="Zones ZEE monde"]').click()
 
-    // Then
+    // Then the layer is saved on the user profile
+    cy.wait('@saveUserLayers').then(({ request }) => {
+      expect(request.body.administrativeLayers).length(1)
+      expect(request.body.administrativeLayers[0].type).equal('eez_areas')
+    })
     cy.getFeaturesFromLayer('eez_areas').then(features => {
       expect(features.length).to.be.equal(7)
     })
 
-    // Refresh and check the item in local storage is not deleted
+    // When the page is refreshed
     cy.reload()
+
+    // Then the layer is restored from the user profile
+    cy.wait('@getUserLayers').then(({ response }) => {
+      expect(response?.body.administrativeLayers).length(1)
+      expect(response?.body.administrativeLayers[0].type).equal('eez_areas')
+    })
+    cy.wait(5000)
+    cy.getFeaturesFromLayer('eez_areas').then(features => {
+      expect(features.length).to.be.equal(7)
+    })
+  })
+
+  it('The selected base layer Should be restored from the user profile', () => {
+    enableUserLayersPersistence()
+    cy.visit('/#@-224002.65,6302673.54,8.70')
+    cy.wait(5000)
+
+    // When
+    cy.get('[title="Arbre des couches"]').click()
+    cy.contains('Fonds de carte').click()
+    cy.contains('Fond de carte sombre').click()
+
+    // Then
+    cy.wait('@saveUserLayers').then(({ request }) => {
+      expect(request.body.baseLayer).equal('DARK')
+    })
+
+    // When the page is refreshed
+    cy.reload()
+
+    // Then
+    cy.wait('@getUserLayers').then(({ response }) => {
+      expect(response?.body.baseLayer).equal('DARK')
+    })
     cy.wait(5000)
     cy.get('[title="Arbre des couches"]').click()
-    cy.wait(500)
-    cy.clickButton('Zones administratives').then(() => {
-      cy.getAllLocalStorage().then(localStorages => {
-        const testLocalStorage = localStorages[LOCALSTORAGE_URL]
-        const showedLayers = JSON.parse(testLocalStorage?.homepagelayersShowedOnMap as string)
-        expect(showedLayers).length(1)
-        expect(showedLayers[0].type).equal('eez_areas')
-      })
-    })
+    cy.contains('Fonds de carte').click()
+    cy.contains('Fond de carte sombre').parent().find('input[type="radio"]').should('be.checked')
   })
 
   it('Should unselect one of the selected topic zone layers', () => {
@@ -429,6 +444,20 @@ context('Sidebars > Regulatory Layers', () => {
     cy.contains('Tous les engins trainants').should('be.visible')
     cy.contains('Création de zone').should('be.visible')
   })
+
+  /**
+   * User layers are stubbed by default (see `support/e2e.ts`): use the backend, starting from empty user layers.
+   */
+  function enableUserLayersPersistence() {
+    cy.request('PUT', '/bff/v1/user_layers', {
+      administrativeLayers: [],
+      baseLayer: null,
+      selectedRegulatoryZoneIds: [],
+      showedRegulatoryZoneIds: []
+    })
+    cy.intercept('GET', '/bff/v1/user_layers', request => request.continue()).as('getUserLayers')
+    cy.intercept('PUT', '/bff/v1/user_layers', request => request.continue()).as('saveUserLayers')
+  }
 
   function cleanRegulationSearchInput() {
     cy.get('*[name="Rechercher une zone réglementaire"]').parent().find('.Element-IconButton').click()

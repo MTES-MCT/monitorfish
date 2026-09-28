@@ -104,7 +104,6 @@ const mapSlice = createSlice({
     },
 
     selectBaseLayer(state, action) {
-      window.localStorage.setItem(baseLayerLocalStorageKey, JSON.stringify(action.payload))
       state.selectedBaseLayer = action.payload
     },
 

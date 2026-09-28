@@ -117,7 +117,6 @@ class GetAllBeaconMalfunctionsUTests {
             GetAllBeaconMalfunctions(
                 beaconMalfunctionsRepository = beaconMalfunctionsRepository,
                 riskFactorRepository = riskFactorRepository,
-                beaconRepository = beaconRepository,
             ).execute()
 
         // Then

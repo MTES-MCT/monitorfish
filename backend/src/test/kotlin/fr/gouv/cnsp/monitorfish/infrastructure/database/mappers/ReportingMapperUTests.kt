@@ -317,8 +317,8 @@ class ReportingMapperUTests {
         Assertions.assertThat(infractionSuspicionValue.numberOfVessels).isEqualTo(5)
         Assertions.assertThat(infractionSuspicionValue.infractions).hasSize(1)
         Assertions.assertThat(infractionSuspicionValue.infractions!![0].natinfCode).isEqualTo(1234)
-        Assertions.assertThat(infractionSuspicionValue.infractions!![0].threat).isEqualTo("Obligations déclaratives")
-        Assertions.assertThat(infractionSuspicionValue.infractions!![0].threatCharacterization).isEqualTo("DEP")
+        Assertions.assertThat(infractionSuspicionValue.infractions[0].threat).isEqualTo("Obligations déclaratives")
+        Assertions.assertThat(infractionSuspicionValue.infractions[0].threatCharacterization).isEqualTo("DEP")
         Assertions.assertThat(infractionSuspicionValue.dml).isEqualTo("DML 56")
     }
 

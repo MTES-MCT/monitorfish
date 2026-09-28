@@ -197,5 +197,14 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.last().vesselProfile).isNotNull()
         assertThat(lastPositionsWithProfiles.last().vessel).isNotNull()
+
+        /**
+         * The beacon of a vessel without last position is attached via the vessel id
+         */
+        val vesselWithoutLastPositionWithBeacon =
+            lastPositionsWithProfiles.first { it.vesselProfile?.cfr == "ABC010331976" }
+        assertThat(vesselWithoutLastPositionWithBeacon.lastPosition).isNull()
+        assertThat(vesselWithoutLastPositionWithBeacon.beacon?.beaconNumber).isEqualTo("VPR0131")
+        assertThat(vesselWithoutLastPositionWithBeacon.emitsPositions).isTrue()
     }
 }

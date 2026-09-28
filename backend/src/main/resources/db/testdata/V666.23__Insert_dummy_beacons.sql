@@ -9,4 +9,5 @@ VALUES
     (   'LHGY122',         7,      'IN_TEST',      FALSE,                     2,    '2021-12-2 12:21'),
     (   'NB56FR8',         8,    'ACTIVATED',      FALSE,                     2,      '2021-6-2 9:23'),
     (   'PO8U9U4',         9,    'ACTIVATED',      FALSE,                     2,     '2021-5-2 12:27'),
+    (   'VPR0131',       131,      'IN_TEST',      FALSE,                     2,     '2021-5-2 12:27'),
     (   'ABC1234',      null,    'ACTIVATED',      FALSE,                     2,     '2021-5-1 12:20');

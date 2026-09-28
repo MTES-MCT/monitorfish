@@ -38,7 +38,7 @@ class GetAllBeaconMalfunctionsUTests {
                 VesselRiskFactor(riskFactor = 1.54, internalReferenceNumber = "FR123456785"),
             )
         given(riskFactorRepository.findAll()).willReturn(riskFactors)
-        given(beaconMalfunctionsRepository.findAllExceptArchived()).willReturn(
+        given(beaconMalfunctionsRepository.findAllFollowedExceptArchived()).willReturn(
             listOf(
                 BeaconMalfunction(
                     1,
@@ -91,7 +91,7 @@ class GetAllBeaconMalfunctionsUTests {
                 ),
             ),
         )
-        given(beaconMalfunctionsRepository.findLastSixtyArchived()).willReturn(
+        given(beaconMalfunctionsRepository.findLastSixtyArchivedAndFollowed()).willReturn(
             listOf(
                 BeaconMalfunction(
                     4,

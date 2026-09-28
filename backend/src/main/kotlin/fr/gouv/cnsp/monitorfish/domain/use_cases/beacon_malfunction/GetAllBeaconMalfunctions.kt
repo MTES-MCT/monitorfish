@@ -16,8 +16,8 @@ class GetAllBeaconMalfunctions(
     fun execute(): List<BeaconMalfunction> {
         val riskFactors = riskFactorRepository.findAll()
 
-        val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllExceptArchived()
-        val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchived()
+        val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllFollowedExceptArchived()
+        val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchivedAndFollowed()
 
         return (beaconMalfunctionsExceptArchived + lastSixtyArchived)
             .map { beaconMalfunction ->

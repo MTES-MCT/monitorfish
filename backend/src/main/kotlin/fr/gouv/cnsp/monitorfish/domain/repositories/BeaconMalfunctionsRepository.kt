@@ -8,16 +8,16 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import java.time.ZonedDateTime
 
 interface BeaconMalfunctionsRepository {
-    fun findAll(): List<BeaconMalfunction>
+    fun findAllFollowed(): List<BeaconMalfunction>
 
     fun findAllByVesselId(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
     ): List<BeaconMalfunction>
 
-    fun findAllExceptArchived(): List<BeaconMalfunction>
+    fun findAllFollowedExceptArchived(): List<BeaconMalfunction>
 
-    fun findLastSixtyArchived(): List<BeaconMalfunction>
+    fun findLastSixtyArchivedAndFollowed(): List<BeaconMalfunction>
 
     fun find(beaconMalfunctionId: Int): BeaconMalfunction
 

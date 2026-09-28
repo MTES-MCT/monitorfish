@@ -17,13 +17,13 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
         """,
         nativeQuery = true,
     )
-    fun findLastSixtyArchived(): List<BeaconMalfunctionEntity>
+    fun findLastSixtyArchivedAndFollowed(): List<BeaconMalfunctionEntity>
 
     @Query(
         value = "SELECT * FROM beacon_malfunctions WHERE stage <> 'ARCHIVED' AND is_followed",
         nativeQuery = true,
     )
-    fun findAllExceptArchived(): List<BeaconMalfunctionEntity>
+    fun findAllFollowedExceptArchived(): List<BeaconMalfunctionEntity>
 
     @Query(
         value = "SELECT * FROM beacon_malfunctions WHERE is_followed",
@@ -83,7 +83,7 @@ interface DBBeaconMalfunctionsRepository : CrudRepository<BeaconMalfunctionEntit
     @Query(
         value = """
         SELECT * FROM beacon_malfunctions
-        WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime AND is_followed
+        WHERE vessel_id = :vesselId AND malfunction_start_date_utc >= :afterDateTime
         """,
         nativeQuery = true,
     )

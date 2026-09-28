@@ -1,61 +1,19 @@
 // TODO Rethink Regulatory naming? Regulatory (an adjective rather than an object name), Regulation difference.
 
 import { createSlice } from '@reduxjs/toolkit'
-import { fromPairs } from 'lodash-es'
+import { fromPairs, groupBy } from 'lodash-es'
 
 import { STATUS } from './components/RegulationTables/constants'
-import { DEFAULT_REGULATION, getRegulatoryLayersWithoutTerritory, REGULATORY_REFERENCE_KEYS } from './utils'
+import {
+  DEFAULT_REGULATION,
+  findCurrentRegulatoryZones,
+  getRegulatoryLayersWithoutTerritory,
+  REGULATORY_REFERENCE_KEYS
+} from './utils'
 
 import type { EditedRegulatoryZone, RegulatoryLawTypes, RegulatoryZone, RegulatoryZoneDraft } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Extent } from 'ol/extent'
-
-// TODO Move that somewhere else.
-const pushRegulatoryZoneInTopicList = (selectedRegulatoryLayers, regulatoryZone) => {
-  if (Object.keys(selectedRegulatoryLayers).includes(regulatoryZone.topic)) {
-    const nextRegZoneTopic = selectedRegulatoryLayers[regulatoryZone.topic]
-    nextRegZoneTopic.push(regulatoryZone)
-    selectedRegulatoryLayers[regulatoryZone.topic] = nextRegZoneTopic
-  } else {
-    selectedRegulatoryLayers[regulatoryZone.topic] = [regulatoryZone]
-  }
-}
-
-// TODO Move that somewhere else.
-const updateSelectedRegulatoryLayers = (
-  regulatoryLayers: RegulatoryZone[] | EditedRegulatoryZone[],
-  regulatoryZoneId: number | string,
-  // TODO This param seems to always be an empty object: remove it with all its related code?
-  selectedRegulatoryLayers: {},
-  selectedRegulatoryLayerIds: Array<number | string>
-) => {
-  const nextSelectedRegulatoryLayers = { ...selectedRegulatoryLayers }
-  const nextSelectedRegulatoryLayerIds = [...selectedRegulatoryLayerIds]
-  const nextRegulatoryZone = regulatoryLayers.find(zone => String(zone.id) === String(regulatoryZoneId))
-  if (nextRegulatoryZone) {
-    if (nextRegulatoryZone.id && nextRegulatoryZone.lawType && nextRegulatoryZone.topic) {
-      pushRegulatoryZoneInTopicList(nextSelectedRegulatoryLayers, nextRegulatoryZone)
-      nextSelectedRegulatoryLayerIds.push(nextRegulatoryZone.id)
-
-      return {
-        selectedRegulatoryLayerIds: nextSelectedRegulatoryLayerIds,
-        selectedRegulatoryLayers: nextSelectedRegulatoryLayers
-      }
-    }
-    if (nextRegulatoryZone.nextId) {
-      return updateSelectedRegulatoryLayers(
-        regulatoryLayers,
-        nextRegulatoryZone.nextId,
-        selectedRegulatoryLayers,
-        selectedRegulatoryLayerIds
-      )
-    }
-
-    return null
-  }
-
-  return null
-}
 
 export type RegulationState = {
   hasOneOrMoreValuesMissing: boolean | undefined
@@ -313,23 +271,11 @@ const regulationSlice = createSlice({
       }>
     ) {
       const { regulatoryZones, selectedRegulatoryZoneIds } = action.payload
-      let nextSelectedRegulatoryLayers = {}
-      let nextSelectedRegulatoryLayerIds: Array<number | string> = []
 
-      selectedRegulatoryZoneIds.forEach(selectedRegulatoryZoneId => {
-        const updatedObjects = updateSelectedRegulatoryLayers(
-          regulatoryZones,
-          selectedRegulatoryZoneId,
-          nextSelectedRegulatoryLayers,
-          nextSelectedRegulatoryLayerIds
-        )
-        if (updatedObjects?.selectedRegulatoryLayers && updatedObjects?.selectedRegulatoryLayerIds) {
-          nextSelectedRegulatoryLayers = updatedObjects.selectedRegulatoryLayers
-          nextSelectedRegulatoryLayerIds = updatedObjects.selectedRegulatoryLayerIds
-        }
-      })
-
-      state.selectedRegulatoryLayers = nextSelectedRegulatoryLayers
+      state.selectedRegulatoryLayers = groupBy(
+        findCurrentRegulatoryZones<RegulatoryZone | EditedRegulatoryZone>(regulatoryZones, selectedRegulatoryZoneIds),
+        regulatoryZone => regulatoryZone.topic
+      ) as Record<string, RegulatoryZone[]>
     },
 
     setSelectedRegulatoryZoneId(state, action) {

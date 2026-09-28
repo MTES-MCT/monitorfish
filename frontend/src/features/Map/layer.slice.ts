@@ -2,8 +2,8 @@
 
 import { LayerProperties } from '@features/Map/constants'
 import { getLayerNameNormalized } from '@features/Map/utils'
+import { findCurrentRegulatoryZones } from '@features/Regulation/utils'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { isNotNullish } from '@utils/isNotNullish'
 
 import { MonitorFishMap } from './Map.types'
 
@@ -148,25 +148,16 @@ const layerSlice = createSlice({
       const showedAdministrativeLayers = administrativeLayers.map(
         ({ type, zone }) => ({ type, zone }) satisfies MonitorFishMap.ShowedLayer
       )
-      const showedRegulatoryLayers = showedRegulatoryZoneIds
-        .map(showedRegulatoryZoneId => {
-          let regulatoryZone = regulatoryZones.find(({ id }) => String(id) === showedRegulatoryZoneId)
-          if (regulatoryZone && !(regulatoryZone.topic && regulatoryZone.lawType) && regulatoryZone.nextId) {
-            const { nextId } = regulatoryZone
-            regulatoryZone = regulatoryZones.find(({ id }) => id === nextId)
-          }
-
-          return regulatoryZone
-            ? ({
-                gears: regulatoryZone.gearRegulation,
-                id: regulatoryZone.id,
-                topic: regulatoryZone.topic,
-                type: LayerProperties.REGULATORY.code,
-                zone: regulatoryZone.zone
-              } satisfies MonitorFishMap.ShowedLayer)
-            : undefined
-        })
-        .filter(isNotNullish)
+      const showedRegulatoryLayers = findCurrentRegulatoryZones(regulatoryZones, showedRegulatoryZoneIds).map(
+        regulatoryZone =>
+          ({
+            gears: regulatoryZone.gearRegulation,
+            id: regulatoryZone.id,
+            topic: regulatoryZone.topic,
+            type: LayerProperties.REGULATORY.code,
+            zone: regulatoryZone.zone
+          }) satisfies MonitorFishMap.ShowedLayer
+      )
 
       state.showedLayers = [...showedAdministrativeLayers, ...showedRegulatoryLayers]
     }

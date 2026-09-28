@@ -4,6 +4,7 @@ import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindow
 import { layerActions } from '@features/Map/layer.slice'
 import { selectBaseLayer } from '@features/Map/slice'
 import { loadUserLayers } from '@features/UserLayers/useCases/loadUserLayers'
+import { saveResolvedUserLayers } from '@features/UserLayers/useCases/saveResolvedUserLayers'
 import { getUserLayersFromState } from '@features/UserLayers/utils'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -91,4 +92,6 @@ const applyUserLayers =
     }
     dispatch(renderAdministrativeLayers())
     dispatch(layerActions.setAreUserLayersLoaded(true))
+
+    await dispatch(saveResolvedUserLayers(userLayers))
   }

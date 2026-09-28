@@ -1,3 +1,5 @@
+import { isNotNullish } from '@utils/isNotNullish'
+
 import { getTextForSearch } from '../../utils'
 import { LayerProperties } from '../Map/constants'
 import { formatDataForSelectPicker } from './components/RegulationTables/utils'
@@ -41,6 +43,52 @@ export const mapToRegulatoryZone = (
     topic: feature.properties.topic,
     zone: decodeURI(feature.properties.zone)
   }
+}
+
+type VersionedRegulatoryZone = Pick<RegulatoryZone, 'id' | 'lawType' | 'nextId' | 'topic'>
+
+/**
+ * Find the current version of a regulatory zone, following `nextId` while the zone is no longer active
+ * (i.e. without topic or law type).
+ *
+ * Returns `undefined` when the zone (or one of its next versions) is deleted.
+ */
+export const findCurrentRegulatoryZone = <T extends VersionedRegulatoryZone>(
+  regulatoryZones: T[],
+  regulatoryZoneId: number | string
+): T | undefined => {
+  const visitedIds = new Set<string>()
+  let currentId: string | undefined = String(regulatoryZoneId)
+
+  while (currentId !== undefined && !visitedIds.has(currentId)) {
+    visitedIds.add(currentId)
+    const searchedId = currentId
+    const regulatoryZone = regulatoryZones.find(({ id }) => String(id) === searchedId)
+    if (!regulatoryZone) {
+      return undefined
+    }
+    if (regulatoryZone.topic && regulatoryZone.lawType) {
+      return regulatoryZone
+    }
+
+    currentId = isNotNullish(regulatoryZone.nextId) ? String(regulatoryZone.nextId) : undefined
+  }
+
+  return undefined
+}
+
+/**
+ * Find the current version of each regulatory zone, without duplicates nor deleted zones.
+ */
+export const findCurrentRegulatoryZones = <T extends VersionedRegulatoryZone>(
+  regulatoryZones: T[],
+  regulatoryZoneIds: Array<number | string>
+): T[] => {
+  const currentRegulatoryZones = regulatoryZoneIds
+    .map(regulatoryZoneId => findCurrentRegulatoryZone(regulatoryZones, regulatoryZoneId))
+    .filter(isNotNullish)
+
+  return [...new Set(currentRegulatoryZones)]
 }
 
 export const mapToProcessingRegulation = (persistProcessingRegulation: RegulatoryZoneDraft) => {

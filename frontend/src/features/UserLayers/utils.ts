@@ -1,5 +1,6 @@
 import { LayerProperties } from '@features/Map/constants'
 import { isNotNullish } from '@utils/isNotNullish'
+import { xor } from 'lodash-es'
 
 import type { AdministrativeLayer, UserLayers } from './types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -10,6 +11,12 @@ export const isEmptyUserLayers = (userLayers: UserLayers) =>
   !userLayers.administrativeLayers.length &&
   !userLayers.showedRegulatoryZoneIds.length &&
   !userLayers.selectedRegulatoryZoneIds.length
+
+const haveSameIds = (ids: string[], otherIds: string[]) => xor(ids, otherIds).length === 0
+
+export const haveSameRegulatoryZoneIds = (userLayers: UserLayers, otherUserLayers: UserLayers) =>
+  haveSameIds(userLayers.selectedRegulatoryZoneIds, otherUserLayers.selectedRegulatoryZoneIds) &&
+  haveSameIds(userLayers.showedRegulatoryZoneIds, otherUserLayers.showedRegulatoryZoneIds)
 
 const isRegulatoryLayer = (showedLayer: MonitorFishMap.ShowedLayer) =>
   showedLayer.type === LayerProperties.REGULATORY.code

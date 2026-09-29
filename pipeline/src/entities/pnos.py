@@ -234,7 +234,6 @@ class RenderedPno:
     is_correction: bool = False
     previous_notification_date_utc: datetime | None = None
 
-
     def get_addressees(
         self, communication_means: CommunicationMeans
     ) -> List[PnoAddressee]:

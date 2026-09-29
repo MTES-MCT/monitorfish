@@ -152,7 +152,7 @@ export function FormikCoordinatesPicker() {
   )
 
   return (
-    <>
+    <div data-missing-field-anchor="latitude longitude">
       <MultiLocationEditor
         defaultValue={coordinates}
         error={error}
@@ -175,7 +175,7 @@ export function FormikCoordinatesPicker() {
           onAdd: addOrEditCoordinates
         }}
       />
-    </>
+    </div>
   )
 }
 

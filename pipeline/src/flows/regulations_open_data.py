@@ -55,7 +55,7 @@ def get_regulations_for_open_data_csv(regulations: gpd.GeoDataFrame) -> pd.DataF
         "wkt",
     ]
 
-    return pd.DataFrame(regulations[columns])
+    return pd.DataFrame(regulations[columns]).rename(columns={"liste_reglementations": "reglementations"})
 
 
 @task

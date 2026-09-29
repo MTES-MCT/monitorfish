@@ -120,7 +120,7 @@ def regulations_for_open_data_csv() -> pd.DataFrame:
             "type_de_reglementation": TYPES_DE_REGLEMENTATION,
             "thematique": THEMATIQUES,
             "zone": ZONES,
-            "liste_reglementations": LISTE_REGLEMENTATIONS,
+            "reglementations": LISTE_REGLEMENTATIONS,
             "wkt": WKTS,
         }
     )

@@ -358,8 +358,10 @@ def to_pgarr(
 
     def _quote(s: str) -> str:
         # Elements containing PostgreSQL array special characters must be double-quoted.
-        if any(c in s for c in (',', '"', '\\', '{', '}', ' ', '\t', '\n', '\r', '\x00')):
-            return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
+        if any(
+            c in s for c in (",", '"', "\\", "{", "}", " ", "\t", "\n", "\r", "\x00")
+        ):
+            return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
         return s
 
     elements = [

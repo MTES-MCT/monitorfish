@@ -289,6 +289,10 @@ def compute_pno_types(
           - flag_state `str` `'FRA'`
           - locode `str` `CCXXX`
           - country_code_iso2 `'FR'`
+          - facade `str` `'NAMO'`
+          - trip_duration_hours `float` `36.5`
+          - vessel_length `float` `14.2`
+          - vessel_department_code `str` `'29'`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :
@@ -303,6 +307,20 @@ def compute_pno_types(
           - fao_areas `List[str]` `["27.8", ...]`
           - flag_states `List[str]` `["GBR", ...]`
           - minimum_quantity_kg `float` `2500.0`
+          - facades `List[str]` `["NAMO", ...]`
+          - vessel_department_codes `List[str]` `["29", ...]`
+          - min_vessel_length `float` `12.0` (inclusive)
+          - max_vessel_length `float` `12.0` (exclusive)
+          - min_trip_duration_hours `float` `24.0` (inclusive)
+          - max_trip_duration_hours `float` `96.0` (exclusive)
+          - has_catches_on_board `bool` `True`
+
+          Empty lists and null values mean that the rule does not filter on the
+          corresponding criterion.
+
+          When unknown, the vessel length and the trip duration are considered
+          infinite, so that the strictest rules (vessels >= 12m, longest trips)
+          apply.
 
     Returns:
         pd.DataFrame: DataFrame of PNOs with attributed PNO types. 1 line = 1 PNO.
@@ -353,7 +371,19 @@ def compute_pno_types(
 
     pnos_pno_types = db.sql(
         """
-        WITH pnos_pno_types_tmp AS (
+        WITH pnos AS (
+            SELECT
+                logbook_reports_pno_id,
+                FIRST(facade) AS facade,
+                FIRST(vessel_department_code) AS vessel_department_code,
+                COALESCE(FIRST(vessel_length), 'Infinity'::DOUBLE) AS vessel_length,
+                COALESCE(FIRST(trip_duration_hours), 'Infinity'::DOUBLE) AS trip_duration_hours,
+                SUM(COALESCE(weight, 0)) > 0 AS has_catches_on_board
+            FROM pno_catches
+            GROUP BY logbook_reports_pno_id
+        ),
+
+        pnos_pno_types_tmp AS (
             SELECT
                 pc.logbook_reports_pno_id,
                 t.pno_type_name,
@@ -362,6 +392,8 @@ def compute_pno_types(
                 t.minimum_quantity_kg,
                 SUM(COALESCE(weight, 0)) OVER (PARTITION BY pc.logbook_reports_pno_id, pno_type_rule_id) AS pno_quantity_kg
             FROM pno_catches pc
+            JOIN pnos p
+            ON p.logbook_reports_pno_id = pc.logbook_reports_pno_id
             LEFT JOIN trip_gear_codes tgc
             ON tgc.logbook_reports_pno_id = pc.logbook_reports_pno_id
             JOIN pno_types t
@@ -369,7 +401,14 @@ def compute_pno_types(
                 (pc.species = ANY(t.species) OR t.species = '[]'::VARCHAR[]) AND
                 (list_has_any(tgc.trip_gear_codes::VARCHAR[], t.gears) OR t.gears = '[]'::VARCHAR[]) AND
                 (length(filter(t.fao_areas, a -> pc.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
-                (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
+                (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[]) AND
+                (p.facade = ANY(t.facades) OR t.facades = '[]'::VARCHAR[]) AND
+                (p.vessel_department_code = ANY(t.vessel_department_codes) OR t.vessel_department_codes = '[]'::VARCHAR[]) AND
+                (p.vessel_length >= t.min_vessel_length OR t.min_vessel_length IS NULL) AND
+                (p.vessel_length < t.max_vessel_length OR t.max_vessel_length IS NULL) AND
+                (p.trip_duration_hours >= t.min_trip_duration_hours OR t.min_trip_duration_hours IS NULL) AND
+                (p.trip_duration_hours < t.max_trip_duration_hours OR t.max_trip_duration_hours IS NULL) AND
+                (p.has_catches_on_board = t.has_catches_on_board OR t.has_catches_on_board IS NULL)
         )
 
         SELECT

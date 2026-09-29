@@ -158,6 +158,7 @@ SELECT
     s.id AS logbook_reports_pno_id,
     s.cfr,
     predicted_arrival_datetime_utc AT TIME ZONE 'UTC' AS predicted_arrival_datetime_utc,
+    (EXTRACT(EPOCH FROM predicted_arrival_datetime_utc - trip_start_date) / 3600)::DOUBLE PRECISION AS trip_duration_hours,
     EXTRACT('YEAR' FROM predicted_arrival_datetime_utc)::INTEGER AS year,
     s.species,
     COALESCE(fg.far_gears, dg.dep_gears, '[]'::jsonb) AS trip_gears,
@@ -168,6 +169,8 @@ SELECT
     COALESCE(s.facade, 'Hors façade') AS facade,
     COALESCE(s.country_code_iso2, LEFT(s.locode, 2)) AS country_code_iso2,
     v.vessel_type,
+    v.length AS vessel_length,
+    d.department_code AS vessel_department_code,
     species.scip_species_type
 FROM pno_species s
 LEFT JOIN far_gears fg
@@ -178,3 +181,5 @@ LEFT JOIN species
 ON species.species_code = s.species
 LEFT JOIN vessels v
 ON v.cfr = s.cfr
+LEFT JOIN districts d
+ON d.district_code = v.district_code

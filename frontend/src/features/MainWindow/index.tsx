@@ -4,6 +4,7 @@ import { MainMap } from '@features/Map/components/MainMap'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { StartupNotification } from '@features/StartupNotification/components'
+import { useSaveUserLayersOnChange } from '@features/UserLayers/hooks/useSaveUserLayersOnChange'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { trackEvent } from '@hooks/useTracking'
@@ -57,6 +58,7 @@ export function MainWindow() {
   )
 
   useBeforeUnload(warnOnUnload)
+  useSaveUserLayersOnChange()
 
   return (
     <>

@@ -8,11 +8,6 @@ import { FormikINNRadio } from '../FormikINNRadio'
 
 import type { MissionActionFormValues } from '../../../types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
 const mockUseGetIsInInnAreaQuery = jest.fn()
 jest.mock('@features/Mission/missionActionApi', () => ({
   useGetIsInInnAreaQuery: arg => mockUseGetIsInInnAreaQuery(arg)

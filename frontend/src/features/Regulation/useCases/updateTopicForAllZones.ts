@@ -4,7 +4,7 @@ import { Feature } from 'ol'
 
 import { sendRegulationTransaction } from '../../../api/geoserver'
 import { regulationActions } from '../slice'
-import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
+import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject } from '../utils'
 
 import type { BackofficeAppThunk } from '@store'
 
@@ -39,7 +39,7 @@ export const updateTopicForAllZones =
         const feature = buildZoneFeature(zone, newLayerName)
 
         return new Promise((resolve, reject) => {
-          sendRegulationTransaction(feature, RegulationActionType.Update)
+          sendRegulationTransaction({ updates: [feature] })
             .then(_ => resolve(true))
             .catch(e => reject(e))
         })

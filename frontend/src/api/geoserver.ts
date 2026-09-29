@@ -2,11 +2,9 @@
 
 import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
-import GML from 'ol/format/GML'
 import WFS from 'ol/format/WFS'
 
 import { HttpStatusCode } from './constants'
-import { RegulationActionType } from '../features/Regulation/utils'
 
 import type { WFSGetFeature } from '../domain/types/geoserver'
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -14,6 +12,7 @@ import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { FeatureCollection, Polygon } from 'geojson'
 import type { Extent } from 'ol/extent'
+import type Feature from 'ol/Feature'
 
 export const REGULATORY_ZONE_METADATA_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la couche réglementaire"
 const REGULATORY_ZONES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
@@ -43,7 +42,7 @@ function getAllRegulatoryLayersFromAPI(fromBackoffice): Promise<Regulation.Regul
 
   return fetch(
     `${geoserverURL}/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typename=monitorfish:` +
-      `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,next_id,tags`
+      `${LayerProperties.REGULATORY.code}&outputFormat=application/json&propertyName=id,law_type,topic,gears,species,regulatory_references,zone,region,tags`
   )
     .then(response => {
       if (response.status === HttpStatusCode.OK) {
@@ -305,34 +304,33 @@ function getRegulatoryFeatureMetadataFromAPI(
     })
 }
 
+export type RegulationTransaction = {
+  deletes?: Feature[]
+  updates?: Feature[]
+}
+
+/**
+ * GeoServer reads `EPSG:4326` as longitude/latitude whereas OpenLayers writes it as latitude/longitude:
+ * the URN form is latitude/longitude for both.
+ */
+const REGULATION_TRANSACTION_SRS_NAME = 'urn:ogc:def:crs:EPSG::4326'
+
 /**
  * @description This API isn't authenticated
  */
-function sendRegulationTransaction(feature, actionType) {
-  const formatWFS = new WFS()
-  const formatGML = new GML({
+function sendRegulationTransaction({ deletes = [], updates = [] }: RegulationTransaction) {
+  const transaction = new WFS().writeTransaction([], updates, deletes, {
     featureNS: 'monitorfish',
+    featurePrefix: 'feature',
     featureType: 'monitorfish:regulations_write',
-    srsName: 'EPSG:4326'
+    nativeElements: [],
+    srsName: REGULATION_TRANSACTION_SRS_NAME
   })
-
   const xs = new XMLSerializer()
-  let transaction
-  // TODO `null` doesn't seem to an expected parameter value for `writeTransaction` method.
-  if (actionType === RegulationActionType.Update) {
-    // @ts-ignore
-    transaction = formatWFS.writeTransaction(null, [feature], null, formatGML)
-  } else if (actionType === RegulationActionType.Insert) {
-    // @ts-ignore
-    transaction = formatWFS.writeTransaction([feature], null, null, formatGML)
-  } else if (actionType === RegulationActionType.Delete) {
-    // @ts-ignore
-    transaction = formatWFS.writeTransaction(null, null, [feature], formatGML)
-  }
   const payload = xs.serializeToString(transaction)
 
   return fetch(`${GEOSERVER_BACKOFFICE_URL}/geoserver/wfs`, {
-    body: payload.replace('feature:', ''),
+    body: payload.replaceAll('typeName="feature:', 'typeName="'),
     headers: {
       'Content-Type': 'text/xml',
       'Data-Type': 'xml',

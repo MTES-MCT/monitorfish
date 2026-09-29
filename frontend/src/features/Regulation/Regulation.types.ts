@@ -39,7 +39,6 @@ export namespace Regulation {
    *      topic: 'Etang de Thau-Ingril Mèze',
    *      upcomingRegulatoryReferences: undefined,
    *      zone: 'Etang de Thau-Ingrill_Drague-à-main',
-   *      next_id: undefined,
    *      tags: ["ARP"]
    *     }
    *   ]
@@ -65,7 +64,6 @@ export namespace Regulation {
     fishing_period?: string | undefined
     gears?: string | undefined
     law_type: string | undefined
-    next_id: number | string | undefined
     region: string | undefined
     regulatory_references: string | undefined
     species?: string | undefined
@@ -80,7 +78,6 @@ export namespace Regulation {
     gears: string
     id: string | undefined
     law_type: string
-    next_id: string | undefined
     other_info: string | undefined
     region: string
     regulatory_references: string | undefined

@@ -49,7 +49,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     },
     id: 123,
     lawType: 'Reg. MEMN',
-    nextId: '123',
     otherInfo: 'blabla',
     region: 'Normandie, Bretagne',
     regulatoryReferences: [
@@ -143,7 +142,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     },
     id: 1234,
     lawType: 'Reg. MEMN  TWO',
-    nextId: '123',
     otherInfo: 'blabla',
     region: 'Normandie, Bretagne  TWO',
     regulatoryReferences: [
@@ -230,7 +228,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     },
     id: 12345,
     lawType: 'Reg. NAMO',
-    nextId: '123',
     otherInfo: 'blabla',
     region: 'Morbihan, Bretagne',
     regulatoryReferences: [
@@ -307,7 +304,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     },
     id: 123456,
     lawType: 'Reg. NAMO',
-    nextId: '123',
     otherInfo: 'blabla',
     region: 'Morbihan, Bretagne',
     regulatoryReferences: [
@@ -384,7 +380,6 @@ export const regulatoryZones: RegulatoryZone[] = [
     },
     id: 1234567,
     lawType: 'Reg. NAMO',
-    nextId: '123',
     otherInfo: 'blabla',
     region: 'Finistère, Bretagne',
     regulatoryReferences: [

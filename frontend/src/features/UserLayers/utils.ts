@@ -8,26 +8,26 @@ import type { RegulatoryZone } from '@features/Regulation/types'
 
 export const isEmptyUserLayers = (userLayers: UserLayers) =>
   !userLayers.baseLayer &&
-  !userLayers.administrativeLayers.length &&
-  !userLayers.showedRegulatoryZoneIds.length &&
+  !userLayers.displayedAdministrativeLayers.length &&
+  !userLayers.displayedRegulatoryZoneIds.length &&
   !userLayers.selectedRegulatoryZoneIds.length
 
 const haveSameIds = (ids: string[], otherIds: string[]) => xor(ids, otherIds).length === 0
 
 export const haveSameRegulatoryZoneIds = (userLayers: UserLayers, otherUserLayers: UserLayers) =>
   haveSameIds(userLayers.selectedRegulatoryZoneIds, otherUserLayers.selectedRegulatoryZoneIds) &&
-  haveSameIds(userLayers.showedRegulatoryZoneIds, otherUserLayers.showedRegulatoryZoneIds)
+  haveSameIds(userLayers.displayedRegulatoryZoneIds, otherUserLayers.displayedRegulatoryZoneIds)
 
 const isRegulatoryLayer = (showedLayer: MonitorFishMap.ShowedLayer) =>
   showedLayer.type === LayerProperties.REGULATORY.code
 
-export const getAdministrativeLayers = (showedLayers: MonitorFishMap.ShowedLayer[]): AdministrativeLayer[] =>
+export const getDisplayedAdministrativeLayers = (showedLayers: MonitorFishMap.ShowedLayer[]): AdministrativeLayer[] =>
   showedLayers
     .filter(showedLayer => !isRegulatoryLayer(showedLayer))
     .map(({ type, zone }) => (type ? { type, zone } : undefined))
     .filter(isNotNullish)
 
-export const getShowedRegulatoryZoneIds = (showedLayers: MonitorFishMap.ShowedLayer[]): string[] =>
+export const getDisplayedRegulatoryZoneIds = (showedLayers: MonitorFishMap.ShowedLayer[]): string[] =>
   showedLayers
     .filter(isRegulatoryLayer)
     .map(regulatoryLayer => regulatoryLayer.id)
@@ -39,12 +39,12 @@ export const getUserLayersFromState = (
   selectedRegulatoryLayers: Record<string, RegulatoryZone[]> | null,
   baseLayer: string | undefined
 ): UserLayers => ({
-  administrativeLayers: getAdministrativeLayers(showedLayers),
   baseLayer,
+  displayedAdministrativeLayers: getDisplayedAdministrativeLayers(showedLayers),
+  displayedRegulatoryZoneIds: getDisplayedRegulatoryZoneIds(showedLayers),
   selectedRegulatoryZoneIds: Object.values(selectedRegulatoryLayers ?? {})
     .flat()
     .map(regulatoryZone => regulatoryZone.id)
     .filter(isNotNullish)
-    .map(String),
-  showedRegulatoryZoneIds: getShowedRegulatoryZoneIds(showedLayers)
+    .map(String)
 })

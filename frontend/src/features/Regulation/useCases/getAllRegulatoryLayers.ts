@@ -77,9 +77,9 @@ const applyUserLayers =
     )
     dispatch(
       layerActions.setShowedLayers({
-        administrativeLayers: userLayers.administrativeLayers,
-        regulatoryZones,
-        showedRegulatoryZoneIds: userLayers.showedRegulatoryZoneIds
+        displayedAdministrativeLayers: userLayers.displayedAdministrativeLayers,
+        displayedRegulatoryZoneIds: userLayers.displayedRegulatoryZoneIds,
+        regulatoryZones
       })
     )
 

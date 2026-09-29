@@ -6,7 +6,7 @@ import { fromPairs, groupBy } from 'lodash-es'
 import { STATUS } from './components/RegulationTables/constants'
 import {
   DEFAULT_REGULATION,
-  findCurrentRegulatoryZones,
+  findRegulatoryZonesByIds,
   getRegulatoryLayersWithoutTerritory,
   REGULATORY_REFERENCE_KEYS
 } from './utils'
@@ -273,7 +273,7 @@ const regulationSlice = createSlice({
       const { regulatoryZones, selectedRegulatoryZoneIds } = action.payload
 
       state.selectedRegulatoryLayers = groupBy(
-        findCurrentRegulatoryZones<RegulatoryZone | EditedRegulatoryZone>(regulatoryZones, selectedRegulatoryZoneIds),
+        findRegulatoryZonesByIds<RegulatoryZone | EditedRegulatoryZone>(regulatoryZones, selectedRegulatoryZoneIds),
         regulatoryZone => regulatoryZone.topic
       ) as Record<string, RegulatoryZone[]>
     },

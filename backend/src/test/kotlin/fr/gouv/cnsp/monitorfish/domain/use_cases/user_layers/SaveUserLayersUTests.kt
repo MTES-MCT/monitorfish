@@ -33,8 +33,8 @@ class SaveUserLayersUTests {
         val expected =
             UserLayers(
                 hashedEmail = hash("dummy@email.gouv.fr"),
-                administrativeLayers = listOf(eezLayer),
-                showedRegulatoryZoneIds = listOf("7"),
+                displayedAdministrativeLayers = listOf(eezLayer),
+                displayedRegulatoryZoneIds = listOf("7"),
                 selectedRegulatoryZoneIds = listOf("8", "9"),
                 baseLayer = "DARK",
             )

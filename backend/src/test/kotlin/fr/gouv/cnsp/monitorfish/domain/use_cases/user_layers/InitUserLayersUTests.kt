@@ -34,8 +34,8 @@ class InitUserLayersUTests {
         val expected =
             UserLayers(
                 hashedEmail = hashedEmail,
-                administrativeLayers = listOf(eezLayer),
-                showedRegulatoryZoneIds = listOf("7"),
+                displayedAdministrativeLayers = listOf(eezLayer),
+                displayedRegulatoryZoneIds = listOf("7"),
                 selectedRegulatoryZoneIds = listOf("8"),
                 baseLayer = "DARK",
             )
@@ -48,8 +48,8 @@ class InitUserLayersUTests {
         val existing =
             UserLayers(
                 hashedEmail = hashedEmail,
-                administrativeLayers = listOf(),
-                showedRegulatoryZoneIds = listOf(),
+                displayedAdministrativeLayers = listOf(),
+                displayedRegulatoryZoneIds = listOf(),
                 selectedRegulatoryZoneIds = listOf("9"),
                 baseLayer = null,
             )

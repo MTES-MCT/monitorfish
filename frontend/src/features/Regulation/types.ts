@@ -14,7 +14,6 @@ export type RegulatoryZone = BaseRegulatoryZone & {
   geometry: Polygon | undefined
   id: number | string | undefined
   lawType: string
-  nextId: string | undefined
   otherInfo: string | undefined
   region: string
   regulatoryReferences: RegulatoryText[] | undefined

@@ -12,16 +12,16 @@ class SaveUserLayers(
 ) {
     fun execute(
         email: String,
-        administrativeLayers: List<AdministrativeLayer>,
-        showedRegulatoryZoneIds: List<String>,
+        displayedAdministrativeLayers: List<AdministrativeLayer>,
+        displayedRegulatoryZoneIds: List<String>,
         selectedRegulatoryZoneIds: List<String>,
         baseLayer: String?,
     ): UserLayers {
         val userLayers =
             UserLayers(
                 hashedEmail = hash(email),
-                administrativeLayers = administrativeLayers.distinct(),
-                showedRegulatoryZoneIds = showedRegulatoryZoneIds.distinct(),
+                displayedAdministrativeLayers = displayedAdministrativeLayers.distinct(),
+                displayedRegulatoryZoneIds = displayedRegulatoryZoneIds.distinct(),
                 selectedRegulatoryZoneIds = selectedRegulatoryZoneIds.distinct(),
                 baseLayer = baseLayer,
             )

@@ -1,5 +1,3 @@
-import { isNotNullish } from '@utils/isNotNullish'
-
 import { getTextForSearch } from '../../utils'
 import { LayerProperties } from '../Map/constants'
 import { formatDataForSelectPicker } from './components/RegulationTables/utils'
@@ -34,7 +32,6 @@ export const mapToRegulatoryZone = (
     geometry: feature.geometry ?? undefined,
     id: feature.properties.id ?? feature.id?.toString()?.split('.')[1],
     lawType: feature.properties.law_type,
-    nextId: feature.properties.next_id,
     otherInfo: feature.properties.other_info,
     region: feature.properties.region,
     regulatoryReferences: parseRegulatoryReferences(feature.properties.regulatory_references),
@@ -45,50 +42,13 @@ export const mapToRegulatoryZone = (
   }
 }
 
-type VersionedRegulatoryZone = Pick<RegulatoryZone, 'id' | 'lawType' | 'nextId' | 'topic'>
-
-/**
- * Find the current version of a regulatory zone, following `nextId` while the zone is no longer active
- * (i.e. without topic or law type).
- *
- * Returns `undefined` when the zone (or one of its next versions) is deleted.
- */
-export const findCurrentRegulatoryZone = <T extends VersionedRegulatoryZone>(
-  regulatoryZones: T[],
-  regulatoryZoneId: number | string
-): T | undefined => {
-  const visitedIds = new Set<string>()
-  let currentId: string | undefined = String(regulatoryZoneId)
-
-  while (currentId !== undefined && !visitedIds.has(currentId)) {
-    visitedIds.add(currentId)
-    const searchedId = currentId
-    const regulatoryZone = regulatoryZones.find(({ id }) => String(id) === searchedId)
-    if (!regulatoryZone) {
-      return undefined
-    }
-    if (regulatoryZone.topic && regulatoryZone.lawType) {
-      return regulatoryZone
-    }
-
-    currentId = isNotNullish(regulatoryZone.nextId) ? String(regulatoryZone.nextId) : undefined
-  }
-
-  return undefined
-}
-
-/**
- * Find the current version of each regulatory zone, without duplicates nor deleted zones.
- */
-export const findCurrentRegulatoryZones = <T extends VersionedRegulatoryZone>(
+export const findRegulatoryZonesByIds = <T extends Pick<RegulatoryZone, 'id'>>(
   regulatoryZones: T[],
   regulatoryZoneIds: Array<number | string>
 ): T[] => {
-  const currentRegulatoryZones = regulatoryZoneIds
-    .map(regulatoryZoneId => findCurrentRegulatoryZone(regulatoryZones, regulatoryZoneId))
-    .filter(isNotNullish)
+  const searchedIds = new Set(regulatoryZoneIds.map(String))
 
-  return [...new Set(currentRegulatoryZones)]
+  return regulatoryZones.filter(({ id }) => searchedIds.has(String(id)))
 }
 
 export const mapToProcessingRegulation = (persistProcessingRegulation: RegulatoryZoneDraft) => {
@@ -212,7 +172,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishingPeriod,
   gearRegulation,
   lawType,
-  nextId,
   otherInfo,
   region,
   regulatoryReferences,
@@ -224,7 +183,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishingPeriod: any
   gearRegulation: any
   lawType: string | undefined
-  nextId: string | undefined
   otherInfo: string | undefined
   region: string | undefined
   regulatoryReferences: any
@@ -236,7 +194,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishing_period: JSON.stringify(fishingPeriod),
   gears: JSON.stringify(gearRegulation),
   law_type: lawType,
-  next_id: nextId,
   other_info: otherInfo,
   region,
   regulatory_references: JSON.stringify(regulatoryReferences),
@@ -247,16 +204,6 @@ export const mapToRegulatoryFeatureObject = ({
 })
 
 export const getRegulatoryFeatureId = id => `${LayerProperties.REGULATORY.code}_write.${id}`
-
-export const emptyRegulatoryFeatureObject: Regulation.RegulatoryFeatureObject = {
-  law_type: undefined,
-  next_id: undefined,
-  region: undefined,
-  regulatory_references: undefined,
-  tags: undefined,
-  topic: undefined,
-  zone: undefined
-}
 
 export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
@@ -320,7 +267,6 @@ export enum RegulatorySearchProperty {
 // TODO Fix casing.
 export enum RegulationActionType {
   Delete = 'delete',
-  Insert = 'insert',
   Update = 'update'
 }
 
@@ -430,7 +376,6 @@ export const DEFAULT_REGULATION: RegulatoryZoneDraft = {
   geometry: undefined,
   id: undefined,
   lawType: undefined,
-  nextId: undefined,
   otherInfo: undefined,
   region: undefined,
   regulatoryReferences: undefined,

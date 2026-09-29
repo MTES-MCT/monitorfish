@@ -5,7 +5,7 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { isNotNullish } from '@utils/isNotNullish'
 
 import { userLayersApi } from '../apis'
-import { getAdministrativeLayers, getShowedRegulatoryZoneIds, isEmptyUserLayers } from '../utils'
+import { getDisplayedAdministrativeLayers, getDisplayedRegulatoryZoneIds, isEmptyUserLayers } from '../utils'
 
 import type { UserLayers } from '../types'
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -23,12 +23,12 @@ const getUserLayersFromLocalStorage = (): UserLayers => {
     .filter(isNotNullish)
 
   return {
-    administrativeLayers: getAdministrativeLayers(showedLayers),
     baseLayer: localStorageManager.get<string>(LocalStorageKey.BaseLayer),
+    displayedAdministrativeLayers: getDisplayedAdministrativeLayers(showedLayers),
+    displayedRegulatoryZoneIds: getDisplayedRegulatoryZoneIds(showedLayers),
     selectedRegulatoryZoneIds: localStorageManager
       .get<Array<number | string>>(LocalStorageKey.SelectedRegulatoryZoneIds, [])
-      .map(String),
-    showedRegulatoryZoneIds: getShowedRegulatoryZoneIds(showedLayers)
+      .map(String)
   }
 }
 

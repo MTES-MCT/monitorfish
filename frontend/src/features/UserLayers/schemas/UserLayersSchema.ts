@@ -8,8 +8,8 @@ export const AdministrativeLayerSchema = z.strictObject({
 })
 
 export const UserLayersSchema = z.strictObject({
-  administrativeLayers: z.array(AdministrativeLayerSchema),
   baseLayer: stringOrUndefined,
-  selectedRegulatoryZoneIds: z.array(z.string()),
-  showedRegulatoryZoneIds: z.array(z.string())
+  displayedAdministrativeLayers: z.array(AdministrativeLayerSchema),
+  displayedRegulatoryZoneIds: z.array(z.string()),
+  selectedRegulatoryZoneIds: z.array(z.string())
 })

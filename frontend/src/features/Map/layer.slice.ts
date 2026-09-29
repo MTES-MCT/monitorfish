@@ -2,7 +2,7 @@
 
 import { LayerProperties } from '@features/Map/constants'
 import { getLayerNameNormalized } from '@features/Map/utils'
-import { findCurrentRegulatoryZones } from '@features/Regulation/utils'
+import { findRegulatoryZonesByIds } from '@features/Regulation/utils'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import { MonitorFishMap } from './Map.types'
@@ -138,17 +138,17 @@ const layerSlice = createSlice({
     setShowedLayers(
       state,
       action: PayloadAction<{
-        administrativeLayers: AdministrativeLayer[]
+        displayedAdministrativeLayers: AdministrativeLayer[]
+        displayedRegulatoryZoneIds: string[]
         regulatoryZones: RegulatoryZone[]
-        showedRegulatoryZoneIds: string[]
       }>
     ) {
-      const { administrativeLayers, regulatoryZones, showedRegulatoryZoneIds } = action.payload
+      const { displayedAdministrativeLayers, displayedRegulatoryZoneIds, regulatoryZones } = action.payload
 
-      const showedAdministrativeLayers = administrativeLayers.map(
+      const showedAdministrativeLayers = displayedAdministrativeLayers.map(
         ({ type, zone }) => ({ type, zone }) satisfies MonitorFishMap.ShowedLayer
       )
-      const showedRegulatoryLayers = findCurrentRegulatoryZones(regulatoryZones, showedRegulatoryZoneIds).map(
+      const showedRegulatoryLayers = findRegulatoryZonesByIds(regulatoryZones, displayedRegulatoryZoneIds).map(
         regulatoryZone =>
           ({
             gears: regulatoryZone.gearRegulation,

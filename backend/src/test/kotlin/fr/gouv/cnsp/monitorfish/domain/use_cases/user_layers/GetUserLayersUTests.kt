@@ -23,8 +23,8 @@ class GetUserLayersUTests {
         val userLayers =
             UserLayers(
                 hashedEmail = hashedEmail,
-                administrativeLayers = listOf(AdministrativeLayer(type = "eez_areas", zone = null)),
-                showedRegulatoryZoneIds = listOf("8"),
+                displayedAdministrativeLayers = listOf(AdministrativeLayer(type = "eez_areas", zone = null)),
+                displayedRegulatoryZoneIds = listOf("8"),
                 selectedRegulatoryZoneIds = listOf("8"),
                 baseLayer = "SATELLITE",
             )

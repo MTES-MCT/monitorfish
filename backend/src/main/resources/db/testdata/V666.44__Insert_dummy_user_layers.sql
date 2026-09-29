@@ -3,4 +3,4 @@
 
 TRUNCATE TABLE user_layers;
 
-INSERT INTO user_layers (hashed_email, administrative_layers, showed_regulatory_zone_ids, selected_regulatory_zone_ids, base_layer) VALUES ('a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a', '[{"type":"eez_areas","zone":null}]', '["8"]', '["8"]', 'SATELLITE');
+INSERT INTO user_layers (hashed_email, displayed_administrative_layers, displayed_regulatory_zone_ids, selected_regulatory_zone_ids, base_layer) VALUES ('a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a', '[{"type":"eez_areas","zone":null}]', '["8"]', '["8"]', 'SATELLITE');

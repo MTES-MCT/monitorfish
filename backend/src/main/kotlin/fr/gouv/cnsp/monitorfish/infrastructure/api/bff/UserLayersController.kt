@@ -25,7 +25,7 @@ class UserLayersController(
     private val saveUserLayers: SaveUserLayers,
 ) {
     @GetMapping("")
-    @Operation(summary = "Get user layers (administrative layers, showed and selected regulatory zones, base layer)")
+    @Operation(summary = "Get user layers (administrative layers, displayed and selected regulatory zones, base layer)")
     fun getUserLayers(
         @AuthenticationPrincipal principal: OidcUser?,
     ): UserLayersDataOutput {
@@ -46,8 +46,8 @@ class UserLayersController(
         return UserLayersDataOutput.fromUserLayers(
             initUserLayers.execute(
                 email,
-                userLayers.administrativeLayers,
-                userLayers.showedRegulatoryZoneIds,
+                userLayers.displayedAdministrativeLayers,
+                userLayers.displayedRegulatoryZoneIds,
                 userLayers.selectedRegulatoryZoneIds,
                 userLayers.baseLayer,
             ),
@@ -65,8 +65,8 @@ class UserLayersController(
         return UserLayersDataOutput.fromUserLayers(
             saveUserLayers.execute(
                 email,
-                userLayers.administrativeLayers,
-                userLayers.showedRegulatoryZoneIds,
+                userLayers.displayedAdministrativeLayers,
+                userLayers.displayedRegulatoryZoneIds,
                 userLayers.selectedRegulatoryZoneIds,
                 userLayers.baseLayer,
             ),

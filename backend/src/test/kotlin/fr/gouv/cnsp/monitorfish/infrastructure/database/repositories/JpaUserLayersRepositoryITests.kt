@@ -25,9 +25,9 @@ class JpaUserLayersRepositoryITests : AbstractDBTests() {
         assertThat(userLayers).isNotNull()
         assertThat(userLayers!!.hashedEmail).isEqualTo(hashedEmail)
         assertThat(
-            userLayers.administrativeLayers,
+            userLayers.displayedAdministrativeLayers,
         ).containsExactly(AdministrativeLayer(type = "eez_areas", zone = null))
-        assertThat(userLayers.showedRegulatoryZoneIds).containsExactly("8")
+        assertThat(userLayers.displayedRegulatoryZoneIds).containsExactly("8")
         assertThat(userLayers.selectedRegulatoryZoneIds).containsExactly("8")
         assertThat(userLayers.baseLayer).isEqualTo("SATELLITE")
     }
@@ -46,8 +46,8 @@ class JpaUserLayersRepositoryITests : AbstractDBTests() {
         val userLayers =
             UserLayers(
                 hashedEmail = hashedEmail,
-                administrativeLayers = listOf(AdministrativeLayer(type = "3_miles_areas", zone = null)),
-                showedRegulatoryZoneIds = listOf("9"),
+                displayedAdministrativeLayers = listOf(AdministrativeLayer(type = "3_miles_areas", zone = null)),
+                displayedRegulatoryZoneIds = listOf("9"),
                 selectedRegulatoryZoneIds = listOf("9"),
                 baseLayer = null,
             )
@@ -59,7 +59,7 @@ class JpaUserLayersRepositoryITests : AbstractDBTests() {
         assertThat(jpaUserLayersRepository.findByHashedEmail(hashedEmail)).isEqualTo(userLayers)
 
         // When
-        val updatedUserLayers = userLayers.copy(administrativeLayers = listOf(), baseLayer = "DARK")
+        val updatedUserLayers = userLayers.copy(displayedAdministrativeLayers = listOf(), baseLayer = "DARK")
         jpaUserLayersRepository.upsert(updatedUserLayers)
 
         // Then

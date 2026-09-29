@@ -300,7 +300,7 @@ context('Sidebars > Regulatory Layers', () => {
     enableUserLayersPersistence()
     cy.visit('/#@-224002.65,6302673.54,8.70')
     cy.wait('@getUserLayers').then(({ response }) => {
-      expect(response?.body.administrativeLayers).to.be.empty
+      expect(response?.body.displayedAdministrativeLayers).to.be.empty
     })
     cy.wait(5000)
 
@@ -317,8 +317,8 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Then the layer is saved on the user profile
     cy.wait('@saveUserLayers').then(({ request }) => {
-      expect(request.body.administrativeLayers).length(1)
-      expect(request.body.administrativeLayers[0].type).equal('eez_areas')
+      expect(request.body.displayedAdministrativeLayers).length(1)
+      expect(request.body.displayedAdministrativeLayers[0].type).equal('eez_areas')
     })
     cy.getFeaturesFromLayer('eez_areas').then(features => {
       expect(features.length).to.be.equal(7)
@@ -329,8 +329,8 @@ context('Sidebars > Regulatory Layers', () => {
 
     // Then the layer is restored from the user profile
     cy.wait('@getUserLayers').then(({ response }) => {
-      expect(response?.body.administrativeLayers).length(1)
-      expect(response?.body.administrativeLayers[0].type).equal('eez_areas')
+      expect(response?.body.displayedAdministrativeLayers).length(1)
+      expect(response?.body.displayedAdministrativeLayers[0].type).equal('eez_areas')
     })
     cy.wait(5000)
     cy.getFeaturesFromLayer('eez_areas').then(features => {
@@ -450,10 +450,10 @@ context('Sidebars > Regulatory Layers', () => {
    */
   function enableUserLayersPersistence() {
     cy.request('PUT', '/bff/v1/user_layers', {
-      administrativeLayers: [],
       baseLayer: null,
-      selectedRegulatoryZoneIds: [],
-      showedRegulatoryZoneIds: []
+      displayedAdministrativeLayers: [],
+      displayedRegulatoryZoneIds: [],
+      selectedRegulatoryZoneIds: []
     })
     cy.intercept('GET', '/bff/v1/user_layers', request => request.continue()).as('getUserLayers')
     cy.intercept('PUT', '/bff/v1/user_layers', request => request.continue()).as('saveUserLayers')

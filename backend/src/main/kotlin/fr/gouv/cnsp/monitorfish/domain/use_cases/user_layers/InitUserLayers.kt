@@ -19,16 +19,16 @@ class InitUserLayers(
 ) {
     fun execute(
         email: String,
-        administrativeLayers: List<AdministrativeLayer>,
-        showedRegulatoryZoneIds: List<String>,
+        displayedAdministrativeLayers: List<AdministrativeLayer>,
+        displayedRegulatoryZoneIds: List<String>,
         selectedRegulatoryZoneIds: List<String>,
         baseLayer: String?,
     ): UserLayers =
         userLayersRepository.findByHashedEmail(hash(email))
             ?: saveUserLayers.execute(
                 email,
-                administrativeLayers,
-                showedRegulatoryZoneIds,
+                displayedAdministrativeLayers,
+                displayedRegulatoryZoneIds,
                 selectedRegulatoryZoneIds,
                 baseLayer,
             )

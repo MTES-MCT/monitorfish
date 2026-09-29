@@ -18,11 +18,11 @@ data class UserLayersEntity(
     @Column(name = "hashed_email")
     val hashedEmail: String,
     @Type(JsonBinaryType::class)
-    @Column(name = "administrative_layers", columnDefinition = "jsonb")
-    val administrativeLayers: String,
+    @Column(name = "displayed_administrative_layers", columnDefinition = "jsonb")
+    val displayedAdministrativeLayers: String,
     @Type(JsonBinaryType::class)
-    @Column(name = "showed_regulatory_zone_ids", columnDefinition = "jsonb")
-    val showedRegulatoryZoneIds: String,
+    @Column(name = "displayed_regulatory_zone_ids", columnDefinition = "jsonb")
+    val displayedRegulatoryZoneIds: String,
     @Type(JsonBinaryType::class)
     @Column(name = "selected_regulatory_zone_ids", columnDefinition = "jsonb")
     val selectedRegulatoryZoneIds: String,
@@ -32,12 +32,12 @@ data class UserLayersEntity(
     fun toUserLayers(mapper: ObjectMapper): UserLayers =
         UserLayers(
             hashedEmail = hashedEmail,
-            administrativeLayers =
+            displayedAdministrativeLayers =
                 mapper.readValue(
-                    administrativeLayers,
+                    displayedAdministrativeLayers,
                     mapper.typeFactory.constructCollectionType(List::class.java, AdministrativeLayer::class.java),
                 ),
-            showedRegulatoryZoneIds = readRegulatoryZoneIds(mapper, showedRegulatoryZoneIds),
+            displayedRegulatoryZoneIds = readRegulatoryZoneIds(mapper, displayedRegulatoryZoneIds),
             selectedRegulatoryZoneIds = readRegulatoryZoneIds(mapper, selectedRegulatoryZoneIds),
             baseLayer = baseLayer,
         )
@@ -58,8 +58,8 @@ data class UserLayersEntity(
         ): UserLayersEntity =
             UserLayersEntity(
                 hashedEmail = userLayers.hashedEmail,
-                administrativeLayers = mapper.writeValueAsString(userLayers.administrativeLayers),
-                showedRegulatoryZoneIds = mapper.writeValueAsString(userLayers.showedRegulatoryZoneIds),
+                displayedAdministrativeLayers = mapper.writeValueAsString(userLayers.displayedAdministrativeLayers),
+                displayedRegulatoryZoneIds = mapper.writeValueAsString(userLayers.displayedRegulatoryZoneIds),
                 selectedRegulatoryZoneIds = mapper.writeValueAsString(userLayers.selectedRegulatoryZoneIds),
                 baseLayer = userLayers.baseLayer,
             )

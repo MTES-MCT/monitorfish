@@ -179,7 +179,8 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          dispatch(createOrUpdateBackofficeRegulation(processingRegulation, selectedRegulatoryZoneId))
+          const pickedGeometry = processingRegulation.id ? geometriesMap[processingRegulation.id] : undefined
+          dispatch(createOrUpdateBackofficeRegulation(processingRegulation, selectedRegulatoryZoneId, pickedGeometry))
           setSaveIsForbidden(false)
         } else {
           dispatch(regulationActions.setRegulatoryTextCheckedMap({}))
@@ -190,6 +191,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       }
     }
   }, [
+    geometriesMap,
     hasOneOrMoreValuesMissing,
     dispatch,
     processingRegulation,

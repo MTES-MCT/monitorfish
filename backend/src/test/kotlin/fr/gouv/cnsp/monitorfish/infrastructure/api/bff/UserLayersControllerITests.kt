@@ -63,16 +63,16 @@ class UserLayersControllerITests {
     private val userLayers =
         UserLayers(
             hashedEmail = "hashed",
-            administrativeLayers = listOf(eezLayer),
-            showedRegulatoryZoneIds = listOf("7"),
+            displayedAdministrativeLayers = listOf(eezLayer),
+            displayedRegulatoryZoneIds = listOf("7"),
             selectedRegulatoryZoneIds = listOf("8"),
             baseLayer = "SATELLITE",
         )
 
     private val input =
         UserLayersDataInput(
-            administrativeLayers = listOf(eezLayer),
-            showedRegulatoryZoneIds = listOf("7"),
+            displayedAdministrativeLayers = listOf(eezLayer),
+            displayedRegulatoryZoneIds = listOf("7"),
             selectedRegulatoryZoneIds = listOf("8"),
             baseLayer = "SATELLITE",
         )
@@ -86,9 +86,9 @@ class UserLayersControllerITests {
         api
             .perform(get("/bff/v1/user_layers").with(authenticatedRequest()))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.administrativeLayers.length()", equalTo(1)))
-            .andExpect(jsonPath("$.administrativeLayers[0].type", equalTo("eez_areas")))
-            .andExpect(jsonPath("$.showedRegulatoryZoneIds[0]", equalTo("7")))
+            .andExpect(jsonPath("$.displayedAdministrativeLayers.length()", equalTo(1)))
+            .andExpect(jsonPath("$.displayedAdministrativeLayers[0].type", equalTo("eez_areas")))
+            .andExpect(jsonPath("$.displayedRegulatoryZoneIds[0]", equalTo("7")))
             .andExpect(jsonPath("$.selectedRegulatoryZoneIds[0]", equalTo("8")))
             .andExpect(jsonPath("$.baseLayer", equalTo("SATELLITE")))
             .andExpect(jsonPath("$.hashedEmail").doesNotExist())
@@ -103,8 +103,8 @@ class UserLayersControllerITests {
         api
             .perform(get("/bff/v1/user_layers").with(authenticatedRequest()))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.administrativeLayers.length()", equalTo(0)))
-            .andExpect(jsonPath("$.showedRegulatoryZoneIds.length()", equalTo(0)))
+            .andExpect(jsonPath("$.displayedAdministrativeLayers.length()", equalTo(0)))
+            .andExpect(jsonPath("$.displayedRegulatoryZoneIds.length()", equalTo(0)))
             .andExpect(jsonPath("$.selectedRegulatoryZoneIds.length()", equalTo(0)))
             .andExpect(jsonPath("$.baseLayer", nullValue()))
     }
@@ -144,7 +144,7 @@ class UserLayersControllerITests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)),
             ).andExpect(status().isOk)
-            .andExpect(jsonPath("$.administrativeLayers[0].type", equalTo("eez_areas")))
+            .andExpect(jsonPath("$.displayedAdministrativeLayers[0].type", equalTo("eez_areas")))
 
         verify(saveUserLayers).execute(
             eq("email@domain-name.com"),

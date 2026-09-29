@@ -18,10 +18,10 @@ const dispatch = jest.fn() as any
 const getState = jest.fn() as any
 
 const LOADED_USER_LAYERS: UserLayers = {
-  administrativeLayers: [{ type: 'eez_areas', zone: undefined }],
   baseLayer: 'SATELLITE',
-  selectedRegulatoryZoneIds: ['8', '9'],
-  showedRegulatoryZoneIds: ['8']
+  displayedAdministrativeLayers: [{ type: 'eez_areas', zone: undefined }],
+  displayedRegulatoryZoneIds: ['8'],
+  selectedRegulatoryZoneIds: ['8', '9']
 }
 
 const givenStateWithRegulatoryZoneIds = (showedIds: number[], selectedIds: number[]) =>
@@ -51,10 +51,10 @@ describe('saveResolvedUserLayers()', () => {
 
     // Then
     expect(saveUserLayersMock).toHaveBeenCalledWith({
-      administrativeLayers: [{ type: 'eez_areas', zone: undefined }],
       baseLayer: 'SATELLITE',
-      selectedRegulatoryZoneIds: ['9', '12'],
-      showedRegulatoryZoneIds: ['12']
+      displayedAdministrativeLayers: [{ type: 'eez_areas', zone: undefined }],
+      displayedRegulatoryZoneIds: ['12'],
+      selectedRegulatoryZoneIds: ['9', '12']
     })
   })
 

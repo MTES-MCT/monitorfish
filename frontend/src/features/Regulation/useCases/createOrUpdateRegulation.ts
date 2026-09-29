@@ -1,53 +1,48 @@
 import Feature from 'ol/Feature'
+import GeoJSON from 'ol/format/GeoJSON'
 
 import { updateRegulation } from './updateRegulation'
 import { getRegulatoryFeatureId, mapToRegulatoryFeatureObject, RegulationActionType } from '../utils'
 
 import type { RegulatoryZoneDraft } from '../types'
 import type { BackofficeAppThunk } from '@store'
+import type { Polygon } from 'geojson'
 
+/**
+ * When another geometry is picked, it is copied into the regulation row (and its own row deleted) rather than
+ * moving the regulation to the geometry row: regulation ids must stay stable as they are saved in the user layers.
+ */
 export const createOrUpdateBackofficeRegulation =
   (
     processingRegulation: RegulatoryZoneDraft,
-    previousId: number | string | undefined
+    previousId: number | string | undefined,
+    pickedGeometry: Polygon | undefined
   ): BackofficeAppThunk<Promise<void>> =>
   async dispatch => {
-    const featureObject = mapToRegulatoryFeatureObject({
-      ...processingRegulation,
-      region: processingRegulation.region?.join(', ')
-    })
+    const regulationFeature = new Feature(
+      mapToRegulatoryFeatureObject({
+        ...processingRegulation,
+        region: processingRegulation.region?.join(', ')
+      })
+    )
 
-    const feature = new Feature(featureObject)
-    feature.setId(getRegulatoryFeatureId(processingRegulation.id))
-    if (isGeometryModified(previousId, processingRegulation.id)) {
-      /**
-       * We first need to delete the previous regulation as there is an UNIQUE CONSTRAINT (topic, zone) of the table.
-       * /!\ This constraint is only applied to the local (CROSS) regulations table.
-       */
-      const emptyFeature = new Feature({})
-      emptyFeature.setId(getRegulatoryFeatureId(previousId))
-      await dispatch(updateRegulation(emptyFeature, RegulationActionType.Delete))
-
-      /**
-       * We must wait for the reset to be done.
-       * TODO Add the two UPDATE into the same transaction to remove this `setTimeout`
-       */
-      setTimeout(() => {
-        /**
-         * Then, we update the new regulation with the values of the previous one
-         */
-        dispatch(updateRegulation(feature, RegulationActionType.Update))
-      }, 1000)
+    if (!previousId || previousId === processingRegulation.id) {
+      regulationFeature.setId(getRegulatoryFeatureId(processingRegulation.id))
+      await dispatch(updateRegulation({ updates: [regulationFeature] }, RegulationActionType.Update))
 
       return
     }
 
-    /**
-     * Then, we update the new regulation with the values of the previous one
-     */
-    await dispatch(updateRegulation(feature, RegulationActionType.Update))
-  }
+    if (!pickedGeometry) {
+      throw new Error(`Geometry ${processingRegulation.id} not found.`)
+    }
 
-function isGeometryModified(previousId: number | string | undefined, id: number | string | undefined) {
-  return previousId && previousId !== id
-}
+    regulationFeature.setId(getRegulatoryFeatureId(previousId))
+    regulationFeature.setGeometry(new GeoJSON().readGeometry(pickedGeometry))
+    const pickedGeometryFeature = new Feature()
+    pickedGeometryFeature.setId(getRegulatoryFeatureId(processingRegulation.id))
+
+    await dispatch(
+      updateRegulation({ deletes: [pickedGeometryFeature], updates: [regulationFeature] }, RegulationActionType.Update)
+    )
+  }

@@ -29,17 +29,17 @@ const dispatch = jest.fn(action => action) as any
 const getState = jest.fn() as any
 
 const EMPTY_USER_LAYERS: UserLayers = {
-  administrativeLayers: [],
   baseLayer: undefined,
-  selectedRegulatoryZoneIds: [],
-  showedRegulatoryZoneIds: []
+  displayedAdministrativeLayers: [],
+  displayedRegulatoryZoneIds: [],
+  selectedRegulatoryZoneIds: []
 }
 
 const SAVED_USER_LAYERS: UserLayers = {
-  administrativeLayers: [{ type: 'eez_areas', zone: undefined }],
   baseLayer: 'SATELLITE',
-  selectedRegulatoryZoneIds: ['8'],
-  showedRegulatoryZoneIds: ['8']
+  displayedAdministrativeLayers: [{ type: 'eez_areas', zone: undefined }],
+  displayedRegulatoryZoneIds: ['8'],
+  selectedRegulatoryZoneIds: ['8']
 }
 
 const setLegacyLocalStorage = () => {
@@ -55,10 +55,10 @@ const setLegacyLocalStorage = () => {
 }
 
 const EXPECTED_SEEDED_PAYLOAD: UserLayers = {
-  administrativeLayers: [{ type: 'eez_areas', zone: undefined }],
   baseLayer: 'DARK',
-  selectedRegulatoryZoneIds: ['8', '9'],
-  showedRegulatoryZoneIds: ['8']
+  displayedAdministrativeLayers: [{ type: 'eez_areas', zone: undefined }],
+  displayedRegulatoryZoneIds: ['8'],
+  selectedRegulatoryZoneIds: ['8', '9']
 }
 
 const resolveWith = (value: unknown) => ({ unwrap: () => Promise.resolve(value) })

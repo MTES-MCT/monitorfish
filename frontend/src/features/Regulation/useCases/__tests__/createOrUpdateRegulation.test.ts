@@ -132,6 +132,32 @@ describe('createOrUpdateBackofficeRegulation()', () => {
     expect(getUpdatedPropertyNames(transaction)).not.toContain('geometry')
   })
 
+  it('Should not delete the regulation When its own geometry is picked', async () => {
+    // When
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, geometryId: '123', id: 123 }, PICKED_GEOMETRY)(
+      dispatch,
+      getState,
+      undefined
+    )
+
+    // Then
+    const transaction = getSentTransaction()
+    expect(getFeatureIds(transaction, 'Update')).toEqual(['regulations_write.123'])
+    expect(getFeatureIds(transaction, 'Delete')).toEqual([])
+  })
+
+  it('Should keep the user texts untouched When they contain the feature type prefix', async () => {
+    // When
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: 123, otherInfo: 'feature: dragues' }, undefined)(
+      dispatch,
+      getState,
+      undefined
+    )
+
+    // Then
+    expect(findElements(getSentTransaction(), 'Value').map(value => value.textContent)).toContain('feature: dragues')
+  })
+
   it('Should fill the picked geometry row When the regulation is created', async () => {
     // When
     await createOrUpdateBackofficeRegulation({ ...REGULATION, geometryId: '456' }, PICKED_GEOMETRY)(

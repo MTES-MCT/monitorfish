@@ -24,7 +24,7 @@ export const createOrUpdateBackofficeRegulation =
       })
     )
 
-    if (!id || !geometryId) {
+    if (!id || !geometryId || geometryId === String(id)) {
       regulationFeature.setId(getRegulatoryFeatureId(id ?? geometryId))
       await dispatch(updateRegulation({ updates: [regulationFeature] }, RegulationActionType.Update))
 

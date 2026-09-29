@@ -19,9 +19,9 @@ def test_flow(reset_test_data):
     )
 
     assert len(initial_pno_types) == 4
-    assert len(pno_types_after_first_run) == 12
+    assert len(pno_types_after_first_run) == 20
     assert len(initial_pno_type_rules) == 7
-    assert len(pno_type_rules_after_first_run) == 49
+    assert len(pno_type_rules_after_first_run) == 20
 
     # Re-running should succeed and lead to the same pno types
     state = init_pno_types_flow(return_state=True)

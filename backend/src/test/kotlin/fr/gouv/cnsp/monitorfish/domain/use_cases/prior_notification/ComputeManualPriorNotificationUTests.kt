@@ -2,15 +2,20 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.whenever
+import fr.gouv.cnsp.monitorfish.domain.entities.district.District
 import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
+import fr.gouv.cnsp.monitorfish.domain.entities.port.Port
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
 import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
+import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoFleetSegmentSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -36,6 +41,8 @@ class ComputeManualPriorNotificationUTests {
     private val computeFleetSegments: ComputeFleetSegments = mock()
     private val computePnoTypes: ComputePnoTypes = mock()
     private val computeRiskFactor: ComputeRiskFactor = mock()
+    private val portRepository: PortRepository = mock()
+    private val districtRepository: DistrictRepository = mock()
 
     @Test
     fun `execute should return PENDING_VERIFICATION state When vessel flag state is GBR`() {
@@ -77,8 +84,33 @@ class ComputeManualPriorNotificationUTests {
         whenever(reportingRepository.findCurrentInfractionSuspicionsByVesselId(any())).thenReturn(listOf())
         whenever(speciesRepository.findAll()).thenReturn(speciesList)
         whenever(computeFleetSegments.execute(any(), any(), any())).thenReturn(segments)
-        whenever(computePnoTypes.execute(any(), any(), any())).thenReturn(types)
+        whenever(
+            computePnoTypes.execute(
+                any(),
+                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            ),
+        ).thenReturn(types)
         whenever(computeRiskFactor.execute(any(), any(), any())).thenReturn(riskFactor)
+        whenever(portRepository.findByLocode(any())).thenReturn(
+            Port(
+                locode = portLocode,
+                countryCode = "FR",
+                name = "Dunkerque",
+                facade = "MEMN",
+                faoAreas = listOf(),
+                latitude = null,
+                longitude = null,
+                region = null,
+            ),
+        )
+        whenever(districtRepository.find(any())).thenReturn(
+            District(districtCode = "DK", district = "Dunkerque", departmentCode = "59", department = "Nord"),
+        )
 
         whenever(pnoPortSubscriptionRepository.has(portLocode)).thenReturn(true)
         whenever(pnoVesselSubscriptionRepository.has(vesselId)).thenReturn(false)
@@ -96,6 +128,8 @@ class ComputeManualPriorNotificationUTests {
                 computeFleetSegments = computeFleetSegments,
                 computePnoTypes = computePnoTypes,
                 computeRiskFactor = computeRiskFactor,
+                portRepository = portRepository,
+                districtRepository = districtRepository,
             ).execute(catches, faoArea, portLocode, tripGearCodes, vesselId, year)
 
         // Then
@@ -147,8 +181,33 @@ class ComputeManualPriorNotificationUTests {
         whenever(reportingRepository.findCurrentInfractionSuspicionsByVesselId(any())).thenReturn(reportings)
         whenever(speciesRepository.findAll()).thenReturn(speciesList)
         whenever(computeFleetSegments.execute(any(), any(), any())).thenReturn(segments)
-        whenever(computePnoTypes.execute(any(), any(), any())).thenReturn(types)
+        whenever(
+            computePnoTypes.execute(
+                any(),
+                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            ),
+        ).thenReturn(types)
         whenever(computeRiskFactor.execute(any(), any(), any())).thenReturn(riskFactor)
+        whenever(portRepository.findByLocode(any())).thenReturn(
+            Port(
+                locode = portLocode,
+                countryCode = "FR",
+                name = "Dunkerque",
+                facade = "MEMN",
+                faoAreas = listOf(),
+                latitude = null,
+                longitude = null,
+                region = null,
+            ),
+        )
+        whenever(districtRepository.find(any())).thenReturn(
+            District(districtCode = "DK", district = "Dunkerque", departmentCode = "59", department = "Nord"),
+        )
 
         whenever(pnoPortSubscriptionRepository.has(portLocode)).thenReturn(true)
         whenever(pnoVesselSubscriptionRepository.has(vesselId)).thenReturn(false)
@@ -166,6 +225,8 @@ class ComputeManualPriorNotificationUTests {
                 computeFleetSegments = computeFleetSegments,
                 computePnoTypes = computePnoTypes,
                 computeRiskFactor = computeRiskFactor,
+                portRepository = portRepository,
+                districtRepository = districtRepository,
             ).execute(catches, faoArea, portLocode, tripGearCodes, vesselId, year)
 
         // Then
@@ -216,8 +277,33 @@ class ComputeManualPriorNotificationUTests {
         whenever(reportingRepository.findCurrentInfractionSuspicionsByVesselId(any())).thenReturn(listOf())
         whenever(speciesRepository.findAll()).thenReturn(speciesList)
         whenever(computeFleetSegments.execute(any(), any(), any())).thenReturn(segments)
-        whenever(computePnoTypes.execute(any(), any(), any())).thenReturn(types)
+        whenever(
+            computePnoTypes.execute(
+                any(),
+                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+            ),
+        ).thenReturn(types)
         whenever(computeRiskFactor.execute(any(), any(), any())).thenReturn(riskFactor)
+        whenever(portRepository.findByLocode(any())).thenReturn(
+            Port(
+                locode = portLocode,
+                countryCode = "FR",
+                name = "Dunkerque",
+                facade = "MEMN",
+                faoAreas = listOf(),
+                latitude = null,
+                longitude = null,
+                region = null,
+            ),
+        )
+        whenever(districtRepository.find(any())).thenReturn(
+            District(districtCode = "DK", district = "Dunkerque", departmentCode = "59", department = "Nord"),
+        )
 
         whenever(pnoPortSubscriptionRepository.has(portLocode)).thenReturn(true)
         whenever(pnoVesselSubscriptionRepository.has(vesselId)).thenReturn(false)
@@ -235,6 +321,8 @@ class ComputeManualPriorNotificationUTests {
                 computeFleetSegments = computeFleetSegments,
                 computePnoTypes = computePnoTypes,
                 computeRiskFactor = computeRiskFactor,
+                portRepository = portRepository,
+                districtRepository = districtRepository,
             ).execute(catches, faoArea, portLocode, tripGearCodes, vesselId, year)
 
         // Then

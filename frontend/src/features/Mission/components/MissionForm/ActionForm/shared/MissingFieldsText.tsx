@@ -1,8 +1,11 @@
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
+import { getMissingFieldsSummary } from '@features/Mission/components/MissionForm/utils/getMissingFieldsSummary'
 import { getMissionActionMissingFields } from '@features/Mission/components/MissionForm/utils/getMissionActionMissingFields'
+import { scrollToFirstMissingField } from '@features/Mission/components/MissionForm/utils/scrollToFirstMissingField'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
+import { Icon, pluralize, THEME, Tooltip } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
@@ -10,10 +13,11 @@ import type { MissionActionFormValues } from '@features/Mission/components/Missi
 export function MissingFieldsText() {
   const dispatch = useMainAppDispatch()
   const { values } = useFormikContext<MissionActionFormValues>()
-  const missingFields = getMissionActionMissingFields(values, dispatch)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const missingFieldPaths = getMissionActionMissingFields(values, dispatch)
   const isMissionEnded = useIsMissionEnded()
 
-  if (missingFields === 0) {
+  if (missingFieldPaths.length === 0) {
     return (
       <CompletionStatus data-cy="action-completion-status" isCompleted>
         <Icon.Confirm color={THEME.color.mediumSeaGreen} size={20} />
@@ -22,19 +26,53 @@ export function MissingFieldsText() {
     )
   }
 
+  const color = isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal
+  const count = missingFieldPaths.length
+
+  const scrollToFirstMissingFieldOfThisForm = () => {
+    if (wrapperRef.current) {
+      scrollToFirstMissingField(wrapperRef.current, missingFieldPaths)
+    }
+  }
+
   return (
     <CompletionStatus data-cy="action-completion-status">
-      <Icon.AttentionFilled color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal} />
-      <Text $color={isMissionEnded ? THEME.color.maximumRed : THEME.color.charcoal}>
-        {missingFields} {pluralize('champ', missingFields)} {pluralize('nécessaire', missingFields)} aux statistiques à
-        compléter
-      </Text>
+      <Icon.AttentionFilled color={color} />
+      <TooltipWrapper ref={wrapperRef} onClick={scrollToFirstMissingFieldOfThisForm}>
+        <StyledTooltip
+          color={color}
+          isSideWindow
+          linkText={`${count} ${pluralize('champ', count)} ${pluralize('nécessaire', count)} aux statistiques à compléter`}
+        >
+          <MissingFieldList data-cy="action-missing-fields-tooltip">
+            {getMissingFieldsSummary(missingFieldPaths, values).map(line => (
+              <li key={line}>{line}</li>
+            ))}
+          </MissingFieldList>
+        </StyledTooltip>
+      </TooltipWrapper>
     </CompletionStatus>
   )
 }
 
-const Text = styled.p<{ $color: string }>`
-  color: ${p => p.$color};
+const TooltipWrapper = styled.div`
+  > div > span {
+    text-decoration: none;
+  }
+
+  > div > span:hover {
+    text-decoration: underline;
+  }
+`
+
+const StyledTooltip = styled(Tooltip)`
+  margin-top: 22px;
+  max-width: 420px;
+  z-index: 99;
+`
+
+const MissingFieldList = styled.ul`
+  margin: 0;
 `
 
 const CompletionStatus = styled.div<{

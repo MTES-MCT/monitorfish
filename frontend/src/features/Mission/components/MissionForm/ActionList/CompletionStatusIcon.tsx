@@ -14,7 +14,7 @@ export function CompletionStatusIcon({ missionAction }: MissingFieldsText) {
   const missingFields = getMissionActionMissingFields(missionAction, dispatch)
   const isMissionEnded = useIsMissionEnded()
 
-  if (missingFields === 0) {
+  if (missingFields.length === 0) {
     return (
       <Wrapper>
         <Icon.Confirm color={THEME.color.mediumSeaGreen} data-cy="action-all-fields-completed" size={20} />

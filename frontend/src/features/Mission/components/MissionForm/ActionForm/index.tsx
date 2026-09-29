@@ -22,7 +22,7 @@ function UnmemoizedActionForm({ actionFormValues, onChange }: ActionFormProps) {
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-action-form-scroll-container>
       <FrontendErrorBoundary>
         {actionFormValues.actionType === MissionAction.MissionActionType.AIR_CONTROL && (
           <AirControlForm initialValues={actionFormValues} onChange={onChange} />

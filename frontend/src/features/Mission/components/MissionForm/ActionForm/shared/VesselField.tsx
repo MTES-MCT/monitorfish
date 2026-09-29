@@ -178,7 +178,7 @@ export function VesselField() {
 
   return (
     <>
-      <Wrapper>
+      <Wrapper data-missing-field-anchor="vesselId">
         <Field>
           <StyledVesselSearch
             baseRef={newWindowContainerRef}

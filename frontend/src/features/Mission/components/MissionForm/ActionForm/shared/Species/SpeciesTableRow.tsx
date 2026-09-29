@@ -145,6 +145,7 @@ export function WeightCell({
 }
 
 type FaoZonesCellProps = Readonly<{
+  hasError: boolean
   isActive: boolean
   isDisabled: boolean
   isHovered: boolean
@@ -155,6 +156,7 @@ type FaoZonesCellProps = Readonly<{
   value: string[] | undefined
 }>
 export function FaoZonesCell({
+  hasError,
   isActive,
   isDisabled,
   isHovered,
@@ -165,12 +167,13 @@ export function FaoZonesCell({
   value
 }: FaoZonesCellProps) {
   return (
-    <StyledPickerTd $isActive={isActive}>
+    <StyledPickerTd $hasError={hasError && !isHovered} $isActive={isActive}>
       {isActive ? (
         <StyledCheckPicker
           $isHovered={isHovered}
           cleanable={false}
           disabled={isDisabled}
+          isErrorMessageHidden
           isLabelHidden
           isRequired
           label="Zone de pêche"

@@ -110,7 +110,7 @@ export function FormikMultiInfractionPicker({ addButtonLabel, label }: FormikMul
     ) ?? []
 
   return (
-    <Wrapper isLight legend={label}>
+    <Wrapper data-missing-field-anchor="infractions" isLight legend={label}>
       <FrontendErrorBoundary>
         {infractions.length > 0 && (
           <StyledRow>

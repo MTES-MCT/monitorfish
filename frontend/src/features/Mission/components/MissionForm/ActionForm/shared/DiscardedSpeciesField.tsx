@@ -180,6 +180,7 @@ export function DiscardedSpeciesField() {
                   </StyledPickerTd>
 
                   <FaoZonesCell
+                    hasError={!discard.faoZones?.length}
                     isActive={isActive}
                     isDisabled={isDisabled}
                     isHovered={isHovered}

@@ -163,7 +163,7 @@ export function GearsField() {
   }
 
   return (
-    <FieldsetGroup isLight legend="Inspection des engins">
+    <FieldsetGroup data-missing-field-anchor="gearOnboard" isLight legend="Inspection des engins">
       {input.value && input.value.length > 0 && (
         <>
           {input.value.map((gearOnboard, index) => {

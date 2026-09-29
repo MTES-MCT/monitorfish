@@ -374,6 +374,7 @@ export function SpeciesField() {
 
                   {isEISREnabled && (
                     <FaoZonesCell
+                      hasError={!specyOnboard.faoZones?.length}
                       isActive={isActive}
                       isDisabled={isDisabled}
                       isHovered={isHovered}

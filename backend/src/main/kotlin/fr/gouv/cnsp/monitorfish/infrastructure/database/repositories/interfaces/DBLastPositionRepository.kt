@@ -56,7 +56,7 @@ interface DBLastPositionRepository : JpaRepository<LastPositionEntity, Int> {
             FROM VesselProfileEntity vp
             FULL JOIN LastPositionEntity lp ON lp.internalReferenceNumber = vp.cfr
             LEFT JOIN VesselEntity v ON v.internalReferenceNumber = vp.cfr
-            LEFT JOIN BeaconEntity b ON b.vesselId = lp.vesselId
+            LEFT JOIN BeaconEntity b ON b.vesselId = COALESCE(lp.vesselId, v.id)
             LEFT JOIN ProducerOrganizationMembershipEntity po ON
                 po.internalReferenceNumber = COALESCE(vp.cfr, lp.internalReferenceNumber)
             LEFT JOIN RiskFactorEntity rf ON

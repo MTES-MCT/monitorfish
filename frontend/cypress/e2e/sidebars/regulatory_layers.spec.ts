@@ -341,6 +341,9 @@ context('Sidebars > Regulatory Layers', () => {
   it('The selected base layer Should be restored from the user profile', () => {
     enableUserLayersPersistence()
     cy.visit('/#@-224002.65,6302673.54,8.70')
+    cy.wait('@getUserLayers').then(({ response }) => {
+      expect(response?.body.baseLayer).to.be.null
+    })
     cy.wait(5000)
 
     // When

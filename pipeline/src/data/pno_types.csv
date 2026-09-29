@@ -1,13 +1,21 @@
 id,name,minimum_notification_period,has_designated_ports
-1,Autres espèces soumises à préavis,4.0,False
-2,Ports désignés cabillaud,4.0,True
-3,Ports désignés merlu,4.0,True
-4,Ports désignés espèces eaux profondes,4.0,True
-5,Ports désignés petits pélagiques,4.0,True
-6,Ports désignés sole,4.0,True
-7,Ports désignés thon rouge,4.0,True
-8,Ports désignés espadon,4.0,True
-9,Ports désignés corail rouge,4.0,True
-10,Préavis navire tiers,4.0,True
-11,Préavis communautaire,4.0,False
-12,Préavis senne de plage,4.0,False
+1,Préavis sans capture à bord,0.5,False
+2,Préavis MEMN - marée ≥ 96h,4.0,False
+3,Préavis MEMN - marée < 96h,2.0,False
+4,Préavis NAMO - marée ≥ 96h,4.0,False
+5,Préavis NAMO - marée 24-96h,3.0,False
+6,Préavis NAMO - marée < 24h,1.0,False
+7,Préavis NAMO - coquille Saint-Jacques navires 22-29-35,0.5,False
+8,Préavis SA - marée ≥ 96h,4.0,False
+9,Préavis SA - marée 24-96h,3.0,False
+10,Préavis SA - marée < 24h,1.0,False
+11,Préavis MED - marée ≥ 24h,4.0,False
+12,Préavis MED - marée < 24h,1.0,False
+13,Préavis Corse,4.0,False
+14,Préavis thon rouge,4.0,False
+15,Préavis anchois,4.0,False
+16,Préavis espadon,4.0,False
+17,Préavis corail rouge,4.0,False
+18,Ports désignés espèces eaux profondes,4.0,True
+19,Préavis navire tiers,4.0,True
+20,Préavis communautaire,4.0,False

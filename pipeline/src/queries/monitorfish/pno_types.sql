@@ -8,7 +8,14 @@ SELECT
     r.fao_areas,
     r.gears,
     r.flag_states,
-    r.minimum_quantity_kg
+    r.minimum_quantity_kg,
+    r.facades,
+    r.vessel_department_codes,
+    r.min_vessel_length,
+    r.max_vessel_length,
+    r.min_trip_duration_hours,
+    r.max_trip_duration_hours,
+    r.has_catches_on_board
 FROM pno_types t
 JOIN pno_type_rules r
 ON t.id = r.pno_type_id

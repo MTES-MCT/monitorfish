@@ -29,7 +29,9 @@ export type EditedRegulatoryZone = Omit<RegulatoryZone, 'region'> & {
 export type RegulatoryZoneDraft = UndefineExcept<
   EditedRegulatoryZone,
   'fishingPeriod' | 'gearRegulation' | 'speciesRegulation'
->
+> & {
+  geometryId?: string
+}
 
 export type RegulatoryText = {
   // TODO Use `Infinity`

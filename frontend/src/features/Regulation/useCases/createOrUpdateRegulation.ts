@@ -9,16 +9,14 @@ import type { BackofficeAppThunk } from '@store'
 import type { Polygon } from 'geojson'
 
 /**
- * When another geometry is picked, it is copied into the regulation row (and its own row deleted) rather than
- * moving the regulation to the geometry row: regulation ids must stay stable as they are saved in the user layers.
+ * When editing a regulation, the picked geometry is copied into the regulation row (and the geometry row deleted)
+ * rather than moving the regulation to the geometry row: regulation ids must stay stable as they are saved in the
+ * user layers.
  */
 export const createOrUpdateBackofficeRegulation =
-  (
-    processingRegulation: RegulatoryZoneDraft,
-    previousId: number | string | undefined,
-    pickedGeometry: Polygon | undefined
-  ): BackofficeAppThunk<Promise<void>> =>
+  (processingRegulation: RegulatoryZoneDraft, pickedGeometry: Polygon | undefined): BackofficeAppThunk<Promise<void>> =>
   async dispatch => {
+    const { geometryId, id } = processingRegulation
     const regulationFeature = new Feature(
       mapToRegulatoryFeatureObject({
         ...processingRegulation,
@@ -26,23 +24,23 @@ export const createOrUpdateBackofficeRegulation =
       })
     )
 
-    if (!previousId || previousId === processingRegulation.id) {
-      regulationFeature.setId(getRegulatoryFeatureId(processingRegulation.id))
+    if (!id || !geometryId) {
+      regulationFeature.setId(getRegulatoryFeatureId(id ?? geometryId))
       await dispatch(updateRegulation({ updates: [regulationFeature] }, RegulationActionType.Update))
 
       return
     }
 
     if (!pickedGeometry) {
-      throw new Error(`Geometry ${processingRegulation.id} not found.`)
+      throw new Error(`Geometry ${geometryId} not found.`)
     }
 
-    regulationFeature.setId(getRegulatoryFeatureId(previousId))
+    regulationFeature.setId(getRegulatoryFeatureId(id))
     regulationFeature.setGeometry(new GeoJSON().readGeometry(pickedGeometry))
-    const pickedGeometryFeature = new Feature()
-    pickedGeometryFeature.setId(getRegulatoryFeatureId(processingRegulation.id))
+    const geometryRowFeature = new Feature()
+    geometryRowFeature.setId(getRegulatoryFeatureId(geometryId))
 
     await dispatch(
-      updateRegulation({ deletes: [pickedGeometryFeature], updates: [regulationFeature] }, RegulationActionType.Update)
+      updateRegulation({ deletes: [geometryRowFeature], updates: [regulationFeature] }, RegulationActionType.Update)
     )
   }

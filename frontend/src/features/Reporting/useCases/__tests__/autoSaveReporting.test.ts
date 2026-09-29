@@ -12,12 +12,6 @@ import { updateReporting } from '../updateReporting'
 
 import type { FormEditedReporting, Reporting } from '@features/Reporting/types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * We need to have
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
 jest.mock('../../reportingApi', () => ({
   reportingApi: {
     endpoints: {

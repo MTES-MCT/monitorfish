@@ -6,11 +6,6 @@ import { omit } from 'lodash-es'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
 jest.mock('@features/Mission/missionActionApi', () => ({
   missionActionApi: {
     endpoints: {

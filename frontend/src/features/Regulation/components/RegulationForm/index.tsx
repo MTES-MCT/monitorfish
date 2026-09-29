@@ -74,8 +74,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
     regulationSaved,
     regulatoryTextCheckedMap,
     regulatoryZonesToPreview,
-    saveOrUpdateRegulation,
-    selectedRegulatoryZoneId
+    saveOrUpdateRegulation
   } = useBackofficeAppSelector(state => state.regulation)
 
   const { lawType, otherInfo, region, regulatoryReferences, topic, zone } = processingRegulation
@@ -158,10 +157,10 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       !!lawType && lawType !== '' && LAWTYPES_TO_TERRITORY[lawType] === FRANCE && !(region && region.length !== 0)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
 
-    valueIsMissing = !(processingRegulation.id && processingRegulation.id !== '')
+    valueIsMissing = !(processingRegulation.geometryId ?? processingRegulation.id)
     willHaveOneOrMoreValuesMissing = willHaveOneOrMoreValuesMissing || valueIsMissing
     dispatch(regulationActions.setHasOneOrMoreValuesMissing(willHaveOneOrMoreValuesMissing))
-  }, [lawType, topic, zone, region, processingRegulation.id, dispatch])
+  }, [lawType, topic, zone, region, processingRegulation.geometryId, processingRegulation.id, dispatch])
 
   useEffect(() => {
     if (saveOrUpdateRegulation && hasOneOrMoreValuesMissing === undefined) {
@@ -179,8 +178,10 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
         const allRequiredValuesHaveBeenFilled = !regulatoryTextCheckList.includes(false) && !hasOneOrMoreValuesMissing
 
         if (allRequiredValuesHaveBeenFilled) {
-          const pickedGeometry = processingRegulation.id ? geometriesMap[processingRegulation.id] : undefined
-          dispatch(createOrUpdateBackofficeRegulation(processingRegulation, selectedRegulatoryZoneId, pickedGeometry))
+          const { geometryId } = processingRegulation
+          dispatch(
+            createOrUpdateBackofficeRegulation(processingRegulation, geometryId ? geometriesMap[geometryId] : undefined)
+          )
           setSaveIsForbidden(false)
         } else {
           dispatch(regulationActions.setRegulatoryTextCheckedMap({}))
@@ -198,7 +199,6 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
     regulatoryReferences?.length,
     regulatoryTextCheckedMap,
     saveOrUpdateRegulation,
-    selectedRegulatoryZoneId,
     setSaveIsForbidden
   ])
 
@@ -207,7 +207,8 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
       return
     }
 
-    const geometryFromId = !!geometriesMap && !!processingRegulation.id && geometriesMap[processingRegulation.id]
+    const { geometryId } = processingRegulation
+    const geometryFromId = !!geometriesMap && !!geometryId && geometriesMap[geometryId]
     if (geometryFromId) {
       dispatch(regulationActions.setRegulatoryGeometriesToPreview([{ geometry: geometryFromId }]))
     } else if (isEdition && processingRegulation?.geometry) {
@@ -225,7 +226,7 @@ export function RegulationForm({ isEdition, title }: RegulationFormProps) {
         })
       )
     }
-  }, [dispatch, geometriesMap, isEdition, processingRegulation, selectedRegulatoryZoneId, isRegulatoryPreviewDisplayed])
+  }, [dispatch, geometriesMap, isEdition, processingRegulation, isRegulatoryPreviewDisplayed])
 
   const setOtherInfo = (value: string | undefined) => {
     dispatch(

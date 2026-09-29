@@ -7,11 +7,6 @@ import type { RegulatoryZoneDraft } from '../../types'
 import type { Polygon } from 'geojson'
 
 /**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
-/**
  * GeoServer response to a WFS 1.1.0 Transaction.
  * @see https://docs.geoserver.org/stable/en/user/services/wfs/reference.html#transaction
  */
@@ -87,7 +82,7 @@ describe('createOrUpdateBackofficeRegulation()', () => {
 
   it('Should copy the picked geometry into the edited regulation and delete the geometry row, in a single transaction', async () => {
     // When
-    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: '456' }, '123', PICKED_GEOMETRY)(
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, geometryId: '456', id: '123' }, PICKED_GEOMETRY)(
       dispatch,
       getState,
       undefined
@@ -109,7 +104,7 @@ describe('createOrUpdateBackofficeRegulation()', () => {
 
   it('Should send the geometry with a CRS whose axis order GeoServer reads as latitude/longitude', async () => {
     // When
-    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: '456' }, '123', PICKED_GEOMETRY)(
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, geometryId: '456', id: '123' }, PICKED_GEOMETRY)(
       dispatch,
       getState,
       undefined
@@ -124,13 +119,9 @@ describe('createOrUpdateBackofficeRegulation()', () => {
     expect(findElements(polygon, 'posList')[0]?.textContent?.split(' ').slice(0, 2)).toEqual(['48.1', '-4.5'])
   })
 
-  it('Should only update the regulation When its geometry is unchanged', async () => {
+  it('Should only update the regulation When no other geometry is picked', async () => {
     // When
-    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: '123' }, '123', PICKED_GEOMETRY)(
-      dispatch,
-      getState,
-      undefined
-    )
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: '123' }, undefined)(dispatch, getState, undefined)
     jest.runAllTimers()
 
     // Then
@@ -143,7 +134,7 @@ describe('createOrUpdateBackofficeRegulation()', () => {
 
   it('Should fill the picked geometry row When the regulation is created', async () => {
     // When
-    await createOrUpdateBackofficeRegulation({ ...REGULATION, id: '456' }, undefined, PICKED_GEOMETRY)(
+    await createOrUpdateBackofficeRegulation({ ...REGULATION, geometryId: '456' }, PICKED_GEOMETRY)(
       dispatch,
       getState,
       undefined

@@ -6,11 +6,6 @@ import { FormikSyncMissionFields } from '../FormikSyncMissionFields'
 
 import type { MissionMainFormValues } from '../../types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
 const mockUseListenToMissionEventUpdatesById = jest.fn()
 jest.mock('../../hooks/useListenToMissionEventUpdatesById', () => ({
   useListenToMissionEventUpdatesById: missionId => mockUseListenToMissionEventUpdatesById(missionId)

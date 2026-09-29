@@ -6,11 +6,6 @@ import { beforeEach, describe, expect, it } from '@jest/globals'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-/**
- * Warning: We could not add `jest` import as it makes the test to fail.
- * @see: https://github.com/swc-project/jest/issues/14#issuecomment-2525330413
- */
-
 jest.mock('@features/FavoriteVessel/apis', () => ({
   favoriteVesselsApi: {
     endpoints: {

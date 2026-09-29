@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,8 +19,8 @@ class JpaVesselRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("vessel")?.clear()
-        cacheManager.getCache("vessels")?.clear()
+        cacheManager.getCache(CacheName.VESSEL)?.clear()
+        cacheManager.getCache(CacheName.VESSELS)?.clear()
     }
 
     @Test

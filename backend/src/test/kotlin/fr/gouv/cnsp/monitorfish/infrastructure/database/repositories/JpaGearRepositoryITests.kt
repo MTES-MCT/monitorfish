@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -18,8 +19,8 @@ class JpaGearRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("gear")?.clear()
-        cacheManager.getCache("gears")?.clear()
+        cacheManager.getCache(CacheName.GEAR)?.clear()
+        cacheManager.getCache(CacheName.GEARS)?.clear()
     }
 
     @Test

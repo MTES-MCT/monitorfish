@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.BeaconEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LastPositionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.RiskFactorEntity
@@ -25,7 +26,7 @@ class JpaLastPositionRepository(
     private val dbLastPositionRepository: DBLastPositionRepository,
     private val mapper: ObjectMapper,
 ) : LastPositionRepository {
-    @Cacheable(value = ["vessels_all_position"])
+    @Cacheable(value = [CacheName.VESSELS_ALL_POSITION], sync = true)
     override fun findAll(): List<LastPosition> =
         dbLastPositionRepository
             .findAll()
@@ -35,7 +36,7 @@ class JpaLastPositionRepository(
                 it.toLastPosition(mapper)
             }
 
-    @Cacheable(value = ["active_vessel"])
+    @Cacheable(value = [CacheName.ACTIVE_VESSEL])
     override fun findByVesselIdentifier(
         vesselIdentifier: VesselIdentifier,
         value: String,
@@ -58,7 +59,7 @@ class JpaLastPositionRepository(
      * cache key, so the cache would never hit and each request would run this (heavy) query again.
      */
     @Cacheable(
-        value = ["active_vessels"],
+        value = [CacheName.ACTIVE_VESSELS],
         key = "#dateTime.truncatedTo(T(java.time.temporal.ChronoUnit).HOURS)",
         sync = true,
     )
@@ -86,7 +87,7 @@ class JpaLastPositionRepository(
                 )
             }.filter { it.hasEitherLastPositionOrVesselProfileWithVessel() }
 
-    @Cacheable(value = ["latest_last_position_date"])
+    @Cacheable(value = [CacheName.LATEST_LAST_POSITION_DATE], sync = true)
     override fun findLastPositionDate(): ZonedDateTime =
         try {
             dbLastPositionRepository.findLastPositionDateTime().atZone(UTC)

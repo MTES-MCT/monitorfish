@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.monitorenv.responses.LegacyControlUnitDataResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -20,7 +21,7 @@ class APILegacyControlUnitRepository(
 ) : LegacyControlUnitRepository {
     private val logger: Logger = LoggerFactory.getLogger(APILegacyControlUnitRepository::class.java)
 
-    @Cacheable(value = ["legacy_control_units"])
+    @Cacheable(value = [CacheName.LEGACY_CONTROL_UNITS], sync = true)
     override fun findAll(): List<LegacyControlUnit> =
         runBlocking {
             val legacyControlUnitsUrl = "${monitorenvProperties.url}/api/v1/control_units"

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,7 +19,7 @@ class JpaFaoAreaRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("fao_areas")?.clear()
+        cacheManager.getCache(CacheName.FAO_AREAS)?.clear()
     }
 
     @Test

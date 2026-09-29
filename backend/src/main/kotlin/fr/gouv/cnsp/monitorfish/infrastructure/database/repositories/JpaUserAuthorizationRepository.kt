@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.UserAuthorizationEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBUserAuthorizationRepository
 import jakarta.transaction.Transactional
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository
 class JpaUserAuthorizationRepository(
     private val dbUserAuthorizationRepository: DBUserAuthorizationRepository,
 ) : UserAuthorizationRepository {
-    @Cacheable(value = ["user_authorization"])
+    @Cacheable(value = [CacheName.USER_AUTHORIZATION])
     override fun findByHashedEmail(hashedEmail: String): UserAuthorization =
         dbUserAuthorizationRepository.findByHashedEmail(hashedEmail).toUserAuthorization()
 

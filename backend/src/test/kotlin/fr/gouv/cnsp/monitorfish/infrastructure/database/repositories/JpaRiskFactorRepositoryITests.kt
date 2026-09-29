@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,9 +18,9 @@ class JpaRiskFactorRepositoryITests : AbstractDBTests() {
 
     @BeforeEach
     fun setup() {
-        cacheManager.getCache("risk_factor_by_cfr")?.clear()
-        cacheManager.getCache("risk_factor_by_vessel_id")?.clear()
-        cacheManager.getCache("risk_factors")?.clear()
+        cacheManager.getCache(CacheName.RISK_FACTOR_BY_CFR)?.clear()
+        cacheManager.getCache(CacheName.RISK_FACTOR_BY_VESSEL_ID)?.clear()
+        cacheManager.getCache(CacheName.RISK_FACTORS)?.clear()
     }
 
     @Test

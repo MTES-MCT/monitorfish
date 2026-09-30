@@ -1,7 +1,8 @@
 import { setInteractionTypeAndListener } from '@features/Draw/slice'
 import { InteractionListener, InteractionType } from '@features/Map/constants'
 import { openDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
-import { reportingActions } from '@features/Reporting/slice'
+import { DEFAULT_REPORTINGS_FILTER, reportingActions } from '@features/Reporting/slice'
+import { removeZoneAt } from '@features/Reporting/zoneFilter'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 
@@ -59,6 +60,17 @@ export function useReportingsFilters() {
 
     filters,
 
+    removeZone: (index: number) => applyFilter({ zone: removeZoneAt(filters.zone, index) }),
+
+    resetFilters: () => dispatch(reportingActions.resetFilters()),
+
+    resetReportingPeriod: () =>
+      applyFilter({
+        endDate: undefined,
+        reportingPeriod: DEFAULT_REPORTINGS_FILTER.reportingPeriod,
+        startDate: undefined
+      }),
+
     updateCustomPeriod: (nextCustomPeriod: DateAsStringRange | undefined) =>
       applyFilter({ endDate: nextCustomPeriod?.[1], startDate: nextCustomPeriod?.[0] }),
 
@@ -72,9 +84,7 @@ export function useReportingsFilters() {
     updateReportingStatus: (nextValue: string | undefined) => applyFilter({ isArchived: toIsArchived(nextValue) }),
 
     updateReportingType: (nextReportingType: ReportingType | undefined) =>
-      applyFilter({ reportingType: nextReportingType }),
-
-    updateZone: (nextZone: string | undefined) => applyFilter({ zone: nextZone })
+      applyFilter({ reportingType: nextReportingType })
   }
 }
 

@@ -60,8 +60,13 @@ data class ReportingsFilter(
 
         val point = GEOMETRY_FACTORY.createPoint(Coordinate(longitude, latitude))
 
-        // The envelope check is a cheap reject before the exact — and much more costly — one.
-        return zone.envelopeInternal.intersects(point.coordinate) && zone.contains(point)
+        // Each drawn zone is checked on its own, as overlapping zones make the multipolygon invalid and
+        // `contains` unreliable. The envelope check is a cheap reject before the costly exact one.
+        val drawnZones = (0 until zone.numGeometries).map(zone::getGeometryN)
+
+        return drawnZones.any { drawnZone ->
+            drawnZone.envelopeInternal.intersects(point.coordinate) && drawnZone.contains(point)
+        }
     }
 
     companion object {

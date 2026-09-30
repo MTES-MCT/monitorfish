@@ -1,6 +1,6 @@
 import { InteractionListener } from '@features/Map/constants'
 import { closeDrawLayerModal } from '@features/Mission/useCases/addOrEditMissionZone'
-import { applyDrawedZoneFilter } from '@features/Reporting/useCases/applyDrawedZoneFilter'
+import { addDrawnZonesToFilter } from '@features/Reporting/useCases/addDrawnZonesToFilter'
 
 import { setDisplayedComponents } from '../../../domain/shared_slices/DisplayedComponent'
 import { resetInteraction } from '../slice'
@@ -27,7 +27,7 @@ export const closeDraw = (listener?: InteractionListener) => (dispatch, getState
    * geometry before it is reset below.
    */
   if (listener === InteractionListener.REPORTINGS_ZONE) {
-    dispatch(applyDrawedZoneFilter())
+    dispatch(addDrawnZonesToFilter())
   }
 
   dispatch(resetInteraction())

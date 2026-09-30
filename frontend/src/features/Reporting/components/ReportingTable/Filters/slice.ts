@@ -8,6 +8,7 @@ import type { ReportingsExtraData } from '@features/Reporting/types'
  */
 export type ReportingTableFiltersState = {
   absentVessel: true | undefined
+  areFiltersDisplayed: boolean
   /**
    * Seafront counts of the last list query, kept here so that the seafront sub-menu — rendered by
    * a parent of the table, which owns the pagination state — can display them without issuing its
@@ -19,6 +20,7 @@ export type ReportingTableFiltersState = {
 
 const INITIAL_STATE: ReportingTableFiltersState = {
   absentVessel: undefined,
+  areFiltersDisplayed: true,
   perSeafrontGroupCount: undefined,
   searchQuery: undefined
 }
@@ -29,6 +31,9 @@ const reportingTableFiltersSlice = createSlice({
   reducers: {
     setAbsentVessel: (state, action: PayloadAction<boolean>) => {
       state.absentVessel = action.payload || undefined
+    },
+    setAreFiltersDisplayed: (state, action: PayloadAction<boolean>) => {
+      state.areFiltersDisplayed = action.payload
     },
     setPerSeafrontGroupCount: (
       state,

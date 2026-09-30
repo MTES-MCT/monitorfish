@@ -125,4 +125,63 @@ context('Side Window > Reporting List > Table', () => {
     cy.getDataCy('ReportingTable-reporting').should('have.length.to.be.greaterThan', 0)
     cy.get('tbody').should('not.contain', 'Pôle OPS')
   })
+
+  it('Should hide the filters but not their tags, and reset them', () => {
+    cy.login('superuser')
+
+    cy.intercept('GET', apiPath).as('getReportings')
+    interceptReportings({ isArchived: 'true' }, 'getArchivedReportings')
+
+    cy.visit('/side_window')
+    cy.getDataCy('side-window-reporting-tab').click()
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
+    cy.wait('@getReportings')
+    cy.getDataCy('reporting-table-reset-filters').should('not.exist')
+
+    cy.fill('Statut', 'Archivé')
+    cy.wait('@getArchivedReportings')
+
+    // When
+    cy.clickButton('Masquer les filtres')
+
+    // Then
+    cy.get('[name="status"]').should('not.exist')
+    cy.getDataCy('reporting-table-filters').contains('.Component-SingleTag', 'Archivé').should('be.visible')
+    cy.getDataCy('reporting-table-reset-filters').should('be.visible')
+
+    // When
+    cy.clickButton('Afficher les filtres')
+    cy.get('[name="status"]').should('exist')
+    cy.getDataCy('reporting-table-reset-filters').click()
+
+    // Then
+    cy.wait('@getReportings').its('request.query').should('not.have.property', 'isArchived')
+    cy.getDataCy('reporting-table-filters').should('not.contain', 'Archivé')
+    cy.getDataCy('reporting-table-reset-filters').should('not.exist')
+  })
+
+  it('Should remove a filter from its tag', () => {
+    cy.login('superuser')
+
+    cy.intercept('GET', apiPath).as('getReportings')
+    interceptReportings({ origin: 'ALERT' }, 'getAlertReportings')
+
+    cy.visit('/side_window')
+    cy.getDataCy('side-window-reporting-tab').click()
+    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
+    cy.wait('@getReportings')
+
+    cy.fill('Source', 'Alerte auto.')
+    cy.wait('@getAlertReportings')
+
+    // When
+    cy.getDataCy('reporting-table-filters')
+      .contains('.Component-SingleTag', 'Alerte auto.')
+      .find('[title="Supprimer ce tag"]')
+      .click()
+
+    // Then
+    cy.wait('@getReportings').its('request.query').should('not.have.property', 'origin')
+    cy.getDataCy('reporting-table-filters').should('not.contain', 'Alerte auto.')
+  })
 })

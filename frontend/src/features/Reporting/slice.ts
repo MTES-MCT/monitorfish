@@ -9,19 +9,21 @@ export type ReportingState = {
   filters: ReportingsFilter
   selectedReportingFeatureId: string | undefined
 }
+export const DEFAULT_REPORTINGS_FILTER: ReportingsFilter = {
+  endDate: undefined,
+  ids: undefined,
+  isArchived: undefined,
+  isIUU: undefined,
+  origin: undefined,
+  reportingPeriod: ReportingSearchPeriod.LAST_3_MONTHS,
+  reportingType: undefined,
+  startDate: undefined,
+  zone: undefined
+}
+
 const INITIAL_STATE: ReportingState = {
   editedReporting: undefined,
-  filters: {
-    endDate: undefined,
-    ids: undefined,
-    isArchived: undefined,
-    isIUU: undefined,
-    origin: undefined,
-    reportingPeriod: ReportingSearchPeriod.LAST_3_MONTHS,
-    reportingType: undefined,
-    startDate: undefined,
-    zone: undefined
-  },
+  filters: DEFAULT_REPORTINGS_FILTER,
   selectedReportingFeatureId: undefined
 }
 
@@ -29,6 +31,10 @@ const reportingSlice = createSlice({
   initialState: INITIAL_STATE,
   name: 'reporting',
   reducers: {
+    resetFilters(state) {
+      state.filters = DEFAULT_REPORTINGS_FILTER
+    },
+
     selectReportingFeatureId(state, action: PayloadAction<string>) {
       state.selectedReportingFeatureId = action.payload
     },

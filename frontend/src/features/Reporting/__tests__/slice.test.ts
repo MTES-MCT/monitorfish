@@ -50,4 +50,19 @@ describe('features/Reporting/slice', () => {
     expect(withZoneAndOrigin.filters.origin).toEqual(ReportingOrigin.SATELLITE)
     expect(withZoneAndOrigin.filters.reportingPeriod).toEqual(ReportingSearchPeriod.LAST_3_MONTHS)
   })
+
+  it('Should restore the default filters on resetFilters', () => {
+    const withFilters = reportingReducer(
+      initialState,
+      reportingActions.setFilters({
+        ...initialState.filters,
+        isArchived: true,
+        zone: 'MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)))'
+      })
+    )
+
+    const state = reportingReducer(withFilters, reportingActions.resetFilters())
+
+    expect(state.filters).toEqual(initialState.filters)
+  })
 })

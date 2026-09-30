@@ -6,6 +6,7 @@ import requests
 from prefect import flow, task
 
 from config import FAO_SPECIES_URL, ISSCAAP_GROUPS_URL, PROXIES
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -101,7 +102,11 @@ def export_species(species: pd.DataFrame, csv_filepath: str) -> None:
     species.to_csv(csv_filepath, index=False, encoding="utf8")
 
 
-@flow(name="Monitorfish - Export Species")
+@flow(
+    name="Monitorfish - Export Species",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def export_species_flow(csv_filepath: str):
     species = extract_species(url=FAO_SPECIES_URL, proxies=PROXIES)
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)

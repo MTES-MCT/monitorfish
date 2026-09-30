@@ -85,6 +85,10 @@ MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
 LOGBOOK_FILES_GID = os.getenv("LOGBOOK_FILES_GID")
 
+# Sentry, where flow failures are reported. Disabled when the DSN is not set.
+SENTRY_DSN = get_key(DOTENV_PATH, "MONITORFISH_PIPELINE_SENTRY_DSN")
+SENTRY_ENV = get_key(DOTENV_PATH, "MONITORFISH_PIPELINE_SENTRY_ENV")
+
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
 

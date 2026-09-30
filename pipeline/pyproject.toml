@@ -50,6 +50,7 @@ oracledb = "^3.4.2"
 # is upgraded to a version that uses importlib.metadata directly.
 importlib-metadata = "^8.7.0"
 sdk-entrepot-gpf = "^0.1.44"
+sentry-sdk = "^2"
 
 
 [tool.poetry.group.dev.dependencies]

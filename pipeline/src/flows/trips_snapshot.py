@@ -2,6 +2,7 @@ import pandas as pd
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -26,7 +27,11 @@ def load_trips_snapshot(trips: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Trips snapshot")
+@flow(
+    name="Monitorfish - Trips snapshot",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def trips_snapshot_flow():
     # Extract
     trips_snapshot = extract_trips_snapshot()

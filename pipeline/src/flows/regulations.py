@@ -2,6 +2,7 @@ import pandas as pd
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import delete_rows, extract, load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -114,7 +115,11 @@ def load_new_regulations(new_regulations: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Regulations")
+@flow(
+    name="Monitorfish - Regulations",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def regulations_flow():
     local_hashes = extract_local_hashes()
     remote_hashes = extract_remote_hashes()

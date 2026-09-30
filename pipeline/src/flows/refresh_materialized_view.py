@@ -3,6 +3,7 @@ from prefect import flow, task
 from sqlalchemy import Table, text
 
 from src.db_config import create_engine
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.infrastructure import get_table
 
 
@@ -16,7 +17,11 @@ def refresh_view(view: Table) -> pd.DataFrame:
         connection.execute(query)
 
 
-@flow(name="Monitorfish - Refresh materialized view")
+@flow(
+    name="Monitorfish - Refresh materialized view",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def refresh_materialized_view_flow(
     view_name: str,
     schema: str = "public",

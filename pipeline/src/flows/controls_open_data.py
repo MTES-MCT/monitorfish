@@ -11,6 +11,7 @@ from config import (
 )
 from src.generic_tasks import extract
 from src.processing import prepare_df_for_loading
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.datagouv import get_csv_file_object, update_resource
 
 
@@ -59,7 +60,11 @@ def transform_fleet_segments_open_data(fleet_segments) -> pd.DataFrame:
     return fleet_segments
 
 
-@flow(name="Monitorfish - Controls open data")
+@flow(
+    name="Monitorfish - Controls open data",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def controls_open_data_flow(
     dataset_id: str = CONTROLS_STATISTICS_DATASET_ID,
     controls_resource_id: str = CONTROLS_STATISTICS_CSV_RESOURCE_ID,

@@ -22,6 +22,7 @@ from config import (
     REGULATIONS_GEOPLATEFORME_UPLOAD_NAME,
 )
 from src.generic_tasks import extract
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.datagouv import (
     get_csv_file_object,
     get_geopackage_file_object,
@@ -108,7 +109,11 @@ def get_regulations_for_geopackage(regulations: gpd.GeoDataFrame) -> gpd.GeoData
     )
 
 
-@flow(name="Monitorfish - Regulations open data")
+@flow(
+    name="Monitorfish - Regulations open data",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def regulations_open_data_flow(
     dataset_id: str = REGULATIONS_DATASET_ID,
     csv_resource_id: str = REGULATIONS_CSV_RESOURCE_ID,

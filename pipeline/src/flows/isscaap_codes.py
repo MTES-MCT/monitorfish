@@ -6,6 +6,7 @@ import tabula
 from prefect import flow, task
 
 from config import PROXIES
+from src.sentry import report_flow_failure_to_sentry
 
 
 def join_values_by_column(df: pd.DataFrame, join_string: str = " ") -> list:
@@ -98,7 +99,11 @@ def export_isscaap_codes(isscaap_codes: pd.DataFrame, csv_filepath: str) -> None
     isscaap_codes.to_csv(csv_filepath, index=True)
 
 
-@flow(name="Monitorfish - Extract ISSCAAP codes from fao.org to csv file")
+@flow(
+    name="Monitorfish - Extract ISSCAAP codes from fao.org to csv file",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def isscaap_codes_flow(csv_filepath: str):
     pdf = extract_isscaap_codes_pdf()
     isscaap_codes = parse_pdf(pdf)

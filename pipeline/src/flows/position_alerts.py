@@ -9,6 +9,7 @@ from src.entities.alerts import PositionAlertSpecification
 from src.flows.position_alert import position_alert_flow
 from src.generic_tasks import extract
 from src.helpers.alerts import position_alert_specification_must_run_now
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_utcnow
 
 
@@ -42,7 +43,11 @@ def get_alerts_that_must_run_now(
     ]
 
 
-@flow(name="Monitorfish - Position alerts")
+@flow(
+    name="Monitorfish - Position alerts",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def position_alerts_flow():
     positions_alerts = extract_position_alerts()
     now = get_utcnow()

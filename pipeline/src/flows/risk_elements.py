@@ -8,6 +8,7 @@ from prefect import flow, get_run_logger, task
 from src.entities.risk_elements import RiskElement
 from src.generic_tasks import extract, load
 from src.processing import df_to_dict_series
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import date_trunc, get_utcnow, make_relativedelta
 
 
@@ -280,7 +281,11 @@ def load_vessels_risk_elements(vessels_risk_elements: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Risk elements")
+@flow(
+    name="Monitorfish - Risk elements",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def risk_elements_flow():
     # Extract
     now = get_utcnow()

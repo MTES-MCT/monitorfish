@@ -17,6 +17,7 @@ from src.generic_tasks import load
 from src.parsers.ers import ers
 from src.parsers.flux import flux
 from src.processing import drop_rows_already_in_table
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import str_to_path
 from src.utils import get_table, move
 
@@ -419,7 +420,12 @@ def load_sales_and_logbook_data(cleaned_data: List[dict]):
                 )
 
 
-@flow(name="Monitorfish - Sales and Logbook", log_prints=True)
+@flow(
+    name="Monitorfish - Sales and Logbook",
+    log_prints=True,
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def sales_and_logbook_flow(
     received_directory: str = RECEIVED_DIRECTORY.as_posix(),
     treated_directory: str = TREATED_DIRECTORY.as_posix(),

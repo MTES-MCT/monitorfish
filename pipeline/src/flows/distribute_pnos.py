@@ -54,6 +54,7 @@ from src.helpers.emails import (
     send_email_or_sms_or_fax_message,
 )
 from src.read_query import read_query
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import filter_results, flatten
 from src.shared_tasks.control_units import fetch_control_units
 from src.shared_tasks.dates import get_utcnow, make_timedelta
@@ -1063,7 +1064,11 @@ def make_manual_prior_notifications_statement(
         return statement
 
 
-@flow(name="Monitorfish - Distribute pnos")
+@flow(
+    name="Monitorfish - Distribute pnos",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def distribute_pnos_flow(
     test_mode: bool,
     is_integration: bool,

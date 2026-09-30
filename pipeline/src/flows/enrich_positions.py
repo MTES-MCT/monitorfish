@@ -9,6 +9,7 @@ from src.generic_tasks import extract
 from src.helpers.dates import Period
 from src.helpers.spatial import enrich_positions
 from src.processing import left_isin_right_by_decreasing_priority, zeros_ones_to_bools
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import make_periods
 from src.shared_tasks.positions import tag_positions_at_port
 from src.utils import psql_insert_copy
@@ -277,7 +278,11 @@ def extract_enrich_load(
     load_fishing_activity(positions, period, logger)
 
 
-@flow(name="Monitorfish - Enrich positions")
+@flow(
+    name="Monitorfish - Enrich positions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def enrich_positions_flow(
     start_hours_ago: int,
     end_hours_ago: int,

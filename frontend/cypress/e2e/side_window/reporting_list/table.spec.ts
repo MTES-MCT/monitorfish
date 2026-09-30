@@ -126,11 +126,12 @@ context('Side Window > Reporting List > Table', () => {
     cy.get('tbody').should('not.contain', 'Pôle OPS')
   })
 
-  it('Should hide the filters but not their tags, and reset them', () => {
+  it('Should hide the filters but not their tags, remove a filter from its tag and reset them', () => {
     cy.login('superuser')
 
     cy.intercept('GET', apiPath).as('getReportings')
     interceptReportings({ isArchived: 'true' }, 'getArchivedReportings')
+    interceptReportings({ isArchived: 'true', origin: 'ALERT' }, 'getArchivedAlertReportings')
 
     cy.visit('/side_window')
     cy.getDataCy('side-window-reporting-tab').click()
@@ -140,48 +141,43 @@ context('Side Window > Reporting List > Table', () => {
 
     cy.fill('Statut', 'Archivé')
     cy.wait('@getArchivedReportings')
+    cy.fill('Source', 'Alerte auto.')
+    cy.wait('@getArchivedAlertReportings')
 
-    // When
+    // When the filters are hidden
     cy.clickButton('Masquer les filtres')
 
-    // Then
+    // Then their tags are still displayed
     cy.get('[name="status"]').should('not.exist')
-    cy.getDataCy('reporting-table-filters').contains('.Component-SingleTag', 'Archivé').should('be.visible')
-    cy.getDataCy('reporting-table-reset-filters').should('be.visible')
+    // The table is wider than the viewport, so the side window may be scrolled past the tags
+    cy.getDataCy('reporting-table-filters')
+      .contains('.Component-SingleTag', 'Statut : Archivé')
+      .scrollIntoView()
+      .should('be.visible')
+    cy.getDataCy('reporting-table-reset-filters').should('exist')
 
-    // When
+    // When a filter is removed from its tag
+    // Intercepted only now, so that the request awaited is the one sent without the source.
+    interceptReportings({ isArchived: 'true' }, 'getArchivedReportingsWithoutSource')
+    cy.getDataCy('reporting-table-filters')
+      .contains('.Component-SingleTag', 'Source : Alerte auto.')
+      .find('[aria-label="Supprimer ce tag"]')
+      .click({ force: true })
+
+    // Then only this filter is removed
+    cy.wait('@getArchivedReportingsWithoutSource').its('request.query').should('not.have.property', 'origin')
+    cy.getDataCy('reporting-table-filters').should('not.contain', 'Alerte auto.')
+    cy.getDataCy('reporting-table-filters').should('contain', 'Statut : Archivé')
+
+    // When the filters are displayed again and reset
     cy.clickButton('Afficher les filtres')
     cy.get('[name="status"]').should('exist')
-    cy.getDataCy('reporting-table-reset-filters').click()
+    cy.intercept('GET', apiPath).as('getResetReportings')
+    cy.getDataCy('reporting-table-reset-filters').click({ force: true })
 
     // Then
-    cy.wait('@getReportings').its('request.query').should('not.have.property', 'isArchived')
+    cy.wait('@getResetReportings').its('request.query').should('not.have.property', 'isArchived')
     cy.getDataCy('reporting-table-filters').should('not.contain', 'Archivé')
     cy.getDataCy('reporting-table-reset-filters').should('not.exist')
-  })
-
-  it('Should remove a filter from its tag', () => {
-    cy.login('superuser')
-
-    cy.intercept('GET', apiPath).as('getReportings')
-    interceptReportings({ origin: 'ALERT' }, 'getAlertReportings')
-
-    cy.visit('/side_window')
-    cy.getDataCy('side-window-reporting-tab').click()
-    cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click()
-    cy.wait('@getReportings')
-
-    cy.fill('Source', 'Alerte auto.')
-    cy.wait('@getAlertReportings')
-
-    // When
-    cy.getDataCy('reporting-table-filters')
-      .contains('.Component-SingleTag', 'Alerte auto.')
-      .find('[title="Supprimer ce tag"]')
-      .click()
-
-    // Then
-    cy.wait('@getReportings').its('request.query').should('not.have.property', 'origin')
-    cy.getDataCy('reporting-table-filters').should('not.contain', 'Alerte auto.')
   })
 })

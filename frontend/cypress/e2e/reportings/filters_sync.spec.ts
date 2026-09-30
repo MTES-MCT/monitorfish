@@ -102,7 +102,7 @@ context('Reportings filters are shared by the map and the list', () => {
     }).as('getArchivedAlertReportingsInZone')
     cy.get('*[data-cy="reporting-table-filters"]')
       .contains('.Component-SingleTag', 'Zone de filtre 1')
-      .find('[title="Supprimer ce tag"]')
+      .find('[aria-label="Supprimer ce tag"]')
       .click()
 
     // Then only the other zone is kept
@@ -121,7 +121,7 @@ context('Reportings filters are shared by the map and the list', () => {
     }).as('getArchivedAlertReportings')
     cy.get('*[data-cy="reporting-table-filters"]')
       .contains('.Component-SingleTag', 'Zone de filtre 1')
-      .find('[title="Supprimer ce tag"]')
+      .find('[aria-label="Supprimer ce tag"]')
       .click()
 
     // Then

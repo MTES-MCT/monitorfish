@@ -93,6 +93,7 @@ class PositionAlertSpecification(BaseModel):
     min_depth: float | None
     flag_states_iso2: List[str] | None
     vessel_ids: List[int] | None
+    excluded_vessel_ids: List[int] | None
     district_codes: List[str] | None
     producer_organizations: List[str] | None
 

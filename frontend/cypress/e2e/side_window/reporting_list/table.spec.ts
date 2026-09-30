@@ -56,7 +56,12 @@ context('Side Window > Reporting List > Table', () => {
     cy.fill('Rechercher dans les signalements', 'renco')
     cy.wait('@getSearchedReportings')
 
-    cy.getDataCy('ReportingTable-reporting').should('have.length', 2)
+    // Other specs create and delete this vessel's reportings on the shared E2E backend, so only the
+    // filtering is asserted, not the count.
+    cy.getDataCy('ReportingTable-reporting').should('have.length.at.least', 1)
+    cy.getDataCy('ReportingTable-reporting').each($row => {
+      cy.wrap($row).contains(/renco/i)
+    })
 
     cy.fill('Rechercher dans les signalements', '')
 

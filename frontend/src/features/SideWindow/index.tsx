@@ -124,7 +124,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
   }, [openedBeaconMalfunctionInKanban, editedReporting, selectedPath.menu, showReportingForm])
 
   useEffect(() => {
-    ;(async function () {
+    void (async function () {
       if (!isFromURL) {
         return
       }

@@ -38,6 +38,8 @@ data class PositionAlertSpecificationDataOutput(
     val flagStatesIso2: List<String> = listOf(),
     val vesselIds: List<Int> = listOf(),
     val vessels: List<VesselIdentityDataOutput> = listOf(),
+    val excludedVesselIds: List<Int> = listOf(),
+    val excludedVessels: List<VesselIdentityDataOutput> = listOf(),
     val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
     val createdBy: String,
@@ -103,6 +105,11 @@ data class PositionAlertSpecificationDataOutput(
                 flagStatesIso2 = positionAlertSpecification.flagStatesIso2,
                 vesselIds = positionAlertSpecification.vesselIds,
                 vessels = positionAlertSpecification.vessels.map { VesselIdentityDataOutput.fromVessel(it) },
+                excludedVesselIds = positionAlertSpecification.excludedVesselIds,
+                excludedVessels =
+                    positionAlertSpecification.excludedVessels.map {
+                        VesselIdentityDataOutput.fromVessel(it)
+                    },
                 districtCodes = positionAlertSpecification.districtCodes,
                 producerOrganizations = positionAlertSpecification.producerOrganizations,
                 createdBy = positionAlertSpecification.createdBy!!,

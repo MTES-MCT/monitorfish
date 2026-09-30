@@ -53,4 +53,26 @@ class GetPositionAlertSpecificationsUTests {
         assertThat(lastPositionAlert.vessels).hasSize(2)
         assertThat(lastPositionAlert.vessels.map { it.id }).isEqualTo(listOf(5, 6))
     }
+
+    @Test
+    fun `execute Should return excluded vessels of position alerts`() {
+        // Given
+        given(positionAlertSpecification.findAllByIsDeletedIsFalse())
+            .willReturn(listOf(DUMMY_POSITION_ALERT.copy(vesselIds = listOf(), excludedVesselIds = listOf(5, 6))))
+        given(vesselRepository.findVesselsByIds(eq(listOf(5, 6))))
+            .willReturn(
+                listOf(
+                    Vessel(id = 5, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                    Vessel(id = 6, flagState = CountryCode.FR, hasLogbookEsacapt = false),
+                ),
+            )
+
+        // When
+        val alerts = GetPositionAlertSpecifications(positionAlertSpecification, vesselRepository).execute()
+
+        // Then
+        val positionAlert = alerts.single { it.type == AlertType.POSITION_ALERT.name }
+        assertThat(positionAlert.vessels).isEmpty()
+        assertThat(positionAlert.excludedVessels.map { it.id }).isEqualTo(listOf(5, 6))
+    }
 }

@@ -170,6 +170,8 @@ export function hasCriterias(values: AlertSpecification, selectedCriterias: Crit
     !!values.regulatoryAreas.length || !!values.administrativeAreas.length || selectedCriterias.includes(Criteria.ZONE)
   const hasNationalityCriteria = !!values.flagStatesIso2.length || selectedCriterias.includes(Criteria.NATIONALITY)
   const hasVesselCriteria = !!values.vesselIds.length || selectedCriterias.includes(Criteria.VESSEL)
+  const hasExcludedVesselCriteria =
+    !!values.excludedVesselIds.length || selectedCriterias.includes(Criteria.EXCLUDED_VESSEL)
   const hasProducerOrganizationCriteria =
     !!values.producerOrganizations.length || selectedCriterias.includes(Criteria.PRODUCER_ORGANIZATION)
   const hasDistrictCriteria = !!values.districtCodes.length || selectedCriterias.includes(Criteria.DISTRICT)
@@ -189,6 +191,7 @@ export function hasCriterias(values: AlertSpecification, selectedCriterias: Crit
 
   return {
     hasDistrictCriteria,
+    hasExcludedVesselCriteria,
     hasGearOnBoardCriteria,
     hasNationalityCriteria,
     hasNoCriteria,

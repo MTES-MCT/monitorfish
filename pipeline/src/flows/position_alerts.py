@@ -77,6 +77,7 @@ def position_alerts_flow():
                 min_depth=position_alert_specification.min_depth,
                 flag_states_iso2=position_alert_specification.flag_states_iso2,
                 vessel_ids=position_alert_specification.vessel_ids,
+                excluded_vessel_ids=position_alert_specification.excluded_vessel_ids,
                 district_codes=position_alert_specification.district_codes,
                 producer_organizations=position_alert_specification.producer_organizations,
             ),

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonProperty
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 
 data class InfractionSuspicionThreatDto(
@@ -27,6 +28,7 @@ data class InfractionSuspicionDto(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
+    val targetType: ReportingTargetType,
     // Legacy single-infraction fields (kept nullable for backward compat when reading old rows)
     val natinfCode: Int? = null,
     val seaFront: String? = null,
@@ -55,6 +57,7 @@ data class ObservationDto(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
+    val targetType: ReportingTargetType,
     val numberOfVessels: Int? = null,
     val seaFront: String? = null,
     val dml: String? = null,

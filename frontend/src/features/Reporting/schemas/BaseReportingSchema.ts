@@ -5,6 +5,8 @@ import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from 'types'
 import z from 'zod'
 
+import { ReportingTargetType } from '../types/ReportingTargetType'
+
 export const BaseReportingSchema = z.strictObject({
   cfr: stringOrUndefined,
   createdBy: z.string(),
@@ -33,5 +35,6 @@ export const BaseReportingSchema = z.strictObject({
   validityOption: z.union([z.enum(ReportingValidityOption), z.undefined()]),
   vesselId: numberOrUndefined,
   vesselIdentifier: z.union([z.enum(VesselIdentifier), z.undefined()]),
+  targetType: z.enum(ReportingTargetType),
   vesselName: stringOrUndefined
 })

@@ -5,6 +5,7 @@ import { LayersSidebar } from '@features/LayersSidebar/components'
 import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
 import { ReportingMapButton } from '@features/Reporting/components/ReportingMapButton'
+import { UserFeedbackMapButton } from '@features/UserFeedback/components/UserFeedbackMapButton'
 import { AISVesselsButton } from '@features/Vessel/components/AISVesselsButton'
 import { VesselListMapButton } from '@features/Vessel/components/VesselListMapButton'
 import { VesselLoader } from '@features/Vessel/components/VesselLoader'
@@ -68,6 +69,9 @@ export function MapButtons() {
   )
   const isReportingMapButtonDisplayed = useMainAppSelector(
     state => state.displayedComponent.isReportingMapButtonDisplayed
+  )
+  const isUserFeedbackMapButtonDisplayed = useMainAppSelector(
+    state => state.displayedComponent.isUserFeedbackMapButtonDisplayed
   )
   const isVesselSearchDisplayed = useMainAppSelector(state => state.displayedComponent.isVesselSearchDisplayed)
   const isVesselSidebarOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
@@ -196,6 +200,15 @@ export function MapButtons() {
           )}
         </Group>
       </RightMenu>
+      {isUserFeedbackMapButtonDisplayed && (
+        <BottomRightMenu $isRightMenuOpen={rightMenuIsOpen} $top={top}>
+          <Group>
+            <MenuItem>
+              <UserFeedbackMapButton />
+            </MenuItem>
+          </Group>
+        </BottomRightMenu>
+      )}
     </>
   )
 }
@@ -231,6 +244,14 @@ const RightMenu = styled(Menu)<{
 }>`
   padding-top: 72px;
   right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
+`
+
+const BottomRightMenu = styled(Menu)<{
+  $isRightMenuOpen: boolean
+}>`
+  bottom: 10px;
+  right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
+  top: unset;
 `
 
 const VesselSidebarContainer = styled.div<{ $isReportingOpen: boolean; $top: number }>`

@@ -4,6 +4,7 @@ from sqlalchemy import Table
 
 from src.db_config import create_engine
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.infrastructure import get_table
 from src.utils import delete
 
@@ -135,7 +136,11 @@ def load_missions_and_missions_control_units(
         )
 
 
-@flow(name="Monitorfish - missions")
+@flow(
+    name="Monitorfish - missions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def missions_flow(
     number_of_months: int,
 ):

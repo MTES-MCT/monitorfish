@@ -2,6 +2,7 @@ import pandas as pd
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -31,7 +32,11 @@ def load_facade_areas(facade_areas: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Facade areas")
+@flow(
+    name="Monitorfish - Facade areas",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def facade_areas_flow():
     facade_areas = extract_facade_areas()
     load_facade_areas(facade_areas)

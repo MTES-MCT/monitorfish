@@ -4,6 +4,7 @@ from prefect import flow, get_run_logger, task
 
 from config import FAO_AREAS_URL, PROXIES
 from src.generic_tasks import load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -56,7 +57,11 @@ def load_fao_areas(fao_areas: gpd.GeoDataFrame):
     )
 
 
-@flow(name="Monitorfish - FAO areas")
+@flow(
+    name="Monitorfish - FAO areas",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def fao_areas_flow(
     url: str = FAO_AREAS_URL,
     proxies: dict = PROXIES,

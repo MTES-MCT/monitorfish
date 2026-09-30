@@ -33,6 +33,7 @@ from src.helpers.emails import (
     send_email_or_sms_or_fax_message,
 )
 from src.helpers.spatial import Position, position_to_position_representation
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import filter_results, flatten
 from src.shared_tasks.infrastructure import execute_statement, get_table
 
@@ -402,7 +403,11 @@ def make_reset_requested_notifications_statement(
     return statement
 
 
-@flow(name="Monitorfish - Notify malfunctions")
+@flow(
+    name="Monitorfish - Notify malfunctions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def notify_beacon_malfunctions_flow(
     test_mode: bool,
     is_integration: bool,

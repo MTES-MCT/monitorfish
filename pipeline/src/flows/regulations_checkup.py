@@ -21,6 +21,7 @@ from config import (
 from src.generic_tasks import extract
 from src.helpers.emails import create_html_email, send_email
 from src.processing import get_matched_groups, try_get_factory
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_utcnow
 
 ####################################### Helpers #######################################
@@ -723,7 +724,11 @@ def send_message(msg: EmailMessage):
     send_email(msg)
 
 
-@flow(name="Monitorfish - Regulations checkup")
+@flow(
+    name="Monitorfish - Regulations checkup",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def regulations_checkup_flow(
     proxies: dict = PROXIES,
     backoffice_regulation_url: str = BACKOFFICE_REGULATION_URL,

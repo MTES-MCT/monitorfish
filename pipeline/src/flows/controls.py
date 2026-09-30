@@ -17,6 +17,7 @@ from src.generic_tasks import extract, load
 from src.helpers.controls import make_infractions
 from src.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.processing import df_to_dict_series, zeros_ones_to_bools
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.facades import extract_facade_areas
 
 
@@ -650,7 +651,11 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
     )
 
 
-@flow(name="Monitorfish - Controls")
+@flow(
+    name="Monitorfish - Controls",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def controls_flow(
     loading_mode: str,
     number_of_months: int,

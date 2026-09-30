@@ -9,6 +9,7 @@ from src.entities.missions import MissionActionType
 from src.generic_tasks import extract
 from src.helpers.segments import allocate_segments_to_catches
 from src.processing import df_to_dict_series, prepare_df_for_loading
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.segments import extract_segments_of_year
 from src.utils import psql_insert_copy
 
@@ -136,7 +137,11 @@ def load_controls_segments(controls_segments: pd.DataFrame):
         )
 
 
-@flow(name="Monitorfish - Recompute controls segments")
+@flow(
+    name="Monitorfish - Recompute controls segments",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def recompute_controls_segments_flow(year: int, control_types: List[str]):
     # Extract
     controls_catches = extract_controls_catches(year=year, control_types=control_types)

@@ -11,6 +11,7 @@ from src.exceptions import MonitorfishHealthError
 from src.generic_tasks import extract, read_query_task
 from src.helpers.dates import utcnow
 from src.processing import join_on_multiple_keys
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_alerts,
@@ -414,7 +415,11 @@ def merge_risk_factor(
     )
 
 
-@flow(name="Monitorfish - Missing FAR alerts")
+@flow(
+    name="Monitorfish - Missing FAR alerts",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def missing_far_alerts_flow(
     alert_type: str,
     name: str,

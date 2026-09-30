@@ -22,6 +22,7 @@ from src.entities.beacon_malfunctions import (
 from src.generic_tasks import extract, load
 from src.helpers.dates import utcnow
 from src.processing import join_on_multiple_keys
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import filter_results
 from src.shared_tasks.dates import get_utcnow, make_timedelta
 from src.shared_tasks.healthcheck import (
@@ -453,7 +454,11 @@ def request_notification(
     r.raise_for_status()
 
 
-@flow(name="Monitorfish - Beacons malfunctions")
+@flow(
+    name="Monitorfish - Beacons malfunctions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def update_beacon_malfunctions_flow(
     max_hours_without_emission_at_sea: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_SEA,
     max_hours_without_emission_at_port: int = BEACONS_MAX_HOURS_WITHOUT_EMISSION_AT_PORT,

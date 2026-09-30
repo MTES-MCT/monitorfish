@@ -13,6 +13,7 @@ from src.processing import (
     join_on_multiple_keys,
     left_isin_right_by_decreasing_priority,
 )
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.healthcheck import (
     assert_positions_received_by_api_health,
     get_monitorfish_healthcheck,
@@ -517,7 +518,11 @@ def load_last_positions_ais(ais_last_positions):
     )
 
 
-@flow(name="Monitorfish - Last positions")
+@flow(
+    name="Monitorfish - Last positions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def last_positions_flow(
     current_position_estimation_max_hours: int = CURRENT_POSITION_ESTIMATION_MAX_HOURS,
     minutes: int = 5,

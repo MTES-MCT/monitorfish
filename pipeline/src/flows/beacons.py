@@ -4,6 +4,7 @@ from prefect import flow, get_run_logger, task
 from src.entities.beacon_malfunctions import BeaconStatus
 from src.generic_tasks import extract, load
 from src.processing import zeros_ones_to_bools
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -78,7 +79,11 @@ def load_satellite_operators(satellite_operators):
     )
 
 
-@flow(name="Monitorfish - Beacons")
+@flow(
+    name="Monitorfish - Beacons",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def beacons_flow():
     # Extract
     beacons = extract_beacons()

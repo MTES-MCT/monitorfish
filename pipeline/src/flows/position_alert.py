@@ -19,6 +19,7 @@ from src.entities.alerts import (
 )
 from src.generic_tasks import extract, read_query_task
 from src.processing import join_on_multiple_keys
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_alerts,
@@ -428,7 +429,11 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     return vessels_in_alerts
 
 
-@flow(name="Monitorfish - Position alert")
+@flow(
+    name="Monitorfish - Position alert",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def position_alert_flow(
     position_alert_id: int,
     name: str,

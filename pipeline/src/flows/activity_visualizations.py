@@ -6,6 +6,7 @@ from prefect import flow, get_run_logger, task
 
 from config import STATIC_LOCATION
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import date_trunc, get_utcnow, make_relativedelta
 
 
@@ -552,7 +553,11 @@ def load_activity_visualization(df: pd.DataFrame, truncate_table: bool):
     )
 
 
-@flow(name="Monitorfish - Generate kepler activity viz")
+@flow(
+    name="Monitorfish - Generate kepler activity viz",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def activity_visualizations_flow(
     start_months_ago: int = 12,
     end_months_ago: int = 0,

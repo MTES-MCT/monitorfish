@@ -3,6 +3,7 @@ from prefect import flow, task
 from config import MISSING_DEP_TRACK_ANALYSIS_HOURS
 from src.entities.alerts import AlertType
 from src.generic_tasks import extract
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     extract_active_reportings,
     extract_silenced_alerts,
@@ -25,7 +26,11 @@ def extract_missing_deps(hours_from_now: int):
     )
 
 
-@flow(name="Monitorfish - Missing DEP alerts")
+@flow(
+    name="Monitorfish - Missing DEP alerts",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def missing_dep_alerts_flow(
     hours_from_now: int = MISSING_DEP_TRACK_ANALYSIS_HOURS,
 ):

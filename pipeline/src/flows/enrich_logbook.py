@@ -19,6 +19,7 @@ from src.generic_tasks import extract
 from src.helpers.dates import Period
 from src.helpers.segments import allocate_segments_to_catches
 from src.processing import prepare_df_for_loading
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_utcnow, make_periods
 from src.shared_tasks.pnos import (
     extract_pno_units_ports_and_segments_subscriptions,
@@ -734,7 +735,11 @@ def extract_enrich_load_logbook(
     load_enriched_pnos(pnos, period, logger)
 
 
-@flow(name="Monitorfish - Enrich Logbook")
+@flow(
+    name="Monitorfish - Enrich Logbook",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def enrich_logbook_flow(
     start_hours_ago: int,
     end_hours_ago: int,

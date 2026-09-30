@@ -22,6 +22,7 @@ from src.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.helpers.spatial import geocode, geocode_google
 from src.processing import coalesce, prepare_df_for_loading
 from src.read_query import read_query, read_table
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.datagouv import get_csv_file_object, update_resource
 from src.utils import psql_insert_copy
 
@@ -212,7 +213,11 @@ def load_unece(locations):
     )
 
 
-@flow(name="Monitorfish - Create UNECE ports codes table")
+@flow(
+    name="Monitorfish - Create UNECE ports codes table",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def flow_make_unece_ports(csv_directory_path: str):
     locations = extract_unece_locations(csv_directory_path)
     locations = clean_unece(locations)
@@ -277,7 +282,11 @@ def load_circabc(locations):
     )
 
 
-@flow(name="Monitorfish - Create CIRCABC ports codes table")
+@flow(
+    name="Monitorfish - Create CIRCABC ports codes table",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def flow_make_circabc_ports(csv_filepath: str):
     locations = extract_circabc_locations(csv_filepath)
     locations = clean_circabc(locations)
@@ -443,7 +452,11 @@ def load_port_codes(ports):
     )
 
 
-@flow(name="Monitorfish - Extract combine CIRCABC and UNECE ports referencials")
+@flow(
+    name="Monitorfish - Extract combine CIRCABC and UNECE ports referencials",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def flow_combine_circabc_unece_ports():
     circabc_ports = extract_circabc_ports()
     unece_ports = extract_unece_ports()
@@ -639,7 +652,11 @@ def load_geocoded_ports(geocoded_ports):
     )
 
 
-@flow(name="Monitorfish - Geocode ports")
+@flow(
+    name="Monitorfish - Geocode ports",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def flow_geocode_ports():
     ports = extract_port_codes()
     active_ports_locodes = extract_active_ports_locodes()
@@ -880,7 +897,11 @@ def load_ports(ports):
     )
 
 
-@flow(name="Monitorfish - Ports")
+@flow(
+    name="Monitorfish - Ports",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def ports_flow(
     dataset_id: str = PORTS_DATASET_ID,
     ports_resource_id: str = PORTS_CSV_RESOURCE_ID,

@@ -2,6 +2,7 @@ import pandas as pd
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task()
@@ -808,7 +809,11 @@ def load_facades_zee_fr_shom(facades_zee_fr_shom: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Administrative areas")
+@flow(
+    name="Monitorfish - Administrative areas",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def admin_areas_flow():
     cgpm_areas = extract_cgpm_areas()
     load_cgpm_areas(cgpm_areas)

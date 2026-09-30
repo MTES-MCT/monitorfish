@@ -1,14 +1,31 @@
+import { ResetButton } from '@components/ResetButton'
 import { SeafrontGroup, seafrontGroupSupportsAbsentVesselFilter } from '@constants/seafront'
 import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
-import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { DrawZoneFilterButton } from '@features/Reporting/components/ZoneFilter/DrawZoneFilterButton'
+import {
+  IUU_OPTIONS,
+  REPORTING_ORIGIN_AS_OPTIONS,
+  REPORTING_SEARCH_PERIOD_AS_OPTIONS,
+  REPORTING_TYPE_OPTIONS,
+  STATUS_OPTIONS
+} from '@features/Reporting/constants'
+import {
+  getArchivedValue,
+  getCustomPeriodValue,
+  getIUUValue,
+  useReportingsFilters
+} from '@features/Reporting/hooks/useReportingsFilters'
+import { DEFAULT_REPORTINGS_FILTER } from '@features/Reporting/slice'
+import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Checkbox, DateRangePicker, Icon, LinkButton, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { isEqual } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { REPORTING_TYPE_FILTER_OPTIONS } from './constants'
+import { FilterTags } from './FilterTags'
 
 type FiltersProps = Readonly<{
   selectedSeafrontGroup: SeafrontGroup
@@ -16,9 +33,20 @@ type FiltersProps = Readonly<{
 export function Filters({ selectedSeafrontGroup }: FiltersProps) {
   const dispatch = useMainAppDispatch()
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
-  const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
   const absentVesselChecked = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
+  const areFiltersDisplayed = useMainAppSelector(state => state.reportingTableFilters.areFiltersDisplayed)
   const [searchText, setSearchText] = useState(searchQuery)
+
+  const {
+    filters,
+    resetFilters,
+    updateCustomPeriod,
+    updateIsIUU,
+    updateOrigin,
+    updateReportingPeriod,
+    updateReportingStatus,
+    updateReportingType
+  } = useReportingsFilters()
 
   const debouncedHandleChange = useDebouncedCallback(
     (value: string | undefined) => {
@@ -28,15 +56,21 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
     { leading: true, maxWait: 250 }
   )
 
-  const updateReportingTypes = (nextValue: ReportingType[] | undefined) => {
-    dispatch(reportingTableFiltersActions.setReportingTypesDisplayed(nextValue))
-  }
-
   const handleCheckAbsentVessel = (isChecked: boolean | undefined) => {
     dispatch(reportingTableFiltersActions.setAbsentVessel(!!isChecked))
   }
 
+  const toggleFiltersDisplay = () => {
+    dispatch(reportingTableFiltersActions.setAreFiltersDisplayed(!areFiltersDisplayed))
+  }
+
+  const resetAllFilters = () => {
+    resetFilters()
+    dispatch(reportingTableFiltersActions.setAbsentVessel(false))
+  }
+
   const showAbsentVesselToggle = seafrontGroupSupportsAbsentVesselFilter(selectedSeafrontGroup)
+  const hasActiveFilters = !isEqual(filters, DEFAULT_REPORTINGS_FILTER) || !!absentVesselChecked
 
   // uncheck absent vessel filter if on a tab that do not supports it
   useEffect(() => {
@@ -46,41 +80,113 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
   }, [absentVesselChecked, dispatch, showAbsentVesselToggle])
 
   return (
-    <Wrapper>
-      <StyledSearch
-        data-cy="side-window-reporting-search"
-        isLabelHidden
-        isLight
-        isSearchInput
-        label="Rechercher dans les signalements"
-        name="side-window-reporting-search"
-        onChange={value => {
-          setSearchText(value)
-          debouncedHandleChange(value)
-        }}
-        placeholder="Rechercher dans les signalements"
-        size={Size.LARGE}
-        value={searchText}
-      />
-      <Select
-        isLabelHidden
-        isTransparent
-        label="Type de signalement"
-        name="reportingType"
-        onChange={updateReportingTypes}
-        options={REPORTING_TYPE_FILTER_OPTIONS}
-        // @ts-expect-error: using the number 0 as key is ignored, see https://github.com/MTES-MCT/monitor-ui/issues/2068
-        optionValueKey="0"
-        placeholder="Type de signalement"
-        value={reportingTypesDisplayed}
-      />
-      {showAbsentVesselToggle && (
-        <Checkbox
-          checked={absentVesselChecked}
-          label="Navires sans fiche"
-          name="absentVessel"
-          onChange={handleCheckAbsentVessel}
+    <Wrapper data-cy="reporting-table-filters">
+      <Row>
+        <StyledSearch
+          data-cy="side-window-reporting-search"
+          isLabelHidden
+          isLight
+          isSearchInput
+          label="Rechercher dans les signalements"
+          name="side-window-reporting-search"
+          onChange={value => {
+            setSearchText(value)
+            debouncedHandleChange(value)
+          }}
+          placeholder="Rechercher dans les signalements"
+          size={Size.LARGE}
+          value={searchText}
         />
+        <ShowFiltersButton Icon={Icon.FilterBis} onClick={toggleFiltersDisplay}>
+          {areFiltersDisplayed ? 'Masquer les filtres' : 'Afficher les filtres'}
+        </ShowFiltersButton>
+      </Row>
+      {areFiltersDisplayed && (
+        <>
+          <Row>
+            <Select
+              isCleanable={false}
+              isLabelHidden
+              isTransparent
+              label="Période"
+              name="reportingPeriod"
+              onChange={value => updateReportingPeriod(value as ReportingSearchPeriod)}
+              options={REPORTING_SEARCH_PERIOD_AS_OPTIONS}
+              placeholder="Période"
+              value={filters.reportingPeriod}
+            />
+            {filters.reportingPeriod === ReportingSearchPeriod.CUSTOM && (
+              <DateRangePicker
+                defaultValue={getCustomPeriodValue(filters)}
+                hasSingleCalendar
+                isCompact
+                isLabelHidden
+                isStringDate
+                label="Période spécifique"
+                name="customPeriod"
+                onChange={updateCustomPeriod}
+                withFullDayDefaults
+              />
+            )}
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Source"
+              name="origin"
+              onChange={value => updateOrigin(value)}
+              options={REPORTING_ORIGIN_AS_OPTIONS}
+              placeholder="Source"
+              value={filters.origin}
+            />
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Statut"
+              name="status"
+              onChange={value => updateReportingStatus(value)}
+              options={STATUS_OPTIONS}
+              placeholder="Statut"
+              value={getArchivedValue(filters.isArchived)}
+            />
+            <Select
+              isLabelHidden
+              isTransparent
+              label="Type de signalement"
+              name="reportingType"
+              onChange={value => updateReportingType(value)}
+              options={REPORTING_TYPE_OPTIONS}
+              placeholder="Type de signalement"
+              value={filters.reportingType}
+            />
+            <Select
+              isLabelHidden
+              isTransparent
+              label="INN / non INN"
+              name="isIUU"
+              onChange={value => updateIsIUU(value)}
+              options={IUU_OPTIONS}
+              placeholder="INN / non INN"
+              value={getIUUValue(filters.isIUU)}
+            />
+          </Row>
+          <Row>
+            <DrawZoneFilterButton />
+            {showAbsentVesselToggle && (
+              <Checkbox
+                checked={absentVesselChecked}
+                label="Navires sans fiche"
+                name="absentVessel"
+                onChange={handleCheckAbsentVessel}
+              />
+            )}
+          </Row>
+        </>
+      )}
+      {hasActiveFilters && (
+        <TagsRow>
+          <FilterTags />
+          <ResetButton data-cy="reporting-table-reset-filters" onClick={resetAllFilters} />
+        </TagsRow>
       )}
     </Wrapper>
   )
@@ -88,8 +194,39 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 12px;
+`
+
+const Row = styled.div`
+  display: flex;
   align-items: center;
   gap: 24px;
+
+  > .Field-MultiCascader,
+  > .Field-CheckPicker,
+  > .Field-Select,
+  > .Element-Fieldset {
+    min-width: 200px;
+    width: 160px;
+  }
+`
+
+const TagsRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+`
+
+const ShowFiltersButton = styled(LinkButton)`
+  color: ${p => p.theme.color.charcoal};
+
+  svg {
+    color: ${p => p.theme.color.charcoal} !important;
+    height: 20px !important;
+    width: 20px !important;
+  }
 `
 
 const StyledSearch = styled(TextInput)`

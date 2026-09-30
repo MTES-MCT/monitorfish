@@ -33,12 +33,14 @@ const INTERACTION_LISTENER_LABELS: Partial<Record<InteractionListener, { button:
   [InteractionListener.CONTROL_POINT]: { button: 'le point de contrôle', title: 'un point de contrôle' },
   [InteractionListener.MISSION_ZONE]: { button: 'la zone de mission', title: 'une zone de mission' },
   [InteractionListener.VESSELS_LIST]: { button: 'la zone de filtre', title: 'une zone de filtre' },
+  [InteractionListener.REPORTINGS_ZONE]: { button: 'la zone de filtre', title: 'une zone de filtre' },
   [InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG]: { button: 'la zone de groupe', title: 'une zone de groupe' }
 }
 
 const pointListeners = new Set([InteractionListener.CONTROL_POINT, InteractionListener.REPORTING_POINT])
 const polygonListeners = new Set([
   InteractionListener.MISSION_ZONE,
+  InteractionListener.REPORTINGS_ZONE,
   InteractionListener.VESSELS_LIST,
   InteractionListener.EDIT_DYNAMIC_VESSEL_GROUP_DIALOG
 ])

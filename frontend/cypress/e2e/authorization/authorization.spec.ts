@@ -5,12 +5,12 @@ context('Authorization', () => {
     cy.login('superuser')
 
     cy.intercept('GET', '/bff/v1/fleet_segments/*').as('getFleetSegments')
-    cy.intercept('GET', '/bff/v1/reportings').as('getReportings')
+    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
     cy.intercept('GET', '/bff/v1/beacon_malfunctions').as('getBeaconMalfunctions')
 
     cy.visit('/#@-824534.42,6082993.21,8.70')
 
-    cy.wait('@getReportings', { timeout: 15000 })
+    cy.wait('@displayReportings', { timeout: 15000 })
     cy.wait('@getFleetSegments', { timeout: 15000 })
     cy.wait('@getBeaconMalfunctions', { timeout: 15000 })
     cy.wait(500)

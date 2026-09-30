@@ -10,13 +10,16 @@ import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn'
 
 import type {
-  AllReportingsFilter,
-  ApiSearchFilter,
   DisplayedReporting,
   FormEditedReporting,
   Reporting,
-  ReportingCreation
+  ReportingCreation,
+  ReportingsExtraData,
+  ReportingsFilter,
+  ReportingsListFilter,
+  ReportingsSortColumn
 } from './types'
+import type { BackendApi } from '@api/BackendApi.types'
 
 const ARCHIVE_REPORTING_ERROR_MESSAGE = "Nous n'avons pas pu archiver ce signalement."
 const ARCHIVE_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu archiver ces signalements."
@@ -83,7 +86,7 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       transformErrorResponse: response => new FrontendApiError(DELETE_REPORTINGS_ERROR_MESSAGE, response)
     }),
 
-    displayReportings: builder.query<DisplayedReporting[], ApiSearchFilter>({
+    displayReportings: builder.query<DisplayedReporting[], ReportingsFilter>({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
       query: filters => ({
         method: 'GET',
@@ -110,15 +113,34 @@ export const reportingApi = monitorfishApi.injectEndpoints({
       }
     }),
 
-    getReportings: builder.query<Reporting.Reporting[], AllReportingsFilter | void>({
+    getReportings: builder.query<
+      BackendApi.ResponseBodyPaginatedList<Reporting.Reporting, ReportingsExtraData>,
+      {
+        apiPaginationParams: BackendApi.RequestPaginationParams
+        apiSortingParams: BackendApi.RequestSortingParams<typeof ReportingsSortColumn>
+        filters: ReportingsFilter
+        listFilter: ReportingsListFilter
+      }
+    >({
       providesTags: () => [{ type: RtkCacheTagType.Reportings }],
-      query: filters => ({
+      query: ({ apiPaginationParams, apiSortingParams, filters, listFilter }) => ({
         method: 'GET',
-        url: getUrlOrPathWithQueryParams('/reportings', filters ?? {})
+        url: getUrlOrPathWithQueryParams('/reportings', {
+          ...apiPaginationParams,
+          ...apiSortingParams,
+          ...filters,
+          ...listFilter,
+          // The list shows every matching reporting, pinning is a map-only concern.
+          ids: undefined
+        })
       }),
       transformErrorResponse: response => new FrontendApiError(GET_REPORTINGS_ERROR_MESSAGE, response),
-      transformResponse: (baseQueryReturnValue: Reporting.Reporting[]) =>
-        parseOrReturn<Reporting.Reporting>(baseQueryReturnValue, ReportingSchema, true)
+      transformResponse: (
+        baseQueryReturnValue: BackendApi.ResponseBodyPaginatedList<Reporting.Reporting, ReportingsExtraData>
+      ) => ({
+        ...baseQueryReturnValue,
+        data: parseOrReturn<Reporting.Reporting>(baseQueryReturnValue.data, ReportingSchema, true)
+      })
     }),
 
     updateReporting: builder.mutation<Reporting.Reporting, { id: number; nextReportingFormData: FormEditedReporting }>({

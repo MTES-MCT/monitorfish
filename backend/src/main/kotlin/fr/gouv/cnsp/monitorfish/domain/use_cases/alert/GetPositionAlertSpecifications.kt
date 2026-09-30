@@ -16,19 +16,23 @@ class GetPositionAlertSpecifications(
 
     fun execute(): List<PositionAlertSpecification> {
         val alerts = positionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
-        val allAlertsVesselsIds = alerts.map { it.vesselIds }.flatten().distinct()
+        val allAlertsVesselsIds = alerts.map { it.vesselIds + it.excludedVesselIds }.flatten().distinct()
         val allAlertVessels = vesselRepository.findVesselsByIds(allAlertsVesselsIds)
 
         val alertsWithVessels =
             alerts.map { alert ->
-                if (alert.vesselIds.isEmpty()) {
+                if (alert.vesselIds.isEmpty() && alert.excludedVesselIds.isEmpty()) {
                     return@map alert
                 }
 
                 val alertVessels =
                     alert.vesselIds.mapNotNull { vesselId -> allAlertVessels.firstOrNull { it.id == vesselId } }
+                val alertExcludedVessels =
+                    alert.excludedVesselIds.mapNotNull { vesselId ->
+                        allAlertVessels.firstOrNull { it.id == vesselId }
+                    }
 
-                return@map alert.copy(vessels = alertVessels)
+                return@map alert.copy(vessels = alertVessels, excludedVessels = alertExcludedVessels)
             }
 
         val extraAlerts =

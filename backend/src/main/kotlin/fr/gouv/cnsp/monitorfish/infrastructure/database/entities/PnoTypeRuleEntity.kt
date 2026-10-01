@@ -31,6 +31,20 @@ data class PnoTypeRuleEntity(
     val flagStates: List<String> = listOf(),
     @Column(name = "minimum_quantity_kg", nullable = false)
     val minimumQuantityKg: Double = 0.0,
+    @Column(name = "facades", nullable = false, columnDefinition = "VARCHAR[]")
+    val facades: List<String> = listOf(),
+    @Column(name = "vessel_department_codes", nullable = false, columnDefinition = "VARCHAR[]")
+    val vesselDepartmentCodes: List<String> = listOf(),
+    @Column(name = "min_vessel_length")
+    val minVesselLength: Double? = null,
+    @Column(name = "max_vessel_length")
+    val maxVesselLength: Double? = null,
+    @Column(name = "min_trip_duration_hours")
+    val minTripDurationHours: Double? = null,
+    @Column(name = "max_trip_duration_hours")
+    val maxTripDurationHours: Double? = null,
+    @Column(name = "has_catches_on_board")
+    val hasCatchesOnBoard: Boolean? = null,
 ) {
     fun toPnoTypeRule() =
         PnoTypeRule(
@@ -41,5 +55,12 @@ data class PnoTypeRuleEntity(
             gears = gears,
             flagStates = flagStates.map { CountryCode.getByAlpha3Code(it) },
             minimumQuantityKg = minimumQuantityKg,
+            facades = facades,
+            vesselDepartmentCodes = vesselDepartmentCodes,
+            minVesselLength = minVesselLength,
+            maxVesselLength = maxVesselLength,
+            minTripDurationHours = minTripDurationHours,
+            maxTripDurationHours = maxTripDurationHours,
+            hasCatchesOnBoard = hasCatchesOnBoard,
         )
 }

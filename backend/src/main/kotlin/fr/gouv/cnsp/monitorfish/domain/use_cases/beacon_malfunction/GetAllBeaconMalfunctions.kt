@@ -3,7 +3,6 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.beacon_malfunction
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunction
 import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconMalfunctionsRepository
-import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import org.slf4j.LoggerFactory
 
@@ -11,19 +10,16 @@ import org.slf4j.LoggerFactory
 class GetAllBeaconMalfunctions(
     private val beaconMalfunctionsRepository: BeaconMalfunctionsRepository,
     private val riskFactorRepository: RiskFactorRepository,
-    private val beaconRepository: BeaconRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetAllBeaconMalfunctions::class.java)
 
     fun execute(): List<BeaconMalfunction> {
         val riskFactors = riskFactorRepository.findAll()
 
-        val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllExceptArchived()
-        val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchived()
-        val activatedBeaconNumbers = beaconRepository.findActivatedBeaconNumbers()
+        val beaconMalfunctionsExceptArchived = beaconMalfunctionsRepository.findAllFollowedExceptArchived()
+        val lastSixtyArchived = beaconMalfunctionsRepository.findLastSixtyArchivedAndFollowed()
 
         return (beaconMalfunctionsExceptArchived + lastSixtyArchived)
-            .filter { activatedBeaconNumbers.contains(it.beaconNumber) }
             .map { beaconMalfunction ->
                 val riskFactor =
                     riskFactors

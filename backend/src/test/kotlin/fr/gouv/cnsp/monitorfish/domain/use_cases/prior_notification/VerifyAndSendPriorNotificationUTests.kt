@@ -32,11 +32,11 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         ).willReturn(fakePriorNotification)
-        given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
+        given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId))
             .willReturn(null)
         given(
             getPriorNotification.execute(
-                fakePriorNotification.reportId!!,
+                fakePriorNotification.reportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             ),
@@ -49,13 +49,13 @@ class VerifyAndSendPriorNotificationUTests {
                 manualPriorNotificationRepository,
                 getPriorNotification,
             ).execute(
-                fakePriorNotification.reportId!!,
+                fakePriorNotification.reportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             )
 
         // Then
-        Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
+        Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId)
     }
 
     @Test
@@ -69,11 +69,11 @@ class VerifyAndSendPriorNotificationUTests {
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
             ),
         ).willReturn(null)
-        given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId!!))
+        given(manualPriorNotificationRepository.findByReportId(fakePriorNotification.reportId))
             .willReturn(fakePriorNotification)
         given(
             getPriorNotification.execute(
-                fakePriorNotification.reportId!!,
+                fakePriorNotification.reportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
@@ -86,12 +86,12 @@ class VerifyAndSendPriorNotificationUTests {
                 manualPriorNotificationRepository,
                 getPriorNotification,
             ).execute(
-                fakePriorNotification.reportId!!,
+                fakePriorNotification.reportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             )
 
         // Then
-        Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId!!)
+        Assertions.assertThat(result.reportId).isEqualTo(fakePriorNotification.reportId)
     }
 }

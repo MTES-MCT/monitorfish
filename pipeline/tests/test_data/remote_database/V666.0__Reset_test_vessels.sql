@@ -71,5 +71,14 @@ INSERT INTO public.vessels (
     '{}', '{}', NULL, '{}', '{}', 'Pêchou', '{9546458753}',
     false,
     null, null, null, null, null, 'target@me', 'Equipé'
+),
+(
+    8,
+    'GBR000888888', 'GBR001', NULL, 'ZZZ99', 'AIS ACTIVITY VESSEL', 'GB', 3.0, 12.0,
+    NULL, NULL, NULL, NULL, 300, 'Chalutier', '4ème', 'Grande pêche',
+    '{OTM}', NULL,
+    '{}', '{}', NULL, '{}', '{}', NULL, '{}',
+    false,
+    null, null, null, null, null, null, 'Equipé'
 )
 ;

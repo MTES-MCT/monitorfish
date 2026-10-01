@@ -7,31 +7,8 @@ from typing import List
 
 import pandas as pd
 
-from config import (
-    CNSP_SIP_DEPARTMENT_EMAIL,
-    CNSP_SIP_DEPARTMENT_FAX,
-    CNSP_SIP_DEPARTMENT_MOBILE_PHONE,
-)
+from config import CNSP_SIP_DEPARTMENT_EMAIL, CNSP_SIP_DEPARTMENT_MOBILE_PHONE
 from src.entities.communication_means import CommunicationMeans
-
-
-class BeaconStatus(Enum):
-    ACTIVATED = "ACTIVATED"
-    DEACTIVATED = "DEACTIVATED"
-    IN_TEST = "IN_TEST"
-    NON_APPROVED = "NON_APPROVED"
-    UNSUPERVISED = "UNSUPERVISED"
-
-    @staticmethod
-    def from_poseidon_status(poseidon_status: str):
-        mapping = {
-            "Activée": BeaconStatus.ACTIVATED,
-            "Désactivée": BeaconStatus.DEACTIVATED,
-            "En test": BeaconStatus.IN_TEST,
-            "Non agréée": BeaconStatus.NON_APPROVED,
-            "Non surveillée": BeaconStatus.UNSUPERVISED,
-        }
-        return mapping[poseidon_status]
 
 
 class BeaconMalfunctionStage(Enum):
@@ -61,15 +38,9 @@ class EndOfMalfunctionReason(Enum):
 
 class BeaconMalfunctionNotificationType(Enum):
     MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION = "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION"
-    MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
-        "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
-    )
     MALFUNCTION_AT_SEA_REMINDER = "MALFUNCTION_AT_SEA_REMINDER"
     MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION = (
         "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION"
-    )
-    MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON = (
-        "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON"
     )
     MALFUNCTION_AT_PORT_REMINDER = "MALFUNCTION_AT_PORT_REMINDER"
     END_OF_MALFUNCTION = "END_OF_MALFUNCTION"
@@ -78,10 +49,8 @@ class BeaconMalfunctionNotificationType(Enum):
     def to_notification_subject_template(self):
         type_subject_mapping = {
             "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
-            "MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_SEA_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption en mer des émissions VMS",
             "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
-            "MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON": "{vessel_name} ({immat}) : interruption à quai des émissions VMS",
             "MALFUNCTION_AT_PORT_REMINDER": "{vessel_name} ({immat}) : RAPPEL : interruption à quai des émissions VMS",
             "END_OF_MALFUNCTION": "{vessel_name} ({immat}) : reprise des émissions VMS",
             "MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC": "Interruption of VMS transmissions from fishing vessel {vessel_name} ({immat})",
@@ -116,11 +85,9 @@ class BeaconMalfunctionToNotify:
     notification_type: BeaconMalfunctionNotificationType
     vessel_emails: List[str]
     vessel_mobile_phone: str
-    vessel_fax: str
     operator_name: str
     operator_email: str
     operator_mobile_phone: str
-    operator_fax: str
     satellite_operator: str
     satellite_operator_emails: List[str]
     foreign_fmc_name: str
@@ -168,45 +135,6 @@ class BeaconMalfunctionToNotify:
                     )
                 ]
                 if CNSP_SIP_DEPARTMENT_MOBILE_PHONE
-                else []
-            )
-        return addressees
-
-    def get_fax_addressees(self) -> List[BeaconMalfunctionNotificationAddressee]:
-        if not self.test_mode:
-            addressees = []
-
-            if self.notification_type is not (
-                BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC
-            ):
-                if self.vessel_fax:
-                    addressees.append(
-                        BeaconMalfunctionNotificationAddressee(
-                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_CAPTAIN,
-                            name=None,
-                            address_or_number=self.vessel_fax,
-                        )
-                    )
-
-                if self.operator_fax:
-                    addressees.append(
-                        BeaconMalfunctionNotificationAddressee(
-                            function=BeaconMalfunctionNotificationRecipientFunction.VESSEL_OPERATOR,
-                            name=self.operator_name,
-                            address_or_number=self.operator_fax,
-                        )
-                    )
-
-        else:
-            addressees = (
-                [
-                    BeaconMalfunctionNotificationAddressee(
-                        function=BeaconMalfunctionNotificationRecipientFunction.FMC,
-                        name="CNSP",
-                        address_or_number=CNSP_SIP_DEPARTMENT_FAX,
-                    )
-                ]
-                if CNSP_SIP_DEPARTMENT_FAX
                 else []
             )
         return addressees
@@ -324,8 +252,6 @@ class BeaconMalfunctionMessageToSend:
             return self.beacon_malfunction_to_notify.get_email_addressees()
         elif self.communication_means is CommunicationMeans.SMS:
             return self.beacon_malfunction_to_notify.get_sms_addressees()
-        elif self.communication_means is CommunicationMeans.FAX:
-            return self.beacon_malfunction_to_notify.get_fax_addressees()
         else:
             raise ValueError(
                 f"Unexpected communication_means {self.communication_means}"

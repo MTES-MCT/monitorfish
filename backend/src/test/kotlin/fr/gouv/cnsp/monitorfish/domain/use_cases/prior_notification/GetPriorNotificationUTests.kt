@@ -77,14 +77,14 @@ class GetPriorNotificationUTests {
                 speciesRepository,
                 vesselRepository,
             ).execute(
-                fakePriorNotification.reportId!!,
+                fakePriorNotification.reportId,
                 fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 false,
             )
 
         // Then
         assertThat(result.logbookMessageAndValue.logbookMessage.reportId)
-            .isEqualTo(fakePriorNotification.reportId!!)
+            .isEqualTo(fakePriorNotification.reportId)
         assertThat(result.logbookMessageAndValue.logbookMessage.referencedReportId).isNull()
     }
 

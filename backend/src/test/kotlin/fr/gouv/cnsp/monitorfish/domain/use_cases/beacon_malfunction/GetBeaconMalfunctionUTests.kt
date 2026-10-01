@@ -11,7 +11,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfun
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationRecipientFunction
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconMalfunctionNotificationType
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.Stage
 import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.VesselStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
@@ -67,7 +66,6 @@ class GetBeaconMalfunctionUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 1,
                 ),
             )
@@ -92,7 +90,6 @@ class GetBeaconMalfunctionUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 1,
                 ),
                 BeaconMalfunction(
@@ -109,7 +106,6 @@ class GetBeaconMalfunctionUTests {
                     null,
                     ZonedDateTime.now(),
                     beaconNumber = "123465",
-                    beaconStatusAtMalfunctionCreation = BeaconStatus.ACTIVATED,
                     vesselId = 1,
                 ),
             ),

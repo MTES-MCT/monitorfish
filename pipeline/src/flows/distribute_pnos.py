@@ -51,7 +51,7 @@ from src.helpers.emails import (
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
-    send_email_or_sms_or_fax_message,
+    send_email_or_sms_message,
 )
 from src.read_query import read_query
 from src.sentry import report_flow_failure_to_sentry
@@ -824,7 +824,7 @@ def send_pno_message(
 ) -> List[PriorNotificationSentMessage]:
     logger = get_run_logger()
 
-    send_errors = send_email_or_sms_or_fax_message(
+    send_errors = send_email_or_sms_message(
         pno_to_send.message, pno_to_send.communication_means, is_integration, logger
     )
 

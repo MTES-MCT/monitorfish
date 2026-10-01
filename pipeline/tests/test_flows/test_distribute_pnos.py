@@ -2572,7 +2572,7 @@ def test_create_sms_with_no_phone_addressees_returns_none(
     "src.flows.distribute_pnos.utcnow",
     mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
-@patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
+@patch("src.flows.distribute_pnos.send_email_or_sms_message")
 def test_send_pno_message_by_email(
     mock_send, pno_to_send_by_email, messages_sent_by_email
 ):
@@ -2587,7 +2587,7 @@ def test_send_pno_message_by_email(
     "src.flows.distribute_pnos.utcnow",
     mock_utcnow(datetime(2023, 6, 6, 16, 10, 0)),
 )
-@patch("src.flows.distribute_pnos.send_email_or_sms_or_fax_message")
+@patch("src.flows.distribute_pnos.send_email_or_sms_message")
 def test_send_pno_message_by_sms(mock_send, pno_to_send_by_sms, messages_sent_by_sms):
     mock_send.return_value = dict()
     sent_messages = send_pno_message(pno_to_send_by_sms, False)
@@ -2755,11 +2755,9 @@ FAKE_RENDERED_PDF = make_fake_rendered_pdf()
 @patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
-@patch("src.helpers.emails.send_fax")
 @patch("src.shared_tasks.control_units.requests")
 def test_flow(
     mock_requests,
-    mock_send_fax,
     mock_send_sms,
     mock_send_email,
     mock_write_pdf,
@@ -2813,8 +2811,6 @@ def test_flow(
     mock_requests.get.assert_called_once_with(
         "https://monitor.env/api/v2/control_units"
     )
-
-    mock_send_fax.assert_not_called()
 
     if is_integration:
         mock_send_sms.assert_not_called()
@@ -2887,11 +2883,9 @@ def test_flow(
 @patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
-@patch("src.helpers.emails.send_fax")
 @patch("src.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_generate(
     mock_requests,
-    mock_send_fax,
     mock_send_sms,
     mock_send_email,
     mock_write_pdf,
@@ -2957,11 +2951,9 @@ def test_flow_with_zero_pno_to_generate(
 @patch("weasyprint.HTML.write_pdf", return_value=FAKE_RENDERED_PDF)
 @patch("src.helpers.emails.send_email")
 @patch("src.helpers.emails.send_sms")
-@patch("src.helpers.emails.send_fax")
 @patch("src.shared_tasks.control_units.requests")
 def test_flow_with_zero_pno_to_send(
     mock_requests,
-    mock_send_fax,
     mock_send_sms,
     mock_send_email,
     mock_write_pdf,

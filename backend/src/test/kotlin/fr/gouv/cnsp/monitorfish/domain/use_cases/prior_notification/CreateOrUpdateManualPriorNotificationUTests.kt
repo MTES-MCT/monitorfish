@@ -222,7 +222,7 @@ class CreateOrUpdateManualPriorNotificationUTests {
         given(manualPriorNotificationRepository.save(any())).willReturn(updatedFakePriorNotification)
         given(
             getPriorNotification.execute(
-                existingFakePriorNotification.reportId!!,
+                existingFakePriorNotification.reportId,
                 existingFakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 true,
             ),
@@ -253,14 +253,14 @@ class CreateOrUpdateManualPriorNotificationUTests {
                 note = null,
                 portLocode = "FAKE_PORT_LOCODE",
                 purpose = LogbookMessagePurpose.LAN,
-                reportId = existingFakePriorNotification.reportId!!,
+                reportId = existingFakePriorNotification.reportId,
                 sentAt = ZonedDateTime.parse("2024-01-01T00:00:00Z"),
                 tripGearCodes = emptyList(),
                 vesselId = 1,
             )
 
         // Then
-        assertThat(result.reportId!!).isEqualTo(existingFakePriorNotification.reportId!!)
+        assertThat(result.reportId!!).isEqualTo(existingFakePriorNotification.reportId)
     }
 
     @Test

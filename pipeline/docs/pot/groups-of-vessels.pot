@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "Groups of vessels"
 msgstr ""
 
 #: ../source/groups-of-vessels.rst:5
-#: 892153b2e5e74b76810b3f87f33781d7
-msgid "Groups of vessels can be created on various criteria (fleet segment, risk factor, gear, producer organization, vessel size, time since last inspection...)."
+#: 813ffa8d2784486b887eb55df4659526
+msgid "Groups of vessels make monitoring and targeting of fishing vessels on various criteria very flexible."
 msgstr ""
 
 #: ../source/groups-of-vessels.rst:7
@@ -32,6 +32,56 @@ msgid "Map showing groups of vessels"
 msgstr ""
 
 #: ../source/groups-of-vessels.rst:12
-#: 813ffa8d2784486b887eb55df4659526
-msgid "Groups created by one user can be kept private or shared with other users. This functionality makes monitoring and targeting of fishing vessels on various criteria very flexible."
+#: af162227b73b47eda37f925c2e3756dc
+msgid "Types of groups"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:14
+#: 637048814812498f9163499e1c5e91c3
+msgid "**dynamic groups** are defined by criteria - the filters of the :doc:`vessel list <vessel-list>` (fleet segment, risk factor, gear, producer organization, vessel size, time since last inspection, zones...). Vessels enter and leave the group as their situation changes."
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:17
+#: 5300e1e781354cc58306d473d44b4c4c
+msgid "**fixed groups** are lists of vessels, created from a selection in the vessel list or by importing a CSV file. Vessels can be removed from a fixed group."
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:20
+#: 04413da8d41145f2b37bb92f42c00e16
+msgid "Each group has a name, a description, points of attention, a color and an optional validity period. Groups can be displayed or hidden on the map, pinned, and exported as a CSV file."
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:24
+#: 846a293b7b1d4b06ba9cb13146c5e52f
+msgid "Sharing"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:26
+#: ef868a0a305c4aefb8eeaad48247663b
+msgid "Groups created by one user can be kept private or shared with the teams of the FMC (operations for mainland France, operations for overseas territories, regulation and planning, SIP). Only super users can share groups."
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:32
+#: e0d8f0877e554738acb5395454caadd9
+msgid "Priority groups"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:34
+#: ef875fa773094b138e2b42220ba1149f
+msgid "Two groups are computed automatically by Monitorfish :"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:36
+#: 9ae67017733a48d1ab49793ab3db5f15
+msgid "**P1 segments** : vessels whose control priority level is *very high*"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:37
+#: cbb9795513a44d2991cf373460753d9c
+msgid "**P2 segments** : vessels whose control priority level is *high*"
+msgstr ""
+
+#: ../source/groups-of-vessels.rst:39
+#: 1d7108c268f84bbd9c4bf6732f8333e6
+msgid "The control priority level of a vessel is that of its current fleet segments (see :doc:`control-priority-steering`), including chartered vessels. Vessels of priority groups are highlighted on the map with a target icon."
 msgstr ""

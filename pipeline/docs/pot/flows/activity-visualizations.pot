@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,5 +23,15 @@ msgstr ""
 
 #: ../source/flows/activity-visualizations.rst:5
 #: 845b3a89ace34fa4bf47b40ebc8989bd
-msgid "The ``Activity visualizations`` flow extract one year of aggregated declarative data from the Data Warehouse, generates a `kepler.gl <https://kepler.gl>`__ visualization with it and loads it in the ``activity_visualisations`` table."
+msgid "The ``Activity visualizations`` flow extracts one year of aggregated declarative data from the Data Warehouse, generates a `kepler.gl <https://kepler.gl>`__ visualization with it and loads it in the ``activity_visualizations`` table."
+msgstr ""
+
+#: ../source/flows/activity-visualizations.rst:8
+#: 04ec2203148843e0b19b44488e8fa096
+msgid "This visualization is then served by the backend in the :doc:`../activity-overview` page of the app."
+msgstr ""
+
+#: ../source/flows/activity-visualizations.rst:10
+#: dd19393f38dc470e9af42f1eb2ebc391
+msgid "It is scheduled to run on the 1st of each month."
 msgstr ""

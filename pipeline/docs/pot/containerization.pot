@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,17 +28,17 @@ msgstr ""
 
 #: ../source/containerization.rst:6
 #: b379046008c1454488d8e337b10f50db
-msgid "``monitorfish_app`` : service with back end (Kotlin Springboot) and front end (React) apps"
+msgid "``ghcr.io/mtes-mct/monitorfish/monitorfish-app`` : service with back end (Kotlin Spring Boot) and front end (React) apps"
 msgstr ""
 
 #: ../source/containerization.rst:7
-#: 5c20455f08574cdfa1527e09154a7209
-msgid "``monitorfish_pipeline`` : service with python data ingestion and processing app"
+#: 5d1f0f4062c9445f8d9e4351346fe012
+msgid "``ghcr.io/mtes-mct/monitorfish/monitorfish-pipeline-prefect3`` : service with python data ingestion and processing app (Prefect flows)"
 msgstr ""
 
 #: ../source/containerization.rst:9
 #: b453f0d3b3f442648efba439b5450dcf
-msgid "These two images are pushed to the `Github package regitry <https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish>`__."
+msgid "These two images are pushed to the `Github package registry <https://github.com/orgs/MTES-MCT/packages?repo_name=monitorfish>`__."
 msgstr ""
 
 #: ../source/containerization.rst:11

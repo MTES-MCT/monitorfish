@@ -167,15 +167,6 @@ minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
-[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_controllers]
-file_filter            = locale/<lang>/LC_MESSAGES/flows/controllers.po
-source_file            = pot/flows/controllers.pot
-source_lang            = en
-type                   = PO
-minimum_perc           = 0
-replace_edited_strings = false
-keep_translations      = false
-
 [o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_controls]
 file_filter            = locale/<lang>/LC_MESSAGES/flows/controls.po
 source_file            = pot/flows/controls.pot
@@ -244,15 +235,6 @@ minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
-[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_ers]
-file_filter            = locale/<lang>/LC_MESSAGES/flows/ers.po
-source_file            = pot/flows/ers.pot
-source_lang            = en
-type                   = PO
-minimum_perc           = 0
-replace_edited_strings = false
-keep_translations      = false
-
 [o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_facade-areas]
 file_filter            = locale/<lang>/LC_MESSAGES/flows/facade-areas.po
 source_file            = pot/flows/facade-areas.pot
@@ -300,15 +282,6 @@ keep_translations      = false
 [o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_last-positions]
 file_filter            = locale/<lang>/LC_MESSAGES/flows/last-positions.po
 source_file            = pot/flows/last-positions.pot
-source_lang            = en
-type                   = PO
-minimum_perc           = 0
-replace_edited_strings = false
-keep_translations      = false
-
-[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_logbook]
-file_filter            = locale/<lang>/LC_MESSAGES/flows/logbook.po
-source_file            = pot/flows/logbook.pot
 source_lang            = en
 type                   = PO
 minimum_perc           = 0
@@ -578,3 +551,137 @@ minimum_perc           = 0
 replace_edited_strings = false
 keep_translations      = false
 
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_access-rights]
+file_filter            = locale/<lang>/LC_MESSAGES/access-rights.po
+source_file            = pot/access-rights.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_back-office]
+file_filter            = locale/<lang>/LC_MESSAGES/back-office.po
+source_file            = pot/back-office.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_control-units]
+file_filter            = locale/<lang>/LC_MESSAGES/control-units.po
+source_file            = pot/control-units.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_init-infraction-threat-characterization]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/init-infraction-threat-characterization.po
+source_file            = pot/flows/init-infraction-threat-characterization.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_init-pno-types]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/init-pno-types.po
+source_file            = pot/flows/init-pno-types.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_recompute-mission-actions-facade]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/recompute-mission-actions-facade.po
+source_file            = pot/flows/recompute-mission-actions-facade.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_regulations-open-data]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/regulations-open-data.po
+source_file            = pot/flows/regulations-open-data.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_risk-elements]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/risk-elements.po
+source_file            = pot/flows/risk-elements.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_sales-and-logbook]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/sales-and-logbook.po
+source_file            = pot/flows/sales-and-logbook.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_flows_trips-snapshot]
+file_filter            = locale/<lang>/LC_MESSAGES/flows/trips-snapshot.po
+source_file            = pot/flows/trips-snapshot.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_map-and-layers]
+file_filter            = locale/<lang>/LC_MESSAGES/map-and-layers.po
+source_file            = pot/map-and-layers.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_missions-and-controls]
+file_filter            = locale/<lang>/LC_MESSAGES/missions-and-controls.po
+source_file            = pot/missions-and-controls.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_reportings]
+file_filter            = locale/<lang>/LC_MESSAGES/reportings.po
+source_file            = pot/reportings.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_vessel-list]
+file_filter            = locale/<lang>/LC_MESSAGES/vessel-list.po
+source_file            = pot/vessel-list.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false
+
+[o:ministere-de-la-transition-ecologique-et-solidaire-1:p:monitorfish:r:pot_vessel-sheet]
+file_filter            = locale/<lang>/LC_MESSAGES/vessel-sheet.po
+source_file            = pot/vessel-sheet.pot
+source_lang            = en
+type                   = PO
+minimum_perc           = 0
+replace_edited_strings = false
+keep_translations      = false

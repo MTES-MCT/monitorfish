@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: ../source/vessel_identification.rst:10
 #: 0886be5ddd2d4092a966471e88347cd1
-msgid "``internal_reference_number`` (Community Fleet Register - CFR) for :"
+msgid "``internal_reference_number`` / ``cfr`` (Community Fleet Register - CFR) for :"
 msgstr ""
 
 #: ../source/vessel_identification.rst:11
@@ -57,16 +57,31 @@ msgid "`Logbook` containing `ERS` (Electronic Reporting System) and `FLUX` (Fish
 msgstr ""
 
 #: ../source/vessel_identification.rst:12
+#: 98eff48b2264464e924d36ba835ae765
+msgid "`Sales notes`"
+msgstr ""
+
+#: ../source/vessel_identification.rst:13
+#: 70c8ec5e0084444ab8921c914971957a
+msgid "``mmsi`` (Maritime Mobile Service Identity) for :"
+msgstr ""
+
+#: ../source/vessel_identification.rst:14
+#: 5dba1357c12d4fd092e6f32186c85c04
+msgid "AIS `Position`"
+msgstr ""
+
+#: ../source/vessel_identification.rst:15
 #: c8a02d90684d4262b881843c6489cfc6
 msgid "``internal_reference_number`` (Community Fleet Register - CFR), ``ircs`` (International Radio Call Sign of the vessel) and ``external_reference_number`` (side number, registration number, IMO number or any other external marking identifying the vessel) for :"
 msgstr ""
 
-#: ../source/vessel_identification.rst:13
+#: ../source/vessel_identification.rst:16
 #: 5dba1357c12d4fd092e6f32186c85c04
 msgid "VMS `Position`"
 msgstr ""
 
-#: ../source/vessel_identification.rst:14
+#: ../source/vessel_identification.rst:17
 #: 9a0410d0fa5e4a8d9322c4bb30066216
 msgid "`Alert` and `Reporting`"
 msgstr ""

@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "Architecture"
 msgstr ""
 
 #: ../source/architecture.rst:5
-#: 1f76ef88c1ca4e90ba53c7dccce2ecc1
-msgid "Monitorfish is built around 3 main components :"
+#: 8cb83ae578e94b06970a7042e890082d
+msgid "Monitorfish is built around 3 main components, and integrates with several external systems :"
 msgstr ""
 
 #: ../source/architecture.rst:11
@@ -47,18 +47,18 @@ msgid "Back end"
 msgstr ""
 
 #: ../source/architecture.rst:26
-#: 582949acbc014908b0f0a5b83387ee79
-msgid "Kotlin"
+#: 69b46e95a9e541bf9749e7fb4db2888e
+msgid "Kotlin 2.4 on the JVM 21, built with Gradle"
 msgstr ""
 
 #: ../source/architecture.rst:27
 #: 3f3d77fd646240158a647978947a975b
-msgid "Spring Boot"
+msgid "Spring Boot 4.1"
 msgstr ""
 
 #: ../source/architecture.rst:28
 #: 2c0ec79a905c48a0871218aabb1cdfa6
-msgid "Flyway (database migration)"
+msgid "Flyway (database migrations, run at startup)"
 msgstr ""
 
 #: ../source/architecture.rst:29
@@ -66,132 +66,332 @@ msgstr ""
 msgid "PostgreSQL with PostGIS/TimescaleDB"
 msgstr ""
 
-#: ../source/architecture.rst:30
-#: f513dd9ef1f745f9919e9386906eced5
-msgid "Tomcat (version 9.0.37)"
+#: ../source/architecture.rst:31
+#: 7a75f16193674fec802cf5a6aa6f4ee7
+msgid "The backend follows a clean architecture : business logic is written as *use cases* (``domain/use_cases``) which are exposed by API controllers and use repositories implemented in the ``infrastructure`` layer."
 msgstr ""
 
 #: ../source/architecture.rst:35
+#: c321958893584170a831bad85616cd68
+msgid "APIs"
+msgstr ""
+
+#: ../source/architecture.rst:37
+#: 2f16e71c2151436b9243b942eb77e9ed
+msgid "``/bff/v1/*`` : the API used by the frontend (*backend for frontend*). It requires an authenticated and authorized user (see :doc:`authentication`). Some routes (missions, alerts, reportings, beacon malfunctions, back office...) are restricted to super users (see :doc:`access-rights`)."
+msgstr ""
+
+#: ../source/architecture.rst:40
+#: ffb7dab1d1414c2e85eb0f490305b00f
+msgid "``/api/v1/*`` : the API used by other systems, notably :"
+msgstr ""
+
+#: ../source/architecture.rst:42
+#: 9b5f28df489b4d558c8c7f393cb4b8cf
+msgid "``POST /api/v1/positions`` to receive VMS positions (NAF format)"
+msgstr ""
+
+#: ../source/architecture.rst:43
+#: 3b174cc3cb9e4a2697d2e0b9edbc9e2b
+msgid "``/api/v1/mission_actions`` used by Monitorenv and RapportNav to read and update the controls of a mission (API key)"
+msgstr ""
+
+#: ../source/architecture.rst:44
+#: 52aa7299c95845f994897f4d3d76b4d3
+msgid "``/api/v1/beacon_malfunctions`` and ``/api/v1/authorization/management`` (API key)"
+msgstr ""
+
+#: ../source/architecture.rst:45
+#: 1ce6e5fc7f4d41e9804d531c641e610b
+msgid "read-only referentials (vessels, ports, infractions) and the ``/api/v1/healthcheck`` endpoint"
+msgstr ""
+
+#: ../source/architecture.rst:47
+#: 8d33f16b23da415bb7c871f4b6c5a28f
+msgid "``/swagger-ui`` : the OpenAPI documentation of these APIs."
+msgstr ""
+
+#: ../source/architecture.rst:50
+#: f58896ce5a4a49dfb0afb7e9054bcb1e
+msgid "Scheduled jobs"
+msgstr ""
+
+#: ../source/architecture.rst:52
+#: 47a4faca89974781b67ef96409d308cf
+msgid "In addition to the :ref:`data pipeline <data-pipeline>`, the backend runs a few scheduled jobs every 5 minutes :"
+msgstr ""
+
+#: ../source/architecture.rst:54
+#: 803ef2295f324121a0456f8bd803305e
+msgid "archiving outdated :doc:`reportings <reportings>` (after a new trip, at the end of their validity, or at the next departure)"
+msgstr ""
+
+#: ../source/architecture.rst:55
+#: 08810b7ebb274be8aea19e197d8759c2
+msgid "deleting :ref:`configurable alerts <configurable-alerts>` at the end of their validity period, when requested"
+msgstr ""
+
+#: ../source/architecture.rst:56
+#: 877ccc4a2cb44dd7894f0429f87ba228
+msgid "invalidating outdated \"zero\" BFT/SWO manual :doc:`prior notifications <prior-notifications>` after 24 hours"
+msgstr ""
+
+#: ../source/architecture.rst:61
 #: 83702c1ca9f24b5eb80a1244276597f9
 msgid "Front end"
 msgstr ""
 
-#: ../source/architecture.rst:37
-#: e353779ca269466ab0c6db183482c31d
-msgid "Openlayers"
+#: ../source/architecture.rst:63
+#: 375c3e903ca04992b0486b6c82826d35
+msgid "React, TypeScript, built with Vite"
 msgstr ""
 
-#: ../source/architecture.rst:38
-#: d8fbdb8c921a42ec85c9fea5513995af
-msgid "React"
+#: ../source/architecture.rst:64
+#: 3c9e1620470541e5ac47e2a77ea71eb0
+msgid "OpenLayers for maps"
 msgstr ""
 
-#: ../source/architecture.rst:45
+#: ../source/architecture.rst:65
+#: 876aba43288b4df9b07313ea547cf25e
+msgid "Redux Toolkit and RTK Query for state management and API calls"
+msgstr ""
+
+#: ../source/architecture.rst:66
+#: fadd5808623c4811afb46206a57bd786
+msgid "`Monitor UI <https://github.com/MTES-MCT/monitor-ui>`__, the design system shared with Monitorenv"
+msgstr ""
+
+#: ../source/architecture.rst:68
+#: f4ad442ddd5d4658b847d30115629f8a
+msgid "The frontend is a single page application served by the backend. It has two windows : the main window (map) and the *side window* (lists, forms and kanbans opened in a separate browser window)."
+msgstr ""
+
+#: ../source/architecture.rst:76
 #: a83f99e41da14e089501c52104399057
 msgid "Data pipeline"
 msgstr ""
 
-#: ../source/architecture.rst:47
+#: ../source/architecture.rst:78
 #: ee3dc0404e8d4e3988ab6d49e7c6e364
 msgid "The data processing service executes python batch jobs to :"
 msgstr ""
 
-#: ../source/architecture.rst:49
+#: ../source/architecture.rst:80
 #: bcd8c04052054c7693c59831aac8e474
 msgid "pull data from external sources into the Monitorfish database (ETL)"
 msgstr ""
 
-#: ../source/architecture.rst:50
+#: ../source/architecture.rst:81
 #: d7d7b6c0d8904a4eae18c7966783d7d7
 msgid "process data in the Monitorfish database to enrich and update tables that the backend makes available to the frontend through an API"
 msgstr ""
 
-#: ../source/architecture.rst:51
+#: ../source/architecture.rst:82
 #: de820e91f72b41c4b7f85a07fb34095c
 msgid "publish data online"
 msgstr ""
 
-#: ../source/architecture.rst:54
+#: ../source/architecture.rst:85
 #: 8af0b89d9f60405bb39cc866192eb704
 msgid "Database schema"
 msgstr ""
 
-#: ../source/architecture.rst:56
+#: ../source/architecture.rst:87
 #: 5a8a39fd591c4c9dbc0067d5eb3a77d3
 msgid "Database tables are created by the :ref:`back-end`. Jobs of the data pipeline require tables to already exist and to have the right columns and data types. It is therefore necessary to keep the back end and the data pipeline applications \"in sync\". For this reason, the back end and the data pipeline should always be deployed with the **same version number** (see :ref:`environment_variables`)."
 msgstr ""
 
-#: ../source/architecture.rst:61
+#: ../source/architecture.rst:92
 #: 52879a695d8c4072b8201af5610c0365
 msgid "Orchestration"
 msgstr ""
 
-#: ../source/architecture.rst:63
+#: ../source/architecture.rst:94
 #: 10b604ab158b45b8bfa9925f664a473a
 msgid "Batch jobs are orchestrated by `Prefect <https://prefect.io>`__. For more information see `Prefect documentation <https://docs.prefect.io/v3/get-started/>`__."
 msgstr ""
 
-#: ../source/architecture.rst:66
+#: ../source/architecture.rst:97
 #: 5280f0ac7242448ba350720ba3102b62
 msgid "The prefect UI enables administrators to monitor their execution, see the logs and debug in case any flow run fails..."
 msgstr ""
 
-#: ../source/architecture.rst:69
+#: ../source/architecture.rst:100
 #: 05aee785bad24a899a2b286076f4baa2
 msgid "Execution"
 msgstr ""
 
-#: ../source/architecture.rst:72
+#: ../source/architecture.rst:103
 #: bf6aa6dbf58a45b88280e59369968778
 msgid "Stack"
 msgstr ""
 
-#: ../source/architecture.rst:74
+#: ../source/architecture.rst:105
 #: 89bc9627d5b84ead8cabc7eaafc78111
 msgid "The main tools used to extract data, process it in python and load it to the PostgreSQL database of Monitorfish are :"
 msgstr ""
 
-#: ../source/architecture.rst:76
+#: ../source/architecture.rst:107
 #: 12ab9e7cca6d4ba78c1d54bf99fc5df6
-msgid "python 3"
+msgid "python 3.14"
 msgstr ""
 
-#: ../source/architecture.rst:77
+#: ../source/architecture.rst:108
 #: 08995e37b73b430fb7cbf116a3df950c
 msgid "`SQLAlchemy <https://www.sqlalchemy.org/>`__ as a python SQL toolkit to interact with SQL databases"
 msgstr ""
 
-#: ../source/architecture.rst:78
+#: ../source/architecture.rst:109
 #: 24d99810f9dd448e9ace9178a1c1f277
-msgid "Database adapters `cx_Oracle <https://oracle.github.io/python-cx_Oracle/>`__,  `psycopg2 <https://github.com/psycopg/psycopg2/>`__ and `ClickHouse Connect <https://clickhouse.com/docs/integrations/python/>`__ for connectivity to Oracle, PostgreSQL and ClickHouse databases respectively"
+msgid "Database adapters `python-oracledb <https://python-oracledb.readthedocs.io/>`__,  `psycopg2 <https://github.com/psycopg/psycopg2/>`__ and `ClickHouse Connect <https://clickhouse.com/docs/integrations/python/>`__ for connectivity to Oracle, PostgreSQL and ClickHouse databases respectively"
 msgstr ""
 
-#: ../source/architecture.rst:80
+#: ../source/architecture.rst:111
 #: 6805360017824557b3cc26dfcfeac2cb
 msgid "`pandas <https://pandas.pydata.org/>`__ and `DuckDB <https://duckdb.org/>`__ for data manipulation in python"
 msgstr ""
 
-#: ../source/architecture.rst:81
+#: ../source/architecture.rst:112
 #: 2fd975c62c0641a9b53c753317af7d73
 msgid "the `prefect python library <https://github.com/prefecthq/prefect>`__ to write batch jobs as flows of tasks"
 msgstr ""
 
-#: ../source/architecture.rst:84
+#: ../source/architecture.rst:115
 #: 21e486faae9048c2810f1800ab8c5fd4
 msgid "Flows : one for each job"
 msgstr ""
 
-#: ../source/architecture.rst:86
+#: ../source/architecture.rst:117
 #: d0ace072b5c54ee491f00a0f5f4e3f2b
 msgid "Batch jobs are written in python as prefect :ref:`flows <flows>` : each flow is responsible for one particular task, such as updating the ``vessels`` referencial or refreshing the table of ``last_positions``."
 msgstr ""
 
-#: ../source/architecture.rst:90
+#: ../source/architecture.rst:121
 #: 4a91b2938dc94ee7a89be3cd5de2e110
 msgid "Execution in a dockerized service"
 msgstr ""
 
-#: ../source/architecture.rst:92
+#: ../source/architecture.rst:123
 #: 05d4eabfd07c49209839c85bb712edbc
-msgid "A `prefect worker <https://docs.prefect.io/v3/concepts/workers>`__ constantly polls the Prefect API in order to know if any flow must be executed. When a flow must be executed, perfect server tells the worker, which spawns a runner that runs the flow in an ephemeral docker container."
+msgid "A `prefect worker <https://docs.prefect.io/v3/concepts/workers>`__ constantly polls the Prefect API in order to know if any flow must be executed. When a flow must be executed, the Prefect server tells the worker, which spawns a runner that runs the flow in an ephemeral docker container."
+msgstr ""
+
+#: ../source/architecture.rst:132
+#: 739bdcab00534ef8bb4d43a51b15d06f
+msgid "Integrations with other systems"
+msgstr ""
+
+#: ../source/architecture.rst:135
+#: 9c67409a32734d5ea487450d4208049c
+msgid "System"
+msgstr ""
+
+#: ../source/architecture.rst:135
+#: 356443e09a50444cb57188b917d98a08
+msgid "Usage"
+msgstr ""
+
+#: ../source/architecture.rst:137
+#: 0c88b99dceef406da6b074628407ca37
+msgid "VMS (FMC2)"
+msgstr ""
+
+#: ../source/architecture.rst:137
+#: c9a8d1dad8234966b8fe0b98654fc698
+msgid "VMS positions are pushed to the backend API ; beacons data is imported by the :doc:`flows/beacons` flow"
+msgstr ""
+
+#: ../source/architecture.rst:138
+#: bcb43c2cda5640139d432987890078f6
+msgid "AIS"
+msgstr ""
+
+#: ../source/architecture.rst:138
+#: 98bd36619fa845e1b3d577f391248c51
+msgid "AIS positions are consumed by the backend from a Kafka topic (``monitor.ais.position``)"
+msgstr ""
+
+#: ../source/architecture.rst:139
+#: 80699d0b2c6e41a3892f2d0bf68127d9
+msgid "Logbook (ERS / FLUX) and sales notes"
+msgstr ""
+
+#: ../source/architecture.rst:139
+#: 26448e5ff7d14d91a51989207adef196
+msgid "Zip files are ingested by the :doc:`flows/sales-and-logbook` flow"
+msgstr ""
+
+#: ../source/architecture.rst:140
+#: ce2c2699de0049cfb00abd8a1826ec95
+msgid "Monitorenv"
+msgstr ""
+
+#: ../source/architecture.rst:140
+#: 6efcfeee08b1460bb932c8bf694c3665
+msgid "Missions, control units and stations are read from the Monitorenv API ; Monitorenv reads and writes the controls of missions through the Monitorfish public API"
+msgstr ""
+
+#: ../source/architecture.rst:142
+#: 3a558b2f54d147fda6750198ec7a8997
+msgid "RapportNav"
+msgstr ""
+
+#: ../source/architecture.rst:142
+#: a576820f5d0342609a2b4b9435f2d699
+msgid "The backend reads RapportNav to know whether a mission has actions filled in RapportNav ; RapportNav reads the controls of missions through the Monitorfish public API"
+msgstr ""
+
+#: ../source/architecture.rst:144
+#: 8f87bce372854099bc1264f8176e7363
+msgid "GeoServer"
+msgstr ""
+
+#: ../source/architecture.rst:144
+#: 429e8f7280454fa799e7d975da589470
+msgid "Serves the administrative and regulatory zones layers to the frontend (WFS / WMS) ; regulations edited in the back office are written to the regulations database with WFS-T"
+msgstr ""
+
+#: ../source/architecture.rst:146
+#: 4cabf00765ec49c6b402beb0e7671d71
+msgid "ProConnect / Cerbère (OIDC)"
+msgstr ""
+
+#: ../source/architecture.rst:146
+#: 2d1e4e95991f4548b9ed4fa7c5f45fea
+msgid "User authentication, see :doc:`authentication`"
+msgstr ""
+
+#: ../source/architecture.rst:147
+#: a3d310d2fda845bbbb7339ac19805ffe
+msgid "Email, SMS and fax gateways"
+msgstr ""
+
+#: ../source/architecture.rst:147
+#: 00a38ad5375f4b9e8631cc84f30694de
+msgid "Used by the data pipeline to send prior notifications, beacon malfunction notifications and reports"
+msgstr ""
+
+#: ../source/architecture.rst:148
+#: 414fc540ac474b40b0b594e9757461c5
+msgid "data.gouv.fr and Géoplateforme"
+msgstr ""
+
+#: ../source/architecture.rst:148
+#: e6db477735cd47d1b0cdc76ee6b83a23
+msgid "Open data publication (ports, controls, fleet segments, regulations), see :doc:`data-sources`"
+msgstr ""
+
+#: ../source/architecture.rst:149
+#: 636688a507a24caea313de2a6616955e
+msgid "Sentry"
+msgstr ""
+
+#: ../source/architecture.rst:149
+#: e9bf5a55bec14133b0ec48c95ee4d995
+msgid "Error monitoring of the backend and frontend"
+msgstr ""
+
+#: ../source/architecture.rst:152
+#: 54e27b2b202247caa50470906a8efd3f
+msgid "Note that the backend never sends messages itself : it sets flags in the database (e.g. a prior notification to send, a beacon malfunction notification requested) which are processed by the data pipeline."
 msgstr ""

@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,4 +34,9 @@ msgstr ""
 #: ../source/activity-overview.rst:12
 #: 784d8f2dba2e441f89faa00982760ecc
 msgid "These visualizations are used to analyze the trends in activity - by fleet segment, by area, ... - and establish inspection plans following a risk-based methodology."
+msgstr ""
+
+#: ../source/activity-overview.rst:15
+#: de4c9cf8e7cb4dd3968e6797e1fd49e9
+msgid "The visualization is opened from the *\"Données d'activité\"* button of the map, in a new tab. It covers the last 12 months of data (catches by position or by statistical rectangle, linked to landing ports) and is updated every month by the :doc:`flows/activity-visualizations` flow. It is enabled depending on the deployment."
 msgstr ""

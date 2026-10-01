@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,16 @@ msgid "Notify beacon malfunctions"
 msgstr ""
 
 #: ../source/flows/notify-beacon-malfunctions.rst:5
-#: 0b229263aca34862a12c91298bd6dea6
-msgid "The ``Notify beacon malfunctions`` flow sends beacon malfunction notifications by email, sms and fax to the vessel captain, vessel operator, satellite operator and foreign FMC (if the vessel is in foreign waters)."
+#: 92715360b0d4423f95efb1f7ce554730
+msgid "The ``Notify beacon malfunctions`` flow sends beacon malfunction notifications by email, sms and fax to the vessel captain, vessel operator, satellite operator and foreign FMC (if the vessel is in foreign waters), for each notification requested in the app (initial notification at sea or at port, reminder, end of malfunction, notification to a foreign FMC)."
 msgstr ""
 
-#: ../source/flows/notify-beacon-malfunctions.rst:8
+#: ../source/flows/notify-beacon-malfunctions.rst:9
 #: 2c855a35a20d4ceba84b17cac7cec7fc
 msgid "Sent notifications are logged in the ``beacon_malfunction_notifications`` table."
+msgstr ""
+
+#: ../source/flows/notify-beacon-malfunctions.rst:11
+#: 4521603f98aa4707abdb91dd616324ef
+msgid "It is scheduled to run every 2 minutes. See :doc:`../vms-beacon-monitoring`."
 msgstr ""

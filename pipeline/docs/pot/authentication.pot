@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,26 +27,66 @@ msgid "Authentication"
 msgstr ""
 
 #: ../source/authentication.rst:7
-#: c77a742013bc4f6fbad39bb1cda38d22
-msgid "We use OIDC (the French government OIDC called \"Cerbère\") to authenticate users."
-msgstr ""
-
-#: ../source/authentication.rst:9
-#: 17d4f98b84844c5f88083bc964fed624
-msgid "frontend: An Authorization Code Flow With Proof Key of Code Exchange (PKCE) is used in our frontend SPA to gather the `access_token`"
+#: 12bc4b996ff74ebd829ea8dde47d2ad5
+msgid "Users are authenticated with OpenID Connect (OIDC), through `ProConnect <https://www.proconnect.gouv.fr>`__ (which federates the identity providers of the French administration, including Cerbère)."
 msgstr ""
 
 #: ../source/authentication.rst:10
-#: c233bcf2c2084220aa68cb024d90d0c8
-msgid "backend: Our backend is a seen as a Resource Server, the `access_token` is verified within an API security filter."
+#: 0363d2758c5844979ef0480f8785080d
+msgid "backend : the backend is an OIDC client (Spring Security ``oauth2Login``). The frontend redirects the user to ``/oauth2/authorization/proconnect`` ; after a successful login, the backend opens a session for the user. Only users whose email belongs to one of the authorized email domains are accepted."
 msgstr ""
 
 #: ../source/authentication.rst:13
+#: 33fa72cdf58e458db225c885a7194eb4
+msgid "frontend : the login page shows a ProConnect or a Cerbère login button (``FRONTEND_OIDC_LOGIN_BUTTON_PROVIDER``). Users without an account are invited to request one by email."
+msgstr ""
+
+#: ../source/authentication.rst:16
+#: 48f074c2da2f4c5daba62698d015f339
+msgid "Authentication can be disabled (e.g. for local development) with the ``monitorfish.oidc.enabled`` property."
+msgstr ""
+
+#: ../source/authentication.rst:19
 #: 8dcade6fb5894780937dbec2bc12c318
 msgid "Authorization"
 msgstr ""
 
-#: ../source/authentication.rst:15
+#: ../source/authentication.rst:21
 #: 26768f143cca434e8c56390f16bbc74e
-msgid "We store users authorization is a custom `user_authorizations` table : the hashed email (SHA256) of the JWT email is used to authorize users."
+msgid "We store users authorization in a custom ``user_authorizations`` table : the hashed email (SHA256) of the user is used to authorize users. Each user is either :"
+msgstr ""
+
+#: ../source/authentication.rst:24
+#: c87419dc277b4aa6970639b15897775b
+msgid "a **super user** (FMC agents), who has access to all features"
+msgstr ""
+
+#: ../source/authentication.rst:25
+#: 980318ee91a8452594b051ced3805282
+msgid "a regular user (other administrations, e.g. control units), who has access to a subset of features"
+msgstr ""
+
+#: ../source/authentication.rst:27
+#: e2dd32cc0023464bafadbe2edcdf4653
+msgid "See :doc:`access-rights` for the features available to each type of user."
+msgstr ""
+
+#: ../source/authentication.rst:29
+#: 5dbed50ce19442f595353ad4f38a0311
+msgid "Routes of the frontend API (``/bff/v1/*``) require an authorized user, and some routes require a super user."
+msgstr ""
+
+#: ../source/authentication.rst:31
+#: dfb3a54bae4d400ca05bbd84f264ddfd
+msgid "Users are managed by other applications through the ``/api/v1/authorization/management`` endpoint of the public API."
+msgstr ""
+
+#: ../source/authentication.rst:34
+#: adaa3307bae94e1e9aa509590daaf1b1
+msgid "Public API"
+msgstr ""
+
+#: ../source/authentication.rst:36
+#: 8eaf7abcafb44686af5d8ed22a0a4379
+msgid "Protected routes of the public API (``/api/v1/*``), used by other systems (Monitorenv, RapportNav...), require an API key sent in the ``x-api-key`` header."
 msgstr ""

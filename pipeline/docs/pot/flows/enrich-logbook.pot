@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,5 +23,35 @@ msgstr ""
 
 #: ../source/flows/enrich-logbook.rst:5
 #: 12a6c73ab07d4550ab94f21698e80d66
-msgid "The ``Enrich logbook`` flow computes logbook PNOs' risk factor, and type - based on the PNO type definitions stored in ``pno_types`` and ``pno_type_rules`` - and loads the result back to the ``value`` field of the ``logbook`` table."
+msgid "The ``Enrich logbook`` flow enriches logbook PNOs with data computed by Monitorfish, and loads the result back to the ``value`` field of the ``logbook_reports`` table :"
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:8
+#: 12a6c73ab07d4550ab94f21698e80d66
+msgid "the PNO types - based on the PNO type definitions stored in ``pno_types`` and ``pno_type_rules`` (see :doc:`init-pno-types`)"
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:9
+#: 13440e7a87d94e8282fc8ee8ce924946
+msgid "the :doc:`fleet segments <../fleet-segments>` of the trip"
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:10
+#: 476452f826e14d118961efbed0e23bde
+msgid "the :doc:`risk factor <../risk-factor>` of the vessel"
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:11
+#: fc9fd48146704c269e8c3c31ef8fbaed
+msgid "whether the PNO is in the verification scope of the FMC, and its verification and sending status"
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:13
+#: ebd8fc527c604b3a964b57ee841cc8bc
+msgid "See :doc:`../prior-notifications`."
+msgstr ""
+
+#: ../source/flows/enrich-logbook.rst:15
+#: 02f71e07288c4d4db5169e66576434ac
+msgid "It is scheduled to run every 5 minutes."
 msgstr ""

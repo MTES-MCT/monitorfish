@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,15 +23,35 @@ msgstr ""
 
 #: ../source/flows/missing-far-alerts.rst:5
 #: f286f434ed014ed582bbb2fc6bedc9fe
-msgid "The ``Missing FAR alerts`` flow detects whether any vessel of more than 12m spent time fishing - that is, whether it emitted VMS data which was classified as fishing activity by the :doc:`enrich positions flow <enrich-positions>` - on the previous day in french waters without sending any FAR logbook report."
+msgid "The ``Missing FAR alerts`` flow detects whether any vessel of 12 meters or more spent time fishing - that is, whether it emitted VMS data which was classified as fishing activity by the :doc:`enrich positions flow <enrich-positions>` - without sending any FAR logbook report."
 msgstr ""
 
 #: ../source/flows/missing-far-alerts.rst:9
-#: 13cd8e5487664f3da6dcf9c3274230f0
-msgid "The detected vessels are loaded to the ``pending_alerts`` table."
+#: 07141d4221ea4ad881c716a9c7539a2a
+msgid "Monitored vessels are french vessels everywhere, and belgian and venezuelan vessels in the french EEZ. Vessels exempted from electronic logbook are excluded."
 msgstr ""
 
-#: ../source/flows/missing-far-alerts.rst:11
-#: 3084197719f1433bad91cb2c00368afe
-msgid "It is scheduled to run every day."
+#: ../source/flows/missing-far-alerts.rst:12
+#: eb997dd364c14d7988b79b42bccd5ed7
+msgid "The flow is scheduled twice every morning :"
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:14
+#: f772eafd40174ca584098a69b5b63655
+msgid "a *Missing FAR in 24h* alert (``MISSING_FAR_ALERT``), for vessels with no FAR on the previous day"
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:15
+#: 174caa7514b64afaa3ec12b0f4a043e9
+msgid "a *Missing FAR in 48h* alert (``MISSING_FAR_48_HOURS_ALERT``), for vessels with no FAR over the previous 2 days"
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:17
+#: 1a856e48f2784ee3893179a29a3b4534
+msgid "As a safeguard against logbook data reception failures, no alert is raised if more than 50% of the monitored vessels appear to have missing FARs."
+msgstr ""
+
+#: ../source/flows/missing-far-alerts.rst:20
+#: 918ac36b4a1847c5b0341cc65b7062e4
+msgid "The detected vessels are loaded to the ``pending_alerts`` table. *Missing FAR in 24h* alerts are then automatically validated by the :doc:`validate-pending-alerts` flow."
 msgstr ""

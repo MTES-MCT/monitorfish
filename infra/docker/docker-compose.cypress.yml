@@ -83,6 +83,8 @@ services:
       - MONITORFISH_OIDC_AUTHORIZED_EMAIL_DOMAINS=email.gouv.fr,email.com
       - MONITORFISH_OIDC_PROVIDER=proconnect
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
+      # Cache reset between specs (see `frontend/config/cypress.config.ts`)
+      - MONITORFISH_E2E_CACHE_RESET_ENABLED=true
 
       # Scheduling
       - MONITORFISH_SCHEDULING_ENABLED=false

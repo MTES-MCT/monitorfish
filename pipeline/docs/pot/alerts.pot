@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,80 +23,175 @@ msgstr ""
 
 #: ../source/alerts.rst:5
 #: a00ac361ee074c9d892c8fc82a9ea8b6
-msgid "Monitorifsh performs **real time fraud detection** using VMS, logbook and regulations data. The types of fraud currenlty detected are :"
-msgstr ""
-
-#: ../source/alerts.rst:7
-#: 8ae85e419d234a8ab32e7c2953fb7cbb
-msgid "trawling in the french 3 nautical miles coastal strip"
+msgid "Monitorfish performs **real time fraud detection** using VMS, logbook and regulations data. When signs of fraud are detected on a vessel, it appears on the map with a red halo :"
 msgstr ""
 
 #: ../source/alerts.rst:8
-#: 760a4c8301894fb28417e091599e8671
-msgid "fishing in the french 12 nautical miles coastal strip by a non-french vessel (excluding historic fishing rights for certains states)"
-msgstr ""
-
-#: ../source/alerts.rst:9
-#: 2eee71b7618c47f1a98b7998a390a11b
-msgid "fishing in the french Exclusive Economic Zone (EEZ) by a non-Community vessel"
-msgstr ""
-
-#: ../source/alerts.rst:10
-#: fec7ca1c3d164b5393637176e07ea4d7
-msgid "undeclared fishing activity : VMS track showing fishing activity with no corresponding Fishing Activity Report (FAR) in the electronic logbook"
-msgstr ""
-
-#: ../source/alerts.rst:11
-#: 19a48342ea5346aabc597755e1fcc257
-msgid "undeclared departure at sea : VMS track showing a departure at sea with no corresponding Departure (DEP) declaration in the electronic logbook"
-msgstr ""
-
-#: ../source/alerts.rst:12
-#: 30ba47359ff84cd9b744d02975041c2f
-msgid "suspicion of under-declaration : fishing effort non consistent with declared quantities"
-msgstr ""
-
-#: ../source/alerts.rst:13
-#: 40703712b36847abab9ca7f0947e5756
-msgid "RTC fishing alert : VMS track showing fishing activity in a Real Time Closure (RTC) area"
-msgstr ""
-
-#: ../source/alerts.rst:14
-#: 9c3383307b1a42cd945788bfc421b7c6
-msgid "NEAFC fishing alert : VMS track showing fishing activity in the NEAFC area (subject to authorization by NEAFC)"
-msgstr ""
-
-#: ../source/alerts.rst:15
-#: 8e634c6b8c1845deb395c07d3edbdb0c
-msgid "exceeding the maximum authorized blue ling (BLI) quantity held onboard : logbook data showing more than 6 tons of blue ling (BLI) onboard a vessel present in area 27.6.a, which is the maximum quantity authorized by R(UE) 1241."
-msgstr ""
-
-#: ../source/alerts.rst:16
-#: 1aa235fcb77a40a8a096778709a39ade
-msgid "user-defined configurable alerts : to detect ad-hoc behaviour, focus monitoring in a certain area..."
-msgstr ""
-
-#: ../source/alerts.rst:18
-#: f495746f408b476c96fc885a0d404659
-msgid "When signs of fraud are detected on a vessel, it appears on the map with a red halo :"
-msgstr ""
-
-#: ../source/alerts.rst:20
 #: 6dce656ed46f4d939678d21abc78d12b
 msgid "Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip"
 msgstr ""
 
-#: ../source/alerts.rst:24
+#: ../source/alerts.rst:12
 #: 15027adb885d4f9aaec559b7fe1343cc
 msgid "*Map showing a vessel's VMS track which presents signs of illegal trawling in the 3 nautical miles coastal strip*"
 msgstr ""
 
-#: ../source/alerts.rst:26
-#: 5f3dfbfba4564a2c858902e72634fe47
-msgid "Alerts are then humanly checked and validated / invalidated. Validated alerts become *reportings* which are stored in the Monitorfish database and added to the vessel's history."
+#: ../source/alerts.rst:14
+#: a5c2c4e57a61409db244e1c6b33d88d7
+msgid "Alerts are available to super users. A dialog in the app (*\"Comment fonctionnent les alertes\"*) explains how each alert works."
 msgstr ""
 
-#: ../source/alerts.rst:28
+#: ../source/alerts.rst:17
+#: 901fa3c14895487f8a49bead6156b6c3
+msgid "Types of alerts"
+msgstr ""
+
+#: ../source/alerts.rst:19
+#: 43b4e536640847e8ba01d3b83f4c7e98
+msgid "Monitorfish detects two kinds of alerts."
+msgstr ""
+
+#: ../source/alerts.rst:21
+#: abb52fa16c9349e2940355e438b9798d
+msgid "**Alerts on logbook declarations**, computed by dedicated flows of the data pipeline :"
+msgstr ""
+
+#: ../source/alerts.rst:23
+#: 19a48342ea5346aabc597755e1fcc257
+msgid "undeclared departure at sea : VMS track showing a departure at sea with no corresponding Departure (DEP) declaration in the electronic logbook (:doc:`flows/missing-dep-alerts`)"
+msgstr ""
+
+#: ../source/alerts.rst:25
+#: fec7ca1c3d164b5393637176e07ea4d7
+msgid "undeclared fishing activity : VMS track showing fishing activity with no corresponding Fishing Activity Report (FAR) in the electronic logbook within 24 hours or 48 hours (:doc:`flows/missing-far-alerts`)"
+msgstr ""
+
+#: ../source/alerts.rst:27
+#: 30ba47359ff84cd9b744d02975041c2f
+msgid "suspicion of under-declaration : fishing effort non consistent with declared quantities (:doc:`flows/suspicions-of-under-declaration-alerts`)"
+msgstr ""
+
+#: ../source/alerts.rst:29
+#: 36af46b830b947ffa4c0e1a42858ca90
+msgid "**Position alerts**, which detect vessels whose VMS positions match a set of criteria (see :ref:`configurable-alerts`). Monitorfish comes with predefined position alerts, for instance :"
+msgstr ""
+
+#: ../source/alerts.rst:32
+#: 8ae85e419d234a8ab32e7c2953fb7cbb
+msgid "trawling in the french 3 nautical miles coastal strip"
+msgstr ""
+
+#: ../source/alerts.rst:33
+#: 760a4c8301894fb28417e091599e8671
+msgid "fishing in the french 12 nautical miles coastal strip by a non-french vessel (excluding historic fishing rights for certain states)"
+msgstr ""
+
+#: ../source/alerts.rst:34
+#: 2eee71b7618c47f1a98b7998a390a11b
+msgid "fishing in the french Exclusive Economic Zone (EEZ) by a non-Community vessel"
+msgstr ""
+
+#: ../source/alerts.rst:35
+#: 40703712b36847abab9ca7f0947e5756
+msgid "fishing in a Real Time Closure (RTC) area"
+msgstr ""
+
+#: ../source/alerts.rst:36
+#: 9c3383307b1a42cd945788bfc421b7c6
+msgid "fishing in the NEAFC area (subject to authorization by NEAFC)"
+msgstr ""
+
+#: ../source/alerts.rst:37
+#: 8e634c6b8c1845deb395c07d3edbdb0c
+msgid "exceeding the maximum authorized blue ling (BLI) quantity held onboard in area 27.6.a"
+msgstr ""
+
+#: ../source/alerts.rst:39
+#: 1aa235fcb77a40a8a096778709a39ade
+msgid "and users can create their own alerts, to detect ad-hoc behaviour or to focus monitoring on a certain area, species or fleet."
+msgstr ""
+
+#: ../source/alerts.rst:44
+#: 7ddb81a545bc4ef182354ccc673ddf17
+msgid "Configurable alerts"
+msgstr ""
+
+#: ../source/alerts.rst:46
+#: e96ebbe7606e40528698e9dc24c45869
+msgid "The *\"Gestion des alertes\"* page of the side window lists all position alerts, which can be searched, activated, deactivated, created, edited and deleted. An alert is defined by :"
+msgstr ""
+
+#: ../source/alerts.rst:49
+#: 34f75353f3a74f57a8abc9192777afe2
+msgid "its name, description, NATINF code and threat (used to categorize the resulting reportings)"
+msgstr ""
+
+#: ../source/alerts.rst:50
+#: 903dbdbef1cc48e8a1e76f8652b432f3
+msgid "the zones of detection : administrative zones (EEZ, FAO areas, coastal strips...) and / or regulatory zones"
+msgstr ""
+
+#: ../source/alerts.rst:51
+#: 3295e84d4e9a4455b2d902c4c921411f
+msgid "the vessels concerned : flag states, districts, producer organizations or individual vessels"
+msgstr ""
+
+#: ../source/alerts.rst:52
+#: 86f7725a201747ea93f219cadef59a91
+msgid "gears onboard (with an optional mesh range) and species onboard (with an optional minimum weight and catch areas)"
+msgstr ""
+
+#: ../source/alerts.rst:53
+#: c4f24459534a4479915038b9615bbf34
+msgid "the positions taken into account : all positions or only positions with fishing activity, over a number of hours, with an optional minimum depth"
+msgstr ""
+
+#: ../source/alerts.rst:55
+#: db57e12e3b0b4631a3d2c63387f2ed4d
+msgid "its validity period, which can be repeated each year"
+msgstr ""
+
+#: ../source/alerts.rst:56
+#: d3a5836f05294b28be8c5bf8205205d7
+msgid "whether the resulting reportings are automatically archived when the vessel starts a new trip, and whether the alert is automatically deleted at the end of its validity period"
+msgstr ""
+
+#: ../source/alerts.rst:59
+#: 0ec65f29d69246f59de3219b7168d288
+msgid "Activated alerts are run every 10 minutes by the :doc:`flows/position-alerts` flow."
+msgstr ""
+
+#: ../source/alerts.rst:62
+#: baf814de0d7b474b81f527e53b558a24
+msgid "Alert lifecycle"
+msgstr ""
+
+#: ../source/alerts.rst:64
+#: e19a2a1eef18480caa4887f4d841445e
+msgid "Pending alerts are listed in the side window, grouped by seafront (MEMN, NAMO, SA, MED, overseas territories...). Alerts are humanly checked and can be :"
+msgstr ""
+
+#: ../source/alerts.rst:67
+#: 5f3dfbfba4564a2c858902e72634fe47
+msgid "**validated** : the alert becomes a :doc:`reporting <reportings>`, stored in the vessel's history"
+msgstr ""
+
+#: ../source/alerts.rst:68
+#: f466cb86ddde499aadea9cba3ebf3765
+msgid "**silenced** : the alert is suspended for this vessel until a chosen date (the list of suspended alerts is available in the *\"Suspension d'alertes\"* page)"
+msgstr ""
+
+#: ../source/alerts.rst:70
+#: 173b1fb0668041289608ce583bf71728
+msgid "**deleted**, when the alert is not relevant"
+msgstr ""
+
+#: ../source/alerts.rst:72
+#: 70400c31d89143e0ad82dfb2f317eb2f
+msgid "Some alerts with a high number of occurrences (e.g. *Missing FAR in 24h*) are automatically validated by the :doc:`flows/validate-pending-alerts` flow."
+msgstr ""
+
+#: ../source/alerts.rst:75
 #: 0ec65f29d69246f59de3219b7168d288
 msgid "Alerts make use of the fishing detection algorithm of the :doc:`enrich position flow <flows/enrich-positions>`."
 msgstr ""

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath("."))
 # -- Project information -----------------------------------------------------
 
 project = "Monitorfish"
-copyright = "2025, Vincent Chéry & Loup Théron"
+copyright = "2026, Vincent Chéry & Loup Théron"
 author = "Vincent Chéry & Loup Théron"
 
 
@@ -31,7 +31,6 @@ author = "Vincent Chéry & Loup Théron"
 extensions = ["sphinx.ext.viewcode", "sphinx.ext.napoleon", "autoapi.extension"]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -40,7 +39,7 @@ exclude_patterns = []
 
 # -- API generation with sphinx-autoapi --------------------------------------
 autoapi_dirs = ["../../src"]
-autoapi_ignore = ["*flows_config*", "*legipeche*"]
+autoapi_ignore = ["*deployments*", "*legipeche*"]
 autoapi_add_toctree_entry = False
 
 # -- Options for HTML output -------------------------------------------------

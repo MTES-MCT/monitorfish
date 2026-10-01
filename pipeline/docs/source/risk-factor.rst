@@ -5,7 +5,7 @@ Risk factor
 The risk factor is a metric computed for each vessel based its historical and real time data 
 aimed at helping FMC agents prioritize vessels to control. It is visible on the map for all vessels and, in a more detailed way, in each vessel's detailed view :
 
-.. image:: _static/img/risk-factor-map.png
+.. image:: _static/img/risk-factor-maps.png
   :width: 800
   :alt: Map showing vessels with their risk-factor and details of one vessel's risk factor
 

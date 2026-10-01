@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/reportings.rst:3
+#: 901619bd9c4e4e6298fa00b0adf1b4de
+msgid "Reportings"
+msgstr ""
+
+#: ../source/reportings.rst:5
+#: 5e49f46033ce4e86a1e815a6c26edc02
+msgid "Reportings (*\"Signalements\"*) record facts about a vessel which are useful to the monitoring and targeting of vessels. They are visible in the vessel's history and contribute to its :doc:`risk factor <risk-factor>`. Reportings are available to super users."
+msgstr ""
+
+#: ../source/reportings.rst:10
+#: 9636aa1c26974859a3a0690c760ba576
+msgid "Types of reportings"
+msgstr ""
+
+#: ../source/reportings.rst:12
+#: 2cbd6fa91bf7472791414b9b6af8081e
+msgid "**alerts** : :doc:`alerts` validated by an FMC agent"
+msgstr ""
+
+#: ../source/reportings.rst:13
+#: bcf1dad9dab8431f9a4d3920a6484463
+msgid "**infraction suspicions** : suspicions of infringement, with a NATINF code"
+msgstr ""
+
+#: ../source/reportings.rst:14
+#: 7a6673c154d54f59aa0aad0c309e0f67
+msgid "**observations** : any other information on a vessel"
+msgstr ""
+
+#: ../source/reportings.rst:16
+#: 80fc0a2e1ac8457e8f891b0724260476
+msgid "Reportings can be flagged as related to IUU (illegal, unreported and unregulated) fishing. They can concern a vessel known to Monitorfish or an unknown vessel."
+msgstr ""
+
+#: ../source/reportings.rst:19
+#: dc5c6ad2956a499e996dbbd0446f0e5a
+msgid "Reportings have a source (FMC, SIP, a control unit, a satellite picture, or another source such as a fisherman, an NGO, a DIRM...) and an end of validity : in 1 month, 12 months, at the next departure of the vessel, until further notice or at a chosen date."
+msgstr ""
+
+#: ../source/reportings.rst:23
+#: df93d9f782f64f7b9613c3e4a8e0a9ae
+msgid "Where to find reportings"
+msgstr ""
+
+#: ../source/reportings.rst:25
+#: ae0540b465a4480c92e1e02e341b3ddf
+msgid "**in the vessel sheet** : the *\"Signalements\"* tab shows current reportings, a summary of the last 12 months and the archived reportings. Observations and infraction suspicions can be created from this tab."
+msgstr ""
+
+#: ../source/reportings.rst:27
+#: d0698838f072494581ce2c01b12469da
+msgid "**in the side window** : the reportings table can be searched, filtered (by seafront, type, status, IUU...) and sorted. Reportings can be edited, duplicated, archived, deleted or downloaded."
+msgstr ""
+
+#: ../source/reportings.rst:29
+#: 6cd630bc799945d9a99cb386cfc1f0a2
+msgid "**on the map** : reportings can be displayed on the map and filtered by type, status, source, IUU, period and zones. IUU reportings can be created directly from the map, at the location of the observed vessel."
+msgstr ""
+
+#: ../source/reportings.rst:33
+#: e3d531a76c3b41cd9647bf3b15551fb4
+msgid "Archiving"
+msgstr ""
+
+#: ../source/reportings.rst:35
+#: 753a1872137c4a8a921b3f567c6fdf95
+msgid "Reportings are archived manually, or automatically by the backend :"
+msgstr ""
+
+#: ../source/reportings.rst:37
+#: b048b261dcd14af4930069a1524f8732
+msgid "at the end of their validity"
+msgstr ""
+
+#: ../source/reportings.rst:38
+#: c4332fb48ce74ecebebe655b82f101be
+msgid "at the next departure of the vessel, when this validity was chosen"
+msgstr ""
+
+#: ../source/reportings.rst:39
+#: 11dbc54eb8ca46979f2a3dffb923fd94
+msgid "when the vessel starts a new trip, for reportings created from alerts which have automatic archiving enabled"
+msgstr ""

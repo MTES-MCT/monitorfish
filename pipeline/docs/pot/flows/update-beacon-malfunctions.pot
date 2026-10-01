@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,5 +23,15 @@ msgstr ""
 
 #: ../source/flows/update-beacon-malfunctions.rst:5
 #: e9888474ff944ce2a2c93b9c10322323
-msgid "The ``Update beacon malfunctions`` flow identifies vessels with an activated beacon (supposed to emit) which have not been emitting for several hours. A beacon malfunction is generated and loaded to the ``beacon_malfunctions`` table for every occurrence of a beacon not emitting for a certain time. Data from this table is used in the app by the :doc:`../vms-beacon-monitoring` module."
+msgid "The ``Update beacon malfunctions`` flow identifies vessels with an activated beacon (supposed to emit) which have not been emitting for several hours. A beacon malfunction is generated and loaded to the ``beacon_malfunctions`` table for every occurrence of a beacon not emitting for a certain time. It also ends ongoing malfunctions when the beacon resumes emitting."
+msgstr ""
+
+#: ../source/flows/update-beacon-malfunctions.rst:9
+#: e0851c11f3a74c68849519d2e56ceea3
+msgid "Data from this table is used in the app by the :doc:`../vms-beacon-monitoring` module."
+msgstr ""
+
+#: ../source/flows/update-beacon-malfunctions.rst:11
+#: 548743de199d4a328cb9e9391f606824
+msgid "It is scheduled to run every 10 minutes."
 msgstr ""

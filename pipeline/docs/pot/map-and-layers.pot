@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/map-and-layers.rst:3
+#: cdba6406e5604dba9b9bcf18f724389b
+msgid "Map and layers"
+msgstr ""
+
+#: ../source/map-and-layers.rst:5
+#: 8e5166bbd25249979847ed56ea93383f
+msgid "The main window of Monitorfish is a map showing the last position of all vessels, refreshed every few minutes."
+msgstr ""
+
+#: ../source/map-and-layers.rst:8
+#: 423a8da256c7409e99ae093a59072818
+msgid "Vessels on the map"
+msgstr ""
+
+#: ../source/map-and-layers.rst:10
+#: 4c7f0f0a236340feae89186f6f3ff973
+msgid "vessels are shown with their heading ; vessels whose last position is older than 3 hours are faded, and the estimated current position of vessels can be displayed"
+msgstr ""
+
+#: ../source/map-and-layers.rst:12
+#: 03241256365e477880f061588e6fbc77
+msgid "hovering a vessel shows its identity, last position and its alerts, reportings and beacon malfunctions"
+msgstr ""
+
+#: ../source/map-and-layers.rst:13
+#: e0609e82a50042748faeeb33d2705820
+msgid "clicking a vessel opens its :doc:`vessel sheet <vessel-sheet>` and displays its track"
+msgstr ""
+
+#: ../source/map-and-layers.rst:14
+#: 6cd1508adda243a69a374c8429469e4c
+msgid "right-clicking a vessel allows to display its track for a custom date range"
+msgstr ""
+
+#: ../source/map-and-layers.rst:15
+#: 1e6d1394207848849a4354f304676785
+msgid "vessels can be filtered by :doc:`groups of vessels <groups-of-vessels>`, :ref:`followed vessels <followed-vessels>` or by drawing a zone on the map"
+msgstr ""
+
+#: ../source/map-and-layers.rst:19
+#: dcafadf1717c4c56b0d920383c7ea8cd
+msgid "Map settings"
+msgstr ""
+
+#: ../source/map-and-layers.rst:21
+#: fa84672bdcdf40799343b1ccb7a5b9c2
+msgid "The map settings (*\"Paramétrer l'affichage\"*) allow to :"
+msgstr ""
+
+#: ../source/map-and-layers.rst:23
+#: 161cd1792bbc4cd0b0f57f2d06e11e6d
+msgid "choose the default depth of tracks"
+msgstr ""
+
+#: ../source/map-and-layers.rst:24
+#: a679a73cd73943b1b4cddb17ef89e5dc
+msgid "choose the label of vessels (name, CFR, nationality, :doc:`fleet segments <fleet-segments>`...) and show or hide labels"
+msgstr ""
+
+#: ../source/map-and-layers.rst:25
+#: cf847bbc500c4d1aa5bc3ad2a04338eb
+msgid "show or hide the :doc:`risk factor <risk-factor>` of vessels, estimated positions and non-selected vessels"
+msgstr ""
+
+#: ../source/map-and-layers.rst:28
+#: 09ff41b8457e4da4b0273859bc82c447
+msgid "Layers"
+msgstr ""
+
+#: ../source/map-and-layers.rst:30
+#: 4d2784085fce4c7a97407cae1c411d32
+msgid "The layers sidebar allows to display :"
+msgstr ""
+
+#: ../source/map-and-layers.rst:32
+#: f89c0cffcc4f487191d5125130532e67
+msgid "**regulatory zones** (:doc:`regulation`) : search zones by name, gear, species, regulatory reference or by drawing a zone on the map, show zones on the map and read their details (authorized gears and species, fishing periods, regulatory references)"
+msgstr ""
+
+#: ../source/map-and-layers.rst:34
+#: b7bed4e38b4c46718d78dcdd71ccbaef
+msgid "**administrative zones** : EEZs, 3, 6 and 12 nautical miles coastal strips, FAO areas, statistical rectangles, effort zones, facades, transverse sea limits, Regional Fisheries Management Organizations (NEAFC, NAFO, ICCAT, IOTC, GFCM, CCAMLR, SIOFA)..."
+msgstr ""
+
+#: ../source/map-and-layers.rst:36
+#: d85cfad992eb4e2dafb830724f76d3d4
+msgid "**imported zones** : any GeoJSON, GPX, KML, IGC or TopoJSON file can be dragged and dropped on the map, then renamed, hidden or deleted"
+msgstr ""
+
+#: ../source/map-and-layers.rst:37
+#: 00e69a855665447084142d741c3fd382
+msgid "**base maps** : dark, light, OpenStreetMap, satellite or SHOM nautical charts"
+msgstr ""
+
+#: ../source/map-and-layers.rst:39
+#: 1c7104d9caac4d058806f6bbafd8a198
+msgid "The layers displayed by each user are saved and restored at the next connection."
+msgstr ""
+
+#: ../source/map-and-layers.rst:42
+#: 1115ff3105f94d94a77e6125aafc7590
+msgid "Map tools"
+msgstr ""
+
+#: ../source/map-and-layers.rst:44
+#: a05abe1b657b4c039a51ab5b6c89ccee
+msgid "**measurement** : measure a distance, or draw a circle of a given radius around a point (*\"Rayon d'action\"*)"
+msgstr ""
+
+#: ../source/map-and-layers.rst:45
+#: 3c8d87f150224f76a98e365d33171663
+msgid "**interest points** : add points on the map with a type, a title, a description and coordinates"
+msgstr ""
+
+#: ../source/map-and-layers.rst:46
+#: b18eb95da9cf42648fd573685973a506
+msgid "**missions and controls** : display missions and controls on the map (super users)"
+msgstr ""
+
+#: ../source/map-and-layers.rst:47
+#: a2337085191e4d868a83f5c96d511215
+msgid "**reportings** : display :doc:`reportings` on the map (super users)"
+msgstr ""
+
+#: ../source/map-and-layers.rst:48
+#: 222b5909832d41b7a5fddb36881f89f7
+msgid "**control units and stations** : see :doc:`control-units` (super users)"
+msgstr ""
+
+#: ../source/map-and-layers.rst:51
+#: 430bdc2fc01c4ab38a275130f89d2531
+msgid "Other features"
+msgstr ""
+
+#: ../source/map-and-layers.rst:53
+#: 7adbcf2012b643de9cb304d740cf988a
+msgid "a banner warns users when VMS or logbook data has stopped being received"
+msgstr ""
+
+#: ../source/map-and-layers.rst:54
+#: deb9237165c9412ca0c1d6cabcbd513d
+msgid "the *\"Mon compte\"* menu allows to log out and to manage the local cache of base maps : base maps can be downloaded in advance to use Monitorfish with a degraded network connection"
+msgstr ""
+
+#: ../source/map-and-layers.rst:56
+#: 92bc2f34f8974b7ab87b792d51516084
+msgid "the *\"Nouveautés\"* panel lists the latest features of the app"
+msgstr ""

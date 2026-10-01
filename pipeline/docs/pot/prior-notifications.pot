@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,15 +23,75 @@ msgstr ""
 
 #: ../source/prior-notifications.rst:5
 #: 14b2d9a4782d4c3b9e4d014cf090c138
-msgid "Prior notifications of return to port can be monitored, checked, prioritized and sent to control units for targeted land inspections."
+msgid "Prior notifications (PNOs) of return to port can be monitored, checked, prioritized and sent to control units for targeted land inspections."
 msgstr ""
 
-#: ../source/prior-notifications.rst:7
+#: ../source/prior-notifications.rst:8
 #: 79a8ae7ddb844d64b02fba5da72af9e6
 msgid "Table of prior notifications of forecoming landings"
 msgstr ""
 
-#: ../source/prior-notifications.rst:12
-#: 7ec37f7f4d8341efa4a4f94c10ff1e76
-msgid "By default, the prioritization of prior notifications sent to control units for targeted inspections is based on the :doc:`risk factor <risk-factor>` and can be overidden by FMC supervisors for specific cases."
+#: ../source/prior-notifications.rst:13
+#: b5062406c4534fc5a2b7e20522f31f3d
+msgid "Sources of prior notifications"
+msgstr ""
+
+#: ../source/prior-notifications.rst:15
+#: 3d38dff32a9240d8ac1b96c03a35c350
+msgid "**logbook PNOs** are sent by vessels in their electronic logbook, and received by the :doc:`flows/sales-and-logbook` flow"
+msgstr ""
+
+#: ../source/prior-notifications.rst:16
+#: 3ad42f3df9974baa8aae504995122a44
+msgid "**manual PNOs** are entered by FMC agents (*\"Ajouter un préavis\"*) for vessels which are not subject to electronic logbook, with the expected catches, port and date of arrival. Manual PNOs are also displayed in the vessel's trip."
+msgstr ""
+
+#: ../source/prior-notifications.rst:19
+#: 610b38694d954d21ac1037a678ef5811
+msgid "The data pipeline computes the type, :doc:`fleet segments <fleet-segments>` and :doc:`risk factor <risk-factor>` of each PNO (see :doc:`flows/enrich-logbook` and :doc:`flows/init-pno-types`)."
+msgstr ""
+
+#: ../source/prior-notifications.rst:23
+#: 0f5fdc7f637941a4a83053a69ae00be0
+msgid "List of prior notifications"
+msgstr ""
+
+#: ../source/prior-notifications.rst:25
+#: b32359d9f40b41f68eabd4f243651fca
+msgid "The list of PNOs, in the side window, can be filtered by nationality, fleet segment, species, gears, date of the last control, port and expected time of arrival, PNO type, vessel length and sending status. A counter shows the number of PNOs to verify."
+msgstr ""
+
+#: ../source/prior-notifications.rst:28
+#: 667c6ddad7b1408fb95a8cbd89a85892
+msgid "The card of each PNO shows its content, the decision of the FMC, the history of messages sent to control units and allows to download the PNO as a PDF document."
+msgstr ""
+
+#: ../source/prior-notifications.rst:32
+#: 1fd9bf17cfab4faba1272d52e792b10f
+msgid "Verification and distribution"
+msgstr ""
+
+#: ../source/prior-notifications.rst:34
+#: 84d78723d902489eb6fd344d50a1875c
+msgid "PNOs which are in the *verification scope* of the FMC - PNOs of vessels with a high :doc:`risk factor <risk-factor>`, of foreign vessels (except some flag states) or of vessels with active :doc:`reportings` - must be verified by an FMC agent before being sent. By default, the prioritization is based on the :doc:`risk factor <risk-factor>` and can be overridden by FMC supervisors for specific cases."
+msgstr ""
+
+#: ../source/prior-notifications.rst:38
+#: 4a1f827ee8cd4c5ab68d1efce612c8d2
+msgid "other PNOs are sent automatically."
+msgstr ""
+
+#: ../source/prior-notifications.rst:40
+#: 15e6d06d56c04f1d8ef53dc32eeb55c1
+msgid "PNOs are sent by email and SMS by the :doc:`flows/distribute-pnos` flow to the control units subscribed to the port, fleet segment or vessel (see :doc:`control-units`). A PNO can be invalidated, for instance when it was sent by mistake."
+msgstr ""
+
+#: ../source/prior-notifications.rst:43
+#: 442d476aa9cc494db047646f72437a9a
+msgid "Manual \"zero\" PNOs of BFT and SWO are automatically invalidated after 24 hours."
+msgstr ""
+
+#: ../source/prior-notifications.rst:45
+#: 851916d581e344aabfaa13a39dbe45e3
+msgid "Depending on the deployment, regular users can access the list of prior notifications in read only mode."
 msgstr ""

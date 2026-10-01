@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,57 +42,66 @@ msgid "How it works"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:19
-#: 1eee6b0c8e144e40933066a313db11f4
-msgid "The administration panel allows Monitorfish admins to steer control priorities by dynamically assigning a **control priority level** to each fleet segment :"
+#: b0594038c66d496098f4256c024c7da0
+msgid "The *\"Objectifs de contrôle\"* page of the :doc:`back office <back-office>` allows Monitorfish admins to set, for each year and each seafront, the number of sea and land controls to perform on each fleet segment, and to steer control priorities by dynamically assigning a **control priority level** to each fleet segment :"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:23
+#: ../source/control-priority-steering.rst:24
 #: df16fb47eaf949ff80c77885ffc6121f
+msgid "Control priority"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:24
 #: 6ba2cf8643e243e5aff7b3f5e0e851ea
 msgid "Control priority level"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:25
+#: ../source/control-priority-steering.rst:26
 #: 6da00fc670f3406ba695e39a07b0edc4
 msgid "Low"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:25
+#: ../source/control-priority-steering.rst:26
 #: 73f6e0a437e6443fa6e18c1e693173ad
 msgid "1"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:26
+#: ../source/control-priority-steering.rst:27
 #: 3a4806be29eb4b4d9987eb10af069033
 msgid "Moderate"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:26
+#: ../source/control-priority-steering.rst:27
 #: ed658bb610b64ae4900226993c46d4c5
 msgid "2"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:27
+#: ../source/control-priority-steering.rst:28
 #: 30704c17c3ce424ba14c8b127b0a2474
 msgid "High"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:27
+#: ../source/control-priority-steering.rst:28
 #: 09df6e341dac4a49a4ac9a430ae5b989
 msgid "3"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:28
+#: ../source/control-priority-steering.rst:29
 #: 8a2531e94f2a4b17acede4a57885ba04
 msgid "Very high"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:28
+#: ../source/control-priority-steering.rst:29
 #: 9d64ef0065a743b18f1d3116964abed4
 msgid "4"
 msgstr ""
 
-#: ../source/control-priority-steering.rst:31
+#: ../source/control-priority-steering.rst:32
 #: e1be72e47a38456697737824ba2fca70
 msgid "The control priority level is then included  in the computation of the :ref:`detectability score <detectability-score>` component of the risk factor. By assigning a higher control priority level to a certain fleet segment, the risk factor of all vessels belonging to this fleet segment in real time will be increased, and Monitorfish will automatically recommend control targets that correspond to this fleet segment, thus helping the FMC to reach its objectives."
+msgstr ""
+
+#: ../source/control-priority-steering.rst:39
+#: 56d626bf2d164888a6f710710db0f5ea
+msgid "Vessels whose control priority level is *very high* or *high* are also gathered in the *P1* and *P2* :ref:`priority groups <priority-groups>`, which are highlighted on the map."
 msgstr ""

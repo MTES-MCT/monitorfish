@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/fao-areas.rst:5
 #: 0b4cf77f68c948fd94492588038ea3d3
-msgid "The ``FAO areas`` flow extracts FAO areas from the `FAO website <http://www.fao.org/fishery/static/ASFIS>`__ and loads it to the ``fao_areas`` table of the Monitorfish database."
+msgid "The ``FAO areas`` flow extracts FAO areas from the `FAO geoserver <https://www.fao.org/fishery/geoserver/fifao/ows>`__ (WFS) and loads it to the ``fao_areas`` table of the Monitorfish database."
 msgstr ""
 
 #: ../source/flows/fao-areas.rst:8
 #: cdf619be8fef42db975a18ba6751a750
-msgid "It is run manually when necessary, in order to sync the Monitorfish database with the FAO website after an update."
+msgid "It is run manually when necessary, in order to sync the Monitorfish database with the FAO data after an update."
 msgstr ""

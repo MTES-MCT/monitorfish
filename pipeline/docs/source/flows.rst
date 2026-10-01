@@ -11,17 +11,20 @@ What are flows?
 *Flows* are batch jobs that move and transform data. Collectively, they constitute the :ref:`data-pipeline` part of 
 the Monitorfish architecture.
 
-Each batch job is written as a `Prefect flow <https://docs.prefect.io/core/concepts/flows.html#overview>`__
+Each batch job is written as a `Prefect flow <https://docs.prefect.io/v3/concepts/flows>`__
 which typically extracts data  (from external sources and / or from tables in the 
 Monitorfish database), processes the data and loads it back into a table of the Monitorfish database.
 
-Flows are composed of `tasks <https://docs.prefect.io/core/concepts/tasks.html#overview>`__ typically written
-as python pure functions. `The UI <http://prefect.csam.e2.rie.gouv.fr/>`__ (restricted access) enables 
+Flows are composed of `tasks <https://docs.prefect.io/v3/concepts/tasks>`__ typically written
+as python pure functions. The Prefect UI (restricted access) enables 
 administrators to view each flow as a diagram of its constituent tasks, to monitor their execution, see 
 the logs and debug in case any flow run fails...
 
 Overview of flows in Monitorfish
 ================================
+
+The schedule of each flow is defined in ``pipeline/src/deployments.py``. The diagrams below give an overview of the main 
+flows, they do not show all flows : see the list of flows below.
 
 Flow that imports administrative areas :
 
@@ -85,8 +88,9 @@ List of flows
     flows/fishing-gears
     flows/foreign-fmcs
     flows/infractions
+    flows/init-infraction-threat-characterization
+    flows/init-pno-types
     flows/last-positions
-    flows/logbook
     flows/missions
     flows/missing-dep-alerts
     flows/missing-far-alerts
@@ -95,14 +99,19 @@ List of flows
     flows/ports
     flows/position-alerts
     flows/recompute-controls-segments
+    flows/recompute-mission-actions-facade
     flows/refresh-materialized-view
     flows/regulations-checkup
     flows/regulations
+    flows/regulations-open-data
+    flows/risk-elements
     flows/risk-factor
+    flows/sales-and-logbook
     flows/scrape-legipeche
     flows/species-groups
     flows/species
     flows/suspicions-of-under-declaration-alerts
+    flows/trips-snapshot
     flows/update-beacon-malfunctions
     flows/validate-pending-alerts
     flows/vessels

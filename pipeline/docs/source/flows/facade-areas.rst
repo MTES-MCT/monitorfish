@@ -6,3 +6,6 @@ The ``Facade areas`` flow extracts facade areas (NAMO, MEMN...) from the CROSSA 
 ``facade_areas_subdivided`` table of the Monitorfish database.
 
 It is run manually when necessary, in order to sync the Monitorfish database with the CROSSA database after an update.
+
+Facades are used to sort alerts and reportings by seafront, and to compute the facade of controls 
+(see :doc:`recompute-mission-actions-facade`).

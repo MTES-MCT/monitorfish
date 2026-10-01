@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,21 +22,21 @@ msgid "Regulation"
 msgstr ""
 
 #: ../source/regulation.rst:5
-#: aaf29ce05fb94e37afe50ff6b6f0fd79
-msgid "A dedicated team of the FMC watches fishing regulation evolutions and captures it as semi-structured data in the admin panel of Monitorfish."
+#: b2c129175acb4fef8ff27840d0d2c44a
+msgid "A dedicated team of the FMC watches fishing regulation evolutions and captures it as semi-structured data in the :doc:`back office <back-office>` of Monitorfish : for each regulated area, its geometry, regulatory references, authorized or prohibited gears and species, fishing periods and derogations."
 msgstr ""
 
-#: ../source/regulation.rst:8
-#: a8dc3e3f43f84ba2972e62944e749786
-msgid "This data can be then displayed in Monitorfish to show regulated fishing areas."
+#: ../source/regulation.rst:9
+#: 951061c79ad54559ab0b13567c005fe0
+msgid "This data can be then displayed in Monitorfish to show regulated fishing areas (see :doc:`map-and-layers`), and is used by :ref:`configurable alerts <configurable-alerts>`."
 msgstr ""
 
-#: ../source/regulation.rst:10
+#: ../source/regulation.rst:12
 #: 5643e8d4065249a79443ec219038799d
 msgid "Map with regulated fishing areas showed in Monitorfish"
 msgstr ""
 
-#: ../source/regulation.rst:14
+#: ../source/regulation.rst:16
 #: c90e1cf7656b497e8d3f6b8f0983e814
-msgid "The regulations data set is published and updated weekly on on data.gouv.fr : https://www.data.gouv.fr/datasets/reglementation-des-peches-cartographiee/"
+msgid "The regulations data set is published and updated weekly on data.gouv.fr and on the Géoplateforme (see :doc:`flows/regulations-open-data`) : https://www.data.gouv.fr/datasets/reglementation-des-peches-cartographiee/"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,82 +26,92 @@ msgstr ""
 msgid "The vessel list (*\"Liste des navires\"*), opened in the side window, is a table of all vessels known to Monitorfish - whether they emit VMS or not - with their last position, fleet segments, gears, species onboard, last controls..."
 msgstr ""
 
-#: ../source/vessel-list.rst:9
+#: ../source/vessel-list.rst:8
+#: c2bae35d0983412eb4f8d4f2a6b5e929
+msgid "Vessel list in the side window, with its filters"
+msgstr ""
+
+#: ../source/vessel-list.rst:12
+#: e9f523f1df574b87a147e7e2908e01c9
+msgid "*Vessel list in the side window, with its filters*"
+msgstr ""
+
+#: ../source/vessel-list.rst:15
 #: 9bea168723d447d78b2bc487e427ebb7
 msgid "Filters"
 msgstr ""
 
-#: ../source/vessel-list.rst:11
+#: ../source/vessel-list.rst:17
 #: e9522474f4434a71b80b38d3ed6173b3
 msgid "Vessels can be filtered on :"
 msgstr ""
 
-#: ../source/vessel-list.rst:13
+#: ../source/vessel-list.rst:19
 #: 9f29c713d94b435b8cc60158326c112f
 msgid "nationality, maritime district and length"
 msgstr ""
 
-#: ../source/vessel-list.rst:14
+#: ../source/vessel-list.rst:20
 #: 24f47f5371f94b35bc3bf80562c6d5f0
 msgid ":doc:`risk factor <risk-factor>` (super users)"
 msgstr ""
 
-#: ../source/vessel-list.rst:15
+#: ../source/vessel-list.rst:21
 #: 9d96b1f6a9a14ca0a92050788d338a5a
 msgid ":doc:`fleet segments <fleet-segments>`, gears and species onboard"
 msgstr ""
 
-#: ../source/vessel-list.rst:16
+#: ../source/vessel-list.rst:22
 #: 06b50aea547b4f63a3d2fd40a99dc0c3
 msgid "date of the last sea control and of the last land control"
 msgstr ""
 
-#: ../source/vessel-list.rst:17
+#: ../source/vessel-list.rst:23
 #: b396ad7c036e44528fbce1a1d5bb15ed
 msgid "landing ports (including ports of manual prior notifications)"
 msgstr ""
 
-#: ../source/vessel-list.rst:18
+#: ../source/vessel-list.rst:24
 #: 088d44a00bc04ee6a9cbfc90be6947fd
 msgid "producer organization membership"
 msgstr ""
 
-#: ../source/vessel-list.rst:19
+#: ../source/vessel-list.rst:25
 #: 1bd716dd8c79406ab9d02f231b9fa1a0
 msgid "zones : administrative zones, regulatory zones, or zones drawn on the map (several zones can be combined)"
 msgstr ""
 
-#: ../source/vessel-list.rst:20
+#: ../source/vessel-list.rst:26
 #: d15c3c5201654f0396782fb9f3bf5fba
 msgid "date of the last VMS position"
 msgstr ""
 
-#: ../source/vessel-list.rst:21
+#: ../source/vessel-list.rst:27
 #: fc88663ccf1f432ba04bd46b8c30eb13
 msgid "VMS and logbook equipment, and whether the vessel is at sea or in port"
 msgstr ""
 
-#: ../source/vessel-list.rst:23
+#: ../source/vessel-list.rst:29
 #: 750b34a2c9da4086bd4477a2a6e486e8
 msgid "The filtered vessels are previewed on the map."
 msgstr ""
 
-#: ../source/vessel-list.rst:26
+#: ../source/vessel-list.rst:32
 #: bffb6ad36e6146eb9cd41281f3a2ff44
 msgid "Actions"
 msgstr ""
 
-#: ../source/vessel-list.rst:28
+#: ../source/vessel-list.rst:34
 #: 8859921128634297833f961e9726a785
 msgid "select vessels and export them as a CSV file"
 msgstr ""
 
-#: ../source/vessel-list.rst:29
+#: ../source/vessel-list.rst:35
 #: d9942ceb1ada497fbbf9c1cfbd6b9103
 msgid "create a :doc:`group of vessels <groups-of-vessels>` from the current filters (dynamic group) or from the selected vessels (fixed group)"
 msgstr ""
 
-#: ../source/vessel-list.rst:30
+#: ../source/vessel-list.rst:36
 #: c7cd148a9029480ab1b7f171d7d1e6aa
 msgid "center the map on a vessel and open its :doc:`vessel sheet <vessel-sheet>`"
 msgstr ""

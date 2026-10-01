@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,71 +39,101 @@ msgid "The vessel sheet has several tabs :"
 msgstr ""
 
 #: ../source/vessel-sheet.rst:16
+#: 1cd7c594b0364ab78e4545e1e8475f73
+msgid "Summary tab of the vessel sheet, with the alert and beacon malfunction banners and the risk factor"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:20
+#: 2e6899f7f96047449ffb248d473b9ed0
+msgid "*Summary tab of the vessel sheet, with the alert and beacon malfunction banners and the risk factor*"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:22
 #: f5fad5bf016e4f2e814bed939571ff8f
 msgid "**Summary** (*\"Résumé\"*) : last position, current :doc:`fleet segments <fleet-segments>`, :doc:`groups <groups-of-vessels>` the vessel belongs to, the vessel's usual activity over the last year (:doc:`vessel-profiles`) and, for super users, a summary of its :doc:`risk factor <risk-factor>`"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:19
+#: ../source/vessel-sheet.rst:25
 #: 9981cf5f856644a3824ea892f5411959
 msgid "**Identity** (*\"Identité\"*) : vessel characteristics, flag state, skipper, charter status and contact methods (contact methods can be updated by super users)"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:21
+#: ../source/vessel-sheet.rst:27
 #: 7a6e8102116c45269be31a1a29fce949
 msgid "**Fishing** (*\"Pêche\"*) : the logbook messages of each trip (DEP, FAR, DIS, COE, COX, CRO, CPS, EOF, PNO, LAN, RTP...) with a summary of catches, the manual :doc:`prior notifications <prior-notifications>` of the trip and the transmission format of messages. Previous trips can be browsed, messages can be filtered, sorted, downloaded and displayed on the track."
 msgstr ""
 
-#: ../source/vessel-sheet.rst:24
+#: ../source/vessel-sheet.rst:30
 #: 23528e25244342638ddb857d81b2025c
 msgid "**Reportings** (*\"Signalements\"*, super users) : current :doc:`reportings`, a summary of the last 12 months and the archived reportings"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:25
+#: ../source/vessel-sheet.rst:31
 #: 67a24980e80b44a2b49ee6b6928126fc
 msgid "**Controls** (*\"Contrôles\"*) : the history of controls by year with infractions, gears and species controlled. Each control can be opened in the :doc:`mission form <missions-and-controls>` (super users), and the trip during which a control took place can be displayed."
 msgstr ""
 
-#: ../source/vessel-sheet.rst:27
+#: ../source/vessel-sheet.rst:33
 #: 3ddfc44a1fad476dbb39fc2feff27ead
 msgid "**VMS / logbook equipment** (*\"VMS/JPE\"*) : VMS and logbook equipment, satellite pictures (VisioCaptures) and the history of :doc:`beacon malfunctions <vms-beacon-monitoring>`"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:31
+#: ../source/vessel-sheet.rst:37
 #: 69be118caacf4eae8ca4c9100144071d
 msgid "Track"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:33
+#: ../source/vessel-sheet.rst:39
 #: 6ab804a0834d4b27b601c6834db7bed5
 msgid "The track of the selected vessel can be :"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:35
+#: ../source/vessel-sheet.rst:41
 #: 0731f18edb214d0eadb60fc17cdcca56
 msgid "displayed over a predefined depth (e.g. 12 hours, 1 day, 3 days...) or a custom date range"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:36
+#: ../source/vessel-sheet.rst:42
 #: e33f63c3fc6d43d78be7af12e1caa236
 msgid "displayed with its positions, or with the logbook messages located on the track"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:37
+#: ../source/vessel-sheet.rst:43
 #: b754c22fec0f42af9142f7c81a4fffb4
 msgid "exported as a CSV file"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:39
+#: ../source/vessel-sheet.rst:45
 #: 0784b347a37f42d8b5aa877b79591955
 msgid "AIS positions are merged into the VMS track when available."
 msgstr ""
 
-#: ../source/vessel-sheet.rst:44
+#: ../source/vessel-sheet.rst:47
+#: 714a7a38a0c84f9c99b2fddd00989d8f
+msgid "Fishing tab : fleet segments and logbook messages of the current trip"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:51
+#: e33f63c3fc6d43d78be7af12e1caa236
+msgid "*Fishing tab : fleet segments and logbook messages of the current trip*"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:53
+#: a3cc80099b5d496486be78d7890edd6b
+msgid "Controls tab : last controls, legal reminders and controls history"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:57
+#: 46bc6c0b504c4ae3af1a81d330044a37
+msgid "*Controls tab : last controls, legal reminders and controls history*"
+msgstr ""
+
+#: ../source/vessel-sheet.rst:62
 #: 4a8379c07cf947ac9f70c08a9b548064
 msgid "Followed vessels"
 msgstr ""
 
-#: ../source/vessel-sheet.rst:46
+#: ../source/vessel-sheet.rst:64
 #: 27a101101aa2461ca4b4fb63c895f940
 msgid "Vessels can be added to the *\"Mes navires suivis\"* list from their sheet, to quickly find them and display their tracks. This list is saved for each user."
 msgstr ""

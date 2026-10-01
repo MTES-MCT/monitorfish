@@ -4,6 +4,12 @@ Map and layers
 
 The main window of Monitorfish is a map showing the last position of all vessels, refreshed every few minutes. 
 
+.. image:: _static/img/map-overview.png
+  :width: 800
+  :alt: Main window of Monitorfish : vessels, alerts (red halos), control units and map tools
+
+*Main window of Monitorfish : vessels, alerts (red halos), control units and map tools*
+
 Vessels on the map
 ------------------
 
@@ -26,6 +32,12 @@ The map settings (*"Paramétrer l'affichage"*) allow to :
 
 Layers
 ------
+
+.. image:: _static/img/layers-sidebar.png
+  :width: 800
+  :alt: Layers sidebar, with a search among regulatory zones
+
+*Layers sidebar, with a search among regulatory zones*
 
 The layers sidebar allows to display :
 

@@ -13,6 +13,12 @@ Vessel sheet
 
 The vessel sheet has several tabs :
 
+.. image:: _static/img/vessel-sheet-summary.png
+  :width: 800
+  :alt: Summary tab of the vessel sheet, with the alert and beacon malfunction banners and the risk factor
+
+*Summary tab of the vessel sheet, with the alert and beacon malfunction banners and the risk factor*
+
 * **Summary** (*"Résumé"*) : last position, current :doc:`fleet segments <fleet-segments>`, :doc:`groups <groups-of-vessels>` 
   the vessel belongs to, the vessel's usual activity over the last year (:doc:`vessel-profiles`) and, for super users, 
   a summary of its :doc:`risk factor <risk-factor>`
@@ -37,6 +43,18 @@ The track of the selected vessel can be :
 * exported as a CSV file
 
 AIS positions are merged into the VMS track when available.
+
+.. image:: _static/img/vessel-sheet-logbook.png
+  :width: 800
+  :alt: Fishing tab : fleet segments and logbook messages of the current trip
+
+*Fishing tab : fleet segments and logbook messages of the current trip*
+
+.. image:: _static/img/vessel-sheet-controls.png
+  :width: 800
+  :alt: Controls tab : last controls, legal reminders and controls history
+
+*Controls tab : last controls, legal reminders and controls history*
 
 .. _followed-vessels:
 

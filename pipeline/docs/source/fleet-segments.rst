@@ -36,6 +36,12 @@ factor (see :doc:`risk-factor`). The segments of a new year can be initialized f
 
 The current definitions of fleet segments are published on data.gouv.fr by the :doc:`flows/controls-open-data` flow.
 
+.. image:: _static/img/back-office-fleet-segments.png
+  :width: 800
+  :alt: Definitions of fleet segments in the back office
+
+*Definitions of fleet segments in the back office*
+
 Fleet segments computation and display
 --------------------------------------
 

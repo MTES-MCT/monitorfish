@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,27 +76,47 @@ msgstr ""
 msgid "**on the map** : reportings can be displayed on the map and filtered by type, status, source, IUU, period and zones. IUU reportings can be created directly from the map, at the location of the observed vessel."
 msgstr ""
 
-#: ../source/reportings.rst:33
+#: ../source/reportings.rst:32
+#: f124f480738f4deb95f63485fc7140b5
+msgid "Reportings table in the side window"
+msgstr ""
+
+#: ../source/reportings.rst:36
+#: c2bcdbe6e0e849589cc507c46d65414a
+msgid "*Reportings table in the side window*"
+msgstr ""
+
+#: ../source/reportings.rst:38
+#: 4cadf3158cf244418e33fb0c1e7ff413
+msgid "Reportings displayed on the map, with their filters"
+msgstr ""
+
+#: ../source/reportings.rst:42
+#: 9366c12e5da94a858c060b5542e5cc6d
+msgid "*Reportings displayed on the map, with their filters*"
+msgstr ""
+
+#: ../source/reportings.rst:45
 #: e3d531a76c3b41cd9647bf3b15551fb4
 msgid "Archiving"
 msgstr ""
 
-#: ../source/reportings.rst:35
+#: ../source/reportings.rst:47
 #: 753a1872137c4a8a921b3f567c6fdf95
 msgid "Reportings are archived manually, or automatically by the backend :"
 msgstr ""
 
-#: ../source/reportings.rst:37
+#: ../source/reportings.rst:49
 #: b048b261dcd14af4930069a1524f8732
 msgid "at the end of their validity"
 msgstr ""
 
-#: ../source/reportings.rst:38
+#: ../source/reportings.rst:50
 #: c4332fb48ce74ecebebe655b82f101be
 msgid "at the next departure of the vessel, when this validity was chosen"
 msgstr ""
 
-#: ../source/reportings.rst:39
+#: ../source/reportings.rst:51
 #: 11dbc54eb8ca46979f2a3dffb923fd94
 msgid "when the vessel starts a new trip, for reportings created from alerts which have automatic archiving enabled"
 msgstr ""

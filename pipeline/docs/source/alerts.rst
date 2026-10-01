@@ -58,11 +58,23 @@ deactivated, created, edited and deleted. An alert is defined by :
 
 Activated alerts are run every 10 minutes by the :doc:`flows/position-alerts` flow.
 
+.. image:: _static/img/alert-configuration.png
+  :width: 800
+  :alt: List of configurable alerts ("Gestion des alertes")
+
+*List of configurable alerts ("Gestion des alertes")*
+
 Alert lifecycle
 ---------------
 
 Pending alerts are listed in the side window, grouped by seafront (MEMN, NAMO, SA, MED, overseas territories...). 
 Alerts are humanly checked and can be :
+
+.. image:: _static/img/alerts-list.png
+  :width: 800
+  :alt: Pending alerts of the NAMO seafront
+
+*Pending alerts of the NAMO seafront*
 
 * **validated** : the alert becomes a :doc:`reporting <reportings>`, stored in the vessel's history
 * **silenced** : the alert is suspended for this vessel until a chosen date (the list of suspended alerts is available in the 

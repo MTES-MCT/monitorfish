@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,32 +46,52 @@ msgstr ""
 msgid "The stations of control units can be displayed on the map."
 msgstr ""
 
-#: ../source/control-units.rst:15
+#: ../source/control-units.rst:14
+#: 7808956306af4183afbb81fc79dd86e7
+msgid "Card of a control unit"
+msgstr ""
+
+#: ../source/control-units.rst:18
+#: d6eceb63cbb34085b768e9fd6664b397
+msgid "*Card of a control unit*"
+msgstr ""
+
+#: ../source/control-units.rst:21
 #: fd16802b6da045ac8fe3c44fa08e473e
 msgid "Prior notification distribution"
 msgstr ""
 
-#: ../source/control-units.rst:17
+#: ../source/control-units.rst:23
 #: ba906ab173a745748bb2201ecd21d763
 msgid "In the :doc:`back office <back-office>`, the *\"Diffusion des préavis\"* menu allows to define which :doc:`prior notifications <prior-notifications>` are sent to each control unit, by :"
 msgstr ""
 
-#: ../source/control-units.rst:20
+#: ../source/control-units.rst:26
 #: 2a23b7c6c2604c8990a73e59e9615a2b
 msgid "port of landing (all prior notifications, or only those which need to be verified by the FMC)"
 msgstr ""
 
-#: ../source/control-units.rst:21
+#: ../source/control-units.rst:27
 #: 8888a512b79042fea590afbf838132a8
 msgid "fleet segment"
 msgstr ""
 
-#: ../source/control-units.rst:22
+#: ../source/control-units.rst:28
 #: 27f06b7b8fbf47c88539dd2c603b6ad1
 msgid "vessel"
 msgstr ""
 
-#: ../source/control-units.rst:24
+#: ../source/control-units.rst:30
+#: 9bac00fdd8f7434f8579ebbd105304ce
+msgid "Prior notification distribution to control units, in the back office"
+msgstr ""
+
+#: ../source/control-units.rst:34
+#: fd237008977449dcbbf7475de6999d68
+msgid "*Prior notification distribution to control units, in the back office*"
+msgstr ""
+
+#: ../source/control-units.rst:36
 #: 0b9e595acc2943eeadbb5e4ccff6c3d8
 msgid "Prior notifications are then sent by email and SMS by the :doc:`flows/distribute-pnos` flow. A weekly summary of their actions is also sent to control units by the :doc:`flows/email-actions-to-units` flow."
 msgstr ""

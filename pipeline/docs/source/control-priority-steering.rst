@@ -29,6 +29,12 @@ High                   3
 Very high              4
 ====================== ======================
 
+.. image:: _static/img/back-office-control-objectives.png
+  :width: 800
+  :alt: Control objectives and control priority levels of fleet segments, in the back office
+
+*Control objectives and control priority levels of fleet segments, in the back office*
+
 The control priority level is then included  in the computation of 
 the :ref:`detectability score <detectability-score>` component of the risk factor.
 By assigning a higher control priority level to a certain fleet segment, the risk 

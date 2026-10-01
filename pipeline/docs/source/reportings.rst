@@ -29,6 +29,18 @@ Where to find reportings
 * **on the map** : reportings can be displayed on the map and filtered by type, status, source, IUU, period and zones. 
   IUU reportings can be created directly from the map, at the location of the observed vessel.
 
+.. image:: _static/img/reportings-table.png
+  :width: 800
+  :alt: Reportings table in the side window
+
+*Reportings table in the side window*
+
+.. image:: _static/img/reportings-map.png
+  :width: 800
+  :alt: Reportings displayed on the map, with their filters
+
+*Reportings displayed on the map, with their filters*
+
 Archiving
 ---------
 

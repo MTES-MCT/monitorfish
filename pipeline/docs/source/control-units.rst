@@ -11,6 +11,12 @@ of each control unit shows :
 
 The stations of control units can be displayed on the map.
 
+.. image:: _static/img/control-unit.png
+  :width: 800
+  :alt: Card of a control unit
+
+*Card of a control unit*
+
 Prior notification distribution
 -------------------------------
 
@@ -20,6 +26,12 @@ are sent to each control unit, by :
 * port of landing (all prior notifications, or only those which need to be verified by the FMC)
 * fleet segment
 * vessel
+
+.. image:: _static/img/back-office-pno-subscribers.png
+  :width: 800
+  :alt: Prior notification distribution to control units, in the back office
+
+*Prior notification distribution to control units, in the back office*
 
 Prior notifications are then sent by email and SMS by the :doc:`flows/distribute-pnos` flow. A weekly summary of 
 their actions is also sent to control units by the :doc:`flows/email-actions-to-units` flow.

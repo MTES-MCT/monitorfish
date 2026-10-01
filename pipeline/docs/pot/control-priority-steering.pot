@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,11 +97,21 @@ msgid "4"
 msgstr ""
 
 #: ../source/control-priority-steering.rst:32
+#: 620164cc8fe84dd49de7fb63cfcbf5d7
+msgid "Control objectives and control priority levels of fleet segments, in the back office"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:36
+#: 3f5a67c53ccf41c497cd088e4ec89592
+msgid "*Control objectives and control priority levels of fleet segments, in the back office*"
+msgstr ""
+
+#: ../source/control-priority-steering.rst:38
 #: e1be72e47a38456697737824ba2fca70
 msgid "The control priority level is then included  in the computation of the :ref:`detectability score <detectability-score>` component of the risk factor. By assigning a higher control priority level to a certain fleet segment, the risk factor of all vessels belonging to this fleet segment in real time will be increased, and Monitorfish will automatically recommend control targets that correspond to this fleet segment, thus helping the FMC to reach its objectives."
 msgstr ""
 
-#: ../source/control-priority-steering.rst:39
+#: ../source/control-priority-steering.rst:45
 #: 56d626bf2d164888a6f710710db0f5ea
 msgid "Vessels whose control priority level is *very high* or *high* are also gathered in the *P1* and *P2* :ref:`priority groups <priority-groups>`, which are highlighted on the map."
 msgstr ""

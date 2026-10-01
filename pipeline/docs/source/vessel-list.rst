@@ -5,6 +5,12 @@ Vessel list
 The vessel list (*"Liste des navires"*), opened in the side window, is a table of all vessels known to Monitorfish - 
 whether they emit VMS or not - with their last position, fleet segments, gears, species onboard, last controls...
 
+.. image:: _static/img/vessel-list.png
+  :width: 800
+  :alt: Vessel list in the side window, with its filters
+
+*Vessel list in the side window, with its filters*
+
 Filters
 -------
 

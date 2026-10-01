@@ -14,6 +14,12 @@ completion of data, control results, JDP missions and vessel.
 
 From this list, :doc:`activity reports (Act-Rep) <activity-report>` can be exported for each Joint Deployment Plan.
 
+.. image:: _static/img/missions-list.png
+  :width: 800
+  :alt: List of missions
+
+*List of missions*
+
 Mission form
 ------------
 
@@ -31,6 +37,12 @@ Actions of the mission can be :
 
 Inspection reports
 ------------------
+
+.. image:: _static/img/mission-form.png
+  :width: 800
+  :alt: Mission form : general information, actions of the mission and the inspection report of a sea control
+
+*Mission form : general information, actions of the mission and the inspection report of a sea control*
 
 The inspection report form of a control records :
 

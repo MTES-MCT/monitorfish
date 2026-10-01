@@ -37,7 +37,7 @@ export function VesselSearchResult({
   return (
     <>
       {hasFoundVessels && (
-        <Results>
+        <Results data-cy="VesselSearch-results">
           <List>
             {foundVMSOrReferentialVessels.map(featureOrIdentity => (
               <VesselSearchResultItem

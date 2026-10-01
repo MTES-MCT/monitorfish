@@ -100,7 +100,8 @@ context('Vessel sidebar controls buttons', () => {
 
     cy.wait(200)
     cy.get('[name="vessel-track-depth"]').should('have.value', '')
-    cy.getDataCy('vessel-menu-fishing').click()
+    // A self-closing banner (3s) may cover the button: wait for it to close
+    cy.getDataCy('vessel-menu-fishing').click({ timeout: 10000 })
     cy.getDataCy('custom-dates-showed-text').contains(
       new RegExp(
         `Piste affichée du ${startDateAsDayjs.format('DD')}/\\d{2}/\\d{2} au ${endDateAsDayjs.format(
@@ -168,7 +169,8 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('.Component-Banner').contains(
       "Nous avons trouvé 3 marées pour ces dates, seulement la 1ère marée est affichée dans l'onglet JPE."
     )
-    cy.getDataCy('vessel-menu-fishing').click()
+    // A self-closing banner (3s) may cover the button: wait for it to close
+    cy.getDataCy('vessel-menu-fishing').click({ timeout: 10000 })
     cy.getDataCy('custom-dates-showed-text').contains('Piste affichée du 11/02/19 au 19/10/19')
 
     // Hide fishing activities

@@ -1,4 +1,5 @@
 import { Banner, type BannerProps } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import type { Promisable } from 'type-fest'
@@ -10,10 +11,14 @@ type ItemProps = Readonly<{
   onCloseOrAutoclose: (bannerStackKey: number) => Promisable<void>
 }>
 export function Item({ bannerProps, bannerStackId, onCloseOrAutoclose }: ItemProps) {
+  // `Banner` restarts its auto-closing timer whenever these callbacks change,
+  // so they must stay stable when other banners are added to or removed from the stack
+  const close = useCallback(() => onCloseOrAutoclose(bannerStackId), [bannerStackId, onCloseOrAutoclose])
+
   const controlledBannerProps: BannerProps = {
     ...bannerProps,
-    onAutoClose: () => onCloseOrAutoclose(bannerStackId),
-    onClose: () => onCloseOrAutoclose(bannerStackId),
+    onAutoClose: close,
+    onClose: close,
     top: '0'
   }
 

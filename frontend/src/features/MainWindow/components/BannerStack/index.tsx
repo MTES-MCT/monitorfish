@@ -1,6 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { isDefined } from '@mtes-mct/monitor-ui'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { Item } from './Item'
@@ -12,9 +13,12 @@ export function BannerStack() {
   const dispatch = useMainAppDispatch()
   const bannerStack = useMainAppSelector(state => state.mainWindowBanner.bannerStack)
 
-  const remove = (bannerStackRank: number) => {
-    dispatch(mainWindowBannerActions.removeBanner(bannerStackRank))
-  }
+  const remove = useCallback(
+    (bannerStackRank: number) => {
+      dispatch(mainWindowBannerActions.removeBanner(bannerStackRank))
+    },
+    [dispatch]
+  )
 
   const bannerStackItems = Object.values(bannerStack.entities).filter(isDefined)
 

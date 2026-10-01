@@ -31,6 +31,7 @@ from src.entities.alerts import (
 from src.flows.position_alert import (
     extract_vessels_current_gears,
     extract_vessels_with_species_onboard,
+    filter_out_excluded_vessels,
     get_sets_of_identifiers,
     get_vessels_in_alert,
     get_vessels_with_gears,
@@ -671,6 +672,51 @@ def test_make_positions_in_alert_query(admin_areas_specs_with_tables):
 
     assert query == expected_query
 
+    # Test make_positions_in_alert_query with excluded vessels
+
+    select_statement = make_positions_in_alert_query(
+        positions_table=positions_table,
+        facades_table=facades_table,
+        track_analysis_depth=track_analysis_depth,
+        now=now,
+        excluded_cfrs={"cfr_3"},
+        excluded_external_immats=set(),
+        excluded_ircss={"ircs_3"},
+    )
+
+    query = str(select_statement.compile(compile_kwargs={"literal_binds": True}))
+
+    expected_query = (
+        "SELECT "
+        "positions.id, "
+        "positions.internal_reference_number AS cfr, "
+        "positions.external_reference_number AS external_immatriculation, "
+        "positions.ircs, "
+        "positions.vessel_name, "
+        "positions.flag_state, "
+        "positions.date_time, "
+        "positions.latitude, "
+        "positions.longitude, "
+        "facades.facade "
+        "\nFROM positions "
+        "LEFT OUTER JOIN facades "
+        "ON ST_Intersects(positions.geometry, facades.geometry) "
+        "\nWHERE positions.date_time > '2024-05-02 06:30:00' "
+        "AND positions.date_time < '2024-05-02 12:30:00' "
+        "AND ("
+        "positions.internal_reference_number IS NOT NULL OR "
+        "positions.external_reference_number IS NOT NULL OR "
+        "positions.ircs IS NOT NULL) "
+        "AND ("
+        "positions.internal_reference_number IN ('cfr_3') OR "
+        "positions.internal_reference_number IS NULL AND "
+        "positions.ircs IN ('ircs_3')"
+        ") IS NOT true "
+        "AND positions.is_fishing"
+    )
+
+    assert query == expected_query
+
 
 def test_extract_vessels_current_gears(reset_test_data, vessels_current_gears):
     res = extract_vessels_current_gears().sort_values("cfr").reset_index(drop=True)
@@ -894,6 +940,25 @@ def test_get_vessels_in_alert():
     pd.testing.assert_frame_equal(
         vessels_in_alert, expected_vessels_in_alert, check_like=True
     )
+
+
+def test_filter_out_excluded_vessels():
+    vessels_in_alert = pd.DataFrame(
+        {
+            "cfr": ["A", "B", "C", None],
+            "vessel_id": [1, 2, 3, None],
+        }
+    )
+
+    res = filter_out_excluded_vessels(vessels_in_alert, [2, 4])
+
+    expected_res = pd.DataFrame(
+        {
+            "cfr": ["A", "C", None],
+            "vessel_id": [1, 3, None],
+        }
+    )
+    pd.testing.assert_frame_equal(res, expected_res)
 
 
 def test_flow_deletes_existing_pending_alerts_of_matching_type_and_alert_id(
@@ -1948,3 +2013,27 @@ def test_flow_filters_on_species_and_catch_areas(reset_test_data):
     )
     assert len(pending_alerts) == 1
     assert pending_alerts["internal_reference_number"].values[0] == "ABC000542519"
+
+
+def test_flow_filters_out_excluded_vessels(reset_test_data):
+    state = position_alert_flow(
+        position_alert_id=1,
+        name="Chalutage dans les 3 milles",
+        description="Description de l'alerte Chalutage dans les 3 milles",
+        natinf_code=7059,
+        threat="some threat",
+        threat_characterization="some threat_characterization",
+        track_analysis_depth=48,
+        only_fishing_positions=False,
+        administrative_areas=[
+            AdminAreasSpecification(areaType="DISTANCE_TO_SHORE", areas=["0-3", "3-6"]),
+        ],
+        flag_states_iso2=["NL"],
+        excluded_vessel_ids=[3],
+        return_state=True,
+    )
+
+    assert state.is_completed()
+
+    pending_alerts = read_query("SELECT * FROM pending_alerts", db="monitorfish_remote")
+    assert len(pending_alerts) == 0

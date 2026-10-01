@@ -184,6 +184,7 @@ export function AlertManagementForm() {
         {({ dirty, errors, setFieldValue, values }) => {
           const {
             hasDistrictCriteria,
+            hasExcludedVesselCriteria,
             hasGearOnBoardCriteria,
             hasNationalityCriteria,
             hasNoCriteria,
@@ -273,6 +274,15 @@ export function AlertManagementForm() {
                           Navires
                         </Dropdown.Item>
                       )}
+                      {!hasExcludedVesselCriteria && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedCriterias(previous => previous.concat(Criteria.EXCLUDED_VESSEL))
+                          }}
+                        >
+                          Navires exclus
+                        </Dropdown.Item>
+                      )}
                       {!hasZoneCriteria && (
                         <Dropdown.Item
                           onClick={() => {
@@ -342,6 +352,17 @@ export function AlertManagementForm() {
                         setSelectedCriterias(previous => previous.filter(criteria => criteria !== Criteria.VESSEL))
                       }}
                       vessels={editedAlertSpecification.vessels}
+                    />
+                  )}
+                  {hasExcludedVesselCriteria && (
+                    <VesselCriteria
+                      isExclusion
+                      onDelete={() => {
+                        setSelectedCriterias(previous =>
+                          previous.filter(criteria => criteria !== Criteria.EXCLUDED_VESSEL)
+                        )
+                      }}
+                      vessels={editedAlertSpecification.excludedVessels}
                     />
                   )}
                   {hasZoneCriteria && (

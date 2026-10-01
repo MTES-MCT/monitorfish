@@ -26,6 +26,7 @@ data class PositionAlertSpecificationDataInput(
     val minDepth: Double? = null,
     val flagStatesIso2: List<String> = listOf(),
     val vesselIds: List<Int> = listOf(),
+    val excludedVesselIds: List<Int> = listOf(),
     val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
 ) {
@@ -54,6 +55,7 @@ data class PositionAlertSpecificationDataInput(
             minDepth = this.minDepth,
             flagStatesIso2 = this.flagStatesIso2,
             vesselIds = this.vesselIds,
+            excludedVesselIds = this.excludedVesselIds,
             districtCodes = this.districtCodes,
             producerOrganizations = this.producerOrganizations,
         )

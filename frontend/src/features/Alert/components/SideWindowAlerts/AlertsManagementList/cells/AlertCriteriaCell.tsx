@@ -103,6 +103,24 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
           </ExpandedRowValue>
         </p>
       )}
+      {alertSpecification.excludedVesselIds.length > 0 && (
+        <p>
+          <ExpandedRowLabel>Navires exclus :</ExpandedRowLabel>
+          <ExpandedRowValue>
+            {alertSpecification.excludedVessels?.map(vessel => (
+              <span key={vessel.internalReferenceNumber} title={vessel.internalReferenceNumber}>
+                <Flag
+                  rel="preload"
+                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.svg`}
+                  style={{ marginLeft: 5, marginRight: 5, marginTop: -1, width: 13 }}
+                  title={countries.getName(vessel.flagState.toLowerCase(), 'fr')}
+                />
+                {vessel.vesselName},
+              </span>
+            ))}
+          </ExpandedRowValue>
+        </p>
+      )}
       {(alertSpecification.administrativeAreas?.length > 0 || alertSpecification.regulatoryAreas?.length > 0) && (
         <p>
           <ExpandedRowLabel>Zones (VMS) :</ExpandedRowLabel>

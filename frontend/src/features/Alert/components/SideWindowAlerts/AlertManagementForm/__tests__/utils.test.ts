@@ -372,6 +372,8 @@ describe('hasCriterias', () => {
       description: '',
       districtCodes: [],
       errorReason: undefined,
+      excludedVesselIds: [],
+      excludedVessels: [],
       flagStatesIso2: [],
       gears: [],
       hasAutomaticArchiving: false,
@@ -410,6 +412,7 @@ describe('hasCriterias', () => {
     expect(resultEmpty.hasSpeciesOnBoardCriteria).toBe(false)
     expect(resultEmpty.hasProducerOrganizationCriteria).toBe(false)
     expect(resultEmpty.hasDistrictCriteria).toBe(false)
+    expect(resultEmpty.hasExcludedVesselCriteria).toBe(false)
 
     // When values have data
     const valuesWithData: AlertSpecification = {
@@ -441,5 +444,12 @@ describe('hasCriterias', () => {
     expect(resultWithSelectedCriterias.hasZoneCriteria).toBe(true)
     expect(resultWithSelectedCriterias.hasSpeciesOnBoardCriteria).toBe(true)
     expect(resultWithSelectedCriterias.hasNationalityCriteria).toBe(false)
+
+    // When only excluded vessels are provided
+    const resultWithExcludedVesselsOnly = hasCriterias({ ...emptyValues, excludedVesselIds: [1] })
+
+    // Then excluded vessels alone are not a triggering criteria
+    expect(resultWithExcludedVesselsOnly.hasExcludedVesselCriteria).toBe(true)
+    expect(resultWithExcludedVesselsOnly.hasNoCriteria).toBe(true)
   })
 })

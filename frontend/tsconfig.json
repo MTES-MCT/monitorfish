@@ -58,10 +58,9 @@
     "**/*.tsx",
     "src/vite-env-override.d.ts",
     "src/ui/styled.d.ts",
-    "vite.config.ts",
-    "src/matomo.d.ts",
+    "src/matomo.d.ts"
   ],
-  "exclude": ["node_modules/*", "scripts/matomo"],
+  "exclude": ["node_modules/*", "scripts/matomo", "vite.config.ts"],
   "ts-node": {
     "esm": true,
     "swc": true,

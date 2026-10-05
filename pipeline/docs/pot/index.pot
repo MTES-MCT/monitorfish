@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 16:49+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../source/overview.rst:5
 #: e3439acbacf04b0f92af90e6ebcdf6a2
-msgid "**Monitorfish** is a **fishing vessels monitoring software** developped by the French administration for the french **Fisheries Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
+msgid "**Monitorfish** is a **fishing vessels monitoring software** developed by the French administration for the french **Fisheries Monitoring Center (FMC)** - the `Centre National de Surveillance des Pêches <https://www.mer.gouv.fr/la-police-des-peches>`_ - and its partners."
 msgstr ""
 
 #: ../source/overview.rst:8
@@ -36,87 +36,112 @@ msgstr ""
 msgid "Features"
 msgstr ""
 
-#: ../source/overview.rst:10
-#: 6d1e4a9deb8944769a4114e373c5bb63
-msgid "Visualization of fishing vessels' real time **positions** (VMS)"
-msgstr ""
-
 #: ../source/overview.rst:11
-#: 80b9d577d5bc453fa24216170d71805b
-msgid "Visualization of fishing vessels' declarative **fishing activity** data (ERS)"
-msgstr ""
-
-#: ../source/overview.rst:12
-#: 434541e56fef473bac7dcfefddde003f
-msgid "Vizualization of synthetic :doc:`activity overview <activity-overview>`"
+#: 61338db769514ed0b8135813cbf2985d
+msgid "Monitoring"
 msgstr ""
 
 #: ../source/overview.rst:13
-#: c0dd4ad0bc1d42299be80fb8d586185b
-msgid ":doc:`Activity report (Act-Rep) <activity-report>`"
-msgstr ""
-
-#: ../source/overview.rst:14
-#: c0dd4ad0bc1d42299be80fb8d586185b
-msgid ":doc:`Inspection reports data entry <inspection-data-entry>`"
+#: 295d78870f4d48e4a5a78d4d2b0d90b4
+msgid "Visualization of fishing vessels' real time **positions** (VMS and AIS) and tracks on a :doc:`map <map-and-layers>`, with regulatory and administrative zones"
 msgstr ""
 
 #: ../source/overview.rst:15
-#: 84bb5291a2f641549169f17ee4c5a6ba
-msgid "Visualization of fishing vessels' historical **inspections** and **violations**"
-msgstr ""
-
-#: ../source/overview.rst:16
-#: 550f6d8c7a8c403094936317e5b240f9
-msgid "Visualization of :doc:`regulated fishing areas <regulation>` of the french and european regulations"
+#: 765ac9e63b3b43e0a6cdc6007a6ead24
+msgid "A :doc:`vessel sheet <vessel-sheet>` gathering each vessel's identity, declarative **fishing activity** (ERS logbook), :doc:`usual activity <vessel-profiles>`, **controls** history, :doc:`reportings` and VMS equipment"
 msgstr ""
 
 #: ../source/overview.rst:17
-#: 8c0ee20ba7f241668a5f96064e14e2fe
-msgid "Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_"
+#: 777a57431af74e8b9a66b56cb53948a7
+msgid "A :doc:`list of all vessels <vessel-list>` with advanced filters, and :doc:`groups of vessels <groups-of-vessels>` that can be shared"
 msgstr ""
 
 #: ../source/overview.rst:18
-#: 41d16795351d4cbf9c0a3d04004b3356
-msgid "Real time fraud detection :doc:`alerts <alerts>`"
+#: 6516c19559424be194b17df00270f65d
+msgid "Real time fraud detection :doc:`alerts <alerts>`, including user-defined alerts, and :doc:`reportings`"
 msgstr ""
 
 #: ../source/overview.rst:19
-#: d983db0e889b4635992b99478bacc6e7
-msgid "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements"
+#: e110658198d44243bdc36243e1130d2e
+msgid "Monitoring of :doc:`VMS beacon malfunctions <vms-beacon-monitoring>`"
 msgstr ""
 
 #: ../source/overview.rst:20
 #: 94bb643d086f4ad78e139bea1e6aac99
-msgid "Compliance checking of :doc:`prior notifications <prior-notifications>` of return to port and prioritization for land inspections"
-msgstr ""
-
-#: ../source/overview.rst:21
-#: 3f9203c71611466994e9f8bc9c768dee
-msgid "Creation and sharing of :doc:`groups of vessels <groups-of-vessels>`"
-msgstr ""
-
-#: ../source/overview.rst:22
-#: f1c10ec65fd84528987529f8744440ae
-msgid "Administration panel that allows admins to"
+msgid "Compliance checking of :doc:`prior notifications <prior-notifications>` of return to port, prioritization and distribution to control units for land inspections"
 msgstr ""
 
 #: ../source/overview.rst:24
-#: 4fcca2a119b94786ab223f54fe0186a0
-msgid "Update regulation data : update authorized fishing areas / periods / gears..."
-msgstr ""
-
-#: ../source/overview.rst:25
-#: 52b87782f5c94dadad4bc79af6997a52
-msgid "Update the definitions of :doc:`fleet segments <fleet-segments>`"
+#: 556fd47359c34acbb7f2fd1da88bf5fd
+msgid "Targeting"
 msgstr ""
 
 #: ../source/overview.rst:26
-#: b998bbfdc5614c8791767c31e4841168
-msgid ":doc:`Stear control priorities <control-priority-steering>` by dynamically adjuting the control priority level of each fleet segment"
+#: 8c0ee20ba7f241668a5f96064e14e2fe
+msgid "Computation of fishing vessels' real time belonging to :doc:`fleet segments <fleet-segments>` as defined by the `European Fishing Control Agency (EFCA) <https://www.efca.europa.eu/en>`_ in its `risk assessment methodology <https://www.efca.europa.eu/en/content/guidelines-risk-assessment-methodology-fisheries-compliance>`_"
+msgstr ""
+
+#: ../source/overview.rst:29
+#: d983db0e889b4635992b99478bacc6e7
+msgid "Computation of fishing vessels' real time :doc:`risk factor <risk-factor>`, a metric developed in the context of the Monitorfish project that aims to help FMC agents **prioritize vessels to control** based on all the above elements"
 msgstr ""
 
 #: ../source/overview.rst:31
+#: b998bbfdc5614c8791767c31e4841168
+msgid ":doc:`Control priority steering <control-priority-steering>` by dynamically adjusting the control priority level of each fleet segment"
+msgstr ""
+
+#: ../source/overview.rst:32
+#: 434541e56fef473bac7dcfefddde003f
+msgid "Synthetic :doc:`activity overview <activity-overview>` to plan inspections"
+msgstr ""
+
+#: ../source/overview.rst:35
+#: 92e324e32a2e481ebdaf5d5b7f35f1e7
+msgid "Controls"
+msgstr ""
+
+#: ../source/overview.rst:37
+#: a93d5bd43a5c4dbaa3f5e85cca060372
+msgid ":doc:`Missions and inspection reports <missions-and-controls>` data entry, shared with Monitorenv"
+msgstr ""
+
+#: ../source/overview.rst:38
+#: c0dd4ad0bc1d42299be80fb8d586185b
+msgid ":doc:`Activity report (Act-Rep) <activity-report>` export for the EFCA"
+msgstr ""
+
+#: ../source/overview.rst:39
+#: caeee17c980a4d32bfdabb50c434d6c5
+msgid ":doc:`Control units <control-units>` directory"
+msgstr ""
+
+#: ../source/overview.rst:42
+#: e17d37d9447b461ebbcf22bf0385470d
+msgid "Administration"
+msgstr ""
+
+#: ../source/overview.rst:44
+#: 1452f3e4e8b7479b95b42b41635a7caf
+msgid "A :doc:`back office <back-office>` to update regulation data (authorized fishing areas, periods, gears...), fleet segments, control objectives, prior notification distribution and producer organization memberships"
+msgstr ""
+
+#: ../source/overview.rst:46
+#: 58ede4051d194077b453fd8b73fbad80
+msgid ":doc:`Access rights <access-rights>` adapted to FMC agents and partners"
+msgstr ""
+
+#: ../source/overview.rst:49
+#: e206170ade5b41d8a112bd05a24a6805
+msgid "Open data"
+msgstr ""
+
+#: ../source/overview.rst:51
+#: 550f6d8c7a8c403094936317e5b240f9
+msgid "Publication of :doc:`regulated fishing areas <regulation>`, ports and control statistics on data.gouv.fr (see :doc:`data-sources`)"
+msgstr ""
+
+#: ../source/overview.rst:55
 #: 130334b74af24f83bc3b91c43e4000d5
 msgid "Demo"
 msgstr ""

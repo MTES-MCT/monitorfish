@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,16 @@ msgid "Validate pending alerts"
 msgstr ""
 
 #: ../source/flows/validate-pending-alerts.rst:5
-#: 10f7a8a04387433191ab80140f7965f5
-msgid "The ``Validate pending alerts`` flow is used to automate the validation of a certain type of alerts."
+#: 3f321564ea614b219ca68e4a3e933999
+msgid "The ``Validate pending alerts`` flow automatically validates all pending alerts of a given type : the alerts are turned into :doc:`reportings <../reportings>`, which are then archived."
 msgstr ""
 
-#: ../source/flows/validate-pending-alerts.rst:7
+#: ../source/flows/validate-pending-alerts.rst:8
 #: 808e7818cdd54f849f334275b7a327be
-msgid "This is used to avoid polluting the app with a large number of alerts yet keep track of said alerts by recording them as reportings."
+msgid "This is used to avoid polluting the app with a large number of alerts yet keep track of said alerts by recording them in the vessels' history."
+msgstr ""
+
+#: ../source/flows/validate-pending-alerts.rst:11
+#: 45cced7f697849649e62c92aabeb9d3b
+msgid "It is scheduled to run every day on *Missing FAR in 24h* alerts (see :doc:`missing-far-alerts`)."
 msgstr ""

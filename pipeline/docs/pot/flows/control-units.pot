@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,5 +23,10 @@ msgstr ""
 
 #: ../source/flows/control-units.rst:5
 #: 3b9793ac044e46aa8c0c35636fbe6526
-msgid "The ``Control units`` flow import control units and administrations from Monitorenv and loads them into ``analytics_control_units`` and ``analytics_administrations`` respectively."
+msgid "The ``Control units`` flow imports control units and administrations from Monitorenv and loads them into ``analytics_control_units`` and ``analytics_administrations`` respectively."
+msgstr ""
+
+#: ../source/flows/control-units.rst:8
+#: 1cfc28940459408d96a54f6531596f30
+msgid "It is scheduled to run every day."
 msgstr ""

@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/init-infraction-threat-characterization.rst:3
+#: 1ea3b9356565458c8a59a0999385644a
+msgid "Init infraction threat characterization"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:5
+#: 3fdd9170431b4bb9a8d28c7dbfab9e82
+msgid "The ``Init infractions threat characterization`` flow loads, from hard coded csv files stored in ``pipeline/src/data/``, the hierarchy used to categorize infractions :"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:8
+#: cd6e5513101a485f8bc0be150b7e6451
+msgid "``threats`` (e.g. reporting obligations, fishing in closed areas...)"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:9
+#: 959fba11ede04f44830fc1fc1e94a271
+msgid "``threat_characterizations``"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:10
+#: 92302063ba804d17a9de001a5fc0bbfd
+msgid "``infraction_threat_characterization``, which links each infraction (NATINF code) to a threat characterization"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:11
+#: 94373fff08e1483cab46f497e2ddb9a3
+msgid "``risk_elements`` (see :doc:`risk-elements`)"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:12
+#: a8bc7a4452cd49ff9626db55bab74f17
+msgid "``isr``, the infringement codes of the EFCA Inspection and Surveillance Report (ISR)"
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:14
+#: 1bbc5e7e975e4e5da7b319430e8da9fd
+msgid "This hierarchy is used to sort infractions by family and type in the app (in control reports, reportings and :ref:`configurable alerts <configurable-alerts>`)."
+msgstr ""
+
+#: ../source/flows/init-infraction-threat-characterization.rst:17
+#: f71f426b515e466e969777ee4cd7c2d3
+msgid "It is run manually when needed (when the csv files are updated)."
+msgstr ""

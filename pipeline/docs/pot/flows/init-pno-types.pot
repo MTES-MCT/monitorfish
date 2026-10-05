@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/init-pno-types.rst:3
+#: b08949e482cf454595ee07592fd84254
+msgid "Init PNO types"
+msgstr ""
+
+#: ../source/flows/init-pno-types.rst:5
+#: 7889dc07476c4609876d4af5ff2f7d62
+msgid "The ``Init PNO types`` flow loads the definitions of prior notification types (and the rules - species, FAO and GFCM areas, gears, flag states, minimum quantity... - which determine whether a PNO belongs to a type) from hard coded csv files stored in ``pipeline/src/data/`` into the ``pno_types`` and ``pno_type_rules`` tables."
+msgstr ""
+
+#: ../source/flows/init-pno-types.rst:9
+#: 4be23eaf32d94f7bb28a6d73c4bf7274
+msgid "PNO types are computed by the :doc:`enrich-logbook` flow and determine whether a PNO is in the verification scope of the FMC and its minimum notification period. See :doc:`../prior-notifications`."
+msgstr ""
+
+#: ../source/flows/init-pno-types.rst:12
+#: e7e999f222834ced9060e88f17a06853
+msgid "It is run manually when needed (when the csv files are updated)."
+msgstr ""

@@ -7,8 +7,11 @@ For identifying vessels and related information, we use :
     * VMS `Beacon` and `BeaconMalfunction` (a vessel must have a ``vessel_id`` from `Navpro` to emit VMS)
     * `Vessel` characteristics (fetched from `Navpro`)
     * `Control`
-* ``internal_reference_number`` (Community Fleet Register - CFR) for :
+* ``internal_reference_number`` / ``cfr`` (Community Fleet Register - CFR) for :
     * `Logbook` containing `ERS` (Electronic Reporting System) and `FLUX` (Fisheries Language for Universal Exchange) messages
+    * `Sales notes`
+* ``mmsi`` (Maritime Mobile Service Identity) for :
+    * AIS `Position`
 * ``internal_reference_number`` (Community Fleet Register - CFR), ``ircs`` (International Radio Call Sign of the vessel) and ``external_reference_number`` (side number, registration number, IMO number or any other external marking identifying the vessel) for :
     * VMS `Position`
     * `Alert` and `Reporting`

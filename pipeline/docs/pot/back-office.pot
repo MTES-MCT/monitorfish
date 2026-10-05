@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/back-office.rst:3
+#: 4079feba21ac4a98a3a31a1b196591c2
+msgid "Back office"
+msgstr ""
+
+#: ../source/back-office.rst:5
+#: 70614763f5bf49cc815f60afce76f748
+msgid "The back office is restricted to super users. It allows to manage the reference data used by Monitorfish :"
+msgstr ""
+
+#: ../source/back-office.rst:7
+#: 37e79a9b169b4a5895da4ead9cf52989
+msgid "Regulatory zones in the back office"
+msgstr ""
+
+#: ../source/back-office.rst:11
+#: 477f56e9af46430482600c462cefb366
+msgid "*Regulatory zones in the back office*"
+msgstr ""
+
+#: ../source/back-office.rst:13
+#: d6ac496fe7c541faa8ac347727da7d0c
+msgid "**regulatory zones** (*\"Zones réglementaires\"*) : create and update regulated fishing areas - geometry, regulatory references, authorized or prohibited gears and species, fishing periods... See :doc:`regulation`."
+msgstr ""
+
+#: ../source/back-office.rst:15
+#: a0e48d9decb0491e84a1cbc395321f4e
+msgid "**control objectives** (*\"Objectifs de contrôle\"*) : set, for each year, seafront and fleet segment, the number of sea and land controls to perform and the control priority level. See :doc:`control-priority-steering`."
+msgstr ""
+
+#: ../source/back-office.rst:17
+#: 58861461b9834bcda9e6bd9d19430125
+msgid "**fleet segments** (*\"Segments de flotte\"*) : define the fleet segments of each year - gears, target species, mesh, FAO areas, vessel types, impact risk factor... A new year can be initialized from the segments of the previous year. See :doc:`fleet-segments`."
+msgstr ""
+
+#: ../source/back-office.rst:19
+#: 39e77aa1d1254c888782777e5d43bcce
+msgid "**prior notification distribution** (*\"Diffusion des préavis\"*) : define which prior notifications are sent to each control unit. See :doc:`control-units`."
+msgstr ""
+
+#: ../source/back-office.rst:21
+#: 4977ed6869ee498f9bdc7ec0f4f613bc
+msgid "**producer organization memberships** (*\"Adhésions aux OP\"*) : record the producer organization of vessels, used to filter the :doc:`vessel list <vessel-list>` and in :ref:`configurable alerts <configurable-alerts>`."
+msgstr ""
+
+#: ../source/back-office.rst:24
+#: 803d1267a4b545a685af8454564da8e4
+msgid "Control objectives of a seafront for the current year"
+msgstr ""
+
+#: ../source/back-office.rst:28
+#: ec93c51344214125aec8a3b840a3a29a
+msgid "*Control objectives of a seafront for the current year*"
+msgstr ""
+
+#: ../source/back-office.rst:30
+#: 1ddc310ba76b40b282c2df8b41f1c8fa
+msgid "Definitions of fleet segments for the current year"
+msgstr ""
+
+#: ../source/back-office.rst:34
+#: 491e371bfb864b8f92acb55592bbd729
+msgid "*Definitions of fleet segments for the current year*"
+msgstr ""

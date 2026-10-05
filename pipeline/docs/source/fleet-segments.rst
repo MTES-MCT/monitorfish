@@ -27,12 +27,32 @@ This risk level represents the **impact of the fishing activity** on the ressour
 
 In addition, and based on the risk assessment conclusions, an objective of a minimum number of controls to perform on each fleet segment is defined.
 
+Fleet segments definition
+-------------------------
+
+Fleet segments are defined for each year in the :doc:`back office <back-office>`, by their gears, target species, 
+mesh, FAO areas, vessel types and the minimum share of target species in catches. Each segment also has an impact risk 
+factor (see :doc:`risk-factor`). The segments of a new year can be initialized from those of the previous year.
+
+The current definitions of fleet segments are published on data.gouv.fr by the :doc:`flows/controls-open-data` flow.
+
+.. image:: _static/img/back-office-fleet-segments.png
+  :width: 800
+  :alt: Definitions of fleet segments in the back office
+
+*Definitions of fleet segments in the back office*
+
 Fleet segments computation and display
 --------------------------------------
 
 The :doc:`flows/current-segments` flow computes the fleet segments each vessel belongs to in real time, based on ERS data.
 
-Fishing vessels' fleet segment(s) can then be visualized on the map in real time, filtered based on their fleet segments...
+Fishing vessels' fleet segment(s) can then be visualized on the map in real time (as vessel labels), in the 
+:doc:`vessel sheet <vessel-sheet>` and in the :doc:`vessel list <vessel-list>`, where vessels can be filtered based on their fleet segments.
+
+The fleet segments of controls are computed when the inspection report is entered (see :doc:`missions-and-controls`), and 
+can be recomputed with the :doc:`flows/recompute-controls-segments` flow. The fleet segments of :doc:`prior notifications <prior-notifications>` 
+are computed by the :doc:`flows/enrich-logbook` flow.
 
 
 .. image:: _static/img/fleet-segments-labels.png

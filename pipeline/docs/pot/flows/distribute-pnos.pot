@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,10 +28,25 @@ msgstr ""
 
 #: ../source/flows/distribute-pnos.rst:7
 #: 2e86c7f3765b4292a79b06431f505577
-msgid "generates pdf documents for all manual and logbook PNOs which have not yet generated and loads them into the ``prior_notification_pdf_documents`` table."
+msgid "generates pdf documents for all manual and logbook PNOs which have not yet been generated and loads them into the ``prior_notification_pdf_documents`` table"
 msgstr ""
 
-#: ../source/flows/distribute-pnos.rst:8
+#: ../source/flows/distribute-pnos.rst:9
 #: d7244edd53d042dea0d46bbff001d6a1
-msgid "sends PNOs by email and text message to control units, respecting control units subscriptions to ports, fleet segments, and vessels"
+msgid "sends PNOs by email and text message to control units, respecting control units subscriptions to ports, fleet segments and vessels (see :doc:`../control-units`)"
+msgstr ""
+
+#: ../source/flows/distribute-pnos.rst:11
+#: 13cb79e590bf4e4d8c79fd02346cc5e0
+msgid "logs sent messages in the ``prior_notification_sent_messages`` table, which is used to display the sending history of each PNO in the app"
+msgstr ""
+
+#: ../source/flows/distribute-pnos.rst:14
+#: 5404b8fa5c27490c86e2e4c12e34dc47
+msgid "It is scheduled to run every minute, on PNOs of the last 5 days."
+msgstr ""
+
+#: ../source/flows/distribute-pnos.rst:16
+#: 18e2123e90af4014aee5ca055038f833
+msgid "See :doc:`../prior-notifications`."
 msgstr ""

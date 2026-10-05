@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,5 +23,20 @@ msgstr ""
 
 #: ../source/flows/missing-dep-alerts.rst:5
 #: c5b0e44f1efd489cbfc582b0233b14b3
-msgid "The ``Missing dep alerts`` flow identifies vessels which emitted VMS out of a port the day before and did not send and FAR report before midnight. Alerts are generated for these vessels and loaded to the ``pending_alerts`` table."
+msgid "The ``Missing dep alerts`` flow identifies vessels which left port (as detected on their VMS track by the :doc:`enrich positions flow <enrich-positions>`) during the last 48 hours without sending the corresponding DEP (departure) logbook message."
+msgstr ""
+
+#: ../source/flows/missing-dep-alerts.rst:9
+#: 0f39881a29db4343be0f536a7f4cb146
+msgid "Monitored vessels are french and venezuelan vessels of 12 meters or more which are not exempted from electronic logbook."
+msgstr ""
+
+#: ../source/flows/missing-dep-alerts.rst:11
+#: c5b0e44f1efd489cbfc582b0233b14b3
+msgid "Alerts are generated for these vessels and loaded to the ``pending_alerts`` table."
+msgstr ""
+
+#: ../source/flows/missing-dep-alerts.rst:13
+#: 8c1af56a70204e748c6b603706adde83
+msgid "It is scheduled to run every 20 minutes."
 msgstr ""

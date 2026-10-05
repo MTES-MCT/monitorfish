@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,11 @@ msgid "Foreign fmcs"
 msgstr ""
 
 #: ../source/flows/foreign-fmcs.rst:5
-#: 73f1459a606f45bfa01925f519ff535f
-msgid "The ``Foreign fmcs`` flow extracts foreign FMC's contact information from the FMC database and loads it to the ``foreign_fmcs`` table."
+#: 01bb55a6de7b420ca0916c6999f534f0
+msgid "The ``Foreign fmcs`` flow extracts foreign FMCs' contact information from the FMC database and loads it to the ``foreign_fmcs`` table. These contacts are used to notify foreign FMCs of :doc:`beacon malfunctions <../vms-beacon-monitoring>`."
+msgstr ""
+
+#: ../source/flows/foreign-fmcs.rst:8
+#: 47bf888d0eb14894930a703cdca07ea8
+msgid "It is scheduled to run every day."
 msgstr ""

@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/trips-snapshot.rst:3
+#: d71e9532c44241d6b1aef3f4b50e2880
+msgid "Trips snapshot"
+msgstr ""
+
+#: ../source/flows/trips-snapshot.rst:5
+#: 0ef078fdc6d2472b8dc916a29a57c39b
+msgid "The ``Trips snapshot`` flow extracts the start and end dates of all logbook trips of all vessels from the Data Warehouse and loads them into the ``trips_snapshot`` table of the Monitorfish database."
+msgstr ""
+
+#: ../source/flows/trips-snapshot.rst:8
+#: 5d6d2d2ca6774f68a9f978a1ea4963a0
+msgid "This table is used by the backend to find the trip during which a past control took place."
+msgstr ""
+
+#: ../source/flows/trips-snapshot.rst:10
+#: 6da869caa2ff4fafb4d8065ac128db92
+msgid "It is scheduled to run every day."
+msgstr ""

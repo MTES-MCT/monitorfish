@@ -23,6 +23,13 @@ All controllers in this package use Spring's `@ConditionalOnProperty` annotation
 - **Usage**: Local development and E2E testing with Keycloak authentication flows
 - **Security**: Disabled by default, requires explicit configuration to enable
 
+### E2eCacheController
+
+- **Purpose**: Clears all the application caches before each Cypress spec, together with the database reset (see `frontend/config/cypressSpecIsolation.ts`)
+- **Activation**: Only when `monitorfish.e2e.cache-reset.enabled=true`
+- **Usage**: E2E testing
+- **Security**: Disabled by default, requires explicit configuration to enable
+
 ## Configuration
 
 All development controllers require explicit configuration to be enabled:
@@ -47,5 +54,6 @@ monitorfish:
 ```
 development/
 ├── README.md                   # This file
+├── E2eCacheController.kt       # Cache reset between E2E specs
 ├── KeycloakProxyController.kt  # Keycloak authentication proxy
 ```

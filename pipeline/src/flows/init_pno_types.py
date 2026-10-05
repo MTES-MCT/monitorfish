@@ -7,6 +7,7 @@ from sqlalchemy import DDL, Table
 from config import LIBRARY_LOCATION
 from src.db_config import create_engine
 from src.generic_tasks import load
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.infrastructure import get_table
 from src.utils import delete
 
@@ -91,7 +92,11 @@ def load_pno_types_and_rules(
         )
 
 
-@flow(name="Monitorfish - Init pno types")
+@flow(
+    name="Monitorfish - Init pno types",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def init_pno_types_flow():
     pno_types_table = get_table("pno_types")
     pno_type_rules_table = get_table("pno_type_rules")

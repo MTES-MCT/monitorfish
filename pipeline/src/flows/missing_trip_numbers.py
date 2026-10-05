@@ -4,6 +4,7 @@ from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.generic_tasks import extract
+from src.sentry import report_flow_failure_to_sentry
 from src.utils import psql_insert_copy
 
 
@@ -94,7 +95,11 @@ def load_computed_trip_numbers(computed_trip_numbers: pd.DataFrame):
         )
 
 
-@flow(name="Monitorfish - Missing trip number")
+@flow(
+    name="Monitorfish - Missing trip number",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def missing_trip_numbers_flow(reset_trip_numbers: bool = False):
     if reset_trip_numbers:
         reset_computed_trip_numbers()

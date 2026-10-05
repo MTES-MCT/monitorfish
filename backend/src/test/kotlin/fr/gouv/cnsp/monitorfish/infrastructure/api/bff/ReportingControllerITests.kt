@@ -11,9 +11,11 @@ import fr.gouv.cnsp.monitorfish.config.OIDCProperties
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
+import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingStats
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.AddReporting
@@ -21,10 +23,11 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.ArchiveReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.DeleteReportings
-import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetAllCurrentReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReporting
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetReportingsList
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.UpdateReporting
+import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.CreateReportingDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.NatinfDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.ThreatCharacterizationDataInput
@@ -74,7 +77,7 @@ class ReportingControllerITests {
     private lateinit var updateReporting: UpdateReporting
 
     @MockitoBean
-    private lateinit var getAllCurrentReportings: GetAllCurrentReportings
+    private lateinit var getReportingsList: GetReportingsList
 
     @MockitoBean
     private lateinit var getReportings: GetReportings
@@ -401,24 +404,37 @@ class ReportingControllerITests {
                 underCharter = true,
                 createdBy = "test@example.gouv.fr",
             )
-        given(getAllCurrentReportings.execute()).willReturn(
-            listOf(Pair(reporting, null)),
+        given(
+            getReportingsList.execute(any(), any(), anyOrNull(), anyOrNull(), any(), any(), any(), any()),
+        ).willReturn(
+            PaginatedList(
+                data = listOf(Pair(reporting, null)),
+                extraData = ReportingStats(perSeafrontGroupCount = mapOf(SeafrontGroup.ALL to 1)),
+                lastPageNumber = 0,
+                pageNumber = 0,
+                pageSize = 50,
+                totalLength = 1,
+            ),
         )
 
         // When
         api
             .perform(
-                get("/bff/v1/reportings")
-                    .with(authenticatedRequest())
+                get(
+                    "/bff/v1/reportings?reportingPeriod=LAST_3_MONTHS&seafrontGroup=ALL" +
+                        "&sortColumn=REPORTING_DATE&sortDirection=DESC&pageNumber=0&pageSize=50",
+                ).with(authenticatedRequest())
                     .with(csrf()),
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.length()", equalTo(1)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].cfr", equalTo("FRFGRGR")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].isArchived", equalTo(false)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].isDeleted", equalTo(false)))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].underCharter", equalTo(true)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.totalLength", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.extraData.perSeafrontGroupCount.ALL", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()", equalTo(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].cfr", equalTo("FRFGRGR")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].isArchived", equalTo(false)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].isDeleted", equalTo(false)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].underCharter", equalTo(true)))
     }
 
     @Test
@@ -610,17 +626,7 @@ class ReportingControllerITests {
                 latitude = 6.3,
                 longitude = -52.5,
             )
-        given(
-            getReportings.execute(
-                isArchived = anyOrNull(),
-                isIUU = anyOrNull(),
-                reportingType = anyOrNull(),
-                reportingPeriod = any(),
-                startDate = anyOrNull(),
-                endDate = anyOrNull(),
-                ids = anyOrNull(),
-            ),
-        ).willReturn(listOf(Pair(reporting, null)))
+        given(getReportings.execute(any())).willReturn(listOf(Pair(reporting, null)))
 
         // When
         api

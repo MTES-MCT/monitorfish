@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,20 +68,50 @@ msgstr ""
 
 #: ../source/fleet-segments.rst:31
 #: 7469ace8cdb34775b6597c5890831a80
-msgid "Fleet segments computation and display"
+msgid "Fleet segments definition"
 msgstr ""
 
 #: ../source/fleet-segments.rst:33
+#: fd5113a00a6b473ca77f369ca2ff3b30
+msgid "Fleet segments are defined for each year in the :doc:`back office <back-office>`, by their gears, target species, mesh, FAO areas, vessel types and the minimum share of target species in catches. Each segment also has an impact risk factor (see :doc:`risk-factor`). The segments of a new year can be initialized from those of the previous year."
+msgstr ""
+
+#: ../source/fleet-segments.rst:37
+#: 6bc5f9019f774fe19f2a207d8024d0c9
+msgid "The current definitions of fleet segments are published on data.gouv.fr by the :doc:`flows/controls-open-data` flow."
+msgstr ""
+
+#: ../source/fleet-segments.rst:39
+#: 11b798b13cd84e2fa7be5df027c6178d
+msgid "Definitions of fleet segments in the back office"
+msgstr ""
+
+#: ../source/fleet-segments.rst:43
+#: 3d00073fcfad4f0d9a816291910f3321
+msgid "*Definitions of fleet segments in the back office*"
+msgstr ""
+
+#: ../source/fleet-segments.rst:46
+#: 7469ace8cdb34775b6597c5890831a80
+msgid "Fleet segments computation and display"
+msgstr ""
+
+#: ../source/fleet-segments.rst:48
 #: e6456c5da74949339a22e03862e57b75
 msgid "The :doc:`flows/current-segments` flow computes the fleet segments each vessel belongs to in real time, based on ERS data."
 msgstr ""
 
-#: ../source/fleet-segments.rst:35
-#: 171c33ce129e4ffab75546b00bbf019e
-msgid "Fishing vessels' fleet segment(s) can then be visualized on the map in real time, filtered based on their fleet segments..."
+#: ../source/fleet-segments.rst:50
+#: 51ea7de13b424bc2aade10fd4ddfe942
+msgid "Fishing vessels' fleet segment(s) can then be visualized on the map in real time (as vessel labels), in the :doc:`vessel sheet <vessel-sheet>` and in the :doc:`vessel list <vessel-list>`, where vessels can be filtered based on their fleet segments."
 msgstr ""
 
-#: ../source/fleet-segments.rst:38
+#: ../source/fleet-segments.rst:53
+#: 520627cf37a84be19b25a7ec98f2e237
+msgid "The fleet segments of controls are computed when the inspection report is entered (see :doc:`missions-and-controls`), and can be recomputed with the :doc:`flows/recompute-controls-segments` flow. The fleet segments of :doc:`prior notifications <prior-notifications>` are computed by the :doc:`flows/enrich-logbook` flow."
+msgstr ""
+
+#: ../source/fleet-segments.rst:58
 #: 11b798b13cd84e2fa7be5df027c6178d
 msgid "Map showing vessels with fleet segments labels"
 msgstr ""

@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/risk-elements.rst:3
+#: 0db24ac4da4a4a5789a9fb05db93d1d1
+msgid "Risk elements"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:5
+#: 32fb45a6e1f9479087a9950caed96ce0
+msgid "The ``Risk elements`` flow computes, for each vessel and over the last 12 months, a set of **risk elements** which measure the vessel's compliance history, and loads them into the ``vessels_risk_elements`` table :"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:9
+#: 760079134abc4ec6b6649409cc5cbe34
+msgid "Code"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:9
+#: ee89ab6abf3f49e68b6d324089289540
+msgid "Risk element"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:9
+#: 5bae1fbc0fed42e6acd2fa9ce7121ff8
+msgid "Metric"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:11
+#: ffd9655c5df94977a81866a618afd216
+msgid "``PNO_MR``"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:11
+#: 6a25fe95f7834416b907ed8813e8f917
+msgid "Prior notification misrecording"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:11
+#: d603b9f1ecfb43e4a0f61a78182e8049
+msgid "share of trips subject to PNO without a valid (logbook or manual) PNO"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:12
+#: 7f0c23ffc89c4b5e9bf4cb6ee731e446
+msgid "``MOT_MR``"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:12
+#: 41be08d651af4144a7663150c8000d17
+msgid "Exceeding the margin of tolerance"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:12
+#: 60fdad0324354957a668f9e8ddf21260
+msgid "share of trips exceeding the margin of tolerance on declared quantities"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:13
+#: 3ac3c3d5f8c74f028c436517a622a2b8
+msgid "``VMS_MR``"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:13
+#: 24fc27c0ea3d4deaa9c4089ef3397f4e
+msgid "Unjustified VMS failure"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:13
+#: 9572217f766642d9ba3e24b78b8a14fd
+msgid "number of beacon malfunctions"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:14
+#: 91a950dcdc9b46d8b76b4bc3bcc726cf
+msgid "``CLA_CM``"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:14
+#: 7ee7300d215547dd866c08254a3cae0f
+msgid "Fishing in closed area"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:14
+#: a0c1ac059fe14f7aac1fdc80f0f7c419
+msgid "number of occurrences of fishing in closed areas"
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:17
+#: e0523686f6204b1d9d8ba58960218c9a
+msgid "Each metric is converted into a risk level from 1 to 4."
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:19
+#: 55358b6ff97c41028154cf8572365cb7
+msgid "Data is extracted from the Data Warehouse and from the Monitorfish database. The definitions of risk elements, and the threats they characterize, are initialized by the :doc:`init-infraction-threat-characterization` flow."
+msgstr ""
+
+#: ../source/flows/risk-elements.rst:22
+#: 7eee4ccbd8394d6c9c54d580e3db5ba7
+msgid "It is scheduled to run every day."
+msgstr ""

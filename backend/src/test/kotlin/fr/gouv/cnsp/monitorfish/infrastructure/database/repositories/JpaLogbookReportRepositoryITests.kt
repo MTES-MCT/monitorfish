@@ -903,8 +903,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Given
         val currentCorReport = jpaLogbookReportRepository.findById(103)
         assertThat((currentCorReport.message as PNO).isBeingSent).isEqualTo(false)
-        assertThat((currentCorReport.message as PNO).isSent).isEqualTo(true)
-        assertThat((currentCorReport.message as PNO).isVerified).isEqualTo(false)
+        assertThat((currentCorReport.message).isSent).isEqualTo(true)
+        assertThat((currentCorReport.message).isVerified).isEqualTo(false)
 
         // When
         jpaLogbookReportRepository.updatePriorNotificationState(
@@ -918,8 +918,8 @@ class JpaLogbookReportRepositoryITests : AbstractDBTests() {
         // Then
         val updatedCorReport = jpaLogbookReportRepository.findById(103)
         assertThat((updatedCorReport.message as PNO).isBeingSent).isEqualTo(true)
-        assertThat((updatedCorReport.message as PNO).isSent).isEqualTo(false)
-        assertThat((updatedCorReport.message as PNO).isVerified).isEqualTo(true)
+        assertThat((updatedCorReport.message).isSent).isEqualTo(false)
+        assertThat((updatedCorReport.message).isVerified).isEqualTo(true)
     }
 
     @Test

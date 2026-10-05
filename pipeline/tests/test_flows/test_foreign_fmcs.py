@@ -93,11 +93,12 @@ def test_transform_foreign_fmcs_contacts(
     pd.testing.assert_frame_equal(res, transformed_foreign_fmcs)
 
 
+@patch(
+    "src.flows.foreign_fmcs.extract_foreign_fmcs_contacts",
+    mock_extract_foreign_fmcs_contacts,
+)
 def test_foreign_fmcs_flow(reset_test_data, loaded_foreign_fmcs):
-    state = foreign_fmcs_flow(
-        extract_foreign_fmcs_contacts_task=mock_extract_foreign_fmcs_contacts,
-        return_state=True,
-    )
+    state = foreign_fmcs_flow(return_state=True)
 
     assert state.is_completed()
 

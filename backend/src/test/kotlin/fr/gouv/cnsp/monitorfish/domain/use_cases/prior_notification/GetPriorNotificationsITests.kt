@@ -598,13 +598,13 @@ class GetPriorNotificationsITests : AbstractDBTests() {
         assertThat(
             invalidatedPriorNotifications.none {
                 outOfVerificationScopePriorNotificationReportIds.contains(it.reportId!!) ||
-                    zeroPriorNotificationIds.contains(it.reportId!!)
+                    zeroPriorNotificationIds.contains(it.reportId)
             },
         ).isTrue()
         assertThat(
             zeroPriorNotifications.none {
                 outOfVerificationScopePriorNotificationReportIds.contains(it.reportId!!) ||
-                    invalidatedPriorNotificationsIds.contains(it.reportId!!)
+                    invalidatedPriorNotificationsIds.contains(it.reportId)
             },
         ).isTrue()
     }

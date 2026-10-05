@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List, Union
 
 import css_inline
@@ -10,11 +9,11 @@ from prefect import allow_failure, flow, get_run_logger, task, unmapped
 from sqlalchemy import Table, update
 
 from config import (
-    CNSP_LOGO_PATH,
     CNSP_SIP_DEPARTMENT_EMAIL,
     EMAIL_FONTS_LOCATION,
     EMAIL_STYLESHEETS_LOCATION,
     EMAIL_TEMPLATES_LOCATION,
+    MINISTRY_LOGO_PATH,
     SMS_TEMPLATES_LOCATION,
 )
 from src.entities.beacon_malfunctions import (
@@ -25,14 +24,15 @@ from src.entities.beacon_malfunctions import (
 )
 from src.entities.communication_means import CommunicationMeans
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.helpers.emails import (
-    create_fax_email,
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
-    send_email_or_sms_or_fax_message,
+    send_email_or_sms_message,
 )
 from src.helpers.spatial import Position, position_to_position_representation
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import filter_results, flatten
 from src.shared_tasks.infrastructure import execute_statement, get_table
 
@@ -67,18 +67,8 @@ def get_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_sea_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_at_port_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -107,18 +97,8 @@ def get_sms_templates() -> dict:
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_sea_initial_notification.jinja")
         ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
-        ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION: (
             env.get_template("malfunction_at_port_initial_notification.jinja")
-        ),
-        BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION_UNSUPERVISED_BEACON: (
-            env.get_template(
-                "malfunction_initial_notification_unsupervised_beacon.jinja"
-            )
         ),
         BeaconMalfunctionNotificationType.MALFUNCTION_AT_SEA_REMINDER: (
             env.get_template("malfunction_at_sea_reminder.jinja")
@@ -175,16 +155,16 @@ def render(
     if output_format == "html":
         # Fonts shall not be included in email body
         fonts_directory = None
-        logo_src = f"cid:{CNSP_LOGO_PATH.name}"
+        logo_src = f"cid:{MINISTRY_LOGO_PATH.name}"
 
     else:
         fonts_directory = EMAIL_FONTS_LOCATION.as_uri()
-        logo_src = CNSP_LOGO_PATH.as_uri()
+        logo_src = MINISTRY_LOGO_PATH.as_uri()
 
     html = template.render(
         fonts_directory=fonts_directory,
         logo_src=logo_src,
-        notification_date=datetime.utcnow().strftime("%d/%m/%Y"),
+        notification_date=utcnow().strftime("%d/%m/%Y"),
         previous_notification_datetime_utc=previous_notification_datetime_utc,
         object=m.get_notification_subject(),
         vessel_name=m.vessel_name,
@@ -264,7 +244,7 @@ def create_email(
             cc=cc,
             subject=m.get_notification_subject(),
             html=html,
-            images=[CNSP_LOGO_PATH],
+            images=[MINISTRY_LOGO_PATH],
             attachments=[("Notification.pdf", pdf)],
             reply_to=CNSP_SIP_DEPARTMENT_EMAIL,
         )
@@ -295,22 +275,6 @@ def create_sms(
 
 
 @task
-def create_fax(
-    pdf: bytes, m: BeaconMalfunctionToNotify
-) -> BeaconMalfunctionMessageToSend:
-    to = [fax_addressee.address_or_number for fax_addressee in m.get_fax_addressees()]
-
-    if to:
-        return BeaconMalfunctionMessageToSend(
-            message=create_fax_email(to=to, pdf=pdf),
-            beacon_malfunction_to_notify=m,
-            communication_means=CommunicationMeans.FAX,
-        )
-    else:
-        return None
-
-
-@task
 def send_beacon_malfunction_message(
     msg_to_send: BeaconMalfunctionMessageToSend, is_integration: bool
 ) -> List[BeaconMalfunctionNotification]:
@@ -333,10 +297,10 @@ def send_beacon_malfunction_message(
     communication_means = msg_to_send.communication_means
     logger = get_run_logger()
 
-    send_errors = send_email_or_sms_or_fax_message(
+    send_errors = send_email_or_sms_message(
         msg, communication_means, is_integration, logger
     )
-    now = datetime.utcnow()
+    now = utcnow()
 
     notifications = []
 
@@ -402,7 +366,11 @@ def make_reset_requested_notifications_statement(
     return statement
 
 
-@flow(name="Monitorfish - Notify malfunctions")
+@flow(
+    name="Monitorfish - Notify malfunctions",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def notify_beacon_malfunctions_flow(
     test_mode: bool,
     is_integration: bool,
@@ -436,10 +404,7 @@ def notify_beacon_malfunctions_flow(
     sms = create_sms.map(text=sms_text, m=malfunctions_to_notify)
     sms = filter_results(allow_failure(sms))
 
-    fax = create_fax.map(pdf=pdf, m=malfunctions_to_notify)
-    fax = filter_results(allow_failure(fax))
-
-    messages_to_send = flatten([email, sms, fax])
+    messages_to_send = flatten([email, sms])
 
     notifications = send_beacon_malfunction_message.map(
         messages_to_send, is_integration=unmapped(is_integration)

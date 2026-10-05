@@ -1,0 +1,24 @@
+[
+    {
+        "table": "user_layers",
+        "beforeAll": "TRUNCATE TABLE user_layers;",
+        "data": [
+            /**
+            ** SHA256 of another@email.com — the non-super "user" from user_authorizations
+            ** The "super-user" (dummy@email.gouv.fr) has no record, so e2e tests start without any saved layer.
+            **/
+            {
+                "hashed_email": "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
+                "displayed_administrative_layers:jsonb": [
+                    {
+                        "type": "eez_areas",
+                        "zone": null
+                    }
+                ],
+                "displayed_regulatory_zone_ids:jsonb": ["8"],
+                "selected_regulatory_zone_ids:jsonb": ["8"],
+                "base_layer": "SATELLITE"
+            }
+        ]
+    }
+]

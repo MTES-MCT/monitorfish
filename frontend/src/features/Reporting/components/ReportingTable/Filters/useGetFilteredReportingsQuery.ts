@@ -1,104 +1,63 @@
-import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS, RtkCacheTagType } from '@api/constants'
-import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import {
+  RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS,
+  RTK_FORCE_REFETCH_QUERY_OPTIONS,
+  RtkCacheTagType
+} from '@api/constants'
 import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
-import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { useHandleFrontendApiError } from '@hooks/useHandleFrontendApiError'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { CustomSearch } from '@mtes-mct/monitor-ui'
-import { useMemo } from 'react'
 
-import type { InfractionSuspicionReporting, Reporting } from '@features/Reporting/types'
+import type { BackendApi } from '@api/BackendApi.types'
+import type { SeafrontGroup } from '@constants/seafront'
+import type { ReportingsFilter, ReportingsSortColumn } from '@features/Reporting/types'
 
-export const useGetFilteredReportingsQuery = (selectedSeafrontGroup: SeafrontGroup) => {
+type UseGetFilteredReportingsQueryArgs = {
+  apiPaginationParams: BackendApi.RequestPaginationParams
+  apiSortingParams: BackendApi.RequestSortingParams<typeof ReportingsSortColumn>
+  selectedSeafrontGroup: SeafrontGroup
+}
+export const useGetFilteredReportingsQuery = ({
+  apiPaginationParams,
+  apiSortingParams,
+  selectedSeafrontGroup
+}: UseGetFilteredReportingsQueryArgs) => {
+  const filters = useMainAppSelector(state => state.reporting.filters)
   const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
-  const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
   const absentVessel = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
 
-  const { data, error, isError, isLoading } = useGetReportingsQuery(
-    { absentVessel },
-    RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS
+  const { data, error, isError, isFetching, isLoading } = useGetReportingsQuery(
+    {
+      apiPaginationParams,
+      apiSortingParams,
+      filters,
+      listFilter: { absentVessel, seafrontGroup: selectedSeafrontGroup, searchQuery }
+    },
+    { ...RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS, ...RTK_FORCE_REFETCH_QUERY_OPTIONS }
   )
 
   useHandleFrontendApiError(DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR, error, RtkCacheTagType.Reportings)
 
-  const currentSeafrontReportings = useMemo(() => {
-    const currentReportings = data ?? []
-
-    let filtered = filterBySeafrontGroup(currentReportings, selectedSeafrontGroup, r => r.value.seaFront)
-
-    if (reportingTypesDisplayed) {
-      filtered = filtered.filter(reporting => reportingTypesDisplayed.includes(reporting.type))
-    }
-
-    return filtered
-  }, [data, selectedSeafrontGroup, reportingTypesDisplayed])
-
-  const fuse = useMemo(
-    () =>
-      new CustomSearch<Reporting.Reporting>(
-        structuredClone(currentSeafrontReportings),
-        [
-          'vesselName',
-          'internalReferenceNumber',
-          'externalReferenceNumber',
-          'ircs',
-          {
-            getFn: reporting => reporting.value.dml ?? '',
-            name: 'value.dml'
-          },
-          {
-            getFn: reporting => (isInfractionSuspicion(reporting) ? reporting.value.title : ''),
-            name: 'value.title'
-          },
-          {
-            getFn: reporting => {
-              if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
-                return reporting.value.infractions.map((i: any) => i.threatCharacterization).join(' ')
-              }
-              if (reporting.type === ReportingType.ALERT) {
-                return reporting.value.threatCharacterization
-              }
-
-              return ''
-            },
-            name: 'value.threatCharacterization'
-          },
-          {
-            getFn: reporting => {
-              if (reporting.type === ReportingType.INFRACTION_SUSPICION) {
-                return reporting.value.infractions.map((i: any) => i.threat).join(' ')
-              }
-              if (reporting.type === ReportingType.ALERT) {
-                return reporting.value.threat
-              }
-
-              return ''
-            },
-            name: 'value.threat'
-          },
-          'value.name'
-        ],
-        { isCaseSensitive: false, isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
-      ),
-    [currentSeafrontReportings]
-  )
-
-  const filteredReportings = useMemo(() => {
-    if (!currentSeafrontReportings) {
-      return []
-    }
-
-    if (!searchQuery || searchQuery.length <= 1) {
-      return currentSeafrontReportings
-    }
-
-    return fuse.find(searchQuery)
-  }, [currentSeafrontReportings, searchQuery, fuse])
-
-  return { isError, isLoading, reportings: filteredReportings }
+  return {
+    extraData: data?.extraData,
+    isError,
+    isFetching,
+    isLoading,
+    reportings: data?.data,
+    totalLength: data?.totalLength
+  }
 }
 
-function isInfractionSuspicion(reporting: Reporting.Reporting): reporting is InfractionSuspicionReporting {
-  return (<InfractionSuspicionReporting>reporting).value.title !== undefined
+/** The filter values that must reset the pagination back to its first page when they change. */
+export function useReportingsListFilter(selectedSeafrontGroup: SeafrontGroup) {
+  const filters = useMainAppSelector(state => state.reporting.filters)
+  const searchQuery = useMainAppSelector(state => state.reportingTableFilters.searchQuery)
+  const absentVessel = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
+
+  return { absentVessel, filters, searchQuery, selectedSeafrontGroup } satisfies {
+    absentVessel: true | undefined
+    filters: ReportingsFilter
+    searchQuery: string | undefined
+    selectedSeafrontGroup: SeafrontGroup
+  }
 }

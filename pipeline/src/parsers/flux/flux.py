@@ -12,6 +12,7 @@ import pandas as pd
 from dateutil.parser import parse
 
 from src.entities.data_exchange_standards import DataDomain
+from src.helpers.dates import utcnow
 from src.parsers.flux.log_parsers import (
     null_parser,
     parse_coe,
@@ -514,7 +515,7 @@ def batch_parse(report_message_strings: List[str], data_domain: DataDomain) -> d
             batch_generated_errors = True
             continue
 
-        now = datetime.utcnow()
+        now = utcnow()
         raw = {
             "operation_number": operation_number,
             "xml_message": report_message_string,

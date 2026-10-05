@@ -1,9 +1,8 @@
-from datetime import datetime
-
 import pandas as pd
 from prefect import task
 
 from src.generic_tasks import extract
+from src.helpers.dates import utcnow
 
 
 @task
@@ -28,5 +27,5 @@ def extract_control_priorities_and_infringement_risk_levels() -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
         query_filepath="monitorfish/control_priorities_and_infringement_risk_levels.sql",
-        params={"year": datetime.utcnow().year},
+        params={"year": utcnow().year},
     )

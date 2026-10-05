@@ -4,6 +4,15 @@ Activity Report
 
 The activity report (Act-Rep) export is a CSV file sent to the European Fisheries Control Agency (EFCA) to report controls within Joint Deployment Plans (JDPs).
 
+It is exported from the missions list (*"Exporter les ACT-REP"*, see :doc:`missions-and-controls`) for a period and a JDP, 
+with the ISR codes of infractions.
+
+.. image:: _static/img/activity-report.png
+  :width: 800
+  :alt: Export of activity reports from the missions list
+
+*Export of activity reports from the missions list*
+
 The JDPs are :
 
 * **Eastern Atlantic and Mediterranean** (DECISION EFCA 2018/030)

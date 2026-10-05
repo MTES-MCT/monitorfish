@@ -3,6 +3,7 @@ import { DatePickerField } from '@features/Mission/components/MissionForm/Action
 import { FormikGangwayField } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikGangwayField'
 import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
+import { StampEISRModeEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/StampEISRModeEffect'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { FormikCheckbox, FormikEffect, FormikTextarea, Icon } from '@mtes-mct/monitor-ui'
@@ -37,7 +38,7 @@ type SeaControlFormProps = Readonly<{
 }>
 export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc, initialValues.isEISR)
   const validationSchema = isMissionEnded ? getSeaControlFormCompletionSchema(isEISREnabled) : SeaControlFormLiveSchema
 
   return (
@@ -46,6 +47,7 @@ export function SeaControlForm({ initialValues, onChange }: SeaControlFormProps)
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
           <FormikRevalidationEffect />
+          <StampEISRModeEffect />
           <UpdateMissionActionCompletionEffect />
           <ActionFormHeader>
             <Icon.FleetSegment />

@@ -9,11 +9,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetSpeciesFromCode
 import java.time.ZonedDateTime
 
 /**
  * A [MissionAction] enriched with vessel attributes (from the `vessels` table) and JPE / logbook
- * (ERS) data for the trip that was current at the control date.
+ * (ERS) data for the trip that was current at the control date, and the names of the discarded species.
  */
 data class EnrichedMissionAction(
     val missionAction: MissionAction,
@@ -24,6 +25,7 @@ data class EnrichedMissionAction(
     val lastDeparturePortLocode: String? = null,
     val lastDeparturePortName: String? = null,
     val lastDepartureDateTime: ZonedDateTime? = null,
+    val discardedSpeciesNamesByCode: Map<String, String> = emptyMap(),
 )
 
 @UseCase
@@ -31,6 +33,7 @@ class EnrichPublicMissionAction(
     private val vesselRepository: VesselRepository,
     private val logbookReportRepository: LogbookReportRepository,
     private val getLogbookMessages: GetLogbookMessages,
+    private val getSpeciesFromCode: GetSpeciesFromCode,
 ) {
     fun execute(action: MissionAction): EnrichedMissionAction {
         val vessel = action.vesselId?.let { vesselRepository.findVesselById(it) }
@@ -69,6 +72,13 @@ class EnrichPublicMissionAction(
                 .lastOrNull()
         val depValue = dep?.message as? DEP
 
+        val discardedSpeciesNamesByCode =
+            action.discardedSpecies
+                .map { it.speciesCode }
+                .distinct()
+                .mapNotNull { code -> getSpeciesFromCode.execute(code)?.let { code to it.name } }
+                .toMap()
+
         return EnrichedMissionAction(
             missionAction = action,
             vessel = vessel,
@@ -78,6 +88,7 @@ class EnrichPublicMissionAction(
             lastDeparturePortLocode = depValue?.departurePort,
             lastDeparturePortName = depValue?.departurePortName,
             lastDepartureDateTime = depValue?.departureDateTime,
+            discardedSpeciesNamesByCode = discardedSpeciesNamesByCode,
         )
     }
 }

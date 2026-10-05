@@ -7,6 +7,7 @@ from prefect import task
 from config import HEALTHCHECK_ENDPOINT
 from src.entities.monitorfish_healthcheck import MonitorfishHealthcheck
 from src.exceptions import MonitorfishHealthError
+from src.helpers.dates import utcnow as _utcnow
 
 
 @task
@@ -49,7 +50,7 @@ def assert_positions_received_by_api_health(
           `max_minutes_without_data`.
     """
     if not utcnow:
-        utcnow = datetime.utcnow()
+        utcnow = _utcnow()
 
     time_without_data = utcnow - healthcheck.date_last_position_received_by_api
     minutes_without_data = time_without_data.total_seconds() / 60
@@ -90,7 +91,7 @@ def assert_last_positions_flow_health(
           `max_minutes_without_data`.
     """
     if not utcnow:
-        utcnow = datetime.utcnow()
+        utcnow = _utcnow()
 
     time_without_data = utcnow - healthcheck.date_last_position_updated_by_prefect
     minutes_without_data = time_without_data.total_seconds() / 60
@@ -130,7 +131,7 @@ def assert_logbook_health(
           `max_minutes_without_data`.
     """
     if not utcnow:
-        utcnow = datetime.utcnow()
+        utcnow = _utcnow()
 
     time_without_data = utcnow - healthcheck.date_logbook_message_received
     minutes_without_data = time_without_data.total_seconds() / 60

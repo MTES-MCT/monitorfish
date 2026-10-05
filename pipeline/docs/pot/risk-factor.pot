@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,17 +123,17 @@ msgstr ""
 msgid "Where"
 msgstr ""
 
-#: ../source/risk-factor.rst:0
+#: ../source/risk-factor.rst:68
 #: 78b489cce2c340aeb9509bba20f5ab48
 msgid ":math:`i` is the index of the control, from most recent (0) to least recent (9)"
 msgstr ""
 
-#: ../source/risk-factor.rst:0
+#: ../source/risk-factor.rst:69
 #: 0c5c125d41ee4be6ad809ac2db7d8736
 msgid ":math:`I_i` is the number of fishing infractions committed and picked up during the control :math:`i`"
 msgstr ""
 
-#: ../source/risk-factor.rst:0
+#: ../source/risk-factor.rst:70
 #: 606b62e863f54a5b99daf03b06ad5337
 msgid ":math:`\\delta_{0I_i}` is equal to 1 if :math:`I_i=0` and equal to 0 otherwise"
 msgstr ""

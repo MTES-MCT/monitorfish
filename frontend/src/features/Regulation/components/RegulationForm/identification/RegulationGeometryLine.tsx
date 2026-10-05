@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { ContentLine } from '../../../../commonStyles/Backoffice.style'
 import { Label } from '../../../../commonStyles/Input.style'
 import { regulationActions } from '../../../slice'
-import { DEFAULT_MENU_CLASSNAME, REGULATORY_REFERENCE_KEYS } from '../../../utils'
+import { DEFAULT_MENU_CLASSNAME } from '../../../utils'
 
 export function RegulationGeometryLine({
   geometryIdList,
@@ -14,10 +14,12 @@ export function RegulationGeometryLine({
   setIsRegulatoryPreviewDisplayed
 }) {
   const dispatch = useBackofficeAppDispatch()
-  const id = useBackofficeAppSelector(state => state.regulation.processingRegulation?.id)
+  const displayedGeometryId = useBackofficeAppSelector(
+    state => state.regulation.processingRegulation?.geometryId ?? state.regulation.processingRegulation?.id
+  )
 
   const onCloseIconClicked = async () => {
-    dispatch(regulationActions.updateProcessingRegulationByKey({ key: REGULATORY_REFERENCE_KEYS.ID, value: undefined }))
+    dispatch(regulationActions.updateProcessingRegulationByKey({ key: 'geometryId', value: undefined }))
     setIsRegulatoryPreviewDisplayed(false)
   }
 
@@ -25,22 +27,22 @@ export function RegulationGeometryLine({
     <ContentLine>
       <Label>Géométrie</Label>
       <StyledSelect
-        error={id ? undefined : 'Géometrie requise.'}
+        error={displayedGeometryId ? undefined : 'Géometrie requise.'}
         isErrorMessageHidden
         isLabelHidden
         label="Choisir un tracé"
         menuClassName={DEFAULT_MENU_CLASSNAME}
         name="Choisir un tracé"
         onChange={value => {
-          dispatch(regulationActions.updateProcessingRegulationByKey({ key: 'id', value }))
+          dispatch(regulationActions.updateProcessingRegulationByKey({ key: 'geometryId', value }))
         }}
         options={geometryIdList}
         placeholder="Choisir un tracé"
         style={{ width: '200px' }}
       />
-      {id && (
+      {displayedGeometryId && (
         <>
-          <SingleTag onDelete={onCloseIconClicked}>{id as unknown as string}</SingleTag>
+          <SingleTag onDelete={onCloseIconClicked}>{String(displayedGeometryId)}</SingleTag>
           <IconButton
             accent={Accent.TERTIARY}
             Icon={isRegulatoryPreviewDisplayed ? Icon.Hide : Icon.Display}

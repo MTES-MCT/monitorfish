@@ -1,9 +1,9 @@
 from io import BytesIO
 from unittest.mock import patch
 
-import fiona
 import geopandas as gpd
 import pandas as pd
+import pyogrio
 from prefect.logging import disable_run_logger
 
 from src.shared_tasks.datagouv import (
@@ -106,7 +106,7 @@ def test_get_geopackage_file_object_with_layers():
     assert isinstance(file_object, BytesIO)
 
     layer_1, layer_2 = ["a", "b"]
-    assert fiona.listlayers(file_object) == [layer_1, layer_2]
+    assert list(pyogrio.list_layers(file_object)[:, 0]) == [layer_1, layer_2]
 
     file_object.seek(0)
     gdf_from_file_object = gpd.read_file(file_object, driver="GPKG", layer=layer_1)

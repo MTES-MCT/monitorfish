@@ -1244,10 +1244,17 @@ def test_flow(mock_move, reset_test_data, expected_sales_notes):
     treated_directory = (ZIPFILES_TEST_DATA_LOCATION / "test_flow/treated").as_posix()
     error_directory = (ZIPFILES_TEST_DATA_LOCATION / "test_flow/error").as_posix()
 
-    logbook_query = "SELECT * FROM logbook_reports"
+    # Rows with a 'BMF_' operation_number are fixture data for the beacon malfunction
+    # activity detection tests (see V666.5 and V666.51) and are excluded here.
+    logbook_query = (
+        "SELECT * FROM logbook_reports WHERE operation_number NOT LIKE 'BMF%'"
+    )
     initial_logbook_reports = read_query(logbook_query, db="monitorfish_remote")
 
-    sales_notes_query = "SELECT * FROM sales_notes ORDER BY operation_number"
+    sales_notes_query = (
+        "SELECT * FROM sales_notes WHERE operation_number NOT LIKE 'BMF%' "
+        "ORDER BY operation_number"
+    )
     sales_notes_raw_query = "SELECT * FROM sales_notes_raw_messages"
     initial_sales_notes = read_query(sales_notes_query, db="monitorfish_remote")
     initial_sales_notes_raw_messages = read_query(

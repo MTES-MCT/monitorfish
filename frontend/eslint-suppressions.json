@@ -167,11 +167,6 @@
       "count": 1
     }
   },
-  "src/features/FavoriteVessel/components/FavoriteVessels/FavoriteVessel.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
   "src/features/FleetSegment/apis.ts": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1

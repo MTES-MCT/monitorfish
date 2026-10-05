@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from logging import Logger
 
 import pandas as pd
@@ -17,7 +17,7 @@ from src.read_query import read_query
 
 
 def test_extract_positions(reset_test_data):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     period = Period(
         start=now - timedelta(days=1, minutes=10), end=now + timedelta(minutes=1)
     )
@@ -360,7 +360,7 @@ def test_load_fishing_activity(reset_test_data):
         }
     )
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     period = Period(start=now - timedelta(hours=4), end=now)
     logger = Logger("logger")
 
@@ -411,7 +411,7 @@ def test_extract_enrich_load(reset_test_data):
         db="monitorfish_remote",
     )
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     period = Period(start=now - timedelta(hours=4, minutes=30), end=now)
     extract_enrich_load(
         period,

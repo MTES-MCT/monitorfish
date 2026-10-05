@@ -46,13 +46,15 @@ from src.entities.pnos import (
     ReturnToPortPurpose,
 )
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.helpers.emails import (
     create_html_email,
     create_sms_email,
     resize_pdf_to_A4,
-    send_email_or_sms_or_fax_message,
+    send_email_or_sms_message,
 )
 from src.read_query import read_query
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.control_flow import filter_results, flatten
 from src.shared_tasks.control_units import fetch_control_units
 from src.shared_tasks.dates import get_utcnow, make_timedelta
@@ -496,7 +498,9 @@ def render_pno(
         purpose_suffix=pno.purpose_suffix,
         is_zero=pno.is_zero,
         is_correction=pno.is_correction,
-        previous_notification_date_utc=format_nullable_datetime(pno.previous_notification_date_utc),
+        previous_notification_date_utc=format_nullable_datetime(
+            pno.previous_notification_date_utc
+        ),
     )
 
     html_email_body = email_body_template.render(
@@ -524,7 +528,9 @@ def render_pno(
         purpose=pno.purpose,
         is_zero=pno.is_zero,
         is_correction=pno.is_correction,
-        previous_notification_date_utc=format_nullable_datetime(pno.previous_notification_date_utc),
+        previous_notification_date_utc=format_nullable_datetime(
+            pno.previous_notification_date_utc
+        ),
     )
 
     sms_date_format = "%d/%m/%Y, %Hh%M UTC"
@@ -565,7 +571,7 @@ def render_pno(
         source=pno.source,
         html_for_pdf=html_for_pdf,
         pdf_document=pdf,
-        generation_datetime_utc=datetime.utcnow(),
+        generation_datetime_utc=utcnow(),
         html_email_body=html_email_body,
         sms_content=sms_content,
         purpose_suffix=pno.purpose_suffix,
@@ -818,7 +824,7 @@ def send_pno_message(
 ) -> List[PriorNotificationSentMessage]:
     logger = get_run_logger()
 
-    send_errors = send_email_or_sms_or_fax_message(
+    send_errors = send_email_or_sms_message(
         pno_to_send.message, pno_to_send.communication_means, is_integration, logger
     )
 
@@ -842,7 +848,7 @@ def send_pno_message(
             PriorNotificationSentMessage(
                 prior_notification_report_id=pno_to_send.pno.report_id,
                 prior_notification_source=pno_to_send.pno.source,
-                date_time_utc=datetime.utcnow(),
+                date_time_utc=utcnow(),
                 communication_means=pno_to_send.communication_means,
                 recipient_address_or_number=addressee.email_address_or_number,
                 success=success,
@@ -1058,7 +1064,11 @@ def make_manual_prior_notifications_statement(
         return statement
 
 
-@flow(name="Monitorfish - Distribute pnos")
+@flow(
+    name="Monitorfish - Distribute pnos",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def distribute_pnos_flow(
     test_mode: bool,
     is_integration: bool,

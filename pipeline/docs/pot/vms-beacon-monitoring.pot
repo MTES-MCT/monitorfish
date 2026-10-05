@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,40 @@ msgstr ""
 
 #: ../source/vms-beacon-monitoring.rst:5
 #: 52d323736e314141a01b4199b069e154
-msgid "A module of Monitorfish is dedicated to monitoring the emission of VMS beacons - which are required by law to emit constantly. When a VMS beacon censes to emit, a malfunction is generated in Monitorfish. The vessel captain and satellite operator are notified and the malfunction can be tracked in a dedicated kanban until the malfunction is resolved."
+msgid "A module of Monitorfish is dedicated to monitoring the emission of VMS beacons - which are required by law to emit constantly."
 msgstr ""
 
-#: ../source/vms-beacon-monitoring.rst:9
+#: ../source/vms-beacon-monitoring.rst:7
+#: 52d323736e314141a01b4199b069e154
+msgid "When a VMS beacon ceases to emit (see :doc:`flows/update-beacon-malfunctions`), a malfunction is generated in Monitorfish. Malfunctions can be tracked in a dedicated kanban (*\"Suivi VMS\"*, super users) until the malfunction is resolved."
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:10
 #: 389698286064437c927bfc1d679f3c84
 msgid "Kanban of beacon malfunctions"
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:14
+#: 11f3bc874d434edfa7235a87792f22ce
+msgid "For each malfunction, FMC agents can :"
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:16
+#: 417ec20c41a6468e9a76b4c204eafcd0
+msgid "move it between the stages of the kanban, and update the status of the vessel (at sea, at port, activity detected...)"
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:17
+#: a49f564c266f41d9af560170c95bb84a
+msgid "add comments, and read the history of the malfunction"
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:18
+#: 3e5c1e205ba54a7394607798425222a8
+msgid "send notifications to the vessel captain and operator, and to the satellite operator - initial notification, reminder, end of malfunction - or notify a foreign FMC when the vessel is in foreign waters. Notifications are sent by email, SMS and fax by the :doc:`flows/notify-beacon-malfunctions` flow."
+msgstr ""
+
+#: ../source/vms-beacon-monitoring.rst:22
+#: 00dac5e95e474cabaeb103575abd404a
+msgid "The history of beacon malfunctions of each vessel is also visible in its :doc:`vessel sheet <vessel-sheet>`."
 msgstr ""

@@ -9,3 +9,5 @@ After each inspection, the inspection report is entered into a dedicated form.
   :alt: Inspection report form
 
 This data is then visible on the inspection history of each vessel and used to compute the vessel's :doc:`risk-factor`.
+
+See :doc:`missions-and-controls` for a full description of missions and inspection reports.

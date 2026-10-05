@@ -12,6 +12,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingPeriod
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.control_units.GetAllLegacyControlUnits
@@ -44,13 +45,15 @@ class GetReportingsUTests {
         endDate: ZonedDateTime? = null,
         ids: List<Int>? = null,
     ) = GetReportings(reportingRepository, getAllLegacyControlUnits).execute(
-        isArchived = isArchived,
-        isIUU = isIUU,
-        reportingType = reportingType,
-        reportingPeriod = reportingPeriod,
-        startDate = startDate,
-        endDate = endDate,
-        ids = ids,
+        ReportingsFilter(
+            isArchived = isArchived,
+            isIUU = isIUU,
+            reportingType = reportingType,
+            reportingPeriod = reportingPeriod,
+            startDate = startDate,
+            endDate = endDate,
+            ids = ids,
+        ),
     )
 
     // --- filter / date logic ---

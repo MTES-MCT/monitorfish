@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,11 @@ msgid "Controls open data"
 msgstr ""
 
 #: ../source/flows/controls-open-data.rst:5
-#: 766fe2871f924d8a8503e75e8e44b890
-msgid "The ``Controls open data`` flow extract control statistics and updates the controls open dataset on data.gouv.fr."
+#: 8078badf01a04cab935b6cecaffa5ab2
+msgid "The ``Controls open data`` flow extracts control statistics and the current definitions of :doc:`fleet segments <../fleet-segments>`, and updates the corresponding open datasets on `data.gouv.fr <https://www.data.gouv.fr>`__."
+msgstr ""
+
+#: ../source/flows/controls-open-data.rst:9
+#: 04af0c3fb9d545578c9c30c4b125f5d2
+msgid "It is scheduled to run every Friday."
 msgstr ""

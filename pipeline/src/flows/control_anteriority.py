@@ -7,7 +7,9 @@ from dateutil.relativedelta import relativedelta
 from prefect import flow, get_run_logger, task
 
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.processing import remove_nones_from_list, try_get_factory
+from src.sentry import report_flow_failure_to_sentry
 
 ######## Parameters for control rate and infraction rate risk factor components ########
 
@@ -257,7 +259,7 @@ def compute_control_rate_risk_factors(controls: pd.DataFrame) -> pd.DataFrame:
 
     controls_ = controls[columns].copy(deep=True)
 
-    now = pytz.utc.localize(datetime.utcnow())
+    now = pytz.utc.localize(utcnow())
 
     # Compute the number of "recent controls" of each vessen with a discount
     # coefficient on control dates and get the datetime of the last control of each
@@ -450,7 +452,7 @@ def compute_control_statistics(controls: pd.DataFrame) -> pd.DataFrame:
         controls[
             (
                 controls.control_datetime_utc
-                > pytz.utc.localize(datetime.utcnow()) - relativedelta(years=3)
+                > pytz.utc.localize(utcnow()) - relativedelta(years=3)
             )
         ]
         .groupby("vessel_id")["id"]
@@ -525,7 +527,11 @@ def load_control_anteriority(control_anteriority: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Control anteriority")
+@flow(
+    name="Monitorfish - Control anteriority",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def control_anteriority_flow(number_years: int = 5):
     # Extract
     controls = extract_last_years_controls(number_years)

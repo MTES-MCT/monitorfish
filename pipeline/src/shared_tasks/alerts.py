@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List
 
 import pandas as pd
@@ -12,6 +11,7 @@ from config import (
 from src.db_config import create_engine
 from src.entities.alerts import AlertType
 from src.generic_tasks import extract, load
+from src.helpers.dates import utcnow
 from src.processing import (
     df_to_dict_series,
     join_on_multiple_keys,
@@ -181,7 +181,7 @@ def make_alerts(
         }
     )
 
-    alerts["creation_date"] = datetime.utcnow()
+    alerts["creation_date"] = utcnow()
 
     if "latitude" not in alerts:
         alerts["latitude"] = None

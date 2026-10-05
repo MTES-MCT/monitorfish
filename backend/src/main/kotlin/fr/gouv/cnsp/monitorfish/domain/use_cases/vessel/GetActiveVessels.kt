@@ -1,7 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.vessel
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.filters.PriorNotificationsFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.CurrentReporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
@@ -42,18 +41,10 @@ class GetActiveVessels(
             )
         val vesselGroups = getAllUserVesselGroups.execute(userEmail)
 
-        val priorNotificationsFilter =
-            PriorNotificationsFilter(
-                willArriveAfter = now,
-                willArriveBefore = now.plusDays(2),
-            )
         val futurePriorNotificationsGroupByInternalReferenceNumber =
             (
-                logbookReportRepository
-                    .findAllAcknowledgedPriorNotifications(priorNotificationsFilter) +
-                    manualPriorNotificationRepository.findAll(
-                        priorNotificationsFilter,
-                    )
+                logbookReportRepository.findAllAcknowledgedPriorNotificationsForActiveVessels() +
+                    manualPriorNotificationRepository.findAllForActiveVessels()
             ).groupBy { it.vessel?.internalReferenceNumber }
 
         return lastPositionsWithProfileAndVessel

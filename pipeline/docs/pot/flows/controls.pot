@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,5 +28,5 @@ msgstr ""
 
 #: ../source/flows/controls.rst:8
 #: 230b1528d9a04a32a10d0ac15e1d4c0a
-msgid "This flow was used to import inspection data from the legacy system which existed before Monitorfish. Since the development of :doc:`../inspection-data-entry` in Monitorfish, this flow is not used any more (but could be if a new import of legacy data were to be necessary)."
+msgid "This flow was used to import inspection data from the legacy system which existed before Monitorfish. Since the development of :doc:`missions and controls data entry <../missions-and-controls>` in Monitorfish, this flow is not used any more (but could be if a new import of legacy data were to be necessary)."
 msgstr ""

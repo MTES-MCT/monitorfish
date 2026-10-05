@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from prefect import task
 
 from src.helpers import dates
+from src.helpers.dates import utcnow
 
 
 class TimeUnit(Enum):
@@ -20,8 +21,8 @@ class TimeUnit(Enum):
 
 @task
 def get_utcnow():
-    """Task version of `datetime.utcnow`"""
-    return datetime.utcnow()
+    """Task version of `src.helpers.dates.utcnow`"""
+    return utcnow()
 
 
 @task
@@ -50,12 +51,12 @@ def date_trunc(d: datetime, unit: str):
 @task
 def get_current_year() -> int:
     """Returns current year"""
-    return datetime.utcnow().year
+    return utcnow().year
 
 
 @task
 def get_timezone_aware_utcnow():
-    return pytz.UTC.localize(datetime.utcnow())
+    return pytz.UTC.localize(utcnow())
 
 
 @task
@@ -91,7 +92,7 @@ def make_periods(
     See `src.helpers.dates.make_periods` for help.
     """
 
-    now = datetime.utcnow()
+    now = utcnow()
 
     return dates.make_periods(
         start_datetime_utc=now - timedelta(hours=start_hours_ago),

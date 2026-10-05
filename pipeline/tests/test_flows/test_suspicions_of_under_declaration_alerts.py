@@ -14,8 +14,10 @@ from src.read_query import read_query
 
 @pytest.fixture
 def expected_suspicions_of_under_declaration() -> pd.DataFrame:
-    today_at_zero_hours = datetime.utcnow().replace(
-        hour=0, minute=0, second=0, microsecond=0
+    today_at_zero_hours = (
+        datetime.now(timezone.utc)
+        .replace(tzinfo=None)
+        .replace(hour=0, minute=0, second=0, microsecond=0)
     )
     one_day = timedelta(days=1)
     return pd.DataFrame(

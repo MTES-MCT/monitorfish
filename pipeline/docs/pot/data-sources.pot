@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,71 +27,126 @@ msgid "VMS positions"
 msgstr ""
 
 #: ../source/data-sources.rst:7
-#: e1f9a39829a54fc79fda1e58450e8b7c
-msgid "VMS positions are received on an API endpoint provided by the Kotlin Springboot backend service."
+#: 943fe5a6c0d8407d96b68ea9bec64bcd
+msgid "VMS positions are received on an API endpoint (``POST /api/v1/positions``, NAF format) provided by the Kotlin Spring Boot backend service, and enriched by the :doc:`flows/enrich-positions` flow."
 msgstr ""
 
-#: ../source/data-sources.rst:10
-#: 2a4d1189daa84c218601b345ce31ce37
-msgid "Logbook xml files"
+#: ../source/data-sources.rst:11
+#: 45a1e364fcda41a48c0bc8352d44497b
+msgid "AIS positions"
 msgstr ""
 
-#: ../source/data-sources.rst:12
+#: ../source/data-sources.rst:13
+#: 1ec1932fa87a4589b3f073b0020dd2a6
+msgid "AIS positions are consumed by the backend from a Kafka topic, and aggregated by the :doc:`flows/last-positions` flow."
+msgstr ""
+
+#: ../source/data-sources.rst:16
+#: 4284cc229bf74203a7f64a8878015dd1
+msgid "Logbook and sales notes files"
+msgstr ""
+
+#: ../source/data-sources.rst:18
 #: cd443d34553443ec8440bbea352457ee
-msgid "Logbook raw xml files are ingested by the :doc:`flows/logbook` flow from the `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/pipeline/config.py>`__ where logbook xml files must be deposited."
+msgid "Logbook (ERS and FLUX formats) and sales notes raw xml files are ingested by the :doc:`flows/sales-and-logbook` flow from the `configured location <https://github.com/MTES-MCT/monitorfish/blob/master/pipeline/config.py>`__ where zip files must be deposited."
 msgstr ""
 
-#: ../source/data-sources.rst:17
+#: ../source/data-sources.rst:23
 #: 8c2857c0665b4438aa913e470d900a64
 msgid "Databases"
 msgstr ""
 
-#: ../source/data-sources.rst:19
+#: ../source/data-sources.rst:25
 #: 695d9749ca1d479fbc00df6d32c405bf
 msgid "Data is imported - and kept in sync by periodically reimporting data - from these databases :"
 msgstr ""
 
-#: ../source/data-sources.rst:21
+#: ../source/data-sources.rst:27
 #: 422b1188c1e6498ba1829bc5f00d6338
 msgid "The OCAN database for :doc:`flows/vessels`"
 msgstr ""
 
-#: ../source/data-sources.rst:22
-#: 465bc0eeddd240f8ac43fd822b878f8b
-msgid "The FMC2 database for :doc:`flows/beacons`"
+#: ../source/data-sources.rst:28
+#: 75d45bdc0efb41f19bcb1d0542e22ac2
+msgid "The FMC2 database for :doc:`flows/beacons`, :doc:`flows/infractions`, :doc:`flows/foreign-fmcs` and legacy :doc:`flows/controls`"
 msgstr ""
 
-#: ../source/data-sources.rst:23
+#: ../source/data-sources.rst:29
 #: 7da5cd01b01a4e92b3be8aba2289a6c7
-msgid "A data warehouse (also developped by the same team : https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse) for :doc:`flows/vessel-profiles`"
+msgid "A data warehouse (also developped by the same team : https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse) for :doc:`flows/vessel-profiles`, :doc:`flows/activity-visualizations`, :doc:`flows/risk-elements` and :doc:`flows/trips-snapshot`"
 msgstr ""
 
-#: ../source/data-sources.rst:24
+#: ../source/data-sources.rst:31
 #: 75d45bdc0efb41f19bcb1d0542e22ac2
 msgid "The CROSS-A database for :doc:`flows/administrative-areas`, :doc:`flows/facade-areas`, :doc:`flows/ports`, :doc:`flows/regulations`"
 msgstr ""
 
-#: ../source/data-sources.rst:26
+#: ../source/data-sources.rst:32
+#: 75d45bdc0efb41f19bcb1d0542e22ac2
+msgid "The Monitorenv database for :doc:`flows/missions` and :doc:`flows/control-units`"
+msgstr ""
+
+#: ../source/data-sources.rst:34
 #: 6b92a5bc2f0a4818976d4c2a8852b853
 msgid "Credentials for these data sources must be configured for Monitorfish to connect to them. See :ref:`environment_variables`."
 msgstr ""
 
-#: ../source/data-sources.rst:29
+#: ../source/data-sources.rst:37
 #: bca05d2157e140c7a9de92edc88fd787
 msgid "Other sources"
 msgstr ""
 
-#: ../source/data-sources.rst:31
+#: ../source/data-sources.rst:39
 #: 4d1902e5455a4fb38daa1c161271bd33
 msgid "The following sources are also used :"
 msgstr ""
 
-#: ../source/data-sources.rst:33
-#: 0bcde0c09e3e419bbe948fad1e64fbbd
-msgid "The `fao.org <https://www.fao.org/>`__ website for FAO areas and species referencials"
+#: ../source/data-sources.rst:41
+#: 0551da53636b4871b5a2ede06b349455
+msgid "The Monitorenv API, read by the backend for missions, control units and stations (see :ref:`integrations`)"
 msgstr ""
 
-#: ../source/data-sources.rst:34
+#: ../source/data-sources.rst:42
+#: d5dbc029f1e74fd6a80b80f3d16aa2cb
+msgid "The `FAO geoserver <https://www.fao.org/fishery/geoserver/fifao/ows>`__ for :doc:`flows/fao-areas`"
+msgstr ""
+
+#: ../source/data-sources.rst:43
+#: add48f4b85324c9cbaf85d311f7057ba
+msgid "Open datasets on `data.gouv.fr <https://www.data.gouv.fr>`__ for :doc:`flows/species` and :doc:`flows/anchorages`"
+msgstr ""
+
+#: ../source/data-sources.rst:44
+#: 453d28f4f24441f58aac0140993de9a3
+msgid "Hard coded csv files (``pipeline/src/data/``) for :doc:`flows/districts`, :doc:`flows/fishing-gears`, :doc:`flows/species-groups`, :doc:`flows/init-pno-types` and :doc:`flows/init-infraction-threat-characterization`"
+msgstr ""
+
+#: ../source/data-sources.rst:46
 #: 2158fc6be3ee4aeeb7cb3dc5a432d547
-msgid "The legipeche intranet website is scraped and user for for :doc:`regulations data checkup <flows/regulations-checkup>`"
+msgid "The legipeche intranet website is scraped and used for :doc:`regulations data checkup <flows/regulations-checkup>`"
+msgstr ""
+
+#: ../source/data-sources.rst:49
+#: e17b3eccb6fa4a2cbfb971a3919bbcec
+msgid "Data publication"
+msgstr ""
+
+#: ../source/data-sources.rst:51
+#: a8dfdfb223ef419996914410a23f5a5d
+msgid "Monitorfish publishes the following open datasets :"
+msgstr ""
+
+#: ../source/data-sources.rst:53
+#: 422b1188c1e6498ba1829bc5f00d6338
+msgid "ports : :doc:`flows/ports`"
+msgstr ""
+
+#: ../source/data-sources.rst:54
+#: 472e60509798493b9195e3d642906a6f
+msgid "control statistics and fleet segments : :doc:`flows/controls-open-data`"
+msgstr ""
+
+#: ../source/data-sources.rst:55
+#: e71c691f76a84fdbb5cd816df52177fa
+msgid "regulated fishing areas, on data.gouv.fr and the Géoplateforme : :doc:`flows/regulations-open-data`"
 msgstr ""

@@ -574,13 +574,14 @@ def test_get_recipients():
     assert recipients == ["cnsp.france@test.email"]
 
 
+@patch("src.flows.regulations_checkup.send_message", mock_send_message)
+@patch("src.flows.regulations_checkup.get_dead_links", mock_get_dead_links)
+@patch(
+    "src.flows.regulations_checkup.get_utcnow",
+    get_utcnow_mock_factory(datetime.datetime(2031, 5, 19, 11, 14)),
+)
 def test_flow(reset_test_data: None):
-    state = regulations_checkup_flow(
-        get_utcnow_fn=get_utcnow_mock_factory(datetime.datetime(2031, 5, 19, 11, 14)),
-        get_dead_links_fn=mock_get_dead_links,
-        send_message_fn=mock_send_message,
-        return_state=True,
-    )
+    state = regulations_checkup_flow(return_state=True)
 
     assert state.is_completed()
 

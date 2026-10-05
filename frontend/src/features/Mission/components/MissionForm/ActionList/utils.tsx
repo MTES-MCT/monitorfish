@@ -1,8 +1,9 @@
 import { Flag } from '@features/commonComponents/Flag'
 import { getFlatInfractionFromThreatsHierarchy } from '@features/Mission/components/MissionForm/ActionForm/utils'
-import { E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { computeIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { generateMissionActionDraftKey } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
+import { mainStore } from '@store'
 import dayjs from 'dayjs'
 import { omit } from 'lodash-es'
 import styled from 'styled-components'
@@ -92,13 +93,21 @@ export function getDuplicatedMissionActionFormValues(
 
 export function getMissionActionFormInitialValues(type: MissionAction.MissionActionType): MissionActionFormValues {
   const actionDatetimeUtc = dayjs().startOf('minute').toISOString()
+  const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
+  const isEISR = computeIsEISREnabled(
+    controlUnits.map(controlUnit => controlUnit.id),
+    actionDatetimeUtc
+  )
 
   return {
     actionDatetimeUtc,
     actionType: type,
     completion: CompletionStatus.TO_COMPLETE,
     draftKey: generateMissionActionDraftKey(),
-    isUnitBoarded: E_ISR_ENABLED && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
+    // Never stored as `false`: the mode is only ever stamped on, so that an action created before
+    // its mission got its control unit can still switch to e-ISR later on.
+    isEISR: isEISR || undefined,
+    isUnitBoarded: isEISR && type === MissionAction.MissionActionType.SEA_CONTROL ? true : undefined,
     isValid: false
   }
 }

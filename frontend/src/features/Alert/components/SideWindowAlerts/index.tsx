@@ -1,9 +1,7 @@
-import { RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS } from '@api/constants'
-import { filterBySeafrontGroup, SeafrontGroup, seafrontGroupSupportsAbsentVesselFilter } from '@constants/seafront'
+import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { AlertManagementForm } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm'
 import { AlertsManagementList } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList'
-import { useGetReportingsQuery } from '@features/Reporting/reportingApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback } from 'react'
@@ -25,10 +23,7 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
   const editedAlertSpecification = useMainAppSelector(state => state.alert.editedAlertSpecification)
   const subMenu = useMainAppSelector(state => state.alert.subMenu)
   const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
-  const reportingTypesDisplayed = useMainAppSelector(state => state.reportingTableFilters.reportingTypesDisplayed)
-  const absentVessel = useMainAppSelector(state => state.reportingTableFilters.absentVessel)
-
-  const { data: currentReportings } = useGetReportingsQuery({ absentVessel }, RTK_FIVE_MINUTES_POLLING_QUERY_OPTIONS)
+  const perSeafrontGroupCount = useMainAppSelector(state => state.reportingTableFilters.perSeafrontGroupCount)
 
   const handleSubMenuChange = useCallback(
     (nextSubMenu: AlertSubMenu) => {
@@ -49,22 +44,13 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
       }
 
       if (selectedTab === AlertAndReportingTab.REPORTING) {
-        if (absentVessel && !seafrontGroupSupportsAbsentVesselFilter(group)) {
-          return 0
-        }
-
-        let filtered = filterBySeafrontGroup(currentReportings ?? [], group, r => r.value.seaFront)
-
-        if (reportingTypesDisplayed) {
-          filtered = filtered.filter(reporting => reportingTypesDisplayed.includes(reporting.type))
-        }
-
-        return filtered.length
+        // Counted backend-side over the whole filtered set, before the seafront filter is applied.
+        return perSeafrontGroupCount?.[group] ?? 0
       }
 
       return 0
     },
-    [absentVessel, currentReportings, pendingAlerts, reportingTypesDisplayed, selectedTab]
+    [pendingAlerts, perSeafrontGroupCount, selectedTab]
   )
 
   return (

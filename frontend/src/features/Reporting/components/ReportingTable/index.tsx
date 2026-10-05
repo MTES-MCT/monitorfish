@@ -1,3 +1,4 @@
+import { BackendApi } from '@api/BackendApi.types'
 import { WindowContext } from '@api/constants'
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { ErrorWall } from '@components/ErrorWall'
@@ -7,24 +8,31 @@ import { getReportingTableColumns } from '@features/Reporting/components/Reporti
 import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
 import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
 import { Filters } from '@features/Reporting/components/ReportingTable/Filters'
-import { useGetFilteredReportingsQuery } from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
+import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
+import {
+  useGetFilteredReportingsQuery,
+  useReportingsListFilter
+} from '@features/Reporting/components/ReportingTable/Filters/useGetFilteredReportingsQuery'
 import { TableBodyEmptyData } from '@features/Reporting/components/ReportingTable/TableBodyEmptyData'
 import { getRowCellCustomStyle } from '@features/Reporting/components/ReportingTable/utils'
+import { DEFAULT_PAGE_SIZE } from '@features/Reporting/constants'
+import { ReportingsSortColumn } from '@features/Reporting/types'
 import { Body } from '@features/SideWindow/components/Body'
 import { Page } from '@features/SideWindow/components/Page'
+import { useListPagination } from '@hooks/useListPagination'
+import { useListSorting } from '@hooks/useListSorting'
+import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
-import { useTableVirtualizer } from '@hooks/useTableVirtualizer'
 import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
-import { notUndefined } from '@tanstack/react-virtual'
+import { Accent, Button, Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { pluralize } from '@utils/pluralize'
 import dayjs from 'dayjs'
 import { range } from 'lodash-es'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
@@ -40,14 +48,38 @@ type ReportingTableProps = Readonly<{
 }>
 export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
-  const tableContainerRef = useRef<HTMLDivElement>(null)
 
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const [isArchivingConfirmationDialogOpen, setIsArchivingConfirmationDialogOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
   const rowSelectionAsArray = Object.keys(rowSelection).map(Number)
 
-  const { isError, isLoading, reportings } = useGetFilteredReportingsQuery(selectedSeafrontGroup)
+  const listFilter = useReportingsListFilter(selectedSeafrontGroup)
+  const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
+    DEFAULT_PAGE_SIZE,
+    listFilter
+  )
+  const { apiSortingParams, reactTableSortingState, setReactTableSortingState } = useListSorting<
+    typeof ReportingsSortColumn
+  >(ReportingsSortColumn.REPORTING_DATE, BackendApi.SortDirection.DESC)
+
+  const {
+    extraData,
+    isError,
+    isFetching,
+    isLoading,
+    reportings: fetchedReportings,
+    totalLength
+  } = useGetFilteredReportingsQuery({ apiPaginationParams, apiSortingParams, selectedSeafrontGroup })
+  const reportings = useMemo(() => fetchedReportings ?? [], [fetchedReportings])
+
+  const loadingState = useLoadingState(isFetching, { apiSortingParams, listFilter }, apiPaginationParams)
+
+  // The seafront sub-menu is rendered by a parent, which has no access to this list's pagination
+  // state and so cannot share this query's cache entry.
+  useEffect(() => {
+    dispatch(reportingTableFiltersActions.setPerSeafrontGroupCount(extraData?.perSeafrontGroupCount))
+  }, [dispatch, extraData])
 
   const confirmArchive = useCallback(() => {
     dispatch(archiveReportings(reportings, rowSelectionAsArray, WindowContext.SideWindow))
@@ -94,33 +126,20 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id.toString(),
-    getSortedRowModel: getSortedRowModel(),
-    initialState: {
-      sorting: [
-        {
-          desc: true,
-          id: 'date'
-        }
-      ]
-    },
+    manualPagination: true,
+    manualSorting: true,
+    onPaginationChange: setReactTablePaginationState,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setReactTableSortingState,
+    rowCount: totalLength ?? 0,
     state: {
-      rowSelection
+      pagination: reactTablePaginationState,
+      rowSelection,
+      sorting: reactTableSortingState
     }
   })
 
   const { rows } = table.getRowModel()
-
-  const overscan = 10
-  const rowVirtualizer = useTableVirtualizer({ estimateSize: 42, overscan, ref: tableContainerRef, rows })
-  const virtualRows = rowVirtualizer.getVirtualItems()
-  const [paddingBeforeRows, paddingAfterRows] =
-    virtualRows.length > 0
-      ? [
-          notUndefined(virtualRows[0]).start - rowVirtualizer.options.scrollMargin,
-          rowVirtualizer.getTotalSize() - notUndefined(virtualRows[virtualRows.length - 1]).end
-        ]
-      : [0, 0]
 
   return (
     <Page>
@@ -129,7 +148,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
           <Filters selectedSeafrontGroup={selectedSeafrontGroup} />
           <TableTop $isFromUrl={isFromUrl}>
             <TableLegend>
-              {reportings.length} {pluralize('signalement', reportings.length)} en cours
+              {totalLength ?? 0} {pluralize('signalement', totalLength ?? 0)}
             </TableLegend>
             <IconButton
               disabled={!rowSelectionAsArray.length}
@@ -158,7 +177,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
           </TableTop>
         </TableOuterWrapper>
 
-        <TableInnerWrapper ref={tableContainerRef} $hasError={isError}>
+        <TableInnerWrapper $hasError={isError}>
           {isError && <ErrorWall displayedErrorKey={DisplayedErrorKey.SIDE_WINDOW_REPORTING_LIST_ERROR} />}
           {!isError && (
             <TableWithSelectableRows.Table $withRowCheckbox data-cy="side-window-reporting-list">
@@ -169,46 +188,37 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
               </TableWithSelectableRows.Head>
 
               {!isLoading && reportings.length === 0 && <TableBodyEmptyData />}
-              {paddingBeforeRows > 0 && (
-                <tr>
-                  <td aria-label="padding before" colSpan={columns.length} style={{ height: paddingBeforeRows }} />
-                </tr>
-              )}
               {!!rows.length && (
                 <tbody>
-                  {virtualRows.map(virtualRow => {
-                    const row = rows[virtualRow?.index]
-
-                    return (
-                      <StyledBodyTr
-                        key={virtualRow.key}
-                        ref={node => rowVirtualizer?.measureElement(node)}
-                        data-cy="ReportingTable-reporting"
-                        data-index={virtualRow?.index}
-                      >
-                        {row?.getVisibleCells().map(cell => (
-                          <Row
-                            key={cell.id}
-                            $hasRightBorder={cell.column.id === 'dml'}
-                            $isCenter={cell.column.id === 'actions'}
-                            style={getRowCellCustomStyle(cell.column)}
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </Row>
-                        ))}
-                      </StyledBodyTr>
-                    )
-                  })}
+                  {rows.map((row, index) => (
+                    <StyledBodyTr key={row.id} data-cy="ReportingTable-reporting" data-index={index}>
+                      {row.getVisibleCells().map(cell => (
+                        <Row
+                          key={cell.id}
+                          $isCenter={cell.column.id === 'actions'}
+                          style={getRowCellCustomStyle(cell.column)}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </Row>
+                      ))}
+                    </StyledBodyTr>
+                  ))}
                 </tbody>
-              )}
-              {paddingAfterRows > 0 && (
-                <tr>
-                  <td aria-label="padding after" colSpan={columns.length} style={{ height: paddingAfterRows }} />
-                </tr>
               )}
             </TableWithSelectableRows.Table>
           )}
         </TableInnerWrapper>
+
+        {loadingState.isLoadingNextPage && (
+          <LoadMore accent={Accent.SECONDARY} disabled>
+            Chargement en cours...
+          </LoadMore>
+        )}
+        {!isError && !loadingState.isLoadingNewPage && !loadingState.isLoadingNextPage && table.getCanNextPage() && (
+          <LoadMore accent={Accent.SECONDARY} onClick={table.nextPage}>
+            {`Charger les ${Math.min((totalLength ?? 0) - reportings.length, DEFAULT_PAGE_SIZE)} signalements suivants`}
+          </LoadMore>
+        )}
       </Body>
       <EditReporting />
       {isDeletionConfirmationDialogOpen && (
@@ -246,6 +256,13 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     </Page>
   )
 }
+
+const LoadMore = styled(Button)`
+  margin-top: 8px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+`
 
 const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)`
   height: 40px;
@@ -292,7 +309,6 @@ const TableInnerWrapper = styled.div<{
   * {
     box-sizing: border-box;
   }
-  height: 619px; /* = table height - 5px (negative margin-top) + 1px for Chrome compatibility */
   min-width: 1290px; /* = table width + right padding + scrollbar width (8px) */
   padding-right: 8px;
   overflow: auto;

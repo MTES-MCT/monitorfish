@@ -2,7 +2,7 @@
 Regulations check-up
 ====================
 
-The ``Regulations check-up`` flow performs a daily check on the data of the ``legipeche`` and ``regulations`` tables. Checks made are :
+The ``Regulations check-up`` flow performs a check on the data of the ``legipeche`` and ``regulations`` tables. Checks made are :
 
 * summary of the changes made in ``legipeche`` in articles referenced in ``regulations``
 * presence of regulated zones without a regulatory reference in ``regulations``
@@ -11,4 +11,4 @@ The ``Regulations check-up`` flow performs a daily check on the data of the ``le
 
 A summary of the check-up is sent by email to the regulations team.
 
-It is scheduled to run every day.
+It is scheduled to run every weekday.

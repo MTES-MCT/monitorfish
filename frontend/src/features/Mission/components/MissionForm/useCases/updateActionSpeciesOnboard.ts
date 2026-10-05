@@ -1,8 +1,9 @@
 import { logbookApi } from '@features/Logbook/api'
 import { getSummedSpeciesOnBoard } from '@features/Logbook/utils'
-import { E_ISR_ENABLED } from '@features/Mission/components/MissionForm/constants'
+import { computeIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { riskFactorApi } from '@features/RiskFactor/apis'
+import { mainStore } from '@store'
 
 import type { Logbook } from '@features/Logbook/Logbook.types'
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
@@ -16,10 +17,16 @@ export const updateActionSpeciesOnboard =
     }
 
     const cfr = missionAction.internalReferenceNumber
+    const controlUnits = mainStore.getState().missionForm.draft?.mainFormValues.controlUnits ?? []
+    const isEISR = computeIsEISREnabled(
+      controlUnits.map(controlUnit => controlUnit.id),
+      missionAction.actionDatetimeUtc,
+      missionAction.isEISR
+    )
 
     const [{ data: riskFactor }, prefillResult] = await Promise.all([
       dispatch(riskFactorApi.endpoints.getRiskFactor.initiate(cfr)),
-      E_ISR_ENABLED ? dispatch(logbookApi.endpoints.getSpeciesControlPrefill.initiate(cfr)) : Promise.resolve(undefined)
+      isEISR ? dispatch(logbookApi.endpoints.getSpeciesControlPrefill.initiate(cfr)) : Promise.resolve(undefined)
     ])
 
     if (!riskFactor) {
@@ -46,7 +53,7 @@ export const updateActionSpeciesOnboard =
         underSizedWeight: undefined
       }))
 
-    const { discardedSpecies, nextSpeciesOnboard } = E_ISR_ENABLED
+    const { discardedSpecies, nextSpeciesOnboard } = isEISR
       ? mergeSpeciesOnboardWithPrefill(baseSpecies, prefillResult?.data ?? [])
       : { discardedSpecies: [], nextSpeciesOnboard: baseSpecies }
 

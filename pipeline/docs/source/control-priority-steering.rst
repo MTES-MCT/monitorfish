@@ -16,11 +16,12 @@ segments are of particular interest at known periods in the year.
 How it works
 ------------
 
-The administration panel allows Monitorfish admins to steer control priorities by dynamically assigning 
-a **control priority level** to each fleet segment :
+The *"Objectifs de contrôle"* page of the :doc:`back office <back-office>` allows Monitorfish admins to set, for each year 
+and each seafront, the number of sea and land controls to perform on each fleet segment, and to steer control priorities by 
+dynamically assigning a **control priority level** to each fleet segment :
 
 ====================== ======================
-Control priority level Control priority level
+Control priority       Control priority level
 ====================== ======================
 Low                    1
 Moderate               2
@@ -28,9 +29,18 @@ High                   3
 Very high              4
 ====================== ======================
 
+.. image:: _static/img/back-office-control-objectives.png
+  :width: 800
+  :alt: Control objectives and control priority levels of fleet segments, in the back office
+
+*Control objectives and control priority levels of fleet segments, in the back office*
+
 The control priority level is then included  in the computation of 
 the :ref:`detectability score <detectability-score>` component of the risk factor.
 By assigning a higher control priority level to a certain fleet segment, the risk 
 factor of all vessels belonging to this fleet segment in real time will be increased, 
 and Monitorfish will automatically recommend control targets that correspond to this 
 fleet segment, thus helping the FMC to reach its objectives.
+
+Vessels whose control priority level is *very high* or *high* are also gathered in the *P1* and *P2* 
+:ref:`priority groups <priority-groups>`, which are highlighted on the map.

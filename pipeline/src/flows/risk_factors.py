@@ -6,6 +6,7 @@ from config import default_risk_factors, risk_factor_coefficients
 from src.entities.vessel_profiles import VesselProfileType
 from src.generic_tasks import extract, load
 from src.processing import join_on_multiple_keys
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_current_year
 from src.shared_tasks.segments import (
     extract_control_priorities_and_infringement_risk_levels,
@@ -381,7 +382,11 @@ def load_risk_factors(risk_factors: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Risk factors")
+@flow(
+    name="Monitorfish - Risk factors",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def risk_factors_flow():
     # Extract
     current_year = get_current_year()

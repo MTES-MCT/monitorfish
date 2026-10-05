@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,11 @@ msgid "The ``Suspicions of under declaration alerts`` flow identifies instances 
 msgstr ""
 
 #: ../source/flows/suspicions-of-under-declaration-alerts.rst:7
-#: 40429b1cedaa44c39afc19883af9749b
-msgid "Alerts are generated for these vessels and loaded to the ``pending_alerts`` table."
+#: a8e112dc1d38415bae30338664b5837e
+msgid "Alerts are generated for these vessels (except those for which the alert is silenced or already reported) and loaded to the ``pending_alerts`` table."
+msgstr ""
+
+#: ../source/flows/suspicions-of-under-declaration-alerts.rst:9
+#: a7a71c9c0e3d4554acbb2fbc338ce309
+msgid "This flow is not scheduled : it is run manually."
 msgstr ""

@@ -1,9 +1,10 @@
 import pandas as pd
-from prefect import task
+from prefect import get_run_logger, task
 
 from config import ANCHORAGES_H3_CELL_RESOLUTION
 from src.generic_tasks import extract
 from src.helpers.bathymetry import get_depth
+from src.helpers.requests_rate_limiter import RateLimitedSession
 from src.helpers.spatial import get_h3_indices
 from src.processing import get_first_non_null_column_name
 
@@ -86,8 +87,16 @@ def add_vessel_identifier(positions: pd.DataFrame) -> pd.DataFrame:
 @task
 def add_depth(positions: pd.DataFrame) -> pd.DataFrame:
     positions = positions.copy(deep=True)
+    logger = get_run_logger()
+    logger.info(f"Adding depth to {len(positions)} positions")
+
+    session = RateLimitedSession(requests_per_second=4, max_retries=5)
+    session.logger = logger
+
     positions["depth"] = positions.apply(
-        lambda row: get_depth(lon=row["longitude"], lat=row["latitude"]),
+        lambda row: get_depth(
+            lon=row["longitude"], lat=row["latitude"], session=session
+        ),
         axis=1,
         result_type="reduce",
     )

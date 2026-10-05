@@ -42,7 +42,19 @@ class JpaManualPriorNotificationRepository(
                 createdBefore = filter.createdBefore,
             ).map { it.toPriorNotification(mapper) }
 
-    @Cacheable(value = ["manual_pno_to_verify"])
+    @Cacheable(value = ["manual_pno_for_active_vessels"], sync = true)
+    override fun findAllForActiveVessels(): List<PriorNotification> {
+        val now = ZonedDateTime.now()
+
+        return findAll(
+            PriorNotificationsFilter(
+                willArriveAfter = now,
+                willArriveBefore = now.plusDays(2),
+            ),
+        )
+    }
+
+    @Cacheable(value = ["manual_pno_to_verify"], sync = true)
     override fun findAllToVerify(): List<PriorNotification> =
         dbManualPriorNotificationRepository
             .findAll(
@@ -81,7 +93,7 @@ class JpaManualPriorNotificationRepository(
         }
 
     @Transactional
-    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["manual_pno_to_verify", "manual_pno_for_active_vessels"], allEntries = true)
     override fun save(newOrNextPriorNotification: PriorNotification): PriorNotification {
         try {
             val manualPriorNotificationEntity =
@@ -103,7 +115,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
-    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["manual_pno_to_verify", "manual_pno_for_active_vessels"], allEntries = true)
     override fun updateState(
         reportId: String,
         isBeingSent: Boolean,
@@ -128,7 +140,7 @@ class JpaManualPriorNotificationRepository(
     }
 
     @Transactional
-    @CacheEvict(value = ["manual_pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["manual_pno_to_verify", "manual_pno_for_active_vessels"], allEntries = true)
     override fun invalidate(reportId: String) {
         val manualPriorNotification =
             dbManualPriorNotificationRepository.findByReportId(reportId) ?: throw BackendUsageException(

@@ -18,9 +18,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAll Should return all beacon malfunctions`() {
+    fun `findAllFollowed Should return all followed beacon malfunctions`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllFollowed()
 
         assertThat(baconMalfunctions).hasSize(12)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
@@ -30,9 +30,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findAllExceptArchived Should return all beacon malfunctions except end of follow up`() {
+    fun `findAllFollowedExceptArchived Should return all followed beacon malfunctions except archived`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllExceptArchived()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findAllFollowedExceptArchived()
 
         assertThat(baconMalfunctions).hasSize(10)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FAK000999999")
@@ -42,9 +42,9 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `findLastSixtyArchived Should return last thirty end of follow up beacon malfunctions`() {
+    fun `findLastSixtyArchivedAndFollowed Should return last sixty archived beacon malfunctions`() {
         // When
-        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyArchived()
+        val baconMalfunctions = jpaBeaconMalfunctionsRepository.findLastSixtyArchivedAndFollowed()
 
         assertThat(baconMalfunctions).hasSize(2)
         assertThat(baconMalfunctions.first().internalReferenceNumber).isEqualTo("FR263465414")
@@ -56,7 +56,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update vesselStatus When not null`() {
         // Given
-        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
+        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAllFollowed()
         val updateDateTime = ZonedDateTime.now()
 
         // When
@@ -70,7 +70,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.vesselStatus).isEqualTo(VesselStatus.AT_SEA)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
             updateDateTime,
@@ -82,7 +82,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `update Should update end of beacon malfunction reason and end of malfunction date time When not null`() {
         // Given
-        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAll()
+        val beaconMalfunctions = jpaBeaconMalfunctionsRepository.findAllFollowed()
         val updateDateTime = ZonedDateTime.now()
 
         // When
@@ -96,7 +96,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
         )
 
         // Then
-        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 1 }
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 1 }
         assertThat(updatedBeaconMalfunction?.stage).isEqualTo(Stage.ARCHIVED)
         assertThat(updatedBeaconMalfunction?.vesselStatusLastModificationDateTime).isCloseTo(
             updateDateTime,
@@ -115,7 +115,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `requestNotification Should update the requestNotification field`() {
         // Given
-        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 2 }
         assertThat(initialBeaconMalfunction?.notificationRequested).isNull()
 
         // When
@@ -123,7 +123,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION, null)
 
         // then
-        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 2 }
         assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
             BeaconMalfunctionNotificationType.MALFUNCTION_AT_PORT_INITIAL_NOTIFICATION,
         )
@@ -133,7 +133,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
     @Transactional
     fun `requestNotification Should update the requestNotification and foreignFmcCode fields`() {
         // Given
-        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        val initialBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 2 }
         assertThat(initialBeaconMalfunction?.notificationRequested).isNull()
 
         // When
@@ -141,7 +141,7 @@ class JpaBeaconMalfunctionsRepositoryITests : AbstractDBTests() {
             .requestNotification(2, BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC, "ABC")
 
         // then
-        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAll().find { it.id == 2 }
+        val updatedBeaconMalfunction = jpaBeaconMalfunctionsRepository.findAllFollowed().find { it.id == 2 }
         assertThat(updatedBeaconMalfunction?.notificationRequested).isEqualTo(
             BeaconMalfunctionNotificationType.MALFUNCTION_NOTIFICATION_TO_FOREIGN_FMC,
         )

@@ -41,7 +41,7 @@ class UpdateLogbookPriorNotificationUTests {
                 priorNotificationPdfDocumentRepository,
                 getPriorNotification,
             ).execute(
-                reportId = fakePriorNotification.reportId!!,
+                reportId = fakePriorNotification.reportId,
                 operationDate = fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime,
                 note = null,
                 updatedBy = "editor@example.org",

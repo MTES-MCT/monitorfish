@@ -13,6 +13,8 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardedSpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.FleetSegment
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
@@ -123,6 +125,14 @@ class MissionActionsControllerITests {
                         flagState = CountryCode.FR,
                         userTrigram = "LTH",
                         completion = Completion.TO_COMPLETE,
+                        discardedSpecies =
+                            listOf(
+                                DiscardedSpeciesControl(
+                                    speciesCode = "HKE",
+                                    rejectedWeight = 12.5,
+                                    discardReason = DiscardReason.DIM,
+                                ),
+                            ),
                     ),
                 ),
             ),
@@ -137,6 +147,10 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.numberOfControlsWithSomeGearsSeized", equalTo(4)))
             .andExpect(jsonPath("$.numberOfControlsWithSomeSpeciesSeized", equalTo(5)))
             .andExpect(jsonPath("$.controls.length()", equalTo(1)))
+            .andExpect(jsonPath("$.controls[0].discardedSpecies[0].speciesCode", equalTo("HKE")))
+            .andExpect(jsonPath("$.controls[0].discardedSpecies[0].discardReason", equalTo("DIM")))
+            .andExpect(jsonPath("$.controls[0].discardedSpecies[0].speciesName").doesNotExist())
+            .andExpect(jsonPath("$.controls[0].discardedSpecies[0].discardReasonName").doesNotExist())
 
         runBlocking {
             Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))

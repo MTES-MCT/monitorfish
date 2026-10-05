@@ -6,6 +6,7 @@ from prefect import flow, get_run_logger, task
 from src.entities.vessel_profiles import VesselProfileType
 from src.generic_tasks import extract, load
 from src.processing import merge_dicts
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_utcnow
 
 
@@ -220,10 +221,14 @@ def load_vessel_profiles(vessel_profiles: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Vessel profiles")
-def vessel_profiles_flow(get_utcnow_fn=get_utcnow):
+@flow(
+    name="Monitorfish - Vessel profiles",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
+def vessel_profiles_flow():
     # Extract
-    now = get_utcnow_fn()
+    now = get_utcnow()
 
     ports_facade = extract_ports_facade.submit()
 

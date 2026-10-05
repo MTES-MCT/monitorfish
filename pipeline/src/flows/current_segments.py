@@ -5,6 +5,7 @@ from config import default_risk_factors
 from src.generic_tasks import extract, load
 from src.helpers.segments import allocate_segments_to_catches
 from src.processing import df_to_dict_series
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_current_year
 from src.shared_tasks.segments import (
     extract_control_priorities_and_infringement_risk_levels,
@@ -221,7 +222,11 @@ def load_current_segments(vessels_segments):  # pragma: no cover
     )
 
 
-@flow(name="Monitorfish - Current segments")
+@flow(
+    name="Monitorfish - Current segments",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def current_segments_flow(number_of_days: int = 90):
     # Extract
     current_year = get_current_year()

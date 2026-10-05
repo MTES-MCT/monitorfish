@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pandas as pd
@@ -19,7 +19,7 @@ from src.flows.controls import (
 from src.read_query import read_query
 from tests.mocks import mock_extract_side_effect
 
-y = datetime.utcnow().year
+y = datetime.now(timezone.utc).replace(tzinfo=None).year
 
 controls_df = pd.DataFrame(
     {
@@ -1034,6 +1034,12 @@ def test_extract_controls_raises_if_intput_is_not_valid(mock_extract):
         "upsert",
     ],
 )
+@patch(
+    "src.flows.controls.load_missions_and_missions_control_units",
+    mock_load_missions_and_missions_control_units,
+)
+@patch("src.flows.controls.extract_catch_controls", mock_extract_catch_controls)
+@patch("src.flows.controls.extract_controls", mock_extract_controls)
 def test_flow(
     reset_test_data,
     expected_loaded_mission_actions,
@@ -1050,9 +1056,6 @@ def test_flow(
     state = controls_flow(
         loading_mode=loading_mode,
         number_of_months=12,
-        extract_controls_fn=mock_extract_controls,
-        extract_catch_controls_fn=mock_extract_catch_controls,
-        load_missions_and_missions_control_units_fn=mock_load_missions_and_missions_control_units,
         return_state=True,
     )
     assert state.is_completed()

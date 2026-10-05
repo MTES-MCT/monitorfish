@@ -1,4 +1,6 @@
 import { CountryFlag } from '@components/CountryFlag'
+import { useDeleteFavoriteVesselMutation } from '@features/FavoriteVessel/apis'
+import { getVesselIdentityFromFavoriteVessel } from '@features/FavoriteVessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -7,33 +9,35 @@ import { hideVesselTrack } from '../../../Vessel/useCases/hideVesselTrack'
 import { showVessel } from '../../../Vessel/useCases/showVessel'
 import { showVesselTrack } from '../../../Vessel/useCases/showVesselTrack'
 import { unselectVessel } from '../../../Vessel/useCases/unselectVessel'
-import { removeVesselFromFavorites } from '../../slice'
 
+import type { FavoriteVesselVesselIdentity } from '@features/FavoriteVessel/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
 type FavoriteVesselProps = Readonly<{
-  favorite: Vessel.VesselIdentity
+  favoriteVessel: FavoriteVesselVesselIdentity
   isLastItem: boolean
   isTrackShowed: boolean
   isVesselShowed: boolean
   vesselCompositeIdentifier: Vessel.VesselCompositeIdentifier
 }>
-
 export function FavoriteVessel({
-  favorite,
+  favoriteVessel,
   isLastItem,
   isTrackShowed,
   isVesselShowed,
   vesselCompositeIdentifier
 }: FavoriteVesselProps) {
   const dispatch = useMainAppDispatch()
+  const [deleteFavoriteVessel] = useDeleteFavoriteVesselMutation()
+
+  const vesselIdentity = getVesselIdentityFromFavoriteVessel(favoriteVessel)
 
   function showVesselSidebar() {
     if (isTrackShowed) {
       dispatch(hideVesselTrack(vesselCompositeIdentifier))
     }
 
-    dispatch(showVessel(favorite, false))
+    dispatch(showVessel(vesselIdentity, false))
   }
 
   function hideVesselTrackOrSidebar() {
@@ -50,9 +54,9 @@ export function FavoriteVessel({
 
   return (
     <Wrapper $isLastItem={isLastItem}>
-      <CountryFlag countryCode={favorite.flagState} size={[20, 14]} />
-      <VesselName data-cy="favorite-vessel-name" title={favorite.vesselName ?? undefined}>
-        {favorite.vesselName}
+      <CountryFlag countryCode={favoriteVessel.flagState} size={[20, 14]} />
+      <VesselName data-cy="favorite-vessel-name" title={favoriteVessel.name ?? undefined}>
+        {favoriteVessel.name}
       </VesselName>
       <Icons>
         {isVesselShowed ? (
@@ -89,7 +93,9 @@ export function FavoriteVessel({
             color={THEME.color.lightGray}
             data-cy="favorite-vessel-show-vessel-track"
             Icon={Icon.Hide}
-            onClick={() => dispatch(showVesselTrack(favorite, null, true))}
+            onClick={() => {
+              dispatch(showVesselTrack(vesselIdentity, null, true))
+            }}
           />
         )}
         <IconButton
@@ -97,7 +103,9 @@ export function FavoriteVessel({
           color={THEME.color.lightGray}
           data-cy="favorite-vessel-delete-vessel"
           Icon={Icon.Close}
-          onClick={() => dispatch(removeVesselFromFavorites(vesselCompositeIdentifier))}
+          onClick={() => {
+            deleteFavoriteVessel(favoriteVessel)
+          }}
           title="Supprimer le navire de mes navires suivis"
         />
       </Icons>
@@ -107,7 +115,7 @@ export function FavoriteVessel({
 
 const Icons = styled.div`
   margin-left: auto;
-  margin-right: 0px;
+  margin-right: 0;
   flex-shrink: 0;
   display: flex;
   height: 36px;

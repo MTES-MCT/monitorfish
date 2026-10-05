@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/access-rights.rst:3
+#: c4fd9a4085ba4af59035ed62cad4dd07
+msgid "Access rights"
+msgstr ""
+
+#: ../source/access-rights.rst:5
+#: da957abe7e4d41b9852b485f418884cd
+msgid "Monitorfish is used by the agents of the FMC (`CNSP <https://www.mer.gouv.fr/la-police-des-peches>`__) and by its partners (control units, regional and departmental administrations...). Users are authenticated with ProConnect (see :doc:`authentication`) and have one of two profiles :"
+msgstr ""
+
+#: ../source/access-rights.rst:9
+#: 86105af1d8c44e388808847f8504169f
+msgid "**super users** (FMC agents) : access to all features"
+msgstr ""
+
+#: ../source/access-rights.rst:10
+#: 2049144d8b804a13b964be07269992ad
+msgid "**regular users** : access to a subset of features, focused on the monitoring of vessels"
+msgstr ""
+
+#: ../source/access-rights.rst:13
+#: 603403d61b514e9c9d99c9d8d02b89cd
+msgid "Feature"
+msgstr ""
+
+#: ../source/access-rights.rst:13
+#: 8dc6bd45f08c4ccaad72937a10283def
+msgid "Super user"
+msgstr ""
+
+#: ../source/access-rights.rst:13
+#: ce379ce2e7954f34975658e552f38f2d
+msgid "Regular user"
+msgstr ""
+
+#: ../source/access-rights.rst:15
+#: 3e24fcc734a74065b3c0704c7fa583e1
+msgid "Map, vessel search, :doc:`vessel sheet <vessel-sheet>`"
+msgstr ""
+
+#: ../source/access-rights.rst:15
+#: ../source/access-rights.rst:16
+#: ../source/access-rights.rst:17
+#: ../source/access-rights.rst:18
+#: ../source/access-rights.rst:19
+#: ../source/access-rights.rst:20
+#: ../source/access-rights.rst:21
+#: ../source/access-rights.rst:22
+#: ../source/access-rights.rst:23
+#: ../source/access-rights.rst:24
+#: ../source/access-rights.rst:25
+#: 5f15c53561654c4f884245b322a58b48
+#: c2e730a9d2604e90aeaeb2b3ee77f1f5
+#: b0be87a1e8914eb493e353ddbbea34b4
+#: ded97c2313274c40a37205611d7554ae
+#: 6639c466c00e4acaa9c4c9e8be8f0d03
+#: 08751b49ffc145f59d58165611e17d12
+#: 746408fffae4463a99dd7e94bfbaaa88
+#: 82d5547062ef48be9a258848fc3cb9ca
+#: 2c17ffa919584b4cb1aa73049cd7cc52
+#: cc256a21894241b2b88b2445cda9ba2a
+#: ab6ec450c0be48c9ac8e2724174999d6
+#: 6103d113f80e40caa40e4cf944ed6f1c
+#: a66816fc1e7e46e9b5fa31920ead3513
+msgid "yes"
+msgstr ""
+
+#: ../source/access-rights.rst:15
+#: ../source/access-rights.rst:18
+#: 98db9d385eef4ce38fa3a8395a33ede5
+#: e257217a47d44edaa9794e1517937544
+msgid "yes [#]_"
+msgstr ""
+
+#: ../source/access-rights.rst:16
+#: ca053a70a3f04be5ab2846e968a366f5
+msgid ":doc:`map-and-layers`"
+msgstr ""
+
+#: ../source/access-rights.rst:17
+#: 602b474f45434da7a75c83af3ad1a9bc
+msgid ":doc:`vessel-list`"
+msgstr ""
+
+#: ../source/access-rights.rst:18
+#: 38b2070356c64f899955cd2e5f6dfe08
+msgid ":doc:`groups-of-vessels`"
+msgstr ""
+
+#: ../source/access-rights.rst:19
+#: 63ef9814d6e946428ae5c2e86802f903
+msgid ":doc:`prior-notifications`"
+msgstr ""
+
+#: ../source/access-rights.rst:19
+#: ae98c2c99f234a62afbe95e161b0af5e
+msgid "read only [#]_"
+msgstr ""
+
+#: ../source/access-rights.rst:20
+#: edcde2111e1248dd924684c4d5c04890
+msgid ":doc:`missions-and-controls`"
+msgstr ""
+
+#: ../source/access-rights.rst:20
+#: ../source/access-rights.rst:21
+#: ../source/access-rights.rst:22
+#: ../source/access-rights.rst:23
+#: ../source/access-rights.rst:24
+#: ../source/access-rights.rst:25
+#: 09f868fa9b184125a8c22a7a5451dd6f
+#: 6654faa904f54141873740270c26f2fb
+#: 9ea20bb60fcf4a2d964e04d256c9fb33
+#: 23bc9e81329d45aead93fc8c732bfcef
+#: 43aee389678a4f918ad8d24d286ea745
+#: ade1fb9d663c49f29e45443e34057ae2
+msgid "no"
+msgstr ""
+
+#: ../source/access-rights.rst:21
+#: 25a66f28e7f84d96bf602fedba2b47ec
+msgid ":doc:`alerts` and :doc:`reportings`"
+msgstr ""
+
+#: ../source/access-rights.rst:22
+#: 5d7a2496c73348708ee86f7ed6e199b1
+msgid ":doc:`vms-beacon-monitoring`"
+msgstr ""
+
+#: ../source/access-rights.rst:23
+#: da4416b3957f46efb3e2e25f4b839200
+msgid ":doc:`control-units`"
+msgstr ""
+
+#: ../source/access-rights.rst:24
+#: 032ae76d339d4ce585753e5036f19a3e
+msgid ":doc:`Risk factor <risk-factor>` display"
+msgstr ""
+
+#: ../source/access-rights.rst:25
+#: e87a61df11db4bf18fdb27cbe672aa03
+msgid ":doc:`back-office`"
+msgstr ""
+
+#: ../source/access-rights.rst:28
+#: 89cff53804b54568aac255825024f860
+msgid "Regular users see the controls history, but not the reportings tab, the risk factor nor the alerts and beacon malfunctions."
+msgstr ""
+
+#: ../source/access-rights.rst:29
+#: 565b5e7fe01e41a1810d7cc8dbea3f48
+msgid "Regular users cannot share groups with other teams."
+msgstr ""
+
+#: ../source/access-rights.rst:30
+#: 869ca8bcd93145b88748838c54c23b68
+msgid "When enabled for the deployment."
+msgstr ""
+
+#: ../source/access-rights.rst:32
+#: e392f6dd3ac6432d9ac0fb4fd7321ea4
+msgid "The *What's new* panel (*\"Nouveautés\"*) and the startup notifications of the app are also adapted to each profile."
+msgstr ""

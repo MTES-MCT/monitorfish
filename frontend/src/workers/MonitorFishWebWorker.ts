@@ -493,19 +493,7 @@ export class MonitorFishWebWorker {
         }
 
         if (emitsPositions !== undefined) {
-          if (
-            emitsPositions === VesselEmitsPosition.YES &&
-            vessel.activityType === ActivityType.POSITION_BASED &&
-            !vessel.emitsPositions
-          ) {
-            return false
-          }
-
-          if (
-            emitsPositions === VesselEmitsPosition.NO &&
-            vessel.activityType === ActivityType.POSITION_BASED &&
-            vessel.emitsPositions
-          ) {
+          if ((emitsPositions === VesselEmitsPosition.YES) !== vessel.emitsPositions) {
             return false
           }
         }

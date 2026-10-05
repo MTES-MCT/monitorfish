@@ -9,4 +9,4 @@ real time.
 
 The computed data is loaded in the ``current_segments`` table of the Monitorfish database.
 
-It is scheduled to run every 10 minutes.prefect 
+It is scheduled to run every 20 minutes.

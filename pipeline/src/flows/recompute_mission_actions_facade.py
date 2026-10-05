@@ -5,6 +5,7 @@ from sqlalchemy import text
 
 from src.db_config import create_engine
 from src.generic_tasks import extract
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.facades import extract_facade_areas
 from src.utils import psql_insert_copy
 
@@ -165,7 +166,11 @@ def load_mission_actions_facade(mission_actions_facade: pd.DataFrame, year: int)
         )
 
 
-@flow(name="Monitorfish - Recompute mission actions facade")
+@flow(
+    name="Monitorfish - Recompute mission actions facade",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def recompute_mission_actions_facade_flow(year: int):
     # Extract
     mission_actions = extract_mission_actions_of_year(year=year)

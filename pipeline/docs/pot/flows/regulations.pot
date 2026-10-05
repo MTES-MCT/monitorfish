@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,15 @@ msgstr ""
 
 #: ../source/flows/regulations.rst:5
 #: 591bbb0ed85c4588b627881ddd616883
-msgid "The ``Regulations`` flow updates the the ``regulations`` table of the Monitorfish database by extracting changes (if present) made in the ``regulations`` table of the CROSSA database."
+msgid "The ``Regulations`` flow updates the ``regulations`` table of the Monitorfish database by extracting changes (if present) made in the ``regulations`` table of the CROSSA database, where regulations are edited in the :doc:`back office <../back-office>`."
 msgstr ""
 
-#: ../source/flows/regulations.rst:8
+#: ../source/flows/regulations.rst:9
 #: ca62f22bd21b40f68f22f3c10569aa26
-msgid "It is scheduled to run every minute."
+msgid "It is scheduled to run every 30 minutes."
+msgstr ""
+
+#: ../source/flows/regulations.rst:11
+#: dde99df069544e39aee521573de38e13
+msgid "See also :doc:`regulations-open-data`."
 msgstr ""

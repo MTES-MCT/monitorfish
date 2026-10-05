@@ -175,7 +175,7 @@ export function FilterBar() {
 
   const updateEmitsNoPositions = (value: boolean | undefined) => {
     const nextEmitsNoPositions = value ? [VesselEmitsPosition.NO] : []
-    const previousEmitsPositions = emitsNoPositions ? [VesselEmitsPosition.YES] : []
+    const previousEmitsPositions = emitsPositions ? [VesselEmitsPosition.YES] : []
     dispatch(filterVessels({ emitsPositions: previousEmitsPositions.concat(nextEmitsNoPositions) }))
   }
 

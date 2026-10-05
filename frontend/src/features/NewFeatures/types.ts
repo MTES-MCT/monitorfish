@@ -1,8 +1,10 @@
+import type { UserTarget } from '@utils/isDisplayedForUser'
+
 export type MonitorFishFeature = {
   // ISO 8601
   date: string
   description: string
-  for: 'ALL' | 'CNSP' | 'EXTERNAL'
+  for: UserTarget
   title: string
   type: 'IMPROVEMENT' | 'NEW_FEATURE'
 }

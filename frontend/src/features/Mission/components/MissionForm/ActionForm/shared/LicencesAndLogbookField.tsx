@@ -16,7 +16,7 @@ const NOT_APPLICABLE_FIELDS: Array<keyof MissionActionFormValues> = ['propulsion
 
 export function LicencesAndLogbookField() {
   const { setFieldValue, values } = useFormikContext<MissionActionFormValues>()
-  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(values.actionDatetimeUtc, values.isEISR)
   const isLandControl = values.actionType === MissionAction.MissionActionType.LAND_CONTROL
 
   useEffect(() => {

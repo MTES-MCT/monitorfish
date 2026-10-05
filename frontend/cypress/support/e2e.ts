@@ -109,4 +109,16 @@ beforeEach(() => {
       statusCode: 200
     }
   )
+  // User layers are saved on the (shared) user profile: stub them so that a spec never starts with the layers
+  // left by another one. Call `enableUserLayersPersistence()` to use the backend.
+  cy.intercept('GET', '/bff/v1/user_layers', {
+    body: {
+      baseLayer: null,
+      displayedAdministrativeLayers: [],
+      displayedRegulatoryZoneIds: [],
+      selectedRegulatoryZoneIds: []
+    }
+  }).as('getUserLayers')
+  cy.intercept('PUT', '/bff/v1/user_layers', request => request.reply(request.body)).as('saveUserLayers')
+  cy.intercept('POST', '/bff/v1/user_layers/init', request => request.reply(request.body))
 })

@@ -1,6 +1,5 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
-import fr.gouv.cnsp.monitorfish.domain.entities.beacon_malfunctions.BeaconStatus
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.defaultImpactRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import org.assertj.core.api.Assertions.assertThat
@@ -178,7 +177,6 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         val vesselWithBeacon = lastPositionsWithProfiles.first { it.lastPosition?.vesselId == 1 }
         assertThat(vesselWithBeacon.beacon?.beaconNumber).isEqualTo("FGEDX85")
         assertThat(vesselWithBeacon.beacon?.vesselId).isEqualTo(1)
-        assertThat(vesselWithBeacon.beacon?.beaconStatus).isEqualTo(BeaconStatus.ACTIVATED)
 
         /**
          * A vessel with risk factor is attached to a last position even if there is no profile for this vessel
@@ -197,5 +195,14 @@ class JpaLastPositionRepositoryITests : AbstractDBTests() {
         assertThat(lastPositionsWithProfiles.last().lastPosition).isNull()
         assertThat(lastPositionsWithProfiles.last().vesselProfile).isNotNull()
         assertThat(lastPositionsWithProfiles.last().vessel).isNotNull()
+
+        /**
+         * The beacon of a vessel without last position is attached via the vessel id
+         */
+        val vesselWithoutLastPositionWithBeacon =
+            lastPositionsWithProfiles.first { it.vesselProfile?.cfr == "ABC010331976" }
+        assertThat(vesselWithoutLastPositionWithBeacon.lastPosition).isNull()
+        assertThat(vesselWithoutLastPositionWithBeacon.beacon?.beaconNumber).isEqualTo("VPR0131")
+        assertThat(vesselWithoutLastPositionWithBeacon.emitsPositions).isTrue()
     }
 }

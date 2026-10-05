@@ -32,7 +32,6 @@ export const mapToRegulatoryZone = (
     geometry: feature.geometry ?? undefined,
     id: feature.properties.id ?? feature.id?.toString()?.split('.')[1],
     lawType: feature.properties.law_type,
-    nextId: feature.properties.next_id,
     otherInfo: feature.properties.other_info,
     region: feature.properties.region,
     regulatoryReferences: parseRegulatoryReferences(feature.properties.regulatory_references),
@@ -41,6 +40,15 @@ export const mapToRegulatoryZone = (
     topic: feature.properties.topic,
     zone: decodeURI(feature.properties.zone)
   }
+}
+
+export const findRegulatoryZonesByIds = <T extends Pick<RegulatoryZone, 'id'>>(
+  regulatoryZones: T[],
+  regulatoryZoneIds: Array<number | string>
+): T[] => {
+  const searchedIds = new Set(regulatoryZoneIds.map(String))
+
+  return regulatoryZones.filter(({ id }) => searchedIds.has(String(id)))
 }
 
 export const mapToProcessingRegulation = (persistProcessingRegulation: RegulatoryZoneDraft) => {
@@ -164,7 +172,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishingPeriod,
   gearRegulation,
   lawType,
-  nextId,
   otherInfo,
   region,
   regulatoryReferences,
@@ -176,7 +183,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishingPeriod: any
   gearRegulation: any
   lawType: string | undefined
-  nextId: string | undefined
   otherInfo: string | undefined
   region: string | undefined
   regulatoryReferences: any
@@ -188,7 +194,6 @@ export const mapToRegulatoryFeatureObject = ({
   fishing_period: JSON.stringify(fishingPeriod),
   gears: JSON.stringify(gearRegulation),
   law_type: lawType,
-  next_id: nextId,
   other_info: otherInfo,
   region,
   regulatory_references: JSON.stringify(regulatoryReferences),
@@ -199,16 +204,6 @@ export const mapToRegulatoryFeatureObject = ({
 })
 
 export const getRegulatoryFeatureId = id => `${LayerProperties.REGULATORY.code}_write.${id}`
-
-export const emptyRegulatoryFeatureObject: Regulation.RegulatoryFeatureObject = {
-  law_type: undefined,
-  next_id: undefined,
-  region: undefined,
-  regulatory_references: undefined,
-  tags: undefined,
-  topic: undefined,
-  zone: undefined
-}
 
 export const FRANCE = 'Réglementation France'
 export const UE = 'Réglementation UE'
@@ -272,7 +267,6 @@ export enum RegulatorySearchProperty {
 // TODO Fix casing.
 export enum RegulationActionType {
   Delete = 'delete',
-  Insert = 'insert',
   Update = 'update'
 }
 
@@ -382,7 +376,6 @@ export const DEFAULT_REGULATION: RegulatoryZoneDraft = {
   geometry: undefined,
   id: undefined,
   lawType: undefined,
-  nextId: undefined,
   otherInfo: undefined,
   region: undefined,
   regulatoryReferences: undefined,

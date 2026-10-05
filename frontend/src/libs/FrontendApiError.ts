@@ -16,7 +16,8 @@ export class FrontendApiError extends FrontendError {
   constructor(
     /** User-friendly message expliciting which operation failed. */
     public userMessage: string,
-    originalError: CustomResponseError
+    /** Either a `CustomResponseError` or, when the request failed before any response, the raw thrown error. */
+    originalError?: CustomResponseError | Error
   ) {
     super(userMessage, originalError)
 
@@ -27,7 +28,7 @@ export class FrontendApiError extends FrontendError {
   override get scope() {
     const scope = new Scope()
     scope.setTags({
-      correlationId: this.originalError.correlationId,
+      correlationId: this.originalError?.correlationId,
       side: 'frontend',
       type: 'api_error'
     })

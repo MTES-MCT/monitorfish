@@ -5,6 +5,17 @@ export const MAIN_PERSISTOR_MISSION_MIGRATIONS = {
   })
 }
 
+export const MAIN_PERSISTOR_STARTUP_NOTIFICATION_MIGRATIONS = {
+  0: state => {
+    const { isSurveyModalDisplayed, ...rest } = state
+
+    return {
+      ...rest,
+      dismissedIds: isSurveyModalDisplayed ? ['survey-2026-07'] : []
+    }
+  }
+}
+
 export const MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS = {
   0: state => ({
     ...state,

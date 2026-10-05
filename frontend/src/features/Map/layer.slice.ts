@@ -2,20 +2,20 @@
 
 import { LayerProperties } from '@features/Map/constants'
 import { getLayerNameNormalized } from '@features/Map/utils'
-import { localStorageManager } from '@libs/LocalStorageManager'
-import { LocalStorageKey } from '@libs/LocalStorageManager/constants'
+import { findRegulatoryZonesByIds } from '@features/Regulation/utils'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { isNotNullish } from '@utils/isNotNullish'
 
 import { MonitorFishMap } from './Map.types'
 
 import type { RegulatoryZone } from '@features/Regulation/types'
+import type { AdministrativeLayer } from '@features/UserLayers/types'
 import type { Feature } from 'ol'
 import type { Geometry } from 'ol/geom'
 import type { Pixel } from 'ol/pixel'
 
 export interface LayerState {
   administrativeZonesGeometryCache: Record<string, any>[]
+  areUserLayersLoaded: boolean
   isBaseMapCachedLocally: boolean
   lastShowedFeatures: Array<Feature<Geometry>>
   layersSidebarOpenedLayerType: string | undefined
@@ -26,13 +26,13 @@ export interface LayerState {
 
 const INITIAL_STATE: LayerState = {
   administrativeZonesGeometryCache: [],
+  areUserLayersLoaded: false,
   isBaseMapCachedLocally: false,
   lastShowedFeatures: [],
   layersSidebarOpenedLayerType: undefined,
   layersToFeatures: [],
   mousePosition: undefined,
-  // TODO Use redux-persist to load showed layers.
-  showedLayers: localStorageManager.get<MonitorFishMap.ShowedLayer[]>(LocalStorageKey.LayersShowedOnMap, [])
+  showedLayers: []
 }
 
 const layerSlice = createSlice({
@@ -70,9 +70,6 @@ const layerSlice = createSlice({
           ]
         }
       }
-
-      // TODO Use redux-persist to save showed layers.
-      localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
     },
 
     /**
@@ -113,9 +110,10 @@ const layerSlice = createSlice({
           layer => !(layer.type === type && (layer.zone ? layer.zone === zone : true))
         )
       }
+    },
 
-      // TODO Use redux-persist to save showed layers.
-      localStorageManager.set(LocalStorageKey.LayersShowedOnMap, state.showedLayers)
+    setAreUserLayersLoaded(state, action: PayloadAction<boolean>) {
+      state.areUserLayersLoaded = action.payload
     },
 
     setIsBaseMapCachedLocally(state, action: PayloadAction<boolean>) {
@@ -134,56 +132,34 @@ const layerSlice = createSlice({
       state.mousePosition = action.payload
     },
 
-    setShowedLayersWithLocalStorageValues(state, action: PayloadAction<RegulatoryZone[]>) {
-      let nextShowedLayers: MonitorFishMap.ShowedLayer[] = []
-      // TODO Use redux-persist to load showed layers.
-      const showedLayersInLocalStorage = localStorageManager.get<MonitorFishMap.ShowedLayer[]>(
-        LocalStorageKey.LayersShowedOnMap,
-        []
+    /**
+     * Set the showed layers, updating the regulatory zones with their latest version (or removing them if deleted)
+     */
+    setShowedLayers(
+      state,
+      action: PayloadAction<{
+        displayedAdministrativeLayers: AdministrativeLayer[]
+        displayedRegulatoryZoneIds: string[]
+        regulatoryZones: RegulatoryZone[]
+      }>
+    ) {
+      const { displayedAdministrativeLayers, displayedRegulatoryZoneIds, regulatoryZones } = action.payload
+
+      const showedAdministrativeLayers = displayedAdministrativeLayers.map(
+        ({ type, zone }) => ({ type, zone }) satisfies MonitorFishMap.ShowedLayer
+      )
+      const showedRegulatoryLayers = findRegulatoryZonesByIds(regulatoryZones, displayedRegulatoryZoneIds).map(
+        regulatoryZone =>
+          ({
+            gears: regulatoryZone.gearRegulation,
+            id: regulatoryZone.id,
+            topic: regulatoryZone.topic,
+            type: LayerProperties.REGULATORY.code,
+            zone: regulatoryZone.zone
+          }) satisfies MonitorFishMap.ShowedLayer
       )
 
-      nextShowedLayers = showedLayersInLocalStorage
-        // TODO Is it necessary?
-        .filter(isNotNullish)
-        .map(showedLayer => {
-          if (showedLayer.type === LayerProperties.REGULATORY.code) {
-            let nextRegulatoryZone = action.payload.find(regulatoryZone => {
-              if (showedLayer.id) {
-                return regulatoryZone.id === showedLayer.id
-              }
-
-              return regulatoryZone.topic === showedLayer.topic && regulatoryZone.zone === showedLayer.zone
-            })
-
-            if (nextRegulatoryZone) {
-              if (!(nextRegulatoryZone.topic && nextRegulatoryZone.lawType) && nextRegulatoryZone.nextId) {
-                nextRegulatoryZone = action.payload.find(
-                  regulatoryZone => !!nextRegulatoryZone && regulatoryZone.id === nextRegulatoryZone.nextId
-                )
-              }
-
-              return nextRegulatoryZone
-                ? ({
-                    gears: nextRegulatoryZone.gearRegulation,
-                    id: nextRegulatoryZone.id,
-                    topic: nextRegulatoryZone.topic,
-                    type: showedLayer.type,
-                    zone: nextRegulatoryZone.zone
-                  } satisfies MonitorFishMap.ShowedLayer)
-                : null
-            }
-
-            return null
-          }
-
-          return showedLayer
-        })
-        .filter(isNotNullish)
-
-      state.showedLayers = nextShowedLayers
-
-      // TODO Use redux-persist to save showed layers.
-      localStorageManager.set(LocalStorageKey.LayersShowedOnMap, nextShowedLayers)
+      state.showedLayers = [...showedAdministrativeLayers, ...showedRegulatoryLayers]
     }
   }
 })

@@ -1,16 +1,19 @@
 from datetime import datetime
+from unittest.mock import patch
 
 from src.flows.activity_visualizations import activity_visualizations_flow
 from src.read_query import read_query
 from tests.mocks import get_utcnow_mock_factory
 
 
+@patch(
+    "src.flows.activity_visualizations.get_utcnow",
+    get_utcnow_mock_factory(datetime(2050, 8, 19, 11, 14)),
+)
 def test_flow(reset_test_data, add_enriched_catches, add_vessels):
-    get_utcnow_mock = get_utcnow_mock_factory(datetime(2050, 8, 19, 11, 14))
     state = activity_visualizations_flow(
         start_months_ago=12,
         end_months_ago=0,
-        get_utcnow_fn=get_utcnow_mock,
         return_state=True,
     )
     assert state.is_completed()

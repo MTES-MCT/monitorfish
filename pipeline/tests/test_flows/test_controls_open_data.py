@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from io import BytesIO
 
 import pandas as pd
@@ -15,7 +15,12 @@ from src.flows.controls_open_data import (
 def fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "year": [2022, 2022, datetime.utcnow().year, datetime.utcnow().year],
+            "year": [
+                2022,
+                2022,
+                datetime.now(timezone.utc).replace(tzinfo=None).year,
+                datetime.now(timezone.utc).replace(tzinfo=None).year,
+            ],
             "segment": ["SWW01/02/03 - 2022", "SWW04 - 2022", "SWW01/02/03", "SWW04"],
             "segment_name": [
                 "Bottom trawls",
@@ -52,7 +57,12 @@ def fleet_segments_open_data() -> pd.DataFrame:
 def transformed_fleet_segments_open_data() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "year": [2022, 2022, datetime.utcnow().year, datetime.utcnow().year],
+            "year": [
+                2022,
+                2022,
+                datetime.now(timezone.utc).replace(tzinfo=None).year,
+                datetime.now(timezone.utc).replace(tzinfo=None).year,
+            ],
             "segment": ["SWW01/02/03 - 2022", "SWW04 - 2022", "SWW01/02/03", "SWW04"],
             "segment_name": [
                 "Bottom trawls",

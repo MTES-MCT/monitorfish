@@ -28,6 +28,4 @@ class JpaBeaconRepository(
             return null
         }
     }
-
-    override fun findActivatedBeaconNumbers(): List<String> = dbBeaconRepository.findActivatedBeaconNumbers()
 }

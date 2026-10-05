@@ -142,6 +142,66 @@ class EnrichedActiveVesselUTests {
     }
 
     @Test
+    fun `Should compute emitsPositions as true When there is no last position and beacon has a vesselId`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                producerOrganization = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vesselGroups = getDynamicVesselGroups(),
+                beacon = Beacon(beaconNumber = "FE456", vesselId = 123),
+                lastPosition = null,
+                landingPort = null,
+            )
+
+        // Then
+        assertThat(vessel.activityType).isEqualTo(ActivityType.LOGBOOK_BASED)
+        assertThat(vessel.emitsPositions).isTrue()
+    }
+
+    @Test
+    fun `Should compute emitsPositions as false When there is no last position and beacon has no vesselId`() {
+        // Given
+        val vessel =
+            EnrichedActiveVessel(
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                riskFactor = VesselRiskFactor(2.3, 2.0, 1.9, 3.2),
+                producerOrganization = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vesselGroups = getDynamicVesselGroups(),
+                beacon = Beacon(beaconNumber = "FE456", vesselId = null),
+                lastPosition = null,
+                landingPort = null,
+            )
+
+        // Then
+        assertThat(vessel.activityType).isEqualTo(ActivityType.LOGBOOK_BASED)
+        assertThat(vessel.emitsPositions).isFalse()
+    }
+
+    @Test
     fun `Should compute activity origin as FROM_LOGBOOK When species onboard is not empty`() {
         // Given
         val lastPositionWithoutGears = getDummyLastPositions().first()

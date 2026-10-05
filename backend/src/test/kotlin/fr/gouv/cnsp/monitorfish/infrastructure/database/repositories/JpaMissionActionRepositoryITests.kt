@@ -242,6 +242,36 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `save Should persist the e-ISR mode and round-trip it correctly`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime).copy(isEISR = true)
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.isEISR).isTrue()
+    }
+
+    @Test
+    @Transactional
+    fun `save Should default the e-ISR mode to null When not provided`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime)
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.isEISR).isNull()
+    }
+
+    @Test
+    @Transactional
     fun `save Should persist the vesselGroups and tripReportings snapshot and round-trip it intact`() {
         // Given
         val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))

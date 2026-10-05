@@ -91,6 +91,11 @@ def test_extract_missions_control_units(mock_extract):
     assert isinstance(query, sqlalchemy.sql.elements.TextClause)
 
 
+@patch(
+    "src.flows.missions.extract_missions_control_units",
+    mock_extract_missions_control_units,
+)
+@patch("src.flows.missions.extract_missions", mock_extract_missions)
 def test_flow(reset_test_data):
     missions_query = "SELECT * FROM analytics_missions ORDER BY id"
     missions_control_units_query = (
@@ -104,8 +109,6 @@ def test_flow(reset_test_data):
 
     state = missions_flow(
         number_of_months=12,
-        extract_missions_fn=mock_extract_missions,
-        extract_missions_control_units_fn=mock_extract_missions_control_units,
         return_state=True,
     )
     assert state.is_completed()

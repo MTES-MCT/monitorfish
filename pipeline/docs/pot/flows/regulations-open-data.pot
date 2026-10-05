@@ -1,0 +1,42 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/regulations-open-data.rst:3
+#: 8baee6a9f7ba4f58ab7eecb679f78151
+msgid "Regulations open data"
+msgstr ""
+
+#: ../source/flows/regulations-open-data.rst:5
+#: 26b94e2248864dd8a8144bee4cf02aa7
+msgid "The ``Regulations open data`` flow publishes the :doc:`regulated fishing areas <../regulation>` of the ``regulations`` table :"
+msgstr ""
+
+#: ../source/flows/regulations-open-data.rst:7
+#: 1caeee59db454c98aee3156349983b4e
+msgid "as a CSV file and a GeoPackage file on the `data.gouv.fr dataset <https://www.data.gouv.fr/datasets/reglementation-des-peches-cartographiee/>`__"
+msgstr ""
+
+#: ../source/flows/regulations-open-data.rst:8
+#: c1e3678d89214ac79608a8294f348423
+msgid "on the `Géoplateforme <https://www.geoportail.gouv.fr>`__ of the IGN, where it is made available as a geographic data service"
+msgstr ""
+
+#: ../source/flows/regulations-open-data.rst:10
+#: 97ae3aaea29b4304944a9128a7675894
+msgid "It is scheduled to run every Friday."
+msgstr ""

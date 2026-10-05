@@ -37,11 +37,13 @@ export function HowAlertsWorksDialog({ onClose }: HowAlertsWorksDialogProps) {
           Si l’agent estime au contraire qu’elle n’est pas valide, il la suspend pour une durée adaptée à chaque
           situation. <br />
           <br />
-          Aujourd’hui, MonitorFish compte au total {numberOfPositionsAlerts + 4} alertes :<br />-{' '}
+          Aujourd’hui, MonitorFish compte au total {numberOfPositionsAlerts + 7} alertes :<br />-{' '}
           <b>{numberOfPositionsAlerts} alertes concernant des positions VMS</b> : pêche en ZEE française par un navire
           tiers, pêche dans les 12 milles sans droits historiques, chalutage dans les 3 milles, pêche en zone RTC, etc.
           <br />- <b>4 alertes concernant les obligations déclaratives</b> : absence de message DEP, absence de message
           FAR en 24h et en 48h, suspicion de sous-déclaration.
+          <br />- <b>3 alertes concernant les avaries VMS</b> : activité AIS détectée sans émission VMS, activité de
+          pêche déclarée pendant une avarie VMS, note de vente pendant une avarie VMS.
         </Text>
         <Title $hasMarginTop>DÉTAIL DU FONCTIONNEMENT DES ALERTES</Title>
         <Line />

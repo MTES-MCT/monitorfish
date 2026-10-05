@@ -144,9 +144,16 @@ export const TdWithoutPaddingWhenActive = styled(SimpleTable.Td)<{
 `
 
 export const StyledPickerTd = styled(SimpleTable.Td)<{
+  $hasError?: boolean
   $isActive: boolean
 }>`
   padding: 0 ${p => (!p.$isActive ? 8 : 0)}px 0 ${p => (!p.$isActive ? 8 : 0)}px !important;
+  ${p =>
+    p.$hasError &&
+    css`
+      box-shadow: inset 0 0 0 1px ${p.theme.color.maximumRed};
+      color: ${p.theme.color.maximumRed};
+    `}
 `
 
 /** Shared look for the single-value Selects (species, discard reason): transparent toggle, blue on hover. */

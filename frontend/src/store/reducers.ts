@@ -5,7 +5,6 @@ import { controlUnitDialogReducer } from '@features/ControlUnit/components/Contr
 import { controlUnitListDialogPersistedReducer } from '@features/ControlUnit/components/ControlUnitListDialog/slice'
 import { customZoneReducer, type CustomZoneState } from '@features/CustomZone/slice'
 import { drawReducer } from '@features/Draw/slice'
-import { favoriteVesselReducer } from '@features/FavoriteVessel/slice'
 import { interestPointReducer, type InterestPointState } from '@features/InterestPoint/slice'
 import { logbookReducer, type LogbookState } from '@features/Logbook/slice'
 import { mainWindowBannerReducer } from '@features/MainWindow/slice'
@@ -48,6 +47,7 @@ import storage from 'redux-persist/es/storage' // LocalStorage
 
 import {
   MAIN_PERSISTOR_MISSION_MIGRATIONS,
+  MAIN_PERSISTOR_STARTUP_NOTIFICATION_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_GROUP_LIST_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_GROUPS_MIGRATIONS,
   MAIN_PERSISTOR_VESSEL_MIGRATIONS
@@ -111,7 +111,6 @@ export const mainReducer = {
     displayedComponentReducer
   ),
   draw: drawReducer,
-  favoriteVessel: favoriteVesselReducer,
   fishingActivities: persistReducerTyped(
     { ...getCommonPersistReducerConfig<LogbookState>('mainPersistorLogbook', ['areFishingActivitiesShowedOnMap']) },
     logbookReducer
@@ -154,7 +153,7 @@ export const mainReducer = {
   regulatoryLayerSearch: regulatoryLayerSearchReducer,
   reporting: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<ReportingState>('mainPersistorReporting', ['displayFilters'])
+      ...getCommonPersistReducerConfig<ReportingState>('mainPersistorReporting', ['filters'])
     },
     reportingReducer
   ),
@@ -162,9 +161,9 @@ export const mainReducer = {
   sideWindow: sideWindowReducer,
   startupNotification: persistReducerTyped(
     {
-      ...getCommonPersistReducerConfig<StartupNotificationState>('mainPersistorStartupNotification', [
-        'isSurveyModalDisplayed'
-      ])
+      ...getCommonPersistReducerConfig<StartupNotificationState>('mainPersistorStartupNotification', ['dismissedIds']),
+      migrate: createMigrate(MAIN_PERSISTOR_STARTUP_NOTIFICATION_MIGRATIONS),
+      version: 0
     },
     startupNotificationReducer
   ),

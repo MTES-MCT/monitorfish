@@ -30,6 +30,7 @@ EMAIL_IMAGES_LOCATION = LIBRARY_LOCATION / Path("emails/images")
 STATE_FLAGS_ICONS_LOCATION = EMAIL_IMAGES_LOCATION / Path("flags")
 CNSP_LOGO_PATH = EMAIL_IMAGES_LOCATION / "logo_cnsp.jpg"
 SE_MER_LOGO_PATH = EMAIL_IMAGES_LOCATION / "logo_se_mer.jpg"
+MINISTRY_LOGO_PATH = EMAIL_IMAGES_LOCATION / "logo_ministere_mer_peche.png"
 CNSP_CROSSA_CACEM_LOGOS_PATH = EMAIL_IMAGES_LOCATION / "logos_cnsp_crossa_cacem.jpg"
 MARIANNE_LOGO_PATH = EMAIL_IMAGES_LOCATION / "marianne.gif"
 LIBERTE_EGALITE_FRATERNITE_LOGO_PATH = (
@@ -84,6 +85,10 @@ DOCKER_IMAGE = (
 MONITORFISH_VERSION = os.getenv("MONITORFISH_VERSION")
 FLOWS_LOCATION = Path("src/flows")  # relative to the WORKDIR in the image
 LOGBOOK_FILES_GID = os.getenv("LOGBOOK_FILES_GID")
+
+# Sentry, where flow failures are reported. Disabled when the DSN is not set.
+SENTRY_DSN = get_key(DOTENV_PATH, "MONITORFISH_PIPELINE_SENTRY_DSN")
+SENTRY_ENV = get_key(DOTENV_PATH, "MONITORFISH_PIPELINE_SENTRY_ENV")
 
 # Location where ERS xml files can be fetched
 ERS_FILES_LOCATION = Path("/opt2/monitorfish-data/ers")
@@ -267,16 +272,10 @@ MONITORFISH_SMS_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_SMS_SERVER_URL")
 MONITORFISH_SMS_SERVER_PORT = get_key(DOTENV_PATH, "MONITORFISH_SMS_SERVER_PORT")
 MONITORFISH_SMS_DOMAIN = get_key(DOTENV_PATH, "MONITORFISH_SMS_DOMAIN")
 
-# Fax server
-MONITORFISH_FAX_SERVER_URL = get_key(DOTENV_PATH, "MONITORFISH_FAX_SERVER_URL")
-MONITORFISH_FAX_SERVER_PORT = get_key(DOTENV_PATH, "MONITORFISH_FAX_SERVER_PORT")
-MONITORFISH_FAX_DOMAIN = get_key(DOTENV_PATH, "MONITORFISH_FAX_DOMAIN")
-
 # Recipients
 CNSP_SIP_DEPARTMENT_MOBILE_PHONE = get_key(
     DOTENV_PATH, "CNSP_SIP_DEPARTMENT_MOBILE_PHONE"
 )
-CNSP_SIP_DEPARTMENT_FAX = get_key(DOTENV_PATH, "CNSP_SIP_DEPARTMENT_FAX")
 CNSP_SIP_DEPARTMENT_EMAIL = get_key(DOTENV_PATH, "CNSP_SIP_DEPARTMENT_EMAIL")
 PNO_TEST_EMAIL = get_key(DOTENV_PATH, "PNO_TEST_EMAIL")
 CNSP_FRANCE_EMAIL_ADDRESS = get_key(DOTENV_PATH, "CNSP_FRANCE_EMAIL_ADDRESS")
@@ -295,6 +294,41 @@ REGULATIONS_CSV_RESOURCE_ID = "67578d0c-92d4-44b4-8405-34ade40742aa"
 REGULATIONS_GEOPACKAGE_RESOURCE_ID = "12d32a68-e245-4e19-9215-7d07c699b6c0"
 REGULATIONS_CSV_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.csv"
 REGULATIONS_GEOPACKAGE_RESOURCE_TITLE = "reglementation-des-peches-cartographiee.gpkg"
+
+# Géoplateforme configuration
+GEOPLATEFORME_API_ROOT_URL = "https://data.geopf.fr/api"
+GEOPLATEFORME_TOKEN_URL = (
+    "https://sso.geopf.fr/realms/geoplateforme/protocol/openid-connect/token"
+)
+GEOPLATEFORME_LOGIN = get_key(DOTENV_PATH, "GEOPLATEFORME_LOGIN")
+GEOPLATEFORME_PASSWORD = get_key(DOTENV_PATH, "GEOPLATEFORME_PASSWORD")
+# Only for a service account. Left empty, the SDK authenticates with the login and the
+# password above, using the public client shipped in its default configuration.
+GEOPLATEFORME_CLIENT_ID = get_key(DOTENV_PATH, "GEOPLATEFORME_CLIENT_ID")
+GEOPLATEFORME_CLIENT_SECRET = get_key(DOTENV_PATH, "GEOPLATEFORME_CLIENT_SECRET")
+# Obtained by running `python -m sdk_entrepot_gpf me` once the credentials above are set.
+GEOPLATEFORME_DATASTORE_ID = get_key(DOTENV_PATH, "GEOPLATEFORME_DATASTORE_ID")
+GEOPLATEFORME_WORKFLOWS_LOCATION = STATIC_LOCATION / Path("geoplateforme")
+
+REGULATIONS_GEOPLATEFORME_UPLOAD_NAME = "reglementation_des_peches_cartographiee"
+REGULATIONS_GEOPLATEFORME_CSV_FILENAME = "reglementation_des_peches_cartographiee.csv"
+REGULATIONS_GEOPLATEFORME_SRS = "EPSG:4326"
+# Name of the stored data behind the published WFS, as listed by
+# `python -m sdk_entrepot_gpf stored_data`.
+# Base name of the stored data. Each run creates a new one, suffixed with the run date,
+# because the Géoplateforme's integration appends to an existing stored data.
+REGULATIONS_GEOPLATEFORME_STORED_DATA_NAME = "reglementation_des_peches_cartographiee"
+# Geoservice configuration and publication to point at the newly created stored data,
+# as listed by `python -m sdk_entrepot_gpf configuration` and `... offering`. They are
+# read from the environment because they change whenever the geoservice is recreated.
+REGULATIONS_GEOPLATEFORME_CONFIGURATION_ID = get_key(
+    DOTENV_PATH, "REGULATIONS_GEOPLATEFORME_CONFIGURATION_ID"
+)
+REGULATIONS_GEOPLATEFORME_OFFERING_ID = get_key(
+    DOTENV_PATH, "REGULATIONS_GEOPLATEFORME_OFFERING_ID"
+)
+REGULATIONS_GEOPLATEFORME_DATASHEET_NAME = "regulation-int"
+REGULATIONS_GEOPLATEFORME_PRODUCER = "MonitorFish"
 
 CONTROLS_STATISTICS_DATASET_ID = "637c9225bad9521cdab12ba2"
 CONTROLS_STATISTICS_CSV_RESOURCE_ID = "e370fae2-9397-4fbd-bdc9-4f574b49d503"

@@ -13,17 +13,3 @@ export function getFeaturesByMonths(features: MonitorFishFeature[]): Record<stri
     return acc
   }, {})
 }
-
-export function isFeatureDisplayed(isSuperUser: boolean) {
-  return (feature: MonitorFishFeature) => {
-    if (!isSuperUser && feature.for === 'CNSP') {
-      return false
-    }
-
-    if (isSuperUser && feature.for === 'EXTERNAL') {
-      return false
-    }
-
-    return true
-  }
-}

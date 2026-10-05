@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,4 +34,9 @@ msgstr ""
 #: ../source/inspection-data-entry.rst:11
 #: 31ff1835f840438fb79e0ac2ea701840
 msgid "This data is then visible on the inspection history of each vessel and used to compute the vessel's :doc:`risk-factor`."
+msgstr ""
+
+#: ../source/inspection-data-entry.rst:13
+#: 2bc46842048f4934b2c04f3e0348c644
+msgid "See :doc:`missions-and-controls` for a full description of missions and inspection reports."
 msgstr ""

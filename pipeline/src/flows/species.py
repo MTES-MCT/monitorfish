@@ -7,6 +7,7 @@ from prefect import flow, get_run_logger, task
 from config import DATA_GOUV_SPECIES_URL, PROXIES
 from src.generic_tasks import load
 from src.processing import coalesce
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -140,8 +141,12 @@ def load_species(species: pd.DataFrame):
     )
 
 
-@flow(name="Monitorfish - Species")
-def species_flow(extract_species_task=extract_species):
-    species = extract_species_task(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
+@flow(
+    name="Monitorfish - Species",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
+def species_flow():
+    species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
     load_species(species)

@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/flows/recompute-mission-actions-facade.rst:3
+#: 63788ae1e8d74c8b835dcdbb491380f3
+msgid "Recompute mission actions facade"
+msgstr ""
+
+#: ../source/flows/recompute-mission-actions-facade.rst:5
+#: a78070d584364e5ea7b67b63c6a6456a
+msgid "The ``Recompute mission actions facade`` flow recomputes the facade (seafront) of all mission actions of a given year, following the same logic as the backend :"
+msgstr ""
+
+#: ../source/flows/recompute-mission-actions-facade.rst:8
+#: e5770340aeab43acb19f488c20e116c5
+msgid "the facade of sea and air controls is deduced from their position"
+msgstr ""
+
+#: ../source/flows/recompute-mission-actions-facade.rst:9
+#: 98d39710a4254fbd882c3c6380b81a7e
+msgid "the facade of land controls is that of the port where they took place"
+msgstr ""
+
+#: ../source/flows/recompute-mission-actions-facade.rst:10
+#: 7e9d74879f614436b13ae8d65a6bf00a
+msgid "other actions (air surveillance, observation) are not assigned a facade"
+msgstr ""
+
+#: ../source/flows/recompute-mission-actions-facade.rst:12
+#: 2e8c6e110b7c49678a280b55cff94574
+msgid "This is useful when facade areas or the facade of ports change. It is run manually."
+msgstr ""

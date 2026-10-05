@@ -1,6 +1,7 @@
 import { DatePickerField } from '@features/Mission/components/MissionForm/ActionForm/shared/DatePickerField'
 import { FormikINNRadio } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikINNRadio'
 import { FormikSpeciesQuantitySeized } from '@features/Mission/components/MissionForm/ActionForm/shared/FormikSpeciesQuantitySeized'
+import { StampEISRModeEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/StampEISRModeEffect'
 import { UpdateMissionActionCompletionEffect } from '@features/Mission/components/MissionForm/ActionForm/shared/UpdateMissionActionCompletionEffect'
 import { useIsEISREnabled } from '@features/Mission/components/MissionForm/hooks/useIsEISREnabled'
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
@@ -35,7 +36,7 @@ type LandControlFormProps = Readonly<{
 }>
 export function LandControlForm({ initialValues, onChange }: LandControlFormProps) {
   const isMissionEnded = useIsMissionEnded()
-  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc)
+  const isEISREnabled = useIsEISREnabled(initialValues.actionDatetimeUtc, initialValues.isEISR)
   const validationSchema = isMissionEnded
     ? getLandControlFormCompletionSchema(isEISREnabled)
     : LandControlFormLiveSchema
@@ -46,6 +47,7 @@ export function LandControlForm({ initialValues, onChange }: LandControlFormProp
         <>
           <FormikEffect onChange={validateBeforeOnChange(initialValues, validateForm, onChange)} />
           <FormikRevalidationEffect />
+          <StampEISRModeEffect />
           <UpdateMissionActionCompletionEffect />
 
           <ActionFormHeader>

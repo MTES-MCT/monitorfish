@@ -4,7 +4,7 @@ import { countVesselListFilter } from '@features/Vessel/components/VesselList/ut
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { pluralize } from '@mtes-mct/monitor-ui'
+import { pluralize, THEME } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 import styled from 'styled-components'
 
@@ -28,7 +28,7 @@ export function VesselFiltersHeadband() {
         <Wrapper $hasHealthcheckWarning={hasHealthcheckWarning}>
           {numberOfFilters} {pluralize('filtre', numberOfFilters)} {numberOfFilters > 1 ? 'sont' : 'est'}{' '}
           {pluralize('appliqué', numberOfFilters)} sur les navires affichés.
-          <ResetButton onClick={reset} />
+          <ResetButton iconColor={THEME.color.white} onClick={reset} />
         </Wrapper>
       )}
     </>
@@ -49,4 +49,14 @@ const Wrapper = styled.div<{
   padding: 13px;
   z-index: 1;
   color: ${p => p.theme.color.gainsboro};
+
+  span {
+    color: ${p => p.theme.color.gainsboro};
+  }
+
+  button {
+    display: inline-flex;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
 `

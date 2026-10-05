@@ -17,7 +17,7 @@ export function RemoveRegulationModal() {
   const deleteRegulation = () => {
     const feature = new Feature({})
     feature.setId(getRegulatoryFeatureId(processingRegulation.id))
-    dispatch(updateRegulation(feature, RegulationActionType.Delete))
+    dispatch(updateRegulation({ deletes: [feature] }, RegulationActionType.Delete))
   }
 
   return (

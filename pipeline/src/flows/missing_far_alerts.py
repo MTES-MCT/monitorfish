@@ -9,7 +9,9 @@ from sqlalchemy.sql import Select
 
 from src.exceptions import MonitorfishHealthError
 from src.generic_tasks import extract, read_query_task
+from src.helpers.dates import utcnow
 from src.processing import join_on_multiple_keys
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     extract_silenced_alerts,
     filter_alerts,
@@ -38,19 +40,19 @@ def get_dates(
     Returns:
         Tuple[datetime, datetime, datetime]
     """
-    utcnow = datetime.utcnow()
-    today_at_zero_hours = utcnow.replace(hour=0, minute=0, second=0, microsecond=0)
+    now = utcnow()
+    today_at_zero_hours = now.replace(hour=0, minute=0, second=0, microsecond=0)
     period_start_at_zero_hours = today_at_zero_hours - timedelta(days=days_without_far)
     yesterday_at_eight_pm = today_at_zero_hours - timedelta(hours=4)
     period_start_hours_from_now = (
-        utcnow - period_start_at_zero_hours
+        now - period_start_at_zero_hours
     ).total_seconds() / 3600
 
     return (
         period_start_at_zero_hours,
         yesterday_at_eight_pm,
         today_at_zero_hours,
-        utcnow,
+        now,
         period_start_hours_from_now,
     )
 
@@ -413,7 +415,11 @@ def merge_risk_factor(
     )
 
 
-@flow(name="Monitorfish - Missing FAR alerts")
+@flow(
+    name="Monitorfish - Missing FAR alerts",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def missing_far_alerts_flow(
     alert_type: str,
     name: str,

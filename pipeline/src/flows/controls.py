@@ -1,4 +1,4 @@
-from typing import Callable, Tuple
+from typing import Tuple
 
 import geopandas as gpd
 import pandas as pd
@@ -17,6 +17,7 @@ from src.generic_tasks import extract, load
 from src.helpers.controls import make_infractions
 from src.helpers.fao_areas import remove_redundant_fao_area_codes
 from src.processing import df_to_dict_series, zeros_ones_to_bools
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.facades import extract_facade_areas
 
 
@@ -650,13 +651,14 @@ def load_mission_actions(mission_actions: pd.DataFrame, loading_mode: str):
     )
 
 
-@flow(name="Monitorfish - Controls")
+@flow(
+    name="Monitorfish - Controls",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def controls_flow(
     loading_mode: str,
     number_of_months: int,
-    extract_controls_fn: Callable = extract_controls,
-    extract_catch_controls_fn: Callable = extract_catch_controls,
-    load_missions_and_missions_control_units_fn: Callable = load_missions_and_missions_control_units,
 ):
     """
     Controls flow - extracts and processes control data from FMC database
@@ -666,11 +668,11 @@ def controls_flow(
         number_of_months: Number of months of data to extract
     """
     # Extract
-    controls = extract_controls_fn(number_of_months=number_of_months)
+    controls = extract_controls(number_of_months=number_of_months)
     fao_areas = extract_fao_areas()
     facade_areas = extract_facade_areas()
     ports = extract_ports()
-    catch_controls = extract_catch_controls_fn()
+    catch_controls = extract_catch_controls()
 
     # Transform
     controls = transform_controls(controls)
@@ -692,6 +694,6 @@ def controls_flow(
         loading_mode=loading_mode,
     )
 
-    return load_missions_and_missions_control_units_fn(
+    return load_missions_and_missions_control_units(
         missions, missions_control_units, loading_mode=loading_mode
     )

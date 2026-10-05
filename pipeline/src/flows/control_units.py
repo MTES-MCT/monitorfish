@@ -3,6 +3,7 @@ from prefect import flow, get_run_logger, task
 
 from src.db_config import create_engine
 from src.generic_tasks import extract, load
+from src.sentry import report_flow_failure_to_sentry
 
 
 @task
@@ -48,11 +49,12 @@ def load_analytics_control_units_and_administrations(
         )
 
 
-@flow(name="Monitorfish - Control units")
-def control_units_flow(
-    extract_control_units_fn=extract_control_units,
-    extract_administrations_fn=extract_administrations,
-):
-    control_units = extract_control_units_fn()
-    administrations = extract_administrations_fn()
+@flow(
+    name="Monitorfish - Control units",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
+def control_units_flow():
+    control_units = extract_control_units()
+    administrations = extract_administrations()
     load_analytics_control_units_and_administrations(control_units, administrations)

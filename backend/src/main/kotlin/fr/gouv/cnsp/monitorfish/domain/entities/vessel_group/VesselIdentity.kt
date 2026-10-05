@@ -13,6 +13,43 @@ data class VesselIdentity(
     val flagState: CountryCode,
     val vesselIdentifier: VesselIdentifier?,
 ) {
+    /**
+     * Whether this identity and [other] designate the same vessel: by `vesselId` when both carry one, else by the
+     * identifier field designated by `vesselIdentifier` when both agree, else by any identifier field shared by both.
+     */
+    fun isSameVesselAs(other: VesselIdentity): Boolean =
+        when {
+            this.vesselId != null && other.vesselId != null ->
+                this.vesselId == other.vesselId
+
+            this.vesselIdentifier != null ->
+                when (this.vesselIdentifier) {
+                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                        this.vesselIdentifier == other.vesselIdentifier &&
+                            this.cfr == other.cfr
+
+                    VesselIdentifier.IRCS ->
+                        this.vesselIdentifier == other.vesselIdentifier &&
+                            this.ircs == other.ircs
+
+                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                        this.vesselIdentifier == other.vesselIdentifier &&
+                            this.externalIdentification == other.externalIdentification
+                }
+
+            !this.cfr.isNullOrEmpty() && !other.cfr.isNullOrEmpty() ->
+                this.cfr == other.cfr
+
+            !this.ircs.isNullOrEmpty() && !other.ircs.isNullOrEmpty() ->
+                this.ircs == other.ircs
+
+            !this.externalIdentification.isNullOrEmpty() &&
+                !other.externalIdentification.isNullOrEmpty() ->
+                this.externalIdentification == other.externalIdentification
+
+            else -> false
+        }
+
     fun isEqualToActiveVessel(activeVessel: EnrichedActiveVessel): Boolean {
         if (activeVessel.lastPosition != null) {
             return when {

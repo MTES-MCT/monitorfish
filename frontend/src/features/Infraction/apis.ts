@@ -28,7 +28,7 @@ async function getInfractionsFromAPI() {
   try {
     return await monitorfishApiKy.get(`/api/v1/infractions`).json<Array<Infraction>>()
   } catch (err) {
-    throw new FrontendApiError(INFRACTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError)
+    throw new FrontendApiError(INFRACTIONS_ERROR_MESSAGE, (err as FrontendApiError).originalError ?? (err as Error))
   }
 }
 

@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
+# This file is distributed under the same license as the Monitorfish package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Monitorfish \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-01 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../source/missions-and-controls.rst:3
+#: 7d3884e2d7f04a8d8be82517755dd831
+msgid "Missions and controls"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:5
+#: 2506d4da02994e0191f7d562f1c42e2a
+msgid "Missions and controls are entered by the FMC (super users) in the side window. Missions are shared with `Monitorenv <https://github.com/MTES-MCT/monitorenv>`__ : a mission can contain both fisheries controls (entered in Monitorfish) and environmental actions (entered in Monitorenv)."
+msgstr ""
+
+#: ../source/missions-and-controls.rst:10
+#: 199fe9cbc845472ab29cae765b53b33a
+msgid "Missions list"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:12
+#: a9a48c3f07bd497eadd6b37c128c7b26
+msgid "The missions list can be filtered by period, administration, control unit, mission type (sea, air, land), status, completion of data, control results, JDP missions and vessel."
+msgstr ""
+
+#: ../source/missions-and-controls.rst:15
+#: 4b47c359b81f49a4a7acd12f16b8e0e7
+msgid "From this list, :doc:`activity reports (Act-Rep) <activity-report>` can be exported for each Joint Deployment Plan."
+msgstr ""
+
+#: ../source/missions-and-controls.rst:17
+#: 2019cbb364004afb8239d5a090408027
+msgid "List of missions"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:21
+#: 00c5d435af0344828dc80c5203712754
+msgid "*List of missions*"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:24
+#: 32d95903ad474dd6ad606190537e348b
+msgid "Mission form"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:26
+#: 96ecbeb7f45a48ba93582e99b0418164
+msgid "A mission has :"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:28
+#: ec0d25b34d174e489e479c3f5baff4d6
+msgid "one or several control units and their resources"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:29
+#: fe95bdd4515a44daabb26ccc3915ea99
+msgid "one or several types (sea, air, land), and whether it is under a Joint Deployment Plan (JDP)"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:30
+#: a67aa2cec1ae4565bc3c0244345f4fa1
+msgid "its dates, zones and observations"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:32
+#: 00c5d435af0344828dc80c5203712754
+msgid "Actions of the mission can be :"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:34
+#: 73153cd38ced42dda16f9dfd02dc108a
+msgid "**sea controls** and **land controls** (inspection reports)"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:35
+#: c27526457ad748fbba89b312b60fd896
+msgid "**air controls** and **air surveillance**"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:36
+#: 2116ae977d3d4d0d82e06bd4bfde067a
+msgid "**observations**"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:39
+#: 7bcce8c1060740a29993e4aad0035eb0
+msgid "Inspection reports"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:41
+#: 79661c8a6b0348a594cc3ae03172e2e1
+msgid "Mission form : general information, actions of the mission and the inspection report of a sea control"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:45
+#: 6c5f9243b14d49c595c4a5c4f6dff472
+msgid "*Mission form : general information, actions of the mission and the inspection report of a sea control*"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:47
+#: ec1d557bf5b3464fba76e353003d9d8a
+msgid "The inspection report form of a control records :"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:49
+#: 77cb2096d4434f749324adc150ee093f
+msgid "the controlled vessel - its :doc:`groups <groups-of-vessels>` and open :doc:`reportings` are displayed when it is selected"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:50
+#: 53ee3f0f3a5c430c95e4cfa5f125c88d
+msgid "the position (sea controls) or the port (land controls) of the control"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:51
+#: 57db5156880b4e7aaf0b3d83eebb3e93
+msgid "the compliance of VMS and AIS emissions, logbook declarations, licences and authorizations"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:52
+#: d07396cf49c94b1599102c4771e99d98
+msgid "the gears controlled, with their mesh"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:53
+#: 75859716109a4325a8c5890740310ada
+msgid "the species onboard, with declared and controlled quantities, the margin of tolerance, undersized and discarded quantities - species are prefilled from the vessel's logbook"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:55
+#: f2c8b52f52ae4cd8b4bd48d0d5ce20f1
+msgid "the infractions found (NATINF codes, sorted by family and type), with their result, and seizures (gears, species, vessel)"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:56
+#: ab0c4a0dddcb4571badb877c35568154
+msgid "whether the vessel is subject to IUU regulations"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:57
+#: d72918aa74244c9aad93ec146a4e2d37
+msgid "the :doc:`fleet segments <fleet-segments>`, computed from the controlled data"
+msgstr ""
+
+#: ../source/missions-and-controls.rst:59
+#: 8f399dbeb9c4443f83fd05276069d608
+msgid "The form is saved automatically. Its completion status lists the missing fields, so that missions can be checked and completed."
+msgstr ""
+
+#: ../source/missions-and-controls.rst:61
+#: 40a6146c5ac04ebb93bdbab6344f7ce9
+msgid "The controls are then displayed in the vessel's controls history (see :doc:`vessel-sheet`) and used to compute its :doc:`risk factor <risk-factor>` and :doc:`fleet segments <fleet-segments>` control statistics."
+msgstr ""
+
+#: ../source/missions-and-controls.rst:64
+#: 19d25df6505b451f873fd1633b937468
+msgid "The data model of inspection reports is being aligned on the EFCA electronic Inspection and Surveillance Report (e-ISR) ; the corresponding fields are enabled progressively."
+msgstr ""

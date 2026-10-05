@@ -8,7 +8,9 @@ from sqlalchemy import text
 
 from config import LIBRARY_LOCATION
 from src.db_config import create_engine
+from src.helpers.dates import utcnow
 from src.scraping.legipeche.legipeche.spiders.legipeche_spider import LegipecheSpider
+from src.sentry import report_flow_failure_to_sentry
 from src.utils import psql_insert_copy
 
 SCRAPED_FILE_LOCATION = LIBRARY_LOCATION / "data/"
@@ -33,7 +35,7 @@ def scrape_legipeche_to_csv():
     for proxy_env in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"]:
         os.environ.pop(proxy_env, None)
 
-    extraction_datetime_utc = datetime.datetime.utcnow()
+    extraction_datetime_utc = utcnow()
 
     process = CrawlerProcess(
         settings={
@@ -102,7 +104,11 @@ def load_legipeche(legipeche: pd.DataFrame):
         )
 
 
-@flow(name="Monitorfish - Scrape legipeche")
+@flow(
+    name="Monitorfish - Scrape legipeche",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def scrape_legipeche_flow():
     delete_csv()
     extraction_datetime_utc = scrape_legipeche_to_csv()

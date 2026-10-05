@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 14:22+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgid "`make <https://www.gnu.org/software/make/>`__"
 msgstr ""
 
 #: ../source/deployment.rst:18
-#: ../source/deployment.rst:98
+#: ../source/deployment.rst:141
 #: bced2dbb027e4568bbfce515a0e81ea8
 #: f9bd48862f874803b10b109da49e0bfd
 msgid "Configuration"
@@ -75,190 +75,280 @@ msgstr ""
 
 #: ../source/deployment.rst:34
 #: 5430e26a5386428d83a83d6c8f38aaba
-msgid "A ``.env`` file must be created in the ``pipeline`` folder, with all the variables listed in ``.env.template`` filled in."
+msgid "A ``.env`` file must be created in the ``pipeline`` folder, with all the variables listed in ``pipeline/.env.template`` filled in."
 msgstr ""
 
 #: ../source/deployment.rst:35
-#: 0029cdb020184b84995479bc4fb75ec1
-msgid "Set the ``MONITORFISH_VERSION`` environment variable. This will determine which docker images to pull when running ```make`` commands."
+#: 02556f1c6a434846b843ce4a3af32983
+msgid "A ``~/.monitorfish`` file must define the variables listed in ``pipeline/.monitorfish.template`` :"
 msgstr ""
 
-#: ../source/deployment.rst:38
-#: 95aa81e03b7d48cea6c8a329d764b287
-msgid "ERS files"
+#: ../source/deployment.rst:37
+#: 7b3cd42e321049b283f9ea49fa213823
+msgid "``MONITORFISH_VERSION`` : determines which docker images to pull when running ``make`` commands. The backend and the data pipeline must always be deployed with the same version (see :ref:`data-pipeline`)."
+msgstr ""
+
+#: ../source/deployment.rst:39
+#: ae3c9aa406224f80997d66b1a87375f8
+msgid "``PREFECT_API_URL`` : the URL of the Prefect server API (e.g. ``http://<prefect-host>:4200/api``)"
 msgstr ""
 
 #: ../source/deployment.rst:40
+#: 3de84464ff7644acaa5294f4ff66be84
+msgid "``LOGBOOK_FILES_GID`` : the group that owns the logbook files folder, so that flows can read and move logbook files"
+msgstr ""
+
+#: ../source/deployment.rst:43
+#: 45eb684d50b046ac8198fcb0e0ceb9f4
+msgid "Logbook files"
+msgstr ""
+
+#: ../source/deployment.rst:45
 #: f8448faf88f4443f8cde74701a514b8c
-msgid "ERS raw xml files are ingested by the ERS flow from the configured ``ERS_FILES_LOCATION`` in ``pipeline/config.py``. In order to make ERS data available to Monitorfish, ERS files should therefore be deposited in this directory."
+msgid "Logbook (ERS / FLUX) and sales notes zip files are ingested by the :doc:`flows/sales-and-logbook` flow from the ``received`` subfolder of ``ERS_FILES_LOCATION`` (configured in ``pipeline/config.py``). In order to make logbook data available to Monitorfish, the zip files should therefore be deposited in this directory."
 msgstr ""
 
-#: ../source/deployment.rst:44
+#: ../source/deployment.rst:50
 #: 48ca5b6874074d668273b897c98f00d9
-msgid "Running the database service"
+msgid "Running the app and database services"
 msgstr ""
 
-#: ../source/deployment.rst:46
-#: 16399d29543f49e485a12ffbe2202c99
-msgid "The Monitorfish database must be running for data processing operations to be carried out. For this, run the backend service first."
+#: ../source/deployment.rst:52
+#: afe280a820e140629fa808668548dbbe
+msgid "The Monitorfish database (``db``) and the app (``app``, backend and frontend) are defined in ``infra/remote/docker-compose.yml``. The app can be (re)started in the version set by ``MONITORFISH_VERSION`` with :"
 msgstr ""
 
-#: ../source/deployment.rst:51
+#: ../source/deployment.rst:59
+#: e0cc6d19b2de414ab1385bd40a5cef12
+msgid "The Monitorfish database must be running for data processing operations to be carried out. Database migrations are run by the backend at startup : the backend must therefore be started (or upgraded) before the data pipeline flows are deployed."
+msgstr ""
+
+#: ../source/deployment.rst:62
+#: bd6bc840dca844afb1b6604a71e6ca8b
+msgid "Unhealthy containers can be restarted automatically by adding the line in ``infra/remote/crontab.txt`` to the crontab file."
+msgstr ""
+
+#: ../source/deployment.rst:67
 #: 9efa4a35fa004fcaaadc5ebea28381d3
 msgid "Running the orchestration service"
 msgstr ""
 
-#: ../source/deployment.rst:54
+#: ../source/deployment.rst:70
 #: 8175acad2ca24104a4f91b48ac8e0cda
-msgid "Starting the Prefect server orchestrator"
+msgid "Starting the Prefect server"
 msgstr ""
 
-#: ../source/deployment.rst:56
-#: d869a54a95f942e8babd551d9a82167f
-msgid "The orchestration service can be started with :"
+#: ../source/deployment.rst:72
+#: d8eff76351c242409c00a1851f40bd0b
+msgid "The Prefect 3 server (API, UI and its own Postgres database) is defined in ``infra/prefect_3_server`` :"
 msgstr ""
 
-#: ../source/deployment.rst:64
+#: ../source/deployment.rst:74
+#: 127af2c7661f42f99c57df931333045d
+msgid "Copy ``infra/prefect_3_server/.env.template`` and rename the copy ``.env``."
+msgstr ""
+
+#: ../source/deployment.rst:75
+#: e235e7def9b14399aa75d2497907d897
+msgid "Fill in the variables in the ``.env`` file."
+msgstr ""
+
+#: ../source/deployment.rst:76
+#: 8e99d203c83348e8ad981b15c45cf8d6
+msgid "Run ``docker compose up -d`` in ``infra/prefect_3_server``."
+msgstr ""
+
+#: ../source/deployment.rst:78
+#: b9d5822c92f1432fb0d0aaeb2673f315
+msgid "The Prefect UI is then available on port 4200."
+msgstr ""
+
+#: ../source/deployment.rst:81
 #: da2b91c4c70e4a0da59ca78e96e2f8e3
 msgid "Automating log cleaning"
 msgstr ""
 
-#: ../source/deployment.rst:66
+#: ../source/deployment.rst:83
 #: 9913e1374caf4d55a94d65f94afd7fd7
-msgid "Logs of past flow runs are stored in a Postgres database that is part of the prefect server architecture. In order to keep the size of this database low, it is necessary to set up a cron job to delete old flow runs."
+msgid "Logs of past flow runs are stored in the Postgres database of the Prefect server. In order to keep the size of this database low, it is necessary to set up a cron job to delete old flow runs, logs and events."
 msgstr ""
 
-#: ../source/deployment.rst:69
+#: ../source/deployment.rst:86
 #: 4bc17c3b5ede41e2b145ad0922244c80
-msgid "The Prefect server database runs in a Docker container. The script ``infra/remote/data-pipeline/truncate-old-prefect-logs.sh`` goes into that container with ``docker exec`` and runs a ``DELETE`` query to delete old flow_runs."
+msgid "The script ``infra/prefect_3_server/truncate-prefect-logs.sh`` goes into the ``prefect-db`` container with ``docker exec`` and runs ``DELETE`` queries on old data."
 msgstr ""
 
-#: ../source/deployment.rst:71
+#: ../source/deployment.rst:89
 #: 0d50aaed78db4a8bbf534be32c1bab43
-msgid "This query can be run daily by setting up a cron job, for instance by adding a line to the crontab file :"
+msgid "This script can be run daily by setting up a cron job, for instance by adding a line to the crontab file :"
 msgstr ""
 
-#: ../source/deployment.rst:77
+#: ../source/deployment.rst:95
 #: df899e07c8694ecc903cd2393d79b184
-msgid "then add the line in ``infra/remote/data-pipeline/crontab.txt`` (after updating the scripts and logs locations as needed) in the crontab file."
+msgid "then add the line in ``infra/prefect_3_server/crontab.txt`` (after updating the script location as needed) in the crontab file."
 msgstr ""
 
-#: ../source/deployment.rst:82
+#: ../source/deployment.rst:100
 #: eebc600719524e148610174ead696bea
 msgid "Running the execution service"
 msgstr ""
 
-#: ../source/deployment.rst:84
-#: 7c58a51c30f24c1bb222694dc6addc86
-msgid "The execution service can be started with :"
+#: ../source/deployment.rst:103
+#: 8175acad2ca24104a4f91b48ac8e0cda
+msgid "Starting the Prefect worker"
 msgstr ""
 
-#: ../source/deployment.rst:93
+#: ../source/deployment.rst:105
+#: 69cff70db964477dbdc40e70b3f66f45
+msgid "Flows are executed by a Prefect `docker worker <https://docs.prefect.io/v3/concepts/workers>`__ which polls the ``monitorfish`` work pool of the Prefect server and runs each flow in an ephemeral container of the ``monitorfish-pipeline-prefect3`` image."
+msgstr ""
+
+#: ../source/deployment.rst:109
+#: d869a54a95f942e8babd551d9a82167f
+msgid "The worker runs as a systemd service :"
+msgstr ""
+
+#: ../source/deployment.rst:111
+#: 14fc08fa7ccc4934a5d8243e8ec4a484
+msgid "Install ``prefect`` (with the ``docker`` extra) in a python virtual environment on the host."
+msgstr ""
+
+#: ../source/deployment.rst:112
+#: af2d369953af4b4c9cad2adaf1d59146
+msgid "Copy ``infra/remote/data-pipeline-prefect3/.prefect-worker.template`` to ``~/.prefect-worker`` and fill in the Prefect server URL."
+msgstr ""
+
+#: ../source/deployment.rst:113
+#: 7d11f8284a6d46c1b68240ce8a4124ff
+msgid "Copy ``infra/remote/data-pipeline-prefect3/prefectworker.sh`` and ``prefectworker.service``, fill in the user, script and virtual environment locations, then install and enable the service :"
+msgstr ""
+
+#: ../source/deployment.rst:122
+#: 104d726aa6704aa582c176e516eb67ee
+msgid "Deploying the flows"
+msgstr ""
+
+#: ../source/deployment.rst:124
+#: 108306ed4bc349189a6bf8f4bc00bd73
+msgid "Flows and their schedules (defined in ``pipeline/src/deployments.py``) are deployed to the Prefect server with :"
+msgstr ""
+
+#: ../source/deployment.rst:130
+#: 0b4f6da53123495d8e072c41ce69ef76
+msgid "This pulls the ``monitorfish-pipeline-prefect3`` image of version ``MONITORFISH_VERSION`` and runs ``infra/remote/data-pipeline-prefect3/deploy-flows.sh``. It must be run again after each upgrade of ``MONITORFISH_VERSION``."
+msgstr ""
+
+#: ../source/deployment.rst:136
 #: 901505e1368f47bab235ecffb9382071
 msgid "Database backup & restore"
 msgstr ""
 
-#: ../source/deployment.rst:95
+#: ../source/deployment.rst:138
 #: 2a18b79c6b2345fa91c0aa4ba85f3dc8
 msgid "This section explains how to perform and automate full database backups."
 msgstr ""
 
-#: ../source/deployment.rst:100
+#: ../source/deployment.rst:143
 #: e7bbb6ccd19b4183a75b02d0ee66b890
 msgid "Create a backups folder on the host machine."
 msgstr ""
 
-#: ../source/deployment.rst:101
+#: ../source/deployment.rst:144
 #: 44a1c6e11f254bae8c38d79162c00eb0
-msgid "Create ``MONITORFISH_BACKUPS_FOLDER`` entry with the full path to the backups folder in ~/.monitorfish - e.g.g. ``export MONITORFISH_BACKUPS_FOLDER=\"/backups/\"``."
+msgid "Create ``MONITORFISH_BACKUPS_FOLDER`` entry with the full path to the backups folder in ~/.monitorfish - e.g. ``export MONITORFISH_BACKUPS_FOLDER=\"/backups/\"``."
 msgstr ""
 
-#: ../source/deployment.rst:102
+#: ../source/deployment.rst:145
+#: 44a1c6e11f254bae8c38d79162c00eb0
+msgid "Create ``MONITORFISH_GIT_FOLDER`` entry in ~/.monitorfish with the full path to the cloned repository - e.g. ``export MONITORFISH_GIT_FOLDER=\"/home/monitorfish/monitorfish\"``."
+msgstr ""
+
+#: ../source/deployment.rst:146
 #: 2392dbbe74144cc79d5a4cfadcf6fea9
-msgid "Create ``MONITORFISH_LOGS_AND_BACKUPS_GID`` entry in ~/.monitorfish with the group that owns the backups folder (the database container with be run with this group so it can write to the backups folder on the host) - e.g.g. ``export MONITORFISH_LOGS_AND_BACKUPS_GID=\"125\"``."
+msgid "Create ``MONITORFISH_LOGS_AND_BACKUPS_GID`` entry in ~/.monitorfish with the group that owns the backups folder (the database container will be run with this group so it can write to the backups folder on the host) - e.g. ``export MONITORFISH_LOGS_AND_BACKUPS_GID=\"125\"``."
 msgstr ""
 
-#: ../source/deployment.rst:103
+#: ../source/deployment.rst:147
 #: 127af2c7661f42f99c57df931333045d
 msgid "Make a copy of ``infra/remote/backup/pg_backup.config.template`` and rename it ``pg_backup.config``."
 msgstr ""
 
-#: ../source/deployment.rst:104
+#: ../source/deployment.rst:148
 #: fe237e7608f8419bbf6b9397740bb392
 msgid "Optionnally, change the backup parameters in ``pg_backup.config``."
 msgstr ""
 
-#: ../source/deployment.rst:107
+#: ../source/deployment.rst:151
 #: 31918af2de644337929880d623221fe1
 msgid "Backup"
 msgstr ""
 
-#: ../source/deployment.rst:110
+#: ../source/deployment.rst:154
 #: 3ad354ac666f4e2ea0f7f0a3138a9e89
 msgid "Running the backup script"
 msgstr ""
 
-#: ../source/deployment.rst:112
+#: ../source/deployment.rst:156
 #: bd6bc840dca844afb1b6604a71e6ca8b
 msgid "Once the configuration step is done, a backup can be made by running the script at ``infra/remote/backup/pg_backup_rotated.sh``."
 msgstr ""
 
-#: ../source/deployment.rst:114
+#: ../source/deployment.rst:158
 #: f2bcba08c8ee4162b7d87abd0735c879
 msgid "This script :"
 msgstr ""
 
-#: ../source/deployment.rst:116
+#: ../source/deployment.rst:160
 #: 87b1828509fb4a55b6018a7e2133232c
 msgid "``docker execs`` into the database container and makes a full database backup using ``pg_dump``"
 msgstr ""
 
-#: ../source/deployment.rst:117
+#: ../source/deployment.rst:161
 #: 52ee75eae84345339f435bc4d16ed50b
 msgid "outputs :"
 msgstr ""
 
-#: ../source/deployment.rst:119
+#: ../source/deployment.rst:163
 #: f9dd66d15daa4cc78015c442d046f393
 msgid "a single ``globals.sql.gz`` file that contains database globals (roles, tablespaces)"
 msgstr ""
 
-#: ../source/deployment.rst:120
+#: ../source/deployment.rst:164
 #: 6f1a88287b0145e2a4bab31b1152171c
 msgid "a ``*.custom`` file (full database dump in compressed `custom` postgres format) for each database on the postgres cluster"
 msgstr ""
 
-#: ../source/deployment.rst:121
+#: ../source/deployment.rst:165
 #: b5ead73c9f7c4911921f2b5e35257048
 msgid "stores these files on the host machine, in a subfolder of the backups folder, named with the date of the backup"
 msgstr ""
 
-#: ../source/deployment.rst:122
+#: ../source/deployment.rst:166
 #: 5abf630c307345b0805d7b60111cbba6
 msgid "deletes old backups in rotation, keeping daily and weekly backups for as long as specified in the ``pg_backup.config`` file"
 msgstr ""
 
-#: ../source/deployment.rst:125
+#: ../source/deployment.rst:169
 #: 8f1952d3418f4caba6f87cab6bcbdb27
 msgid "Automating backups"
 msgstr ""
 
-#: ../source/deployment.rst:127
+#: ../source/deployment.rst:171
 #: 494555a19dbe4ef69f10653be1cdd210
 msgid "To automate backups, add the line ``infra/remote/backup/crontab.txt`` to the crontab file :"
 msgstr ""
 
-#: ../source/deployment.rst:133
+#: ../source/deployment.rst:177
 #: 710a8417e03e4ee989e086f89bdfc227
 msgid "We recommend running the backup script daily."
 msgstr ""
 
-#: ../source/deployment.rst:136
+#: ../source/deployment.rst:180
 #: ba0d91a650b44cfb9321f64899894ceb
 msgid "Restore"
 msgstr ""
 
-#: ../source/deployment.rst:138
+#: ../source/deployment.rst:182
 #: 22b0f83eb6344b1a85edc492c2391dc8
 msgid "To restore from a backup, see `TimescaleDB documentation <https://legacy-docs.timescale.com/v1.7/using-timescaledb/backup#pg_dump-pg_restore>`_."
 msgstr ""

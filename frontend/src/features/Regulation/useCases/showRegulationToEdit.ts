@@ -50,7 +50,6 @@ export const showRegulationToEdit =
           geometry,
           id,
           lawType,
-          nextId: undefined,
           otherInfo,
           region: region ? region.split(', ') : [],
           regulatoryReferences: regulatoryReferences?.length ? regulatoryReferences : [DEFAULT_REGULATORY_TEXT],

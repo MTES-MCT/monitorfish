@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,51 +22,71 @@ msgid "Position alerts"
 msgstr ""
 
 #: ../source/flows/position-alerts.rst:5
-#: 1c89c74e1b9943b8947fd321fe6f8c65
-msgid "The ``Position alerts`` flow detects whether any vessel emitted VMS data that matches the specified detection parameters on :"
+#: 9923981faf72439d92de127befd92224
+msgid "Position alerts are the :ref:`configurable alerts <configurable-alerts>` created by users in the app. Their specifications are stored in the ``position_alerts`` table."
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:7
+#: ../source/flows/position-alerts.rst:8
+#: fd71fff67f7843a5aaf5677e43183419
+msgid "They are run by two flows :"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:10
+#: d6e57b0b2e174145b98f23d310b9d39c
+msgid "the ``Position alerts`` flow, scheduled to run every 10 minutes, reads all alert specifications and selects those which are activated and within their validity period (validity periods can be repeated each year). For each of these, it triggers a run of the ``Position alert`` flow."
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:13
+#: b441fc920c9c4a1596bf9fdf97c737f4
+msgid "the ``Position alert`` flow runs one alert specification : it detects whether any vessel emitted VMS data that matches the detection parameters of the specification. At most 3 runs of this flow are executed concurrently."
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:16
+#: e3fff5d1dc5141d58e24e8f2c9a33281
+msgid "Detection parameters are :"
+msgstr ""
+
+#: ../source/flows/position-alerts.rst:18
 #: f8357151c4d347f19625e886aaa010cd
 msgid "flag state"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:8
-#: 928e779082994651a383aeab484949ab
-msgid "area of detection"
+#: ../source/flows/position-alerts.rst:19
+#: 49f152e425f84c9d9e7383ff4d850cfe
+msgid "areas of detection : administrative areas (EEZ, FAO areas, coastal strips...) and / or regulatory areas"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:9
+#: ../source/flows/position-alerts.rst:20
 #: 0337b606d3504fc1a178d695fc9fa0f6
 msgid "whether to detect all positions or only positions with fishing activity (as detected by the :doc:`enrich positions flow <enrich-positions>`)"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:10
+#: ../source/flows/position-alerts.rst:21
 #: 8d9eb919a2894626b53ad5f57b551e18
-msgid "fishing gear (from logbook data and :doc:`vessel-profiles`)"
+msgid "fishing gear (from logbook data and :doc:`vessel-profiles`), with an optional mesh range"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:11
-#: 9deb74c25c4b4972933ce9738d7dbc1d
-msgid "species (from logbook data)"
+#: ../source/flows/position-alerts.rst:22
+#: 69d71fad61af472ba35e612dc948feee
+msgid "species onboard (from logbook data), with an optional minimum weight and catch areas"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:12
+#: ../source/flows/position-alerts.rst:23
 #: c403c956f1ef49af96660a591d430145
 msgid "time window (specified by a number of hours preceding the present time)"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:13
+#: ../source/flows/position-alerts.rst:24
 #: 21abb91782524270bc358081affa8c97
 msgid "depth (based on bathymetry data from https://emodnet.ec.europa.eu at the position of the VMS point)"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:14
+#: ../source/flows/position-alerts.rst:25
 #: 18ad06abf73444499ce0316af379074b
 msgid "list of vessels (specified by their district, producer organization or individually)"
 msgstr ""
 
-#: ../source/flows/position-alerts.rst:16
-#: 3ed54288c3e94ad5a82304e9e7613732
-msgid "The detected vessels are loaded to the ``pending_alerts`` table."
+#: ../source/flows/position-alerts.rst:27
+#: 4525e90c500a451297342babb3b61a34
+msgid "Vessels for which the alert is silenced are excluded. The detected vessels are loaded to the ``pending_alerts`` table."
 msgstr ""

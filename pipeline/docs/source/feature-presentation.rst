@@ -5,15 +5,23 @@ Feature presentation
 .. toctree::
     :maxdepth: 1
 
+    map-and-layers
+    vessel-sheet
+    vessel-list
+    groups-of-vessels
     alerts
-    regulation
+    reportings
+    vms-beacon-monitoring
+    prior-notifications
+    missions-and-controls
     inspection-data-entry
+    activity-report
+    control-units
+    regulation
     fleet-segments
     risk-factor
     control-priority-steering
-    prior-notifications
-    groups-of-vessels
-    activity-overview
-    activity-report
     vessel-profiles
-    vms-beacon-monitoring
+    activity-overview
+    back-office
+    access-rights

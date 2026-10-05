@@ -25,7 +25,15 @@ def infractions() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "natinf_code": [20978, 22206, 22564, 27724, 30771, 30788, 40409],
-            "regulation": [None, "Reg pêche 1", None, "Reg pêche 5", None, None, "d89-273"],
+            "regulation": [
+                None,
+                "Reg pêche 1",
+                None,
+                "Reg pêche 5",
+                None,
+                None,
+                "d89-273",
+            ],
             "infraction_category": [
                 "Environnement",
                 "Pêche",
@@ -53,7 +61,15 @@ def cleaned_infractions() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "natinf_code": [20978, 22206, 22564, 27724, 30771, 30788, 40409],
-            "regulation": [None, "Reg pêche 1", None, "Reg pêche 5", None, None, "d89-273"],
+            "regulation": [
+                None,
+                "Reg pêche 1",
+                None,
+                "Reg pêche 5",
+                None,
+                None,
+                "d89-273",
+            ],
             "infraction_category": [
                 "Environnement",
                 "Pêche",

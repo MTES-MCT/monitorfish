@@ -3,7 +3,7 @@ import logging
 import os
 import re
 from email.message import EmailMessage
-from typing import Callable, Iterable, List, Tuple
+from typing import Iterable, List, Tuple
 
 import jinja2
 import pandas as pd
@@ -21,6 +21,7 @@ from config import (
 from src.generic_tasks import extract
 from src.helpers.emails import create_html_email, send_email
 from src.processing import get_matched_groups, try_get_factory
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.dates import get_utcnow
 
 ####################################### Helpers #######################################
@@ -723,18 +724,19 @@ def send_message(msg: EmailMessage):
     send_email(msg)
 
 
-@flow(name="Monitorfish - Regulations checkup")
+@flow(
+    name="Monitorfish - Regulations checkup",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def regulations_checkup_flow(
     proxies: dict = PROXIES,
     backoffice_regulation_url: str = BACKOFFICE_REGULATION_URL,
-    get_utcnow_fn=get_utcnow,
-    get_dead_links_fn: Callable = get_dead_links,
-    send_message_fn: Callable = send_message,
 ):
     # Extract data
     monitorfish_regulations = extract_monitorfish_regulations.submit()
     legipeche_regulations = extract_legipeche_regulations.submit()
-    utcnow = get_utcnow_fn()
+    utcnow = get_utcnow()
 
     # Extract output templates
     main_template = get_main_template()
@@ -763,7 +765,7 @@ def regulations_checkup_flow(
         monitorfish_regulations=monitorfish_regulations,
         legipeche_regulations=legipeche_regulations,
     )
-    dead_links = get_dead_links_fn(monitorfish_regulations, unknown_links, proxies)
+    dead_links = get_dead_links(monitorfish_regulations, unknown_links, proxies)
     dead_links = format_dead_links(dead_links)
 
     outdated_references = get_outdated_references(monitorfish_regulations, utcnow)
@@ -792,5 +794,5 @@ def regulations_checkup_flow(
 
     recipients = get_recipients()
     msg = create_message(html, recipients)
-    send_message_fn(msg)
+    send_message(msg)
     return msg

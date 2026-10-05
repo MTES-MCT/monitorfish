@@ -474,12 +474,12 @@ class PriorNotificationControllerUTests {
         api
             .perform(
                 get(
-                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId!!}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
+                    "/bff/v1/prior_notifications/${fakePriorNotification.reportId}?operationDate=${fakePriorNotification.logbookMessageAndValue.logbookMessage.operationDateTime}&isManuallyCreated=false",
                 ).with(authenticatedRequest()),
             )
             // Then
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId!!)))
+            .andExpect(jsonPath("$.reportId", equalTo(fakePriorNotification.reportId)))
             .andExpect(jsonPath("$.asManualDraft.fishingCatches[0].weight", equalTo(12.0)))
             .andExpect(jsonPath("$.asManualDraft.fishingCatches[1].weight", equalTo(0.0)))
             .andExpect(jsonPath("$.logbookMessage.message.catchOnboard[0].weight", equalTo(12.0)))

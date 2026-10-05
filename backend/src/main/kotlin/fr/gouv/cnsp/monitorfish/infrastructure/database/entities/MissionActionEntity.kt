@@ -217,6 +217,8 @@ class MissionActionEntity(
     val isInnControl: Boolean,
     @Column(name = "is_unit_boarded")
     val isUnitBoarded: Boolean? = null,
+    @Column(name = "is_e_isr")
+    val isEISR: Boolean? = null,
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
 ) {
@@ -298,6 +300,7 @@ class MissionActionEntity(
                 isSeafarersControl = missionAction.isSeafarersControl,
                 isInnControl = missionAction.isINNControl,
                 isUnitBoarded = missionAction.isUnitBoarded,
+                isEISR = missionAction.isEISR,
                 observationsByUnit = missionAction.observationsByUnit,
             )
     }
@@ -390,6 +393,7 @@ class MissionActionEntity(
             isSeafarersControl = isSeafarersControl,
             isINNControl = isInnControl,
             isUnitBoarded = isUnitBoarded,
+            isEISR = isEISR,
             observationsByUnit = observationsByUnit,
         )
 

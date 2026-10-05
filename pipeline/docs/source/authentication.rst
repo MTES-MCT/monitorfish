@@ -4,12 +4,34 @@ Authentication & authorization
 Authentication
 --------------
 
-We use OIDC (the French government OIDC called "Cerbère") to authenticate users.
+Users are authenticated with OpenID Connect (OIDC), through `ProConnect <https://www.proconnect.gouv.fr>`__ 
+(which federates the identity providers of the French administration, including Cerbère).
 
-* frontend: An Authorization Code Flow With Proof Key of Code Exchange (PKCE) is used in our frontend SPA to gather the `access_token`
-* backend: Our backend is a seen as a Resource Server, the `access_token` is verified within an API security filter.
+* backend : the backend is an OIDC client (Spring Security ``oauth2Login``). The frontend redirects the user to 
+  ``/oauth2/authorization/proconnect`` ; after a successful login, the backend opens a session for the user. Only 
+  users whose email belongs to one of the authorized email domains are accepted.
+* frontend : the login page shows a ProConnect or a Cerbère login button (``FRONTEND_OIDC_LOGIN_BUTTON_PROVIDER``). 
+  Users without an account are invited to request one by email.
+
+Authentication can be disabled (e.g. for local development) with the ``monitorfish.oidc.enabled`` property.
 
 Authorization
 -------------
 
-We store users authorization is a custom `user_authorizations` table : the hashed email (SHA256) of the JWT email is used to authorize users.
+We store users authorization in a custom ``user_authorizations`` table : the hashed email (SHA256) of the user is used 
+to authorize users. Each user is either :
+
+* a **super user** (FMC agents), who has access to all features
+* a regular user (other administrations, e.g. control units), who has access to a subset of features
+
+See :doc:`access-rights` for the features available to each type of user.
+
+Routes of the frontend API (``/bff/v1/*``) require an authorized user, and some routes require a super user.
+
+Users are managed by other applications through the ``/api/v1/authorization/management`` endpoint of the public API.
+
+Public API
+----------
+
+Protected routes of the public API (``/api/v1/*``), used by other systems (Monitorenv, RapportNav...), require an API key 
+sent in the ``x-api-key`` header.

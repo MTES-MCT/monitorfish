@@ -12,12 +12,16 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.DEP
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.LogbookMessageValue
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardReason
+import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.DiscardedSpeciesControl
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.species.Species
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
+import fr.gouv.cnsp.monitorfish.domain.use_cases.species.GetSpeciesFromCode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.never
@@ -41,6 +45,9 @@ class EnrichPublicMissionActionUTests {
 
     @MockitoBean
     private lateinit var getLogbookMessages: GetLogbookMessages
+
+    @MockitoBean
+    private lateinit var getSpeciesFromCode: GetSpeciesFromCode
 
     private val cfr = "FRA000123456"
 
@@ -199,5 +206,29 @@ class EnrichPublicMissionActionUTests {
         assertThat(result.tripNumber).isNull()
         verify(vesselRepository, never()).findVesselById(any())
         verify(logbookReportRepository, never()).findAllTrips(any())
+    }
+
+    @Test
+    fun `execute should resolve the names of the discarded species`() {
+        // Given
+        val action =
+            mockAction.copy(
+                vesselId = null,
+                internalReferenceNumber = null,
+                discardedSpecies =
+                    listOf(
+                        DiscardedSpeciesControl(speciesCode = "HKE", discardReason = DiscardReason.DIM),
+                        DiscardedSpeciesControl(speciesCode = "HKE", discardReason = DiscardReason.DIS),
+                        DiscardedSpeciesControl(speciesCode = "XXX", discardReason = DiscardReason.RET),
+                    ),
+            )
+        `when`(getSpeciesFromCode.execute(eq("HKE")))
+            .thenReturn(Species(code = "HKE", name = "MERLU EUROPÉEN", scipSpeciesType = null))
+
+        // When
+        val result = enrichPublicMissionAction.execute(action)
+
+        // Then
+        assertThat(result.discardedSpeciesNamesByCode).isEqualTo(mapOf("HKE" to "MERLU EUROPÉEN"))
     }
 }

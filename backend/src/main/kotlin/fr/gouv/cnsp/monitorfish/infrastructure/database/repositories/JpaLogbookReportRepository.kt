@@ -94,7 +94,19 @@ class JpaLogbookReportRepository(
             }
     }
 
-    @Cacheable(value = ["pno_to_verify"])
+    @Cacheable(value = ["pno_for_active_vessels"], sync = true)
+    override fun findAllAcknowledgedPriorNotificationsForActiveVessels(): List<PriorNotification> {
+        val now = ZonedDateTime.now()
+        val filter =
+            PriorNotificationsFilter(
+                willArriveAfter = now,
+                willArriveBefore = now.plusDays(2),
+            )
+
+        return findAllAcknowledgedPriorNotifications(filter)
+    }
+
+    @Cacheable(value = ["pno_to_verify"], sync = true)
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
         val filter =
             PriorNotificationsFilter(
@@ -267,7 +279,7 @@ class JpaLogbookReportRepository(
         )
 
     @Transactional
-    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["pno_to_verify", "pno_for_active_vessels"], allEntries = true)
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
@@ -337,7 +349,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    @CacheEvict(value = ["pno_to_verify"], allEntries = true)
+    @CacheEvict(value = ["pno_to_verify", "pno_for_active_vessels"], allEntries = true)
     override fun invalidate(
         reportId: String,
         operationDate: ZonedDateTime,

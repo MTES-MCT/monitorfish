@@ -104,6 +104,7 @@ data class AddMissionActionDataInput(
     var isSeafarersControl: Boolean? = null,
     var isINNControl: Boolean = false,
     val isUnitBoarded: Boolean? = null,
+    val isEISR: Boolean? = null,
 ) {
     fun toMissionAction() =
         MissionAction(
@@ -175,5 +176,6 @@ data class AddMissionActionDataInput(
             isSeafarersControl = isSeafarersControl,
             isINNControl = isINNControl,
             isUnitBoarded = isUnitBoarded,
+            isEISR = isEISR,
         )
 }

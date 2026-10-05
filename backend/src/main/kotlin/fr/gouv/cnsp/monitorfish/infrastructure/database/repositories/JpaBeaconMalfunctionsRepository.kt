@@ -17,18 +17,18 @@ import java.time.ZonedDateTime
 class JpaBeaconMalfunctionsRepository(
     private val dbBeaconMalfunctionsRepository: DBBeaconMalfunctionsRepository,
 ) : BeaconMalfunctionsRepository {
-    override fun findAll(): List<BeaconMalfunction> =
-        dbBeaconMalfunctionsRepository.findAll().map {
+    override fun findAllFollowed(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findAllFollowed().map {
             it.toBeaconMalfunction()
         }
 
-    override fun findAllExceptArchived(): List<BeaconMalfunction> =
-        dbBeaconMalfunctionsRepository.findAllExceptArchived().map {
+    override fun findAllFollowedExceptArchived(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findAllFollowedExceptArchived().map {
             it.toBeaconMalfunction()
         }
 
-    override fun findLastSixtyArchived(): List<BeaconMalfunction> =
-        dbBeaconMalfunctionsRepository.findLastSixtyArchived().map {
+    override fun findLastSixtyArchivedAndFollowed(): List<BeaconMalfunction> =
+        dbBeaconMalfunctionsRepository.findLastSixtyArchivedAndFollowed().map {
             it.toBeaconMalfunction()
         }
 
@@ -72,6 +72,14 @@ class JpaBeaconMalfunctionsRepository(
             .map {
                 it.toBeaconMalfunction()
             }
+
+    @Transactional
+    override fun updateIsFollowed(
+        id: Int,
+        isFollowed: Boolean,
+    ) {
+        dbBeaconMalfunctionsRepository.updateIsFollowed(id, isFollowed)
+    }
 
     @Transactional
     override fun requestNotification(

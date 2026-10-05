@@ -69,13 +69,11 @@ def mock_invalidate_cache() -> pd.DataFrame:
     mock_calls.append(mock_requests)
 
 
+@patch("src.flows.ports.invalidate_cache", mock_invalidate_cache)
+@patch("src.flows.ports.update_resource", mock_update_resource)
+@patch("src.flows.ports.extract_local_ports", mock_extract_local_ports)
 def test_flow(reset_test_data, expected_ports_open_data, expected_loaded_ports):
-    state = ports_flow(
-        extract_local_ports_fn=mock_extract_local_ports,
-        update_resource_fn=mock_update_resource,
-        invalidate_cache_fn=mock_invalidate_cache,
-        return_state=True,
-    )
+    state = ports_flow(return_state=True)
     assert state.is_completed()
 
     # Check loaded ports

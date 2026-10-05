@@ -5,6 +5,7 @@ from prefect import Flow
 from prefect.schedules import Schedule
 
 from src.deployments import flows_to_deploy
+from src.sentry import report_flow_failure_to_sentry
 
 
 def validate_schedule_parameters(
@@ -48,3 +49,9 @@ def validate_schedule_parameters(
 def test_deployments():
     for flow_to_deploy in flows_to_deploy:
         validate_schedule_parameters(flow_to_deploy.flow, flow_to_deploy.schedules)
+
+
+def test_deployed_flows_report_failures_to_sentry():
+    for flow_to_deploy in flows_to_deploy:
+        assert report_flow_failure_to_sentry in flow_to_deploy.flow.on_failure_hooks
+        assert report_flow_failure_to_sentry in flow_to_deploy.flow.on_crashed_hooks

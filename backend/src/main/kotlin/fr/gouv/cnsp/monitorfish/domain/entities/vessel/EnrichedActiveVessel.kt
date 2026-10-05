@@ -45,7 +45,8 @@ data class EnrichedActiveVessel(
                 // A non-French vessel is taken into account and French vessels must have a registered beacon
                 lastPosition?.flagState != CountryCode.FR || beacon?.vesselId != null
             } else {
-                false
+                // A vessel without a recent position is still expected to emit if it has a registered beacon
+                beacon?.vesselId != null
             }
 
         segments =

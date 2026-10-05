@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2025, Vincent Chéry & Loup Théron
+# Copyright (C) 2026, Vincent Chéry & Loup Théron
 # This file is distributed under the same license as the Monitorfish package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Monitorfish \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-27 10:28+0200\n"
+"POT-Creation-Date: 2026-10-01 09:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 
 #: ../source/flows/administrative-areas.rst:5
 #: 6d192d7a86dc46a18bcb2887fe43dd3c
-msgid "The ``Administrative areas`` flow extracts administrative areas (FAO areas, exclusive economic areas...) from the CROSSA database and inserts the data into the various tables of the Monitorfish database."
+msgid "The ``Administrative areas`` flow extracts administrative areas (FAO areas, exclusive economic areas, 3/6/12 nautical miles coastal strips, statistical rectangles...) from the CROSSA database and inserts the data into the various tables of the Monitorfish database."
 msgstr ""
 
-#: ../source/flows/administrative-areas.rst:8
+#: ../source/flows/administrative-areas.rst:9
 #: d71cefdccc2f4a9581ef7e66c0d7c686
-msgid "It is run manually when necessary, in order to sync the Monitorfish database with the CROSSA database after an update."
+msgid "It is scheduled to run every weekday, in order to keep the Monitorfish database in sync with the CROSSA database."
 msgstr ""

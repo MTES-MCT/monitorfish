@@ -1,5 +1,6 @@
 from prefect import flow
 
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     archive_reporting,
     extract_non_archived_reportings_ids_of_type,
@@ -8,7 +9,11 @@ from src.shared_tasks.alerts import (
 )
 
 
-@flow(name="Monitorfish - Validate pending alerts")
+@flow(
+    name="Monitorfish - Validate pending alerts",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def validate_pending_alerts_flow(alert_type: str):
     pending_alert_ids = extract_pending_alerts_ids_of_type(alert_type)
     validated_alerts = validate_pending_alert.map(pending_alert_ids)

@@ -4,6 +4,7 @@ import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
 import TileWMS from 'ol/source/TileWMS'
 import XYZ from 'ol/source/XYZ'
+import TileState from 'ol/TileState'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { LayerProperties } from '../constants'
@@ -30,18 +31,26 @@ function UnmemoizedBaseLayer() {
       return
     }
 
-    fetch(src).then(response => {
-      if (!response.ok) {
-        return
-      }
+    fetch(src)
+      .then(response => {
+        if (!response.ok) {
+          imageTile.setState(TileState.ERROR)
 
-      response.blob().then(blob => {
-        const objUrl = URL.createObjectURL(blob)
-        tileCacheMapRef.current.set(src, objUrl)
-        // @ts-ignore
-        imgElement.src = objUrl
+          return undefined
+        }
+
+        return response.blob().then(blob => {
+          const objUrl = URL.createObjectURL(blob)
+          tileCacheMapRef.current.set(src, objUrl)
+          // @ts-ignore
+          imgElement.src = objUrl
+        })
       })
-    })
+      // A tile request can fail (network error, request aborted by a page reload):
+      // mark the tile as failed instead of leaving an unhandled promise rejection
+      .catch(() => {
+        imageTile.setState(TileState.ERROR)
+      })
   }, [])
 
   const baseLayersObjects = useMemo(

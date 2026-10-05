@@ -47,6 +47,9 @@ monitorfish:
     keycloak:
         proxy:
             enabled: ${MONITORFISH_KEYCLOAK_PROXY_ENABLED:false}
+    e2e:
+        cache-reset:
+            enabled: ${MONITORFISH_E2E_CACHE_RESET_ENABLED:false}
     kafka:
         ais:
             enabled: ${MONITORFISH_KAFKA_AIS_ENABLED:false}

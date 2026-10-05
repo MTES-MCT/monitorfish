@@ -170,17 +170,15 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
               value={getIUUValue(filters.isIUU)}
             />
             <DrawZoneFilterButton />
-          </Row>
-          {showAbsentVesselToggle && (
-            <Row>
+            {showAbsentVesselToggle && (
               <Checkbox
                 checked={absentVesselChecked}
                 label="Navires sans fiche"
                 name="absentVessel"
                 onChange={handleCheckAbsentVessel}
               />
-            </Row>
-          )}
+            )}
+          </Row>
         </>
       )}
       {hasActiveFilters && (

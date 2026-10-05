@@ -128,4 +128,22 @@ describe('scrollToFirstMissingField()', () => {
 
     expect(field.hasAttribute('data-missing-field-highlighted')).toBe(false)
   })
+  it('Should highlight the label of a control check row', () => {
+    document.body.innerHTML = `
+      <div data-action-form-scroll-container id="action-form">
+        <p id="header"></p>
+        <fieldset class="Field-MultiRadio" data-missing-field-row>
+          <legend data-missing-field-label id="label">Bonne émission VMS</legend>
+          <div class="Field-Radio" id="radio"><input name="emitsVms" /></div>
+        </fieldset>
+      </div>
+    `
+    const scrollContainer = document.getElementById('action-form') as HTMLElement
+    scrollContainer.scrollTo = jest.fn()
+
+    scrollToFirstMissingField(document.getElementById('header') as HTMLElement, ['emitsVms'])
+
+    expect(document.getElementById('label')?.hasAttribute('data-missing-field-highlighted')).toBe(true)
+    expect(document.getElementById('radio')?.hasAttribute('data-missing-field-highlighted')).toBe(false)
+  })
 })

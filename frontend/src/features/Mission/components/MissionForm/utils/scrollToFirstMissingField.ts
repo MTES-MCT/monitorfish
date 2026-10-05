@@ -61,7 +61,10 @@ export function findFirstMissingFieldElement(root: ParentNode, paths: string[]):
 }
 
 function highlightField(element: Element): void {
-  const fieldElement = element.closest('[class*="Field-"]') ?? element
+  const fieldElement =
+    element.closest('[data-missing-field-row]')?.querySelector('[data-missing-field-label]') ??
+    element.closest('[class*="Field-"]') ??
+    element
 
   clearTimeout(highlightTimeouts.get(fieldElement))
   fieldElement.setAttribute(HIGHLIGHT_ATTRIBUTE, '')

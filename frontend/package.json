@@ -132,7 +132,7 @@
     "@vitejs/plugin-react": "6.0.5",
     "assert": "2.1.0",
     "codecov": "3.8.3",
-    "cypress": "15.21.0",
+    "cypress": "15.18.0",
     "cypress-axe": "1.7.0",
     "dotenv": "17.4.2",
     "eslint": "9.39.4",

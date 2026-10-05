@@ -9,7 +9,7 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { Accent, Tag, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import dayjs from 'dayjs'
-import styled from 'styled-components'
+import styled, { type DefaultTheme } from 'styled-components'
 
 import { ActionButtonsCell } from './cells/ActionButtonsCell'
 
@@ -57,7 +57,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Date début',
       id: ReportingsSortColumn.REPORTING_DATE,
-      size: 100 + legacyFirefoxOffset
+      size: 120 + legacyFirefoxOffset
     },
     {
       accessorFn: row => row,
@@ -93,12 +93,13 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       cell: (info: CellContext<Reporting.Reporting, ReportingType>) => {
         const { isInfractionSuspicion } = ReportingTypeCharacteristics[info.getValue()]
         const typeLabel = isInfractionSuspicion ? "Susp. d'infraction" : 'Observation'
+        const isArchived = !!info.row.original.isArchived
 
         return (
           <TypeAndStatus>
-            <TypeDot $isInfractionSuspicion={isInfractionSuspicion} title={typeLabel} />
+            <TypeDot $isArchived={isArchived} $isInfractionSuspicion={isInfractionSuspicion} title={typeLabel} />
             <HiddenText>{typeLabel}</HiddenText>
-            {info.row.original.isArchived ? 'Archivé' : 'En cours'}
+            {isArchived ? 'Archivé' : 'En cours'}
           </TypeAndStatus>
         )
       },
@@ -122,7 +123,7 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       enableSorting: true,
       header: () => 'Titre',
       id: ReportingsSortColumn.TITLE,
-      size: 315 + legacyFirefoxOffset
+      size: 295 + legacyFirefoxOffset
     },
     {
       accessorFn: row => {
@@ -185,16 +186,23 @@ const TypeAndStatus = styled.span`
 `
 
 const TypeDot = styled.span<{
+  $isArchived: boolean
   $isInfractionSuspicion: boolean
 }>`
-  background-color: ${p => (p.$isInfractionSuspicion ? p.theme.color.maximumRed : p.theme.color.opal)};
+  background-color: ${p => (p.$isArchived ? p.theme.color.white : getTypeColor(p))};
+  border: 1px solid ${p => getTypeColor(p)};
   border-radius: 50%;
+  box-sizing: border-box;
   display: inline-block;
   flex-shrink: 0;
   height: 8px;
   margin-right: 8px;
   width: 8px;
 `
+
+function getTypeColor({ $isInfractionSuspicion, theme }: { $isInfractionSuspicion: boolean; theme: DefaultTheme }) {
+  return $isInfractionSuspicion ? theme.color.maximumRed : theme.color.blueGray
+}
 
 const TitleCell = styled.span`
   align-items: center;

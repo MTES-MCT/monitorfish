@@ -1,3 +1,5 @@
+import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
+import { setSelectedTab } from '@features/Alert/components/SideWindowAlerts/slice'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
 import { ReportingZoneFilter } from '@features/Reporting/components/ReportingMapMenuDialog/ReportingZoneFilter'
@@ -63,6 +65,7 @@ export function ReportingMapMenuDialog() {
     )
   }
   const toggleReportingList = () => {
+    dispatch(setSelectedTab(AlertAndReportingTab.REPORTING))
     dispatch(openSideWindowPath({ menu: SideWindowMenuKey.ALERT_LIST_AND_REPORTING_LIST }))
   }
 

@@ -83,7 +83,7 @@ context('Reportings filters are shared by the map and the list', () => {
 
     cy.clickButton('Voir la vue détaillée des signalements')
     cy.wait(1000)
-    cy.getDataCy('side-window-reporting-tab').click({ force: true })
+    cy.getDataCy('reporting-table-filters').should('exist')
     cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click({ force: true })
 
     // Then the list queries with the very filters set on the map side...

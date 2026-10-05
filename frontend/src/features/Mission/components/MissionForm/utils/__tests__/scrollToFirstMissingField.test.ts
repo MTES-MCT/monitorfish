@@ -128,12 +128,12 @@ describe('scrollToFirstMissingField()', () => {
 
     expect(field.hasAttribute('data-missing-field-highlighted')).toBe(false)
   })
-  it('Should highlight the label of a control check row', () => {
+  it('Should highlight the legend of a multiple choice field', () => {
     document.body.innerHTML = `
       <div data-action-form-scroll-container id="action-form">
         <p id="header"></p>
-        <fieldset class="Field-MultiRadio" data-missing-field-row>
-          <legend data-missing-field-label id="label">Bonne émission VMS</legend>
+        <fieldset class="Element-Fieldset Field-MultiRadio">
+          <legend id="label">Bonne émission VMS</legend>
           <div class="Field-Radio" id="radio"><input name="emitsVms" /></div>
         </fieldset>
       </div>

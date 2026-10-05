@@ -62,7 +62,7 @@ export function findFirstMissingFieldElement(root: ParentNode, paths: string[]):
 
 function highlightField(element: Element): void {
   const fieldElement =
-    element.closest('[data-missing-field-row]')?.querySelector('[data-missing-field-label]') ??
+    element.closest('.Element-Fieldset[class*="Field-"]')?.querySelector(':scope > legend') ??
     element.closest('[class*="Field-"]') ??
     element
 

@@ -38,13 +38,8 @@ export function ControlCheckTable({ rows }: ControlCheckTableProps) {
               {label}
             </SectionHeader>
           ) : (
-            <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio" data-missing-field-row>
-              <RowLegend
-                $disabled={!!disabled}
-                $hasBorderBottom={!!hasBorderBottom}
-                $isFirst={index === 0}
-                data-missing-field-label
-              >
+            <RowFieldset key={name} className="Element-Fieldset Field-MultiRadio">
+              <RowLegend $disabled={!!disabled} $hasBorderBottom={!!hasBorderBottom} $isFirst={index === 0}>
                 <LabelText $isRequired={!!isRequired}>{label}</LabelText>
               </RowLegend>
               {CONTROL_CHECK_AS_OPTIONS.map(opt => (

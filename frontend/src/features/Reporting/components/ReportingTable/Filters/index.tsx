@@ -195,7 +195,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 1290px; /* = table width */
 `
 
 const Row = styled.div`

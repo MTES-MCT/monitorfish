@@ -89,19 +89,23 @@ export function UserFeedbackMapButton() {
                   {isError && (
                     <ErrorMessage>Nous n&apos;avons pas pu envoyer votre message. Veuillez réessayer.</ErrorMessage>
                   )}
-                  <Button
-                    disabled={!isSendable}
-                    Icon={Icon.Send}
-                    isFullWidth
-                    onClick={() => {
-                      void send()
-                    }}
-                  >
-                    Envoyer
-                  </Button>
                 </>
               )}
             </StyledBody>
+            {!isSuccess && (
+              <Footer>
+                <Button
+                  disabled={!isSendable}
+                  Icon={Icon.Send}
+                  isFullWidth
+                  onClick={() => {
+                    void send()
+                  }}
+                >
+                  Envoyer
+                </Button>
+              </Footer>
+            )}
           </StyledContainer>
         </StyledMapToolBox>
       )}
@@ -137,6 +141,10 @@ const StyledBody = styled(MapMenuDialog.Body)`
   display: flex;
   flex-direction: column;
   gap: 12px;
+`
+
+const Footer = styled(MapMenuDialog.Footer)`
+  box-sizing: border-box;
 `
 
 const ErrorMessage = styled.p`

@@ -41,7 +41,9 @@ context('Main Window > User Feedback', () => {
       expect(request.body.files[0].mimeType).to.equal('image/png')
       expect(request.body.files[0].content).to.not.be.empty
     })
-    cy.get('[data-cy="map-user-feedback-box"]').contains('Merci, nous prendrons connaissance de votre message.')
+    cy.get('[data-cy="map-user-feedback-box"]').contains(
+      'Merci, nous allons prendre connaissance de votre message et vous répondre.'
+    )
 
     cy.get('button[title="Nous contacter"]').click()
     cy.get('[data-cy="map-user-feedback-box"]').should('not.exist')

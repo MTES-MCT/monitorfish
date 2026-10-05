@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 val springBootVersion = "4.1.1"
-val kotlinVersion = "2.4.10"
+val kotlinVersion = "2.4.20"
 val springSecurityVersion = "7.1.1"
 
 plugins {
@@ -12,13 +12,13 @@ plugins {
 
     id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.4.10"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.4.10"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.4.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.4.20"
 
-    kotlin("jvm") version "2.4.10"
-    kotlin("plugin.noarg") version "2.4.10"
-    kotlin("plugin.jpa") version "2.4.10"
-    kotlin("plugin.serialization") version "2.4.10"
+    kotlin("jvm") version "2.4.20"
+    kotlin("plugin.noarg") version "2.4.20"
+    kotlin("plugin.jpa") version "2.4.20"
+    kotlin("plugin.serialization") version "2.4.20"
 
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
@@ -121,19 +121,19 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 
     // HTTP client
-    implementation("io.ktor:ktor-client-core-jvm:3.5.2")
-    implementation("io.ktor:ktor-client-java-jvm:3.5.2")
-    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.5.2")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.5.2")
+    implementation("io.ktor:ktor-client-core-jvm:3.6.0")
+    implementation("io.ktor:ktor-client-java-jvm:3.6.0")
+    implementation("io.ktor:ktor-client-content-negotiation-jvm:3.6.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.6.0")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:13.1.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.1.0")
-    implementation("org.hibernate.validator:hibernate-validator:9.1.3.Final")
+    implementation("org.flywaydb:flyway-core:13.4.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.4.0")
+    implementation("org.hibernate.validator:hibernate-validator:9.1.4.Final")
     // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
     // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).
     implementation("org.hibernate.orm:hibernate-spatial")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.15.5")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.16.0")
     api("org.locationtech.jts:jts-core:1.20.0")
     implementation("org.n52.jackson:jackson-datatype-jts:3.0.4")
     implementation("org.locationtech.proj4j:proj4j:1.4.3")
@@ -141,24 +141,24 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql:42.7.13")
 
     // Serialization / API
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.2")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
     // Required to (de)serialize java.util.Optional (e.g. PatchableMissionActionDataInput): since the
     // Spring Boot 4 upgrade the starters ship Jackson 3 and no longer pull this Jackson 2 module.
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.2")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.3")
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
-    api("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0")
+    api("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
 
     // Utilities
     api("com.neovisionaries:nv-i18n:1.29")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
-    implementation("io.sentry:sentry:8.53.0")
-    implementation("io.sentry:sentry-log4j2:8.53.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
+    implementation("io.sentry:sentry:8.58.0")
+    implementation("io.sentry:sentry-log4j2:8.58.0")
 
     // Runtime
     runtimeOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")
 
     // Test
-    testImplementation("io.ktor:ktor-client-mock-jvm:3.5.2")
+    testImplementation("io.ktor:ktor-client-mock-jvm:3.6.0")
     testImplementation("org.springframework.kafka:spring-kafka-test") {
         exclude(group = "ch.qos.logback", module = "logback-classic")
     }
@@ -190,6 +190,16 @@ configure<KtlintExtension> {
     android.set(false)
     outputToConsole.set(true)
     ignoreFailures.set(false)
+}
+
+// Dependency management aligns every Kotlin artifact on the project's Kotlin version, but ktlint
+// embeds its own compiler and cannot parse anything with Kotlin >= 2.4.20 ("Extensions storage is not registered").
+configurations.matching { it.name.startsWith("ktlint") }.configureEach {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion("2.1.0")
+        }
+    }
 }
 
 tasks.named<Test>("test") {

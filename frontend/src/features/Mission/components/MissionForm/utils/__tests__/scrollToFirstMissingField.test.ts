@@ -1,9 +1,10 @@
-import { beforeEach, describe, expect, it } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 
 import {
   findFirstMissingFieldElement,
   findMissingFieldElement,
-  scrollToFirstMissingField
+  scrollToFirstMissingField,
+  sortPathsByDisplayOrder
 } from '../scrollToFirstMissingField'
 
 describe('findMissingFieldElement()', () => {
@@ -46,7 +47,48 @@ describe('findFirstMissingFieldElement()', () => {
   })
 })
 
+describe('sortPathsByDisplayOrder()', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <div data-missing-field-anchor="vesselId"></div>
+      <input name="emitsVms" />
+      <table><tbody><tr data-cy="species-onboard-row-0"></tr></tbody></table>
+    `
+  })
+
+  it('Should sort the paths by display order, whatever their initial order', () => {
+    expect(sortPathsByDisplayOrder(document, ['speciesOnboard[0].faoZones', 'emitsVms', 'vesselId'])).toEqual([
+      'vesselId',
+      'emitsVms',
+      'speciesOnboard[0].faoZones'
+    ])
+  })
+
+  it('Should put the paths without displayed element last, keeping their order', () => {
+    expect(sortPathsByDisplayOrder(document, ['completedBy', 'emitsVms', 'userTrigram', 'vesselId'])).toEqual([
+      'vesselId',
+      'emitsVms',
+      'completedBy',
+      'userTrigram'
+    ])
+  })
+
+  it('Should keep the order of the paths sharing the same element', () => {
+    expect(
+      sortPathsByDisplayOrder(document, [
+        'speciesOnboard[0].faoZones',
+        'speciesOnboard[0].controlledWeight',
+        'vesselId'
+      ])
+    ).toEqual(['vesselId', 'speciesOnboard[0].faoZones', 'speciesOnboard[0].controlledWeight'])
+  })
+})
+
 describe('scrollToFirstMissingField()', () => {
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   it('Should only look for and scroll within the action form panel', () => {
     document.body.innerHTML = `
       <div id="main-form"><input name="completedBy" /></div>
@@ -64,6 +106,26 @@ describe('scrollToFirstMissingField()', () => {
 
     scrollToFirstMissingField(document.getElementById('header') as HTMLElement, ['completedBy'])
 
-    expect(containerScrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 520 })
+    expect(containerScrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 776 })
+  })
+  it('Should briefly highlight the field of the first missing field', () => {
+    jest.useFakeTimers()
+    document.body.innerHTML = `
+      <div data-action-form-scroll-container id="action-form">
+        <p id="header"></p>
+        <div class="Field-Checkbox" id="field"><input name="emitsVms" /></div>
+      </div>
+    `
+    const scrollContainer = document.getElementById('action-form') as HTMLElement
+    scrollContainer.scrollTo = jest.fn()
+    const field = document.getElementById('field') as HTMLElement
+
+    scrollToFirstMissingField(document.getElementById('header') as HTMLElement, ['emitsVms'])
+
+    expect(field.hasAttribute('data-missing-field-highlighted')).toBe(true)
+
+    jest.advanceTimersByTime(1500)
+
+    expect(field.hasAttribute('data-missing-field-highlighted')).toBe(false)
   })
 })

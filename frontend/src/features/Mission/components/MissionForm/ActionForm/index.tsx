@@ -59,4 +59,10 @@ const Wrapper = styled.div`
   flex: 1 1 0;
   width: 545px;
   overflow-y: auto;
+
+  [data-missing-field-highlighted] {
+    border-radius: 2px;
+    outline: 2px solid ${p => p.theme.color.blueGray};
+    outline-offset: 4px;
+  }
 `

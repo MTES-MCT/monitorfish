@@ -6,13 +6,20 @@ import {
   getLandControlFormCompletionSchema,
   getSeaControlFormCompletionSchema,
   InfractionFormCompletionSchema,
-  InfractionFormLiveSchema
+  InfractionFormLiveSchema,
+  makeGearOnboardSchema
 } from '../schemas'
 
 jest.mock('store/index', () => ({
   mainStore: {
     getState: () => ({
-      gear: { gears: [] },
+      gear: {
+        gears: [
+          { category: 'Chaluts', code: 'OTB', isMeshRequiredForSegment: false },
+          { category: 'Chaluts', code: 'OTT', isMeshRequiredForSegment: true },
+          { category: 'Lignes et hameçons', code: 'LLS', isMeshRequiredForSegment: true }
+        ]
+      },
       missionForm: { draft: null }
     })
   }
@@ -120,13 +127,35 @@ describe('ActionForm/schemas', () => {
     })
   })
 
+  describe('makeGearOnboardSchema', () => {
+    it('should fail validation with a message When no mesh is filled for a gear requiring a mesh for its segment', () => {
+      expect(() => makeGearOnboardSchema(false).validateSync({ gearCode: 'OTT', gearWasControlled: true })).toThrow(
+        'Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'
+      )
+    })
+
+    it('should pass validation When only the controlled mesh is filled for a gear requiring a mesh for its segment', () => {
+      expect(
+        makeGearOnboardSchema(false).isValidSync({ controlledMesh: 80, gearCode: 'OTT', gearWasControlled: true })
+      ).toBe(true)
+    })
+
+    it('should pass validation When no mesh is filled for a gear not requiring a mesh for its segment', () => {
+      expect(makeGearOnboardSchema(false).isValidSync({ gearCode: 'OTB', gearWasControlled: true })).toBe(true)
+    })
+
+    it('should pass validation When no mesh is filled for a gear without mesh', () => {
+      expect(makeGearOnboardSchema(false).isValidSync({ gearCode: 'LLS', gearWasControlled: true })).toBe(true)
+    })
+  })
+
   describe('getSeaControlFormCompletionSchema', () => {
     const completionValuesWithoutEISR = {
       actionDatetimeUtc: '2026-06-15T10:00:00Z',
       completedBy: 'DEF',
       emitsAis: MissionAction.ControlCheck.YES,
       emitsVms: MissionAction.ControlCheck.YES,
-      gearOnboard: [{ gearWasControlled: true }],
+      gearOnboard: [{ declaredMesh: 70, gearCode: 'OTB', gearWasControlled: true }],
       isINNControl: false,
       isLastHaul: false,
       latitude: 48.4,
@@ -163,7 +192,14 @@ describe('ActionForm/schemas', () => {
         getSeaControlFormCompletionSchema(true).isValidSync({
           ...completionValuesWithoutEISR,
           ...eisrFields,
-          gearOnboard: [{ gearMarkingIsCompliant: MissionAction.ControlCheck.YES, gearWasControlled: true }]
+          gearOnboard: [
+            {
+              declaredMesh: 70,
+              gearCode: 'OTB',
+              gearMarkingIsCompliant: MissionAction.ControlCheck.YES,
+              gearWasControlled: true
+            }
+          ]
         })
       ).toBe(true)
     })
@@ -189,7 +225,7 @@ describe('ActionForm/schemas', () => {
       completedBy: 'DEF',
       emitsAis: MissionAction.ControlCheck.NOT_APPLICABLE,
       emitsVms: MissionAction.ControlCheck.NOT_APPLICABLE,
-      gearOnboard: [{ gearWasControlled: true }],
+      gearOnboard: [{ declaredMesh: 70, gearCode: 'OTB', gearWasControlled: true }],
       isINNControl: false,
       isLastHaul: false,
       licencesMatchActivity: MissionAction.ControlCheck.YES,
@@ -226,7 +262,14 @@ describe('ActionForm/schemas', () => {
       weighingOperationsMonitoredByInspectors: MissionAction.ControlCheck.YES
     }
 
-    const gearOnboardWithEISR = [{ gearMarkingIsCompliant: MissionAction.ControlCheck.YES, gearWasControlled: true }]
+    const gearOnboardWithEISR = [
+      {
+        declaredMesh: 70,
+        gearCode: 'OTB',
+        gearMarkingIsCompliant: MissionAction.ControlCheck.YES,
+        gearWasControlled: true
+      }
+    ]
 
     it('should pass validation without e-ISR fields When e-ISR is disabled', () => {
       expect(getLandControlFormCompletionSchema(false).isValidSync(completionValuesWithoutEISR)).toBe(true)

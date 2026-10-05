@@ -1,11 +1,14 @@
 import { useIsMissionEnded } from '@features/Mission/components/MissionForm/hooks/useIsMissionEnded'
 import { getMissingFieldsSummary } from '@features/Mission/components/MissionForm/utils/getMissingFieldsSummary'
 import { getMissionActionMissingFields } from '@features/Mission/components/MissionForm/utils/getMissionActionMissingFields'
-import { scrollToFirstMissingField } from '@features/Mission/components/MissionForm/utils/scrollToFirstMissingField'
+import {
+  scrollToFirstMissingField,
+  sortPathsByDisplayOrder
+} from '@features/Mission/components/MissionForm/utils/scrollToFirstMissingField'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, pluralize, THEME, Tooltip } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { useRef } from 'react'
+import { type RefObject, useRef } from 'react'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
@@ -44,14 +47,28 @@ export function MissingFieldsText() {
           isSideWindow
           linkText={`${count} ${pluralize('champ', count)} ${pluralize('nécessaire', count)} aux statistiques à compléter`}
         >
-          <MissingFieldList data-cy="action-missing-fields-tooltip">
-            {getMissingFieldsSummary(missingFieldPaths, values).map(line => (
-              <li key={line}>{line}</li>
-            ))}
-          </MissingFieldList>
+          <MissingFieldListContent elementInActionFormRef={wrapperRef} paths={missingFieldPaths} values={values} />
         </StyledTooltip>
       </TooltipWrapper>
     </CompletionStatus>
+  )
+}
+
+type MissingFieldListContentProps = Readonly<{
+  elementInActionFormRef: RefObject<HTMLDivElement | null>
+  paths: string[]
+  values: MissionActionFormValues
+}>
+function MissingFieldListContent({ elementInActionFormRef, paths, values }: MissingFieldListContentProps) {
+  const scrollContainer = elementInActionFormRef.current?.closest('[data-action-form-scroll-container]')
+  const sortedPaths = scrollContainer ? sortPathsByDisplayOrder(scrollContainer, paths) : paths
+
+  return (
+    <MissingFieldList data-cy="action-missing-fields-tooltip">
+      {getMissingFieldsSummary(sortedPaths, values).map(line => (
+        <li key={line}>{line}</li>
+      ))}
+    </MissingFieldList>
   )
 }
 

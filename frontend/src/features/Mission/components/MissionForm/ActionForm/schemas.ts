@@ -130,20 +130,18 @@ const actionDatetimeUtcValidator = string()
 export function makeGearOnboardSchema(isEISR: boolean) {
   return object({
     gearWasControlled: boolean().required(HIDDEN_ERROR),
-    declaredMesh: number().when(['gearCode', 'controlledMesh'], {
-      is: (gearCode, controlledMesh, context) => {
-        const { gears } = mainStore.getState().gear
-        const gear = gears.find(({ code }) => code === gearCode)
-        const declaredMesh = context?.parent?.declaredMesh
+    declaredMesh: number().when(['gearCode', 'controlledMesh'], ([gearCode, controlledMesh], schema) => {
+      const { gears } = mainStore.getState().gear
+      const gear = gears.find(({ code }) => code === gearCode)
+      if (!hasGearMesh(gearCode, gear?.category)) {
+        return schema.notRequired()
+      }
 
-        if (gear?.isMeshRequiredForSegment && hasGearMesh(gearCode, gear.category)) {
-          return controlledMesh === undefined && declaredMesh === undefined
-        }
+      if (gear?.isMeshRequiredForSegment && controlledMesh === undefined) {
+        return schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.')
+      }
 
-        return false
-      },
-      then: schema => schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'),
-      otherwise: schema => schema.notRequired()
+      return schema.required(HIDDEN_ERROR)
     }),
     controlledMesh: number(),
     gearMarkingIsCompliant: isEISR ? string().required(HIDDEN_ERROR) : string().notRequired()

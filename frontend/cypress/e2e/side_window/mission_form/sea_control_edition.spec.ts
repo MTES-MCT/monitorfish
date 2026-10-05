@@ -101,7 +101,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
       .its('response.statusCode')
       .should('eq', 201)
 
-    cy.getDataCy('action-completion-status').contains('6 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('7 champs nécessaires aux statistiques à compléter')
   })
 
   it('Should modify the controlled vessel and updated the gears, species, faoAreas and segments fields', () => {

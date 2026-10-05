@@ -133,15 +133,11 @@ export function makeGearOnboardSchema(isEISR: boolean) {
     declaredMesh: number().when(['gearCode', 'controlledMesh'], ([gearCode, controlledMesh], schema) => {
       const { gears } = mainStore.getState().gear
       const gear = gears.find(({ code }) => code === gearCode)
-      if (!hasGearMesh(gearCode, gear?.category)) {
+      if (!hasGearMesh(gearCode, gear?.category) || controlledMesh !== undefined) {
         return schema.notRequired()
       }
 
-      if (gear?.isMeshRequiredForSegment && controlledMesh === undefined) {
-        return schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.')
-      }
-
-      return schema.required(HIDDEN_ERROR)
+      return schema.required('Au moins un maillage déclaré ou contrôlé est requis pour cet engin.')
     }),
     controlledMesh: number(),
     gearMarkingIsCompliant: isEISR ? string().required(HIDDEN_ERROR) : string().notRequired()

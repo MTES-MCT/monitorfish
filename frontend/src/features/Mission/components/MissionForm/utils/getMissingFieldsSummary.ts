@@ -11,7 +11,7 @@ const MISSING_FIELD_LABELS: Record<string, string> = {
   europeanFishingLicenceValid: 'Licence de pêche européenne valide',
   gangwayPresentAndCompliant: 'Echelle de coupée présente et conforme',
   gearOnboard: 'Inspection des engins',
-  'gearOnboard[].declaredMesh': 'Maillage déclaré',
+  'gearOnboard[].declaredMesh': 'Maillage déclaré ou mesuré',
   'gearOnboard[].gearMarkingIsCompliant': "Marquage de l'engin conforme",
   'gearOnboard[].gearWasControlled': 'Engin contrôlé',
   holdControlledAfterUnloading: 'Cale contrôlée après déchargement',

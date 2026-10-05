@@ -15,9 +15,8 @@ jest.mock('store/index', () => ({
     getState: () => ({
       gear: {
         gears: [
-          { category: 'Chaluts', code: 'OTB', isMeshRequiredForSegment: false },
-          { category: 'Chaluts', code: 'OTT', isMeshRequiredForSegment: true },
-          { category: 'Lignes et hameçons', code: 'LLS', isMeshRequiredForSegment: false }
+          { category: 'Chaluts', code: 'OTB' },
+          { category: 'Lignes et hameçons', code: 'LLS' }
         ]
       },
       missionForm: { draft: null }
@@ -128,20 +127,16 @@ describe('ActionForm/schemas', () => {
   })
 
   describe('makeGearOnboardSchema', () => {
-    it('should fail validation When the declared mesh of a gear with mesh is missing', () => {
-      expect(makeGearOnboardSchema(false).isValidSync({ gearCode: 'OTB', gearWasControlled: true })).toBe(false)
-    })
-
-    it('should fail validation When the declared mesh is missing even if the controlled mesh is filled', () => {
-      expect(
-        makeGearOnboardSchema(false).isValidSync({ controlledMesh: 80, gearCode: 'OTB', gearWasControlled: true })
-      ).toBe(false)
-    })
-
-    it('should show an error message When no mesh is filled for a gear requiring a mesh for its segment', () => {
-      expect(() => makeGearOnboardSchema(false).validateSync({ gearCode: 'OTT', gearWasControlled: true })).toThrow(
+    it('should fail validation with a message When no mesh is filled for a gear with mesh', () => {
+      expect(() => makeGearOnboardSchema(false).validateSync({ gearCode: 'OTB', gearWasControlled: true })).toThrow(
         'Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'
       )
+    })
+
+    it('should pass validation When only the controlled mesh is filled', () => {
+      expect(
+        makeGearOnboardSchema(false).isValidSync({ controlledMesh: 80, gearCode: 'OTB', gearWasControlled: true })
+      ).toBe(true)
     })
 
     it('should pass validation When the gear has no mesh', () => {

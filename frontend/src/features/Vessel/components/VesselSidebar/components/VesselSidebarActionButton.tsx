@@ -55,7 +55,7 @@ const StyledButton = styled(MapButton)<{
   cursor: pointer;
   border-radius: 1px;
   right: ${p => {
-    const base = p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10
+    const base = p.$isRightMenuOpen && p.$isSidebarOpen ? 54 : 9
 
     return base + (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0)
   }}px;

@@ -5,8 +5,14 @@ import fr.gouv.cnsp.monitorfish.config.TchapProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.user_feedback.UserFeedback
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserFeedbackRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.tchap.requests.MatrixImageInfo
+import fr.gouv.cnsp.monitorfish.infrastructure.tchap.requests.MatrixImageMessageRequest
 import fr.gouv.cnsp.monitorfish.infrastructure.tchap.requests.MatrixTextMessageRequest
+import fr.gouv.cnsp.monitorfish.infrastructure.tchap.responses.MatrixUploadResponse
+import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -45,15 +51,42 @@ class TchapUserFeedbackRepository(
             return
         }
 
-        val url =
-            "$homeserverUrl/_matrix/client/v3/rooms/${roomId.encodeURLPathPart()}/send/m.room.message/${UUID.randomUUID()}"
+        val sendUrl = "$homeserverUrl/_matrix/client/v3/rooms/${roomId.encodeURLPathPart()}/send/m.room.message"
 
         try {
             runBlocking {
-                apiClient.httpClient.put(url) {
+                // Uploaded before posting anything, so that a rejected file does not leave a lone text message
+                val imageMessages =
+                    feedback.attachments.map { attachment ->
+                        val upload =
+                            apiClient.httpClient
+                                .post("$homeserverUrl/_matrix/media/v3/upload") {
+                                    bearerAuth(accessToken)
+                                    parameter("filename", attachment.fileName)
+                                    contentType(ContentType.parse(attachment.mimeType))
+                                    setBody(attachment.content)
+                                }.body<MatrixUploadResponse>()
+
+                        MatrixImageMessageRequest(
+                            msgtype = "m.image",
+                            body = attachment.fileName,
+                            url = upload.contentUri,
+                            info = MatrixImageInfo(mimetype = attachment.mimeType, size = attachment.content.size),
+                        )
+                    }
+
+                apiClient.httpClient.put("$sendUrl/${UUID.randomUUID()}") {
                     bearerAuth(accessToken)
                     contentType(ContentType.Application.Json)
                     setBody(toMatrixMessage(feedback))
+                }
+
+                imageMessages.forEach { imageMessage ->
+                    apiClient.httpClient.put("$sendUrl/${UUID.randomUUID()}") {
+                        bearerAuth(accessToken)
+                        contentType(ContentType.Application.Json)
+                        setBody(imageMessage)
+                    }
                 }
             }
         } catch (e: Exception) {

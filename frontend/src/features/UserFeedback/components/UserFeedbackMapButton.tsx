@@ -4,18 +4,22 @@ import { MapBox } from '@features/Map/constants'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Button, Icon, MapMenuDialog, Textarea } from '@mtes-mct/monitor-ui'
+import { Button, FileUploader, Icon, MapMenuDialog, Textarea, UploadMode } from '@mtes-mct/monitor-ui'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
 import { useSendUserFeedbackMutation } from '../apis'
 
+import type { FileApi } from '@mtes-mct/monitor-ui'
+
 export function UserFeedbackMapButton() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.USER_FEEDBACK)
   const [message, setMessage] = useState<string | undefined>(undefined)
+  const [files, setFiles] = useState<FileApi[]>([])
+  const [fileError, setFileError] = useState<string | undefined>(undefined)
   const [sendUserFeedback, { isError, isLoading, isSuccess, reset }] = useSendUserFeedbackMutation()
 
   const isSendable = !!message?.trim() && !isLoading
@@ -34,8 +38,9 @@ export function UserFeedbackMapButton() {
     }
 
     try {
-      await sendUserFeedback({ message, pageUrl: window.location.href }).unwrap()
+      await sendUserFeedback({ files, message, pageUrl: window.location.href }).unwrap()
       setMessage(undefined)
+      setFiles([])
     } catch {
       // The error is displayed from the mutation state
     }
@@ -53,12 +58,12 @@ export function UserFeedbackMapButton() {
             </MapMenuDialog.Header>
             <StyledBody>
               {isSuccess ? (
-                <Success>Merci, nous prendrons connaissance de votre message.</Success>
+                <Success>Merci, nous allons prendre connaissance de votre message et vous répondre.</Success>
               ) : (
                 <>
                   <p>
                     Une remarque, une idée ou un problème ? Écrivez-nous, l&apos;équipe MonitorFish vous répondra par
-                    e-mail.
+                    e-mail. Vous pouvez joindre des captures d&apos;écran.
                   </p>
                   <StyledTextarea
                     isLabelHidden
@@ -70,6 +75,17 @@ export function UserFeedbackMapButton() {
                     rows={5}
                     value={message}
                   />
+                  <FileUploader
+                    files={files}
+                    mode={UploadMode.IMAGES}
+                    onDelete={setFiles}
+                    onError={setFileError}
+                    onUpload={nextFiles => {
+                      setFileError(undefined)
+                      setFiles(nextFiles)
+                    }}
+                  />
+                  {fileError && <ErrorMessage>{fileError}</ErrorMessage>}
                   {isError && (
                     <ErrorMessage>Nous n&apos;avons pas pu envoyer votre message. Veuillez réessayer.</ErrorMessage>
                   )}

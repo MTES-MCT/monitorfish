@@ -21,13 +21,18 @@ class UserFeedbackController(
 ) {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Send a user feedback to the MonitorFish team")
+    @Operation(summary = "Send a user feedback, with optional screenshots, to the MonitorFish team")
     fun sendUserFeedback(
         @AuthenticationPrincipal principal: OidcUser?,
         @RequestBody userFeedback: UserFeedbackDataInput,
     ) {
         val email: String = principal?.email ?: ""
 
-        sendUserFeedback.execute(userFeedback.message, email, userFeedback.pageUrl)
+        sendUserFeedback.execute(
+            message = userFeedback.message,
+            userEmail = email,
+            pageUrl = userFeedback.pageUrl,
+            attachments = userFeedback.files.map { it.toUserFeedbackAttachment() },
+        )
     }
 }

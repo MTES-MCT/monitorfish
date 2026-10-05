@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.tchap
 import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.TchapProperties
 import fr.gouv.cnsp.monitorfish.domain.entities.user_feedback.UserFeedback
+import fr.gouv.cnsp.monitorfish.domain.entities.user_feedback.UserFeedbackAttachment
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -12,6 +13,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.assertj.core.api.Assertions.assertThat
@@ -78,6 +80,85 @@ class TchapUserFeedbackRepositoryITest {
                 "Page : https://monitorfish.fr/?a=1&amp;b=2<br></p>" +
                 "<p>Le &lt;b&gt;filtre&lt;/b&gt; ne marche pas<br>Merci</p>",
         )
+    }
+
+    @Test
+    fun `send Should upload the attachment then post the text and image messages`() {
+        // Given
+        val requests = mutableListOf<Triple<HttpMethod, String, String>>()
+        var uploadContentType: String? = null
+        var uploadFileName: String? = null
+        val mockEngine =
+            MockEngine { request ->
+                val path = request.url.encodedPath
+                requests.add(Triple(request.method, path, String(request.body.toByteArray())))
+
+                if (path == "/_matrix/media/v3/upload") {
+                    uploadContentType = request.body.contentType?.toString()
+                    uploadFileName = request.url.parameters["filename"]
+
+                    respond(
+                        content = """{"content_uri": "mxc://agent.dinum.tchap.gouv.fr/abc"}""",
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                } else {
+                    respond(
+                        content = """{"event_id": "${'$'}event"}""",
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
+            }
+        val feedbackWithAttachment =
+            feedback.copy(
+                attachments = listOf(UserFeedbackAttachment(byteArrayOf(1, 2, 3), "capture.png", "image/png")),
+            )
+
+        // When
+        TchapUserFeedbackRepository(getTchapProperties(), ApiClient(mockEngine)).send(feedbackWithAttachment)
+
+        // Then
+        assertThat(requests.map { it.first }).containsExactly(HttpMethod.Post, HttpMethod.Put, HttpMethod.Put)
+        assertThat(requests[0].second).isEqualTo("/_matrix/media/v3/upload")
+        assertThat(uploadContentType).isEqualTo("image/png")
+        assertThat(uploadFileName).isEqualTo("capture.png")
+
+        val textMessage = Json.parseToJsonElement(requests[1].third).jsonObject
+        assertThat(textMessage["msgtype"]?.jsonPrimitive?.content).isEqualTo("m.text")
+
+        val imageMessage = Json.parseToJsonElement(requests[2].third).jsonObject
+        assertThat(imageMessage["msgtype"]?.jsonPrimitive?.content).isEqualTo("m.image")
+        assertThat(imageMessage["body"]?.jsonPrimitive?.content).isEqualTo("capture.png")
+        assertThat(imageMessage["url"]?.jsonPrimitive?.content).isEqualTo("mxc://agent.dinum.tchap.gouv.fr/abc")
+        val info = imageMessage["info"]!!.jsonObject
+        assertThat(info["mimetype"]?.jsonPrimitive?.content).isEqualTo("image/png")
+        assertThat(info["size"]?.jsonPrimitive?.int).isEqualTo(3)
+    }
+
+    @Test
+    fun `send Should not post any message When the attachment upload fails`() {
+        // Given
+        val requestPaths = mutableListOf<String>()
+        val mockEngine =
+            MockEngine { request ->
+                requestPaths.add(request.url.encodedPath)
+                respond(content = """{"errcode": "M_TOO_LARGE"}""", status = HttpStatusCode.PayloadTooLarge)
+            }
+        val feedbackWithAttachment =
+            feedback.copy(
+                attachments = listOf(UserFeedbackAttachment(byteArrayOf(1, 2, 3), "capture.png", "image/png")),
+            )
+
+        // When
+        val throwable =
+            catchThrowable {
+                TchapUserFeedbackRepository(getTchapProperties(), ApiClient(mockEngine)).send(feedbackWithAttachment)
+            }
+
+        // Then
+        assertThat(throwable).isInstanceOf(BackendInternalException::class.java)
+        assertThat(requestPaths).containsExactly("/_matrix/media/v3/upload")
     }
 
     @Test

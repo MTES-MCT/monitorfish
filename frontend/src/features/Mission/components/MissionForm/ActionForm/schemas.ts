@@ -133,7 +133,7 @@ export function makeGearOnboardSchema(isEISR: boolean) {
     declaredMesh: number().when(['gearCode', 'controlledMesh'], ([gearCode, controlledMesh], schema) => {
       const { gears } = mainStore.getState().gear
       const gear = gears.find(({ code }) => code === gearCode)
-      if (!hasGearMesh(gearCode, gear?.category) || controlledMesh !== undefined) {
+      if (!gear?.isMeshRequiredForSegment || !hasGearMesh(gearCode, gear.category) || controlledMesh !== undefined) {
         return schema.notRequired()
       }
 

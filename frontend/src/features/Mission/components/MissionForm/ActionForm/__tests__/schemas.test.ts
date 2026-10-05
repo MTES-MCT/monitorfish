@@ -15,8 +15,9 @@ jest.mock('store/index', () => ({
     getState: () => ({
       gear: {
         gears: [
-          { category: 'Chaluts', code: 'OTB' },
-          { category: 'Lignes et hameçons', code: 'LLS' }
+          { category: 'Chaluts', code: 'OTB', isMeshRequiredForSegment: false },
+          { category: 'Chaluts', code: 'OTT', isMeshRequiredForSegment: true },
+          { category: 'Lignes et hameçons', code: 'LLS', isMeshRequiredForSegment: true }
         ]
       },
       missionForm: { draft: null }
@@ -127,19 +128,23 @@ describe('ActionForm/schemas', () => {
   })
 
   describe('makeGearOnboardSchema', () => {
-    it('should fail validation with a message When no mesh is filled for a gear with mesh', () => {
-      expect(() => makeGearOnboardSchema(false).validateSync({ gearCode: 'OTB', gearWasControlled: true })).toThrow(
+    it('should fail validation with a message When no mesh is filled for a gear requiring a mesh for its segment', () => {
+      expect(() => makeGearOnboardSchema(false).validateSync({ gearCode: 'OTT', gearWasControlled: true })).toThrow(
         'Au moins un maillage déclaré ou contrôlé est requis pour cet engin.'
       )
     })
 
-    it('should pass validation When only the controlled mesh is filled', () => {
+    it('should pass validation When only the controlled mesh is filled for a gear requiring a mesh for its segment', () => {
       expect(
-        makeGearOnboardSchema(false).isValidSync({ controlledMesh: 80, gearCode: 'OTB', gearWasControlled: true })
+        makeGearOnboardSchema(false).isValidSync({ controlledMesh: 80, gearCode: 'OTT', gearWasControlled: true })
       ).toBe(true)
     })
 
-    it('should pass validation When the gear has no mesh', () => {
+    it('should pass validation When no mesh is filled for a gear not requiring a mesh for its segment', () => {
+      expect(makeGearOnboardSchema(false).isValidSync({ gearCode: 'OTB', gearWasControlled: true })).toBe(true)
+    })
+
+    it('should pass validation When no mesh is filled for a gear without mesh', () => {
       expect(makeGearOnboardSchema(false).isValidSync({ gearCode: 'LLS', gearWasControlled: true })).toBe(true)
     })
   })

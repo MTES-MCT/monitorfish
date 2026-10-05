@@ -167,7 +167,8 @@ export function GearsField() {
       {input.value && input.value.length > 0 && (
         <>
           {input.value.map((gearOnboard, index) => {
-            const gearCategory = gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value.category ?? ''
+            const gear = gearsAsOptions.find(o => o.value.code === gearOnboard.gearCode)?.value
+            const gearCategory = gear?.category ?? ''
             const hasMeshFields = hasGearMesh(gearOnboard.gearCode, gearCategory)
             const hasWireFields = isEISREnabled && WIRE_FIELDS_GEAR_CATEGORIES.has(gearCategory)
 
@@ -212,7 +213,7 @@ export function GearsField() {
                         <>
                           <FormikNumberInput
                             isErrorMessageHidden
-                            isRequired
+                            isRequired={!!gear?.isMeshRequiredForSegment}
                             label="Maillage déclaré"
                             name={`gearOnboard[${index}].declaredMesh`}
                           />

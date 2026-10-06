@@ -1,9 +1,10 @@
+import logging
 from unittest.mock import patch
 
 import pytest
 from prefect import flow
 
-from src.sentry import report_flow_failure_to_sentry
+from src.sentry import _ForwardToLoggerHandler, report_flow_failure_to_sentry
 
 
 @flow(
@@ -42,7 +43,10 @@ def test_report_flow_failure_to_sentry_captures_the_flow_exception(sentry_sdk_mo
     sentry_sdk_mock.init.assert_called_once()
     assert sentry_sdk_mock.init.call_args.kwargs["dsn"] == "https://key@sentry.test/1"
     assert sentry_sdk_mock.init.call_args.kwargs["environment"] == "test"
-    assert sentry_sdk_mock.init.call_args.kwargs["http_proxy"] == "http://proxy.test:8090"
+    assert sentry_sdk_mock.init.call_args.kwargs["debug"] is True
+    assert (
+        sentry_sdk_mock.init.call_args.kwargs["http_proxy"] == "http://proxy.test:8090"
+    )
     assert (
         sentry_sdk_mock.init.call_args.kwargs["https_proxy"] == "http://proxy.test:8090"
     )
@@ -72,3 +76,28 @@ def test_report_flow_failure_to_sentry_does_not_raise_when_sentry_fails(
 
     assert state.is_failed()
     sentry_sdk_mock.capture_exception.assert_called_once()
+
+
+def test_report_flow_failure_to_sentry_logs_events_that_sentry_sdk_fails_to_send(
+    sentry_sdk_mock,
+):
+    def log_sending_error(**kwargs):
+        logging.getLogger("sentry_sdk.errors").error("Unexpected status code: %s", 403)
+
+    sentry_sdk_mock.flush.side_effect = log_sending_error
+
+    # Lets the SDK's logs through, as if it had been initialized with `debug=True`
+    with patch("sentry_sdk.debug.get_client") as get_client_mock, patch(
+        "src.sentry.SENTRY_DSN", "https://key@sentry.test/1"
+    ), patch("src.sentry.flow_run_logger") as flow_run_logger_mock:
+        get_client_mock.return_value.options = {"debug": True}
+        state = failing_flow(return_state=True)
+
+    assert state.is_failed()
+    flow_run_logger_mock.return_value.log.assert_called_once_with(
+        logging.ERROR, "Sentry: Unexpected status code: 403", exc_info=None
+    )
+    assert not any(
+        isinstance(handler, _ForwardToLoggerHandler)
+        for handler in logging.getLogger("sentry_sdk.errors").handlers
+    )

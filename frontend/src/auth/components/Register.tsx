@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { LoginBackground } from './Login'
+import { LoginBackground } from './LoginBackground'
 
 export function Register() {
   return (

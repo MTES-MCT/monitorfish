@@ -8,7 +8,7 @@ import {
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon, pluralize, THEME, Tooltip } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
-import { type RefObject, useRef } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import type { MissionActionFormValues } from '@features/Mission/components/MissionForm/types'
@@ -16,7 +16,7 @@ import type { MissionActionFormValues } from '@features/Mission/components/Missi
 export function MissingFieldsText() {
   const dispatch = useMainAppDispatch()
   const { values } = useFormikContext<MissionActionFormValues>()
-  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
   const missingFieldPaths = getMissionActionMissingFields(values, dispatch)
   const isMissionEnded = useIsMissionEnded()
 
@@ -33,21 +33,21 @@ export function MissingFieldsText() {
   const count = missingFieldPaths.length
 
   const scrollToFirstMissingFieldOfThisForm = () => {
-    if (wrapperRef.current) {
-      scrollToFirstMissingField(wrapperRef.current, missingFieldPaths)
+    if (wrapperElement) {
+      scrollToFirstMissingField(wrapperElement, missingFieldPaths)
     }
   }
 
   return (
     <CompletionStatus data-cy="action-completion-status">
       <Icon.AttentionFilled color={color} />
-      <TooltipWrapper ref={wrapperRef} onClick={scrollToFirstMissingFieldOfThisForm}>
+      <TooltipWrapper ref={setWrapperElement} onClick={scrollToFirstMissingFieldOfThisForm}>
         <StyledTooltip
           color={color}
           isSideWindow
           linkText={`${count} ${pluralize('champ', count)} ${pluralize('nécessaire', count)} aux statistiques à compléter`}
         >
-          <MissingFieldListContent elementInActionFormRef={wrapperRef} paths={missingFieldPaths} values={values} />
+          <MissingFieldListContent elementInActionForm={wrapperElement} paths={missingFieldPaths} values={values} />
         </StyledTooltip>
       </TooltipWrapper>
     </CompletionStatus>
@@ -55,12 +55,12 @@ export function MissingFieldsText() {
 }
 
 type MissingFieldListContentProps = Readonly<{
-  elementInActionFormRef: RefObject<HTMLDivElement | null>
+  elementInActionForm: HTMLDivElement | null
   paths: string[]
   values: MissionActionFormValues
 }>
-function MissingFieldListContent({ elementInActionFormRef, paths, values }: MissingFieldListContentProps) {
-  const scrollContainer = elementInActionFormRef.current?.closest('[data-action-form-scroll-container]')
+function MissingFieldListContent({ elementInActionForm, paths, values }: MissingFieldListContentProps) {
+  const scrollContainer = elementInActionForm?.closest('[data-action-form-scroll-container]')
   const sortedPaths = scrollContainer ? sortPathsByDisplayOrder(scrollContainer, paths) : paths
 
   return (

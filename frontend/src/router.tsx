@@ -16,7 +16,6 @@ import { LightHomePage } from '@pages/LightHomePage'
 import { LoginPage } from '@pages/LoginPage'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import { Login } from './auth/components/Login'
 import { Register } from './auth/components/Register'
 import { RequireAuth } from './auth/components/RequireAuth'
 import { ROUTER_PATHS } from './paths'
@@ -57,7 +56,8 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <Login />
+        // Lazy-loaded so that the DSFR stylesheet is only fetched on the login page
+        lazy: () => import('./auth/components/Login').then(({ Login }) => ({ Component: Login }))
       }
     ]
   },

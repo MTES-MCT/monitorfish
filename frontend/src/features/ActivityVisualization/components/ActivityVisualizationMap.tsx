@@ -2,7 +2,7 @@ import { useGetActivityVisualizationQuery } from '@features/ActivityVisualizatio
 import { trackEvent } from '@hooks/useTracking'
 import { useEffect } from 'react'
 
-import { LoginBackground } from '../../../auth/components/Login'
+import { LoginBackground } from '../../../auth/components/LoginBackground'
 import { useGetUserEmail } from '../../../auth/hooks/useGetUserEmail'
 import { LoadingSpinnerWall } from '../../../ui/LoadingSpinnerWall'
 

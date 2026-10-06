@@ -25,7 +25,6 @@ export function VesselSidebarHeader() {
   const vesselSidebarIsOpen = useMainAppSelector(state => state.vessel.vesselSidebarIsOpen)
   const areAISVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areAISVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
 
   const vesselLocation =
@@ -67,7 +66,6 @@ export function VesselSidebarHeader() {
   return (
     <VesselNameOrInput
       $isReportingOpen={isReportingMapFormDisplayed}
-      $isRightMenuOpen={rightMenuIsOpen}
       data-cy="vessel-name"
       isHidden={previewFilteredVesselsMode}
     >
@@ -93,7 +91,6 @@ export function VesselSidebarHeader() {
 
 const VesselNameOrInput = styled(MapComponent)<{
   $isReportingOpen: boolean
-  $isRightMenuOpen: boolean
 }>`
   display: flex;
   flex: 0 0 auto;
@@ -106,7 +103,7 @@ const VesselNameOrInput = styled(MapComponent)<{
   border-radius: 2px;
   padding: 0;
   transition: all 0.3s;
-  margin-right: ${p => (p.$isRightMenuOpen ? 11 : 1) + +(p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH + 8 : 0)}px;
+  margin-right: ${p => (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH + 8 : 0)}px;
   z-index: 2;
 
   &:hover,

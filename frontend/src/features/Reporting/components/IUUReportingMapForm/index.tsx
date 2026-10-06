@@ -197,7 +197,7 @@ export function IUUReportingMapForm() {
     <>
       {isRendered && (
         <>
-          <Wrapper $top={top} data-cy="map-reporting-form" isOpen={isOpened}>
+          <Wrapper $top={top} data-cy="map-reporting-form" isAnchoredToMapEdge isOpen={isOpened}>
             <Header>
               <HeaderTitle>
                 <Icon.Report color={THEME.color.white} />

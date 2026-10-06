@@ -1,3 +1,4 @@
+import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
 import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
 import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -161,9 +162,9 @@ const TrackRequestBody = styled(MapComponent)<{
   margin-right: 540px;
   position: absolute;
   right: ${p => {
-    const base = p.$isRightMenuOpen && p.$isSidebarOpen ? 55 : 10
+    const base = p.$isRightMenuOpen && p.$isSidebarOpen ? 54 : 9
 
-    return base + (p.$isReportingOpen ? 480 : 0)
+    return base + (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0)
   }}px;
   text-align: left;
   top: 118px;

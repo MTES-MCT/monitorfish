@@ -44,6 +44,11 @@ monitorfish:
     sentry:
         enabled: ${MONITORFISH_SENTRY_ENABLED}
         dsn: ${SENTRY_DSN}
+    tchap:
+        enabled: ${MONITORFISH_TCHAP_ENABLED:false}
+        homeserverUrl: ${MONITORFISH_TCHAP_HOMESERVER_URL:https://matrix.agent.dinum.tchap.gouv.fr}
+        accessToken: ${MONITORFISH_TCHAP_ACCESS_TOKEN:}
+        feedbackRoomId: ${MONITORFISH_TCHAP_FEEDBACK_ROOM_ID:}
     keycloak:
         proxy:
             enabled: ${MONITORFISH_KEYCLOAK_PROXY_ENABLED:false}

@@ -44,7 +44,12 @@ export function VesselSidebar() {
       <AnimateToTrack isSidebarOpen={isOpen} />
       <HideNonSelectedVessels isSidebarOpen={isOpen} />
       <ShowFishingActivitiesOnMap isSidebarOpen={isOpen} />
-      <Wrapper data-cy="vessel-sidebar" isOpen={isOpen} isReportingOpen={isReportingMapFormDisplayed}>
+      <Wrapper
+        data-cy="vessel-sidebar"
+        isAnchoredToMapEdge
+        isOpen={isOpen}
+        isReportingOpen={isReportingMapFormDisplayed}
+      >
         <Tabs />
         <Body />
         <GrayOverlay $isOverlayed={isFocusedOnVesselSearch && isOpen} />

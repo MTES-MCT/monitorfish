@@ -5,7 +5,7 @@ from prefect.logging.loggers import flow_run_logger
 from prefect.states import State
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from config import SENTRY_DSN, SENTRY_ENV
+from config import PROXIES, SENTRY_DSN, SENTRY_ENV
 
 
 def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
@@ -22,6 +22,8 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
             sentry_sdk.init(
                 dsn=SENTRY_DSN,
                 environment=SENTRY_ENV,
+                http_proxy=PROXIES["http"],
+                https_proxy=PROXIES["https"],
                 # Failures are reported by this hook only, with the flow run context,
                 # not a second time from Prefect's error logs
                 integrations=[LoggingIntegration(event_level=None)],

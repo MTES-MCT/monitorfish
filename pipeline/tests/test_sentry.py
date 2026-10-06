@@ -32,15 +32,20 @@ def test_report_flow_failure_to_sentry_does_nothing_without_dsn(sentry_sdk_mock)
 
 
 def test_report_flow_failure_to_sentry_captures_the_flow_exception(sentry_sdk_mock):
+    proxies = {"http": "http://proxy.test:8090", "https": "http://proxy.test:8090"}
     with patch("src.sentry.SENTRY_DSN", "https://key@sentry.test/1"), patch(
         "src.sentry.SENTRY_ENV", "test"
-    ):
+    ), patch("src.sentry.PROXIES", proxies):
         state = failing_flow(return_state=True)
 
     assert state.is_failed()
     sentry_sdk_mock.init.assert_called_once()
     assert sentry_sdk_mock.init.call_args.kwargs["dsn"] == "https://key@sentry.test/1"
     assert sentry_sdk_mock.init.call_args.kwargs["environment"] == "test"
+    assert sentry_sdk_mock.init.call_args.kwargs["http_proxy"] == "http://proxy.test:8090"
+    assert (
+        sentry_sdk_mock.init.call_args.kwargs["https_proxy"] == "http://proxy.test:8090"
+    )
 
     sentry_sdk_mock.capture_exception.assert_called_once()
     exception = sentry_sdk_mock.capture_exception.call_args.args[0]

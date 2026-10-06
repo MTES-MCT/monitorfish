@@ -1,8 +1,14 @@
+import asyncio
 import logging
+import threading
 from unittest.mock import patch
+from uuid import UUID
 
 import pytest
 from prefect import flow
+from prefect.client.orchestration import get_client
+from prefect.client.schemas.filters import LogFilter, LogFilterFlowRunId
+from prefect.logging.handlers import APILogHandler
 
 from src.sentry import report_flow_failure_to_sentry
 
@@ -14,6 +20,18 @@ from src.sentry import report_flow_failure_to_sentry
 )
 def failing_flow():
     raise ValueError("Something went wrong")
+
+
+def read_flow_run_log_messages(flow_run_id: UUID) -> list[str]:
+    async def read_logs():
+        await APILogHandler.aflush()
+        async with get_client() as client:
+            logs = await client.read_logs(
+                log_filter=LogFilter(flow_run_id=LogFilterFlowRunId(any_=[flow_run_id]))
+            )
+        return [log.message for log in logs]
+
+    return asyncio.run(read_logs())
 
 
 @pytest.fixture
@@ -81,21 +99,27 @@ def test_report_flow_failure_to_sentry_does_not_raise_when_sentry_fails(
 def test_report_flow_failure_to_sentry_logs_events_that_sentry_sdk_fails_to_send(
     sentry_sdk_mock,
 ):
-    def log_sending_error(**kwargs):
-        logging.getLogger("sentry_sdk.errors").error("Unexpected status code: %s", 403)
+    # Like the SDK, which sends events and logs its errors from a background thread
+    def log_sending_error_from_another_thread(**kwargs):
+        thread = threading.Thread(
+            target=logging.getLogger("sentry_sdk.errors").error,
+            args=("Unexpected status code: %s", 403),
+        )
+        thread.start()
+        thread.join()
 
-    sentry_sdk_mock.flush.side_effect = log_sending_error
+    sentry_sdk_mock.flush.side_effect = log_sending_error_from_another_thread
     sentry_sdk_logger_handlers = list(logging.getLogger("sentry_sdk.errors").handlers)
 
     # Lets the SDK's logs through, as if it had been initialized with `debug=True`
     with patch("sentry_sdk.debug.get_client") as get_client_mock, patch(
         "src.sentry.SENTRY_DSN", "https://key@sentry.test/1"
-    ), patch("src.sentry.flow_run_logger") as flow_run_logger_mock:
+    ):
         get_client_mock.return_value.options = {"debug": True}
         state = failing_flow(return_state=True)
 
     assert state.is_failed()
-    flow_run_logger_mock.return_value.log.assert_called_once_with(
-        logging.ERROR, "Sentry: Unexpected status code: 403", exc_info=None
+    assert "Sentry: Unexpected status code: 403" in read_flow_run_log_messages(
+        state.state_details.flow_run_id
     )
     assert logging.getLogger("sentry_sdk.errors").handlers == sentry_sdk_logger_handlers

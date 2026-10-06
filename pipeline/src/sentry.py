@@ -15,15 +15,13 @@ from config import PROXIES, SENTRY_DSN, SENTRY_ENV
 sentry_sdk_logger = logging.getLogger("sentry_sdk.errors")
 
 
-class _ForwardToLoggerHandler(logging.Handler):
-    def __init__(self, logger: logging.LoggerAdapter):
+class _CollectRecordsHandler(logging.Handler):
+    def __init__(self):
         super().__init__(level=logging.WARNING)
-        self.logger = logger
+        self.records: list[logging.LogRecord] = []
 
     def emit(self, record: logging.LogRecord):
-        self.logger.log(
-            record.levelno, f"Sentry: {record.getMessage()}", exc_info=record.exc_info
-        )
+        self.records.append(record)
 
 
 def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
@@ -35,7 +33,7 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
         return
 
     logger = flow_run_logger(flow_run, flow)
-    sentry_sdk_errors_handler = _ForwardToLoggerHandler(logger)
+    sentry_sdk_errors_handler = _CollectRecordsHandler()
     sentry_sdk_logger.addHandler(sentry_sdk_errors_handler)
 
     # A Sentry outage must not change the outcome of the flow run
@@ -90,3 +88,10 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
         )
     finally:
         sentry_sdk_logger.removeHandler(sentry_sdk_errors_handler)
+
+    # Logged from this thread, as Prefect drops the logs emitted outside of a run
+    # context, like those of the SDK's background thread
+    for record in sentry_sdk_errors_handler.records:
+        logger.log(
+            record.levelno, f"Sentry: {record.getMessage()}", exc_info=record.exc_info
+        )

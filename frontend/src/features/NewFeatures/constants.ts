@@ -7,6 +7,44 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-10-06',
+        description: `Vous pouvez désormais ajouter une pièce jointe à vos messages envoyés via le tchat. L'équipe MonitorFish vous répondra par e-mail.`,
+        for: 'ALL',
+        title: `Bouton « Nous contacter »`,
+        type: 'NEW_FEATURE'
+      },
+      {
+        date: '2026-10-06',
+        description: `- La liste des signalements affiche désormais aussi les **signalements archivés** (notamment les signalements INN),
+- Les colonnes ont été harmonisées avec le formulaire : « Date début » (date exacte), « Source », « Type et statut » (avec pastille) et tag **INN** ; la colonne « DML concernée » est retirée.`,
+        for: 'CNSP',
+        title: `Signalements – Affichage des signalements archivés dans la liste`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-10-05',
+        description: `La zone de l'alerte de chalutage dans les 3 milles nautiques exclut désormais les zones de dérogation : les navires qui y pêchent ne déclenchent plus d'alerte.`,
+        for: 'CNSP',
+        title: `Alerte chalutage dans les 3 milles – Prise en compte des dérogations`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-10-05',
+        description: `- Une infobulle sur le texte « N champs nécessaires aux statistiques à compléter » liste les champs manquants, dans l'ordre du formulaire,
+- Un clic sur ce texte fait défiler le formulaire jusqu'au premier champ manquant et le met en évidence,
+- Les erreurs sont mieux signalées dans les tableaux des espèces.`,
+        for: 'CNSP',
+        title: `CR de contrôle – Identification des champs manquants`,
+        type: 'IMPROVEMENT'
+      },
+      {
+        date: '2026-09-29',
+        description: `L'organisation de vos couches (zones réglementaires, zones administratives et fond de carte : affichage, masquage, épinglage) est désormais rattachée à votre compte utilisateur, et donc retrouvée depuis toute session, sur tout ordinateur.`,
+        for: 'ALL',
+        title: `Sauvegarde de l'organisation des couches`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-09-08',
         description: `La sauvegarde de vos navires suivis a été améliorée : ils sont désormais rattachés à votre compte utilisateur et donc accessibles depuis toute session, sur tout ordinateur.`,
         for: 'ALL',

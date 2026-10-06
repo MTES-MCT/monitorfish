@@ -1,0 +1,3 @@
+# Required by the @gouvfr/dsfr preinstall license check.
+# Bump `accept-license` when an upgrade fails with an [UPDATE-...] message.
+accept-license: 1.0.1

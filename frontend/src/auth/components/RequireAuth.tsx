@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
 
-import { LoginBackground } from './Login'
+import { LoginBackground } from './LoginBackground'
 import { UserAccountContext } from '../../context/UserAccountContext'
 import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'

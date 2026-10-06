@@ -1,3 +1,5 @@
+import logging
+
 import sentry_sdk
 from prefect import Flow
 from prefect.client.schemas.objects import FlowRun
@@ -6,6 +8,22 @@ from prefect.states import State
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 from config import PROXIES, SENTRY_DSN, SENTRY_ENV
+
+# Where the SDK logs the events it fails to send (network error, rejected by Sentry
+# or by the proxy...), as sending happens in a background thread and never raises.
+# The SDK drops these logs unless it is initialized with `debug=True`.
+sentry_sdk_logger = logging.getLogger("sentry_sdk.errors")
+
+
+class _ForwardToLoggerHandler(logging.Handler):
+    def __init__(self, logger: logging.LoggerAdapter):
+        super().__init__(level=logging.WARNING)
+        self.logger = logger
+
+    def emit(self, record: logging.LogRecord):
+        self.logger.log(
+            record.levelno, f"Sentry: {record.getMessage()}", exc_info=record.exc_info
+        )
 
 
 def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
@@ -16,6 +34,10 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
     if not SENTRY_DSN:
         return
 
+    logger = flow_run_logger(flow_run, flow)
+    sentry_sdk_errors_handler = _ForwardToLoggerHandler(logger)
+    sentry_sdk_logger.addHandler(sentry_sdk_errors_handler)
+
     # A Sentry outage must not change the outcome of the flow run
     try:
         if not sentry_sdk.is_initialized():
@@ -24,6 +46,7 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
                 environment=SENTRY_ENV,
                 http_proxy=PROXIES["http"],
                 https_proxy=PROXIES["https"],
+                debug=True,
                 # Failures are reported by this hook only, with the flow run context,
                 # not a second time from Prefect's error logs
                 integrations=[LoggingIntegration(event_level=None)],
@@ -62,6 +85,8 @@ def report_flow_failure_to_sentry(flow: Flow, flow_run: FlowRun, state: State):
         # Flow runs execute in containers which are removed once the run is over
         sentry_sdk.flush(timeout=5)
     except Exception:
-        flow_run_logger(flow_run, flow).warning(
+        logger.warning(
             "Could not report the flow run failure to Sentry.", exc_info=True
         )
+    finally:
+        sentry_sdk_logger.removeHandler(sentry_sdk_errors_handler)

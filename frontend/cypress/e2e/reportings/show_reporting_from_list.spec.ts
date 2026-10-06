@@ -12,7 +12,7 @@ function openSideWindowReportingList() {
   cy.clickButton('Voir la vue détaillée des signalements')
   cy.wait(1000)
 
-  cy.getDataCy('side-window-reporting-tab').click({ force: true })
+  cy.getDataCy('reporting-table-filters').should('exist')
   cy.getDataCy(`side-window-sub-menu-${SeafrontGroup.NAMO}`).click({ force: true })
 }
 

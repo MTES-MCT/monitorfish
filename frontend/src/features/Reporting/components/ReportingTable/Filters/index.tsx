@@ -19,7 +19,7 @@ import { DEFAULT_REPORTINGS_FILTER } from '@features/Reporting/slice'
 import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Checkbox, DateRangePicker, Icon, LinkButton, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
+import { Checkbox, DateRangePicker, Icon, LinkButton, Select, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { isEqual } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -97,7 +97,8 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
           size={Size.LARGE}
           value={searchText}
         />
-        <ShowFiltersButton Icon={Icon.FilterBis} onClick={toggleFiltersDisplay}>
+        <ShowFiltersButton onClick={toggleFiltersDisplay}>
+          <Icon.FilterBis color={THEME.color.charcoal} size={20} />
           {areFiltersDisplayed ? 'Masquer les filtres' : 'Afficher les filtres'}
         </ShowFiltersButton>
       </Row>
@@ -168,8 +169,6 @@ export function Filters({ selectedSeafrontGroup }: FiltersProps) {
               placeholder="INN / non INN"
               value={getIUUValue(filters.isIUU)}
             />
-          </Row>
-          <Row>
             <DrawZoneFilterButton />
             {showAbsentVesselToggle && (
               <Checkbox
@@ -200,8 +199,9 @@ const Wrapper = styled.div`
 
 const Row = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 
   > .Field-MultiCascader,
   > .Field-CheckPicker,
@@ -221,12 +221,6 @@ const TagsRow = styled.div`
 
 const ShowFiltersButton = styled(LinkButton)`
   color: ${p => p.theme.color.charcoal};
-
-  svg {
-    color: ${p => p.theme.color.charcoal} !important;
-    height: 20px !important;
-    width: 20px !important;
-  }
 `
 
 const StyledSearch = styled(TextInput)`

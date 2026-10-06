@@ -262,6 +262,11 @@ const LoadMore = styled(Button)`
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+
+  /* monitor-ui clips the label descenders at non-100% zoom levels */
+  > span {
+    overflow: visible;
+  }
 `
 
 const StyledBodyTr = styled(TableWithSelectableRows.BodyTr)`

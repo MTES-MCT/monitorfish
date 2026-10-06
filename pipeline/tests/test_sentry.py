@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 from prefect import flow
 
-from src.sentry import _ForwardToLoggerHandler, report_flow_failure_to_sentry
+from src.sentry import report_flow_failure_to_sentry
 
 
 @flow(
@@ -85,6 +85,7 @@ def test_report_flow_failure_to_sentry_logs_events_that_sentry_sdk_fails_to_send
         logging.getLogger("sentry_sdk.errors").error("Unexpected status code: %s", 403)
 
     sentry_sdk_mock.flush.side_effect = log_sending_error
+    sentry_sdk_logger_handlers = list(logging.getLogger("sentry_sdk.errors").handlers)
 
     # Lets the SDK's logs through, as if it had been initialized with `debug=True`
     with patch("sentry_sdk.debug.get_client") as get_client_mock, patch(
@@ -97,7 +98,4 @@ def test_report_flow_failure_to_sentry_logs_events_that_sentry_sdk_fails_to_send
     flow_run_logger_mock.return_value.log.assert_called_once_with(
         logging.ERROR, "Sentry: Unexpected status code: 403", exc_info=None
     )
-    assert not any(
-        isinstance(handler, _ForwardToLoggerHandler)
-        for handler in logging.getLogger("sentry_sdk.errors").handlers
-    )
+    assert logging.getLogger("sentry_sdk.errors").handlers == sentry_sdk_logger_handlers

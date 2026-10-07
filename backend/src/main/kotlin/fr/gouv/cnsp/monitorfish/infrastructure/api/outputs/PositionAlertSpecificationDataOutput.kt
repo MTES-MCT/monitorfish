@@ -6,6 +6,8 @@ import fr.gouv.cnsp.monitorfish.domain.entities.alerts.GearSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PositionAlertSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.RegulatoryAreaSpecification
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.SpeciesSpecification
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ThreatHierarchyDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 import java.time.ZonedDateTime
 
@@ -102,7 +104,7 @@ data class PositionAlertSpecificationDataOutput(
                 minDepth = positionAlertSpecification.minDepth,
                 flagStatesIso2 = positionAlertSpecification.flagStatesIso2,
                 vesselIds = positionAlertSpecification.vesselIds,
-                vessels = positionAlertSpecification.vessels.map { VesselIdentityDataOutput.fromVessel(it) },
+                vessels = positionAlertSpecification.vessels.map { it.toVesselIdentityDataOutput() },
                 districtCodes = positionAlertSpecification.districtCodes,
                 producerOrganizations = positionAlertSpecification.producerOrganizations,
                 createdBy = positionAlertSpecification.createdBy!!,

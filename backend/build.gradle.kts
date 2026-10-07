@@ -47,11 +47,6 @@ springBoot {
     }
 }
 
-// this is to address https://github.com/JLLeitschuh/ktlint-gradle/issues/809
-ktlint {
-    version = "1.5.0"
-}
-
 dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.3")
@@ -93,6 +88,8 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
+    api(project(":api-contract"))
+
     // Spring Boot
     api("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     api("org.springframework.boot:spring-boot-starter-json:$springBootVersion")
@@ -185,19 +182,25 @@ tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
 }
 
-configure<KtlintExtension> {
-    verbose.set(true)
-    android.set(false)
-    outputToConsole.set(true)
-    ignoreFailures.set(false)
-}
+allprojects {
+    pluginManager.withPlugin("org.jlleitschuh.gradle.ktlint") {
+        configure<KtlintExtension> {
+            // this is to address https://github.com/JLLeitschuh/ktlint-gradle/issues/809
+            version.set("1.5.0")
+            verbose.set(true)
+            android.set(false)
+            outputToConsole.set(true)
+            ignoreFailures.set(false)
+        }
 
-// Dependency management aligns every Kotlin artifact on the project's Kotlin version, but ktlint
-// embeds its own compiler and cannot parse anything with Kotlin >= 2.4.20 ("Extensions storage is not registered").
-configurations.matching { it.name.startsWith("ktlint") }.configureEach {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.jetbrains.kotlin") {
-            useVersion("2.1.0")
+        // Dependency management aligns every Kotlin artifact on the project's Kotlin version, but ktlint
+        // embeds its own compiler and cannot parse anything with Kotlin >= 2.4.20 ("Extensions storage is not registered").
+        configurations.matching { it.name.startsWith("ktlint") }.configureEach {
+            resolutionStrategy.eachDependency {
+                if (requested.group == "org.jetbrains.kotlin") {
+                    useVersion("2.1.0")
+                }
+            }
         }
     }
 }

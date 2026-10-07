@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.MissionActionDataOutput
 
 data class ControlsSummaryDataOutput(
     val vesselId: Int,
@@ -18,7 +19,7 @@ data class ControlsSummaryDataOutput(
                 numberOfControlsWithSomeSpeciesSeized = controlsSummary.numberOfControlsWithSomeSpeciesSeized,
                 controls =
                     controlsSummary.controls.map {
-                        MissionActionDataOutput.fromMissionAction(it, useThreatHierarchyForForm = false)
+                        it.toMissionActionDataOutput(useThreatHierarchyForForm = false)
                     },
             )
     }

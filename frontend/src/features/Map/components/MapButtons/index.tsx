@@ -200,7 +200,7 @@ export function MapButtons() {
           )}
         </Group>
       </RightMenu>
-      {isUserFeedbackMapButtonDisplayed && (
+      {isUserFeedbackMapButtonDisplayed && import.meta.env.FRONTEND_TCHAP_ENABLED === 'true' && (
         <BottomRightMenu $isRightMenuOpen={rightMenuIsOpen} $top={top}>
           <Group>
             <MenuItem>

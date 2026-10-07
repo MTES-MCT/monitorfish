@@ -37,10 +37,10 @@ export function Login() {
       </header>
 
       <Main id="content">
-        <div className="fr-container fr-py-10v">
+        <div className="fr-container fr-py-14v">
           <div className="fr-grid-row fr-grid-row--center">
-            <Card className="fr-col-12 fr-col-md-10 fr-col-lg-7 fr-p-4w fr-p-md-6w fr-mt-15w fr-mb-6w">
-              <h1>Connexion à MonitorFish</h1>
+            <Card className="fr-col-12 fr-col-md-10 fr-col-lg-10 fr-p-4w fr-p-md-6w fr-mt-6w fr-mb-6w">
+              <h1 className="fr-mb-6w">Connexion à MonitorFish</h1>
 
               {oidcProvider === 'proconnect' ? (
                 <div className="fr-connect-group">
@@ -69,17 +69,20 @@ export function Login() {
                   S&apos;identifier avec Cerbère
                 </button>
               )}
+
+              <div className="fr-callout fr-mt-10w fr-mb-0">
+                <h3 className="fr-callout__title">
+                  Vous accédez à une application réservée aux services de l&apos;Etat
+                </h3>
+                <p className="fr-callout__text fr-text--sm">
+                  Rappels législatifs : conformément à l&apos;art. L121-6 du Code de la fonction publique :
+                  &quot;l&apos;agent public est tenu au secret professionnel dans le respect des articles 226-13 et
+                  226-14 du code pénal&quot;. Conformément à l&apos;article 226-13 du Code pénal : &quot;La révélation
+                  d&apos;une information à caractère secret par une personne qui en est dépositaire est punie d&apos;un
+                  an d&apos;emprisonnement et de 15 000&euro; d&apos;amende&quot;.
+                </p>
+              </div>
             </Card>
-            <div className="fr-callout fr-mt-15w fr-mb-0">
-              <p className="fr-callout__title">Vous accédez à une application réservée aux services de l&apos;Etat.</p>
-              <p className="fr-callout__text fr-text--sm">
-                Rappels législatifs : conformément à l&apos;art. L121-6 du Code de la fonction publique :
-                &quot;l&apos;agent public est tenu au secret professionnel dans le respect des articles 226-13 et 226-14
-                du code pénal&quot;. Conformément à l&apos;article 226-13 du Code pénal : &quot;La révélation d&apos;une
-                information à caractère secret par une personne qui en est dépositaire est punie d&apos;un an
-                d&apos;emprisonnement et de 15 000&euro; d&apos;amende&quot;.
-              </p>
-            </div>
           </div>
         </div>
       </Main>

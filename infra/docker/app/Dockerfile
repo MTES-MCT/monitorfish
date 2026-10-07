@@ -99,6 +99,13 @@ RUN mkdir /home/monitorfish/logs
 ENV STATIC_FILES_PATH="/home/monitorfish/public"
 
 USER root
+# Missing from the JRE cacerts, it signs Tchap certificates.
+# JAVA_TOOL_OPTIONS is cleared so that keytool does not start the JMX agent.
+COPY infra/docker/app/certs/ /tmp/extra-certs/
+RUN JAVA_TOOL_OPTIONS= keytool -importcert -noprompt -cacerts -storepass changeit \
+      -alias haricatlsrsarootca2021 -file /tmp/extra-certs/harica-tls-rsa-root-ca-2021.pem \
+    && rm -rf /tmp/extra-certs
+
 RUN chown monitorfish /home/monitorfish/import-meta-env
 RUN chmod +x /home/monitorfish/import-meta-env
 

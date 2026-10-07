@@ -4,9 +4,11 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.EnrichP
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.PatchMissionAction
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.UpdateMissionActionSpeciesOnboard
-import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.PatchableMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.PatchableMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.PublicMissionActionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.UpdateMissionActionSpeciesOnboardDataInput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.outputs.PublicMissionActionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.toPatchableMissionAction
+import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.outputs.toPublicMissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -39,7 +41,7 @@ class PublicMissionActionsController(
         missionId: Int,
     ): List<PublicMissionActionDataOutput> =
         getMissionActions.execute(missionId).map {
-            PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(it))
+            enrichPublicMissionAction.execute(it).toPublicMissionActionDataOutput()
         }
 
     @PatchMapping(value = ["/{actionId}"], consumes = ["application/json"])
@@ -54,7 +56,7 @@ class PublicMissionActionsController(
     ): PublicMissionActionDataOutput {
         val updatedMissionAction = patchMissionAction.execute(actionId, actionInput.toPatchableMissionAction())
 
-        return PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(updatedMissionAction))
+        return enrichPublicMissionAction.execute(updatedMissionAction).toPublicMissionActionDataOutput()
     }
 
     @PutMapping(value = ["/{actionId}/species_onboard/{speciesIndex}"], consumes = ["application/json"])
@@ -77,6 +79,6 @@ class PublicMissionActionsController(
                 toleranceMargin = actionInput.toleranceMargin,
             )
 
-        return PublicMissionActionDataOutput.fromEnriched(enrichPublicMissionAction.execute(updatedMissionAction))
+        return enrichPublicMissionAction.execute(updatedMissionAction).toPublicMissionActionDataOutput()
     }
 }

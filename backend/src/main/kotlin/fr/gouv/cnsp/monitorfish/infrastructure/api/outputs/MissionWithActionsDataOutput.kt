@@ -5,6 +5,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionAndActions
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionSource
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MissionType
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.MultiPolygon
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.MissionActionDataOutput
 import java.time.ZonedDateTime
 
 /**
@@ -60,10 +61,7 @@ data class MissionWithActionsDataOutput(
             controlUnits = missionAndActions.mission.controlUnits,
             actions =
                 missionAndActions.actions.map {
-                    MissionActionDataOutput.fromMissionAction(
-                        it,
-                        useThreatHierarchyForForm = useThreatHierarchyForForm,
-                    )
+                    it.toMissionActionDataOutput(useThreatHierarchyForForm = useThreatHierarchyForForm)
                 },
             hasRapportNavActions = missionAndActions.hasRapportNavActions,
         )

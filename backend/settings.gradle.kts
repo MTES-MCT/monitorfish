@@ -10,3 +10,5 @@ pluginManagement {
 }
 
 rootProject.name = "monitorfish"
+
+include("api-contract")

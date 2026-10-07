@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReport
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.dtos.ActivityReportInfraction
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.MissionActionDataOutput
 
 data class ActivityReportDataOutput(
     val action: MissionActionDataOutput,
@@ -19,10 +20,7 @@ data class ActivityReportDataOutput(
         fun fromActivityReport(activityReport: ActivityReport) =
             ActivityReportDataOutput(
                 action =
-                    MissionActionDataOutput.fromMissionAction(
-                        missionAction = activityReport.action,
-                        useThreatHierarchyForForm = false,
-                    ),
+                    activityReport.action.toMissionActionDataOutput(useThreatHierarchyForForm = false),
                 activityCode = activityReport.activityCode,
                 faoArea = activityReport.faoArea,
                 segment = activityReport.segment,

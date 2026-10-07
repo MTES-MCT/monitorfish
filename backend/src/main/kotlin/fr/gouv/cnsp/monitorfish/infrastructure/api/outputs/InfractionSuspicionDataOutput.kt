@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ThreatHierarchyDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

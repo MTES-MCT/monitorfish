@@ -21,6 +21,8 @@ on:
       - "**.sql"
       - "backend/pom.xml"
       - "backend/build.gradle.kts"
+      - "backend/settings.gradle.kts"
+      - "backend/api-contract/build.gradle.kts"
       - "Makefile"
       - "frontend"
   schedule:

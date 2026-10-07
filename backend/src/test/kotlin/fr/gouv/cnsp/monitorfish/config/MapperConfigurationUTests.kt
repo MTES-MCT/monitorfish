@@ -1,6 +1,6 @@
 package fr.gouv.cnsp.monitorfish.config
 
-import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.input.PatchableMissionActionDataInput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.PatchableMissionActionDataInput
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime

@@ -1,7 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PortDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.PortDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toPortDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.cache.CacheManager
@@ -21,7 +22,7 @@ class PublicPortController(
     @Operation(summary = "Get all active ports")
     fun getActivePorts(): List<PortDataOutput> =
         getActivePorts.execute().map { port ->
-            PortDataOutput.fromPort(port)
+            port.toPortDataOutput()
         }
 
     @PutMapping(value = ["/invalidate"])

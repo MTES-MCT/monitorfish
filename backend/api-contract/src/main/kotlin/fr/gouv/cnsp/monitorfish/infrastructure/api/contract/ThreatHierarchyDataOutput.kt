@@ -1,4 +1,4 @@
-package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
+package fr.gouv.cnsp.monitorfish.infrastructure.api.contract
 
 data class NatinfDataOutput(
     val label: String,

@@ -1,8 +1,10 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessels
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselIdentityDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toVesselIdentityDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -20,7 +22,7 @@ class PublicVesselController(
 ) {
     @GetMapping("")
     @Operation(summary = "Get all vessels")
-    fun getAllVessels(): List<VesselIdentityDataOutput> = getVessels.execute().map(VesselIdentityDataOutput::fromVessel)
+    fun getAllVessels(): List<VesselIdentityDataOutput> = getVessels.execute().map(Vessel::toVesselIdentityDataOutput)
 
     @GetMapping("/search")
     @Operation(summary = "Search vessels")
@@ -34,6 +36,6 @@ class PublicVesselController(
         searched: String,
     ): List<VesselIdentityDataOutput> =
         searchVessels.execute(searched).map {
-            VesselIdentityDataOutput.fromVesselAndBeacon(it)
+            it.toVesselIdentityDataOutput()
         }
 }

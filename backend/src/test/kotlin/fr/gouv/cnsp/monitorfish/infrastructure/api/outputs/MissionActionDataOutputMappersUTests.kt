@@ -4,10 +4,11 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.InfractionType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.InfractionType as ContractInfractionType
 
-class MissionActionDataOutputUTests {
+class MissionActionDataOutputMappersUTests {
     @Test
-    fun `fromInfractionWithThreatHierarchy Should map a pending infraction without any threat`() {
+    fun `toMissionActionInfractionDataOutputWithThreatHierarchy Should map a pending infraction without any threat`() {
         // Given
         val infraction =
             Infraction(
@@ -16,10 +17,10 @@ class MissionActionDataOutputUTests {
             )
 
         // When
-        val output = MissionActionInfractionDataOutput.fromInfractionWithThreatHierarchy(infraction)
+        val output = infraction.toMissionActionInfractionDataOutputWithThreatHierarchy()
 
         // Then
-        assertThat(output.infractionType).isEqualTo(InfractionType.PENDING)
+        assertThat(output.infractionType).isEqualTo(ContractInfractionType.PENDING)
         assertThat(output.threats).isNull()
         assertThat(output.natinf).isNull()
         assertThat(output.comments).isEqualTo("En attente de PV")

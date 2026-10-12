@@ -8,7 +8,7 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   : [
       {
         date: '2026-10-12',
-        description: `Les photos des navires affichées dans la fiche navire provenaient de MarineTraffic, qui ne les met plus à disposition gratuitement. Elles ont donc été retirées de la fiche navire.`,
+        description: `Les photos des navires affichées dans la fiche navire provenaient de MarineTraffic, qui ne les met plus à disposition gratuitement. Elles ont donc été retirées de la fiche navire en attendant de trouver une solution alternative.`,
         for: 'ALL',
         title: `Fiche navire – Retrait des photos des navires`,
         type: 'IMPROVEMENT'

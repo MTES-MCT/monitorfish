@@ -7,14 +7,13 @@ import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedV
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FingerprintLoader, getCoordinates, THEME } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
 import { getDateTime, timeagoFrenchLocale } from '../../../../../utils'
 import InfoSVG from '../../../../icons/Information.svg?react'
-import NoVesselSVG from '../../../../icons/Picto_photo_navire_manquante.svg?react'
 
 // @ts-ignore
 timeago.register('fr', timeagoFrenchLocale)
@@ -27,7 +26,6 @@ export function VesselSummary() {
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
 
-  const [photoFallback, setPhotoFallback] = useState(false)
   const coordinates =
     !Number.isNaN(selectedVessel?.lastPositionLatitude) && !Number.isNaN(selectedVessel?.lastPositionLongitude)
       ? getCoordinates(
@@ -38,17 +36,6 @@ export function VesselSummary() {
       : undefined
 
   useEffect(() => {
-    // The MMSI is required for the vessel picture to be available
-    if (!selectedVessel?.mmsi) {
-      setPhotoFallback(true)
-
-      return
-    }
-
-    setPhotoFallback(false)
-  }, [selectedVessel])
-
-  useEffect(() => {
     if (!selectedVessel && !loadingVessel && selectedVesselIdentity) {
       dispatch(showVessel(selectedVesselIdentity, false))
     }
@@ -56,23 +43,6 @@ export function VesselSummary() {
 
   return !loadingVessel ? (
     <Body>
-      <PhotoZone>
-        {photoFallback ? (
-          <NoVessel />
-        ) : (
-          <>
-            {selectedVessel?.mmsi ? (
-              <Photo
-                onError={() => setPhotoFallback(true)}
-                referrerPolicy="no-referrer"
-                src={`https://photos.marinetraffic.com/ais/showphoto.aspx?mmsi=${selectedVessel?.mmsi}&size=thumb300`}
-              />
-            ) : (
-              <NoVessel />
-            )}
-          </>
-        )}
-      </PhotoZone>
       <ZoneWithoutBackground>
         <LatLon>
           <FieldName>Latitude</FieldName>
@@ -143,12 +113,6 @@ const Gray = styled.span`
   font-weight: 300;
 `
 
-const NoVessel = styled(NoVesselSVG)`
-  width: 60px;
-  background: ${p => p.theme.color.gainsboro};
-  padding: 92px 136px 92px 136px;
-`
-
 const FieldName = styled.div`
   margin-top: 9px;
   color: ${p => p.theme.color.slateGray};
@@ -163,24 +127,8 @@ const FieldValue = styled.div`
   font-weight: 500;
 `
 
-const PhotoZone = styled.div`
-  background: ${p => p.theme.color.white};
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-  padding: 10px;
-`
-
 const Body = styled.div`
   padding: 10px;
-`
-
-const Photo = styled.img<{
-  referrerPolicy: string
-}>`
-  max-height: 190px;
-  left: auto;
-  right: auto;
 `
 
 const NoValue = styled.span`

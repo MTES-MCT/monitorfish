@@ -7,6 +7,13 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-10-12',
+        description: `Les photos des navires affichées dans la fiche navire provenaient de MarineTraffic, qui ne les met plus à disposition gratuitement. Elles ont donc été retirées de la fiche navire.`,
+        for: 'ALL',
+        title: `Fiche navire – Retrait des photos des navires`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-10-06',
         description: `Vous pouvez désormais ajouter une pièce jointe à vos messages envoyés via le tchat. L'équipe MonitorFish vous répondra par e-mail.`,
         for: 'ALL',

@@ -28,6 +28,7 @@ class SpaController : ErrorController {
                 "/log_in",
                 "/register",
                 "/activity_visualization",
+                "/declaration_accessibilite",
                 "/side_window",
             )
     }

@@ -1,6 +1,7 @@
-import '@gouvfr/dsfr/dist/dsfr.min.css'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import styled from 'styled-components'
+
+import { DsfrLayout } from './DsfrLayout'
 
 const onConnect = () => {
   window.location.href = '/oauth2/authorization/proconnect'
@@ -15,27 +16,7 @@ export function Login() {
   }
 
   return (
-    <Wrapper>
-      <header className="fr-header" role="banner">
-        <div className="fr-header__body">
-          <div className="fr-container">
-            <div className="fr-header__body-row">
-              <div className="fr-header__brand fr-enlarge-link">
-                <div className="fr-header__brand-top">
-                  <div className="fr-header__logo">
-                    <MinistryLogo />
-                  </div>
-                </div>
-                <div className="fr-header__service">
-                  <p className="fr-header__service-title">MonitorFish</p>
-                  <p className="fr-header__service-tagline">Améliorer le contrôle des activités des navires de pêche</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <DsfrLayout>
       <Main id="content">
         <div className="fr-container fr-py-14v">
           <div className="fr-grid-row fr-grid-row--center">
@@ -87,56 +68,10 @@ export function Login() {
         </div>
       </Main>
 
-      <footer className="fr-footer" id="footer" role="contentinfo">
-        <div className="fr-container">
-          <div className="fr-footer__body">
-            <div className="fr-footer__brand">
-              <MinistryLogo />
-            </div>
-            <div className="fr-footer__content">
-              <p className="fr-footer__content-desc">Centre National de Surveillance des Pêches (CNSP)</p>
-              <ul className="fr-footer__content-list">
-                {['info.gouv.fr', 'service-public.fr', 'legifrance.gouv.fr', 'data.gouv.fr'].map(domain => (
-                  <li key={domain} className="fr-footer__content-item">
-                    <a
-                      className="fr-footer__content-link"
-                      href={`https://${domain}`}
-                      rel="noopener external noreferrer"
-                      target="_blank"
-                      title={`${domain} - nouvelle fenêtre`}
-                    >
-                      {domain}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
-
       <BannerStack />
-    </Wrapper>
+    </DsfrLayout>
   )
 }
-
-function MinistryLogo() {
-  return (
-    <p className="fr-logo">
-      Ministère
-      <br />
-      chargé de la mer
-      <br />
-      et de la pêche
-    </p>
-  )
-}
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`
 
 const Main = styled.main`
   flex: 1 0 auto;

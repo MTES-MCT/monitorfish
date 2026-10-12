@@ -44,6 +44,9 @@ const StyledDialog = styled(Dialog)`
 
 const StyledBody = styled(Dialog.Body)`
   > p,
+  > p *,
+  li,
+  li *,
   span {
     color: ${p => p.theme.color.charcoal};
     font-size: 16px !important;

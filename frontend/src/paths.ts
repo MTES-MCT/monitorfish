@@ -1,6 +1,7 @@
 import { BackOfficeMenuKey, BackOfficeMenuPath } from '@features/BackOffice/components/BackofficeMenu/constants'
 
 export const ROUTER_PATHS = {
+  accessibilityStatement: '/declaration_accessibilite',
   activityVisualization: '/activity_visualization',
   backendForFrontend: '/bff',
   backoffice: '/backoffice',

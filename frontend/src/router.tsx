@@ -62,6 +62,13 @@ export const routes = [
     ]
   },
   {
+    path: ROUTER_PATHS.accessibilityStatement,
+    lazy: () =>
+      import('./auth/components/AccessibilityStatement').then(({ AccessibilityStatement }) => ({
+        Component: AccessibilityStatement
+      }))
+  },
+  {
     path: ROUTER_PATHS.register,
     element: <Register />
   },

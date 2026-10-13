@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.logbook.messages.PNO
 import fr.gouv.cnsp.monitorfish.fakers.LogbookMessageFaker
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
+import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -208,6 +209,70 @@ class PriorNotificationUTests {
             )
 
         assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `isUnderFrenchJurisdiction Should return false for a foreign vessel landing in a foreign port`() {
+        // Given
+        val priorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                port = PortFaker.fakePort(locode = "SRPBM", countryCode = "SR"),
+                vessel = VesselFaker.fakeVessel(flagState = CountryCode.VE),
+            )
+
+        // When
+        val result = priorNotification.isUnderFrenchJurisdiction()
+
+        // Then
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `isUnderFrenchJurisdiction Should return true for a French vessel landing in a foreign port`() {
+        // Given
+        val priorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                port = PortFaker.fakePort(locode = "SRPBM", countryCode = "SR"),
+                vessel = VesselFaker.fakeVessel(flagState = CountryCode.FR),
+            )
+
+        // When
+        val result = priorNotification.isUnderFrenchJurisdiction()
+
+        // Then
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `isUnderFrenchJurisdiction Should return true for a foreign vessel landing in a French port`() {
+        // Given
+        val priorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                port = PortFaker.fakePort(countryCode = "FR"),
+                vessel = VesselFaker.fakeVessel(flagState = CountryCode.VE),
+            )
+
+        // When
+        val result = priorNotification.isUnderFrenchJurisdiction()
+
+        // Then
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `isUnderFrenchJurisdiction Should return true When the port is unknown`() {
+        // Given
+        val priorNotification =
+            PriorNotificationFaker.fakePriorNotification().copy(
+                port = null,
+                vessel = VesselFaker.fakeVessel(flagState = CountryCode.VE),
+            )
+
+        // When
+        val result = priorNotification.isUnderFrenchJurisdiction()
+
+        // Then
+        assertThat(result).isTrue()
     }
 
     companion object {

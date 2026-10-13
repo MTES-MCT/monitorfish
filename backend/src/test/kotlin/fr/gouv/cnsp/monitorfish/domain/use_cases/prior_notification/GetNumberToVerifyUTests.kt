@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
@@ -12,7 +13,11 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.fakers.LogbookMessageFaker
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
+import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
+import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -33,6 +38,9 @@ class GetNumberToVerifyUTests {
 
     @MockitoBean
     private lateinit var riskFactorRepository: RiskFactorRepository
+
+    @MockitoBean
+    private lateinit var vesselRepository: VesselRepository
 
     @Test
     fun `execute Should return a map of PNO for each facade to verify`() {
@@ -122,6 +130,7 @@ class GetNumberToVerifyUTests {
                 manualPriorNotificationRepository,
                 portRepository,
                 riskFactorRepository,
+                vesselRepository,
             ).execute()
 
         // Then
@@ -131,4 +140,55 @@ class GetNumberToVerifyUTests {
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.OUTREMEROA]).isEqualTo(1)
         assertThat(result.perSeafrontGroupCount[SeafrontGroup.NO_FACADE]).isEqualTo(0)
     }
+
+    @Test
+    fun `execute Should not count foreign vessels landing in a foreign port`() {
+        // Given
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                PortFaker.fakePort(locode = "FRABC", countryCode = "FR", facade = "NAMO"),
+                PortFaker.fakePort(locode = "SRPBM", countryCode = "SR", facade = null),
+            ),
+        )
+        given(logbookReportRepository.findAllPriorNotificationsToVerify()).willReturn(
+            listOf(
+                fakeForeignVesselPriorNotification(index = 1, portLocode = "FRABC"),
+                fakeForeignVesselPriorNotification(index = 2, portLocode = "SRPBM"),
+            ),
+        )
+        given(vesselRepository.findVesselsByInternalReferenceNumbers(listOf("FOREIGN_CFR"))).willReturn(
+            listOf(VesselFaker.fakeVessel(internalReferenceNumber = "FOREIGN_CFR", flagState = CountryCode.VE)),
+        )
+
+        // When
+        val result =
+            GetNumberToVerify(
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                portRepository,
+                riskFactorRepository,
+                vesselRepository,
+            ).execute()
+
+        // Then
+        assertThat(result.perSeafrontGroupCount[SeafrontGroup.ALL]).isEqualTo(1)
+        assertThat(result.perSeafrontGroupCount[SeafrontGroup.NAMO]).isEqualTo(1)
+        assertThat(result.perSeafrontGroupCount[SeafrontGroup.NO_FACADE]).isEqualTo(0)
+    }
+
+    private fun fakeForeignVesselPriorNotification(
+        index: Int,
+        portLocode: String,
+    ): PriorNotification =
+        PriorNotificationFaker.fakePriorNotification(index).copy(
+            logbookMessageAndValue =
+                LogbookMessageAndValue(
+                    clazz = PNO::class.java,
+                    logbookMessage =
+                        LogbookMessageFaker.fakePnoLogbookMessage(index).copy(
+                            internalReferenceNumber = "FOREIGN_CFR",
+                            message = LogbookMessageFaker.fakePnoMessage().apply { port = portLocode },
+                        ),
+                ),
+        )
 }

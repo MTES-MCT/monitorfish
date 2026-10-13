@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 
 @UseCase
 class GetNumberToVerify(
@@ -14,6 +15,7 @@ class GetNumberToVerify(
     private val manualPriorNotificationRepository: ManualPriorNotificationRepository,
     private val portRepository: PortRepository,
     private val riskFactorRepository: RiskFactorRepository,
+    private val vesselRepository: VesselRepository,
 ) {
     fun execute(): PriorNotificationStats {
         val allPorts = portRepository.findAll()
@@ -29,11 +31,9 @@ class GetNumberToVerify(
 
         val priorNotifications =
             undeletedPriorNotifications
-                .map { priorNotification ->
-                    priorNotification.enrich(allRiskFactors, allPorts, priorNotification.isManuallyCreated)
-
-                    priorNotification
-                }
+                .onEach { it.enrich(allRiskFactors, allPorts, it.isManuallyCreated) }
+                .let { enrichWithVessel(it, vesselRepository) }
+                .filter { it.isUnderFrenchJurisdiction() }
 
         return PriorNotificationStats(
             perSeafrontGroupCount =

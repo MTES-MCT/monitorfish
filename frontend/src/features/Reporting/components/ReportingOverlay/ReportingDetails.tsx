@@ -85,8 +85,8 @@ export function ReportingDetails({
             {!!reporting.flagState && reporting.flagState !== UNKNOWN_VESSEL.flagState && (
               <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
             )}
-            {reporting.numberOfVessels !== undefined && reporting.numberOfVessels > 1
-              ? `${reporting.numberOfVessels} navires`
+            {reporting.numberOfTargets !== undefined && reporting.numberOfTargets > 1
+              ? `${reporting.numberOfTargets} navires`
               : `${reporting.vesselName ?? 'Navire inconnu'}`}
           </VesselName>
           {isSelected && (

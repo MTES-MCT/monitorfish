@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.alerts.PendingAlert
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -95,6 +96,10 @@ data class ReportingEntity(
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType::class)
     val validityOption: ReportingValidityOption? = null,
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType::class)
+    @Column(name = "target_type", nullable = false, columnDefinition = "reporting_target_type")
+    val targetType: ReportingTargetType,
 ) {
     fun toReporting(mapper: ObjectMapper): Reporting =
         ReportingMapper.getReportingFromJSON(
@@ -136,6 +141,7 @@ data class ReportingEntity(
             gearCode = null,
             archivingDate = null,
             lastUpdateDate = validationDate ?: ZonedDateTime.now(),
+            targetType = ReportingTargetType.VESSEL,
         )
 
         fun fromReporting(
@@ -173,6 +179,12 @@ data class ReportingEntity(
                     is Reporting.InfractionSuspicion -> reporting.validityOption
                     is Reporting.Observation -> reporting.validityOption
                     is Reporting.Alert -> null
+                },
+            targetType =
+                when (reporting) {
+                    is Reporting.InfractionSuspicion -> reporting.targetType
+                    is Reporting.Observation -> reporting.targetType
+                    is Reporting.Alert -> ReportingTargetType.VESSEL
                 },
         )
     }

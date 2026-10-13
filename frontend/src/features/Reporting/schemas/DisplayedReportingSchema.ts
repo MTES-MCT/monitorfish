@@ -21,7 +21,7 @@ export const DisplayedReportingSchema = z.strictObject({
   isInfractionSuspicion: z.boolean(),
   isIUU: z.boolean(),
   isObservation: z.boolean(),
-  numberOfVessels: numberOrUndefined,
+  numberOfTargets: numberOrUndefined,
   reportingDate: z.string(),
   title: z.string(),
   type: z.enum(ReportingType),

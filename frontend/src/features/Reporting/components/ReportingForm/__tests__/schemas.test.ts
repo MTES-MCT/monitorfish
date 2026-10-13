@@ -1,4 +1,5 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { describe, expect, it } from '@jest/globals'
@@ -8,6 +9,7 @@ import { CreateOrEditReportingSchema } from '../schemas'
 const baseValidData = {
   reportingDate: '2024-01-01T00:00:00.000Z',
   reportingSource: ReportingOriginSource.OPS,
+  targetType: ReportingTargetType.VESSEL,
   title: 'Test',
   type: ReportingType.OBSERVATION,
   validityOption: ReportingValidityOption.INDEFINITE,
@@ -49,6 +51,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
       isUnknownVessel: true,
       reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
+      targetType: ReportingTargetType.VESSEL,
       title: 'Test',
       type: ReportingType.OBSERVATION,
       validityOption: ReportingValidityOption.INDEFINITE
@@ -60,6 +63,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
     const result = CreateOrEditReportingSchema.safeParse({
       reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
+      targetType: ReportingTargetType.VESSEL,
       title: 'Test',
       type: ReportingType.OBSERVATION
     })
@@ -78,6 +82,7 @@ describe('CreateOrEditReportingSchema vessel identifier validation', () => {
       isUnknownVessel: false,
       reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
+      targetType: ReportingTargetType.VESSEL,
       title: 'Test',
       type: ReportingType.OBSERVATION
     })
@@ -259,6 +264,7 @@ describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
     isIUU: true,
     reportingDate: '2024-01-01T00:00:00.000Z',
     reportingSource: ReportingOriginSource.OPS,
+    targetType: ReportingTargetType.VESSEL,
     title: 'Test IUU',
     type: ReportingType.OBSERVATION,
     validityOption: ReportingValidityOption.INDEFINITE,
@@ -275,13 +281,13 @@ describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
       ...baseIUUData,
       latitude: 48.5,
       longitude: -4.2,
-      numberOfVessels: 1
+      numberOfTargets: 1
     })
     expect(result.success).toBe(true)
   })
 
   it('fails when isIUU is true and latitude is missing', () => {
-    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, longitude: -4.2, numberOfVessels: 1 })
+    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, longitude: -4.2, numberOfTargets: 1 })
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)
@@ -289,17 +295,17 @@ describe('CreateOrEditReportingSchema isIUU coordinates validation', () => {
     }
   })
 
-  it('fails when isIUU is true and numberOfVessels is missing', () => {
+  it('fails when isIUU is true and numberOfTargets is missing', () => {
     const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, longitude: -4.2 })
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)
-      expect(paths).toContainEqual(['numberOfVessels'])
+      expect(paths).toContainEqual(['numberOfTargets'])
     }
   })
 
   it('fails when isIUU is true and longitude is missing', () => {
-    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, numberOfVessels: 1 })
+    const result = CreateOrEditReportingSchema.safeParse({ ...baseIUUData, latitude: 48.5, numberOfTargets: 1 })
     expect(result.success).toBe(false)
     if (!result.success) {
       const paths = result.error.issues.map(i => i.path)

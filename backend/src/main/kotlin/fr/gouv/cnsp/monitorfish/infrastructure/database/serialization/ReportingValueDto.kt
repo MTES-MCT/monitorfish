@@ -35,7 +35,8 @@ data class InfractionSuspicionDto(
     val threatCharacterization: String? = null,
     // New list format
     val infractions: List<InfractionSuspicionThreatDto>? = null,
-    val numberOfVessels: Int? = null,
+    @JsonAlias("numberOfVessels")
+    val numberOfTargets: Int? = null,
     @JsonProperty("type")
     val reportingTypeMapping: ReportingTypeMapping = ReportingTypeMapping.INFRACTION_SUSPICION,
 )
@@ -55,7 +56,8 @@ data class ObservationDto(
     val satelliteType: SatelliteSource? = null,
     val title: String,
     val description: String? = null,
-    val numberOfVessels: Int? = null,
+    @JsonAlias("numberOfVessels")
+    val numberOfTargets: Int? = null,
     val seaFront: String? = null,
     val dml: String? = null,
     @JsonProperty("type")

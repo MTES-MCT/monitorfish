@@ -140,7 +140,8 @@ sealed class Reporting {
         val title: String,
         val description: String? = null,
         val infractions: List<InfractionSuspicionThreat>,
-        val numberOfVessels: Int? = null,
+        val numberOfTargets: Int? = null,
+        val targetType: ReportingTargetType = ReportingTargetType.VESSEL,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -151,7 +152,7 @@ sealed class Reporting {
             otherSourceType = other
         }
 
-        fun verify() =
+        fun verify() {
             checkReportingActorAndFieldsRequirements(
                 reportingSource = reportingSource,
                 controlUnitId = controlUnitId,
@@ -161,6 +162,20 @@ sealed class Reporting {
                 latitude = latitude,
                 longitude = longitude,
             )
+            checkReportingTargetRequirements(
+                targetType = targetType,
+                gearCode = gearCode,
+                vesselId = vesselId,
+                vesselName = vesselName,
+                cfr = cfr,
+                externalMarker = externalMarker,
+                ircs = ircs,
+                mmsi = mmsi,
+                imo = imo,
+                length = length,
+                vesselIdentifier = vesselIdentifier,
+            )
+        }
 
         override fun update(command: ReportingUpdateCommand): Reporting =
             when (command.type) {
@@ -186,13 +201,15 @@ sealed class Reporting {
                         validityOption = command.validityOption,
                         reportingDate = command.reportingDate,
                         infractions = command.infractions,
-                        numberOfVessels = command.numberOfVessels,
+                        numberOfTargets = command.numberOfTargets,
                         isFishing = command.isFishing ?: false,
                         latitude = command.latitude,
                         longitude = command.longitude,
                         otherSourceType = command.otherSourceType,
                         satelliteType = command.satelliteType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.OBSERVATION ->
                     Observation(
                         id = this.id,
@@ -227,9 +244,11 @@ sealed class Reporting {
                         description = command.description,
                         satelliteType = command.satelliteType,
                         otherSourceType = command.otherSourceType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.ALERT -> throw NotImplementedError()
-                else -> error("Invalid target type: ${command.type}")
+                else -> error("Invalid reporting type: ${command.type}")
             }
     }
 
@@ -271,7 +290,8 @@ sealed class Reporting {
         val satelliteType: SatelliteSource? = null,
         val title: String,
         val description: String? = null,
-        val numberOfVessels: Int? = null,
+        val numberOfTargets: Int? = null,
+        val targetType: ReportingTargetType = ReportingTargetType.VESSEL,
         override val seaFront: String? = null,
         override val dml: String? = null,
     ) : Reporting() {
@@ -281,7 +301,7 @@ sealed class Reporting {
             otherSourceType = other
         }
 
-        fun verify() =
+        fun verify() {
             checkReportingActorAndFieldsRequirements(
                 reportingSource = reportingSource,
                 controlUnitId = controlUnitId,
@@ -291,6 +311,20 @@ sealed class Reporting {
                 latitude = latitude,
                 longitude = longitude,
             )
+            checkReportingTargetRequirements(
+                targetType = targetType,
+                gearCode = gearCode,
+                vesselId = vesselId,
+                vesselName = vesselName,
+                cfr = cfr,
+                externalMarker = externalMarker,
+                ircs = ircs,
+                mmsi = mmsi,
+                imo = imo,
+                length = length,
+                vesselIdentifier = vesselIdentifier,
+            )
+        }
 
         override fun update(command: ReportingUpdateCommand): Reporting =
             when (command.type) {
@@ -320,8 +354,10 @@ sealed class Reporting {
                         longitude = command.longitude,
                         otherSourceType = command.otherSourceType,
                         satelliteType = command.satelliteType,
-                        numberOfVessels = command.numberOfVessels,
+                        numberOfTargets = command.numberOfTargets,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.INFRACTION_SUSPICION ->
                     InfractionSuspicion(
                         id = this.id,
@@ -358,9 +394,11 @@ sealed class Reporting {
                         infractions = command.infractions,
                         satelliteType = command.satelliteType,
                         otherSourceType = command.otherSourceType,
+                        targetType = command.targetType,
                     )
+
                 ReportingType.ALERT -> throw NotImplementedError()
-                else -> error("Invalid target type: ${command.type}")
+                else -> error("Invalid reporting type: ${command.type}")
             }
     }
 }
@@ -400,4 +438,35 @@ private fun checkReportingActorAndFieldsRequirements(
 
         else -> {}
     }
+}
+
+private fun checkReportingTargetRequirements(
+    targetType: ReportingTargetType,
+    gearCode: String?,
+    vesselId: Int?,
+    vesselName: String?,
+    cfr: String?,
+    externalMarker: String?,
+    ircs: String?,
+    mmsi: String?,
+    imo: String?,
+    length: Double?,
+    vesselIdentifier: VesselIdentifier?,
+) {
+    if (targetType != ReportingTargetType.GEAR) {
+        return
+    }
+
+    require(!gearCode.isNullOrEmpty()) { "A gear must be set" }
+    require(
+        vesselId == null &&
+            vesselName.isNullOrEmpty() &&
+            cfr.isNullOrEmpty() &&
+            externalMarker.isNullOrEmpty() &&
+            ircs.isNullOrEmpty() &&
+            mmsi.isNullOrEmpty() &&
+            imo.isNullOrEmpty() &&
+            length == null &&
+            vesselIdentifier == null,
+    ) { "Vessel information must not be set when targeting a gear" }
 }

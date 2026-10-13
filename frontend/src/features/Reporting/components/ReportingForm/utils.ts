@@ -1,4 +1,5 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -62,11 +63,12 @@ export function getFormFields(
     length: editedReporting?.length,
     longitude: editedReporting?.longitude,
     mmsi: editedReporting?.mmsi,
-    numberOfVessels: isIUU ? (value?.numberOfVessels ?? 1) : undefined,
+    numberOfTargets: isIUU ? (value?.numberOfTargets ?? 1) : undefined,
     otherSourceType: value?.otherSourceType,
     reportingDate: editedReporting?.reportingDate ?? customDayjs().utc().toISOString(),
     reportingSource: value?.reportingSource ?? ReportingOriginSource.OPS,
     satelliteType: value?.satelliteType,
+    targetType: (editedReporting?.type && editedReporting?.targetType) ?? ReportingTargetType.VESSEL,
     title: value?.title ?? '',
     validityOption,
     vesselId: editedReporting?.vesselId,

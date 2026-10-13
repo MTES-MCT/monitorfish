@@ -82,4 +82,5 @@ NS	Non spécifié	Engin inconnu
 DRM	Dragues mécanisées	Dragues
 OTS	Inconnu FAO	Engin inconnu
 SUX	Filets tournants (non spécifié)	Filets tournants
+FAD	Dispositif de concentration de poissons (DCP)	Engins divers
 \.

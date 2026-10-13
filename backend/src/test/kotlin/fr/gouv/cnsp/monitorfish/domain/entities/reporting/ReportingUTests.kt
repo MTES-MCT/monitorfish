@@ -64,7 +64,7 @@ class ReportingUTests {
         type: ReportingType,
         latitude: Double? = 10.0,
         longitude: Double? = 20.0,
-        numberOfVessels: Int? = 3,
+        numberOfTargets: Int? = 3,
     ) = ReportingUpdateCommand(
         flagState = CountryCode.FR,
         reportingDate = now,
@@ -73,7 +73,7 @@ class ReportingUTests {
         satelliteType = SatelliteSource.OTHER,
         otherSourceType = OtherSource.NGO,
         isFishing = true,
-        numberOfVessels = numberOfVessels,
+        numberOfTargets = numberOfTargets,
         reportingSource = ReportingSource.UNIT,
         controlUnitId = 1,
         title = "Updated",
@@ -142,7 +142,7 @@ class ReportingUTests {
         assertThat(result.latitude).isEqualTo(10.0)
         assertThat(result.longitude).isEqualTo(20.0)
         assertThat(result.isFishing).isTrue()
-        assertThat(result.numberOfVessels).isEqualTo(3)
+        assertThat(result.numberOfTargets).isEqualTo(3)
         assertThat(result.satelliteType).isEqualTo(SatelliteSource.OTHER)
         assertThat(result.otherSourceType).isEqualTo(OtherSource.NGO)
     }
@@ -381,8 +381,12 @@ class ReportingUTests {
             isIUU: Boolean = false,
             latitude: Double? = null,
             longitude: Double? = null,
+            targetType: ReportingTargetType = ReportingTargetType.VESSEL,
+            gearCode: String? = null,
+            vesselName: String? = null,
         ) = Reporting.InfractionSuspicion(
             flagState = CountryCode.FR,
+            vesselName = vesselName,
             creationDate = now,
             lastUpdateDate = now,
             reportingDate = now,
@@ -393,6 +397,8 @@ class ReportingUTests {
             isIUU = isIUU,
             latitude = latitude,
             longitude = longitude,
+            gearCode = gearCode,
+            targetType = targetType,
             title = "Title",
             infractions =
                 listOf(
@@ -415,8 +421,12 @@ class ReportingUTests {
             isIUU: Boolean = false,
             latitude: Double? = null,
             longitude: Double? = null,
+            targetType: ReportingTargetType = ReportingTargetType.VESSEL,
+            gearCode: String? = null,
+            vesselName: String? = null,
         ) = Reporting.Observation(
             flagState = CountryCode.FR,
+            vesselName = vesselName,
             creationDate = now,
             lastUpdateDate = now,
             reportingDate = now,
@@ -427,6 +437,8 @@ class ReportingUTests {
             isIUU = isIUU,
             latitude = latitude,
             longitude = longitude,
+            gearCode = gearCode,
+            targetType = targetType,
             title = "Title",
             isArchived = false,
             isDeleted = false,
@@ -525,6 +537,58 @@ class ReportingUTests {
 
             assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
             assertThat(throwable.message).contains("actor type must be set")
+        }
+
+        // Target type checks
+
+        @Test
+        fun `verify Should pass When targeting a gear with a gear code and no vessel info`() {
+            makeInfractionSuspicion(
+                targetType = ReportingTargetType.GEAR,
+                gearCode = "FAD",
+            ).verify()
+        }
+
+        @Test
+        fun `verify Should throw When targeting a gear without a gear code`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(targetType = ReportingTargetType.GEAR).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("gear must be set")
+        }
+
+        @Test
+        fun `verify Should throw When targeting a gear with vessel info`() {
+            val throwable =
+                catchThrowable {
+                    makeInfractionSuspicion(
+                        targetType = ReportingTargetType.GEAR,
+                        gearCode = "FAD",
+                        vesselName = "Some vessel",
+                    ).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("Vessel information must not be set")
+        }
+
+        @Test
+        fun `verify Should pass When targeting a vessel`() {
+            makeInfractionSuspicion(vesselName = "Some vessel").verify()
+        }
+
+        @Test
+        fun `verify Should throw for Observation When targeting a gear without a gear code`() {
+            val throwable =
+                catchThrowable {
+                    makeObservation(targetType = ReportingTargetType.GEAR).verify()
+                }
+
+            assertThat(throwable).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(throwable.message).contains("gear must be set")
         }
 
         // Observation delegates to the same logic — one smoke test suffices

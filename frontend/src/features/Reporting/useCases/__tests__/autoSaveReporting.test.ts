@@ -1,5 +1,6 @@
 import { WindowContext } from '@api/constants'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { addReporting } from '@features/Reporting/useCases/addReporting'
@@ -43,6 +44,7 @@ const aValidFormReporting: FormEditedReporting = {
   mmsi: undefined,
   reportingDate: new Date().toISOString(),
   reportingSource: ReportingOriginSource.OPS,
+  targetType: ReportingTargetType.VESSEL,
   title: 'My reporting',
   type: ReportingType.OBSERVATION,
   validityOption: ReportingValidityOption.INDEFINITE,

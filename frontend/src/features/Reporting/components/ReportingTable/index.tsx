@@ -19,6 +19,7 @@ import { DEFAULT_PAGE_SIZE } from '@features/Reporting/constants'
 import { ReportingsSortColumn } from '@features/Reporting/types'
 import { Body } from '@features/SideWindow/components/Body'
 import { Page } from '@features/SideWindow/components/Page'
+import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useListPagination } from '@hooks/useListPagination'
 import { useListSorting } from '@hooks/useListSorting'
 import { useLoadingState } from '@hooks/useLoadingState'
@@ -48,6 +49,7 @@ type ReportingTableProps = Readonly<{
 }>
 export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
+  const { gearsAsOptions } = useGetGearsAsOptions()
 
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
   const [isArchivingConfirmationDialogOpen, setIsArchivingConfirmationDialogOpen] = useState(false)
@@ -109,9 +111,9 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
   const columns = useMemo(
     () =>
       isLoading
-        ? getReportingTableColumns(isFromUrl).map(column => ({ ...column, cell: SkeletonRow }))
-        : getReportingTableColumns(isFromUrl),
-    [isLoading, isFromUrl]
+        ? getReportingTableColumns(isFromUrl, gearsAsOptions).map(column => ({ ...column, cell: SkeletonRow }))
+        : getReportingTableColumns(isFromUrl, gearsAsOptions),
+    [gearsAsOptions, isLoading, isFromUrl]
   )
 
   const tableData = useMemo(

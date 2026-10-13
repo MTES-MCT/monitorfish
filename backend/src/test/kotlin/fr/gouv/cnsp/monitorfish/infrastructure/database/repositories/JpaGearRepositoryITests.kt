@@ -28,7 +28,7 @@ class JpaGearRepositoryITests : AbstractDBTests() {
         // When
         val gears = jpaGearRepository.findAll()
 
-        assertThat(gears).hasSize(83)
+        assertThat(gears).hasSize(84)
         assertThat(gears.first().code).isEqualTo("MIS")
         assertThat(gears.first().name).isEqualTo("Engin divers")
         assertThat(gears.first().category).isEqualTo("Engin inconnu")

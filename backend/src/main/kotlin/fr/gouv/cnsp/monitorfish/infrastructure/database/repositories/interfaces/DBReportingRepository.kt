@@ -269,7 +269,8 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
             vessel_identifier = CAST(:vesselIdentifier AS vessel_identifier),
             validity_option = :validityOption,
             flag_state = :flagState,
-            is_fishing = :isFishing
+            is_fishing = :isFishing,
+            target_type = CAST(:targetType AS reporting_target_type)
         WHERE id = :id
     """,
         nativeQuery = true,
@@ -296,5 +297,6 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         validityOption: String?,
         flagState: String,
         isFishing: Boolean?,
+        targetType: String,
     )
 }

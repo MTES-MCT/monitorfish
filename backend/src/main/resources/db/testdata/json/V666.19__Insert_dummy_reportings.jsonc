@@ -232,7 +232,7 @@
                     "dml": "DML 29",
                     "type": "INFRACTION_SUSPICION",
                     "seaFront": "NAMO",
-		    "numberOfVessels": 1
+		    "numberOfTargets": 1
                 },
                 "vessel_id": 11,
                 "vessel_identifier": "INTERNAL_REFERENCE_NUMBER",

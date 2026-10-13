@@ -5,6 +5,8 @@ import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { booleanOrUndefined, numberOrUndefined, stringOrUndefined } from 'types'
 import z from 'zod'
 
+import { ReportingTargetType } from '../types/ReportingTargetType'
+
 export const BaseReportingSchema = z.strictObject({
   cfr: stringOrUndefined,
   createdBy: z.string(),
@@ -27,6 +29,7 @@ export const BaseReportingSchema = z.strictObject({
   longitude: numberOrUndefined,
   mmsi: stringOrUndefined,
   reportingDate: z.string(),
+  targetType: z.enum(ReportingTargetType),
   type: z.enum(ReportingType),
   underCharter: booleanOrUndefined,
   validationDate: stringOrUndefined,

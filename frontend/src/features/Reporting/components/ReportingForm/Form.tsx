@@ -9,6 +9,7 @@ import {
 import { EMPTY_VESSEL_IDENTITY, updateReportingSource } from '@features/Reporting/components/ReportingForm/utils'
 import { mapControlUnitsToUniqueSortedIdsAsOptions } from '@features/Reporting/components/VesselReportings/CurrentReportingList/utils'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
@@ -45,7 +46,8 @@ import {
   OtherSourceTypeLabel,
   ReportingOriginSourceLabel,
   ReportingTypeCharacteristics,
-  SatelliteSourceLabel
+  SatelliteSourceLabel,
+  TargetTypeLabel
 } from '../../types'
 
 import type { FormEditedReporting } from '../../types'
@@ -87,7 +89,13 @@ type FormProps = Readonly<{
   onClose: () => void
   onIsDirty: ((isDirty: boolean) => void) | undefined
   onVesselStateChange?:
-    | ((vesselName: string | undefined, flagState: string | undefined, numberOfVessels: number | undefined) => void)
+    | ((
+        vesselName: string | undefined,
+        flagState: string | undefined,
+        numberOfTargets: number | undefined,
+        targetType: ReportingTargetType | undefined,
+        gearCode: string | undefined
+      ) => void)
     | undefined
 }>
 export function Form({
@@ -147,6 +155,7 @@ export function Form({
     !selectedVessel && (isEdition || isDuplication || !!values.isUnknownVessel)
   )
   const isInfractionSuspicion = values.type === ReportingType.INFRACTION_SUSPICION
+  const isTargetingGear = values.targetType === ReportingTargetType.GEAR
   const selectedVesselHasLogbook = useMainAppSelector(state => {
     if (!state.vessel.selectedVesselIdentity) {
       return false
@@ -158,7 +167,7 @@ export function Form({
     return !!vessel?.lastLogbookMessageDateTime && !!vessel?.length && vessel.length > 12
   })
   const isDepOptionEnabled = !isIUU && selectedVesselHasLogbook
-  const isPlural = isIUU && (values.numberOfVessels ?? 1) > 1
+  const isPlural = isIUU && (values.numberOfTargets ?? 1) > 1
   const infractions = isInfractionSuspicion ? (values.infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
   const isStandardizedTitle = OBSERVATION_TITLES.includes(values.title ?? '')
@@ -219,15 +228,15 @@ export function Form({
     }
   }
 
-  const handleNumberOfVesselsChange = (nextValue: number | undefined) => {
+  const handleNumberOfTargetsChange = (nextValue: number | undefined) => {
     if (!isIUU || (nextValue ?? 1) <= 1) {
-      void setFieldValue('numberOfVessels', nextValue)
+      void setFieldValue('numberOfTargets', nextValue)
 
       return
     }
 
     setIsVesselAbsent(true)
-    clearVesselValues({ isUnknownVessel: true, numberOfVessels: nextValue })
+    clearVesselValues({ isUnknownVessel: true, numberOfTargets: nextValue })
   }
 
   const handleObservationTypeSelect = (observationTitle: string | undefined) => {
@@ -279,6 +288,28 @@ export function Form({
     }
   }
 
+  const handleTargetTypeChange = (nextTargetType: ReportingTargetType | undefined) => {
+    if (nextTargetType === ReportingTargetType.GEAR) {
+      // Reset the vessel fields when targeting gear so stale vessel data is not submitted.
+      void setValues({
+        ...values,
+        ...EMPTY_VESSEL_IDENTITY,
+        isFishing: undefined,
+        isUnknownVessel: false,
+        targetType: ReportingTargetType.GEAR
+      })
+      setIsVesselAbsent(false)
+
+      return
+    }
+
+    void setValues({
+      ...values,
+      gearCode: undefined,
+      targetType: ReportingTargetType.VESSEL
+    })
+  }
+
   useEffect(() => {
     if (onIsDirty) {
       onIsDirty(dirty)
@@ -295,8 +326,21 @@ export function Form({
   }, [formActionsRef, submitForm, values])
 
   useEffect(() => {
-    onVesselStateChange?.(values.vesselName, values.flagState, values.numberOfVessels)
-  }, [onVesselStateChange, values.flagState, values.vesselName, values.numberOfVessels])
+    onVesselStateChange?.(
+      values.vesselName,
+      values.flagState,
+      values.numberOfTargets,
+      values.targetType,
+      values.gearCode
+    )
+  }, [
+    onVesselStateChange,
+    values.flagState,
+    values.gearCode,
+    values.vesselName,
+    values.numberOfTargets,
+    values.targetType
+  ])
 
   useEffect(() => {
     if (!onAutoSave || !isValid || !dirty) {
@@ -390,18 +434,43 @@ export function Form({
       {!hideVesselSection && <StyledHr $isLight={isLight} />}
       <FormikCoordinatesPicker isLight={isLight} isRequired={isIUU} />
       {isIUU && (
-        <NumberInput
-          error={errors.numberOfVessels}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+          <NumberInput
+            error={errors.numberOfTargets}
+            isLight={isLight}
+            isRequired
+            label="Nombre de cibles"
+            min={1}
+            name="numberOfTargets"
+            onChange={handleNumberOfTargetsChange}
+            style={{ flex: 1 }}
+            value={values.numberOfTargets}
+          />
+          <Select
+            isCleanable={false}
+            isLight={isLight}
+            isRequired
+            label="Type de cible"
+            name="targetType"
+            onChange={handleTargetTypeChange}
+            options={getOptionsFromLabelledEnum(TargetTypeLabel)}
+            style={{ flex: 1 }}
+            value={values.targetType}
+          />
+        </div>
+      )}
+      {!hideVesselSection && isTargetingGear && (
+        <FormikSelect
           isLight={isLight}
           isRequired
-          label="Nombre de navires"
-          min={1}
-          name="numberOfVessels"
-          onChange={handleNumberOfVesselsChange}
-          value={values.numberOfVessels}
+          label="Type d'engin"
+          name="gearCode"
+          options={gearsAsOptions ?? []}
+          searchable
+          virtualized
         />
       )}
-      {!hideVesselSection && (
+      {!hideVesselSection && !isTargetingGear && (
         <VesselSection $hasError={!!errors?.isUnknownVessel}>
           <VesselSearch
             disabled={isVesselAbsent}
@@ -507,7 +576,7 @@ export function Form({
           )}
         </VesselSection>
       )}
-      {!hideVesselSection && errors?.isUnknownVessel && (
+      {!hideVesselSection && !isTargetingGear && errors?.isUnknownVessel && (
         <FieldError>
           {isVesselAbsent
             ? 'Veuillez renseigner au moins un identifiant (nom, MMSI, IMO ou marquage extérieur) ou cocher la case "navire inconnu"'

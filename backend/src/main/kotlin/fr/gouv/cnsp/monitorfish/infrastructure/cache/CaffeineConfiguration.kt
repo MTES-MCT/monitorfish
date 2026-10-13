@@ -86,6 +86,8 @@ class CaffeineConfiguration {
     val activeVessel = "active_vessel"
     val vesselCharter = "vessel_charter"
     val vesselProducerOrganization = "vessel_producer_organization"
+    val vesselInquiries = "vessel_inquiries"
+    val vesselInquiriesLastKnown = "vessel_inquiries_last_known"
     val lastPositionDate = "last_position_date"
     val latestLastPositionDate = "latest_last_position_date"
 
@@ -181,6 +183,8 @@ class CaffeineConfiguration {
         val activeVesselCache = buildSecondsCache(activeVessel, ticker, 60)
         val vesselCharterCache = buildMinutesCache(vesselCharter, ticker, 30)
         val vesselProducerOrganizationCache = buildMinutesCache(vesselProducerOrganization, ticker, 120)
+        val vesselInquiriesCache = buildMinutesCache(vesselInquiries, ticker, 5)
+        val vesselInquiriesLastKnownCache = buildMinutesCache(vesselInquiriesLastKnown, ticker, oneWeek)
         val lastPositionDateCache = buildMinutesCache(lastPositionDate, ticker, 1)
         val latestLastPositionDateCache = buildMinutesCache(latestLastPositionDate, ticker, 1)
 
@@ -251,6 +255,8 @@ class CaffeineConfiguration {
                 activeVesselCache,
                 vesselCharterCache,
                 vesselProducerOrganizationCache,
+                vesselInquiriesCache,
+                vesselInquiriesLastKnownCache,
                 userInfoCache,
                 lastLogbookOperationDateCache,
                 lastPositionDateCache,

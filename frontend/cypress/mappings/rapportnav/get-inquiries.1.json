@@ -1,0 +1,71 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/public/inquiries",
+    "headers": {
+      "X-API-Key": {
+        "equalTo": "cypress-api-key"
+      }
+    },
+    "queryParameters": {
+      "vesselId": {
+        "equalTo": "1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Request-Headers": "*"
+    },
+    "jsonBody": [
+      {
+        "id": "b2f6a1c4-3d5e-4f7a-8b9c-0d1e2f3a4b5c",
+        "vesselId": 1,
+        "type": "FISH",
+        "origin": "CNSP_REPORTING",
+        "status": "IN_PROGRESS",
+        "conclusion": null,
+        "startDateTimeUtc": "2026-09-02T08:00:00Z",
+        "endDateTimeUtc": null,
+        "service": {
+          "id": 6,
+          "name": "ULAM 56"
+        }
+      },
+      {
+        "id": "8a3c6b6e-2f1a-4c0e-9d3b-1f2e3d4c5b6a",
+        "vesselId": 1,
+        "type": "FISH",
+        "origin": "FOLLOW_UP_CONTROL",
+        "status": "CLOSED",
+        "conclusion": "WITH_REPORT",
+        "startDateTimeUtc": "2025-03-01T10:00:00Z",
+        "endDateTimeUtc": "2025-03-15T10:00:00Z",
+        "service": {
+          "id": 6,
+          "name": "ULAM 56"
+        }
+      },
+      {
+        "id": "4e7d9c2b-1a3f-4b6e-8d0c-5f2a7b9e1c3d",
+        "vesselId": 1,
+        "type": "FISH",
+        "origin": "OPPORTUNITY_CONTROL",
+        "status": "CLOSED",
+        "conclusion": "NO_FOLLOW_UP",
+        "startDateTimeUtc": "2023-06-12T07:30:00Z",
+        "endDateTimeUtc": "2023-06-20T16:00:00Z",
+        "service": {
+          "id": 3,
+          "name": "DML 29"
+        }
+      }
+    ]
+  }
+}

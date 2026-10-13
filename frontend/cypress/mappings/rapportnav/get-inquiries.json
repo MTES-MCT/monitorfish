@@ -1,0 +1,23 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/public/inquiries",
+    "headers": {
+      "X-API-Key": {
+        "equalTo": "cypress-api-key"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Request-Headers": "*"
+    },
+    "jsonBody": []
+  }
+}

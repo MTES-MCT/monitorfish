@@ -3,10 +3,15 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlsSummary
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.Inquiry
+import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -17,6 +22,7 @@ class GetVesselControls(
     private val gearRepository: GearRepository,
     private val missionRepository: MissionRepository,
     private val enrichMissionAction: EnrichMissionAction,
+    private val inquiryRepository: InquiryRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
@@ -26,6 +32,7 @@ class GetVesselControls(
     ): ControlsSummary =
         coroutineScope {
             logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
+            val inquiries = async(Dispatchers.IO) { findInquiries(vesselId, afterDateTime) }
             val controls =
                 missionActionsRepository
                     .findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
@@ -82,6 +89,20 @@ class GetVesselControls(
                 numberOfControlsWithSomeGearsSeized = numberOfControlsWithSomeGearsSeized,
                 numberOfControlsWithSomeSpeciesSeized = numberOfControlsWithSomeSpeciesSeized,
                 controls = controlsWithCodeValues,
+                inquiries = inquiries.await(),
             )
+        }
+
+    private fun findInquiries(
+        vesselId: Int,
+        afterDateTime: ZonedDateTime,
+    ): List<Inquiry> =
+        try {
+            inquiryRepository.findAllByVesselId(vesselId, afterDateTime)
+        } catch (e: BackendInternalException) {
+            // Inquiries come from RapportNav: its unavailability must not hide the vessel controls
+            logger.error(e.message, e)
+
+            listOf()
         }
 }

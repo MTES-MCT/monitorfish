@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component
 class RapportnavProperties {
     var url: String = ""
     var timeout: Long = 3000
+    var apiKey: String = ""
 }

@@ -8,6 +8,7 @@ data class ControlsSummaryDataOutput(
     val numberOfControlsWithSomeGearsSeized: Int,
     val numberOfControlsWithSomeSpeciesSeized: Int,
     val controls: List<MissionActionDataOutput>,
+    val inquiries: List<InquiryDataOutput>,
 ) {
     companion object {
         fun fromControlsSummary(controlsSummary: ControlsSummary) =
@@ -20,6 +21,7 @@ data class ControlsSummaryDataOutput(
                     controlsSummary.controls.map {
                         MissionActionDataOutput.fromMissionAction(it, useThreatHierarchyForForm = false)
                     },
+                inquiries = controlsSummary.inquiries.map { InquiryDataOutput.fromInquiry(it) },
             )
     }
 }

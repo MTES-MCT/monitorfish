@@ -108,6 +108,16 @@ data class PriorNotification(
             return emptyList()
         }
 
+    /** Must be called after `port` and `vessel` are enriched. */
+    fun isUnderFrenchJurisdiction(): Boolean {
+        val port = port
+        if (port == null || vessel == null) {
+            return true
+        }
+
+        return vessel.isFrench() || port.isFrenchOrUnknown()
+    }
+
     fun enrich(
         allRiskFactors: List<VesselRiskFactor>,
         allPorts: List<Port>,

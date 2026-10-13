@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.prior_notification
 
+import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.domain.entities.facade.SeafrontGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessage
@@ -18,6 +19,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
+import fr.gouv.cnsp.monitorfish.fakers.LogbookMessageFaker
+import fr.gouv.cnsp.monitorfish.fakers.PortFaker
+import fr.gouv.cnsp.monitorfish.fakers.PriorNotificationFaker
+import fr.gouv.cnsp.monitorfish.fakers.VesselFaker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -178,4 +183,73 @@ class GetPriorNotificationsUTests {
             "FAKE_REPORT_ID_2_COR",
         )
     }
+
+    @Test
+    fun `execute Should exclude foreign vessels landing in a foreign port from both the list and the counts`() {
+        // Given
+        given(portRepository.findAll()).willReturn(
+            listOf(
+                PortFaker.fakePort(locode = "FRABC", countryCode = "FR", facade = "NAMO"),
+                PortFaker.fakePort(locode = "SRPBM", countryCode = "SR", facade = null),
+            ),
+        )
+        given(logbookReportRepository.findAllAcknowledgedPriorNotifications(defaultFilter)).willReturn(
+            listOf(
+                fakeForeignVesselPriorNotification(index = 1, portLocode = "FRABC"),
+                fakeForeignVesselPriorNotification(index = 2, portLocode = "SRPBM"),
+            ),
+        )
+        given(vesselRepository.findVesselsByInternalReferenceNumbers(listOf("FOREIGN_CFR"))).willReturn(
+            listOf(VesselFaker.fakeVessel(internalReferenceNumber = "FOREIGN_CFR", flagState = CountryCode.VE)),
+        )
+
+        // When
+        val result =
+            GetPriorNotifications(
+                gearRepository,
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+                portRepository,
+                reportingRepository,
+                riskFactorRepository,
+                speciesRepository,
+                vesselRepository,
+            ).execute(
+                defaultFilter,
+                defaultIsInvalidated,
+                defaultIsPriorNotificationZero,
+                defaultSeafrontGroup,
+                defaultStates,
+                defaultSortColumn,
+                defaultSortDirection,
+                defaultPageNumber,
+                defaultPageSize,
+            )
+
+        // Then
+        assertThat(result.data).hasSize(1)
+        assertThat(
+            result.data[0]
+                .logbookMessageAndValue.logbookMessage.reportId,
+        ).isEqualTo("FAKE_REPORT_ID_1")
+        assertThat(result.extraData.perSeafrontGroupCount[SeafrontGroup.ALL]).isEqualTo(1)
+        assertThat(result.extraData.perSeafrontGroupCount[SeafrontGroup.NAMO]).isEqualTo(1)
+        assertThat(result.extraData.perSeafrontGroupCount[SeafrontGroup.NO_FACADE]).isEqualTo(0)
+    }
+
+    private fun fakeForeignVesselPriorNotification(
+        index: Int,
+        portLocode: String,
+    ): PriorNotification =
+        PriorNotificationFaker.fakePriorNotification(index).copy(
+            logbookMessageAndValue =
+                LogbookMessageAndValue(
+                    clazz = PNO::class.java,
+                    logbookMessage =
+                        LogbookMessageFaker.fakePnoLogbookMessage(index).copy(
+                            internalReferenceNumber = "FOREIGN_CFR",
+                            message = LogbookMessageFaker.fakePnoMessage().apply { port = portLocode },
+                        ),
+                ),
+        )
 }

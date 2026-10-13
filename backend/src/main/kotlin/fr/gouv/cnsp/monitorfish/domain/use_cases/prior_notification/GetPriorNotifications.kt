@@ -12,7 +12,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.UNKNOWN_VESSEL
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
@@ -57,6 +56,7 @@ class GetPriorNotifications(
         val allPriorNotifications =
             timed("fetch and enrich") {
                 fetchAndEnrich(filter, allPorts, allRiskFactors)
+                    .filter { it.isUnderFrenchJurisdiction() }
             }
         val filteredPriorNotifications =
             timed("filter") {
@@ -96,45 +96,7 @@ class GetPriorNotifications(
 
         return (automaticPriorNotifications + manualPriorNotifications)
             .onEach { it.enrich(allRiskFactors, allPorts, it.isManuallyCreated) }
-            .let { enrichWithVessel(it) }
-    }
-
-    private fun enrichWithVessel(priorNotifications: List<PriorNotification>): List<PriorNotification> {
-        val vesselsById =
-            priorNotifications
-                .asSequence()
-                .filter { it.isManuallyCreated }
-                .mapNotNull { it.logbookMessageAndValue.logbookMessage.vesselId }
-                .distinct()
-                .chunked(5000)
-                .flatMap { vesselRepository.findVesselsByIds(it) }
-                .toList()
-
-        val vesselsByInternalReferenceNumber =
-            priorNotifications
-                .asSequence()
-                .filter { !it.isManuallyCreated }
-                .mapNotNull { it.logbookMessageAndValue.logbookMessage.internalReferenceNumber }
-                .distinct()
-                .chunked(5000)
-                .flatMap { vesselRepository.findVesselsByInternalReferenceNumbers(it) }
-                .toList()
-
-        val vessels = vesselsById + vesselsByInternalReferenceNumber
-
-        return priorNotifications.map { pno ->
-            val vessel =
-                if (pno.isManuallyCreated) {
-                    vessels.find { it.id == pno.logbookMessageAndValue.logbookMessage.vesselId }
-                } else {
-                    vessels.find {
-                        it.internalReferenceNumber ==
-                            pno.logbookMessageAndValue.logbookMessage.internalReferenceNumber
-                    }
-                } ?: UNKNOWN_VESSEL
-
-            pno.copy(vessel = vessel)
-        }
+            .let { enrichWithVessel(it, vesselRepository) }
     }
 
     private fun filter(
@@ -145,8 +107,7 @@ class GetPriorNotifications(
         isPriorNotificationZero: Boolean?,
     ): List<PriorNotification> =
         priorNotifications.filter { pno ->
-            excludeForeignPortsExceptFrenchVessels(pno) &&
-                seafrontGroup.hasSeafront(pno.seafront) &&
+            seafrontGroup.hasSeafront(pno.seafront) &&
                 matchesStatusFilter(pno, states, isInvalidated, isPriorNotificationZero)
         }
 
@@ -220,15 +181,6 @@ class GetPriorNotifications(
     }
 
     companion object {
-        private fun excludeForeignPortsExceptFrenchVessels(priorNotification: PriorNotification): Boolean {
-            val port = priorNotification.port // Mutable prop
-            if (port == null || priorNotification.vessel == null) {
-                return true
-            }
-
-            return priorNotification.vessel.isFrench() || port.isFrenchOrUnknown()
-        }
-
         private fun matchesStatusFilter(
             priorNotification: PriorNotification,
             states: List<PriorNotificationState>?,

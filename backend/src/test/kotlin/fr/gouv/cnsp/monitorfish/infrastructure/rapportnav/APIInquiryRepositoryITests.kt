@@ -26,13 +26,24 @@ class APIInquiryRepositoryITests {
             {
                 "id": "$inquiryId",
                 "vesselId": 42,
-                "type": "FISH",
+                "missionId": 12,
+                "type": "VEHICLE",
                 "origin": "FOLLOW_UP_CONTROL",
                 "status": "CLOSED",
-                "conclusion": "NO_INFRACTION",
+                "conclusion": "WITH_REPORT",
                 "startDateTimeUtc": "2024-03-01T10:00:00Z",
                 "endDateTimeUtc": "2024-03-15T10:00:00Z",
-                "service": { "id": 6, "name": "ULAM 56" },
+                "isSignedByInspector": true,
+                "service": { "id": 6, "name": "ULAM 56", "controlUnitIds": [10449] },
+                "infractions": [
+                    {
+                        "controlType": "LANDING_OBLIGATION",
+                        "infractionType": "WITH_REPORT",
+                        "natinfs": ["7064"],
+                        "observations": "Débarquement sous taille"
+                    }
+                ],
+                "observations": ["Commentaire de l'unité"],
                 "unknownField": "ignored"
             }
         ]
@@ -75,7 +86,13 @@ class APIInquiryRepositoryITests {
         assertThat(inquiry.vesselId).isEqualTo(42)
         assertThat(inquiry.status).isEqualTo("CLOSED")
         assertThat(inquiry.startDateTimeUtc).isEqualTo(ZonedDateTime.parse("2024-03-01T10:00:00Z"))
+        assertThat(inquiry.missionId).isEqualTo(12)
+        assertThat(inquiry.isSignedByInspector).isTrue()
         assertThat(inquiry.service?.name).isEqualTo("ULAM 56")
+        assertThat(inquiry.service?.controlUnitIds).containsExactly(10449)
+        assertThat(inquiry.infractions.single().controlType).isEqualTo("LANDING_OBLIGATION")
+        assertThat(inquiry.infractions.single().natinfs).containsExactly("7064")
+        assertThat(inquiry.observations).containsExactly("Commentaire de l'unité")
     }
 
     @Test

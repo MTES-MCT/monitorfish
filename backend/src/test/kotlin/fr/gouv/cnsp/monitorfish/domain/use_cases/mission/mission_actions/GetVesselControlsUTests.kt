@@ -152,13 +152,17 @@ class GetVesselControlsUTests {
                 Inquiry(
                     id = UUID.randomUUID(),
                     vesselId = 1,
-                    type = "FISH",
+                    missionId = 1,
+                    type = "VEHICLE",
                     origin = null,
                     status = "CLOSED",
                     conclusion = null,
                     startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
                     endDateTimeUtc = null,
+                    isSignedByInspector = null,
                     service = null,
+                    infractions = listOf(),
+                    observations = listOf(),
                 )
             given(inquiryRepository.findAllByVesselId(vesselId, now)).willReturn(listOf(inquiry))
 

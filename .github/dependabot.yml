@@ -52,7 +52,7 @@ updates:
       prefix: "[Tech] Frontend - "
     labels: ["tech. enhancement", "dependencies"]
     exclude-paths:
-      - "frontend/package-lock.json"
+      - "package-lock.json"
     ignore:
       - dependency-name: "rsuite"
     groups:
@@ -67,6 +67,8 @@ updates:
 
   - package-ecosystem: "pip"
     directory: "/pipeline"
+    exclude-paths:
+      - "poetry.lock"
     cooldown:
       default-days: 30
       semver-patch-days: 3

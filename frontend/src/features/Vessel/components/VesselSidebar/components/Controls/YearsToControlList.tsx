@@ -8,26 +8,32 @@ import styled from 'styled-components'
 
 import { YearControls } from './YearControls'
 
+import type { Inquiry } from '@features/Inquiry/Inquiry.types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type YearsToControlListProps = {
   controlsFromDate: string
   yearsToControls: Record<number, MissionAction.MissionAction[]>
+  yearsToInquiries: Record<number, Inquiry.Inquiry[]>
 }
 
-export function YearsToControlList({ controlsFromDate, yearsToControls }: YearsToControlListProps) {
-  const sortedYears = Object.keys(yearsToControls)
+export function YearsToControlList({ controlsFromDate, yearsToControls, yearsToInquiries }: YearsToControlListProps) {
+  const sortedYears = [...new Set([...Object.keys(yearsToControls), ...Object.keys(yearsToInquiries)])]
     .sort((a, b) => Number(b) - Number(a))
     .map(value => Number(value))
 
   return (
     <SidebarZone>
       <SidebarHeader>Historique des contrôles</SidebarHeader>
-      {yearsToControls && Object.keys(yearsToControls) && Object.keys(yearsToControls).length ? (
+      {sortedYears.length ? (
         <List data-cy="vessel-control-years">
           {sortedYears.map(year => (
             <ListItem key={year} title={`Année ${year}`}>
-              <YearControls year={year} yearControls={yearsToControls[year] ?? []} />
+              <YearControls
+                year={year}
+                yearControls={yearsToControls[year] ?? []}
+                yearInquiries={yearsToInquiries[year] ?? []}
+              />
             </ListItem>
           ))}
         </List>

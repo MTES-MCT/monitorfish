@@ -6,10 +6,18 @@ import { openVesselSidebarTab } from '@features/Vessel/useCases/openVesselSideba
 import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, Icon, Size, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, customDayjs, Icon, Size, Tag, TagGroup, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import styled from 'styled-components'
 
+import {
+  ContentColumn,
+  ControlCardButton,
+  ControlCardTitle,
+  ControlCardUnit,
+  ControlCardWrapper,
+  GyroColumn
+} from './Controls.style'
 import { GearOnboard } from './GearOnboard'
 import { Infraction } from './Infraction'
 import { useIsSuperUser } from '../../../../../../auth/hooks/useIsSuperUser'
@@ -78,7 +86,7 @@ export function Control({ control }: ControlProps) {
   const controlTitle = `CONTRÔLE ${controlType} DU ${getDate(control.actionDatetimeUtc)}`
 
   return (
-    <Wrapper>
+    <ControlCardWrapper>
       <GyroColumn>
         {numberOfInfractionsWithRecord > 0 && <StyledControlUnitFilled color={THEME.color.maximumRed} />}
         {numberOfInfractionsWithoutRecord > 0 && !numberOfInfractionsWithRecord && (
@@ -87,7 +95,7 @@ export function Control({ control }: ControlProps) {
         {!numberOfInfractions && <StyledControlUnitFilled color={THEME.color.mediumSeaGreen} />}
       </GyroColumn>
       <ContentColumn data-cy="vessel-control">
-        <Title data-cy="vessel-control-title" title={`${controlTitle} ${controlPort}`}>
+        <ControlCardTitle data-cy="vessel-control-title" title={`${controlTitle} ${controlPort}`}>
           {controlTitle}
           {controlPort && (
             <>
@@ -96,12 +104,12 @@ export function Control({ control }: ControlProps) {
             </>
           )}
           <br />
-          <Unit>
+          <ControlCardUnit>
             {control.controlUnits
               .map(controlUnit => `${controlUnit.name.replace('(historique)', '')} – ${controlUnit.administration}`)
               .join(', ')}
-          </Unit>
-        </Title>
+          </ControlCardUnit>
+        </ControlCardTitle>
         {!numberOfInfractions && <NoInfraction>Pas d’infraction</NoInfraction>}
         {(control.hasSomeGearsSeized || control.hasSomeSpeciesSeized) && (
           <StyledTagGroup>
@@ -135,7 +143,7 @@ export function Control({ control }: ControlProps) {
           </OtherComments>
         )}
         {isSuperUser && (
-          <StyledButton
+          <ControlCardButton
             accent={Accent.SECONDARY}
             data-cy="open-control"
             Icon={Icon.MissionAction}
@@ -143,20 +151,15 @@ export function Control({ control }: ControlProps) {
             size={Size.SMALL}
           >
             Ouvrir le contrôle
-          </StyledButton>
+          </ControlCardButton>
         )}
-        <StyledButton accent={Accent.SECONDARY} Icon={Icon.Fishery} onClick={openTripForControl} size={Size.SMALL}>
+        <ControlCardButton accent={Accent.SECONDARY} Icon={Icon.Fishery} onClick={openTripForControl} size={Size.SMALL}>
           Voir la marée du contrôle
-        </StyledButton>
+        </ControlCardButton>
       </ContentColumn>
-    </Wrapper>
+    </ControlCardWrapper>
   )
 }
-
-const StyledButton = styled(Button)`
-  margin-top: 16px;
-  margin-right: 8px;
-`
 
 const OtherCommentsTitle = styled.div`
   font-weight: bold;
@@ -173,39 +176,6 @@ const OtherComments = styled.div`
 const NoInfraction = styled.div`
   font-size: 13px;
   font-weight: bold;
-`
-
-const Unit = styled.span`
-  font-weight: normal;
-  font-size: 11px;
-`
-
-const Title = styled.div`
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  white-space: inherit;
-  max-width: 400px;
-  padding-right: 24px;
-`
-
-const Wrapper = styled.div`
-  background: ${p => p.theme.color.gainsboro};
-  width: -moz-available;
-  width: -webkit-fill-available;
-  margin: 16px;
-  padding: 12px 24px 16px 12px;
-  color: ${p => p.theme.color.gunMetal};
-  display: flex;
-  white-space: initial;
-`
-
-const GyroColumn = styled.div``
-const ContentColumn = styled.div`
-  width: 100%;
-  box-sizing: border-box;
 `
 
 const StyledControlUnitFilled = styled(Icon.ControlUnitFilled)`

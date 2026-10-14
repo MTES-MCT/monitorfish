@@ -17,7 +17,10 @@ export const YearListTitleText = styled.div`
   color: ${THEME.color.slateGray};
   font-size: 13px;
   font-weight: 500;
-  width: 95%;
+  width: 420px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const YearListContent = styled.div<HTMLProps<HTMLDivElement>>`

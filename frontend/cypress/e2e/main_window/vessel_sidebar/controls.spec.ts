@@ -13,6 +13,12 @@ context('Vessel sidebar controls tab', () => {
   it('Controls Should contain the controls summary and history', () => {
     const currentMonth = dayjs().month()
     const currentYear = dayjs().year()
+    // Inquiries have hardcoded dates: they are tested separately
+    cy.intercept('GET', '/bff/v1/mission_actions/controls*', request => {
+      request.continue(response => {
+        response.body.inquiries = []
+      })
+    })
 
     // Given
     openVesselBySearch('Pheno')
@@ -224,5 +230,66 @@ context('Vessel sidebar controls tab', () => {
     })
     cy.clickButton('Ouvrir le contrôle')
     cy.get('@side_window').should('be.called')
+  })
+
+  it('Inquiries Should be displayed in the controls history', () => {
+    // Controls have dates relative to now: they are tested separately
+    cy.intercept('GET', '/bff/v1/mission_actions/controls*', request => {
+      request.continue(response => {
+        response.body.controls = []
+      })
+    })
+
+    // Given
+    openVesselBySearch('Pheno')
+
+    // When
+    cy.get('*[data-cy="vessel-menu-controls"]').click({ timeout: 10000 })
+    cy.get('*[data-cy="vessel-controls"]', { timeout: 10000 }).should('be.visible')
+
+    // Then
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).contains('1 contrôle croisé en cours')
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2025"]`).contains(
+      '2 contrôles dont 2 croisés, 2 infractions'
+    )
+
+    // In progress inquiry
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).find('[data-cy="vessel-controls-year"]').click()
+    cy.getDataCy('vessel-inquiry')
+      .first()
+      .should('contain', 'CONTRÔLE CROISÉ EN COURS - OUVERT LE 13/04/2026')
+      .and('contain', 'ULAM 56')
+      .and('contain', 'Origine : signalement CNSP')
+      .and('not.contain', 'Voir la marée du contrôle')
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).find('[data-cy="vessel-controls-year"]').click()
+
+    // Closed inquiry
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2025"]`).find('[data-cy="vessel-controls-year"]').click()
+    cy.getDataCy('vessel-inquiry-title').eq(0).contains('CONTRÔLE CROISÉ DU 02/06/2025 AU 20/06/2025')
+    cy.getDataCy('vessel-inquiry')
+      .eq(1)
+      .should('contain', 'CONTRÔLE CROISÉ DU 21/10/2024 AU 01/02/2025')
+      .and('contain', 'Origine : signalement CNSP')
+      .and('contain', 'Infraction 1 : Obligation de débarquement (rejets...)')
+      .and('contain', 'Débarquement de captures sous la taille minimale de référence.')
+      .and('contain', 'Avec PV')
+      .and('contain', 'NATINF 7064')
+      .and('contain', 'Infraction 2 : Mesures techniques et de conservation')
+      .and('contain', 'NATINF 2593')
+      .and('contain', 'NATINF 7059')
+      .and('contain', 'Voir plus')
+      .and('not.contain', 'Ouvrir le contrôle')
+      .and('not.contain', 'Voir la marée du contrôle')
+
+    cy.getDataCy('vessel-inquiry')
+      .eq(1)
+      .find('[data-cy="vessel-inquiry-see-more"]')
+      .should('have.text', 'Voir plus')
+      .scrollIntoView()
+      .click({ force: true })
+    cy.getDataCy('vessel-inquiry')
+      .eq(1)
+      .should('contain', 'Second échange avec le capitaine le 15/01 : pièces complémentaires transmises.')
+      .and('contain', 'Voir moins')
   })
 })

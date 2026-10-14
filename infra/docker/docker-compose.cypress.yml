@@ -57,6 +57,7 @@ services:
       # RapportNav
       - RAPPORTNAV_URL=http://rapportnav-stubs:8080
       - RAPPORTNAV_TIMEOUT=3000
+      - RAPPORTNAV_API_KEY=cypress-api-key
 
       # API Configuration
       - MONITORFISH_API_PROTECTED_API_KEY=APIKEY

@@ -1,0 +1,213 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/public/inquiries",
+    "headers": {
+      "X-API-Key": {
+        "equalTo": "cypress-api-key"
+      }
+    },
+    "queryParameters": {
+      "vesselId": {
+        "equalTo": "1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Request-Headers": "*"
+    },
+    "jsonBody": [
+      {
+        "id": "b2f6a1c4-3d5e-4f7a-8b9c-0d1e2f3a4b5c",
+        "vesselId": 1,
+        "missionId": 34,
+        "type": "VEHICLE",
+        "origin": "CNSP_REPORTING",
+        "status": "IN_PROGRESS",
+        "conclusion": null,
+        "startDateTimeUtc": "2026-04-13T08:00:00Z",
+        "endDateTimeUtc": null,
+        "isSignedByInspector": false,
+        "service": {
+          "id": 6,
+          "name": "ULAM 56",
+          "controlUnitIds": [
+            10449
+          ]
+        },
+        "infractions": [
+          {
+            "controlType": "FISHING_REPORTING_OBLIGATION",
+            "infractionType": "WAITING",
+            "natinfs": [
+              "4234"
+            ],
+            "observations": "Journal de bord non présenté lors du contrôle, à vérifier avec les données VMS."
+          }
+        ],
+        "observations": [
+          "Signalement CNSP reçu le 12/04 : écarts entre les captures déclarées et les débarquements constatés."
+        ]
+      },
+      {
+        "id": "6c1e8f3a-9b2d-4e5f-a7c8-1d2e3f4a5b6c",
+        "vesselId": 1,
+        "missionId": 43,
+        "type": "VEHICLE",
+        "origin": "FOLLOW_UP_CONTROL",
+        "status": "CLOSED",
+        "conclusion": "NO_FOLLOW_UP",
+        "startDateTimeUtc": "2025-06-02T07:00:00Z",
+        "endDateTimeUtc": "2025-06-20T15:30:00Z",
+        "isSignedByInspector": true,
+        "service": {
+          "id": 9,
+          "name": "DPM 56",
+          "controlUnitIds": [
+            10066
+          ]
+        },
+        "infractions": [],
+        "observations": [
+          "Contrôle de suite de la marée de mai : documents de bord conformes, aucune suite donnée."
+        ]
+      },
+      {
+        "id": "8a3c6b6e-2f1a-4c0e-9d3b-1f2e3d4c5b6a",
+        "vesselId": 1,
+        "missionId": 2,
+        "type": "VEHICLE",
+        "origin": "CNSP_REPORTING",
+        "status": "CLOSED",
+        "conclusion": "WITH_REPORT",
+        "startDateTimeUtc": "2024-10-21T09:00:00Z",
+        "endDateTimeUtc": "2025-02-01T17:00:00Z",
+        "isSignedByInspector": true,
+        "service": {
+          "id": 6,
+          "name": "ULAM 56",
+          "controlUnitIds": [
+            10449
+          ]
+        },
+        "infractions": [
+          {
+            "controlType": "LANDING_OBLIGATION",
+            "infractionType": "WITH_REPORT",
+            "natinfs": [
+              "7064"
+            ],
+            "observations": "Débarquement de captures sous la taille minimale de référence."
+          },
+          {
+            "controlType": "TECHNICAL_MEASURE",
+            "infractionType": "WITH_REPORT",
+            "natinfs": [
+              "2593",
+              "7059"
+            ],
+            "observations": "Maillage du cul de chalut inférieur au minimum réglementaire."
+          }
+        ],
+        "observations": [
+          "Commentaire renseigné par l'unité dans RapportNav à l'issue de son contrôle croisé qui a pu s'étendre sur plusieurs jours, voire semaines, voire mois. On affiche au maximum quatre lignes de commentaires, s'il est plus long il faut cliquer sur \"Voir plus\".",
+          "Second échange avec le capitaine le 15/01 : pièces complémentaires transmises."
+        ]
+      },
+      {
+        "id": "4e7d9c2b-1a3f-4b6e-8d0c-5f2a7b9e1c3d",
+        "vesselId": 1,
+        "missionId": 6,
+        "type": "VEHICLE",
+        "origin": "OPPORTUNITY_CONTROL",
+        "status": "CLOSED",
+        "conclusion": "WITH_REPORT",
+        "startDateTimeUtc": "2023-06-12T07:30:00Z",
+        "endDateTimeUtc": "2023-06-20T16:00:00Z",
+        "isSignedByInspector": true,
+        "service": {
+          "id": 9,
+          "name": "DPM 56",
+          "controlUnitIds": [
+            10066
+          ]
+        },
+        "infractions": [
+          {
+            "controlType": "SECTOR",
+            "infractionType": "WITHOUT_REPORT",
+            "natinfs": [
+              "2610"
+            ],
+            "observations": "Pêche dans les eaux sous juridiction française sans autorisation valide."
+          }
+        ],
+        "observations": [
+          "Contrôle d'opportunité au débarquement à Lorient."
+        ]
+      },
+      {
+        "id": "2d9b7e1f-5c3a-4f8e-b6d1-7a9c0e2f4b8d",
+        "vesselId": 1,
+        "missionId": 4,
+        "type": "VEHICLE",
+        "origin": "OTHER_REPORTING",
+        "status": "CLOSED",
+        "conclusion": "NO_FOLLOW_UP",
+        "startDateTimeUtc": "2022-11-08T10:15:00Z",
+        "endDateTimeUtc": "2022-12-19T11:00:00Z",
+        "isSignedByInspector": false,
+        "service": {
+          "id": 6,
+          "name": "ULAM 56",
+          "controlUnitIds": [
+            10449
+          ]
+        },
+        "infractions": [],
+        "observations": [
+          "Signalement d'un usager non confirmé après vérification des données de géolocalisation."
+        ]
+      },
+      {
+        "id": "9f4a2c6e-7b1d-4a3e-8c5f-0e6d2b8a1f7c",
+        "vesselId": 1,
+        "missionId": 24,
+        "type": "VEHICLE",
+        "origin": "URCEM_DEDICATED_STATION",
+        "status": "CLOSED",
+        "conclusion": "WITH_REPORT",
+        "startDateTimeUtc": "2021-05-17T06:45:00Z",
+        "endDateTimeUtc": "2021-07-02T14:20:00Z",
+        "isSignedByInspector": true,
+        "service": {
+          "id": 6,
+          "name": "ULAM 56",
+          "controlUnitIds": [
+            10449
+          ]
+        },
+        "infractions": [
+          {
+            "controlType": "TECHNICAL_MEASURE",
+            "infractionType": "WITH_REPORT",
+            "natinfs": [
+              "7059"
+            ],
+            "observations": "Engin utilisé dans une zone où son emploi est interdit."
+          }
+        ],
+        "observations": [
+          "Poste dédié URCEM : contrôle croisé des notes de vente et des déclarations de captures."
+        ]
+      }
+    ]
+  }
+}

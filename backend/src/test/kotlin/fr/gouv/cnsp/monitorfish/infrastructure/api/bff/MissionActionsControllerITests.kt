@@ -24,6 +24,9 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionA
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.ActivityCode
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.actrep.JointDeploymentPlan
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.Inquiry
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.InquiryInfraction
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.InquiryService
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.GroupType
@@ -65,6 +68,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.ZonedDateTime
+import java.util.UUID
 
 @Import(
     MapperConfiguration::class,
@@ -135,6 +139,31 @@ class MissionActionsControllerITests {
                             ),
                     ),
                 ),
+                listOf(
+                    Inquiry(
+                        id = UUID.fromString("8a3c6b6e-2f1a-4c0e-9d3b-1f2e3d4c5b6a"),
+                        vesselId = 1,
+                        missionId = 34,
+                        type = "VEHICLE",
+                        origin = "FOLLOW_UP_CONTROL",
+                        status = "CLOSED",
+                        conclusion = "WITH_REPORT",
+                        startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
+                        endDateTimeUtc = null,
+                        isSignedByInspector = true,
+                        service = InquiryService(id = 6, name = "ULAM 56", controlUnitIds = listOf(10449)),
+                        infractions =
+                            listOf(
+                                InquiryInfraction(
+                                    controlType = "LANDING_OBLIGATION",
+                                    infractionType = "WITH_REPORT",
+                                    natinfs = listOf("7064"),
+                                    observations = "Débarquement sous taille",
+                                ),
+                            ),
+                        observations = listOf("Commentaire de l'unité"),
+                    ),
+                ),
             ),
         )
 
@@ -151,6 +180,17 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.controls[0].discardedSpecies[0].discardReason", equalTo("DIM")))
             .andExpect(jsonPath("$.controls[0].discardedSpecies[0].speciesName").doesNotExist())
             .andExpect(jsonPath("$.controls[0].discardedSpecies[0].discardReasonName").doesNotExist())
+            .andExpect(jsonPath("$.inquiries.length()", equalTo(1)))
+            .andExpect(jsonPath("$.inquiries[0].id", equalTo("8a3c6b6e-2f1a-4c0e-9d3b-1f2e3d4c5b6a")))
+            .andExpect(jsonPath("$.inquiries[0].status", equalTo("CLOSED")))
+            .andExpect(jsonPath("$.inquiries[0].startDateTimeUtc", equalTo("2024-03-01T10:00:00Z")))
+            .andExpect(jsonPath("$.inquiries[0].missionId", equalTo(34)))
+            .andExpect(jsonPath("$.inquiries[0].isSignedByInspector", equalTo(true)))
+            .andExpect(jsonPath("$.inquiries[0].service.name", equalTo("ULAM 56")))
+            .andExpect(jsonPath("$.inquiries[0].service.controlUnitIds[0]", equalTo(10449)))
+            .andExpect(jsonPath("$.inquiries[0].infractions[0].controlType", equalTo("LANDING_OBLIGATION")))
+            .andExpect(jsonPath("$.inquiries[0].infractions[0].natinfs[0]", equalTo("7064")))
+            .andExpect(jsonPath("$.inquiries[0].observations[0]", equalTo("Commentaire de l'unité")))
 
         runBlocking {
             Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))

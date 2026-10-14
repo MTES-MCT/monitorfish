@@ -8,7 +8,12 @@ import styled from 'styled-components'
 
 import { ControlsSummary } from './ControlsSummary'
 import { YearsToControlList } from './YearsToControlList'
-import { getLastControls, getYearsToActions, INITIAL_LAST_CONTROLS } from '../../../../../../domain/entities/controls'
+import {
+  getLastControls,
+  getYearsToActions,
+  getYearsToInquiries,
+  INITIAL_LAST_CONTROLS
+} from '../../../../../../domain/entities/controls'
 import { setControlFromDate } from '../../control.slice'
 
 export function VesselControls() {
@@ -29,6 +34,14 @@ export function VesselControls() {
     }
 
     return getYearsToActions(controlsFromDate, currentControlSummary.controls)
+  })()
+
+  const yearsToInquiries = (function () {
+    if (!currentControlSummary?.inquiries) {
+      return {}
+    }
+
+    return getYearsToInquiries(controlsFromDate, currentControlSummary.inquiries)
   })()
 
   const lastControls = (function () {
@@ -65,7 +78,11 @@ export function VesselControls() {
           />
         )}
         <>
-          <YearsToControlList controlsFromDate={controlsFromDate} yearsToControls={yearsToActions} />
+          <YearsToControlList
+            controlsFromDate={controlsFromDate}
+            yearsToControls={yearsToActions}
+            yearsToInquiries={yearsToInquiries}
+          />
           <SidebarLoadMoreYears>
             <Button accent={Accent.SECONDARY} onClick={seeMore}>
               Afficher plus de contrôles

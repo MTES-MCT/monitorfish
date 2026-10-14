@@ -15,6 +15,7 @@ import { updateReporting } from '../../useCases/updateReporting'
 
 import type { ReportingFormActions } from './Form'
 import type { FormEditedReporting, Reporting } from '../../types'
+import type { ReportingTargetType } from '../../types/ReportingTargetType'
 
 export type { ReportingFormActions }
 
@@ -40,7 +41,9 @@ type ReportingFormProps = {
   onVesselStateChange?: (
     vesselName: string | undefined,
     flagState: string | undefined,
-    numberOfVessels: number | undefined
+    numberOfTargets: number | undefined,
+    targetType: ReportingTargetType | undefined,
+    gearCode: string | undefined
   ) => void
   windowContext: WindowContext
 }

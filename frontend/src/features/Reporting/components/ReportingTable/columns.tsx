@@ -5,8 +5,9 @@ import { HiddenText } from '@features/commonStyles/HiddenText'
 import { getInfractionTitle } from '@features/Reporting/components/ReportingCard/utils'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
 import { type Reporting, ReportingsSortColumn, ReportingTypeCharacteristics } from '@features/Reporting/types'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
-import { Accent, Tag, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
+import { Accent, Tag, TableWithSelectableRows, type Option } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import dayjs from 'dayjs'
 import styled, { type DefaultTheme } from 'styled-components'
@@ -19,7 +20,10 @@ import type { CellContext, ColumnDef } from '@tanstack/react-table'
  * Sortable columns are identified by their backend sort column, as `useListSorting` sends the
  * `react-table` column id straight to the API.
  */
-export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Reporting.Reporting, any>> {
+export function getReportingTableColumns(
+  isFromUrl: boolean,
+  gearsAsOptions?: Option[]
+): Array<ColumnDef<Reporting.Reporting, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
 
   return [
@@ -72,19 +76,28 @@ export function getReportingTableColumns(isFromUrl: boolean): Array<ColumnDef<Re
       size: 132 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
+      // Sorting is server-side on `vesselName`, so gear targets (which have no vessel name)
+      // all group together when sorting by this column. Sorting by target is a known limitation.
+      accessorFn: row => {
+        if (row.targetType === ReportingTargetType.GEAR) {
+          return gearsAsOptions?.find(option => option.value === row.gearCode)?.label ?? row.gearCode ?? '-'
+        }
+
+        return row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-')
+      },
       cell: (info: CellContext<Reporting.Reporting, string>) => {
         const reporting = info.row.original
+        const isGearTarget = reporting.targetType === ReportingTargetType.GEAR
 
         return (
           <Ellipsised>
-            <StyledCountryFlag countryCode={reporting.flagState} size={[20, 14]} />
+            {!isGearTarget && <StyledCountryFlag countryCode={reporting.flagState} size={[20, 14]} />}
             <Titled>{info.getValue()}</Titled>
           </Ellipsised>
         )
       },
       enableSorting: true,
-      header: () => 'Navire',
+      header: () => 'Cible',
       id: ReportingsSortColumn.VESSEL_NAME,
       size: 280 + legacyFirefoxOffset
     },

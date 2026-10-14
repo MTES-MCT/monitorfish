@@ -24,6 +24,7 @@ import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { z } from 'zod'
 
 import type { OtherSourceType } from './types/OtherSourceType'
+import type { ReportingTargetType } from './types/ReportingTargetType'
 import type { AllSeafrontGroup, SeafrontGroup } from '@constants/seafront'
 import type { ObservationSchema } from '@features/Reporting/schemas/ObservationSchema'
 import type { SatelliteSource } from '@features/Reporting/types/SatelliteSource'
@@ -94,6 +95,7 @@ type FormBaseEditedFields = Pick<
   | 'vesselIdentifier'
   | 'validityOption'
   | 'vesselName'
+  | 'targetType'
 >
 
 export type FormEditedReporting =
@@ -171,6 +173,11 @@ export const OtherSourceTypeLabel: Record<OtherSourceType, string> = {
   NGO: 'ONG ou association',
   BOATER: 'Plaisancier',
   OTHER: 'Autre'
+}
+
+export const TargetTypeLabel: Record<ReportingTargetType, string> = {
+  VESSEL: 'Navire',
+  GEAR: 'Engin'
 }
 
 /* eslint-enable sort-keys-fix/sort-keys-fix */

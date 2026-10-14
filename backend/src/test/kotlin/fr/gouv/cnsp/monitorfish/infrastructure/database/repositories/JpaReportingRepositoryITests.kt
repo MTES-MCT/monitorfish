@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront.NAMO
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.filters.ReportingFilter
@@ -123,6 +124,47 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
         assertThat(reportings.last().creationDate).isEqualTo(creationDate)
         assertThat(reportings.last().validationDate).isNull()
         assertThat(reportings.last().vesselId).isEqualTo(126)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should save a reporting targeting a gear`() {
+        // Given
+        val creationDate = ZonedDateTime.now()
+        val reporting =
+            Reporting.InfractionSuspicion(
+                gearCode = "FAD",
+                targetType = ReportingTargetType.GEAR,
+                numberOfTargets = 3,
+                flagState = CountryCode.FR,
+                creationDate = creationDate,
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = creationDate,
+                reportingSource = ReportingSource.OPS,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
+                title = "A title",
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
+            )
+
+        // When
+        jpaReportingRepository.save(reporting)
+        val reportings = jpaReportingRepository.findAll()
+
+        // Then
+        val savedReporting = reportings.last() as Reporting.InfractionSuspicion
+        assertThat(savedReporting.targetType).isEqualTo(ReportingTargetType.GEAR)
+        assertThat(savedReporting.numberOfTargets).isEqualTo(3)
+        assertThat(savedReporting.gearCode).isEqualTo("FAD")
     }
 
     @Test

@@ -135,9 +135,10 @@ object ReportingMapper {
                         title = infractionSuspicionValue.title,
                         description = infractionSuspicionValue.description,
                         infractions = infractions,
-                        numberOfVessels = infractionSuspicionValue.numberOfVessels,
+                        numberOfTargets = infractionSuspicionValue.numberOfTargets,
                         seaFront = infractionSuspicionValue.seaFront,
                         dml = infractionSuspicionValue.dml,
+                        targetType = entity.targetType,
                     )
                 }
 
@@ -179,9 +180,10 @@ object ReportingMapper {
                         satelliteType = observationValue.satelliteType,
                         title = observationValue.title,
                         description = observationValue.description,
-                        numberOfVessels = observationValue.numberOfVessels,
+                        numberOfTargets = observationValue.numberOfTargets,
                         seaFront = observationValue.seaFront,
                         dml = observationValue.dml,
+                        targetType = entity.targetType,
                     )
                 }
             }
@@ -220,7 +222,7 @@ object ReportingMapper {
                     satelliteType = reporting.satelliteType,
                     title = reporting.title,
                     description = reporting.description,
-                    numberOfVessels = reporting.numberOfVessels,
+                    numberOfTargets = reporting.numberOfTargets,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
                     infractions =
@@ -242,7 +244,7 @@ object ReportingMapper {
                     satelliteType = reporting.satelliteType,
                     title = reporting.title,
                     description = reporting.description,
-                    numberOfVessels = reporting.numberOfVessels,
+                    numberOfTargets = reporting.numberOfTargets,
                     seaFront = reporting.seaFront,
                     dml = reporting.dml,
                 )

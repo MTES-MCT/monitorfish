@@ -8,10 +8,12 @@ import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUURepo
 import { ReportingForm } from '@features/Reporting/components/ReportingForm'
 import { getDuplicatedFormFields } from '@features/Reporting/components/ReportingForm/utils'
 import { reportingActions } from '@features/Reporting/slice'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -41,8 +43,11 @@ export function IUUReportingMapForm() {
   const { isOpened, isRendered } = useDisplayMapBox(isReportingMapFormDisplayed)
   const [vesselName, setVesselName] = useState<string | undefined>(undefined)
   const [flagState, setFlagState] = useState<string | undefined>(undefined)
-  const [numberOfVessels, setNumberOfVessels] = useState<number | undefined>(undefined)
+  const [numberOfTargets, setNumberOfTargets] = useState<number | undefined>(undefined)
+  const [targetType, setTargetType] = useState<ReportingTargetType | undefined>(undefined)
+  const [gearCode, setGearCode] = useState<string | undefined>(undefined)
   const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
+  const { gearsAsOptions } = useGetGearsAsOptions()
   const formActionsRef = useRef<ReportingFormActions | undefined>(undefined)
   const isDirtyRef = useRef(false)
   const reportingIdRef = useRef(editedReporting?.id)
@@ -55,7 +60,9 @@ export function IUUReportingMapForm() {
     reportingTypeRef.current = undefined
     setVesselName(undefined)
     setFlagState(undefined)
-    setNumberOfVessels(undefined)
+    setNumberOfTargets(undefined)
+    setTargetType(undefined)
+    setGearCode(undefined)
     setAutoSavedLastUpdateDate(undefined)
   }
 
@@ -160,11 +167,15 @@ export function IUUReportingMapForm() {
     (
       nextVesselName: string | undefined,
       nextFlagState: string | undefined,
-      nextNumberOfVessels: number | undefined
+      nextNumberOfTargets: number | undefined,
+      nextTargetType: ReportingTargetType | undefined,
+      nextGearCode: string | undefined
     ) => {
       setVesselName(nextVesselName)
       setFlagState(nextFlagState)
-      setNumberOfVessels(nextNumberOfVessels)
+      setNumberOfTargets(nextNumberOfTargets)
+      setTargetType(nextTargetType)
+      setGearCode(nextGearCode)
     },
     []
   )
@@ -181,13 +192,24 @@ export function IUUReportingMapForm() {
 
   const lastUpdateDate = autoSavedLastUpdateDate ?? editedReporting?.lastUpdateDate
 
+  const isTargetingGear = targetType === ReportingTargetType.GEAR
+  const gearLabel = isTargetingGear
+    ? (gearsAsOptions?.find(option => option.value === gearCode)?.label ?? gearCode)
+    : undefined
+
   const title = (() => {
     if (!lastUpdateDate) {
       return 'NOUVEAU SIGNALEMENT INN'
     }
 
-    if (numberOfVessels !== undefined && numberOfVessels > 1) {
-      return `${numberOfVessels} NAVIRES`
+    if (isTargetingGear) {
+      const label = gearLabel ?? 'ENGIN INCONNU'
+
+      return numberOfTargets !== undefined && numberOfTargets > 1 ? `${numberOfTargets} ${label}` : label
+    }
+
+    if (numberOfTargets !== undefined && numberOfTargets > 1) {
+      return `${numberOfTargets} NAVIRES`
     }
 
     return `${vesselName ?? 'NAVIRE INCONNU'}`

@@ -1,5 +1,6 @@
 import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/constants'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { expect } from '@jest/globals'
@@ -39,6 +40,7 @@ describe('Reportings/Current/utils.sortByValidationOrCreationDateDesc()', () => 
       longitude: undefined,
       mmsi: undefined,
       reportingDate: '2023-10-30T09:10:00Z',
+      targetType: ReportingTargetType.VESSEL,
       type: ReportingType.ALERT,
       underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',

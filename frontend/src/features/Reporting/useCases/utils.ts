@@ -34,11 +34,12 @@ export function toReportingPayload(formValues: FormEditedReporting, isIUU = fals
     length: formValues.length,
     longitude: formValues.longitude,
     mmsi: formValues.mmsi,
-    numberOfVessels: formValues.numberOfVessels,
+    numberOfTargets: formValues.numberOfTargets,
     otherSourceType: formValues.otherSourceType,
     reportingDate: formValues.reportingDate,
     reportingSource: formValues.reportingSource,
     satelliteType: formValues.satelliteType,
+    targetType: formValues.targetType,
     threatHierarchies:
       formValues.type === ReportingType.INFRACTION_SUSPICION
         ? (formValues.infractions ?? []).map((i: any) => i.threatHierarchy).filter(Boolean)

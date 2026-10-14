@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingValidityOption
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -32,6 +33,7 @@ class ReportingDataOutput(
     val validationDate: ZonedDateTime? = null,
     val expirationDate: ZonedDateTime? = null,
     val validityOption: ReportingValidityOption? = null,
+    val targetType: ReportingTargetType,
     val value: ReportingValueDataOutput,
     val isArchived: Boolean,
     val isDeleted: Boolean,
@@ -86,6 +88,12 @@ class ReportingDataOutput(
                         is Reporting.InfractionSuspicion -> reporting.validityOption
                         is Reporting.Observation -> reporting.validityOption
                         is Reporting.Alert -> null
+                    },
+                targetType =
+                    when (reporting) {
+                        is Reporting.InfractionSuspicion -> reporting.targetType
+                        is Reporting.Observation -> reporting.targetType
+                        is Reporting.Alert -> ReportingTargetType.VESSEL
                     },
                 value = value,
                 isArchived = reporting.isArchived,

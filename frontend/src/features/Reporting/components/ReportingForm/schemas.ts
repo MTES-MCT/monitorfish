@@ -1,4 +1,5 @@
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { ReportingValidityOption } from '@features/Reporting/types/ReportingValidityOption'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -10,6 +11,7 @@ export const CreateOrEditReportingSchema = z
     controlUnitId: z.number().optional(),
     expirationDate: z.string().optional(),
     externalMarker: z.string().optional(),
+    gearCode: z.string().optional(),
     imo: z.string().optional(),
     infractions: z.array(z.any()).optional(),
     ircs: z.string().optional(),
@@ -19,11 +21,12 @@ export const CreateOrEditReportingSchema = z
     latitude: z.number().optional(),
     longitude: z.number().optional(),
     mmsi: z.string().optional(),
-    numberOfVessels: z.number().optional(),
+    numberOfTargets: z.number().optional(),
     otherSourceType: z.string().optional(),
     reportingDate: z.iso.datetime('Veuillez renseigner la date et heure du signalement.'),
     reportingSource: z.enum(ReportingOriginSource),
     satelliteType: z.string().optional(),
+    targetType: z.enum(ReportingTargetType, 'Veuillez renseigner le type de cible.'),
     title: z
       .string('Veuillez renseigner le titre du signalement.')
       .min(1, 'Veuillez renseigner le titre du signalement.'),
@@ -33,11 +36,11 @@ export const CreateOrEditReportingSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.isIUU) {
-      if (!Number.isInteger(data.numberOfVessels)) {
+      if (!Number.isInteger(data.numberOfTargets)) {
         ctx.addIssue({
           code: 'custom',
           message: 'Veuillez renseigner le nombre de navires.',
-          path: ['numberOfVessels']
+          path: ['numberOfTargets']
         })
       }
 
@@ -134,13 +137,23 @@ export const CreateOrEditReportingSchema = z
       })
     }
 
-    const hasVesselIdentifier = !!(data.vesselName ?? data.mmsi ?? data.imo ?? data.ircs ?? data.externalMarker)
-    if (!hasVesselIdentifier && !data.isUnknownVessel) {
-      ctx.addIssue({
-        code: 'custom',
-        message:
-          'Veuillez renseigner au moins un identifiant (nom, MMSI, IMO ou marquage extérieur) ou cocher la case "navire inconnu".',
-        path: ['isUnknownVessel']
-      })
+    if (data.targetType === ReportingTargetType.GEAR) {
+      if (!data.gearCode) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Veuillez renseigner un engin.',
+          path: ['gearCode']
+        })
+      }
+    } else {
+      const hasVesselIdentifier = !!(data.vesselName ?? data.mmsi ?? data.imo ?? data.ircs ?? data.externalMarker)
+      if (!hasVesselIdentifier && !data.isUnknownVessel) {
+        ctx.addIssue({
+          code: 'custom',
+          message:
+            'Veuillez renseigner au moins un identifiant (nom, MMSI, IMO ou marquage extérieur) ou cocher la case "navire inconnu".',
+          path: ['isUnknownVessel']
+        })
+      }
     }
   })

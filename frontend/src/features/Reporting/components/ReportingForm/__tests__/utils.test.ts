@@ -41,7 +41,7 @@ const baseReporting = {
     controlUnitId: undefined,
     description: 'Some description',
     dml: undefined,
-    numberOfVessels: undefined,
+    numberOfTargets: undefined,
     otherSourceType: undefined,
     reportingSource: ReportingOriginSource.OPS,
     satelliteType: undefined,
@@ -112,7 +112,7 @@ describe('getFormFields', () => {
     const fields = getFormFields(undefined, true)
 
     expect(fields.validityOption).toBe(ReportingValidityOption.CUSTOM)
-    expect(fields.numberOfVessels).toBe(1)
+    expect(fields.numberOfTargets).toBe(1)
     expect(fields.expirationDate).toBeDefined()
   })
 })
@@ -137,7 +137,7 @@ describe('getDuplicatedFormFields', () => {
     length: 24,
     longitude: -4.9,
     mmsi: '123456789',
-    numberOfVessels: 1,
+    numberOfTargets: 1,
     otherSourceType: undefined,
     reportingDate: '2024-01-01T00:00:00.000Z',
     reportingSource: ReportingOriginSource.OPS,
@@ -177,7 +177,7 @@ describe('getDuplicatedFormFields', () => {
       infractions: [{ threatHierarchy: { natinf: 27717 } }],
       latitude: 48.1,
       longitude: -4.9,
-      numberOfVessels: 1,
+      numberOfTargets: 1,
       reportingDate: '2024-01-01T00:00:00.000Z',
       reportingSource: ReportingOriginSource.OPS,
       title: 'Some title',

@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.facade.Seafront
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThreat
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ReportingEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.serialization.AlertValueDto
@@ -29,6 +30,7 @@ class ReportingMapperUTests {
     private fun getDefaultEntity(
         type: ReportingType = ReportingType.ALERT,
         value: String = "",
+        targetType: ReportingTargetType = ReportingTargetType.VESSEL,
     ) = ReportingEntity(
         id = 1,
         vesselId = 123,
@@ -50,6 +52,7 @@ class ReportingMapperUTests {
         createdBy = "test@example.gouv.fr",
         type = type,
         value = value,
+        targetType = targetType,
     )
 
     @Test
@@ -212,7 +215,7 @@ class ReportingMapperUTests {
                 "\"title\": \"A title !\"," +
                 "\"description\": \"A description !\"," +
                 "\"dml\": \"DML 56\"," +
-                "\"numberOfVessels\": 3," +
+                "\"numberOfTargets\": 3," +
                 "\"infractions\": [" +
                 "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans " +
                 "autorisation par navire tiers\"}," +
@@ -233,12 +236,83 @@ class ReportingMapperUTests {
         parsedReporting as Reporting.InfractionSuspicion
         Assertions.assertThat(parsedReporting.title).isEqualTo("A title !")
         Assertions.assertThat(parsedReporting.dml).isEqualTo("DML 56")
-        Assertions.assertThat(parsedReporting.numberOfVessels).isEqualTo(3)
+        Assertions.assertThat(parsedReporting.numberOfTargets).isEqualTo(3)
         Assertions.assertThat(parsedReporting.infractions).hasSize(2)
         Assertions.assertThat(parsedReporting.infractions[0].natinfCode).isEqualTo(2608)
         Assertions.assertThat(parsedReporting.infractions[0].threat).isEqualTo("Activités INN")
         Assertions.assertThat(parsedReporting.infractions[1].natinfCode).isEqualTo(7059)
         Assertions.assertThat(parsedReporting.infractions[1].threat).isEqualTo("Mesures techniques")
+    }
+
+    @Test
+    fun `getReportingFromJSON Should map targetType from the entity column`() {
+        // Given
+        val infraction =
+            "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
+                "\"reportingSource\": \"OPS\"," +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"," +
+                "\"numberOfTargets\": 3," +
+                "\"infractions\": [" +
+                "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans " +
+                "autorisation par navire tiers\"}" +
+                "]" +
+                "}"
+
+        // When
+        val parsedReporting =
+            ReportingMapper.getReportingFromJSON(
+                mapper,
+                infraction,
+                ReportingType.INFRACTION_SUSPICION,
+                getDefaultEntity(
+                    type = ReportingType.INFRACTION_SUSPICION,
+                    value = infraction,
+                    targetType = ReportingTargetType.GEAR,
+                ),
+            )
+
+        // Then
+        Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
+        parsedReporting as Reporting.InfractionSuspicion
+        Assertions.assertThat(parsedReporting.targetType).isEqualTo(ReportingTargetType.GEAR)
+        Assertions.assertThat(parsedReporting.numberOfTargets).isEqualTo(3)
+    }
+
+    @Test
+    fun `getReportingFromJSON Should read the legacy numberOfVessels key`() {
+        // Given - JSON written before the rename, still using the `numberOfVessels` key
+        val infraction =
+            "{" +
+                "\"type\": \"INFRACTION_SUSPICION\"," +
+                "\"reportingSource\": \"OPS\"," +
+                "\"authorTrigram\": \"LTH\"," +
+                "\"authorContact\": null," +
+                "\"title\": \"A title !\"," +
+                "\"description\": \"A description !\"," +
+                "\"numberOfVessels\": 3," +
+                "\"infractions\": [" +
+                "{\"natinfCode\": 2608, \"threat\": \"Activités INN\", \"threatCharacterization\": \"Pêche sans " +
+                "autorisation par navire tiers\"}" +
+                "]" +
+                "}"
+
+        // When
+        val parsedReporting =
+            ReportingMapper.getReportingFromJSON(
+                mapper,
+                infraction,
+                ReportingType.INFRACTION_SUSPICION,
+                getDefaultEntity(type = ReportingType.INFRACTION_SUSPICION, value = infraction),
+            )
+
+        // Then
+        Assertions.assertThat(parsedReporting).isInstanceOf(Reporting.InfractionSuspicion::class.java)
+        parsedReporting as Reporting.InfractionSuspicion
+        Assertions.assertThat(parsedReporting.numberOfTargets).isEqualTo(3)
     }
 
     @Test
@@ -293,7 +367,7 @@ class ReportingMapperUTests {
                 reportingSource = ReportingSource.OPS,
                 title = "A title !",
                 description = "A description !",
-                numberOfVessels = 5,
+                numberOfTargets = 5,
                 infractions =
                     listOf(
                         InfractionSuspicionThreat(
@@ -314,7 +388,7 @@ class ReportingMapperUTests {
         Assertions.assertThat(infractionSuspicionValue.reportingSource).isEqualTo(ReportingSource.OPS)
         Assertions.assertThat(infractionSuspicionValue.title).isEqualTo("A title !")
         Assertions.assertThat(infractionSuspicionValue.description).isEqualTo("A description !")
-        Assertions.assertThat(infractionSuspicionValue.numberOfVessels).isEqualTo(5)
+        Assertions.assertThat(infractionSuspicionValue.numberOfTargets).isEqualTo(5)
         Assertions.assertThat(infractionSuspicionValue.infractions).hasSize(1)
         Assertions.assertThat(infractionSuspicionValue.infractions!![0].natinfCode).isEqualTo(1234)
         Assertions.assertThat(infractionSuspicionValue.infractions[0].threat).isEqualTo("Obligations déclaratives")

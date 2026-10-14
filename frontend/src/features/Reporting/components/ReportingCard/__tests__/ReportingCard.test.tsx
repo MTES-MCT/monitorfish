@@ -2,6 +2,7 @@ import { Seafront } from '@constants/seafront'
 import { PendingAlertValueType } from '@features/Alert/constants'
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { ReportingOriginSource } from '@features/Reporting/types/ReportingOriginSource'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { afterAll, afterEach, beforeEach, describe, expect, it } from '@jest/globals'
@@ -74,6 +75,7 @@ function buildInfractionSuspicionReporting(infractions: InfractionSuspicionThrea
     longitude: undefined,
     mmsi: undefined,
     reportingDate: '2023-10-30T09:10:00Z',
+    targetType: ReportingTargetType.VESSEL,
     type: ReportingType.INFRACTION_SUSPICION,
     underCharter: undefined,
     validationDate: undefined,
@@ -85,7 +87,7 @@ function buildInfractionSuspicionReporting(infractions: InfractionSuspicionThrea
       description: 'Le navire semble pêcher trop près de la côte.',
       dml: undefined,
       infractions,
-      numberOfVessels: undefined,
+      numberOfTargets: undefined,
       otherSourceType: undefined,
       reportingSource: ReportingOriginSource.OPS,
       satelliteType: undefined,
@@ -157,6 +159,7 @@ describe('ReportingCard()', () => {
       longitude: undefined,
       mmsi: undefined,
       reportingDate: '2023-10-30T09:10:00Z',
+      targetType: ReportingTargetType.VESSEL,
       type: ReportingType.ALERT,
       underCharter: undefined,
       validationDate: '2023-10-30T15:08:05.845121Z',

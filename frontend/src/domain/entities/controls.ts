@@ -1,3 +1,4 @@
+import { Inquiry } from '@features/Inquiry/Inquiry.types'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs, type UndefineExcept } from '@mtes-mct/monitor-ui'
 
@@ -66,6 +67,47 @@ export const getYearsToActions = (
 
   return nextYearsToControls
 }
+
+/**
+ * A closed inquiry is dated by its end, as it may span over multiple years
+ */
+export const getInquiryDate = (inquiry: Inquiry.Inquiry): string | undefined =>
+  inquiry.endDateTimeUtc ?? inquiry.startDateTimeUtc
+
+/**
+ * Get inquiries for each years : Years are keys and inquiries are values
+ */
+export const getYearsToInquiries = (
+  controlsFromDate: string,
+  inquiries: Inquiry.Inquiry[]
+): Record<string, Inquiry.Inquiry[]> => {
+  const nextYearsToInquiries: Record<string, Inquiry.Inquiry[]> = {}
+
+  let fromYear = customDayjs(controlsFromDate).year()
+  const toYear = customDayjs().utc().year()
+  while (fromYear <= toYear) {
+    nextYearsToInquiries[fromYear] = []
+    fromYear += 1
+  }
+
+  inquiries.forEach(inquiry => {
+    const year = customDayjs(getInquiryDate(inquiry)).year()
+
+    nextYearsToInquiries[year] = (nextYearsToInquiries[year] ?? []).concat(inquiry)
+  })
+
+  return nextYearsToInquiries
+}
+
+export const isInquiryClosed = (inquiry: Inquiry.Inquiry): boolean => inquiry.status === Inquiry.InquiryStatus.CLOSED
+
+export const getInquiryNumberOfInfractionsWithRecord = (inquiry: Inquiry.Inquiry): number =>
+  inquiry.infractions.filter(infraction => infraction.infractionType === Inquiry.InquiryInfractionType.WITH_REPORT)
+    .length
+
+export const getInquiryNumberOfInfractionsWithoutRecord = (inquiry: Inquiry.Inquiry): number =>
+  inquiry.infractions.filter(infraction => infraction.infractionType !== Inquiry.InquiryInfractionType.WITH_REPORT)
+    .length
 
 /**
  * Get the number of infractions in a control - Take care of infractions without NATINF

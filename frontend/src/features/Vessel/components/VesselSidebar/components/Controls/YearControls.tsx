@@ -10,40 +10,57 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
+import { Inquiry } from './Inquiry'
 import {
+  getInquiryDate,
+  getInquiryNumberOfInfractionsWithoutRecord,
+  getInquiryNumberOfInfractionsWithRecord,
   getNumberOfInfractions,
   getNumberOfInfractionsWithoutRecord,
-  getNumberOfInfractionsWithRecord
+  getNumberOfInfractionsWithRecord,
+  isInquiryClosed
 } from '../../../../../../domain/entities/controls'
 
+import type { Inquiry as InquiryType } from '@features/Inquiry/Inquiry.types'
 import type { MissionAction } from '@features/Mission/missionAction.types'
 
 type YearControlsProps = {
   year: number
   yearControls: MissionAction.MissionAction[]
+  yearInquiries: InquiryType.Inquiry[]
 }
 
-export function YearControls({ year, yearControls }: YearControlsProps) {
+type YearItem =
+  | { control: MissionAction.MissionAction; date: string | undefined; inquiry?: never }
+  | { control?: never; date: string | undefined; inquiry: InquiryType.Inquiry }
+
+export function YearControls({ year, yearControls, yearInquiries }: YearControlsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const isEmpty = yearControls.length === 0
+  const closedInquiries = yearInquiries.filter(isInquiryClosed)
+  const numberOfInProgressInquiries = yearInquiries.length - closedInquiries.length
+  const numberOfControls = yearControls.length + closedInquiries.length
+  const isEmpty = yearControls.length === 0 && yearInquiries.length === 0
 
   const numberOfInfractionsText = (function () {
-    const numberOfInfractions = yearControls.reduce(
-      (accumulator, control) => accumulator + getNumberOfInfractions(control),
-      0
-    )
+    const numberOfInfractionsWithRecord =
+      yearControls.reduce((accumulator, control) => accumulator + getNumberOfInfractionsWithRecord(control), 0) +
+      closedInquiries.reduce(
+        (accumulator, inquiry) => accumulator + getInquiryNumberOfInfractionsWithRecord(inquiry),
+        0
+      )
 
-    const numberOfInfractionsWithRecord = yearControls.reduce(
-      (accumulator, control) => accumulator + getNumberOfInfractionsWithRecord(control),
-      0
-    )
+    const numberOfInfractionsWithoutRecord =
+      yearControls.reduce((accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control), 0) +
+      closedInquiries.reduce(
+        (accumulator, inquiry) => accumulator + getInquiryNumberOfInfractionsWithoutRecord(inquiry),
+        0
+      )
 
-    const numberOfInfractionsWithoutRecord = yearControls.reduce(
-      (accumulator, control) => accumulator + getNumberOfInfractionsWithoutRecord(control),
-      0
-    )
+    const numberOfInfractions =
+      yearControls.reduce((accumulator, control) => accumulator + getNumberOfInfractions(control), 0) +
+      closedInquiries.reduce((accumulator, inquiry) => accumulator + inquiry.infractions.length, 0)
 
-    if (isEmpty) {
+    if (!numberOfControls) {
       return null
     }
 
@@ -59,7 +76,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       return (
         <>
           , {numberOfInfractionsWithoutRecord} {pluralize('infraction', numberOfInfractionsWithoutRecord)} sans PV{' '}
-          <GlodenPuppy />
+          <GoldenPuppy />
         </>
       )
     }
@@ -68,7 +85,7 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
       return (
         <>
           , {numberOfInfractions} {pluralize('infraction', numberOfInfractions)} dont {numberOfInfractionsWithoutRecord}{' '}
-          sans PV <Red /> <GlodenPuppy />
+          sans PV <Red /> <GoldenPuppy />
         </>
       )
     }
@@ -80,43 +97,79 @@ export function YearControls({ year, yearControls }: YearControlsProps) {
     )
   })()
 
-  const sortedControls = yearControls.sort((a, b) =>
-    a.actionDatetimeUtc && b.actionDatetimeUtc && a.actionDatetimeUtc > b.actionDatetimeUtc ? -1 : 1
-  )
+  const numberOfControlsText = (function () {
+    if (isEmpty) {
+      return 'Aucun contrôle'
+    }
+
+    if (!numberOfControls) {
+      return (
+        <InProgress>
+          {numberOfInProgressInquiries} {pluralize('contrôle', numberOfInProgressInquiries)}{' '}
+          {pluralize('croisé', numberOfInProgressInquiries)} en cours
+        </InProgress>
+      )
+    }
+
+    return (
+      <>
+        {numberOfControls} {pluralize('contrôle', numberOfControls)}
+        {closedInquiries.length > 0 && (
+          <>
+            {' '}
+            dont {closedInquiries.length} {pluralize('croisé', closedInquiries.length)}
+          </>
+        )}
+        {numberOfInProgressInquiries > 0 && (
+          <InProgress>
+            {' '}
+            (+{numberOfInProgressInquiries} {pluralize('croisé', numberOfInProgressInquiries)} en cours)
+          </InProgress>
+        )}
+      </>
+    )
+  })()
+
+  const sortedItems: YearItem[] = [
+    ...yearControls.map(control => ({ control, date: control.actionDatetimeUtc })),
+    ...yearInquiries.map(inquiry => ({ date: getInquiryDate(inquiry), inquiry }))
+  ].sort((a, b) => (a.date && b.date && a.date > b.date ? -1 : 1))
 
   return (
-    yearControls && (
-      <div>
-        <YearListRow>
-          <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
-            <YearListTitleText>
-              <Year>{year}</Year>
-              <YearResume data-cy="vessel-controls-year">
-                {!isEmpty ? (
-                  <>
-                    {yearControls.length} {pluralize('contrôle', yearControls.length)}
-                  </>
-                ) : (
-                  'Aucun contrôle'
-                )}
-                {numberOfInfractionsText}
-              </YearResume>
-            </YearListTitleText>
-          </YearListTitle>
-          {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
-        </YearListRow>
+    <div>
+      <YearListRow>
+        <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
+          <YearListTitleText>
+            <Year>{year}</Year>
+            <YearResume data-cy="vessel-controls-year">
+              {numberOfControlsText}
+              {numberOfInfractionsText}
+            </YearResume>
+          </YearListTitleText>
+        </YearListTitle>
+        {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
+      </YearListRow>
 
-        {isOpen && (
-          <Row>
-            <YearListContent>
-              {sortedControls.map(control => control && <Control key={control.id} control={control} />)}
-            </YearListContent>
-          </Row>
-        )}
-      </div>
-    )
+      {isOpen && (
+        <Row>
+          <YearListContent>
+            {sortedItems.map(item =>
+              item.control ? (
+                <Control key={item.control.id} control={item.control} />
+              ) : (
+                <Inquiry key={item.inquiry.id} inquiry={item.inquiry} />
+              )
+            )}
+          </YearListContent>
+        </Row>
+      )}
+    </div>
   )
 }
+
+const InProgress = styled.span`
+  font-style: italic;
+`
 
 export const Row = styled.div`
   display: flex;
@@ -146,7 +199,7 @@ const Green = styled.span`
   display: inline-block;
 `
 
-const GlodenPuppy = styled.span`
+const GoldenPuppy = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
@@ -159,6 +212,7 @@ const Year = styled.span`
   color: ${p => p.theme.color.slateGray};
   width: 39px;
   display: inline-block;
+  flex-shrink: 0;
 `
 
 const YearResume = styled.span`

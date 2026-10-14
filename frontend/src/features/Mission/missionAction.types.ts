@@ -10,6 +10,7 @@ import { NatinfSchema } from './schemas/NatinfSchema'
 import { SpeciesOnboardControlSchema } from './schemas/SpeciesOnboardControlSchema'
 import { ThreatSchema } from './schemas/ThreatSchema'
 
+import type { Inquiry } from '@features/Inquiry/Inquiry.types'
 import type { ThreatCharacterizationSchema } from '@features/Mission/schemas/ThreatCharacterizationSchema'
 
 export namespace MissionAction {
@@ -54,6 +55,7 @@ export namespace MissionAction {
 
   export type MissionControlsSummary = {
     controls: MissionAction[]
+    inquiries: Inquiry.Inquiry[]
     numberOfControlsWithSomeGearsSeized: number
     numberOfControlsWithSomeSpeciesSeized: number
     numberOfDiversions: number

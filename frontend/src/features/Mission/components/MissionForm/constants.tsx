@@ -160,3 +160,19 @@ export const GEAR_CATEGORIES_WITHOUT_MESH = [
 
 /** Gears having a mesh although their category is listed in `GEAR_CATEGORIES_WITHOUT_MESH`. */
 export const GEAR_CODES_WITH_MESH = ['FCN', 'MDR']
+
+/**
+ * Gear categories for which the "Last haul effectué" check does not apply:
+ * the field is hidden (and therefore not required) for these gears, and when there is no gear at all.
+ */
+export const GEAR_CATEGORIES_WITHOUT_LAST_HAUL = [
+  'Dragues',
+  'Filets soulevés',
+  'Gangui',
+  'Pièges et casiers',
+  'Engins de pêche récréative',
+  'Engins de récolte',
+  'Engins divers',
+  'Engin inconnu',
+  "Pas d'engin"
+]

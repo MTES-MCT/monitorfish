@@ -14,7 +14,7 @@ context('Side Window > Mission Form > Land Control', () => {
   })
 
   it('Should fill the form and send the expected data to the API', () => {
-    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('18 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
 
     const now = getUtcDateInMultipleFormats()
@@ -168,6 +168,8 @@ context('Side Window > Mission Form > Land Control', () => {
     // Qualité du contrôle
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
+    // The "Last haul effectué" field is visible when at least one gear has a last haul (e.g. OTB).
+    cy.contains('Last haul effectué').should('be.visible')
     cy.fill('Last haul effectué', 'Oui')
 
     // INN

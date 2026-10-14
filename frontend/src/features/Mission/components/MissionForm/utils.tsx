@@ -2,13 +2,19 @@ import { FormError, FormErrorCode } from '@libs/FormError'
 import { validateRequiredFormValues } from '@utils/validateRequiredFormValues'
 import { difference, omit } from 'lodash-es'
 
-import { GEAR_CATEGORIES_WITHOUT_MESH, GEAR_CODES_WITH_MESH, MISSION_ACTION_FORM_VALUES_SKELETON } from './constants'
+import {
+  GEAR_CATEGORIES_WITHOUT_LAST_HAUL,
+  GEAR_CATEGORIES_WITHOUT_MESH,
+  GEAR_CODES_WITH_MESH,
+  MISSION_ACTION_FORM_VALUES_SKELETON
+} from './constants'
 import { Mission } from '../../mission.types'
 import { MissionAction } from '../../missionAction.types'
 
 import type { MissionActionFormValues, MissionMainFormValues } from './types'
 import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
 import type { Undefine } from '@mtes-mct/monitor-ui'
+import type { Gear } from 'domain/types/Gear'
 
 import MissionActionType = MissionAction.MissionActionType
 
@@ -163,4 +169,22 @@ export function getValidMissionDataControlUnit(
  */
 export function hasGearMesh(gearCode: string, gearCategory: string | undefined): boolean {
   return !GEAR_CATEGORIES_WITHOUT_MESH.includes(gearCategory ?? '') || GEAR_CODES_WITH_MESH.includes(gearCode)
+}
+
+/**
+ * Whether the "Last haul effectué" field applies to the given onboard gears.
+ *
+ * The field is hidden when there is no gear or when every onboard gear belongs to a category
+ * for which a "last haul" is not relevant (see `GEAR_CATEGORIES_WITHOUT_LAST_HAUL`).
+ */
+export function hasApplicableLastHaulGear(
+  gearOnboard: Pick<MissionAction.GearControl, 'gearCode'>[] | undefined,
+  gears: Pick<Gear, 'code' | 'category'>[]
+): boolean {
+  return (gearOnboard ?? []).some(
+    gearControl =>
+      !GEAR_CATEGORIES_WITHOUT_LAST_HAUL.includes(
+        gears.find(({ code }) => code === gearControl.gearCode)?.category ?? ''
+      )
+  )
 }

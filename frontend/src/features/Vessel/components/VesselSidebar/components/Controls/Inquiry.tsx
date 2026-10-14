@@ -89,7 +89,7 @@ export function Inquiry({ inquiry }: InquiryProps) {
                   {observations}
                 </Observations>
                 {(isObservationsOverflowing || isObservationsOpen) && (
-                  <SeeMore onClick={() => setIsObservationsOpen(!isObservationsOpen)}>
+                  <SeeMore data-cy="vessel-inquiry-see-more" onClick={() => setIsObservationsOpen(!isObservationsOpen)}>
                     {isObservationsOpen ? 'Voir moins' : 'Voir plus'}
                   </SeeMore>
                 )}

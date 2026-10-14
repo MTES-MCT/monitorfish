@@ -281,7 +281,11 @@ context('Vessel sidebar controls tab', () => {
       .and('not.contain', 'Ouvrir le contrôle')
       .and('not.contain', 'Voir la marée du contrôle')
 
-    cy.getDataCy('vessel-inquiry').eq(1).contains('Voir plus').click()
+    cy.getDataCy('vessel-inquiry')
+      .eq(1)
+      .find('[data-cy="vessel-inquiry-see-more"]')
+      .should('have.text', 'Voir plus')
+      .click()
     cy.getDataCy('vessel-inquiry')
       .eq(1)
       .should('contain', 'Second échange avec le capitaine le 15/01 : pièces complémentaires transmises.')

@@ -123,7 +123,8 @@ export function getTopmostFeatureAtPixel(
   map.forEachFeatureAtPixel(
     pixel,
     (feature, layer) => {
-      const zIndex = layer?.getZIndex() ?? -Infinity
+      // Same defaults as OpenLayers rendering: unmanaged layers (`null`) are on top, managed ones default to 0
+      const zIndex = layer ? (layer.getZIndex() ?? 0) : Infinity
       if (!topmostFeature || zIndex > topmostZIndex) {
         topmostFeature = feature
         topmostZIndex = zIndex

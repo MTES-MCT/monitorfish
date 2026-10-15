@@ -1,6 +1,7 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { type Coordinates, getCoordinates, MultiRadio, useClickOutsideEffect } from '@mtes-mct/monitor-ui'
+import { getCoordinatesInMainWorld } from '@utils/worldCopy'
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -45,7 +46,12 @@ export function MapCoordinatesBox({ coordinates }: MapCoordinatesBoxProps) {
 }
 
 const getShowedCoordinates = (coordinates, coordinatesFormat) => {
-  const transformedCoordinates = getCoordinates(coordinates, OPENLAYERS_PROJECTION, coordinatesFormat)
+  // The cursor may be on a world copy (the map wraps around the globe)
+  const transformedCoordinates = getCoordinates(
+    coordinates && getCoordinatesInMainWorld(coordinates),
+    OPENLAYERS_PROJECTION,
+    coordinatesFormat
+  )
 
   if (Array.isArray(transformedCoordinates) && transformedCoordinates.length === 2) {
     return `${transformedCoordinates[0]} ${transformedCoordinates[1]}`

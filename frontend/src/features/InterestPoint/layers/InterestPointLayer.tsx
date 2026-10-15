@@ -1,6 +1,7 @@
 import { INTEREST_POINT_VECTOR_LAYER, INTEREST_POINT_VECTOR_SOURCE } from '@features/InterestPoint/layers/constants'
 import { deleteInterestPoint } from '@features/InterestPoint/useCases/deleteInterestPoint'
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
+import { getLabelLineCoordinates } from '@features/Vessel/label.utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { parseInt } from 'lodash-es'
@@ -131,11 +132,16 @@ export function InterestPointLayer({ mapMovingAndZoomEvent }) {
 
       if (existingLabelLineFeature && interestPointFeature) {
         existingLabelLineFeature.setGeometry(
-          new LineString([interestPointFeature.getGeometry()?.getCoordinates() as Coordinate, nextCoordinates])
+          new LineString(
+            getLabelLineCoordinates(interestPointFeature.getGeometry()?.getCoordinates() as Coordinate, nextCoordinates)
+          )
         )
       }
     } else {
-      const interestPointLineFeature = InterestPointLine.getFeature(coordinates, nextCoordinates, featureId)
+      const interestPointLineFeature = InterestPointLine.getFeature(
+        ...getLabelLineCoordinates(coordinates, nextCoordinates),
+        featureId
+      )
 
       INTEREST_POINT_VECTOR_SOURCE.addFeature(interestPointLineFeature)
     }

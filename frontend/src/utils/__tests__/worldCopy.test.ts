@@ -1,6 +1,7 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { describe, expect, it } from '@jest/globals'
 import {
+  getCoordinatesInMainWorld,
   getExtentInWorldCopyOf,
   getCoordinatesInWorldCopyOf,
   moveGeometryToMainWorld,
@@ -44,6 +45,24 @@ describe('utils/worldCopy', () => {
 
       expect(transform([x!, 0], OPENLAYERS_PROJECTION, WSG84_PROJECTION)[0]).toBeCloseTo(181)
     })
+  })
+
+  describe('getCoordinatesInMainWorld()', () => {
+    it.each([
+      [190, -170],
+      [-190, 170],
+      [530, 170],
+      [-4.5, -4.5]
+    ])(
+      'Should return the longitude %d° as %d° (e.g. the cursor coordinates on a world copy)',
+      (longitude, expected) => {
+        const [x, y] = getCoordinatesInMainWorld(fromLonLat([longitude, -13]))
+
+        const [resultLongitude, resultLatitude] = transform([x!, y!], OPENLAYERS_PROJECTION, WSG84_PROJECTION)
+        expect(resultLongitude).toBeCloseTo(expected)
+        expect(resultLatitude).toBeCloseTo(-13)
+      }
+    )
   })
 
   describe('getExtentInWorldCopyOf()', () => {

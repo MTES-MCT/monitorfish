@@ -27,6 +27,11 @@ export function getCoordinatesInWorldCopyOf(coordinates: Coordinate, referenceX:
   return [x! + getWorldShiftTowards(x!, referenceX), ...rest]
 }
 
+/** Returns the copy of `coordinates` in the main world, i.e. with a longitude within [-180°, 180°]. */
+export function getCoordinatesInMainWorld(coordinates: Coordinate): Coordinate {
+  return getCoordinatesInWorldCopyOf(coordinates, 0)
+}
+
 export function getExtentInWorldCopyOf(extent: Extent, referenceX: number): Extent {
   const [minX, minY, maxX, maxY] = extent
   const shift = getWorldShiftTowards(getCenter(extent)[0]!, referenceX)

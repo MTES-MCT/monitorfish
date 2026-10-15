@@ -70,6 +70,22 @@ context('Map world wrap', () => {
     cy.getViewCenter().should(center => {
       expect(center![0]).to.be.greaterThan(HALF_WORLD_WIDTH_IN_METERS)
     })
+
+    // When hovering the map center
+    cy.get('.VESSELS_POINTS').then($map => {
+      const { height, left, top, width } = $map[0]!.getBoundingClientRect()
+      cy.get('.VESSELS_POINTS').trigger('pointermove', {
+        clientX: left + width / 2,
+        clientY: top + height / 2,
+        force: true,
+        pointerId: 1
+      })
+    })
+
+    // Then the cursor coordinates are within [-180°, 180°] (175° W, not 185° E)
+    cy.contains('(DMS)')
+      .invoke('text')
+      .should('match', /17[45]° \d{2}′ \d{2}″ W/)
   })
 
   it('A vessel and its alert Should be displayed and selected on a wrapped world copy', () => {
@@ -114,7 +130,31 @@ context('Map world wrap', () => {
       })
 
       expect(features.length).to.be.greaterThan(0)
+
+      // When hovering this track point copy
+      const mapRect = monitorfishMap.getViewport().getBoundingClientRect()
+      cy.get('.VESSELS_POINTS').trigger('pointermove', {
+        clientX: Math.round(pixel[0] + mapRect.left),
+        clientY: Math.round(pixel[1] + mapRect.top),
+        force: true,
+        pointerId: 1
+      })
     })
+
+    // Then the track point card is displayed next to the hovered copy
+    assertIsInsideViewport('*[data-cy="vessel-track-card-longitude"]')
+  })
+
+  it('The vessel map menu Should be displayed next to the right-clicked vessel copy', () => {
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait(5000)
+    cy.moveViewToWorldCopy(1)
+
+    // When right-clicking the same vessel as in vessel_track.spec.ts, on the next world copy
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
+
+    // Then
+    assertIsInsideViewport('*[data-cy="add-vessel-to-favorites"]')
   })
 
   it('An alert reporting overlay Should be displayed next to the hovered reporting copy', () => {

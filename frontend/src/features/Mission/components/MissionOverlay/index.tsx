@@ -82,7 +82,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
   }, [])
 
   const getNextOverlayPosition = useCallback(() => {
-    const [x, y] = feature.getGeometry().getCoordinates()
+    const [x, y] = getCoordinatesInViewWorld(feature.getGeometry().getCoordinates())
     const extent = monitorfishMap.getView().calculateExtent()
 
     const boxSize = getMapResolution() * overlayHeight

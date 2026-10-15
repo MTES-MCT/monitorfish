@@ -143,10 +143,13 @@ describe('@features/Map/utils.ts', () => {
 describe('getTopmostFeatureAtPixel()', () => {
   // On a world copy, OpenLayers hits canvas layers (on the main world coordinate) before WebGL layers
   // (on the displayed world copy), whatever their z-index
-  function getMapHitting(hits: Array<[string, number]>) {
+  // A `null` z-index stands for an unmanaged layer (e.g. a Draw or Modify interaction overlay)
+  function getMapHitting(hits: Array<[string, number | undefined | null]>) {
     return {
       forEachFeatureAtPixel: (_pixel, callback) => {
-        hits.some(([featureId, zIndex]) => callback({ getId: () => featureId }, { getZIndex: () => zIndex }))
+        hits.some(([featureId, zIndex]) =>
+          callback({ getId: () => featureId }, zIndex === null ? null : { getZIndex: () => zIndex })
+        )
       }
     } as any
   }
@@ -167,6 +170,25 @@ describe('getTopmostFeatureAtPixel()', () => {
     ])
 
     expect(getTopmostFeatureAtPixel(map, [0, 0], {})?.getId()).toEqual('VESSELS_POINTS:1')
+  })
+
+  it('Should consider a layer without z-index as rendered at z-index 0, as OpenLayers does', () => {
+    const map = getMapHitting([
+      ['LAYER_WITHOUT_Z_INDEX:1', undefined],
+      ['LAYER_WITH_Z_INDEX_0:1', 0],
+      ['LAYER_WITH_NEGATIVE_Z_INDEX:1', -1]
+    ])
+
+    expect(getTopmostFeatureAtPixel(map, [0, 0], {})?.getId()).toEqual('LAYER_WITHOUT_Z_INDEX:1')
+  })
+
+  it('Should return the feature of an unmanaged layer, rendered on top of all layers', () => {
+    const map = getMapHitting([
+      ['VESSELS_POINTS:1', 1000],
+      ['DRAW_SKETCH:1', null]
+    ])
+
+    expect(getTopmostFeatureAtPixel(map, [0, 0], {})?.getId()).toEqual('DRAW_SKETCH:1')
   })
 
   it('Should return undefined When no feature is hit', () => {

@@ -1,4 +1,5 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getExtentInViewWorld } from '@features/Map/utils'
 
 import { ensureCoordinates } from './ensureCoordinates'
 import { FeatureWithCodeAndEntityId } from '../libs/FeatureWithCodeAndEntityId'
@@ -37,7 +38,7 @@ export function getDialogWindowPositionFromFeature(
 
   const dialogHeight = dialogElement.offsetHeight + 40
   const dialogWidth = dialogElement.offsetWidth
-  const featureGeometryExtent = geometry.getExtent()
+  const featureGeometryExtent = getExtentInViewWorld(geometry.getExtent())
   const featureMapTopAndLeft = ensureCoordinates([featureGeometryExtent[0], featureGeometryExtent[3]])
   const featureWindowCoordinates = ensureCoordinates(monitorfishMap.getPixelFromCoordinate(featureMapTopAndLeft))
 

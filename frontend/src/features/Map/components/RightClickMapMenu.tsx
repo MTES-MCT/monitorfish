@@ -1,6 +1,6 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { getTopmostFeatureAtPixel } from '@features/Map/utils'
+import { getCoordinatesInViewWorld, getTopmostFeatureAtPixel } from '@features/Map/utils'
 import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
@@ -41,7 +41,7 @@ export function RightClickMapMenu() {
       }
 
       vessel.current = clickedVessel
-      setCoordinates((feature?.getGeometry() as Point)?.getCoordinates())
+      setCoordinates(getCoordinatesInViewWorld((feature?.getGeometry() as Point)?.getCoordinates()))
     }
 
     monitorfishMap.getViewport().addEventListener('contextmenu', showMenu)

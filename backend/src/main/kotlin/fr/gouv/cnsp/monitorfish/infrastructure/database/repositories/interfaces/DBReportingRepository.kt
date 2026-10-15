@@ -220,6 +220,35 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
     )
     fun findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage(): List<Int>
 
+    /**
+     * Search for unarchived reportings older than 7 days whose vessel is smaller than 12 meters.
+     * Vessels smaller than 12 meters have no JPE (electronic logbook), so they never send DEP logbook
+     * messages and the "after new voyage" archiving rules never apply to them: they are archived on a
+     * time basis instead.
+     *
+     * The vessel length is taken from the `vessels` registry when the reporting is linked to a vessel
+     * (`vessel_id`), and falls back to the length captured on the reporting for absent vessels (no
+     * registry record).
+     */
+    @Query(
+        value = """
+        SELECT
+            r.id
+        FROM
+            reportings r
+        LEFT JOIN
+            vessels v ON v.id = r.vessel_id
+        WHERE
+            r.archived IS FALSE AND
+            r.deleted IS FALSE AND
+            r.creation_date < NOW() AT TIME ZONE 'UTC' - INTERVAL '7 days' AND
+            COALESCE(v.length, r.length) IS NOT NULL AND
+            COALESCE(v.length, r.length) < 12
+        """,
+        nativeQuery = true,
+    )
+    fun findOutdatedReportingsForSmallVessels(): List<Int>
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         value = """

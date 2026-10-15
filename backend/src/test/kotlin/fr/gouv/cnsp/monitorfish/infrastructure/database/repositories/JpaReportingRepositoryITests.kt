@@ -724,6 +724,105 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findOutdatedReportingsForSmallVessels Should return reportings older than 7 days for vessels smaller than 12 meters`() {
+        // Given - vessel 103 is 11.99 meters in the `vessels` registry
+        val reporting = saveReporting(vesselId = 103, length = null, creationDate = ZonedDateTime.now().minusDays(10))
+
+        // When
+        val reportingIds = jpaReportingRepository.findOutdatedReportingsForSmallVessels()
+
+        // Then
+        assertThat(reportingIds).contains(reporting.id)
+    }
+
+    @Test
+    @Transactional
+    fun `findOutdatedReportingsForSmallVessels Should return reportings for absent vessels with a length smaller than 12 meters`() {
+        // Given - an absent vessel (no `vessel_id`) whose length is only known from the reporting
+        val reporting = saveReporting(vesselId = null, length = 8.0, creationDate = ZonedDateTime.now().minusDays(10))
+
+        // When
+        val reportingIds = jpaReportingRepository.findOutdatedReportingsForSmallVessels()
+
+        // Then
+        assertThat(reportingIds).contains(reporting.id)
+    }
+
+    @Test
+    @Transactional
+    fun `findOutdatedReportingsForSmallVessels Should not return reportings for vessels of at least 12 meters`() {
+        // Given - vessel 101 is 15 meters in the `vessels` registry
+        val reporting = saveReporting(vesselId = 101, length = null, creationDate = ZonedDateTime.now().minusDays(10))
+
+        // When
+        val reportingIds = jpaReportingRepository.findOutdatedReportingsForSmallVessels()
+
+        // Then
+        assertThat(reportingIds).doesNotContain(reporting.id)
+    }
+
+    @Test
+    @Transactional
+    fun `findOutdatedReportingsForSmallVessels Should not return reportings younger than 7 days`() {
+        // Given
+        val reporting = saveReporting(vesselId = 103, length = null, creationDate = ZonedDateTime.now().minusDays(1))
+
+        // When
+        val reportingIds = jpaReportingRepository.findOutdatedReportingsForSmallVessels()
+
+        // Then
+        assertThat(reportingIds).doesNotContain(reporting.id)
+    }
+
+    @Test
+    @Transactional
+    fun `findOutdatedReportingsForSmallVessels Should not return reportings when no length is available`() {
+        // Given - an absent vessel with no length on the reporting either
+        val reporting = saveReporting(vesselId = null, length = null, creationDate = ZonedDateTime.now().minusDays(10))
+
+        // When
+        val reportingIds = jpaReportingRepository.findOutdatedReportingsForSmallVessels()
+
+        // Then
+        assertThat(reportingIds).doesNotContain(reporting.id)
+    }
+
+    private fun saveReporting(
+        vesselId: Int?,
+        length: Double?,
+        creationDate: ZonedDateTime,
+    ): Reporting =
+        jpaReportingRepository.save(
+            Reporting.InfractionSuspicion(
+                cfr = "FRFGRGR",
+                externalMarker = "RGD",
+                ircs = "6554fEE",
+                vesselId = vesselId,
+                length = length,
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                flagState = CountryCode.FR,
+                creationDate = creationDate,
+                reportingDate = ZonedDateTime.now(),
+                lastUpdateDate = creationDate,
+                reportingSource = ReportingSource.OPS,
+                infractions =
+                    listOf(
+                        InfractionSuspicionThreat(
+                            natinfCode = 123456,
+                            threat = "Obligations déclaratives",
+                            threatCharacterization = "DEP",
+                        ),
+                    ),
+                title = "A title",
+                type = ReportingType.INFRACTION_SUSPICION,
+                isDeleted = false,
+                isArchived = false,
+                createdBy = "test@example.gouv.fr",
+            ),
+        )
+
+    @Test
+    @Transactional
     fun `findAll Should return reportings with position when hasPosition is true`() {
         val filter = ReportingFilter(hasPosition = true)
 

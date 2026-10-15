@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
-import { hasGearMesh } from '@features/Mission/components/MissionForm/utils'
+import { hasApplicableLastHaulGear, hasGearMesh } from '@features/Mission/components/MissionForm/utils'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 import { mainStore } from '@store'
@@ -219,7 +219,12 @@ export function getLandControlFormCompletionSchema(isEISR: boolean) {
       gearOnboard: array().of(makeGearOnboardSchema(isEISR)).required(HIDDEN_ERROR).min(1, HIDDEN_ERROR),
 
       // Qualité du contrôle
-      isLastHaul: boolean().required(HIDDEN_ERROR),
+      isLastHaul: boolean().when('gearOnboard', {
+        is: (gearOnboard: MissionAction.GearControl[] | undefined) =>
+          hasApplicableLastHaulGear(gearOnboard, mainStore.getState().gear.gears),
+        then: schema => schema.required(HIDDEN_ERROR),
+        otherwise: schema => schema.notRequired()
+      }),
 
       // Saisi par / Complété par
       completedBy: string().trim().required(HIDDEN_ERROR)
@@ -273,7 +278,12 @@ export function getSeaControlFormCompletionSchema(isEISR: boolean) {
       ),
 
       // Qualité du contrôle
-      isLastHaul: boolean().required(HIDDEN_ERROR),
+      isLastHaul: boolean().when('gearOnboard', {
+        is: (gearOnboard: MissionAction.GearControl[] | undefined) =>
+          hasApplicableLastHaulGear(gearOnboard, mainStore.getState().gear.gears),
+        then: schema => schema.required(HIDDEN_ERROR),
+        otherwise: schema => schema.notRequired()
+      }),
 
       // Saisi par / Complété par
       completedBy: string().trim().required(HIDDEN_ERROR)

@@ -14,6 +14,10 @@ import type {
   MissionActionReporting
 } from '@features/Mission/schemas/MissionActionSnapshotSchema'
 
+jest.mock('@api/gear', () => ({
+  useGetGearsQuery: () => ({ data: [] })
+}))
+
 const PRIORITY_TARGET_SELECTOR = '[data-cy="mission-action-priority-target"]'
 
 function getPriorityTarget(): HTMLElement {

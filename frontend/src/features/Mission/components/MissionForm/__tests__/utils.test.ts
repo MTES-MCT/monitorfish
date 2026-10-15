@@ -6,6 +6,7 @@ import {
   getMissionActionsToCreateUpdateOrDelete,
   getMissionDataFromMissionFormValues,
   getUpdatedMissionFromMissionMainFormValues,
+  hasApplicableLastHaulGear,
   hasGearMesh
 } from '../utils'
 
@@ -519,6 +520,29 @@ describe('features/Mission/components/MissionForm/utils', () => {
     expect(hasGearMesh('HAR', 'Engins divers')).toBe(false)
     expect(hasGearMesh('FCN', 'Engins divers')).toBe(true)
     expect(hasGearMesh('MDR', 'Engins divers')).toBe(true)
+  })
+
+  it('hasApplicableLastHaulGear() should return whether the last haul field applies to the onboard gears', () => {
+    const gears = [
+      { category: 'Chaluts', code: 'OTB' },
+      { category: 'Dragues', code: 'DRB' },
+      { category: 'Filets soulevés', code: 'LNB' },
+      { category: 'Gangui', code: 'TMB' },
+      { category: 'Pièges et casiers', code: 'FPO' },
+      { category: 'Engins de pêche récréative', code: 'RG' },
+      { category: 'Engins de récolte', code: 'HMX' },
+      { category: 'Engins divers', code: 'HAR' },
+      { category: 'Engin inconnu', code: 'MIS' },
+      { category: "Pas d'engin", code: 'NO' }
+    ]
+
+    expect(hasApplicableLastHaulGear(undefined, gears)).toBe(false)
+    expect(hasApplicableLastHaulGear([], gears)).toBe(false)
+    expect(hasApplicableLastHaulGear([{ gearCode: 'DRB' }], gears)).toBe(false)
+    expect(hasApplicableLastHaulGear([{ gearCode: 'DRB' }, { gearCode: 'FPO' }], gears)).toBe(false)
+    expect(hasApplicableLastHaulGear([{ gearCode: 'NO' }], gears)).toBe(false)
+    expect(hasApplicableLastHaulGear([{ gearCode: 'OTB' }], gears)).toBe(true)
+    expect(hasApplicableLastHaulGear([{ gearCode: 'OTB' }, { gearCode: 'DRB' }], gears)).toBe(true)
   })
 })
 

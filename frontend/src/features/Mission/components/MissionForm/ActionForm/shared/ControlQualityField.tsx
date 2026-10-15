@@ -1,9 +1,12 @@
+import { useGetGearsQuery } from '@api/gear'
 import { FormikCheckbox, FormikMultiRadio, FormikTextarea } from '@mtes-mct/monitor-ui'
 import { useFormikContext } from 'formik'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { getPriorityTargetReasons } from './utils'
 import { FieldsetGroup } from '../../shared/FieldsetGroup'
+import { hasApplicableLastHaulGear } from '../../utils'
 
 import type { MissionActionFormValues } from '../../types'
 
@@ -21,8 +24,14 @@ function joinReasons(reasons: string[]): string {
 
 export function ControlQualityField({ withLastHaul = false }: ControlQualityFieldProps) {
   const { values } = useFormikContext<MissionActionFormValues>()
+  const { data: gears } = useGetGearsQuery()
 
   const { hasGroupOrReportingReason, isPriorityTarget, reasons } = getPriorityTargetReasons(values)
+
+  const shouldDisplayLastHaul = useMemo(
+    () => withLastHaul && hasApplicableLastHaulGear(values.gearOnboard, gears ?? []),
+    [gears, values.gearOnboard, withLastHaul]
+  )
 
   return (
     <Wrapper isLight legend="Qualité du contrôle (interne CNSP)">
@@ -38,7 +47,7 @@ export function ControlQualityField({ withLastHaul = false }: ControlQualityFiel
           )}
         </PriorityTarget>
       )}
-      {withLastHaul && (
+      {shouldDisplayLastHaul && (
         <FormikMultiRadio
           isErrorMessageHidden
           isInline

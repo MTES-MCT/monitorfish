@@ -114,6 +114,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Nom du navire', 'Un navire')
     cy.fill('Nationalité', 'France')
     cy.fill('Ajouter un engin', 'MIS')
+    // The "Last haul effectué" field is hidden when the gear has no last haul (e.g. Engin inconnu).
+    cy.contains('MIS - Engin divers').should('be.visible')
+    cy.contains('Last haul effectué').should('not.exist')
     // The "Lieu du contrôle" field is stubbed in FormikCoordinatesPicker
 
     cy.wait(500)
@@ -173,7 +176,7 @@ context('Side Window > Mission Form > Sea Control', () => {
     // -------------------------------------------------------------------------
     // Form
 
-    cy.getDataCy('action-completion-status').contains('19 champs nécessaires aux statistiques à compléter')
+    cy.getDataCy('action-completion-status').contains('18 champs nécessaires aux statistiques à compléter')
     cy.getDataCy('action-contains-missing-fields').should('exist')
     cy.getDataCy('mission-form-header').contains('À compléter')
 
@@ -333,6 +336,8 @@ context('Side Window > Mission Form > Sea Control', () => {
     // Qualité du contrôle
     cy.fill('Unité sans jauge oméga', true)
     cy.fill('Observations sur le déroulé du contrôle', 'Une observation sur le déroulé du contrôle.')
+    // The "Last haul effectué" field is visible when at least one gear has a last haul (e.g. OTB).
+    cy.contains('Last haul effectué').should('be.visible')
     cy.fill('Last haul effectué', 'Non')
 
     // INN

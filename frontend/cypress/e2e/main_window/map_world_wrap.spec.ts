@@ -26,6 +26,15 @@ function assertViewIsOnWorldCopy(offset: number) {
   })
 }
 
+// The map pointer move handler is throttled: a single event is ignored, the next one within 50ms is handled
+function hoverMapAt(clientX: number, clientY: number) {
+  cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX, clientY, force: true, pointerId: 1 })
+  cy.wait(20)
+  cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: clientX + 1, clientY, force: true, pointerId: 1 })
+  cy.wait(20)
+  cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX, clientY, force: true, pointerId: 1 })
+}
+
 function getLongitudesFromWkt(wkt: string): number[] {
   return (wkt.match(/-?\d+(\.\d+)?\s+-?\d+(\.\d+)?/g) ?? []).map(pair => Number(pair.split(/\s+/)[0]))
 }
@@ -74,12 +83,7 @@ context('Map world wrap', () => {
     // When hovering the map center
     cy.get('.VESSELS_POINTS').then($map => {
       const { height, left, top, width } = $map[0]!.getBoundingClientRect()
-      cy.get('.VESSELS_POINTS').trigger('pointermove', {
-        clientX: left + width / 2,
-        clientY: top + height / 2,
-        force: true,
-        pointerId: 1
-      })
+      hoverMapAt(left + width / 2, top + height / 2)
     })
 
     // Then the cursor coordinates are within [-180°, 180°] (175° W, not 185° E)
@@ -114,10 +118,12 @@ context('Map world wrap', () => {
     cy.window().then(win => {
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       const { getFeaturesFromLayer, getPixelFromCoordinate, monitorfishMap } = win.olTestUtils
-      const trackPoint = getFeaturesFromLayer('VESSEL_TRACK').find(
-        feature => feature.getGeometry()?.getType() === 'Point'
+      // A position in the middle of the track, away from the last position where the vessel icon is drawn on top
+      const trackPositions = getFeaturesFromLayer('VESSEL_TRACK').filter(feature =>
+        String(feature.getId()).includes(':position:')
       )
-      expect(trackPoint, 'a track point').to.not.equal(undefined)
+      const trackPoint = trackPositions[Math.floor(trackPositions.length / 2)]
+      expect(trackPoint, 'a track position').to.not.equal(undefined)
 
       const [x, y] = trackPoint.getGeometry().getCoordinates()
       const trackPointCopy = [x + WORLD_WIDTH_IN_METERS, y]
@@ -133,12 +139,7 @@ context('Map world wrap', () => {
 
       // When hovering this track point copy
       const mapRect = monitorfishMap.getViewport().getBoundingClientRect()
-      cy.get('.VESSELS_POINTS').trigger('pointermove', {
-        clientX: Math.round(pixel[0] + mapRect.left),
-        clientY: Math.round(pixel[1] + mapRect.top),
-        force: true,
-        pointerId: 1
-      })
+      hoverMapAt(Math.round(pixel[0] + mapRect.left), Math.round(pixel[1] + mapRect.top))
     })
 
     // Then the track point card is displayed next to the hovered copy

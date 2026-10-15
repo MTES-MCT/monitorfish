@@ -1,6 +1,7 @@
 import { useMoveOverlayWhenDragging } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenDragging'
 import { useMoveOverlayWhenZooming } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenZooming'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getCoordinatesInViewWorld } from '@features/Map/utils'
 import { getVesselCompositeIdentifier } from '@features/Vessel/utils'
 import Overlay from 'ol/Overlay'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -16,7 +17,7 @@ const INITIAL_OFFSET_VALUE = [5, -30]
 const INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK = [33, -25]
 
 export function VesselLabelOverlay({
-  coordinates,
+  coordinates: featureCoordinates,
   featureId,
   identity,
   label,
@@ -28,6 +29,8 @@ export function VesselLabelOverlay({
   triggerShowRiskDetails,
   zoomHasChanged
 }) {
+  // The feature may be displayed on a world copy (the map wraps around the globe)
+  const coordinates = useMemo(() => getCoordinatesInViewWorld(featureCoordinates), [featureCoordinates])
   const overlayElementRef = useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
 
   const currentOffset = useRef(trackIsShown ? INITIAL_OFFSET_VALUE_WHEN_SHOWN_TRACK : INITIAL_OFFSET_VALUE)

@@ -1,6 +1,7 @@
 import { setDrawedGeometry } from '@features/Draw/slice'
 import { OpenLayersGeometryType } from '@features/Map/constants'
 import { addGeometryToMultiPolygonGeoJSON, convertToGeoJSONGeometryObject } from '@features/Map/utils'
+import { moveGeometryToMainWorld } from '@utils/worldCopy'
 import { Geometry, MultiPolygon } from 'ol/geom'
 
 import type { Point, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
@@ -13,6 +14,7 @@ export const addFeatureToDrawedFeature = (feature: Feature<Geometry>) => (dispat
   if (!geometry || !listener) {
     return
   }
+  moveGeometryToMainWorld(geometry)
 
   if (geometry.getType() === OpenLayersGeometryType.POINT) {
     const nextGeometry = convertToGeoJSONGeometryObject<Point>(geometry)

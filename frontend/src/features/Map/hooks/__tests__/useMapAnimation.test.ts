@@ -13,6 +13,7 @@ jest.mock('@features/Map/monitorfishMap', () => ({
     getView: () => ({
       animate: mockAnimate,
       fit: mockFit,
+      getCenter: () => [0, 0],
       getZoom: mockGetZoom
     })
   }

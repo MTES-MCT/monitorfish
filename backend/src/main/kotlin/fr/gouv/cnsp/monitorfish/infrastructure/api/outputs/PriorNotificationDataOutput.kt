@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoVerificationReason
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationState
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 import java.time.ZonedDateTime
 
 class PriorNotificationDataOutput(
@@ -68,7 +69,7 @@ class PriorNotificationDataOutput(
                 requireNotNull(priorNotification.updatedAt) {
                     "`priorNotification.updatedAt` is null."
                 }
-            val vesselIdentity = VesselIdentityDataOutput.fromVessel(vessel)
+            val vesselIdentity = vessel.toVesselIdentityDataOutput()
             val vesselId = vessel.id
 
             val logbookMessageDataOutput = LogbookMessageDataOutput.fromLogbookMessage(logbookMessage)

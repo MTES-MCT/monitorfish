@@ -21,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyageByDates
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SaveVesselContactToUpdate
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.VesselContactToUpdateDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActiveVesselBaseDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionsResumeAndHistoryDataOutput
@@ -32,9 +33,9 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SelectedVesselAndPosi
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SpeciesControlPrefillDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput.Companion.fromVesselContactToUpdate
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselReportingsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VoyageDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toVesselIdentityDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -330,7 +331,7 @@ class VesselController(
         searched: String,
     ): List<VesselIdentityDataOutput> =
         searchVessels.execute(searched).map {
-            VesselIdentityDataOutput.fromVesselAndBeacon(it)
+            it.toVesselIdentityDataOutput()
         }
 
     @GetMapping("/logbook/find_by_dates")

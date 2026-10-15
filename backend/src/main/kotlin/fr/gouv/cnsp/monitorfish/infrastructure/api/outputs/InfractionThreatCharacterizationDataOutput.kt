@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionThreatCharacterization
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infraction
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ThreatHierarchyDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.InfractionHierarchyBuilder
 
 data class InfractionThreatCharacterizationDataOutput(

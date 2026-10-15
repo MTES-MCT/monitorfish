@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.utils.CustomZonedDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -86,11 +87,9 @@ data class ManualPriorNotificationFormDataOutput(
                     ManualPriorNotificationFishingCatchDataOutput.fromLogbookFishingCatch(it, !hasGlobalFaoArea)
                 }
             val vesselIdentity =
-                VesselIdentityDataOutput.fromVessel(
-                    requireNotNull(priorNotification.vessel) {
-                        "`priorNotification.vessel` is null."
-                    },
-                )
+                requireNotNull(priorNotification.vessel) {
+                    "`priorNotification.vessel` is null."
+                }.toVesselIdentityDataOutput()
 
             return ManualPriorNotificationFormDataOutput(
                 reportId = reportId,

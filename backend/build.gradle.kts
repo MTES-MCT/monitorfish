@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 val springBootVersion = "4.1.1"
-val kotlinVersion = "2.4.20"
+val kotlinVersion = "2.4.21"
 val springSecurityVersion = "7.1.1"
 
 plugins {
@@ -12,13 +12,13 @@ plugins {
 
     id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.jetbrains.kotlin.plugin.spring") version "2.4.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.4.20"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.4.21"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.4.21"
 
-    kotlin("jvm") version "2.4.20"
-    kotlin("plugin.noarg") version "2.4.20"
-    kotlin("plugin.jpa") version "2.4.20"
-    kotlin("plugin.serialization") version "2.4.20"
+    kotlin("jvm") version "2.4.21"
+    kotlin("plugin.noarg") version "2.4.21"
+    kotlin("plugin.jpa") version "2.4.21"
+    kotlin("plugin.serialization") version "2.4.21"
 
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
@@ -127,18 +127,18 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.6.0")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:13.4.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.4.0")
+    implementation("org.flywaydb:flyway-core:13.9.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.9.0")
     implementation("org.hibernate.validator:hibernate-validator:9.1.4.Final")
     // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
     // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).
     implementation("org.hibernate.orm:hibernate-spatial")
     implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.16.0")
     api("org.locationtech.jts:jts-core:1.20.0")
-    implementation("org.n52.jackson:jackson-datatype-jts:3.0.4")
+    implementation("org.n52.jackson:jackson-datatype-jts:3.0.5")
     implementation("org.locationtech.proj4j:proj4j:1.4.3")
     implementation("org.locationtech.proj4j:proj4j-epsg:1.4.3")
-    runtimeOnly("org.postgresql:postgresql:42.7.13")
+    runtimeOnly("org.postgresql:postgresql:42.7.14")
 
     // Serialization / API
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
@@ -151,8 +151,8 @@ dependencies {
     // Utilities
     api("com.neovisionaries:nv-i18n:1.29")
     implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
-    implementation("io.sentry:sentry:8.58.0")
-    implementation("io.sentry:sentry-log4j2:8.58.0")
+    implementation("io.sentry:sentry:8.60.0")
+    implementation("io.sentry:sentry-log4j2:8.60.0")
 
     // Runtime
     runtimeOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")

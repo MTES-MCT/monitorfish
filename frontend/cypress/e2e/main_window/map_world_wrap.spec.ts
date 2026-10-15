@@ -18,6 +18,18 @@ function assertIsInsideViewport(selector: string) {
   })
 }
 
+/** Same as visiting `/#@x,y,zoom` (see `MapHistory`), on the world copy `worldOffset` worlds away. */
+function setMapView(x: number, y: number, zoom: number, worldOffset: number) {
+  cy.window().then(win => {
+    // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+    const { monitorfishMap } = win.olTestUtils
+    monitorfishMap.getView().setCenter([x + worldOffset * WORLD_WIDTH_IN_METERS, y])
+    monitorfishMap.getView().setZoom(zoom)
+    monitorfishMap.renderSync()
+  })
+  cy.wait(500)
+}
+
 function assertViewIsOnWorldCopy(offset: number) {
   cy.getViewCenter().should(center => {
     const worldIndex = Math.round(center![0]! / WORLD_WIDTH_IN_METERS)
@@ -58,22 +70,24 @@ function hoverReportingCopy(vesselName: string, attempt = 0): Cypress.Chainable 
   })
 }
 
+/**
+ * All scenarios run inside a single `it()` to avoid paying the login/visit/wait setup cost multiple times.
+ * Instead of visiting another `/#@x,y,zoom` URL, each scenario sets the map view with `setMapView()`.
+ * The scenarios are order-dependent: e.g. the vessel is unselected before clicking a mission at a fixed pixel.
+ */
 context('Map world wrap', () => {
-  beforeEach(() => {
+  it('Map features Should be displayed, selected and saved on wrapped world copies', () => {
+    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+    cy.intercept('GET', `/bff/v1/missions*`).as('missions')
     cy.login('superuser')
-  })
+    cy.visit('/#@-824534.42,6082993.21,8.70', stubSideWindowOptions)
+    cy.wait('@missions')
+    cy.wait(6000)
 
-  it('The map Should be panned across the antimeridian', () => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(3000)
-
+    cy.log('The map Should be panned across the antimeridian')
     // When centering east of the antimeridian, near Wallis-et-Futuna (185° E = 175° W)
-    cy.window().then(win => {
-      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-      const { monitorfishMap } = win.olTestUtils
-      monitorfishMap.getView().setCenter([(185 / 180) * HALF_WORLD_WIDTH_IN_METERS, -1500000])
-      monitorfishMap.renderSync()
-    })
+    setMapView((185 / 180) * HALF_WORLD_WIDTH_IN_METERS, -1500000, 8.7, 0)
 
     // Then the view is not clamped to the [-180°, 180°] extent
     cy.getViewCenter().should(center => {
@@ -90,13 +104,33 @@ context('Map world wrap', () => {
     cy.contains('(DMS)')
       .invoke('text')
       .should('match', /17[45]° \d{2}′ \d{2}″ W/)
-  })
 
-  it('A vessel and its alert Should be displayed and selected on a wrapped world copy', () => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(6000)
-    cy.moveViewToWorldCopy(1)
+    cy.log('The vessel map menu Should be displayed next to the right-clicked vessel copy')
+    setMapView(-824534.42, 6082993.21, 8.7, 1)
 
+    // When right-clicking the same vessel as in vessel_track.spec.ts, on the next world copy
+    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
+
+    // Then
+    assertIsInsideViewport('*[data-cy="add-vessel-to-favorites"]')
+
+    cy.log('An interest point drawn on a wrapped world copy Should have WGS84 coordinates')
+    // When (the click on the button also closes the vessel map menu)
+    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
+    cy.get('body').should($body => {
+      expect($body.find('*[data-cy="add-vessel-to-favorites"]:visible')).to.have.length(0)
+    })
+    cy.get('#root').click(490, 580, { timeout: 10000 })
+
+    // Then
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('47° 4')
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('007° 5')
+    cy.get('*[data-cy="interest-point-coordinates"]').contains('W')
+    assertIsInsideViewport('*[data-cy="interest-point-coordinates"]')
+    cy.get('*[data-cy="interest-point-name-input"]').type('Tour du monde')
+    cy.get('*[data-cy="interest-point-save"]').click({ timeout: 10000 })
+
+    cy.log('A vessel and its alert Should be displayed and selected on a wrapped world copy')
     // When hovering the vessel copy
     cy.hoverOrClickVesselByName('EN RÉPÉTER PÈRE', 'VESSELS_POINTS', 'hover', 0, 1)
 
@@ -144,53 +178,40 @@ context('Map world wrap', () => {
 
     // Then the track point card is displayed next to the hovered copy
     assertIsInsideViewport('*[data-cy="vessel-track-card-longitude"]')
-  })
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+    cy.get('*[data-cy="vessel-sidebar"]').should('not.exist')
 
-  it('The vessel map menu Should be displayed next to the right-clicked vessel copy', () => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
-    cy.moveViewToWorldCopy(1)
+    cy.log('A mission overlay Should be displayed next to the clicked mission copy')
+    setMapView(-188008.06, 6245230.27, 8.7, 1)
 
-    // When right-clicking the same vessel as in vessel_track.spec.ts, on the next world copy
-    cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
+    // When
+    cy.get('#root').click(331, 789)
 
     // Then
-    assertIsInsideViewport('*[data-cy="add-vessel-to-favorites"]')
-  })
+    cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
+    assertIsInsideViewport('*[data-cy="mission-overlay"]')
 
-  it('An alert reporting overlay Should be displayed next to the hovered reporting copy', () => {
-    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
-    cy.visit('/#@-545000,6135000,10.50')
-    cy.wait('@displayReportings')
-    cy.wait(3000)
+    cy.log('An alert reporting overlay Should be displayed next to the hovered reporting copy')
+    setMapView(-545000, 6135000, 10.5, 1)
     cy.clickButton('Signalements')
     cy.clickButton('Afficher les signalements')
+    cy.wait('@displayReportings')
     cy.wait(1000)
-    cy.moveViewToWorldCopy(1)
 
     // When
     hoverReportingCopy('RENCONTRER VEILLER APPARTEMENT')
 
     // Then
     assertIsInsideViewport('[data-cy="reporting-overlay"]')
-  })
 
-  it('A reporting point drawn on a wrapped world copy Should be saved with WGS84 coordinates', () => {
-    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
-    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
-    cy.visit('/#@-545000,6135000,10.50')
-    cy.wait('@displayReportings')
-    cy.wait(3000)
-
-    cy.clickButton('Signalements')
-    cy.clickButton('Afficher les signalements')
+    cy.log('A reporting point drawn on a wrapped world copy Should be saved with WGS84 coordinates')
+    cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
     cy.clickButton('Créer un nouveau signalement INN')
     cy.get('input[name="reportingSource"][value="OTHER"]').click()
     cy.fill('Autres types de source', 'DIRM')
     cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
 
     // When the point is drawn on the next world copy
-    cy.moveViewToWorldCopy(1)
     cy.clickButton('Ajouter un point')
     cy.wait(250)
     cy.get('body').click(150, 150)
@@ -211,24 +232,24 @@ context('Map world wrap', () => {
       expect(request.body.longitude).to.be.within(-10, 0)
       expect(request.body.latitude).to.be.within(45, 52)
     })
-  })
+    cy.clickButton('Fermer')
+    cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
 
-  it('A reporting zone filter drawn on a wrapped world copy Should be sent with WGS84 coordinates', () => {
-    cy.intercept('GET', '/bff/v1/reportings/display*').as('displayReportings')
-    cy.visit('/#@-545000,6135000,10.50', stubSideWindowOptions)
-    cy.wait('@displayReportings')
-    cy.wait(1000)
+    cy.log('A reporting zone filter drawn on a wrapped world copy Should be sent with WGS84 coordinates')
     cy.intercept({
       method: 'GET',
       pathname: '/bff/v1/reportings/display',
       query: { zone: /^MULTIPOLYGON/ }
     }).as('displayReportingsInZone')
-
-    cy.clickButton('Signalements')
+    setMapView(-545000, 6135000, 10.5, -1)
+    cy.get('body').then($body => {
+      if ($body.find('*[data-cy="reporting-map-menu-box"]:visible').length === 0) {
+        cy.clickButton('Signalements')
+      }
+    })
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
 
     // When
-    cy.moveViewToWorldCopy(-1)
     cy.clickButton('Définir une zone de filtre manuelle')
     cy.get('body').click(490, 580)
     cy.get('body').click(420, 635)
@@ -243,36 +264,5 @@ context('Map world wrap', () => {
       expect(longitudes.length).to.be.greaterThan(3)
       longitudes.forEach(longitude => expect(longitude).to.be.within(-10, 0))
     })
-  })
-
-  it('A mission overlay Should be displayed next to the clicked mission copy', () => {
-    cy.intercept('GET', `/bff/v1/missions*`).as('missions')
-    cy.visit('/#@-188008.06,6245230.27,8.70')
-    cy.wait('@missions')
-    cy.wait(3000)
-    cy.moveViewToWorldCopy(1)
-
-    // When
-    cy.get('#root').click(331, 789)
-
-    // Then
-    cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
-    assertIsInsideViewport('*[data-cy="mission-overlay"]')
-  })
-
-  it('An interest point drawn on a wrapped world copy Should have WGS84 coordinates', () => {
-    cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(3000)
-    cy.moveViewToWorldCopy(1)
-
-    // When
-    cy.clickButton("Créer un point d'intérêt", { withoutScroll: true })
-    cy.get('#root').click(490, 580, { timeout: 10000 })
-
-    // Then
-    cy.get('*[data-cy="interest-point-coordinates"]').contains('47° 4')
-    cy.get('*[data-cy="interest-point-coordinates"]').contains('007° 5')
-    cy.get('*[data-cy="interest-point-coordinates"]').contains('W')
-    assertIsInsideViewport('*[data-cy="interest-point-coordinates"]')
   })
 })

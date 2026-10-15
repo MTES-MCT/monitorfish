@@ -1,3 +1,4 @@
+import { getCoordinatesInViewWorld } from '@features/Map/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Icon } from '@mtes-mct/monitor-ui'
 import Overlay from 'ol/Overlay'
@@ -20,7 +21,7 @@ export function LogbookMessageOverlay({ logbookOverlay }: LogbookMessageOverlayP
       new Overlay({
         element: logbookOverlayRef.current,
         offset: [0, -4],
-        position: logbookOverlay.coordinates,
+        position: getCoordinatesInViewWorld(logbookOverlay.coordinates),
         positioning: 'bottom-center'
       }),
     [logbookOverlay]

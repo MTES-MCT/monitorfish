@@ -1,5 +1,7 @@
+import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { MissionAction } from '@features/Mission/missionAction.types'
 import { drawMovedLabelLine } from '@features/Vessel/label.utils'
+import { get as getProjection } from 'ol/proj'
 
 import { MissionLabelLine } from '../../../../domain/entities/missionLabelLine'
 
@@ -38,7 +40,7 @@ export function getLabelsOfFeaturesInExtent(
     return []
   }
 
-  const featuresInExtent = missionsLayerSource.getFeaturesInExtent(extent) || []
+  const featuresInExtent = missionsLayerSource.getFeaturesInExtent(extent, getProjection(OPENLAYERS_PROJECTION)!) || []
   if (featuresInExtent.length > MAX_MISSIONS_LABELS_DISPLAYED) {
     return []
   }

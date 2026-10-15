@@ -1,10 +1,10 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { hoverOnMapFeature } from '@features/Map/useCases/hoverOnMapFeature'
+import { getTopmostFeatureAtPixel } from '@features/Map/utils'
 import { useCallback, useEffect, useRef } from 'react'
 
 import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
 import type { Feature, MapBrowserEvent } from 'ol'
-import type { FeatureLike } from 'ol/Feature'
 import type OpenLayerMap from 'ol/Map'
 
 export function useMapPointerMove(
@@ -23,7 +23,7 @@ export function useMapPointerMove(
       }
 
       const pixel = map.getEventPixel(event.originalEvent)
-      const feature = map.forEachFeatureAtPixel<FeatureLike>(pixel, hoveredFeature => hoveredFeature, {
+      const feature = getTopmostFeatureAtPixel(map, pixel, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer => layer.get('isHoverable') === true && layer.getOpacity() > 0
       })

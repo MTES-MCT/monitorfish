@@ -1,5 +1,6 @@
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getLabelLineCoordinates } from '@features/Vessel/label.utils'
 import {
   filterNonSelectedVessels,
   getVesselFeaturesInExtent,
@@ -70,10 +71,13 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
       if (vesselToCoordinates.has(featureId)) {
         const existingLabelLineFeature = VESSELS_LABEL_VECTOR_SOURCE.getFeatureById(featureId)
         if (existingLabelLineFeature) {
-          existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
+          existingLabelLineFeature.setGeometry(new LineString(getLabelLineCoordinates(fromCoordinates, toCoordinates)))
         }
       } else {
-        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId)
+        const labelLineFeature = VesselLabelLine.getFeature(
+          ...getLabelLineCoordinates(fromCoordinates, toCoordinates),
+          featureId
+        )
 
         VESSELS_LABEL_VECTOR_SOURCE.addFeature(labelLineFeature)
       }

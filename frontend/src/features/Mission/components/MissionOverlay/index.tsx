@@ -4,7 +4,7 @@ import { getOverlayPosition, getTopLeftMargin } from '@features/Map/components/O
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { getMapResolution } from '@features/Map/utils'
+import { getCoordinatesInViewWorld, getMapResolution } from '@features/Map/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
@@ -82,7 +82,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
   }, [])
 
   const getNextOverlayPosition = useCallback(() => {
-    const [x, y] = feature.getGeometry().getCoordinates()
+    const [x, y] = getCoordinatesInViewWorld(feature.getGeometry().getCoordinates())
     const extent = monitorfishMap.getView().calculateExtent()
 
     const boxSize = getMapResolution() * overlayHeight
@@ -112,7 +112,7 @@ export function MissionOverlay({ feature, isSelected = false }) {
 
     setMissionProperties(feature.getProperties() as Mission.MissionPointFeatureProperties)
     overlayRef.current.style.display = 'block'
-    overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
+    overlayObjectRef.current.setPosition(getCoordinatesInViewWorld(feature.getGeometry().getCoordinates()))
 
     const nextOverlayPosition = getNextOverlayPosition()
     setOverlayPosition(nextOverlayPosition)

@@ -8,8 +8,10 @@ import {
 import { dottedLayerStyle } from '@features/Map/layers/styles/dottedLayer.style'
 import { drawStyle, editStyle } from '@features/Map/layers/styles/draw.style'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { moveGeometryToViewWorld } from '@features/Map/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { moveGeometryToMainWorld } from '@utils/worldCopy'
 import { isEmpty } from 'lodash-es'
 import { Feature } from 'ol'
 import GeoJSON from 'ol/format/GeoJSON'
@@ -40,9 +42,13 @@ function UnmemoizedDrawLayer() {
       return undefined
     }
 
-    return new GeoJSON({
+    const nextFeature = new GeoJSON({
       featureProjection: OPENLAYERS_PROJECTION
     }).readFeature(currentGeometry) as Feature<Geometry>
+    // Modify only grabs the vertices of the real feature, not of its wrapped copies
+    moveGeometryToViewWorld(nextFeature.getGeometry())
+
+    return nextFeature
   }, [drawedGeometry, initialGeometry])
 
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
@@ -99,7 +105,7 @@ function UnmemoizedDrawLayer() {
     (event: ModifyEvent) => {
       const nextGeometry = event.features.item(0).getGeometry()
       if (nextGeometry) {
-        dispatch(setDrawedGeometry(nextGeometry))
+        dispatch(setDrawedGeometry(moveGeometryToMainWorld(nextGeometry.clone())))
       }
     },
     [dispatch]

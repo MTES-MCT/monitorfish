@@ -1,12 +1,12 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { clickOnMapFeature } from '@features/Map/useCases/clickOnMapFeature'
+import { getTopmostFeatureAtPixel } from '@features/Map/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { platformModifierKeyOnly } from 'ol/events/condition'
 import { useCallback, useEffect } from 'react'
 
 import type { MainAppThunk } from '@store'
 import type { MapBrowserEvent } from 'ol'
-import type { FeatureLike } from 'ol/Feature'
 import type OpenLayerMap from 'ol/Map'
 
 export function useMapClick(map: OpenLayerMap) {
@@ -18,7 +18,7 @@ export function useMapClick(map: OpenLayerMap) {
         return
       }
 
-      const feature = map.forEachFeatureAtPixel<FeatureLike>(event.pixel, clicked => clicked, {
+      const feature = getTopmostFeatureAtPixel(map, event.pixel, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE,
         layerFilter: layer => layer.get('isClickable') === true && layer.getOpacity() > 0
       })

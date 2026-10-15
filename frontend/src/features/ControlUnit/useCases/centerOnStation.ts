@@ -1,5 +1,6 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { fitMapToExtent } from '@features/Map/useCases/animateMap'
+import { getCoordinatesInViewWorld } from '@features/Map/utils'
 import { stationActions } from '@features/Station/slice'
 import { FrontendError } from '@libs/FrontendError'
 import { fromLonLat } from 'ol/proj'
@@ -22,7 +23,7 @@ export const centerOnStation = (stations: Station.Station[] | Station.StationDat
     const stationCoordinates = fromLonLat([station.longitude, station.latitude])
 
     // Add this as a `monitorfishMap` method (vanilla).
-    monitorfishMap.getView().animate({ center: stationCoordinates })
+    monitorfishMap.getView().animate({ center: getCoordinatesInViewWorld(stationCoordinates) })
   } else {
     const bufferedHighlightedStationsExtent = getBufferedExtentFromStations(stations, 0.5)
 

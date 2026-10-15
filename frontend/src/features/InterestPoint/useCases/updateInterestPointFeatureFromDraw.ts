@@ -1,6 +1,7 @@
 import { interestPointActions, interestPointSelectors } from '@features/InterestPoint/slice'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { moveGeometryToMainWorld } from '@utils/worldCopy'
 import Feature from 'ol/Feature'
 import GeoJSON from 'ol/format/GeoJSON'
 
@@ -16,6 +17,10 @@ export const updateInterestPointFeatureFromDraw = (feature: Feature) => (dispatc
 
   feature.setId(interestPointIdEdited)
   feature.setProperties(interestPointEdited.properties)
+  const geometry = feature.getGeometry()
+  if (geometry) {
+    moveGeometryToMainWorld(geometry)
+  }
 
   const geoJSONFeature = getGeoJSONFromFeature(feature)
 

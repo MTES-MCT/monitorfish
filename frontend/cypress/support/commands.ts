@@ -9,6 +9,7 @@ import { getViewCenter } from './commands/getViewCenter'
 import { hoverOrClickVesselByName } from './commands/hoverOrClickVesselByName'
 import { injectAxe } from './commands/injectAxe'
 import { login } from './commands/login'
+import { moveViewToWorldCopy } from './commands/moveViewToWorldCopy'
 
 registerMonitorUiCustomCommands()
 
@@ -29,4 +30,5 @@ Cypress.Commands.add('getDownloadedFileContent', getDownloadedFileContent)
 Cypress.Commands.add('hoverOrClickVesselByName', hoverOrClickVesselByName)
 Cypress.Commands.add('resetCountRequestsByAlias', resetCountRequestsByAlias)
 Cypress.Commands.add('login', login)
+Cypress.Commands.add('moveViewToWorldCopy', moveViewToWorldCopy)
 Cypress.Commands.add('injectAxe', injectAxe)

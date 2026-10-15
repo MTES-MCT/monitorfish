@@ -1,6 +1,6 @@
 import { useMoveOverlayWhenDragging } from '@features/Map/components/Overlay/hooks/useMoveOverlayWhenDragging'
 import { MonitorFishMap } from '@features/Map/Map.types'
-import { getMapResolution } from '@features/Map/utils'
+import { getCoordinatesInViewWorld, getMapResolution } from '@features/Map/utils'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import Overlay from 'ol/Overlay'
@@ -80,7 +80,7 @@ export function ControlOverlay({ feature, isSelected = false }) {
   }, [overlayObjectRef])
 
   const getNextOverlayPosition = useCallback(() => {
-    const [x, y] = feature.getGeometry().getCoordinates()
+    const [x, y] = getCoordinatesInViewWorld(feature.getGeometry().getCoordinates())
     const extent = monitorfishMap.getView().calculateExtent()
     const boxSize = getMapResolution() * overlayHeight
 
@@ -109,7 +109,7 @@ export function ControlOverlay({ feature, isSelected = false }) {
 
     setControlProperties(feature.getProperties() as Mission.MissionActionFeatureProperties)
     overlayRef.current.style.display = 'block'
-    overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
+    overlayObjectRef.current.setPosition(getCoordinatesInViewWorld(feature.getGeometry().getCoordinates()))
 
     const nextOverlayPosition = getNextOverlayPosition()
     setOverlayTopLeftMargin(getTopLeftMargin(nextOverlayPosition, margins))

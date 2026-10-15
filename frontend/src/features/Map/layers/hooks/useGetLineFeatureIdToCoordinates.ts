@@ -1,3 +1,4 @@
+import { getLabelLineCoordinates } from '@features/Vessel/label.utils'
 import LineString from 'ol/geom/LineString'
 import { useCallback, useState } from 'react'
 
@@ -11,10 +12,13 @@ export function useGetLineFeatureIdToCoordinates(vectorSource) {
       if (featureIdToCoordinates.has(featureId)) {
         const existingLabelLineFeature = vectorSource.getFeatureById(featureId)
         if (existingLabelLineFeature) {
-          existingLabelLineFeature.setGeometry(new LineString([fromCoordinates, toCoordinates]))
+          existingLabelLineFeature.setGeometry(new LineString(getLabelLineCoordinates(fromCoordinates, toCoordinates)))
         }
       } else {
-        const labelLineFeature = VesselLabelLine.getFeature(fromCoordinates, toCoordinates, featureId)
+        const labelLineFeature = VesselLabelLine.getFeature(
+          ...getLabelLineCoordinates(fromCoordinates, toCoordinates),
+          featureId
+        )
 
         vectorSource.addFeature(labelLineFeature)
       }

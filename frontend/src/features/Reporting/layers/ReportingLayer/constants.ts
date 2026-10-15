@@ -6,7 +6,7 @@ import { Vector } from 'ol/layer'
 import WebGLPointsLayer from 'ol/layer/WebGLPoints'
 import VectorSource from 'ol/source/Vector'
 
-export const REPORTINGS_VECTOR_SOURCE = new VectorSource({ wrapX: false })
+export const REPORTINGS_VECTOR_SOURCE = new VectorSource()
 
 export const REPORTINGS_VECTOR_LAYER = new WebGLPointsLayer({
   className: LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].code,
@@ -20,7 +20,7 @@ REPORTINGS_VECTOR_LAYER.setProperties({
   isHoverable: true
 })
 
-export const REPORTINGS_LINE_VECTOR_SOURCE = new VectorSource({ wrapX: false })
+export const REPORTINGS_LINE_VECTOR_SOURCE = new VectorSource()
 
 export const REPORTINGS_LINE_VECTOR_LAYER = new Vector({
   source: REPORTINGS_LINE_VECTOR_SOURCE,
@@ -28,7 +28,7 @@ export const REPORTINGS_LINE_VECTOR_LAYER = new Vector({
   zIndex: (LayerProperties[MonitorFishMap.MonitorFishLayer.REPORTING].zIndex ?? 500) - 1
 })
 
-export const REPORTINGS_ZONE_FILTER_VECTOR_SOURCE = new VectorSource({ wrapX: false })
+export const REPORTINGS_ZONE_FILTER_VECTOR_SOURCE = new VectorSource()
 
 export const REPORTINGS_ZONE_FILTER_VECTOR_LAYER = new Vector({
   source: REPORTINGS_ZONE_FILTER_VECTOR_SOURCE,

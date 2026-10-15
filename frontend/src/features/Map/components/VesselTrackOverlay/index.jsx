@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { VesselTrackCard } from './VesselTrackCard.jsx'
 import { LayerProperties } from '../../constants'
 import { monitorfishMap } from '../../monitorfishMap'
-import { getMapResolution } from '../../utils'
+import { getCoordinatesInViewWorld, getMapResolution } from '../../utils'
 import { getOverlayPosition, getTopLeftMargin } from '../Overlay/utils.ts'
 
 const overlayBoxSize = 240
@@ -48,7 +48,7 @@ export function VesselTrackOverlay({ feature }) {
   }, [overlayObjectRef])
 
   function getNextOverlayPosition() {
-    const [x, y] = feature.getGeometry().getCoordinates()
+    const [x, y] = getCoordinatesInViewWorld(feature.getGeometry().getCoordinates())
     const extent = monitorfishMap.getView().calculateExtent()
     const boxSize = getMapResolution() * overlayBoxSize
 
@@ -64,7 +64,7 @@ export function VesselTrackOverlay({ feature }) {
       ) {
         setVesselFeatureToShowOnCard(feature)
         overlayRef.current.style.display = 'block'
-        overlayObjectRef.current.setPosition(feature.getGeometry().getCoordinates())
+        overlayObjectRef.current.setPosition(getCoordinatesInViewWorld(feature.getGeometry().getCoordinates()))
 
         const nextOverlayPosition = getNextOverlayPosition()
         setOverlayPosition(nextOverlayPosition)

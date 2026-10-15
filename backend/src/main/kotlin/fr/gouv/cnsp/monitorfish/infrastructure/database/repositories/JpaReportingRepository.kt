@@ -288,6 +288,9 @@ class JpaReportingRepository(
     override fun findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage(): List<Int> =
         dbReportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage()
 
+    override fun findOutdatedReportingsForSmallVessels(): List<Int> =
+        dbReportingRepository.findOutdatedReportingsForSmallVessels()
+
     override fun archiveReportings(ids: List<Int>): Int = dbReportingRepository.archiveReportings(ids)
 
     @Transactional

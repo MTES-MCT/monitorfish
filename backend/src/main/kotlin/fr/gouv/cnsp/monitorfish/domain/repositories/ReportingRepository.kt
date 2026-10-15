@@ -53,6 +53,8 @@ interface ReportingRepository {
 
     fun findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage(): List<Int>
 
+    fun findOutdatedReportingsForSmallVessels(): List<Int>
+
     fun archive(id: Int)
 
     fun archiveReportings(ids: List<Int>): Int

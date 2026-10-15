@@ -23,6 +23,8 @@ class ArchiveOutdatedReportings(
         val expiredReportingsToArchive = reportingRepository.findExpiredReportings()
         val nonAlertDepReportingsToArchive =
             reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage()
+        val outdatedSmallVesselReportingsToArchive =
+            reportingRepository.findOutdatedReportingsForSmallVessels()
 
         val alertSpecificationsToArchive =
             alertSpecificationRepository
@@ -43,9 +45,13 @@ class ArchiveOutdatedReportings(
         logger.info("Found ${filteredReportingIdsToArchive.size} alert reportings to archive after new voyage.")
         logger.info("Found ${nonAlertDepReportingsToArchive.size} non-alert UNTIL_NEXT_DEP reportings to archive.")
         logger.info("Found ${expiredReportingsToArchive.size} expired reportings to archive.")
+        logger.info("Found ${outdatedSmallVesselReportingsToArchive.size} reportings for small vessels to archive.")
         val numberOfArchivedReportings =
             reportingRepository.archiveReportings(
-                filteredReportingIdsToArchive + expiredReportingsToArchive + nonAlertDepReportingsToArchive,
+                filteredReportingIdsToArchive +
+                    expiredReportingsToArchive +
+                    nonAlertDepReportingsToArchive +
+                    outdatedSmallVesselReportingsToArchive,
             )
 
         logger.info("Archived $numberOfArchivedReportings reportings")

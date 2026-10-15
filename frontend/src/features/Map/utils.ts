@@ -9,8 +9,12 @@ import type { MonitorFishMap } from '@features/Map/Map.types'
 import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
 import type { Coordinate } from 'ol/coordinate'
 import type { Extent } from 'ol/extent'
+import type { FeatureLike } from 'ol/Feature'
 import type { MultiPolygon, Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
+import type OpenLayerMap from 'ol/Map'
+import type { AtPixelOptions } from 'ol/Map'
+import type { Pixel } from 'ol/pixel'
 
 export const getLayerNameNormalized = layer => [layer.type, layer.topic, layer.zone].filter(Boolean).join(':')
 
@@ -101,6 +105,34 @@ export function getCoordinatesInViewWorld<T extends Coordinate | undefined>(coor
 
 export function getExtentInViewWorld(extent: Extent): Extent {
   return getExtentInWorldCopyOf(extent, getViewCenterX())
+}
+
+/**
+ * Returns the feature at `pixel` of the layer with the highest z-index.
+ * `map.forEachFeatureAtPixel()` stops at the first hit, but on a world copy OpenLayers hits canvas layers
+ * (on the main world coordinate) before WebGL layers (on the displayed world copy), whatever their z-index.
+ */
+export function getTopmostFeatureAtPixel(
+  map: OpenLayerMap,
+  pixel: Pixel,
+  options: AtPixelOptions
+): FeatureLike | undefined {
+  let topmostFeature: FeatureLike | undefined
+  let topmostZIndex = -Infinity
+
+  map.forEachFeatureAtPixel(
+    pixel,
+    (feature, layer) => {
+      const zIndex = layer?.getZIndex() ?? -Infinity
+      if (!topmostFeature || zIndex > topmostZIndex) {
+        topmostFeature = feature
+        topmostZIndex = zIndex
+      }
+    },
+    options
+  )
+
+  return topmostFeature
 }
 
 /** Moves, in place, a geometry to the world copy displayed by the map. */

@@ -3,7 +3,11 @@ import Feature from 'ol/Feature'
 import { Geometry, Polygon } from 'ol/geom'
 
 import { dummyMultiPolygonGeoJSON } from './mocks'
-import { addGeometryToMultiPolygonGeoJSON, keepOnlyInitialGeometriesOfMultiPolygon } from '../utils'
+import {
+  addGeometryToMultiPolygonGeoJSON,
+  getTopmostFeatureAtPixel,
+  keepOnlyInitialGeometriesOfMultiPolygon
+} from '../utils'
 
 describe('@features/Map/utils.ts', () => {
   it('.addGeometryToMultiPolygonGeoJSON() Should add a geometry with OpenLayers projection to an existing MultiPolygon GeoJSON', () => {
@@ -133,5 +137,39 @@ describe('@features/Map/utils.ts', () => {
       ],
       type: 'MultiPolygon'
     })
+  })
+})
+
+describe('getTopmostFeatureAtPixel()', () => {
+  // On a world copy, OpenLayers hits canvas layers (on the main world coordinate) before WebGL layers
+  // (on the displayed world copy), whatever their z-index
+  function getMapHitting(hits: Array<[string, number]>) {
+    return {
+      forEachFeatureAtPixel: (_pixel, callback) => {
+        hits.some(([featureId, zIndex]) => callback({ getId: () => featureId }, { getZIndex: () => zIndex }))
+      }
+    } as any
+  }
+
+  it('Should return the feature of the layer with the highest z-index', () => {
+    const map = getMapHitting([
+      ['VESSEL_ESTIMATED_POSITION:1', 99],
+      ['VESSELS_POINTS:1', 1000]
+    ])
+
+    expect(getTopmostFeatureAtPixel(map, [0, 0], {})?.getId()).toEqual('VESSELS_POINTS:1')
+  })
+
+  it('Should return the first feature hit When features are in the same layer', () => {
+    const map = getMapHitting([
+      ['VESSELS_POINTS:1', 1000],
+      ['VESSELS_POINTS:2', 1000]
+    ])
+
+    expect(getTopmostFeatureAtPixel(map, [0, 0], {})?.getId()).toEqual('VESSELS_POINTS:1')
+  })
+
+  it('Should return undefined When no feature is hit', () => {
+    expect(getTopmostFeatureAtPixel(getMapHitting([]), [0, 0], {})).toBeUndefined()
   })
 })

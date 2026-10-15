@@ -1,5 +1,6 @@
 import { HIT_PIXEL_TO_TOLERANCE } from '@constants/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
+import { getTopmostFeatureAtPixel } from '@features/Map/utils'
 import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Point } from 'ol/geom'
@@ -22,7 +23,7 @@ export function RightClickMapMenu() {
       event.preventDefault()
 
       const pixel = monitorfishMap.getEventPixel(event)
-      const feature = monitorfishMap.forEachFeatureAtPixel(pixel, pixelFeature => pixelFeature, {
+      const feature = getTopmostFeatureAtPixel(monitorfishMap, pixel, {
         hitTolerance: HIT_PIXEL_TO_TOLERANCE
       })
       const clickedFeatureId = feature?.getId()

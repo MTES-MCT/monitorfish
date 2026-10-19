@@ -3,6 +3,7 @@ import { CoordinatesFormat, MeasurementType, OPENLAYERS_PROJECTION, WSG84_PROJEC
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { coordinatesAreDistinct, CoordinatesInput, getCoordinates } from '@mtes-mct/monitor-ui'
+import { getCoordinatesInMainWorld } from '@utils/worldCopy'
 import { transform } from 'ol/proj'
 import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
@@ -29,7 +30,7 @@ export function CustomCircleRange({ isOpened }) {
     }
 
     return getCoordinates(
-      circleMeasurementInDrawing?.coordinates,
+      getCoordinatesInMainWorld(circleMeasurementInDrawing.coordinates),
       OPENLAYERS_PROJECTION,
       CoordinatesFormat.DECIMAL_DEGREES,
       false

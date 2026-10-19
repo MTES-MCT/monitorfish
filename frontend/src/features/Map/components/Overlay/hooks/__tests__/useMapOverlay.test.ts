@@ -1,6 +1,7 @@
 import { OverlayPosition } from '@features/Map/components/Overlay/types'
-import { describe, expect, it } from '@jest/globals'
+import { beforeEach, describe, expect, it } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react'
+import { WORLD_WIDTH } from '@utils/worldCopy'
 import Overlay from 'ol/Overlay'
 
 import { useMapOverlay } from '../useMapOverlay'
@@ -18,19 +19,30 @@ jest.mock('ol/Overlay', () => ({
   }))
 }))
 
+let mockViewWorldIndex = 0
+
+function getMockViewShift() {
+  return mockViewWorldIndex * jest.requireActual<typeof import('@utils/worldCopy')>('@utils/worldCopy').WORLD_WIDTH
+}
+
 jest.mock('@features/Map/monitorfishMap', () => ({
   monitorfishMap: {
     addOverlay: jest.fn(),
     getCoordinateFromPixel: jest.fn(),
     getPixelFromCoordinate: jest.fn(),
     getView: () => ({
-      calculateExtent: jest.fn().mockReturnValue([0, 0, 1000, 1000])
+      calculateExtent: jest.fn().mockReturnValue([getMockViewShift(), 0, getMockViewShift() + 1000, 1000])
     }),
     removeOverlay: jest.fn()
   }
 }))
 
 jest.mock('@features/Map/utils', () => ({
+  getCoordinatesInViewWorld: (coordinates: number[] | undefined) =>
+    coordinates &&
+    jest
+      .requireActual<typeof import('@utils/worldCopy')>('@utils/worldCopy')
+      .getCoordinatesInWorldCopyOf(coordinates, getMockViewShift() + 500),
   getMapResolution: jest.fn().mockReturnValue(1)
 }))
 
@@ -52,6 +64,10 @@ function getOverlayInstance() {
 }
 
 describe('useMapOverlay()', () => {
+  beforeEach(() => {
+    mockViewWorldIndex = 0
+  })
+
   it('Should initialise overlayPosition to BOTTOM when margins are provided', () => {
     const { result } = renderHook(() =>
       useMapOverlay({ coordinates: COORDINATES, margins: MARGINS, overlayHeight: 100 })
@@ -86,6 +102,17 @@ describe('useMapOverlay()', () => {
     renderHook(() => useMapOverlay({ coordinates: COORDINATES, margins: MARGINS, overlayHeight: 100 }))
 
     // center (500,500) → BOTTOM → offset [-60, 60]
+    expect(getOverlayInstance().setOffset).toHaveBeenCalledWith([-60, 60])
+  })
+
+  it('Should position the overlay on the world copy displayed by the map', () => {
+    // The user panned once around the globe: the feature hovered is the copy of the next world
+    mockViewWorldIndex = 1
+
+    renderHook(() => useMapOverlay({ coordinates: COORDINATES, margins: MARGINS, overlayHeight: 100 }))
+
+    expect(getOverlayInstance().setPosition).toHaveBeenCalledWith([500 + WORLD_WIDTH, 500])
+    // Same quadrant as in the main world: center of the view → BOTTOM → offset [-60, 60]
     expect(getOverlayInstance().setOffset).toHaveBeenCalledWith([-60, 60])
   })
 

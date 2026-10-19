@@ -1,5 +1,6 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { describe, expect, it } from '@jest/globals'
+import { WORLD_WIDTH } from '@utils/worldCopy'
 import { Geometry } from 'ol/geom'
 import Map from 'ol/Map'
 
@@ -31,7 +32,11 @@ describe('utils/getDialogWindowPositionFromFeature()', () => {
   const callGetDialogWindowPositionFromFeature = () =>
     getDialogWindowPositionFromFeature(featureMock, dialogElementMock, TEST_FEATURE_MARGINS, TEST_WINDOW_MARGINS)
 
+  let viewCenterX = 0
+
   beforeEach(() => {
+    viewCenterX = 0
+    MockedMap.prototype.getView = jest.fn().mockReturnValue({ getCenter: () => [viewCenterX, 0] })
     global.window.innerWidth = 800
     global.window.innerHeight = 600
 
@@ -86,5 +91,15 @@ describe('utils/getDialogWindowPositionFromFeature()', () => {
     MockedMap.prototype.getPixelFromCoordinate.mockReturnValue([750, 550]) // Bottom-right corner of the 800x600 window
 
     expect(callGetDialogWindowPositionFromFeature()).toEqual([299, 636])
+  })
+
+  it('should position dialog next to the feature copy of the world copy displayed by the map', () => {
+    // The user panned once around the globe
+    viewCenterX = WORLD_WIDTH
+    MockedMap.prototype.getPixelFromCoordinate.mockReturnValue([400, 300])
+
+    callGetDialogWindowPositionFromFeature()
+
+    expect(MockedMap.prototype.getPixelFromCoordinate).toHaveBeenLastCalledWith([WORLD_WIDTH, 100])
   })
 })

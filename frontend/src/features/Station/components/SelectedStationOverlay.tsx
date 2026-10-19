@@ -1,4 +1,5 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getExtentInViewWorld } from '@features/Map/utils'
 import { useForceUpdate } from '@mtes-mct/monitor-ui'
 import { Overlay } from 'ol'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
@@ -52,7 +53,8 @@ export function SelectedStationOverlay() {
         element: wrapperElement
       })
       nextOverlay.setProperties({ entityId: feature.entityId })
-      nextOverlay.setPosition(feature.getGeometry()?.getExtent())
+      const extent = feature.getGeometry()?.getExtent()
+      nextOverlay.setPosition(extent && getExtentInViewWorld(extent))
       nextOverlay.setOffset(currentOffsetRef.current)
 
       removeOverlay()

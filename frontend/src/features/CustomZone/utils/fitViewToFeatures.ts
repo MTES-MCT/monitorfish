@@ -1,4 +1,5 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { getExtentInViewWorld } from '@features/Map/utils'
 import VectorSource from 'ol/source/Vector'
 
 import type { Feature } from 'ol'
@@ -11,7 +12,7 @@ export function fitViewToFeatures(features: Feature<Geometry>[]) {
 
   const extent = vectorSource.getExtent()
   if (extent) {
-    monitorfishMap.getView().fit(extent, {
+    monitorfishMap.getView().fit(getExtentInViewWorld(extent), {
       padding: [30, 30, 30, 30]
     })
   }

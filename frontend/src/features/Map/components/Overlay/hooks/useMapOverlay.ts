@@ -3,7 +3,7 @@ import { useMoveOverlayWhenZooming } from '@features/Map/components/Overlay/hook
 import { type OverlayCardMargins, OverlayPosition } from '@features/Map/components/Overlay/types'
 import { computeSmartPositionAndOffset } from '@features/Map/components/Overlay/utils'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
-import { getMapResolution } from '@features/Map/utils'
+import { getCoordinatesInViewWorld, getMapResolution } from '@features/Map/utils'
 import { noop } from 'lodash-es'
 import Overlay from 'ol/Overlay'
 import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -38,7 +38,7 @@ type UseMapOverlayParams = {
   zoomHasChanged?: number | undefined
 }
 export function useMapOverlay({
-  coordinates,
+  coordinates: featureCoordinates,
   initialOffset = [0, 0],
   margins,
   onDrag,
@@ -47,6 +47,8 @@ export function useMapOverlay({
   zIndex,
   zoomHasChanged
 }: UseMapOverlayParams): UseMapOverlayResult {
+  // The feature may be displayed on a world copy (the map wraps around the globe)
+  const coordinates = useMemo(() => getCoordinatesInViewWorld(featureCoordinates), [featureCoordinates])
   const overlayElementRef = useRef<HTMLDivElement>(null)
   const currentOffset = useRef(initialOffset)
   const coordinatesRef = useRef(coordinates)

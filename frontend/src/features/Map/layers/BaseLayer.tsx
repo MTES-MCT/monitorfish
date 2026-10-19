@@ -63,8 +63,7 @@ function UnmemoizedBaseLayer() {
             tileLoadFunction: loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=${CARTO_KEY}`
-            ),
-            wrapX: false
+            )
           }),
           zIndex: 0
         }),
@@ -79,8 +78,7 @@ function UnmemoizedBaseLayer() {
             tileLoadFunction: isInLightMode ? undefined : loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${CARTO_KEY}`
-            ),
-            wrapX: false
+            )
           }),
           zIndex: 0
         }),
@@ -89,8 +87,7 @@ function UnmemoizedBaseLayer() {
           className: LayerProperties.BASE_LAYER.code,
           source: new OSM({
             attributions:
-              '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-            wrapX: false
+              '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
           }),
           zIndex: 0
         }),
@@ -101,8 +98,7 @@ function UnmemoizedBaseLayer() {
             maxZoom: 19,
             url: `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=${
               import.meta.env.FRONTEND_MAPBOX_KEY
-            }`,
-            wrapX: false
+            }`
           }),
           zIndex: 0
         }),
@@ -114,8 +110,7 @@ function UnmemoizedBaseLayer() {
             serverType: 'geoserver',
             // Countries have transparency, so do not fade tiles:
             transition: 0,
-            url: `https://services.data.shom.fr/${import.meta.env.FRONTEND_SHOM_KEY}/wms/r`,
-            wrapX: false
+            url: `https://services.data.shom.fr/${import.meta.env.FRONTEND_SHOM_KEY}/wms/r`
           }),
           zIndex: 0
         })

@@ -1,4 +1,4 @@
-import { getMapResolution, getMapZoom } from '@features/Map/utils'
+import { getCoordinatesInViewWorld, getExtentInViewWorld, getMapResolution, getMapZoom } from '@features/Map/utils'
 
 import { monitorfishMap } from '../monitorfishMap'
 
@@ -6,7 +6,10 @@ import type { Extent } from 'ol/extent'
 
 const SIDEBAR_OFFSET_FACTOR = 200
 
-export function animateToVesselCoordinates(coordinates: [number, number], isVesselSidebarOpen: boolean) {
+export function animateToVesselCoordinates(vesselCoordinates: [number, number], isVesselSidebarOpen: boolean) {
+  // Stay on the world copy displayed by the map instead of flying back around the globe
+  const coordinates = getCoordinatesInViewWorld(vesselCoordinates)
+
   if (getMapZoom() >= 8) {
     const sidebarOffset = isVesselSidebarOpen ? getMapResolution() * SIDEBAR_OFFSET_FACTOR : 0
 
@@ -28,9 +31,11 @@ export function animateToVesselCoordinates(coordinates: [number, number], isVess
 }
 
 export function fitMapToVesselTrack(extent: Extent, callback?: () => void) {
-  monitorfishMap.getView().fit(extent, { callback, duration: 500, maxZoom: 10, padding: [100, 550, 100, 50] })
+  monitorfishMap
+    .getView()
+    .fit(getExtentInViewWorld(extent), { callback, duration: 500, maxZoom: 10, padding: [100, 550, 100, 50] })
 }
 
 export function fitMapToExtent(extent: Extent) {
-  monitorfishMap.getView().fit(extent, { duration: 200, maxZoom: 12, padding: [30, 30, 30, 30] })
+  monitorfishMap.getView().fit(getExtentInViewWorld(extent), { duration: 200, maxZoom: 12, padding: [30, 30, 30, 30] })
 }

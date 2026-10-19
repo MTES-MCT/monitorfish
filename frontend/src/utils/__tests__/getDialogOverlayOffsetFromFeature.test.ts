@@ -32,7 +32,11 @@ describe('utils/getDialogOverlayOffsetFromFeature()', () => {
   const callGetDialogOverlayOffsetFromFeature = () =>
     getDialogOverlayOffsetFromFeature(featureMock, dialogElementMock, TEST_FEATURE_MARGINS, TEST_WINDOW_MARGINS)
 
+  let viewCenterX = 0
+
   beforeEach(() => {
+    viewCenterX = 0
+    MockedMap.prototype.getView = jest.fn().mockReturnValue({ getCenter: () => [viewCenterX, 0] })
     global.window.innerWidth = 800
     global.window.innerHeight = 600
 

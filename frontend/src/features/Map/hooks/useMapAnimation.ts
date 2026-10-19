@@ -1,4 +1,5 @@
 import { resetAnimateToRegulatoryLayer } from '@features/Map/slice'
+import { getCoordinatesInViewWorld, getExtentInViewWorld } from '@features/Map/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useCallback, useEffect, useRef } from 'react'
@@ -17,7 +18,7 @@ export function useMapAnimation(isInitRenderDone: RefObject<boolean>) {
     (_animateToRegulatoryLayer: any) => {
       if (_animateToRegulatoryLayer && !isAnimating.current && isInitRenderDone.current) {
         if (_animateToRegulatoryLayer.extent) {
-          monitorfishMap.getView().fit(_animateToRegulatoryLayer.extent, {
+          monitorfishMap.getView().fit(getExtentInViewWorld(_animateToRegulatoryLayer.extent), {
             callback: () => dispatch(resetAnimateToRegulatoryLayer()),
             duration: 1000
           })
@@ -27,7 +28,10 @@ export function useMapAnimation(isInitRenderDone: RefObject<boolean>) {
 
         if (_animateToRegulatoryLayer.center) {
           const animateObject: AnimationOptions = {
-            center: [_animateToRegulatoryLayer.center[0], _animateToRegulatoryLayer.center[1]],
+            center: getCoordinatesInViewWorld([
+              _animateToRegulatoryLayer.center[0],
+              _animateToRegulatoryLayer.center[1]
+            ]),
             duration: 1000
           }
 

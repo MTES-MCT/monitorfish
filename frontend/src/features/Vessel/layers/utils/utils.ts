@@ -16,7 +16,9 @@ export const getVesselFeaturesInExtent = throttle(
       // @ts-ignore
       ?.getSource()
 
-    return vesselsLayer?.getFeaturesInExtent(monitorfishMap.getView().calculateExtent()) || []
+    const view = monitorfishMap.getView()
+
+    return vesselsLayer?.getFeaturesInExtent(view.calculateExtent(), view.getProjection()) || []
   },
   250,
   { leading: true }

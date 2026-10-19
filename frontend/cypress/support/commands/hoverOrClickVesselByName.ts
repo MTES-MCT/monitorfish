@@ -1,8 +1,12 @@
+import { WORLD_WIDTH_IN_METERS } from './moveViewToWorldCopy'
+
 export function hoverOrClickVesselByName(
   vesselName: string,
   layerName: string = 'VESSELS_POINTS',
   action: 'hover' | 'click' = 'hover',
-  topNegativeOffset: number = 0
+  topNegativeOffset: number = 0,
+  /** Targets the vessel's copy `worldOffset` worlds away (as displayed after panning around the globe). */
+  worldOffset: number = 0
 ): Cypress.Chainable {
   return cy.get(`.${layerName}`).then($mapElement =>
     cy.window().then(win => {
@@ -14,7 +18,8 @@ export function hoverOrClickVesselByName(
         throw new Error(`Vessel "${vesselName}" not found in ${layerName} layer`)
       }
 
-      const coordinates = vessel.getGeometry().getCoordinates()
+      const [vesselX, vesselY] = vessel.getGeometry().getCoordinates()
+      const coordinates = [vesselX + worldOffset * WORLD_WIDTH_IN_METERS, vesselY]
 
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       const [mapWidth, mapHeight] = win.olTestUtils.getMapSize() ?? [1280, 1024]

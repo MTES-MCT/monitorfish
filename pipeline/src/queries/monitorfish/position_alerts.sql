@@ -21,6 +21,7 @@ SELECT
     min_depth,
     flag_states_iso2,
     vessel_ids,
+    excluded_vessel_ids,
     district_codes,
     producer_organizations
 FROM position_alerts

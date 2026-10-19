@@ -26,6 +26,9 @@ export function getAlertCriteriaSummary(alertSpecification: AlertSpecification):
   if (alertSpecification.vesselIds.length > 0) {
     summary = summary.concat('Navires')
   }
+  if (alertSpecification.excludedVesselIds.length > 0) {
+    summary = summary.concat('Navires exclus')
+  }
   if (alertSpecification.species.length > 0) {
     summary = summary.concat('Espèces à bord')
   }

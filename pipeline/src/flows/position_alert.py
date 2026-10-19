@@ -5,7 +5,7 @@ import duckdb
 import pandas as pd
 from geoalchemy2.functions import ST_Intersects
 from prefect import flow, task
-from sqlalchemy import Table, and_, not_, or_, select
+from sqlalchemy import Table, and_, not_, or_, select, true
 from sqlalchemy.sql import Select
 
 from src.entities.alerts import (
@@ -198,6 +198,45 @@ def merge_sets_of_identifiers(
     return cfrs, external_immats, ircss
 
 
+def make_vessels_filter(
+    positions_table: Table,
+    cfrs: set | None,
+    external_immats: set | None,
+    ircss: set | None,
+):
+    """
+    Returns a filter condition on `positions_table` matching positions of vessels
+    with the given identifiers, or `None` if no identifiers are given.
+    External immatriculations and IRCSs are only matched for positions without CFR.
+    """
+    vessel_filters = []
+    if cfrs is not None:
+        vessel_filters.append(
+            positions_table.c.internal_reference_number.in_(sorted(cfrs))
+        )
+    if external_immats is not None:
+        vessel_filters.append(
+            and_(
+                positions_table.c.internal_reference_number == None,  # noqa: E711
+                positions_table.c.external_reference_number.in_(
+                    sorted(external_immats)
+                ),
+            )
+        )
+    if ircss is not None:
+        vessel_filters.append(
+            and_(
+                positions_table.c.internal_reference_number == None,  # noqa: E711
+                positions_table.c.ircs.in_(sorted(ircss)),
+            )
+        )
+
+    if len(vessel_filters) == 0:
+        return None
+
+    return or_(*vessel_filters)
+
+
 @task
 def make_positions_in_alert_query(
     *,
@@ -213,6 +252,9 @@ def make_positions_in_alert_query(
     cfrs: set | None = None,
     external_immats: set | None = None,
     ircss: set | None = None,
+    excluded_cfrs: set | None = None,
+    excluded_external_immats: set | None = None,
+    excluded_ircss: set | None = None,
 ) -> Select:
     start_date = now - timedelta(hours=track_analysis_depth)
 
@@ -265,29 +307,20 @@ def make_positions_in_alert_query(
                 )
             )
 
-    if cfrs is not None or external_immats is not None or ircss is not None:
-        vessel_filters = []
-        if cfrs is not None:
-            vessel_filters.append(
-                positions_table.c.internal_reference_number.in_(sorted(cfrs))
-            )
-        if external_immats is not None:
-            vessel_filters.append(
-                and_(
-                    positions_table.c.internal_reference_number == None,  # noqa: E711
-                    positions_table.c.external_reference_number.in_(
-                        sorted(external_immats)
-                    ),
-                )
-            )
-        if ircss is not None:
-            vessel_filters.append(
-                and_(
-                    positions_table.c.internal_reference_number == None,  # noqa: E711
-                    positions_table.c.ircs.in_(sorted(ircss)),
-                )
-            )
-        filter_conditions.append(or_(*vessel_filters))
+    vessels_filter = make_vessels_filter(positions_table, cfrs, external_immats, ircss)
+    if vessels_filter is not None:
+        filter_conditions.append(vessels_filter)
+
+    excluded_vessels_filter = make_vessels_filter(
+        positions_table,
+        excluded_cfrs or None,
+        excluded_external_immats or None,
+        excluded_ircss or None,
+    )
+    if excluded_vessels_filter is not None:
+        # `IS NOT true` rather than `NOT` so that positions for which the filter
+        # evaluates to NULL (e.g. NULL identifiers) are kept
+        filter_conditions.append(excluded_vessels_filter.is_not(true()))
 
     q = (
         select(
@@ -429,6 +462,15 @@ def get_vessels_in_alert(positions_in_alert: pd.DataFrame) -> pd.DataFrame:
     return vessels_in_alerts
 
 
+@task
+def filter_out_excluded_vessels(
+    vessels_in_alert: pd.DataFrame, excluded_vessel_ids: List[int]
+) -> pd.DataFrame:
+    return vessels_in_alert[
+        ~vessels_in_alert.vessel_id.isin(excluded_vessel_ids)
+    ].reset_index(drop=True)
+
+
 @flow(
     name="Monitorfish - Position alert",
     on_failure=[report_flow_failure_to_sentry],
@@ -451,6 +493,7 @@ def position_alert_flow(
     min_depth: float | None = None,
     flag_states_iso2: List[str] | None = None,
     vessel_ids: List[int] | None = None,
+    excluded_vessel_ids: List[int] | None = None,
     district_codes: List[str] | None = None,
     producer_organizations: List[str] | None = None,
 ):
@@ -519,6 +562,25 @@ def position_alert_flow(
         vessels_external_immats = None
         vessels_ircss = None
 
+    if excluded_vessel_ids:
+        excluded_vessels_query = make_vessels_query(
+            vessels_table=vessels_table,
+            prod_org_memberships_table=None,
+            vessel_ids=excluded_vessel_ids,
+            district_codes=None,
+            producer_organizations=None,
+        )
+        excluded_vessels = read_query_task("monitorfish_remote", excluded_vessels_query)
+        (
+            excluded_cfrs,
+            excluded_external_immats,
+            excluded_ircss,
+        ) = get_sets_of_identifiers(excluded_vessels)
+    else:
+        excluded_cfrs = None
+        excluded_external_immats = None
+        excluded_ircss = None
+
     cfrs, external_immats, ircss = merge_sets_of_identifiers(
         cfrs_with_species_min_weight,
         cfrs_with_gears,
@@ -540,6 +602,9 @@ def position_alert_flow(
         cfrs=cfrs,
         external_immats=external_immats,
         ircss=ircss,
+        excluded_cfrs=excluded_cfrs,
+        excluded_external_immats=excluded_external_immats,
+        excluded_ircss=excluded_ircss,
     )
 
     current_risk_factors = extract_current_risk_factors.submit()
@@ -559,6 +624,14 @@ def position_alert_flow(
         districts_table=districts_table,
         districts_columns_to_add=["dml"],
     )
+    # Excluded vessels are already filtered out in the positions query. This catches
+    # positions of excluded vessels that were emitted with other identifiers than
+    # those used in the query (e.g. without CFR), and are matched to the excluded
+    # vessel by `add_vessel_id`.
+    if excluded_vessel_ids:
+        vessels_in_alert = filter_out_excluded_vessels(
+            vessels_in_alert, excluded_vessel_ids
+        )
     alerts = make_alerts(
         vessels_in_alert,
         alert_type="POSITION_ALERT",

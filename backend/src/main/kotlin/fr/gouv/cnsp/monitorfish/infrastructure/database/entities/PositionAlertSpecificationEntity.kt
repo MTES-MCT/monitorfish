@@ -78,6 +78,8 @@ data class PositionAlertSpecificationEntity(
     val flagStatesIso2: List<String>? = null,
     @Column(name = "vessel_ids", columnDefinition = "integer[]")
     val vesselIds: List<Int>? = null,
+    @Column(name = "excluded_vessel_ids", columnDefinition = "integer[]")
+    val excludedVesselIds: List<Int>? = null,
     @Column(name = "district_codes", columnDefinition = "varchar[]")
     val districtCodes: List<String>? = null,
     @Column(name = "producer_organizations", columnDefinition = "varchar[]")
@@ -122,6 +124,7 @@ data class PositionAlertSpecificationEntity(
             minDepth = minDepth,
             flagStatesIso2 = flagStatesIso2 ?: listOf(),
             vesselIds = vesselIds ?: listOf(),
+            excludedVesselIds = excludedVesselIds ?: listOf(),
             districtCodes = districtCodes ?: listOf(),
             producerOrganizations = producerOrganizations ?: listOf(),
             createdBy = createdBy,
@@ -163,6 +166,7 @@ data class PositionAlertSpecificationEntity(
                 minDepth = alertSpecification.minDepth,
                 flagStatesIso2 = alertSpecification.flagStatesIso2,
                 vesselIds = alertSpecification.vesselIds,
+                excludedVesselIds = alertSpecification.excludedVesselIds,
                 districtCodes = alertSpecification.districtCodes,
                 producerOrganizations = alertSpecification.producerOrganizations,
                 createdBy = alertSpecification.createdBy,

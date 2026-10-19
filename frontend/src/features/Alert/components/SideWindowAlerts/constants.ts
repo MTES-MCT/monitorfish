@@ -35,6 +35,8 @@ export const DEFAULT_EDITED_ALERT_SPECIFICATION: AlertSpecification = {
   description: '',
   districtCodes: [],
   errorReason: undefined,
+  excludedVesselIds: [],
+  excludedVessels: [],
   flagStatesIso2: [],
   gears: [],
   hasAutomaticArchiving: false,

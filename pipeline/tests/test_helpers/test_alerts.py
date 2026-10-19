@@ -26,6 +26,7 @@ BASE_ALERT = PositionAlertSpecification(
     min_depth=None,
     flag_states_iso2=[],
     vessel_ids=[],
+    excluded_vessel_ids=[],
     district_codes=[],
     producer_organizations=[],
 )

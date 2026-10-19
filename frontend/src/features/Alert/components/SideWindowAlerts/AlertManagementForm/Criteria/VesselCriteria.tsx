@@ -15,12 +15,15 @@ import type { AISVessel } from '@features/Vessel/AISVessel.types'
 const baseUrl = window.location.origin
 
 type VesselCriteriaProps = {
+  isExclusion?: boolean
   onDelete: () => void
   vessels: Vessel.VesselIdentity[]
 }
-export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
+export function VesselCriteria({ isExclusion = false, onDelete, vessels }: VesselCriteriaProps) {
   const { newWindowContainerRef } = useNewWindow()
-  const [input, , helper] = useField<EditedAlertSpecification['vesselIds']>('vesselIds')
+  const [input, , helper] = useField<EditedAlertSpecification['vesselIds']>(
+    isExclusion ? 'excludedVesselIds' : 'vesselIds'
+  )
   const [isCriteriaOpened, setIsCriteriaOpened] = useState(true)
   const [updatedVessels, setUpdatedVessels] = useState<Vessel.VesselIdentity[]>(vessels)
 
@@ -55,11 +58,15 @@ export function VesselCriteria({ onDelete, vessels }: VesselCriteriaProps) {
         }}
         type="button"
       >
-        <Criteria.Title>NAVIRES</Criteria.Title>
+        <Criteria.Title>{isExclusion ? 'NAVIRES EXCLUS' : 'NAVIRES'}</Criteria.Title>
         <Criteria.ChevronIcon $isOpen={isCriteriaOpened} />
       </Criteria.Head>
       <Criteria.Body $isOpen={isCriteriaOpened}>
-        <StyledCriteriaInfo>Seuls les navires émettant VMS peuvent faire l’objet d’une alerte.</StyledCriteriaInfo>
+        <StyledCriteriaInfo>
+          {isExclusion
+            ? 'Ces navires ne feront jamais l’objet de cette alerte, même s’ils remplissent les autres critères.'
+            : 'Seuls les navires émettant VMS peuvent faire l’objet d’une alerte.'}
+        </StyledCriteriaInfo>
         {updatedVessels.map(vessel => {
           const identifiers = [
             vessel.internalReferenceNumber ? { label: '(CFR)', value: vessel.internalReferenceNumber } : null,

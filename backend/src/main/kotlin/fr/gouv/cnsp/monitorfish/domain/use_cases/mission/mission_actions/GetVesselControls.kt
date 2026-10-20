@@ -10,6 +10,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -23,16 +24,27 @@ class GetVesselControls(
     private val missionRepository: MissionRepository,
     private val enrichMissionAction: EnrichMissionAction,
     private val inquiryRepository: InquiryRepository,
+    private val getAuthorizedUser: GetAuthorizedUser,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
     suspend fun execute(
         vesselId: Int,
         afterDateTime: ZonedDateTime,
+        email: String,
     ): ControlsSummary =
         coroutineScope {
+            val isSuperUser = getAuthorizedUser.execute(email).isSuperUser
+
             logger.debug("Searching controls for vessel {} after {}", vesselId, afterDateTime)
-            val inquiries = async(Dispatchers.IO) { findInquiries(vesselId, afterDateTime) }
+            val inquiries =
+                async(Dispatchers.IO) {
+                    findInquiries(
+                        isSuperUser = isSuperUser,
+                        vesselId = vesselId,
+                        afterDateTime = afterDateTime,
+                    )
+                }
             val controls =
                 missionActionsRepository
                     .findVesselMissionActionsAfterDateTime(vesselId, afterDateTime)
@@ -94,11 +106,18 @@ class GetVesselControls(
         }
 
     private fun findInquiries(
+        isSuperUser: Boolean,
         vesselId: Int,
         afterDateTime: ZonedDateTime,
     ): List<Inquiry> =
         try {
-            inquiryRepository.findAllByVesselId(vesselId, afterDateTime)
+            val inquiries = inquiryRepository.findAllByVesselId(vesselId, afterDateTime)
+
+            if (!isSuperUser) {
+                return inquiries.filter { it.status != "IN_PROGRESS" }
+            }
+
+            inquiries
         } catch (e: BackendInternalException) {
             // Inquiries come from RapportNav: its unavailability must not hide the vessel controls
             logger.error(e.message, e)

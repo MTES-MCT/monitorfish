@@ -109,7 +109,7 @@ class MissionActionsControllerITests {
     @Test
     fun `Should get all controls for a vessel`() {
         // Given
-        givenSuspended { this.getVesselControls.execute(any(), any()) }.willReturn(
+        givenSuspended { this.getVesselControls.execute(any(), any(), any()) }.willReturn(
             ControlsSummary(
                 1,
                 3,
@@ -193,7 +193,7 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.inquiries[0].observations[0]", equalTo("Commentaire de l'unité")))
 
         runBlocking {
-            Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"))
+            Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"), "")
         }
     }
 

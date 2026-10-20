@@ -17,7 +17,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
-import { Accent, Button, Icon, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Icon, IconButton, Size, TableWithSelectableRows, usePrevious } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { captureMessage } from '@sentry/react'
 import {
@@ -27,13 +27,16 @@ import {
   getExpandedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
+import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
+import { PRIOR_NOTIFICATIONS_CSV_MAP } from './csvMap'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -54,6 +57,7 @@ type PriorNotificationListProps = Readonly<{
 export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps) {
   const lastFetchStartDateRef = useRef<number | undefined>(undefined)
   const { forceUpdate } = useForceUpdate()
+  const isSuperUser = useIsSuperUser()
 
   const dispatch = useMainAppDispatch()
   const listFilter = useMainAppSelector(state => state.priorNotification.listFilterValues)
@@ -66,9 +70,9 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const openedReportingListVesselIdentity = useMainAppSelector(
     state => state.priorNotification.openedReportingListVesselIdentity
   )
-  const isSuperUser = useIsSuperUser()
 
   const [rowSelection, setRowSelection] = useState({})
+  const rowSelectionAsArray = Object.keys(rowSelection).map(String)
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [lastFetchDuration, setLastFetchDuration] = useState<number | undefined>(undefined)
 
@@ -219,6 +223,20 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetching])
 
+  const download = () => {
+    const checkedPriorNotifications =
+      priorNotifications?.filter(priorNotification => rowSelectionAsArray.includes(priorNotification.reportId)) ?? []
+    const fileName = `${checkedPriorNotifications.length}-pno-${dayjs().format('DD-MM-YYYY')}`
+
+    downloadAsCsv(fileName, checkedPriorNotifications, PRIOR_NOTIFICATIONS_CSV_MAP)
+
+    trackEvent({
+      action: `Export de PNOs au format CSV`,
+      category: 'PNO',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+  }
+
   return (
     <>
       <SubMenu
@@ -245,6 +263,12 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                 isBodyLoaderVisible || isError || totalLength === undefined ? '...' : totalLength
               } préavis (tous les horaires sont en UTC) en ${isBodyLoaderVisible || isError || lastFetchDuration === undefined ? '...' : `${lastFetchDuration / 1000}s`}`}</TableLegend>
 
+              <IconButton
+                disabled={!rowSelectionAsArray.length}
+                Icon={Icon.Download}
+                onClick={download}
+                title={`Télécharger ${rowSelectionAsArray.length} préavis`}
+              />
               {isSuperUser && (
                 <Button
                   accent={Accent.PRIMARY}
@@ -354,15 +378,19 @@ const TableTop = styled.div<{
 }>`
   align-items: flex-end;
   display: flex;
-  justify-content: space-between;
   margin: 8px 0;
   width: ${p => (!p.$isFromUrl && isLegacyFirefox() ? 1396 : 1391)}px; /* = table width */
+  gap: 8px;
+
+  .Element-Button {
+    height: 32px;
+  }
 `
 
 const TableLegend = styled.p`
   color: ${p => p.theme.color.slateGray};
   line-height: 1;
-  margin: 0;
+  margin: 0 auto 0 0;
 `
 
 const TableInnerWrapper = styled.div<{

@@ -16,6 +16,15 @@ Les contrôles croisés clôturés sont listés avec les autres contrôles de l'
         type: 'NEW_FEATURE'
       },
       {
+        date: '2026-10-20',
+        description: `Vous pouvez désormais télécharger les préavis sélectionnés dans la liste au format CSV (bouton de téléchargement au-dessus du tableau), pour les exploiter et les filtrer dans un tableur (Excel, LibreOffice).
+
+Une ligne par préavis, avec notamment : pavillon et identifiants du navire, port, dates (UTC), raison, types, segments, engins, zones FAO, espèces, détail des captures et poids total (kg), note de risque et nombre de signalements.`,
+        for: 'ALL',
+        title: `Préavis – Export CSV des préavis`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-10-12',
         description: `Les photos des navires affichées dans la fiche navire provenaient de MarineTraffic, qui ne les met plus à disposition gratuitement. Elles ont donc été retirées de la fiche navire en attendant de trouver une solution alternative.`,
         for: 'ALL',

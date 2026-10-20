@@ -20,6 +20,8 @@ import jakarta.websocket.server.PathParam
 import kotlinx.coroutines.runBlocking
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -53,9 +55,17 @@ class MissionActionsController(
         @RequestParam(name = "afterDateTime")
         @DateTimeFormat(pattern = VesselController.ZONE_DATE_TIME_PATTERN)
         afterDateTime: ZonedDateTime,
+        @AuthenticationPrincipal
+        principal: OidcUser?,
     ): ControlsSummaryDataOutput =
         runBlocking {
-            val actionsSummary = getVesselControls.execute(vesselId, afterDateTime)
+            val email = principal?.email ?: ""
+            val actionsSummary =
+                getVesselControls.execute(
+                    vesselId = vesselId,
+                    afterDateTime = afterDateTime,
+                    email = email,
+                )
             ControlsSummaryDataOutput.fromControlsSummary(actionsSummary)
         }
 

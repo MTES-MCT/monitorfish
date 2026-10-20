@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions
 import com.neovisionaries.i18n.CountryCode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizedUser
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.gear.Gear
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion
@@ -18,6 +19,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
@@ -50,6 +52,34 @@ class GetVesselControlsUTests {
     @MockitoBean
     private lateinit var inquiryRepository: InquiryRepository
 
+    @MockitoBean
+    private lateinit var getAuthorizedUser: GetAuthorizedUser
+
+    private val email = "dummy@email.gouv.fr"
+
+    private fun givenAuthorizedUser(isSuperUser: Boolean) {
+        given(getAuthorizedUser.execute(email)).willReturn(
+            AuthorizedUser(email = email, isSuperUser = isSuperUser, service = null),
+        )
+    }
+
+    private fun inquiry(status: String) =
+        Inquiry(
+            id = UUID.randomUUID(),
+            vesselId = 1,
+            missionId = 1,
+            type = "VEHICLE",
+            origin = null,
+            status = status,
+            conclusion = null,
+            startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
+            endDateTimeUtc = null,
+            isSignedByInspector = null,
+            service = null,
+            infractions = listOf(),
+            observations = listOf(),
+        )
+
     private fun buildGetVesselControls() =
         GetVesselControls(
             missionActionsRepository = missionActionsRepository,
@@ -61,6 +91,7 @@ class GetVesselControlsUTests {
                     infractionRepository = infractionRepository,
                 ),
             inquiryRepository = inquiryRepository,
+            getAuthorizedUser = getAuthorizedUser,
         )
 
     @Test
@@ -148,26 +179,12 @@ class GetVesselControlsUTests {
                 ),
             )
             given(gearRepository.findByCode(eq("OTB"))).willReturn(Gear("OTB", "Chalut de fond"))
-            val inquiry =
-                Inquiry(
-                    id = UUID.randomUUID(),
-                    vesselId = 1,
-                    missionId = 1,
-                    type = "VEHICLE",
-                    origin = null,
-                    status = "CLOSED",
-                    conclusion = null,
-                    startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
-                    endDateTimeUtc = null,
-                    isSignedByInspector = null,
-                    service = null,
-                    infractions = listOf(),
-                    observations = listOf(),
-                )
+            val inquiry = inquiry(status = "CLOSED")
             given(inquiryRepository.findAllByVesselId(vesselId, now)).willReturn(listOf(inquiry))
+            givenAuthorizedUser(isSuperUser = false)
 
             // When
-            val controlResumeAndControls = buildGetVesselControls().execute(vesselId, now)
+            val controlResumeAndControls = buildGetVesselControls().execute(vesselId, now, email)
 
             // Then
             assertThat(controlResumeAndControls.numberOfDiversions).isEqualTo(1)
@@ -197,13 +214,52 @@ class GetVesselControlsUTests {
             given(inquiryRepository.findAllByVesselId(any(), any())).willThrow(
                 BackendInternalException("Could not fetch inquiries."),
             )
+            givenAuthorizedUser(isSuperUser = true)
 
             // When
-            val controlResumeAndControls = buildGetVesselControls().execute(1, now)
+            val controlResumeAndControls = buildGetVesselControls().execute(1, now, email)
 
             // Then
             assertThat(controlResumeAndControls.controls).isEmpty()
             assertThat(controlResumeAndControls.inquiries).isEmpty()
+        }
+    }
+
+    @Test
+    fun `execute Should return in progress inquiries When the user is a super user`() {
+        runBlocking {
+            // Given
+            val now = ZonedDateTime.now().minusDays(1)
+            val inProgressInquiry = inquiry(status = "IN_PROGRESS")
+            val closedInquiry = inquiry(status = "CLOSED")
+            given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(listOf())
+            given(inquiryRepository.findAllByVesselId(1, now)).willReturn(listOf(inProgressInquiry, closedInquiry))
+            givenAuthorizedUser(isSuperUser = true)
+
+            // When
+            val controlResumeAndControls = buildGetVesselControls().execute(1, now, email)
+
+            // Then
+            assertThat(controlResumeAndControls.inquiries).containsExactly(inProgressInquiry, closedInquiry)
+        }
+    }
+
+    @Test
+    fun `execute Should not return in progress inquiries When the user is not a super user`() {
+        runBlocking {
+            // Given
+            val now = ZonedDateTime.now().minusDays(1)
+            val inProgressInquiry = inquiry(status = "IN_PROGRESS")
+            val closedInquiry = inquiry(status = "CLOSED")
+            given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(listOf())
+            given(inquiryRepository.findAllByVesselId(1, now)).willReturn(listOf(inProgressInquiry, closedInquiry))
+            givenAuthorizedUser(isSuperUser = false)
+
+            // When
+            val controlResumeAndControls = buildGetVesselControls().execute(1, now, email)
+
+            // Then
+            assertThat(controlResumeAndControls.inquiries).containsExactly(closedInquiry)
         }
     }
 }

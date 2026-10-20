@@ -7,7 +7,7 @@ import { flatMap, groupBy, sortBy } from 'lodash-es'
 import type { AlertSpecification, RegulatoryAreaSpecification } from '@features/Alert/types'
 import type { RegulatoryLawTypes } from '@features/Regulation/types'
 import type { TreeOption } from '@mtes-mct/monitor-ui'
-import type { TreeBranchOption, TreeLeafOption } from '@mtes-mct/monitor-ui/types/definitions'
+import type { TreeBranchOption, TreeLeafOption } from '@mtes-mct/monitor-ui'
 
 Countries.registerLocale(COUNTRIES_FR)
 

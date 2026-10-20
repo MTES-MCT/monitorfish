@@ -13,12 +13,13 @@ const geoJSONFormat = new GeoJSON()
  */
 export const addDrawnZonesToFilter = (): MainAppThunk => (dispatch, getState) => {
   const { drawedGeometry } = getState().draw
-  if (!drawedGeometry) {
+  const drawnGeometry = drawedGeometry ? geoJSONFormat.readGeometry(drawedGeometry) : null
+  if (!drawnGeometry) {
     return
   }
 
   const { filters } = getState().reporting
-  const drawnZones = readZonesFromGeometry(geoJSONFormat.readGeometry(drawedGeometry))
+  const drawnZones = readZonesFromGeometry(drawnGeometry)
 
   dispatch(reportingActions.setFilters({ ...filters, zone: addZones(filters.zone, drawnZones) }))
 }

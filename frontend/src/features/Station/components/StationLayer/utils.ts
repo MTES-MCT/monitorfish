@@ -77,7 +77,7 @@ export function getStationPointFeature(station: Station.Station) {
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }
-  )
+  ) as Point
 
   const feature = new FeatureWithCodeAndEntityId({
     code: MonitorFishMap.MonitorFishLayer.STATION,

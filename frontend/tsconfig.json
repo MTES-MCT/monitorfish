@@ -6,7 +6,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "baseUrl": "./src",
     "checkJs": false,
     // Override inherited value for CommonJS > ESM compatibility purpose
     "esModuleInterop": true,
@@ -15,7 +14,7 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     // https://github.com/cypress-io/cypress/issues/26308#issuecomment-1666236726
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
@@ -26,16 +25,18 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@api/*": ["api/*"],
-      "@components/*": ["components/*"],
-      "@constants/*": ["constants/*"],
-      "@features/*": ["features/*"],
-      "@hooks/*": ["hooks/*"],
-      "@libs/*": ["libs/*"],
-      "@pages/*": ["pages/*"],
-      "@store": ["store/index.ts"],
-      "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"]
+      "@api/*": ["./src/api/*"],
+      "@components/*": ["./src/components/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@features/*": ["./src/features/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@libs/*": ["./src/libs/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@store": ["./src/store/index.ts"],
+      "@store/*": ["./src/store/*"],
+      "@utils/*": ["./src/utils/*"],
+      // Bare specifiers resolved from `src` (e.g. `domain/...`)
+      "*": ["./src/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import type { AccessorColumnDef } from '@tanstack/table-core/build/lib/types'
+import type { AccessorColumnDef } from '@tanstack/react-table'
 import type { Promisable } from 'type-fest'
 
 export function getFormDataFromSubscriber(

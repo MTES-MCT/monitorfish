@@ -44,10 +44,10 @@ export function RightClickMapMenu() {
       setCoordinates(getCoordinatesInViewWorld((feature?.getGeometry() as Point)?.getCoordinates()))
     }
 
-    monitorfishMap.getViewport().addEventListener('contextmenu', showMenu)
+    monitorfishMap.getViewport()?.addEventListener('contextmenu', showMenu)
 
     return () => {
-      monitorfishMap.getViewport().removeEventListener('contextmenu', showMenu)
+      monitorfishMap.getViewport()?.removeEventListener('contextmenu', showMenu)
     }
   }, [vessels])
 

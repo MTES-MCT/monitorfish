@@ -16,7 +16,7 @@ const FISHING_CATCH_VALIDATION_SCHEMA: ObjectSchema<PriorNotification.FormDataFi
   weight: number().required('Veuillez indiquer le poids pour chaque espèce.')
 })
 
-const VESSEL_IDENTITY_VALIDATION_SCHEMA: ObjectSchema<any> = object<any>({}) as ObjectSchema<Vessel.VesselIdentity>
+const VESSEL_IDENTITY_VALIDATION_SCHEMA = mixed<Vessel.VesselIdentity>()
 
 export const FORM_VALIDATION_SCHEMA: ObjectSchema<ManualPriorNotificationFormValues> = object({
   didNotFishAfterZeroNotice: boolean().required(),

@@ -9,7 +9,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import type { ReportingsFilter } from '@features/Reporting/types'
 import type { ReportingOrigin } from '@features/Reporting/types/ReportingOrigin'
 import type { ReportingType } from '@features/Reporting/types/ReportingType'
-import type { DateAsStringRange } from '@mtes-mct/monitor-ui/types/definitions'
+import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 function toIsArchived(value: string | undefined): boolean | undefined {
   if (value === 'ARCHIVED') {

@@ -24,7 +24,7 @@ export const addCustomCircleMeasurement =
     }
 
     const radiusInMeters =
-      METERS_PER_UNIT.m * ((circleMeasurementToAdd?.circleRadiusToAdd ?? 0) as number) * metersForOneNauticalMile
+      (METERS_PER_UNIT.m ?? 1) * ((circleMeasurementToAdd?.circleRadiusToAdd ?? 0) as number) * metersForOneNauticalMile
 
     let coordinates: Coordinate = []
     if (circleMeasurementHasCoordinatesAndRadiusFromForm()) {

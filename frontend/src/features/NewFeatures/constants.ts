@@ -7,6 +7,15 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-10-20',
+        description: `L'onglet « Contrôles » de la fiche navire affiche désormais les **contrôles croisés** saisis dans RapportNav.
+
+Les contrôles croisés clôturés sont listés avec les autres contrôles de l'année, avec leur unité, leur origine, leurs infractions (avec ou sans PV) et leurs observations.`,
+        for: 'ALL',
+        title: `Fiche navire – Affichage des contrôles croisés`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-10-12',
         description: `Les photos des navires affichées dans la fiche navire provenaient de MarineTraffic, qui ne les met plus à disposition gratuitement. Elles ont donc été retirées de la fiche navire en attendant de trouver une solution alternative.`,
         for: 'ALL',

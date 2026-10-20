@@ -51,7 +51,7 @@ export function Infraction({ data, hasError, hasMultipleInfraction, index, onDel
         <div>
           <TagGroup>
             <Tag accent={Accent.PRIMARY}>{MissionAction.INFRACTION_TYPE_LABEL[data.infractionType]}</Tag>
-            {data.infractionType !== MissionAction.InfractionType.PENDING && (
+            {!!natinfAndThreatCharacterization.natinf && (
               <StyledTag accent={Accent.PRIMARY} title={getInfractionTitle(natinfAndThreatCharacterization)}>
                 {natinfAndThreatCharacterization.threatCharacterization} / NATINF{' '}
                 {natinfAndThreatCharacterization.natinf}

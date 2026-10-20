@@ -9,8 +9,8 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils.toContract
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.InfractionType as ContractInfractionType
 
 fun Infraction.toMissionActionInfractionDataOutputWithThreatHierarchy(): MissionActionInfractionDataOutput {
-    // A pending infraction has no threat/NATINF yet, so there is no hierarchy to build
-    if (infractionType == InfractionType.PENDING) {
+    // A pending infraction may have no threat/NATINF yet, so there is no hierarchy to build
+    if (infractionType == InfractionType.PENDING && natinf == null) {
         return MissionActionInfractionDataOutput(
             infractionType = ContractInfractionType.PENDING,
             comments = comments,

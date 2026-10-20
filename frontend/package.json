@@ -46,7 +46,11 @@
     "picomatch": "4.0.4",
     "@babel/plugin-transform-runtime": "^7.29.0",
     "eslint-plugin-typescript-sort-keys": {
-      "eslint": "$eslint"
+      "eslint": "$eslint",
+      "typescript": "$typescript"
+    },
+    "madge": {
+      "typescript": "$typescript"
     }
   },
   "dependencies": {
@@ -162,7 +166,7 @@
     "strip-json-comments": "5.0.3",
     "ts-jest": "29.4.14",
     "type-fest": "4.41.0",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "typescript-7": "npm:typescript@7.0.2",
     "vite": "8.3.3",
     "vite-plugin-svgr": "5.2.0",

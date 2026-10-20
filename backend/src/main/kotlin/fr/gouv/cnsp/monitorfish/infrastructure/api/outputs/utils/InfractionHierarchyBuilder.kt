@@ -1,8 +1,8 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.utils
 
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.NatinfDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatCharacterizationDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ThreatHierarchyDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.NatinfDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ThreatCharacterizationDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ThreatHierarchyDataOutput
 
 /**
  * Builds a hierarchical structure of threats, threat characterizations, and NATINF codes

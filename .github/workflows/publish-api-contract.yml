@@ -1,0 +1,40 @@
+name: Publish API contract
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Contract version to publish, without the leading 'v' (e.g. 1.127.0)"
+        required: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    name: Publish monitorfish-api-contract to GitHub Packages
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    env:
+      VERSION: ${{ inputs.version || github.event.release.tag_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name || github.ref }}
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v6.0.1
+        with:
+          distribution: zulu
+          java-version: 21
+
+      - name: Publish
+        working-directory: ./backend
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :api-contract:test :api-contract:publish -PcontractVersion="${VERSION#v}"

@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.FixedVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.PriorityVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 
 data class ControlledVesselDataOutput(
     @JsonUnwrapped
@@ -22,7 +23,7 @@ data class ControlledVesselDataOutput(
             tripReportings: List<Reporting>,
         ): ControlledVesselDataOutput =
             ControlledVesselDataOutput(
-                controlledVessel = VesselIdentityDataOutput.fromVessel(vessel),
+                controlledVessel = vessel.toVesselIdentityDataOutput(),
                 groups =
                     vesselGroups.map {
                         when (it) {

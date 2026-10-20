@@ -7,11 +7,12 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetActi
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetVesselControls
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.IsPointInInnArea
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.UpdateMissionAction
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.MissionActionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.AddMissionActionDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActivityReportsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlsSummaryDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.IsInInnAreaDataOutput
-import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.MissionActionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toMissionActionDataOutput
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -84,8 +85,7 @@ class MissionActionsController(
     fun createMissionAction(
         @RequestBody
         actionInput: AddMissionActionDataInput,
-    ): MissionActionDataOutput =
-        MissionActionDataOutput.fromMissionAction(addMissionAction.execute(actionInput.toMissionAction()))
+    ): MissionActionDataOutput = addMissionAction.execute(actionInput.toMissionAction()).toMissionActionDataOutput()
 
     @PutMapping(value = ["/{actionId}"], consumes = ["application/json"])
     @Operation(summary = "Update a mission action")
@@ -98,7 +98,7 @@ class MissionActionsController(
         actionInput: AddMissionActionDataInput,
     ): MissionActionDataOutput {
         val updatedMissionAction = updateMissionAction.execute(actionId, actionInput.toMissionAction())
-        return MissionActionDataOutput.fromMissionAction(updatedMissionAction)
+        return updatedMissionAction.toMissionActionDataOutput()
     }
 
     @DeleteMapping(value = ["/{actionId}"])

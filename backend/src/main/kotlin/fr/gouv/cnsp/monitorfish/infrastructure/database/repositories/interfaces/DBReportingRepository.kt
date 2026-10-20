@@ -241,6 +241,7 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
         WHERE
             r.archived IS FALSE AND
             r.deleted IS FALSE AND
+            r.type IN ('INFRACTION_SUSPICION') AND
             r.creation_date < NOW() AT TIME ZONE 'UTC' - INTERVAL '7 days' AND
             COALESCE(v.length, r.length) IS NOT NULL AND
             COALESCE(v.length, r.length) < 12

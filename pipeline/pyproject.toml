@@ -30,7 +30,7 @@ requests-mock = "^1.11.0"
 h3 = "^4.5.0"
 pypdf = "^6.14.2"
 clickhouse-connect = "^0.15.1"
-pyarrow = "^22.0.0"
+pyarrow = "^26.0.0"
 prefect = {version = "3.6.9", extras = ["docker"]}
 # Prefect is pinned to 3.6.9 (must match the deployed Prefect server) and only
 # constrains fastapi as >=0.111,<1. FastAPI's include_router internals were

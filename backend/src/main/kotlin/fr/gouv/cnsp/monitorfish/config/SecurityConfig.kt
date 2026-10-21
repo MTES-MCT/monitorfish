@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAllowedToLogIn
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController.Companion.FRONTEND_APP_ROUTES
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +45,8 @@ import java.util.Base64
 class SecurityConfig(
     val oidcProperties: OIDCProperties,
     val clientRegistrationRepository: ClientRegistrationRepository?,
+    // Lazily resolved: the use case is only needed at login, and sliced web tests don't load it
+    private val getIsAllowedToLogIn: ObjectProvider<GetIsAllowedToLogIn>,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
 
@@ -134,45 +138,24 @@ class SecurityConfig(
             }
 
             private fun validateAndProcessUser(oidcUser: OidcUser): OidcUser {
-                logger.debug("========== Email Domain Validation ==========")
-                logger.debug(
-                    "MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=${oidcProperties.bypassEmailDomainsFilter}",
-                )
-
-                if (oidcProperties.bypassEmailDomainsFilter == "true") {
-                    logger.info("✅ OIDC is bypassing email domain checks.")
-                    return oidcUser
-                }
-
-                val emailClaim = oidcUser.claims["email"] as? String
-                logger.debug("User email from JWT: $emailClaim")
-
-                if (emailClaim.isNullOrBlank()) {
+                val email = oidcUser.claims["email"] as? String
+                if (email.isNullOrBlank()) {
                     val errorMsg = "Email claim is missing or empty in JWT"
                     logger.error("❌ $errorMsg")
                     throw OAuth2AuthenticationException(errorMsg)
                 }
 
-                val emailDomain = emailClaim.substringAfterLast("@")
-                logger.debug("Extracted email domain: $emailDomain")
-                logger.debug(
-                    "Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}",
-                )
+                val idpId = oidcUser.claims["idp_id"] as? String
+                val organizationalUnit = oidcUser.claims["organizational_unit"] as? String
+                logger.debug("User idp_id: $idpId, organizational_unit: $organizationalUnit")
 
-                val isAuthorized =
-                    oidcProperties.authorizedEmailDomains.any { domain ->
-                        emailDomain.equals(domain, ignoreCase = true)
-                    }
-
-                if (!isAuthorized) {
-                    val errorMsg =
-                        "User not authorized. Email domain '$emailDomain' does not match any authorized domain: ${oidcProperties.authorizedEmailDomains}"
+                val isAllowed = getIsAllowedToLogIn.getObject().execute(email, idpId, organizationalUnit)
+                if (!isAllowed) {
+                    val errorMsg = "User not authorized (idp_id: '$idpId', organizational_unit: '$organizationalUnit')."
                     logger.error("❌ $errorMsg")
                     throw OAuth2AuthenticationException(errorMsg)
                 }
 
-                logger.info("✅ User authorized with email domain: $emailDomain")
-                logger.debug("========== End Email Domain Validation ==========")
                 return oidcUser
             }
         }

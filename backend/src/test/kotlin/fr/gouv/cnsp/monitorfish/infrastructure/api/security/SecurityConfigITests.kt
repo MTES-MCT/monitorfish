@@ -46,7 +46,6 @@ class SecurityConfigITests {
             "monitorfish.oidc.login-url=http://localhost:8080/oauth2/authorization/oidc",
             "monitorfish.oidc.success-url=http://localhost:8080/",
             "monitorfish.oidc.error-url=http://localhost:8080/error",
-            "monitorfish.oidc.authorized-sirets=123456789",
             "monitorfish.oidc.issuer-uri=http://localhost:8080/auth/realms/monitorfish",
             "monitorfish.keycloak.proxy.enabled=false",
         ],

@@ -14,11 +14,12 @@ class GetIsAuthorizedUser(
     fun execute(
         email: String,
         isSuperUserPath: Boolean,
+        isAdministratorPath: Boolean,
     ): Boolean {
         /**
-         * If the path is not super-user protected, authorize any logged user
+         * If the path is neither super-user nor administrator protected, authorize any logged user
          */
-        if (!isSuperUserPath) {
+        if (!isSuperUserPath && !isAdministratorPath) {
             return true
         }
 
@@ -30,10 +31,14 @@ class GetIsAuthorizedUser(
             } catch (e: Throwable) {
                 /**
                  * If the user is not found in the `UserAuthorizationRepository` and the path
-                 * is super-user protected, reject
+                 * is protected, reject
                  */
                 return false
             }
+
+        if (isAdministratorPath) {
+            return userAuthorization.isSuperUser && userAuthorization.isAdministrator
+        }
 
         return userAuthorization.isSuperUser
     }

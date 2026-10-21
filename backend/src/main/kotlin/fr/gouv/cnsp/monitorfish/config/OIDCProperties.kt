@@ -7,14 +7,18 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "monitorfish.oidc")
 class OIDCProperties {
     var enabled: Boolean? = false
-    var bypassEmailDomainsFilter: String? = "false"
+    var bypassLoginFilter: String? = "false"
     var clientId: String = ""
     var clientSecret: String = ""
     var redirectUri: String = ""
     var loginUrl: String = ""
     var successUrl: String = ""
     var errorUrl: String = ""
-    var authorizedEmailDomains: List<String> = listOf()
+
+    /**
+     * ProConnect `idp_id` of Cerbère: users coming from this identity provider are filtered by `organizational_unit`.
+     */
+    var cerbereIdpId: String = ""
     var issuerUri: String = ""
 
     /**

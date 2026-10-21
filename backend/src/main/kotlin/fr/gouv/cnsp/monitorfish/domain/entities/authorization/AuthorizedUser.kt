@@ -4,6 +4,7 @@ data class AuthorizedUser(
     val email: String?,
     val isSuperUser: Boolean,
     val service: CnspService?,
+    val isAdministrator: Boolean = false,
 ) {
     companion object {
         fun fromUserAuthorization(
@@ -14,6 +15,7 @@ data class AuthorizedUser(
                 email = email,
                 isSuperUser = userAuthorization.isSuperUser,
                 service = userAuthorization.service,
+                isAdministrator = userAuthorization.isSuperUser && userAuthorization.isAdministrator,
             )
     }
 }

@@ -92,7 +92,7 @@ context('Side Window > Mission Form > Main Form', () => {
   it(
     'Should send the expected data to the API When auto save is not enabled',
     {
-      env: {
+      expose: {
         FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: false
       }
     },

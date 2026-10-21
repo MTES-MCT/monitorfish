@@ -59,6 +59,12 @@
     },
     "@typescript-eslint/parser": {
       "typescript": "$typescript"
+    },
+    "@mtes-mct/monitor-ui": {
+      "cypress": "$cypress"
+    },
+    "cypress-axe": {
+      "cypress": "$cypress"
     }
   },
   "dependencies": {
@@ -146,7 +152,7 @@
     "@vitejs/plugin-react": "6.1.2",
     "assert": "2.1.0",
     "codecov": "3.8.3",
-    "cypress": "15.21.1",
+    "cypress": "16.2.0",
     "cypress-axe": "1.7.0",
     "dotenv": "17.4.2",
     "eslint": "9.39.4",

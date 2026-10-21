@@ -97,9 +97,7 @@ context('Side Window > Vessel List > Table', () => {
     cy.clickButton('Télécharger le tableau')
 
     cy.wait(400)
-    cy.exec('cd cypress/downloads && ls').then(result => {
-      const downloadedCSVFilename = result.stdout
-
+    cy.task<string[]>('listDownloadedFiles').then(([downloadedCSVFilename]) => {
       return cy
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should('contains', 'Nationalité,Nom,CFR,C/S,MMSI,Longueur,GDH (UTC),Latitude,Longitude,Cap,Vitesse')

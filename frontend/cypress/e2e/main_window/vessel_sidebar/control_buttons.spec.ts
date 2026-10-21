@@ -35,9 +35,7 @@ context('Vessel sidebar controls buttons', () => {
 
     // Then
     cy.wait(400)
-    cy.exec('cd cypress/downloads && ls').then(result => {
-      const downloadedCSVFilename = result.stdout
-
+    cy.task<string[]>('listDownloadedFiles').then(([downloadedCSVFilename]) => {
       return cy
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should(

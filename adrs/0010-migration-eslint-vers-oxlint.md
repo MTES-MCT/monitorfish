@@ -241,8 +241,12 @@ typescript-eslint (*peer* `<6.1.0`, canary compris), ts-jest, madge et le prépr
 < 15.19. Le retrait de `baseUrl` (supprimé par TS 7 ; `paths` relatifs à `./src` + repli `*`)
 lève aussi la réserve « *Lint type-aware via OxLint (`tsgolint`)* » des *Alternatives*.
 
-- **`typescript` 7.0.2** pour `tsc` (`test:type`), Cypress (15.21, support TS 7) et `tsgolint`
-  (qui embarque son propre typescript-go).
+- **`typescript` 7.0.2** pour `tsc` (`test:type`), Cypress et `tsgolint` (qui embarque son propre
+  typescript-go). Cypress passe en **16.2** : les 15.20+ compilent les specs TS 7 mais souffrent sous
+  Firefox (BiDi) d'erreurs `no AUT context initialized`, corrigées seulement en 16.0
+  (cypress-io/cypress#34708). Migration : `env` → `expose` (config, overrides par test et
+  `window.Cypress.expose()` côté app), `cy.exec` → tâches `listDownloadedFiles`/`cleanDownloadedFiles`,
+  `keystrokeDelay: 10` (défaut passé à 0), override du *peer* `cypress` de monitor-ui et cypress-axe.
 - **Passe type-aware** (`test:lint:types`) : `oxlint --type-aware --config=.oxlintrc.typed.json`
   (`await-thenable`, `no-misused-promises`, `no-unnecessary-type-assertion`,
   `prefer-nullish-coalescing`, `require-await`) — ~9 s à froid au lieu de ~54 s. OxLint n'ayant pas

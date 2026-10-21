@@ -1187,7 +1187,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
   it(
     'Should not display e-ISR-specific fields when e-ISR feature flag is disabled',
-    { env: { FRONTEND_E_ISR_ENABLED: false } },
+    { expose: { FRONTEND_E_ISR_ENABLED: false } },
     () => {
       fillSideWindowMissionFormBase(Mission.MissionTypeLabel.SEA)
 

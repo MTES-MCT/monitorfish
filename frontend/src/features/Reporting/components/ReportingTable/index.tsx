@@ -5,7 +5,7 @@ import { ErrorWall } from '@components/ErrorWall'
 import { Bold } from '@components/style'
 import { SeafrontGroup } from '@constants/seafront'
 import { getReportingTableColumns } from '@features/Reporting/components/ReportingTable/columns'
-import { REPORTING_CSV_MAP } from '@features/Reporting/components/ReportingTable/constants'
+import { getReportingCsvMap } from '@features/Reporting/components/ReportingTable/constants'
 import { EditReporting } from '@features/Reporting/components/ReportingTable/EditReporting'
 import { Filters } from '@features/Reporting/components/ReportingTable/Filters'
 import { reportingTableFiltersActions } from '@features/Reporting/components/ReportingTable/Filters/slice'
@@ -24,6 +24,7 @@ import { useListPagination } from '@hooks/useListPagination'
 import { useListSorting } from '@hooks/useListSorting'
 import { useLoadingState } from '@hooks/useLoadingState'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { trackEvent } from '@hooks/useTracking'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { Accent, Button, Icon, IconButton, TableWithSelectableRows } from '@mtes-mct/monitor-ui'
@@ -49,6 +50,7 @@ type ReportingTableProps = Readonly<{
 }>
 export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTableProps) {
   const dispatch = useMainAppDispatch()
+  const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
   const { gearsAsOptions } = useGetGearsAsOptions()
 
   const [isDeletionConfirmationDialogOpen, setIsDeletionConfirmationDialogOpen] = useState(false)
@@ -93,7 +95,7 @@ export function ReportingTable({ isFromUrl, selectedSeafrontGroup }: ReportingTa
     const checkedCurrentSeafrontReportings = reportings.filter(reporting => rowSelectionAsArray.includes(reporting.id))
     const fileName = `${checkedCurrentSeafrontReportings.length}-signalements-${dayjs().format('DD-MM-YYYY')}`
 
-    downloadAsCsv(fileName, checkedCurrentSeafrontReportings, REPORTING_CSV_MAP)
+    downloadAsCsv(fileName, checkedCurrentSeafrontReportings, getReportingCsvMap(coordinatesFormat))
 
     trackEvent({
       action: `Export de signalements au format CSV`,

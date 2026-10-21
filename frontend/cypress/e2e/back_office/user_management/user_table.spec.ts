@@ -14,10 +14,24 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable').contains('another@email.com')
     cy.get('.Table-SimpleTable').contains('Douane')
 
+    cy.get('.Table-SimpleTable').contains('CNSP · Pôle OPS métropole')
+
     cy.fill('Rechercher un e-mail', 'dummy')
 
     cy.get('[data-cy="users-results"]').contains('1 utilisateur')
     cy.get('.Table-SimpleTable').contains('dummy@email.gouv.fr')
+
+    cy.fill('Rechercher un e-mail', undefined)
+    cy.fill('Filtrer par type', 'Externe')
+
+    cy.get('[data-cy="users-results"]').contains('1 utilisateur')
+    cy.get('.Table-SimpleTable').contains('another@email.com')
+
+    cy.fill('Filtrer par type', undefined)
+    cy.fill('Filtrer par activité', 'Jamais connectés')
+
+    // The super user has just logged in
+    cy.get('.Table-SimpleTable').should('not.contain', 'dummy@email.gouv.fr')
   })
 
   it('Should add a CNSP user and an external user', () => {
@@ -63,14 +77,14 @@ context('BackOffice > Users', () => {
   it('Should replace the users of an administration', () => {
     cy.intercept('PUT', '/bff/v1/admin/users/administrations/DOUANE').as('replaceAdministrationUsers')
 
-    cy.clickButton('Mettre à jour les utilisateurs d’une administration')
+    cy.clickButton('Importer une liste')
     cy.fill('Administration', 'Douane')
     cy.fill('E-mails (un par ligne, ou séparés par des virgules)', 'new.agent@douane.finances.gouv.fr')
 
-    cy.get('[data-cy="replace-administration-users-diff"]').contains(
-      '1 utilisateur à ajouter : new.agent@douane.finances.gouv.fr'
-    )
-    cy.get('[data-cy="replace-administration-users-diff"]').contains('1 utilisateur à supprimer : another@email.com')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('1 utilisateur à ajouter')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('new.agent@douane.finances.gouv.fr')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('1 utilisateur à supprimer')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('another@email.com')
 
     cy.clickButton('Mettre à jour')
 
@@ -87,7 +101,7 @@ context('BackOffice > Users', () => {
   })
 
   it('Should import the emails of an administration from a CSV file', () => {
-    cy.clickButton('Mettre à jour les utilisateurs d’une administration')
+    cy.clickButton('Importer une liste')
     cy.fill('Administration', 'Douane')
 
     cy.get('.Component-Dialog input[type=file]').selectFile('cypress/fixtures/utilisateurs_administration.csv', {
@@ -99,10 +113,10 @@ context('BackOffice > Users', () => {
       'have.value',
       'jean.dupont@douane.finances.gouv.fr\nmarie.martin@douane.finances.gouv.fr'
     )
-    cy.get('[data-cy="replace-administration-users-diff"]').contains(
-      '2 utilisateurs à ajouter : jean.dupont@douane.finances.gouv.fr, marie.martin@douane.finances.gouv.fr'
-    )
-    cy.get('[data-cy="replace-administration-users-diff"]').contains('1 utilisateur à supprimer : another@email.com')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('2 utilisateurs à ajouter')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('jean.dupont@douane.finances.gouv.fr')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('marie.martin@douane.finances.gouv.fr')
+    cy.get('[data-cy="replace-administration-users-diff"]').contains('1 utilisateur à supprimer')
 
     cy.clickButton('Annuler')
   })

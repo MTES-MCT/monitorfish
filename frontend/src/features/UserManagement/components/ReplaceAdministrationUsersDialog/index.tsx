@@ -1,4 +1,4 @@
-import { Accent, Button, Dialog, Select, Textarea, THEME, pluralize } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, Select, Tag, Textarea, THEME, pluralize } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -56,7 +56,7 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
 
   return (
     <Dialog isAbsolute>
-      <Dialog.Title onClose={onClose}>Mettre à jour les utilisateurs d’une administration</Dialog.Title>
+      <Dialog.Title onClose={onClose}>Importer une liste d’utilisateurs</Dialog.Title>
       <StyledBody>
         <p>
           Lors de la revue des habilitations, collez ou importez (CSV) la liste complète des e-mails de
@@ -85,14 +85,30 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
         )}
         {diff && invalidEmails.length === 0 && (
           <Diff data-cy="replace-administration-users-diff">
-            <li>
-              {diff.addedEmails.length} {pluralize('utilisateur', diff.addedEmails.length)} à ajouter
-              {diff.addedEmails.length > 0 && ` : ${diff.addedEmails.join(', ')}`}
-            </li>
-            <li>
-              {diff.removedEmails.length} {pluralize('utilisateur', diff.removedEmails.length)} à supprimer
-              {diff.removedEmails.length > 0 && ` : ${diff.removedEmails.join(', ')}`}
-            </li>
+            <DiffGroup>
+              <DiffTitle>
+                {diff.addedEmails.length} {pluralize('utilisateur', diff.addedEmails.length)} à ajouter
+              </DiffTitle>
+              <DiffTags>
+                {diff.addedEmails.map(email => (
+                  <Tag key={email} backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.charcoal}>
+                    {email}
+                  </Tag>
+                ))}
+              </DiffTags>
+            </DiffGroup>
+            <DiffGroup>
+              <DiffTitle>
+                {diff.removedEmails.length} {pluralize('utilisateur', diff.removedEmails.length)} à supprimer
+              </DiffTitle>
+              <DiffTags>
+                {diff.removedEmails.map(email => (
+                  <Tag key={email} backgroundColor={THEME.color.maximumRed15} color={THEME.color.charcoal}>
+                    {email}
+                  </Tag>
+                ))}
+              </DiffTags>
+            </DiffGroup>
           </Diff>
         )}
         {errorMessage && <Error>{errorMessage}</Error>}
@@ -124,11 +140,29 @@ const StyledBody = styled(Dialog.Body)`
   width: 600px;
 `
 
-const Diff = styled.ul`
-  margin: 0;
-  max-height: 200px;
+const Diff = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 240px;
   overflow-y: auto;
-  padding-left: 16px;
+`
+
+const DiffGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+const DiffTitle = styled.p`
+  font-weight: 500;
+  margin: 0;
+`
+
+const DiffTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 `
 
 const Error = styled.p`

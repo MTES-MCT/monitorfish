@@ -1,8 +1,8 @@
 import { Ellipsised } from '@components/Ellipsised'
-import { Accent, Icon, IconButton, Toggle } from '@mtes-mct/monitor-ui'
+import { Accent, Icon, IconButton, Tag, THEME, Toggle } from '@mtes-mct/monitor-ui'
 
 import { getDateTime } from '../../../../utils'
-import { EXTERNAL_ADMINISTRATION_LABEL } from '../../constants'
+import { getUserAffiliation } from '../../utils'
 
 import type { UserManagement } from '../../types'
 import type { AccessorColumnDef } from '@tanstack/table-core/build/lib/types'
@@ -22,12 +22,19 @@ export function getTableColumns(
       size: 320
     },
     {
-      accessorFn: row => (row.isSuperUser ? 'CNSP' : 'Externe'),
-      cell: info => info.getValue<string>(),
+      accessorFn: getUserAffiliation,
+      cell: info => (
+        <Tag
+          backgroundColor={info.row.original.isSuperUser ? THEME.color.charcoal : THEME.color.gainsboro}
+          color={info.row.original.isSuperUser ? THEME.color.white : THEME.color.charcoal}
+        >
+          {info.getValue<string>()}
+        </Tag>
+      ),
       enableSorting: true,
-      header: () => 'Type',
-      id: 'type',
-      size: 100
+      header: () => 'Rattachement',
+      id: 'affiliation',
+      size: 240
     },
     {
       accessorFn: row => row.isSuperUser && row.isAdministrator,
@@ -47,22 +54,6 @@ export function getTableColumns(
       header: () => 'Admin.',
       id: 'isAdministrator',
       size: 80
-    },
-    {
-      accessorFn: row => row.service ?? '',
-      cell: info => info.getValue<string>(),
-      enableSorting: true,
-      header: () => 'Service CNSP',
-      id: 'service',
-      size: 180
-    },
-    {
-      accessorFn: row => (row.administration ? EXTERNAL_ADMINISTRATION_LABEL[row.administration] : ''),
-      cell: info => info.getValue<string>(),
-      enableSorting: true,
-      header: () => 'Administration',
-      id: 'administration',
-      size: 200
     },
     {
       accessorFn: row => row.lastLoginAtUtc ?? '',

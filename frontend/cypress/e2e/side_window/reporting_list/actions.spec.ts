@@ -229,7 +229,7 @@ context('Side Window > Reporting List > Actions', () => {
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should(
           'contains',
-          'Date début,Source,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade,Statut,INN'
+          'Date début,Source,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade,Statut,INN,Latitude,Longitude'
         )
         .should('contains', csvValues)
     })

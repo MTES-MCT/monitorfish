@@ -1,7 +1,23 @@
+import { CoordinatesFormat, WSG84_PROJECTION } from '@features/Map/constants'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
+import { getCoordinates } from '@mtes-mct/monitor-ui'
 
 import type { Reporting } from '@features/Reporting/types'
 import type { DownloadAsCsvMap } from '@utils/downloadAsCsv'
+
+function getDMDCoordinate(reporting: Reporting.Reporting, index: 0 | 1): string {
+  if (reporting.latitude === undefined || reporting.longitude === undefined) {
+    return ''
+  }
+
+  return (
+    getCoordinates(
+      [reporting.longitude, reporting.latitude],
+      WSG84_PROJECTION,
+      CoordinatesFormat.DEGREES_MINUTES_DECIMALS
+    )[index]?.replace(/ /g, '') ?? ''
+  )
+}
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
@@ -33,6 +49,14 @@ export const REPORTING_CSV_MAP: DownloadAsCsvMap<Reporting.Reporting> = {
   isIUU: {
     label: 'INN',
     transform: reporting => (reporting.isIUU ? 'OUI' : 'NON')
+  },
+  latitude: {
+    label: 'Latitude',
+    transform: reporting => getDMDCoordinate(reporting, 0)
+  },
+  longitude: {
+    label: 'Longitude',
+    transform: reporting => getDMDCoordinate(reporting, 1)
   }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */

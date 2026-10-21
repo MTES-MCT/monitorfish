@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 class ProtectedPathsAPIProperties {
     var paths: List<String>? = listOf()
     var superUserPaths: List<String>? = listOf()
+    var administratorPaths: List<String>? = listOf()
     var publicPaths: List<String>? = listOf()
     var apiKey: String = ""
 }

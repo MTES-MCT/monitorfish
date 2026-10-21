@@ -63,11 +63,12 @@ services:
       - MONITORFISH_API_PROTECTED_API_KEY=APIKEY
       - MONITORFISH_API_PROTECTED_PATHS=/bff/*
       - MONITORFISH_API_PROTECTED_SUPER_USER_PATHS=/bff/v1/beacon_malfunctions,/bff/v1/missions,/bff/v1/operational_alerts,/bff/v1/reportings,/bff/v1/vessels/risk_factors,/bff/v1/vessels/contact_method,/bff/v1/admin/control_objectives,/bff/v1/admin/fleet_segments,/bff/v1/fleet_segments/compute
+      - MONITORFISH_API_PROTECTED_ADMINISTRATOR_PATHS=/bff/v1/admin/users,/bff/v1/admin/authorized_organizational_units
       - MONITORFISH_API_PROTECTED_PUBLIC_PATHS=/api/v1/authorization/management/*,/api/v1/beacon_malfunctions/*,/api/v1/mission_actions/*
 
       # OIDC Configuration
       - MONITORFISH_OIDC_ENABLED=true
-      - MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=true
+      - MONITORFISH_OIDC_BYPASS_LOGIN_FILTER=false
       - MONITORFISH_OIDC_PROXY_URL=http://keycloak:8080
       - MONITORFISH_OIDC_ISSUER_URI=http://keycloak:8080/realms/monitor
       - MONITORFISH_OIDC_ISSUER_URI_EXTERNAL=http://localhost:8880/realms/monitor
@@ -81,7 +82,7 @@ services:
       - MONITORFISH_OIDC_LOGIN_URL=/oauth2/authorization/proconnect
       - MONITORFISH_OIDC_SUCCESS_URL=http://localhost:8880
       - MONITORFISH_OIDC_ERROR_URL=http://localhost:8880/register
-      - MONITORFISH_OIDC_AUTHORIZED_EMAIL_DOMAINS=email.gouv.fr,email.com
+      - MONITORFISH_OIDC_CERBERE_IDP_ID=4106b71b-094a-48f0-974a-cb2c2a9649b3
       - MONITORFISH_OIDC_PROVIDER=proconnect
       - MONITORFISH_KEYCLOAK_PROXY_ENABLED=true
       # Cache reset between specs (see `frontend/config/cypress.config.ts`)

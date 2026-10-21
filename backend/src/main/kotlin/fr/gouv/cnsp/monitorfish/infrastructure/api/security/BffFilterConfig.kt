@@ -44,6 +44,7 @@ class BffFilterConfig(
 
         logger.info("Adding user authentication for paths: ${protectedPathsAPIProperties.paths}")
         logger.info("Super-user protected paths : ${protectedPathsAPIProperties.superUserPaths}")
+        logger.info("Administrator protected paths : ${protectedPathsAPIProperties.administratorPaths}")
 
         return registrationBean
     }

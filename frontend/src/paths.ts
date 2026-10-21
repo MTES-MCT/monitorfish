@@ -19,5 +19,6 @@ export const ROUTER_PATHS = {
   producerOrganizationMembership: BackOfficeMenuPath[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE],
   register: '/register',
   regulations: BackOfficeMenuPath[BackOfficeMenuKey.REGULATORY_ZONE_TABLE],
-  sideWindow: '/side_window'
+  sideWindow: '/side_window',
+  users: BackOfficeMenuPath[BackOfficeMenuKey.USER_TABLE]
 }

@@ -4,8 +4,11 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BACK_OFFICE_MENU_LABEL, BackOfficeMenuKey, BackOfficeMenuPath } from './constants'
+import { useGetUserAccount } from '../../../../auth/hooks/useGetUserAccount'
 
 export function BackOfficeMenu() {
+  const { userAccount } = useGetUserAccount()
+
   return (
     <Wrapper>
       <StyledNavLink to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.REGULATORY_ZONE_TABLE]}`}>
@@ -34,6 +37,12 @@ export function BackOfficeMenu() {
         <Icon.Account />
         {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE]}
       </StyledNavLink>
+      {userAccount?.isAdministrator && (
+        <StyledNavLink to={`${ROUTER_PATHS.backoffice}/${BackOfficeMenuPath[BackOfficeMenuKey.USER_TABLE]}`}>
+          <Icon.Account />
+          {BACK_OFFICE_MENU_LABEL[BackOfficeMenuKey.USER_TABLE]}
+        </StyledNavLink>
+      )}
     </Wrapper>
   )
 }

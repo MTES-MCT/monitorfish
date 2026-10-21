@@ -58,7 +58,9 @@ class UserAuthorizationCheckFilter(
                     it,
                 )
             } ?: false
-        val isAuthorized = getIsAuthorizedUser.execute(email, isSuperUserPath)
+        val isAdministratorPath =
+            protectedPathsAPIProperties.administratorPaths?.any { request.requestURI.contains(it) } ?: false
+        val isAuthorized = getIsAuthorizedUser.execute(email, isSuperUserPath, isAdministratorPath)
         if (!isAuthorized) {
             logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} ($email)")
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)

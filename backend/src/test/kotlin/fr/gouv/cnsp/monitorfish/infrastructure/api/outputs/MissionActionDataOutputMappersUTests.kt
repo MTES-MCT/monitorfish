@@ -46,7 +46,13 @@ class MissionActionDataOutputMappersUTests {
         val threat = output.threats!!.single()
         assertThat(threat.value).isEqualTo("Obligations déclaratives")
         assertThat(threat.children.single().value).isEqualTo("DEP")
-        assertThat(threat.children.single().children.single().value).isEqualTo(27689)
+        assertThat(
+            threat.children
+                .single()
+                .children
+                .single()
+                .value,
+        ).isEqualTo(27689)
         assertThat(output.comments).isEqualTo("En attente de PV")
     }
 }

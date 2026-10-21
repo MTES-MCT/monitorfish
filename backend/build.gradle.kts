@@ -124,9 +124,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.6.0")
 
     // Data / persistence
-    implementation("org.flywaydb:flyway-core:13.9.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.9.0")
-    implementation("org.hibernate.validator:hibernate-validator:9.1.4.Final")
+    implementation("org.flywaydb:flyway-core:13.10.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.10.0")
+    implementation("org.hibernate.validator:hibernate-validator:9.1.5.Final")
     // Version managed by the Spring Boot BOM so it stays aligned with the managed hibernate-core
     // (an explicit newer hibernate-spatial pulls APIs absent from the BOM's hibernate-core).
     implementation("org.hibernate.orm:hibernate-spatial")
@@ -138,16 +138,16 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql:42.7.14")
 
     // Serialization / API
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.4")
     // Required to (de)serialize java.util.Optional (e.g. PatchableMissionActionDataInput): since the
     // Spring Boot 4 upgrade the starters ship Jackson 3 and no longer pull this Jackson 2 module.
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.3")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.4")
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
     api("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
 
     // Utilities
     api("com.neovisionaries:nv-i18n:1.29")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.3.1")
     implementation("io.sentry:sentry:8.60.0")
     implementation("io.sentry:sentry-log4j2:8.60.0")
 

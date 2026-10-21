@@ -28,14 +28,14 @@ kotlin {
 
 // Consumers bring their own Jackson (2 or 3) runtime: both read the annotations of the 2.x `jackson-annotations` artifact.
 dependencies {
-    api("com.fasterxml.jackson.core:jackson-annotations:2.20")
+    api("com.fasterxml.jackson.core:jackson-annotations:2.22")
     api("com.neovisionaries:nv-i18n:1.29")
 
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
-    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.3")
-    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.3")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.4")
+    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.4")
+    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.4")
 }
 
 publishing {

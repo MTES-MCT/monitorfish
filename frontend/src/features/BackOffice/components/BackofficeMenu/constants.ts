@@ -1,3 +1,8 @@
+import { Icon } from '@mtes-mct/monitor-ui'
+
+import type { IconProps } from '@mtes-mct/monitor-ui'
+import type { FunctionComponent } from 'react'
+
 export enum BackOfficeMenuKey {
   CONTROL_OBJECTIVE_TABLES = 'CONTROL_OBJECTIVE_TABLES',
   FLEET_SEGMENT_TABLE = 'FLEET_SEGMENT_TABLE',
@@ -29,3 +34,18 @@ export const BackOfficeMenuPath = {
   PRIOR_NOTIFICATION_SUBSCRIBER_FORM: 'prior_notification_subscribers/:controlUnitId',
   REGULATION_FORM: 'regulation/edit'
 }
+
+export type BackOfficeMenuItem = {
+  Icon: FunctionComponent<IconProps>
+  isAdministratorOnly: boolean
+  key: BackOfficeMenuKey
+}
+
+export const BACK_OFFICE_MENU_ITEMS: BackOfficeMenuItem[] = [
+  { Icon: Icon.MapLayers, isAdministratorOnly: false, key: BackOfficeMenuKey.REGULATORY_ZONE_TABLE },
+  { Icon: Icon.ControlUnit, isAdministratorOnly: false, key: BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES },
+  { Icon: Icon.FleetSegment, isAdministratorOnly: false, key: BackOfficeMenuKey.FLEET_SEGMENT_TABLE },
+  { Icon: Icon.Fishery, isAdministratorOnly: false, key: BackOfficeMenuKey.PRIOR_NOTIFICATION_SUBSCRIBER_TABLE },
+  { Icon: Icon.Account, isAdministratorOnly: false, key: BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE },
+  { Icon: Icon.GroupPerson, isAdministratorOnly: true, key: BackOfficeMenuKey.USER_TABLE }
+]

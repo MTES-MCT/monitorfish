@@ -1,5 +1,6 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
+import { BackOfficeHeader } from '@features/BackOffice/components/BackOfficeHeader'
 import { Accent, Button, DataTable, Icon, Select, TextInput, pluralize } from '@mtes-mct/monitor-ui'
 import { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -9,7 +10,7 @@ import { UserAccountContext } from '../../../../context/UserAccountContext'
 import {
   ACTIVITY_AS_OPTIONS,
   EXTERNAL_ADMINISTRATION_AS_OPTIONS,
-  TAB_LABEL,
+  TAB_AS_OPTIONS,
   USER_TYPE_AS_OPTIONS
 } from '../../constants'
 import { UserManagement } from '../../types'
@@ -63,20 +64,7 @@ export function UserTable() {
 
   return (
     <BackOfficeBody>
-      <TabList role="tablist">
-        {[UserManagement.Tab.USERS, UserManagement.Tab.AUTHORIZED_ORGANIZATIONAL_UNITS].map(tab => (
-          <TabTitle
-            key={tab}
-            $isSelected={tab === selectedTab}
-            aria-selected={tab === selectedTab}
-            onClick={() => setSelectedTab(tab)}
-            role="tab"
-            type="button"
-          >
-            {TAB_LABEL[tab]}
-          </TabTitle>
-        ))}
-      </TabList>
+      <BackOfficeHeader tabs={{ onChange: setSelectedTab, options: TAB_AS_OPTIONS, value: selectedTab }} />
 
       {selectedTab === UserManagement.Tab.USERS && (
         <>
@@ -164,27 +152,6 @@ export function UserTable() {
     </BackOfficeBody>
   )
 }
-
-const TabList = styled.div`
-  display: flex;
-  gap: 50px;
-  margin-bottom: 32px;
-`
-
-const TabTitle = styled.button<{
-  $isSelected: boolean
-}>`
-  background: none;
-  border: none;
-  border-bottom: 5px solid ${p => (p.$isSelected ? p.theme.color.charcoal : 'transparent')};
-  color: ${p => p.theme.color.charcoal};
-  cursor: pointer;
-  font-size: 22px;
-  font-weight: 700;
-  height: 38px;
-  line-height: 1.4;
-  padding: 0;
-`
 
 const Toolbar = styled.div`
   align-items: flex-start;

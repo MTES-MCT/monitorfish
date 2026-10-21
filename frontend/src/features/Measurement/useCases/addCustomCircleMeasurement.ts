@@ -3,7 +3,7 @@ import { measurementStyle, measurementStyleWithCenter } from '@features/Measurem
 import { saveMeasurement } from '@features/Measurement/useCases/saveMeasurement'
 import Feature from 'ol/Feature'
 import { circular } from 'ol/geom/Polygon'
-import { METERS_PER_UNIT, transform } from 'ol/proj'
+import { transform } from 'ol/proj'
 
 import type { MeasurementInProgress } from '@features/Measurement/types'
 import type { Coordinate } from 'ol/coordinate'
@@ -23,8 +23,7 @@ export const addCustomCircleMeasurement =
       return
     }
 
-    const radiusInMeters =
-      (METERS_PER_UNIT.m ?? 1) * ((circleMeasurementToAdd?.circleRadiusToAdd ?? 0) as number) * metersForOneNauticalMile
+    const radiusInMeters = ((circleMeasurementToAdd?.circleRadiusToAdd ?? 0) as number) * metersForOneNauticalMile
 
     let coordinates: Coordinate = []
     if (circleMeasurementHasCoordinatesAndRadiusFromForm()) {

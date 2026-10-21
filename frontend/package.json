@@ -56,6 +56,9 @@
     },
     "tsconfck": {
       "typescript": "$typescript"
+    },
+    "@typescript-eslint/parser": {
+      "typescript": "$typescript"
     }
   },
   "dependencies": {

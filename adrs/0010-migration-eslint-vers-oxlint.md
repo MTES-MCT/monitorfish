@@ -261,3 +261,14 @@ lève aussi la réserve « *Lint type-aware via OxLint (`tsgolint`)* » des *Alt
   *Limites découvertes*). Les `eslint-disable` inline des enums à ordre volontaire suffisent.
 - **madge** → `import/no-cycle` natif d'OxLint (`test:deps`) ; **ts-jest** → `@swc/jest` (tests
   multi-fenêtres).
+- **`overrides` npm** (le JSON de `package.json` ne permet pas de les commenter) :
+  - `"typescript": "$typescript"` pour `@typescript-eslint/eslint-plugin`,
+    `eslint-plugin-typescript-sort-keys` et `tsconfck` (*peers* `typescript` ancrés `<6.1.0`, `^5`
+    ou `^5` optionnel) : sans eux `npm install` échoue en `ERESOLVE` sur TS 7. typescript-eslint
+    reçoit en réalité TS 6 via le hook ci-dessus.
+  - `@babel/plugin-transform-runtime` `^7.29.0` : contourne un bug de résolution npm des *peers*
+    optionnels imbriqués (`@vitejs/plugin-react` → `@rolldown/plugin-babel` →
+    `@babel/plugin-transform-runtime`), où npm tente la 8.0.0-rc et échoue en `ERESOLVE` alors
+    qu'aucun de ces paquets n'est installé.
+  - ⚠️ La CI tourne sous Node 22 (npm 10), qui installe des *peers* optionnels qu'npm 11 ignore
+    (ex. `tsconfck`) : vérifier le lockfile avec `npx -p npm@10 npm ci --dry-run`.

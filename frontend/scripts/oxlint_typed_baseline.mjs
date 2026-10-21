@@ -8,32 +8,63 @@ import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 
 const BASELINE_PATH = 'oxlint-typed-baseline.json'
-const mode = process.argv[2]
 
-const result = spawnSync(
-  'oxlint',
-  ['--type-aware', '--config=.oxlintrc.typed.json', '--format=json', 'src'],
-  { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, shell: process.platform === 'win32' }
-)
-if (result.error || !result.stdout) {
-  console.error(result.error ?? result.stderr)
-  process.exit(2)
+function lint() {
+  const { stderr, stdout } = spawnSync(
+    'oxlint',
+    ['--type-aware', '--config=.oxlintrc.typed.json', '--format=json', 'src'],
+    { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 }
+  )
+
+  try {
+    return JSON.parse(stdout).diagnostics
+  } catch {
+    // OxLint exits with 1 both on violations and on a broken run (e.g. an invalid config),
+    // only the former prints a JSON report
+    console.error(stdout, stderr)
+    process.exit(2)
+  }
 }
 
-const { diagnostics } = JSON.parse(result.stdout)
-const crashes = diagnostics.filter(({ code }) => !code)
-if (crashes.length > 0) {
-  crashes.forEach(({ filename, message }) => console.error(`${filename}: ${message}`))
-  process.exit(2)
+function countByFileAndRule(diagnostics) {
+  const counts = {}
+  diagnostics.forEach(({ code, filename }) => {
+    counts[filename] ??= {}
+    counts[filename][code] = (counts[filename][code] ?? 0) + 1
+  })
+
+  return counts
 }
 
-const current = {}
-diagnostics.forEach(({ code, filename }) => {
-  current[filename] ??= {}
-  current[filename][code] = (current[filename][code] ?? 0) + 1
-})
+function findExceeding(counts, baseline) {
+  return Object.entries(counts).flatMap(([filename, rules]) =>
+    Object.entries(rules)
+      .map(([code, count]) => ({ allowed: baseline[filename]?.[code] ?? 0, code, count, filename }))
+      .filter(({ allowed, count }) => count > allowed)
+  )
+}
 
-const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) : {}
+function prune(baseline, counts) {
+  const pruned = {}
+  Object.entries(baseline).forEach(([filename, rules]) => {
+    Object.entries(rules).forEach(([code, allowed]) => {
+      const count = Math.min(counts[filename]?.[code] ?? 0, allowed)
+      if (count > 0) {
+        pruned[filename] ??= {}
+        pruned[filename][code] = count
+      }
+    })
+  })
+
+  return pruned
+}
+
+function sumCounts(counts) {
+  return Object.values(counts).reduce(
+    (total, rules) => total + Object.values(rules).reduce((sum, count) => sum + count, 0),
+    0
+  )
+}
 
 function writeBaseline(counts) {
   const sorted = Object.fromEntries(
@@ -44,35 +75,19 @@ function writeBaseline(counts) {
   writeFileSync(BASELINE_PATH, `${JSON.stringify(sorted, null, 2)}\n`)
 }
 
+const mode = process.argv[2]
+const diagnostics = lint()
+const counts = countByFileAndRule(diagnostics)
+
 if (mode === '--suppress-all') {
-  writeBaseline(current)
+  writeBaseline(counts)
   process.exit(0)
 }
 
-const excess = []
-const pruned = {}
-let unpruned = 0
-Object.entries(current).forEach(([filename, rules]) => {
-  Object.entries(rules).forEach(([code, count]) => {
-    const allowed = baseline[filename]?.[code] ?? 0
-    if (count > allowed) {
-      excess.push({ code, count, filename, allowed })
-    }
-  })
-})
-Object.entries(baseline).forEach(([filename, rules]) => {
-  Object.entries(rules).forEach(([code, allowed]) => {
-    const count = Math.min(current[filename]?.[code] ?? 0, allowed)
-    unpruned += allowed - count
-    if (count > 0) {
-      pruned[filename] ??= {}
-      pruned[filename][code] = count
-    }
-  })
-})
-
-if (excess.length > 0) {
-  excess.forEach(({ allowed, code, count, filename }) => {
+const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) : {}
+const exceeding = findExceeding(counts, baseline)
+if (exceeding.length > 0) {
+  exceeding.forEach(({ allowed, code, count, filename }) => {
     console.error(`${filename}: ${code} ${count} violation(s), ${allowed} allowed by ${BASELINE_PATH}`)
     diagnostics
       .filter(diagnostic => diagnostic.filename === filename && diagnostic.code === code)
@@ -81,14 +96,16 @@ if (excess.length > 0) {
   process.exit(1)
 }
 
+const pruned = prune(baseline, counts)
 if (mode === '--prune') {
   writeBaseline(pruned)
   process.exit(0)
 }
 
-if (unpruned > 0) {
+const fixedCount = sumCounts(baseline) - sumCounts(pruned)
+if (fixedCount > 0) {
   console.error(
-    `${unpruned} violation(s) recorded in ${BASELINE_PATH} no longer occur: run \`npm run test:lint:types:prune\` and commit the result.`
+    `${fixedCount} violation(s) recorded in ${BASELINE_PATH} no longer occur: run \`npm run test:lint:types:prune\` and commit the result.`
   )
   process.exit(1)
 }

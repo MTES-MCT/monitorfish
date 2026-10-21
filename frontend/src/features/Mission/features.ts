@@ -17,7 +17,7 @@ import { getNumberOfInfractions, getNumberOfInfractionsWithRecord } from '../../
 import { booleanToInt, getDate, getDateTime } from '../../utils'
 
 import type { MissionActionFormValues, MissionMainFormValues } from '@features/Mission/components/MissionForm/types'
-import type { Geometry, MultiPolygon } from 'ol/geom'
+import type { MultiPolygon } from 'ol/geom'
 
 import MissionStatus = Mission.MissionStatus
 import MissionActionType = MissionAction.MissionActionType
@@ -100,18 +100,18 @@ export const getMissionFeatureZone = (
   const geometry = geoJSON.readGeometry(mission.geom, {
     dataProjection: WSG84_PROJECTION,
     featureProjection: OPENLAYERS_PROJECTION
-  }) as Geometry
+  })
 
   const missionStatus = getMissionStatus(mission)
   const feature = new Feature({
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
-    geometry,
     missionId: mission.id,
     missionStatus,
     missionTypes: mission.missionTypes,
     startDateTimeUtc: mission.startDateTimeUtc
   })
+  feature.setGeometry(geometry ?? undefined)
   feature.setId(`${type}:${mission.id}`)
 
   return feature

@@ -70,7 +70,7 @@ export default [
           types: ['boolean'],
           format: ['camelCase', 'PascalCase', 'UPPER_CASE']
         }
-      ],
+      ]
     }
   }
 ]

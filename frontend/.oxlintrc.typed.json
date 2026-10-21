@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // Type-aware pass (`oxlint --type-aware`, tsgolint), run by `npm run test:lint:types` through
+  // scripts/oxlint_typed_baseline.mjs, which fails on any violation not recorded in
+  // oxlint-typed-baseline.json. Kept apart from .oxlintrc.json so that per-save linting stays fast.
+  "plugins": ["typescript"],
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "typescript/await-thenable": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/require-await": "error"
+  },
+  "overrides": [
+    {
+      // The `as any` assertions in these recursive generic utils are deliberate: removing them
+      // (as the no-unnecessary-type-assertion fixer does) makes tsc fail with TS2589
+      // "type instantiation is excessively deep".
+      "files": ["src/utils/nullify.ts", "src/utils/undefinedize.ts"],
+      "rules": {
+        "typescript/no-unnecessary-type-assertion": "off"
+      }
+    }
+  ]
+}

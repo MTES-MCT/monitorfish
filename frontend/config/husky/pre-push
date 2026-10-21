@@ -14,7 +14,7 @@ fi
 
 cd ./frontend
 
-# Full type-check (tsc, incremental) and type-aware lint (typescript-eslint) both need complete
+# Full type-check (tsc) and type-aware lint (oxlint --type-aware + typescript-eslint) both need complete
 # type information and are the two slowest checks: run them in parallel. Only their output is
 # printed when they fail (kept silent on success), but we announce start/progress/end around
 # them so a slow-but-alive push is never mistaken for a hang or network error.

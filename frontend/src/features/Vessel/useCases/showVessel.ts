@@ -4,7 +4,7 @@ import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { resetLoadingVessel } from '@features/Vessel/slice'
-import { VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { UNKNOWN_VESSEL, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { displayVesselSidebarAndPositions } from '@features/Vessel/useCases/displayVesselSidebarAndPositions'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
@@ -19,6 +19,10 @@ import type { MainAppThunk } from '@store'
 export const showVessel =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
+    if (vesselIdentity.vesselId === UNKNOWN_VESSEL.vesselId) {
+      return
+    }
+
     const {
       vessel: { selectedVesselSidebarTab }
     } = getState()

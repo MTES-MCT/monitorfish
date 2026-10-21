@@ -11,7 +11,7 @@ import { transform } from 'ol/proj'
 import { openVesselSidebarTab } from './openVesselSidebarTab'
 import { unselectVessel } from './unselectVessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
-import { VesselSidebarTab } from '../types/vessel'
+import { UNKNOWN_VESSEL, VesselSidebarTab } from '../types/vessel'
 import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 import { extractVesselIdentityProps } from '../utils'
 import { vesselApi } from '../vesselApi'
@@ -35,10 +35,8 @@ export const showReporting =
       }
 
       const reportingHasVessel =
-        reporting.vesselId !== undefined ||
-        reporting.cfr !== undefined ||
-        reporting.externalMarker !== undefined ||
-        reporting.ircs !== undefined
+        reporting.vesselId !== UNKNOWN_VESSEL.vesselId &&
+        (reporting.vesselId !== undefined || !!reporting.cfr || !!reporting.externalMarker || !!reporting.ircs)
 
       if (reportingHasVessel) {
         positionToMoveTo = await showReportingWithKnownVessel(dispatch, getState, reporting, positionToMoveTo)

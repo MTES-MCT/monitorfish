@@ -9,6 +9,21 @@ context('BackOffice > Users', () => {
     cy.wait(['@getUsers', '@getAuthorizedOrganizationalUnits'])
   })
 
+  it('Should highlight the current page in the menu, display the user email and collapse the menu', () => {
+    cy.get('nav[aria-label="Menu du backoffice"] a[aria-current="page"]').contains('Utilisateurs')
+    cy.get('nav[aria-label="Menu du backoffice"]').contains('dummy@email.gouv.fr')
+    cy.get('nav[aria-label="Menu du backoffice"]').contains('Retour à la carte')
+    cy.get('nav[aria-label="Menu du backoffice"]').contains('MonitorFish')
+
+    cy.get('button[aria-label="Replier le menu"]').click()
+
+    cy.get('nav[aria-label="Menu du backoffice"]').should('not.contain', 'Utilisateurs')
+    cy.get('nav[aria-label="Menu du backoffice"] a[title="Utilisateurs"]').should('have.attr', 'aria-current', 'page')
+
+    // Reset
+    cy.get('button[aria-label="Déplier le menu"]').click()
+  })
+
   it('Should list users and filter them', () => {
     cy.get('[data-cy="users-results"]').contains('2 utilisateurs')
     cy.get('.Table-SimpleTable').contains('another@email.com')

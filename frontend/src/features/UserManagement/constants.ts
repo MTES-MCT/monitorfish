@@ -21,6 +21,7 @@ export const TAB_LABEL: Record<UserManagement.Tab, string> = {
   [UserManagement.Tab.USERS]: 'Utilisateurs',
   [UserManagement.Tab.AUTHORIZED_ORGANIZATIONAL_UNITS]: 'Unités organisationnelles autorisées (Cerbère)'
 }
+export const TAB_AS_OPTIONS = getOptionsFromLabelledEnum(TAB_LABEL)
 
 export const USER_TYPE_LABEL: Record<UserManagement.UserType, string> = {
   [UserManagement.UserType.CNSP]: 'CNSP',

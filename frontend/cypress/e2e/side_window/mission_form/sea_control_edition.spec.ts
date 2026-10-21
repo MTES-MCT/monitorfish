@@ -208,7 +208,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
   it(
     'Should update actions When auto save is not enabled',
     {
-      env: {
+      expose: {
         FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: false
       }
     },
@@ -267,7 +267,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
   it(
     'Should update actions and keep existing actions ids',
     {
-      env: {
+      expose: {
         FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: false
       }
     },

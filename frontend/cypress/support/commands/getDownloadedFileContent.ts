@@ -7,11 +7,10 @@ function getRetryableDownloadedFileContent(
 ) {
   cy.wait(500)
 
-  cy.exec('cd cypress/downloads && ls').then(result => {
-    const downloadedFilename = result.stdout
-    cy.log(`Files: ${result.stdout}`)
+  cy.task<string[]>('listDownloadedFiles').then(([downloadedFilename]) => {
+    cy.log(`File: ${downloadedFilename}`)
 
-    if (!downloadedFilename || downloadedFilename === '') {
+    if (!downloadedFilename) {
       if (leftRetryCount <= 0) {
         throw new Error(`No file found after ${RETRY_COUNT} retries.`)
       }

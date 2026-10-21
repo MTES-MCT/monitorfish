@@ -92,28 +92,28 @@ export const BOOLEAN_AS_CONTROL_CHECK_OPTIONS: Option[] = [
 /**
  * Is auto-save enabled.
  *
- * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * When running Cypress tests, we modify this value in spec files, so we use `window.Cypress.expose()`
  * instead of `import.meta.env`.
  */
 export const AUTO_SAVE_ENABLED = isCypress()
   ? // @ts-ignore
-    window.Cypress.env().FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED
+    window.Cypress.expose().FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED
   : import.meta.env.FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED === 'true'
 
 /**
  * Is the e-ISR feature enabled.
  *
- * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * When running Cypress tests, we modify this value in spec files, so we use `window.Cypress.expose()`
  * instead of `import.meta.env`.
  */
 export const E_ISR_ENABLED = isCypress()
   ? // @ts-ignore
-    window.Cypress.env().FRONTEND_E_ISR_ENABLED
+    window.Cypress.expose().FRONTEND_E_ISR_ENABLED
   : import.meta.env.FRONTEND_E_ISR_ENABLED === 'true'
 
 const rawEIsrControlUnits: string = isCypress()
   ? // @ts-ignore
-    (window.Cypress.env().FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST ?? '')
+    (window.Cypress.expose().FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST ?? '')
   : (import.meta.env.FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST ?? '')
 
 /**
@@ -127,12 +127,12 @@ export const E_ISR_CONTROL_UNITS_FOR_TEST: number[] = rawEIsrControlUnits
 /**
  * ISO date from which controls fall under e-ISR. Empty = no date filtering.
  *
- * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+ * When running Cypress tests, we modify this value in spec files, so we use `window.Cypress.expose()`
  * instead of `import.meta.env`.
  */
 export const E_ISR_APPLICATION_DATE: string = isCypress()
   ? // @ts-ignore
-    (window.Cypress.env().FRONTEND_E_ISR_APPLICATION_DATE ?? '')
+    (window.Cypress.expose().FRONTEND_E_ISR_APPLICATION_DATE ?? '')
   : (import.meta.env.FRONTEND_E_ISR_APPLICATION_DATE ?? '')
 
 export const HIDDEN_ERROR = 'HIDDEN_ERROR'

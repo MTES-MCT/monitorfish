@@ -54,8 +54,8 @@ function UnmemoizedDrawLayer() {
   const vectorSourceRef = useRef() as MutableRefObject<VectorSource<Feature<Geometry>>>
   const getVectorSource = useCallback(() => {
     if (vectorSourceRef.current === undefined) {
-      vectorSourceRef.current = new VectorSource({
-        format: new GeoJSON({
+      vectorSourceRef.current = new VectorSource<Feature<Geometry>>({
+        format: new GeoJSON<Feature<Geometry>>({
           dataProjection: WSG84_PROJECTION,
           featureProjection: OPENLAYERS_PROJECTION
         })

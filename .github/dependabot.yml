@@ -55,6 +55,9 @@ updates:
       - "package-lock.json"
     ignore:
       - dependency-name: "rsuite"
+      # TypeScript 6 is only kept for typescript-eslint (naming-convention pass), which needs its JS API
+      - dependency-name: "typescript-6"
+        versions: [">=7"]
     groups:
       non-major-dependencies:
         applies-to: version-updates

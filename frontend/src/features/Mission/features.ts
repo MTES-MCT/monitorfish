@@ -106,12 +106,12 @@ export const getMissionFeatureZone = (
   const feature = new Feature({
     controlUnits: mission.controlUnits,
     endDateTimeUtc: mission.endDateTimeUtc,
-    geometry,
     missionId: mission.id,
     missionStatus,
     missionTypes: mission.missionTypes,
     startDateTimeUtc: mission.startDateTimeUtc
   })
+  feature.setGeometry(geometry ?? undefined)
   feature.setId(`${type}:${mission.id}`)
 
   return feature

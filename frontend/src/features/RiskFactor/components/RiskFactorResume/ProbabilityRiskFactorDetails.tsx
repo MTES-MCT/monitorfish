@@ -15,7 +15,7 @@ import styled from 'styled-components'
 export function ProbabilityRiskFactorDetails({ isOpen }) {
   const riskFactor = useMainAppSelector(state => state.vessel.selectedVessel)?.riskFactor
   assertNotNullish(riskFactor)
-  const currentYear = new Date().getUTCFullYear()
+  const currentYear = customDayjs().utc().year()
 
   const hasBeenControlledWithinPastFiveYears = riskFactor.lastControlDatetime
     ? customDayjs(riskFactor.lastControlDatetime).isAfter(customDayjs().subtract(5, 'year'))

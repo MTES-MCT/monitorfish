@@ -35,8 +35,8 @@ const getVectorSource = (type: string, zone: string | undefined): VectorSource =
 }
 
 function buildWholeVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
-  const vectorSource = new VectorSource({
-    format: new GeoJSON({
+  const vectorSource = new VectorSource<Feature<Geometry>>({
+    format: new GeoJSON<Feature<Geometry>>({
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }),
@@ -56,8 +56,8 @@ function buildWholeVectorSource(type: string, zone: string | undefined): VectorS
 }
 
 function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
-  const vectorSource = new VectorSource({
-    format: new GeoJSON({
+  const vectorSource = new VectorSource<Feature<Geometry>>({
+    format: new GeoJSON<Feature<Geometry>>({
       dataProjection: WSG84_PROJECTION,
       featureProjection: OPENLAYERS_PROJECTION
     }),

@@ -2,8 +2,8 @@ import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { THEME, type Station } from '@mtes-mct/monitor-ui'
 import { isEmpty, uniq } from 'lodash-es'
-import { GeoJSON } from 'ol/format'
 import { LineString, Point } from 'ol/geom'
+import { transform } from 'ol/proj'
 import { Fill, Icon, Stroke, Style, Text } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 
@@ -67,17 +67,7 @@ export const getFeatureStyle = ((feature: FeatureWithCodeAndEntityId) => {
 export function getStationPointFeature(station: Station.Station) {
   const controlUnitsCount = uniq(station.controlUnitResources.map(({ controlUnitId }) => controlUnitId)).length
 
-  const geoJSON = new GeoJSON()
-  const geometry = geoJSON.readGeometry(
-    {
-      coordinates: [station.longitude, station.latitude],
-      type: 'Point'
-    },
-    {
-      dataProjection: WSG84_PROJECTION,
-      featureProjection: OPENLAYERS_PROJECTION
-    }
-  )
+  const geometry = new Point(transform([station.longitude, station.latitude], WSG84_PROJECTION, OPENLAYERS_PROJECTION))
 
   const feature = new FeatureWithCodeAndEntityId({
     code: MonitorFishMap.MonitorFishLayer.STATION,

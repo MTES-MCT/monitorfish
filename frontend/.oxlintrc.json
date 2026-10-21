@@ -6,7 +6,8 @@
   "jsPlugins": [
     "eslint-plugin-sort-keys-fix",
     "eslint-plugin-sort-destructure-keys",
-    "eslint-plugin-typescript-sort-keys",
+    // Adapted so that its `string-enum` rule reads OxLint's enum AST (see the plugin file)
+    { "name": "typescript-sort-keys", "specifier": "./config/oxlint/typescriptSortKeysPlugin.mjs" },
     "eslint-plugin-cypress",
     "eslint-plugin-mocha",
     { "name": "import-js", "specifier": "eslint-plugin-import" },
@@ -103,9 +104,7 @@
       "asc",
       { "caseSensitive": false, "natural": false, "requiredFirst": false }
     ],
-    // typescript-sort-keys/string-enum cannot run here: it crashes under jsPlugins (OxLint puts
-    // enum members in `body.members`, the rule expects `members`), and the crash silently disables
-    // every other jsPlugin rule for the file. It runs in eslint-typed.config.mjs instead.
+    "typescript-sort-keys/string-enum": "error",
     "stylistic/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "stylistic/padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }],
     "react-js/jsx-sort-props": ["error", { "ignoreCase": true, "reservedFirst": true }],

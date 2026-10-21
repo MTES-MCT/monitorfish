@@ -159,9 +159,7 @@ context('Side Window > Vessel Group List', () => {
     cy.get('[title=\'Télécharger le groupe "Mission Thémis – semaine 04"\']').click({ force: true })
 
     cy.wait(400)
-    cy.exec('cd cypress/downloads && ls').then(result => {
-      const downloadedCSVFilename = result.stdout
-
+    cy.task<string[]>('listDownloadedFiles').then(([downloadedCSVFilename]) => {
       return cy
         .readFile(`cypress/downloads/${downloadedCSVFilename}`)
         .should(

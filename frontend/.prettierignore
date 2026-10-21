@@ -5,3 +5,4 @@
 
 # Machine-managed by `eslint --prune-suppressions` — keep Prettier from fighting its format
 /eslint-suppressions.json
+/oxlint-typed-baseline.json

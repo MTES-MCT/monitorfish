@@ -1,3 +1,5 @@
+import { assertIsClippedByOverflow } from '../utils/assertIsClippedByOverflow'
+
 context('InterestPoint', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -123,10 +125,11 @@ context('InterestPoint', () => {
 
     // Then
     cy.get('#root').click(536, 600, { timeout: 10000 })
-    cy.get('*[data-cy="edit-interest-point"]').should('not.be.visible')
+    // The closed box is unmounted 300ms after closing (`useDisplayMapBox`)
+    cy.get('*[data-cy="edit-interest-point"]').should('not.exist')
 
     cy.wait(300)
-    cy.get('*[data-cy="interest-point-edit"]').should('not.be.visible')
+    cy.get('*[data-cy="interest-point-edit"]').should(assertIsClippedByOverflow)
     cy.get('*[data-cy="interest-point-edit"]').click({ force: true })
     cy.get('*[data-cy="dms-coordinates-input"]', { timeout: 10000 }).should(
       'have.value',

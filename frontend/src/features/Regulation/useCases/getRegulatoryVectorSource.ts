@@ -35,8 +35,8 @@ export const getRegulatoryVectorSource =
   (dispatch, getState) => {
     const zoneName = `${LayerProperties.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
-    const vectorSource = new VectorSource({
-      format: new GeoJSON({
+    const vectorSource = new VectorSource<Feature<Geometry>>({
+      format: new GeoJSON<Feature<Geometry>>({
         dataProjection: WSG84_PROJECTION,
         featureProjection: OPENLAYERS_PROJECTION
       }),

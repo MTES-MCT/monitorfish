@@ -233,3 +233,46 @@ Remplacé par les **bulk suppressions natives d'ESLint** (≥ 9.24) — l'équiv
   `--no-inline-config` conservé ; `--ext`/`--no-eslintrc` supprimés (disparus d'ESLint 9).
 - `eslint-suppressions.json` est géré par ESLint : exclu de Prettier (`.prettierignore`) pour
   éviter le ping-pong de formatage avec `--prune-suppressions`.
+
+## Addendum (2026-10-21) : TypeScript 7 et passe type-aware sur OxLint (`tsgolint`)
+
+TypeScript 7 (portage natif en Go) ne fournit plus l'API JS du compilateur, dont dépendent
+typescript-eslint (*peer* `<6.1.0`, canary compris), ts-jest, madge et le préprocesseur Cypress
+< 15.19. Le retrait de `baseUrl` (supprimé par TS 7 ; `paths` relatifs à `./src` + repli `*`)
+lève aussi la réserve « *Lint type-aware via OxLint (`tsgolint`)* » des *Alternatives*.
+
+- **`typescript` 7.0.2** pour `tsc` (`test:type`), Cypress et `tsgolint` (qui embarque son propre
+  typescript-go). Cypress passe en **16.2** : les 15.20+ compilent les specs TS 7 mais souffrent sous
+  Firefox (BiDi) d'erreurs `no AUT context initialized`, corrigées seulement en 16.0
+  (cypress-io/cypress#34708). Migration : `env` → `expose` (config, overrides par test et
+  `window.Cypress.expose()` côté app), `cy.exec` → tâches `listDownloadedFiles`/`cleanDownloadedFiles`,
+  `keystrokeDelay: 10` (défaut passé à 0), override du *peer* `cypress` de monitor-ui et cypress-axe.
+- **Passe type-aware** (`test:lint:types`) : `oxlint --type-aware --config=.oxlintrc.typed.json`
+  (`await-thenable`, `no-misused-promises`, `no-unnecessary-type-assertion`,
+  `prefer-nullish-coalescing`, `require-await`) — ~9 s à froid au lieu de ~54 s. OxLint n'ayant pas
+  de *bulk suppressions*, `scripts/oxlint_typed_baseline.mjs` reproduit le ratchet ESLint : backlog
+  par fichier et par règle dans **`oxlint-typed-baseline.json`**, toute violation en plus échoue,
+  et une violation corrigée impose **`npm run test:lint:types:prune`**. Contrairement à l'ancienne
+  passe (`--no-inline-config`), les `eslint-disable` inline sont respectés.
+- **`@typescript-eslint/naming-convention`** : seule règle restée sur typescript-eslint
+  (`eslint-naming.config.mjs`, `test:lint:naming`, lancée par `test:lint:types`), absente d'OxLint
+  et impossible en `jsPlugins` (pas de `parserServices`). Elle tourne sur **TypeScript 6**
+  (alias npm `typescript-6`), injecté par un hook de résolution Node
+  (`node --import ./config/eslint/useTypescript6.mjs`). Ses suppressions
+  (`eslint-suppressions.json`, 7 violations) se purgent via `npm run test:lint:naming:prune`.
+- **`typescript-sort-keys/string-enum`** revient dans OxLint : `config/oxlint/typescriptSortKeysPlugin.mjs`
+  ré-expose le plugin en exposant `body.members` sous `members` (cause du crash décrit dans
+  *Limites découvertes*). Les `eslint-disable` inline des enums à ordre volontaire suffisent.
+- **madge** → `import/no-cycle` natif d'OxLint (`test:deps`) ; **ts-jest** → `@swc/jest` (tests
+  multi-fenêtres).
+- **`overrides` npm** (le JSON de `package.json` ne permet pas de les commenter) :
+  - `"typescript": "$typescript"` pour `@typescript-eslint/eslint-plugin`,
+    `eslint-plugin-typescript-sort-keys` et `tsconfck` (*peers* `typescript` ancrés `<6.1.0`, `^5`
+    ou `^5` optionnel) : sans eux `npm install` échoue en `ERESOLVE` sur TS 7. typescript-eslint
+    reçoit en réalité TS 6 via le hook ci-dessus.
+  - `@babel/plugin-transform-runtime` `^7.29.0` : contourne un bug de résolution npm des *peers*
+    optionnels imbriqués (`@vitejs/plugin-react` → `@rolldown/plugin-babel` →
+    `@babel/plugin-transform-runtime`), où npm tente la 8.0.0-rc et échoue en `ERESOLVE` alors
+    qu'aucun de ces paquets n'est installé.
+  - ⚠️ La CI tourne sous Node 22 (npm 10), qui installe des *peers* optionnels qu'npm 11 ignore
+    (ex. `tsconfck`) : vérifier le lockfile avec `npx -p npm@10 npm ci --dry-run`.

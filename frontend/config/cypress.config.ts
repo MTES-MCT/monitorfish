@@ -1,6 +1,7 @@
-import {defineConfig} from 'cypress'
+import { defineConfig } from 'cypress'
+import { existsSync, readdirSync, rmSync } from 'node:fs'
 
-import {clearBackendCaches, restoreDatabase, snapshotDatabase} from './cypressSpecIsolation'
+import { clearBackendCaches, restoreDatabase, snapshotDatabase } from './cypressSpecIsolation'
 
 const IS_CI = Boolean(process.env.CI)
 /**
@@ -15,6 +16,17 @@ export default defineConfig({
     baseUrl: `http://${IS_CI ? 'localhost:8880' : 'localhost:3000'}`,
     excludeSpecPattern: ['**/__snapshots__/*', '**/__image_snapshots__/*'],
     setupNodeEvents(on, config) {
+      on('task', {
+        cleanDownloadedFiles() {
+          rmSync(config.downloadsFolder, { force: true, recursive: true })
+
+          return null
+        },
+        listDownloadedFiles() {
+          return existsSync(config.downloadsFolder) ? readdirSync(config.downloadsFolder) : []
+        }
+      })
+
       if (!IS_SPEC_ISOLATION_ENABLED) {
         return
       }
@@ -37,21 +49,25 @@ export default defineConfig({
     },
     specPattern: 'cypress/e2e/**/*.spec.ts'
   },
-  env: {
+  expose: {
     /**
-     * When running Cypress tests, we modify this env var in spec file, so we use `window.Cypress.env()`
+     * When running Cypress tests, we modify these values in spec files, so we use `window.Cypress.expose()`
      * instead of `import.meta.env` in application code.
      */
     FRONTEND_E_ISR_CONTROL_UNITS_FOR_TEST: '10499',
     FRONTEND_E_ISR_ENABLED: true,
-    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true,
+    FRONTEND_MISSION_FORM_AUTO_SAVE_ENABLED: true
   },
+  // Cypress 16 types without delay by default, which outruns the debounced inputs of the forms under test
+  keystrokeDelay: 10,
+
+  pageLoadTimeout: 120000,
+
   projectId: '9b7q8z',
   retries: {
     openMode: 0,
     runMode: 5
   },
-  pageLoadTimeout: 120000,
   screenshotOnRunFailure: true,
   scrollBehavior: false,
   video: false,

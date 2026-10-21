@@ -8,7 +8,7 @@ describe('hooks/useTable/utils.getArrayPathFromStringPath()', () => {
 
     const result = getArrayPathFromStringPath(stringPath)
 
-    expect(result).toMatchObject(['aProp'] as any)
+    expect(result).toMatchObject(['aProp'])
   })
 
   it('should return the expected array path from a 2 levels deep string path', () => {
@@ -16,7 +16,7 @@ describe('hooks/useTable/utils.getArrayPathFromStringPath()', () => {
 
     const result = getArrayPathFromStringPath(stringPath)
 
-    expect(result).toMatchObject(['aProp', 'sSubProp', 'aSubSubProp'] as any)
+    expect(result).toMatchObject(['aProp', 'sSubProp', 'aSubSubProp'])
   })
 
   it('should throw an error from an empty-ish string path', () => {

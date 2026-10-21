@@ -1,7 +1,7 @@
 import { Icon, Tag } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { TagProps } from '@mtes-mct/monitor-ui/elements/Tag'
+import type { TagProps } from '@mtes-mct/monitor-ui'
 
 export function TagInfo({ children, ...props }: TagProps) {
   return (

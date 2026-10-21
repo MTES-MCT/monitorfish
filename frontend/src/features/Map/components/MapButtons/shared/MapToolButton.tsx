@@ -2,7 +2,7 @@ import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, IconButton, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import type { IconButtonProps } from '@mtes-mct/monitor-ui/elements/IconButton'
+import type { IconButtonProps } from '@mtes-mct/monitor-ui'
 
 type MapToolButtonProps = {
   className?: string | undefined

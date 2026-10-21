@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import styled from 'styled-components'
 
 import type { EditedAlertSpecification } from '@features/Alert/types'
-import type { DateAsStringRange } from '@mtes-mct/monitor-ui/types/definitions'
+import type { DateAsStringRange } from '@mtes-mct/monitor-ui'
 
 export function FormikValidityPeriod() {
   const { newWindowContainerRef } = useNewWindow()

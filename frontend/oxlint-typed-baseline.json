@@ -1,0 +1,546 @@
+{
+  "src/api/__tests__/geoserver.test.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/api/api.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/components/ConfirmationModal.tsx": {
+    "typescript(no-misused-promises)": 3
+  },
+  "src/components/Dialog.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/components/SideWindowCard.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/domain/use_cases/error/displayOrLogError.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/ActivityReport/__tests__/utils.test.ts": {
+    "typescript(require-await)": 7
+  },
+  "src/features/ActivityReport/components/ExportActivityReportsDialog/index.tsx": {
+    "typescript(no-misused-promises)": 3
+  },
+  "src/features/AdministrativeZone/layers/styles/administrativeLayer.style.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Alert/components/HowAlertsWorksDialog.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/Criteria/ZoneCriteria.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Alert/components/SideWindowAlerts/AlertManagementForm/index.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Alert/components/SideWindowAlerts/AlertsManagementList/index.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 3
+  },
+  "src/features/Alert/components/SideWindowAlerts/SilencedAlerts/AddSilencedAlertDialog.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/Alert/components/SideWindowAlerts/SilencedAlerts/index.tsx": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionCard.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetails.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionDetailsFollowUp.tsx": {
+    "typescript(prefer-nullish-coalescing)": 6
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/BeaconMalfunctionsDetailsFollowUpNotification.tsx": {
+    "typescript(prefer-nullish-coalescing)": 6
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/index.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/BeaconMalfunction/components/BeaconMalfunctionBoard/utils.tsx": {
+    "typescript(prefer-nullish-coalescing)": 3
+  },
+  "src/features/ControlObjective/components/ControlObjectiveTable/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/ControlUnit/__tests__/utils.test.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Item.tsx": {
+    "typescript(prefer-nullish-coalescing)": 3
+  },
+  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitResourceList/Form.tsx": {
+    "typescript(no-misused-promises)": 3
+  },
+  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitResourceList/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/CustomZone/components/EditDialog.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/Draw/layer.tsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/Draw/useCases/addFeatureToDrawedFeature.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/FleetSegment/components/FleetSegmentsBackoffice/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/FleetSegment/useCases/getFleetSegmentsYearEntries.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Healthcheck/__tests__/utils.test.ts": {
+    "typescript(require-await)": 4
+  },
+  "src/features/LoadOffline/components/LoadOffline.tsx": {
+    "typescript(no-misused-promises)": 3,
+    "typescript(require-await)": 1
+  },
+  "src/features/LoadOffline/utils.ts": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Logbook/components/VesselLogbook/CustomDatesShowedInfo.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Logbook/components/VesselLogbook/LogbookMessages/messages/CPSMessage/__tests__/utils.test.ts": {
+    "typescript(require-await)": 4
+  },
+  "src/features/Logbook/components/VesselLogbook/LogbookSummary/LogbookMessageResumeHeader.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Logbook/components/VesselLogbook/LogbookSummary/index.tsx": {
+    "typescript(no-misused-promises)": 4
+  },
+  "src/features/Logbook/components/VesselLogbook/LogbookSummary/summaries/DEPMessageResume.tsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/Logbook/components/VesselLogbook/LogbookSummary/summaries/PNOMessageResume.tsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Logbook/useCases/displayedLogbookOverlays/hideLogbookMessageOverlay.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Logbook/useCases/displayedLogbookOverlays/toggleAndDisplayLogbookMessageOverlay.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Logbook/useCases/displayedLogbookOverlays/toggleAndHideLogbookMessageOverlays.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Logbook/useCases/getVesselLogbook.ts": {
+    "typescript(await-thenable)": 1,
+    "typescript(prefer-nullish-coalescing)": 1,
+    "typescript(require-await)": 2
+  },
+  "src/features/Logbook/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 4
+  },
+  "src/features/Map/components/RightClickMapMenuOverlay.jsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Map/components/TrackTypeOverlay/TrackTypeCard.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Map/components/VesselTrackOverlay/VesselTrackCard.jsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Map/hooks/useMapLayer.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Map/layers/styles/utils.test.ts": {
+    "typescript(require-await)": 7
+  },
+  "src/features/Measurement/layers/MeasurementLayer.tsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/Mission/__tests__/getMissionCompletionStatus.test.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/ControlCheckTable.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikCoordinatesPicker.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikGangwayField.tsx": {
+    "typescript(no-misused-promises)": 4
+  },
+  "src/features/Mission/components/MissionForm/ActionForm/shared/FormikMultiInfractionPicker/Infraction.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/Mission/components/MissionForm/ActionList/ActionCard.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/components/MissionForm/ActionList/FishActionCard.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Mission/components/MissionForm/ActionList/index.tsx": {
+    "typescript(no-misused-promises)": 5
+  },
+  "src/features/Mission/components/MissionForm/ActionList/utils.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/components/MissionForm/Loader.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/components/MissionForm/MainForm/FormikLocationPicker.tsx": {
+    "typescript(no-misused-promises)": 3,
+    "typescript(require-await)": 2
+  },
+  "src/features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/ControlUnitWarningMessage.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 2
+  },
+  "src/features/Mission/components/MissionForm/MainForm/FormikMultiControlUnitPicker/index.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/components/MissionForm/MainForm/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Mission/components/MissionForm/hooks/useGetMissionActionFormikUsecases.ts": {
+    "typescript(no-misused-promises)": 7
+  },
+  "src/features/Mission/components/MissionForm/index.tsx": {
+    "typescript(no-misused-promises)": 4
+  },
+  "src/features/Mission/components/MissionForm/shared/DeletionConfirmationDialog.tsx": {
+    "typescript(no-misused-promises)": 3
+  },
+  "src/features/Mission/components/MissionForm/shared/FormHead.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/components/MissionForm/useCases/initMissionGeometry.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/components/MissionForm/useCases/updateOtherControlsCheckboxes.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/components/MissionList/hooks/useGetFilteredMissionsQuery.ts": {
+    "typescript(prefer-nullish-coalescing)": 4
+  },
+  "src/features/Mission/components/MissionList/index.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/layers/MissionsLabelsLayer/MissionsLabelsLayer.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/layers/MissionsLabelsLayer/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Mission/useCases/editMission.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Mission/useCases/saveMission.ts": {
+    "typescript(await-thenable)": 1,
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/PriorNotification/components/LogbookPriorNotificationForm/Footer.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/PriorNotification/components/LogbookPriorNotificationForm/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/PriorNotification/components/ManualPriorNotificationForm/Content.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/PriorNotification/components/PriorNotificationList/cells/ActionButtonsCell.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 1
+  },
+  "src/features/PriorNotification/components/PriorNotificationList/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/PriorNotification/components/PriorNotificationSubscriberForm/utils.tsx": {
+    "typescript(no-misused-promises)": 3
+  },
+  "src/features/PriorNotification/components/shared/CardBodyHead/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/PriorNotification/components/shared/DownloadButton/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/PriorNotification/components/shared/UploadFiles.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/PriorNotification/useCases/openPriorNotificationReportingList.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/ProducerOrganizationMembership/components/ProducerOrganizationMembershipTable/FilterBar.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/ProducerOrganizationMembership/useCases/__tests__/__mocks__/dummyCsv.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/FishingPeriod/fields/DayTimeCheckbox.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/FishingPeriod/hooks/usePushArrayInFishingPeriod.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/InfoPoint.tsx": {
+    "typescript(prefer-nullish-coalescing)": 5
+  },
+  "src/features/Regulation/components/RegulationForm/identification/RegulationGeometryLine.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/identification/RegulationLawTypeLine.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/identification/RegulationRegionLine.tsx": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/identification/RegulationTopicLine.tsx": {
+    "typescript(await-thenable)": 1,
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/components/RegulationForm/species_regulation/RegulatedSpecies.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/components/RegulatoryZones/RegulatoryTopic.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Regulation/layers/RegulatoryLayerSearch.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/layers/styles/utils/isForbiddenPeriod.test.ts": {
+    "typescript(require-await)": 27
+  },
+  "src/features/Regulation/layers/styles/utils/isForbiddenPeriod.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Regulation/useCases/getAllRegulatoryLayers.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Regulation/useCases/getAllRegulatoryLayersByRegTerritory.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Regulation/useCases/getGeometryWithoutRegulationReference.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Regulation/useCases/searchRegulatoryLayers.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Reporting/components/IUUReportingMapForm/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Reporting/components/ReportingForm/Form.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Reporting/components/ReportingForm/FormikCoordinatesPicker.tsx": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Reporting/components/ReportingForm/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Reporting/components/VesselReportings/ArchivedReportingList/index.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Reporting/components/VesselReportings/CurrentReportingList/Content.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 1
+  },
+  "src/features/Reporting/useCases/__tests__/archiveReporting.test.ts": {
+    "typescript(require-await)": 2
+  },
+  "src/features/RiskFactor/components/RiskFactorResume/ImpactRiskFactorDetails.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/RiskFactor/components/RiskFactorResume/RiskFactorExplanationModal.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/SideWindow/Menu/index.tsx": {
+    "typescript(no-misused-promises)": 5
+  },
+  "src/features/SideWindow/SubMenu/Item.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/SideWindow/index.tsx": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/SideWindow/useCases/openSideWindowPath.ts": {
+    "typescript(await-thenable)": 2
+  },
+  "src/features/Vessel/components/ExportVesselListDialog/index.tsx": {
+    "typescript(await-thenable)": 1,
+    "typescript(no-misused-promises)": 3
+  },
+  "src/features/Vessel/components/VesselList/FilterBar.tsx": {
+    "typescript(require-await)": 2
+  },
+  "src/features/Vessel/components/VesselList/cells/ActionButtonsCell.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/components/VesselListAndGroups/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/Vessel/components/VesselSearch/index.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/Controls/Control.tsx": {
+    "typescript(await-thenable)": 1,
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/Controls/index.tsx": {
+    "typescript(await-thenable)": 1,
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/Equipment/resume/BeaconMalfunctionBody.tsx": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/Equipment/resume/EquipmentResume.tsx": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/ShowFishingActivitiesOnMap.tsx": {
+    "typescript(await-thenable)": 2,
+    "typescript(no-misused-promises)": 1
+  },
+  "src/features/Vessel/components/VesselSidebar/components/Tabs.tsx": {
+    "typescript(no-misused-promises)": 6
+  },
+  "src/features/Vessel/layers/utils/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 4
+  },
+  "src/features/Vessel/types/track/__tests__/index.test.ts": {
+    "typescript(require-await)": 11
+  },
+  "src/features/Vessel/types/vessel.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/Vessel/useCases/VesselListV2/previewVessels.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/VesselListV2/undoPreviewVessels.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/VesselListV2/updateCustomZoneAndFilterVessels.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderAISVesselFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderVesselAlertAndBeaconMalfunctionFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderVesselAlertFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderVesselBeaconMalfunctionFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderVesselEstimatedPositionFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/rendering/renderVesselInfractionSuspicionFeatures.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/Vessel/useCases/showVessel.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Vessel/useCases/updateVesselTrackAndLogbookFromDates.ts": {
+    "typescript(await-thenable)": 2
+  },
+  "src/features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/Vessel/vesselApi.ts": {
+    "typescript(require-await)": 2
+  },
+  "src/features/VesselFilter/layers/VesselFilterLayer.jsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/VesselGroup/components/EditDynamicVesselGroupDialog/index.tsx": {
+    "typescript(no-misused-promises)": 4,
+    "typescript(require-await)": 12
+  },
+  "src/features/VesselGroup/components/EditFixedVesselGroupDialog/UploadVesselFile.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 1
+  },
+  "src/features/VesselGroup/components/EditFixedVesselGroupDialog/__tests__/__mocks__/getVesselsDummyCsv.ts": {
+    "typescript(require-await)": 1
+  },
+  "src/features/VesselGroup/components/EditFixedVesselGroupDialog/index.tsx": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/features/VesselGroup/components/VesselGroupList/VesselGroupRow.tsx": {
+    "typescript(no-misused-promises)": 1,
+    "typescript(require-await)": 1
+  },
+  "src/features/VesselGroup/components/VesselGroupList/cells/ActionButtonsCell.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 1
+  },
+  "src/features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow.tsx": {
+    "typescript(await-thenable)": 4,
+    "typescript(no-misused-promises)": 4
+  },
+  "src/features/VesselGroup/useCases/countFilteredVessels.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/VesselGroup/useCases/deleteVesselGroup.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/VesselGroup/useCases/hideVesselsNotInVesselGroups.ts": {
+    "typescript(await-thenable)": 1
+  },
+  "src/features/VesselSearch/VesselSearchResultItem.tsx": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/features/VesselSearch/index.tsx": {
+    "typescript(no-misused-promises)": 2,
+    "typescript(require-await)": 1
+  },
+  "src/features/commonStyles/Backoffice.style.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/features/commonStyles/icons/EditIcon.style.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/hooks/useListenForScroll.ts": {
+    "typescript(no-misused-promises)": 2
+  },
+  "src/utils.test.ts": {
+    "typescript(require-await)": 4
+  },
+  "src/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/utils/__tests__/getLocalstorageProperty.test.ts": {
+    "typescript(require-await)": 2
+  },
+  "src/utils/__tests__/isCypress.test.ts": {
+    "typescript(prefer-nullish-coalescing)": 1
+  },
+  "src/workers/MonitorFishWebWorker.ts": {
+    "typescript(prefer-nullish-coalescing)": 2
+  },
+  "src/workers/serviceWorker.ts": {
+    "typescript(no-misused-promises)": 1
+  },
+  "src/workers/utils.ts": {
+    "typescript(prefer-nullish-coalescing)": 4
+  }
+}

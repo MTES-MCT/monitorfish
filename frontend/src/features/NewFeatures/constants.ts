@@ -7,6 +7,15 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-10-21',
+        description: `L'export CSV de la liste des signalements contient désormais la **position** des signalements (colonnes « Latitude » et « Longitude »), lorsqu'elle a été renseignée.
+
+Les coordonnées sont exportées dans le format choisi dans les paramètres de la carte (DMS, DMD ou DD).`,
+        for: 'CNSP',
+        title: `Signalements – Ajout des positions dans l'export CSV`,
+        type: 'IMPROVEMENT'
+      },
+      {
         date: '2026-10-20',
         description: `L'onglet « Contrôles » de la fiche navire affiche désormais les **contrôles croisés** saisis dans RapportNav.
 

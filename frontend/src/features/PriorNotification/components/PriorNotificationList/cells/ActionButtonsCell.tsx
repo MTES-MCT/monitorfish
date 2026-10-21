@@ -1,6 +1,7 @@
 import { openLogbookPriorNotificationForm } from '@features/PriorNotification/useCases/openLogbookPriorNotificationForm'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -18,6 +19,7 @@ type ActionButtonsCellProps = Readonly<{
 export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps) {
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
+  const isUnknownVessel = priorNotification.vesselId === UNKNOWN_VESSEL.vesselId
 
   const edit = () => {
     if (priorNotification.isManuallyCreated) {
@@ -56,6 +58,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
     <Wrapper>
       <IconButton
         accent={Accent.TERTIARY}
+        disabled={isUnknownVessel}
         Icon={Icon.ViewOnMap}
         onClick={selectMainMapVessel}
         title="Centrer le navire sur la carte"

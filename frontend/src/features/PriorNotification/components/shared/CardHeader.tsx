@@ -1,4 +1,5 @@
 import { CountryFlag } from '@components/CountryFlag'
+import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
@@ -25,6 +26,7 @@ export function CardHeader({
   withFirstTitleRow = false
 }: CardHeaderProps) {
   const dispatch = useMainAppDispatch()
+  const isUnknownVessel = selectedVesselIdentity?.vesselId === UNKNOWN_VESSEL.vesselId
 
   function triggerShowVessel() {
     if (selectedVesselIdentity) {
@@ -63,14 +65,14 @@ export function CardHeader({
               )}
             </TitleRowIconBox>
 
-            {selectedVesselIdentity ? (
+            {selectedVesselIdentity && isUnknownVessel && <UnknownVesselName>Navire inconnu</UnknownVesselName>}
+            {selectedVesselIdentity && !isUnknownVessel && (
               <button onClick={triggerShowVessel} title="Voir la fiche navire" type="button">
                 <VesselName>{selectedVesselIdentity.vesselName ?? '...'}</VesselName> (
                 {selectedVesselIdentity.internalReferenceNumber ?? '...'})
               </button>
-            ) : (
-              <Loader $height={22} />
             )}
+            {!selectedVesselIdentity && <Loader $height={22} />}
           </TitleRow>
         )}
 
@@ -180,4 +182,10 @@ const Loader = styled.span<{
 const VesselName = styled.span`
   font-size: 16px;
   font-weight: 700;
+`
+
+// `inline-block` stops the parent row's underline from propagating to this text
+const UnknownVesselName = styled(VesselName)`
+  cursor: default;
+  display: inline-block;
 `

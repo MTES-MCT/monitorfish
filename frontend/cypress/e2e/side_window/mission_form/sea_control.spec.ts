@@ -160,7 +160,7 @@ context('Side Window > Mission Form > Sea Control', () => {
         id: 2
       },
       statusCode: 201
-    })
+    }).as('createMissionAction')
     cy.intercept('PUT', '/bff/v1/mission_actions/2', {
       body: {
         id: 2
@@ -346,6 +346,9 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Saisi par
     cy.fill('Saisi par', 'Marlin')
+    // "Saisi par" is the last required field: the control is only created now. Wait for it, otherwise
+    // "Complété par" lands within the same auto-save debounce and no update (PUT) is ever sent.
+    cy.wait('@createMissionAction')
 
     // Complété par
     cy.fill('Complété par', 'Alice', { index: 1 })

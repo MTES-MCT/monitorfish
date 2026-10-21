@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 
+import { assertIsClippedByOverflow } from '../../utils/assertIsClippedByOverflow'
 import { openVesselBySearch } from '../utils'
 
 context('Vessel sidebar controls buttons', () => {
@@ -154,7 +155,7 @@ context('Vessel sidebar controls buttons', () => {
     cy.get('*[data-cy^="fishing-activity-name"]').eq(2).scrollIntoView().click({ force: true, timeout: 10000 })
     cy.wait(200)
     cy.get('#OOF20191030059903').should('be.visible')
-    cy.get('#OOF20190627059908').should('not.be.visible')
+    cy.get('#OOF20190627059908').should(assertIsClippedByOverflow)
 
     cy.get('*[data-cy^="vessel-track-depth-selection"]').click({ timeout: 10000 })
 

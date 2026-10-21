@@ -9,6 +9,14 @@ export const EXTERNAL_ADMINISTRATION_LABEL: Record<UserManagement.ExternalAdmini
 }
 export const EXTERNAL_ADMINISTRATION_AS_OPTIONS = getOptionsFromLabelledEnum(EXTERNAL_ADMINISTRATION_LABEL)
 
+export const INACTIVITY_DELAY_IN_MONTHS = 6
+
+export const ACTIVITY_LABEL: Record<UserManagement.Activity, string> = {
+  [UserManagement.Activity.INACTIVE]: `Inactifs depuis ${INACTIVITY_DELAY_IN_MONTHS} mois ou jamais connectés`,
+  [UserManagement.Activity.NEVER_LOGGED_IN]: 'Jamais connectés'
+}
+export const ACTIVITY_AS_OPTIONS = getOptionsFromLabelledEnum(ACTIVITY_LABEL)
+
 export const TAB_LABEL: Record<UserManagement.Tab, string> = {
   [UserManagement.Tab.USERS]: 'Utilisateurs',
   [UserManagement.Tab.AUTHORIZED_ORGANIZATIONAL_UNITS]: 'Unités organisationnelles autorisées (Cerbère)'

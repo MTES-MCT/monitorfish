@@ -7,6 +7,18 @@ export namespace UserManagement {
     GENDARMERIE_NATIONALE = 'GENDARMERIE_NATIONALE'
   }
 
+  export enum Activity {
+    INACTIVE = 'INACTIVE',
+    NEVER_LOGGED_IN = 'NEVER_LOGGED_IN'
+  }
+
+  export type Filters = {
+    activity: Activity | undefined
+    administration: ExternalAdministration | undefined
+    searchQuery: string | undefined
+    userType: UserType | undefined
+  }
+
   export type User = {
     administration: ExternalAdministration | undefined
     email: string | undefined

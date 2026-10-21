@@ -6,9 +6,15 @@ import styled from 'styled-components'
 
 import { getTableColumns } from './constants'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
-import { EXTERNAL_ADMINISTRATION_AS_OPTIONS, TAB_LABEL } from '../../constants'
+import {
+  ACTIVITY_AS_OPTIONS,
+  EXTERNAL_ADMINISTRATION_AS_OPTIONS,
+  TAB_LABEL,
+  USER_TYPE_AS_OPTIONS
+} from '../../constants'
 import { UserManagement } from '../../types'
 import { useDeleteUserMutation, useGetUsersQuery, useUpdateUserIsAdministratorMutation } from '../../userManagementApi'
+import { filterUsers } from '../../utils'
 import { AddUserDialog } from '../AddUserDialog'
 import { AuthorizedOrganizationalUnitList } from '../AuthorizedOrganizationalUnitList'
 import { ReplaceAdministrationUsersDialog } from '../ReplaceAdministrationUsersDialog'
@@ -22,10 +28,12 @@ export function UserTable() {
   const [updateUserIsAdministrator] = useUpdateUserIsAdministratorMutation()
 
   const [selectedTab, setSelectedTab] = useState<UserManagement.Tab>(UserManagement.Tab.USERS)
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
-  const [administrationFilter, setAdministrationFilter] = useState<UserManagement.ExternalAdministration | undefined>(
-    undefined
-  )
+  const [filters, setFilters] = useState<UserManagement.Filters>({
+    activity: undefined,
+    administration: undefined,
+    searchQuery: undefined,
+    userType: undefined
+  })
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<UserManagement.User | undefined>(undefined)
@@ -37,15 +45,12 @@ export function UserTable() {
       }),
     [userAccount.email, updateUserIsAdministrator]
   )
-  const filteredUsers = useMemo(() => {
-    const normalizedSearchQuery = searchQuery?.trim().toLowerCase()
+  const filteredUsers = useMemo(() => filterUsers(users, filters), [users, filters])
 
-    return users.filter(
-      user =>
-        (administrationFilter === undefined || user.administration === administrationFilter) &&
-        (!normalizedSearchQuery || (user.email ?? '').includes(normalizedSearchQuery))
-    )
-  }, [users, administrationFilter, searchQuery])
+  const updateFilter =
+    <K extends keyof UserManagement.Filters>(key: K) =>
+    (nextValue: UserManagement.Filters[K]) =>
+      setFilters(previousFilters => ({ ...previousFilters, [key]: nextValue }))
 
   const confirmDeletion = async () => {
     if (!userToDelete) {
@@ -75,32 +80,54 @@ export function UserTable() {
 
       {selectedTab === UserManagement.Tab.USERS && (
         <>
-          <FilterBar>
-            <TextInput
-              Icon={Icon.Search}
-              isLabelHidden
-              label="Rechercher un e-mail"
-              name="searchQuery"
-              onChange={setSearchQuery}
-              placeholder="Rechercher un e-mail..."
-              value={searchQuery}
-            />
-            <Select
-              isLabelHidden
-              label="Filtrer par administration"
-              name="administrationFilter"
-              onChange={setAdministrationFilter}
-              options={EXTERNAL_ADMINISTRATION_AS_OPTIONS}
-              placeholder="Administration"
-              value={administrationFilter}
-            />
-            <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => setIsAddDialogOpen(true)}>
-              Ajouter un utilisateur
-            </Button>
-            <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={() => setIsReplaceDialogOpen(true)}>
-              Mettre à jour les utilisateurs d’une administration
-            </Button>
-          </FilterBar>
+          <Toolbar>
+            <Filters>
+              <TextInput
+                Icon={Icon.Search}
+                isLabelHidden
+                label="Rechercher un e-mail"
+                name="searchQuery"
+                onChange={updateFilter('searchQuery')}
+                placeholder="Rechercher un e-mail..."
+                value={filters.searchQuery}
+              />
+              <Select
+                isLabelHidden
+                label="Filtrer par type"
+                name="userTypeFilter"
+                onChange={updateFilter('userType')}
+                options={USER_TYPE_AS_OPTIONS}
+                placeholder="Type"
+                value={filters.userType}
+              />
+              <Select
+                isLabelHidden
+                label="Filtrer par administration"
+                name="administrationFilter"
+                onChange={updateFilter('administration')}
+                options={EXTERNAL_ADMINISTRATION_AS_OPTIONS}
+                placeholder="Administration"
+                value={filters.administration}
+              />
+              <Select
+                isLabelHidden
+                label="Filtrer par activité"
+                name="activityFilter"
+                onChange={updateFilter('activity')}
+                options={ACTIVITY_AS_OPTIONS}
+                placeholder="Activité"
+                value={filters.activity}
+              />
+            </Filters>
+            <Actions>
+              <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => setIsAddDialogOpen(true)}>
+                Ajouter un utilisateur
+              </Button>
+              <Button accent={Accent.PRIMARY} Icon={Icon.Download} onClick={() => setIsReplaceDialogOpen(true)}>
+                Importer une liste
+              </Button>
+            </Actions>
+          </Toolbar>
 
           <TableLegend data-cy="users-results">
             {filteredUsers.length} {pluralize('utilisateur', filteredUsers.length)}
@@ -159,23 +186,32 @@ const TabTitle = styled.button<{
   padding: 0;
 `
 
-const FilterBar = styled.div`
-  align-items: center;
+const Toolbar = styled.div`
+  align-items: flex-start;
   display: flex;
   gap: 16px;
+  justify-content: space-between;
   margin-bottom: 16px;
+`
+
+const Filters = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 
   > .Field-TextInput {
-    width: 280px;
+    width: 260px;
   }
 
   > .Field-Select {
-    width: 320px;
+    width: 200px;
   }
+`
 
-  > button:first-of-type {
-    margin-left: auto;
-  }
+const Actions = styled.div`
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
 `
 
 const TableLegend = styled.p`

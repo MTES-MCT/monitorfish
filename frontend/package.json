@@ -164,7 +164,7 @@
     "eslint-plugin-sort-keys-fix": "1.1.2",
     "eslint-plugin-typescript-sort-keys": "3.3.0",
     "eventsourcemock": "2.0.0",
-    "got": "14.6.6",
+    "got": "16.0.0",
     "husky": "9.1.7",
     "jest": "30.5.2",
     "jest-environment-jsdom": "30.5.2",

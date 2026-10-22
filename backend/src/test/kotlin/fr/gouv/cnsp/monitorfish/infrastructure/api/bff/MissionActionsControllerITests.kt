@@ -432,6 +432,75 @@ class MissionActionsControllerITests {
     }
 
     @Test
+    fun `Should create a mission action with a pending infraction keeping its threat`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2023-04-27T16:05:00Z")
+        val newMission = TestUtils.getDummyMissionAction(dateTime)
+        given(addMissionAction.execute(any())).willReturn(newMission)
+
+        // When
+        api
+            .perform(
+                post("/bff/v1/mission_actions")
+                    .content(
+                        objectMapper.writeValueAsString(
+                            AddMissionActionDataInput(
+                                actionDatetimeUtc = dateTime,
+                                missionId = 2,
+                                vesselId = 2,
+                                actionType = MissionActionType.SEA_CONTROL,
+                                infractions =
+                                    listOf(
+                                        MissionActionInfractionDataInput(
+                                            infractionType = InfractionType.PENDING,
+                                            threats =
+                                                listOf(
+                                                    ThreatHierarchyDataInput(
+                                                        children =
+                                                            listOf(
+                                                                ThreatCharacterizationDataInput(
+                                                                    children =
+                                                                        listOf(
+                                                                            NatinfDataInput(
+                                                                                label = "27689",
+                                                                                value = 27689,
+                                                                            ),
+                                                                        ),
+                                                                    label = "Pêche sans autorisation par navire tiers",
+                                                                    value = "Pêche sans autorisation par navire tiers",
+                                                                ),
+                                                            ),
+                                                        label = "Activités INN",
+                                                        value = "Activités INN",
+                                                    ),
+                                                ),
+                                            comments = "En attente de PV",
+                                        ),
+                                    ),
+                                flagState = CountryCode.FR,
+                                userTrigram = "LTH",
+                                completion = Completion.TO_COMPLETE,
+                            ),
+                        ),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isCreated)
+
+        argumentCaptor<MissionAction>().apply {
+            verify(addMissionAction).execute(capture())
+
+            val infraction = allValues[0].infractions.single()
+            Assertions.assertThat(infraction.infractionType).isEqualTo(InfractionType.PENDING)
+            Assertions.assertThat(infraction.natinf).isEqualTo(27689)
+            Assertions.assertThat(infraction.threat).isEqualTo("Activités INN")
+            Assertions
+                .assertThat(infraction.threatCharacterization)
+                .isEqualTo("Pêche sans autorisation par navire tiers")
+        }
+    }
+
+    @Test
     fun `Should update a mission action`() {
         // Given
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")

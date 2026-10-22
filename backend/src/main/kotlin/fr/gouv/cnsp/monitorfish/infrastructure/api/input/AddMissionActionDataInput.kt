@@ -20,7 +20,7 @@ data class MissionActionInfractionDataInput(
     val comments: String? = null,
 ) {
     fun toInfraction(): Infraction {
-        if (infractionType == InfractionType.PENDING) {
+        if (infractionType == InfractionType.PENDING && threats.isEmpty()) {
             return Infraction(infractionType = infractionType, comments = comments)
         }
 

@@ -1,12 +1,11 @@
 context('BackOffice > Users', () => {
   beforeEach(() => {
     cy.intercept('GET', '/bff/v1/admin/users').as('getUsers')
-    cy.intercept('GET', '/bff/v1/admin/authorized_organizational_units').as('getAuthorizedOrganizationalUnits')
 
     cy.login('superuser')
 
     cy.visit('/backoffice/users')
-    cy.wait(['@getUsers', '@getAuthorizedOrganizationalUnits'])
+    cy.wait('@getUsers')
   })
 
   it('Should highlight the current page in the menu, display the user email and collapse the menu', () => {
@@ -184,7 +183,10 @@ context('BackOffice > Users', () => {
   })
 
   it('Should add and delete an authorized organizational unit', () => {
+    cy.intercept('GET', '/bff/v1/admin/authorized_organizational_units').as('getAuthorizedOrganizationalUnits')
+
     cy.get('[role="tab"]').contains('Services autorisés (Cerbère)').click()
+    cy.wait('@getAuthorizedOrganizationalUnits')
 
     cy.get('[data-cy="authorized-organizational-units"]').contains('DAM/DPMA')
 

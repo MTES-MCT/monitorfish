@@ -7,8 +7,11 @@ import {
   getAdministrationEmailsDiff,
   getAuthorizationAuditLogActor,
   getAuthorizationAuditLogDetails,
+  getAuthorizationAuditLogTarget,
+  getEmailsFromFile,
   getEmailsFromRows,
   getUserAffiliation,
+  isInactiveUser,
   isValidEmail,
   parseEmails
 } from '../utils'
@@ -154,6 +157,33 @@ describe('features/UserManagement/utils', () => {
       neverLoggedInExternalUser
     ])
     expect(filterUsers(users, { ...noFilters, searchQuery: ' OLD ' }, now)).toEqual([inactiveCnspUser])
+  })
+
+  it('isInactiveUser() should flag users who never logged in or not for 6 months', () => {
+    const now = customDayjs.utc('2026-10-21T12:00:00Z')
+
+    expect(isInactiveUser(user({ lastLoginAtUtc: undefined }), now)).toBe(true)
+    expect(isInactiveUser(user({ lastLoginAtUtc: '2026-04-20T12:00:00Z' }), now)).toBe(true)
+    expect(isInactiveUser(user({ lastLoginAtUtc: '2026-04-22T12:00:00Z' }), now)).toBe(false)
+  })
+
+  it('getEmailsFromFile() should extract the emails of a CSV file', async () => {
+    const csv = 'Nom;E-mail\nJean Dupont;Jean.Dupont@douane.finances.gouv.fr\n'
+    // jsdom's `File` has no `arrayBuffer()`
+    const file = { arrayBuffer: () => Promise.resolve(new Uint8Array(Buffer.from(csv)).buffer) } as unknown as File
+
+    const result = await getEmailsFromFile(file)
+
+    expect(result).toEqual(['jean.dupont@douane.finances.gouv.fr'])
+  })
+
+  it('getAuthorizationAuditLogTarget() should label the administration of a list import', () => {
+    expect(getAuthorizationAuditLogTarget(auditLog({ target: 'GENDARMERIE_MARITIME' }))).toBe('Gendarmerie maritime')
+    expect(
+      getAuthorizationAuditLogTarget(
+        auditLog({ action: UserManagement.AuthorizationAuditAction.ADD_USER, target: 'agent@email.gouv.fr' })
+      )
+    ).toBe('agent@email.gouv.fr')
   })
 
   it('getAuthorizationAuditLogActor() should fall back to the API key when there is no logged user', () => {

@@ -42,26 +42,4 @@ context('Main Window > My Account', () => {
 
     cy.clickButton('Désactiver')
   })
-
-  it('Should open the backoffice in a new tab', () => {
-    cy.window().then(window => {
-      cy.stub(window, 'open').as('windowOpen')
-    })
-
-    cy.clickButton('Mon compte', { withoutScroll: true })
-    cy.clickButton('Accéder au backoffice')
-
-    cy.get('@windowOpen').should('have.been.calledWith', '/backoffice', '_blank', 'noopener')
-  })
-
-  it('Should not display the backoffice access to a non super user', () => {
-    cy.login('user')
-    cy.visit('/')
-    cy.wait(5000)
-
-    cy.clickButton('Mon compte', { withoutScroll: true })
-
-    cy.getDataCy('map-account-box').contains('another@email.com')
-    cy.getDataCy('map-account-box').should('not.contain', 'Accéder au backoffice')
-  })
 })

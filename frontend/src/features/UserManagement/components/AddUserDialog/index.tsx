@@ -98,7 +98,7 @@ export function AddUserDialog({ onClose, users }: AddUserDialogProps) {
             value={administration}
           />
         )}
-        {errorMessage && <Error>{errorMessage}</Error>}
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </StyledBody>
       <Dialog.Action>
         <Button accent={Accent.SECONDARY} onClick={onClose}>
@@ -127,6 +127,6 @@ const StyledBody = styled(Dialog.Body)`
   width: 480px;
 `
 
-const Error = styled.p`
+const ErrorText = styled.p`
   color: ${THEME.color.maximumRed};
 `

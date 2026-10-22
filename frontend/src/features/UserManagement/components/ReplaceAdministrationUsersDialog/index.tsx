@@ -87,9 +87,9 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
         <UploadEmailsFile onChange={importEmails} />
 
         {invalidEmails.length > 0 && (
-          <Error>
+          <ErrorText>
             {pluralize('E-mail invalide', invalidEmails.length)} : {invalidEmails.join(', ')}
-          </Error>
+          </ErrorText>
         )}
         {diff && invalidEmails.length === 0 && (
           <Diff data-cy="replace-administration-users-diff">
@@ -142,7 +142,7 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
             onChange={isChecked => setIsEmptyListConfirmed(!!isChecked)}
           />
         )}
-        {errorMessage && <Error>{errorMessage}</Error>}
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </StyledBody>
       <Dialog.Action>
         <Button accent={Accent.SECONDARY} onClick={onClose}>
@@ -196,6 +196,6 @@ const DiffTags = styled.div`
   gap: 4px;
 `
 
-const Error = styled.p`
+const ErrorText = styled.p`
   color: ${THEME.color.maximumRed};
 `

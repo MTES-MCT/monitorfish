@@ -108,7 +108,7 @@ private fun UserAuthorization.isInAnotherAdministrationThan(administration: Exte
 private fun UserAuthorization.isUpToDateIn(administration: ExternalAdministration) =
     this.administration == administration && email != null
 
-internal val EMAIL_REGEX = Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+internal val EMAIL_REGEX = Regex("^[^@\\s]+@[^@\\s.]+(\\.[^@\\s.]+)+$")
 
 data class ReplacedAdministrationUsers(
     val addedEmails: List<String>,

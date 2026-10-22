@@ -38,6 +38,9 @@ describe('features/UserManagement/utils', () => {
     expect(isValidEmail('a@gendarmerie.fr')).toBe(true)
     expect(isValidEmail('a@gendarmerie')).toBe(false)
     expect(isValidEmail('gendarmerie.fr')).toBe(false)
+    expect(isValidEmail('a@douane.finances.gouv.fr')).toBe(true)
+    expect(isValidEmail('a@douane..fr')).toBe(false)
+    expect(isValidEmail('a@.douane.fr')).toBe(false)
   })
 
   it('getEmailsFromRows() should keep email cells of any column, ignoring headers and other values', () => {

@@ -15,9 +15,6 @@ const PAGE_SIZE = 50
 const SEARCH_DEBOUNCE_DELAY_IN_MS = 300
 const NO_AUTHORIZATION_AUDIT_LOGS: UserManagement.AuthorizationAuditLog[] = []
 
-/**
- * The audit log only grows: it is filtered and paginated by the backend, and more pages are loaded on demand.
- */
 export function AuthorizationAuditLogTable() {
   const [action, setAction] = useState<UserManagement.AuthorizationAuditAction | undefined>(undefined)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)

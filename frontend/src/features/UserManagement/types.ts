@@ -96,7 +96,6 @@ export namespace UserManagement {
 
   export type EmailsDiff = {
     addedEmails: string[]
-    /** Users of another administration, moved to this one. */
     movedEmails: string[]
     removedEmails: string[]
   }

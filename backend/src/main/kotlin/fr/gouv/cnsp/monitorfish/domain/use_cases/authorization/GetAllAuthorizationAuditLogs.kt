@@ -6,9 +6,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAudit
 import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.utils.PaginatedList
 
-/**
- * The audit log only grows: it is filtered and paginated in the database.
- */
 @UseCase
 class GetAllAuthorizationAuditLogs(
     private val authorizationAuditLogRepository: AuthorizationAuditLogRepository,

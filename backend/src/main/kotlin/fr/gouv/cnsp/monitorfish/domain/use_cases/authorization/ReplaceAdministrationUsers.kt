@@ -13,9 +13,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * Replaces the users of an external administration by the given list of emails (used during the authorizations review).
- * Super users are never added nor removed by this use case, and users of another administration are moved.
- * An empty list removes all the users of the administration: it must be explicitly confirmed.
+ * Used during the authorizations review. Super users are left untouched, and users of another administration are moved.
  */
 @UseCase
 class ReplaceAdministrationUsers(
@@ -56,24 +54,14 @@ class ReplaceAdministrationUsers(
 
         val movedHashedEmails =
             hashedEmails.keys
-                .filter {
-                    val existingUser = usersByHashedEmail[it]
-
-                    existingUser != null &&
-                        !existingUser.isSuperUser &&
-                        existingUser.administration != null &&
-                        existingUser.administration != administration
-                }.toSet()
+                .filter { usersByHashedEmail[it]?.isInAnotherAdministrationThan(administration) == true }
+                .toSet()
         val addedHashedEmails = hashedEmails.keys - currentHashedEmails - superUserHashedEmails - movedHashedEmails
-        // Users already listed in this administration with their email are left untouched
         val upsertedUsers =
             hashedEmails
                 .filterKeys { it !in superUserHashedEmails }
-                .filter { (hashedEmail, _) ->
-                    val existingUser = usersByHashedEmail[hashedEmail]
-
-                    existingUser == null || existingUser.administration != administration || existingUser.email == null
-                }.map { (hashedEmail, email) ->
+                .filterKeys { usersByHashedEmail[it]?.isUpToDateIn(administration) != true }
+                .map { (hashedEmail, email) ->
                     UserAuthorization(
                         hashedEmail = hashedEmail,
                         email = email,
@@ -114,11 +102,16 @@ class ReplaceAdministrationUsers(
     }
 }
 
+private fun UserAuthorization.isInAnotherAdministrationThan(administration: ExternalAdministration) =
+    !isSuperUser && this.administration != null && this.administration != administration
+
+private fun UserAuthorization.isUpToDateIn(administration: ExternalAdministration) =
+    this.administration == administration && email != null
+
 internal val EMAIL_REGEX = Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
 
 data class ReplacedAdministrationUsers(
     val addedEmails: List<String>,
-    /** Users of another administration, moved to this one. */
     val movedEmails: List<String>,
     val removedEmails: List<String>,
     val ignoredSuperUserEmails: List<String>,

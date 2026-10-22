@@ -160,9 +160,7 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable tr')
       .contains('tr', 'dummy@email.gouv.fr')
       .contains(/\d{2}\/\d{2}\/\d{4} à \d{2}h\d{2}/)
-    // An administrator can't remove its own administrator rights
     cy.get('.Table-SimpleTable tr').contains('tr', 'dummy@email.gouv.fr').find('.rs-toggle-disabled').should('exist')
-    // Nor delete itself
     cy.get('.Table-SimpleTable tr')
       .contains('tr', 'dummy@email.gouv.fr')
       .find('button[title="Supprimer cet utilisateur"]')

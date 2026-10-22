@@ -122,7 +122,6 @@ class SecurityConfig(
                 val claims = decodeAndVerifyJwtClaims(userRequest, jwtToken)
                 logger.debug("Successfully decoded JWT userinfo with claims: ${claims.keys}")
 
-                // https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse
                 if (claims["sub"] != userRequest.idToken.subject) {
                     throw IllegalArgumentException("UserInfo `sub` claim does not match the ID token subject")
                 }
@@ -136,10 +135,6 @@ class SecurityConfig(
                 )
             }
 
-            /**
-             * ProConnect signs the userinfo response: its claims (`idp_id`, `organizational_unit`) grant access,
-             * so the signature is verified with the provider keys, as for the ID token.
-             */
             private fun decodeAndVerifyJwtClaims(
                 userRequest: OidcUserRequest,
                 jwtToken: String,
@@ -380,10 +375,7 @@ class SecurityConfig(
         }
     }
 
-    /**
-     * The CSRF token is lazily loaded by Spring Security: load it on each request so that the `XSRF-TOKEN` cookie
-     * is always available to the frontend before its first mutation.
-     */
+    /** Spring Security loads the CSRF token lazily: the frontend needs its cookie before its first mutation. */
     private class CsrfCookieFilter : OncePerRequestFilter() {
         override fun doFilterInternal(
             request: HttpServletRequest,

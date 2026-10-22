@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.authorization
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.API_KEY_ACTOR_EMAIL
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditAction
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditLog
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
@@ -35,10 +36,9 @@ class SaveUser(
             )
 
         userAuthorizationRepository.upsert(user)
-        // Called with the API key: there is no logged user
         authorizationAuditLogRepository.save(
             AuthorizationAuditLog(
-                actorEmail = null,
+                actorEmail = API_KEY_ACTOR_EMAIL,
                 action = AuthorizationAuditAction.ADD_USER,
                 target = user.email ?: user.hashedEmail,
                 details = getUserAuditDetails(user),

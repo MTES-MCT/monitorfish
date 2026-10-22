@@ -313,6 +313,93 @@ class ComputePnoTypesUTests {
         assertThat(resultPnoTypeNames).containsAll(listOf("Préavis sans règle"))
     }
 
+    @Test
+    fun `execute Should apply prior notification level criteria`() {
+        // Given
+        given(pnoTypeRepository.findAll()).willReturn(getPnoTypesWithPriorNotificationLevelCriteria())
+        val sol = listOf(LogbookFishingCatch(species = "SOL", faoZone = "27.8.a", weight = 50.0))
+        val sce = listOf(LogbookFishingCatch(species = "SCE", faoZone = "27.7.e", weight = 300.0))
+
+        fun computeTypeNames(
+            catches: List<LogbookFishingCatch>,
+            facade: String? = "NAMO",
+            departmentCode: String? = "56",
+            length: Double? = 15.0,
+            duration: Double? = 10.0,
+        ) = ComputePnoTypes(pnoTypeRepository)
+            .execute(catches, listOf("OTB"), CountryCode.FR, facade, departmentCode, length, duration)
+            .map { it.name }
+            .sorted()
+
+        // When / Then
+        assertThat(computeTypeNames(sol)).containsExactly("NAMO - marée < 24h")
+        assertThat(computeTypeNames(sol, duration = 50.0)).containsExactly("NAMO - marée 24-96h")
+        // Unknown vessel length and trip duration : strictest rules apply
+        assertThat(computeTypeNames(sol, length = null, duration = null)).containsExactly("NAMO - marée ≥ 96h")
+        assertThat(computeTypeNames(sce, departmentCode = "29")).containsExactly("NAMO - CSJ", "NAMO - marée < 24h")
+        assertThat(computeTypeNames(sce, departmentCode = "56")).containsExactly("NAMO - marée < 24h")
+        assertThat(computeTypeNames(listOf(), length = 20.0)).containsExactly("Sans capture")
+        assertThat(
+            computeTypeNames(
+                listOf(LogbookFishingCatch(species = "SWO", faoZone = "37.1.1", weight = 20.0)),
+                facade = "MED",
+                length = 8.0,
+            ),
+        ).containsExactly("Espadon")
+        assertThat(computeTypeNames(sol, length = 8.0)).isEmpty()
+    }
+
+    private fun getPnoTypesWithPriorNotificationLevelCriteria(): List<PnoType> {
+        val landingRule =
+            PnoTypeRule(
+                id = 0,
+                species = listOf(),
+                faoAreas = listOf(),
+                cgpmAreas = listOf(),
+                gears = listOf(),
+                flagStates = listOf(),
+                minimumQuantityKg = 0.0,
+                minVesselLength = 12.0,
+                hasCatchesOnBoard = true,
+            )
+        val rules =
+            listOf(
+                "Sans capture" to landingRule.copy(hasCatchesOnBoard = false),
+                "NAMO - marée ≥ 96h" to landingRule.copy(facades = listOf("NAMO"), minTripDurationHours = 96.0),
+                "NAMO - marée 24-96h" to
+                    landingRule.copy(
+                        facades = listOf("NAMO"),
+                        minTripDurationHours = 24.0,
+                        maxTripDurationHours = 96.0,
+                    ),
+                "NAMO - marée < 24h" to landingRule.copy(facades = listOf("NAMO"), maxTripDurationHours = 24.0),
+                "NAMO - CSJ" to
+                    landingRule.copy(
+                        species = listOf("SCE"),
+                        facades = listOf("NAMO"),
+                        vesselDepartmentCodes = listOf("22", "29", "35"),
+                    ),
+                "Espadon" to
+                    landingRule.copy(
+                        species = listOf("SWO"),
+                        faoAreas = listOf("37"),
+                        minVesselLength = null,
+                        maxVesselLength = 12.0,
+                        hasCatchesOnBoard = null,
+                    ),
+            )
+
+        return rules.mapIndexed { index, (name, rule) ->
+            PnoType(
+                id = index + 1,
+                name = name,
+                minimumNotificationPeriod = 4.0,
+                hasDesignatedPorts = false,
+                pnoTypeRules = listOf(rule.copy(id = index + 1)),
+            )
+        }
+    }
+
     private fun getCatches(speciesAndFaoArea: List<List<String>>) =
         speciesAndFaoArea.map {
             val aCatch = LogbookFishingCatch(weight = 123.0)

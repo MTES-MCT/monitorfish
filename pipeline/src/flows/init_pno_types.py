@@ -11,6 +11,16 @@ from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.infrastructure import get_table
 from src.utils import delete
 
+PNO_TYPE_RULES_ARRAY_COLUMNS = [
+    "species",
+    "fao_areas",
+    "cgpm_areas",
+    "gears",
+    "flag_states",
+    "facades",
+    "vessel_department_codes",
+]
+
 
 @task
 def extract_pno_types():
@@ -26,9 +36,8 @@ def extract_pno_type_rules():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/pno_type_rules.csv",
         encoding="utf8",
-        converters=dict.fromkeys(
-            ["species", "fao_areas", "cgpm_areas", "gears", "flag_states"], literal_eval
-        ),
+        converters=dict.fromkeys(PNO_TYPE_RULES_ARRAY_COLUMNS, literal_eval),
+        dtype={"has_catches_on_board": "boolean"},
     )
 
 
@@ -75,13 +84,7 @@ def load_pno_types_and_rules(
             connection=con,
             logger=logger,
             how="append",
-            pg_array_columns=[
-                "species",
-                "fao_areas",
-                "cgpm_areas",
-                "gears",
-                "flag_states",
-            ],
+            pg_array_columns=PNO_TYPE_RULES_ARRAY_COLUMNS,
             init_ddls=[
                 DDL(
                     "SELECT setval("

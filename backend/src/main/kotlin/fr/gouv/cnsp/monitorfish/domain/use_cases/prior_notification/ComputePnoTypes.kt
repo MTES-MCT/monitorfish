@@ -15,6 +15,10 @@ class ComputePnoTypes(
         catchToLand: List<LogbookFishingCatch>,
         gearCodes: List<String>,
         flagState: CountryCode?,
+        portFacade: String? = null,
+        vesselDepartmentCode: String? = null,
+        vesselLength: Double? = null,
+        tripDurationHours: Double? = null,
     ): List<PnoType> {
         require(catchToLand.all { it.faoZone != null }) {
             "All `faoZone` of catches must be given."
@@ -24,8 +28,22 @@ class ComputePnoTypes(
             return emptyList()
         }
 
+        val hasCatchesOnBoard = catchToLand.sumOf { it.weight ?: 0.0 } > 0
+
         val allPnoTypes = pnoTypeRepository.findAll()
-        val allPnoTypeRules = allPnoTypes.map { pnoType -> pnoType.pnoTypeRules.map { it to pnoType } }.flatten()
+        val allPnoTypeRules =
+            allPnoTypes
+                .map { pnoType -> pnoType.pnoTypeRules.map { it to pnoType } }
+                .flatten()
+                .filter { (rule) ->
+                    rule.appliesToPriorNotification(
+                        portFacade = portFacade,
+                        vesselDepartmentCode = vesselDepartmentCode,
+                        vesselLength = vesselLength,
+                        tripDurationHours = tripDurationHours,
+                        hasCatchesOnBoard = hasCatchesOnBoard,
+                    )
+                }
 
         val catchToPnoTypeRules =
             catchToLand.map { pnoCatch ->

@@ -9,12 +9,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.findByHashedEmailOrNull
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * Only CNSP users (super users) can be administrators, and administrators can't remove their own rights nor the last
- * administrator's ones, so that user management is never left without administrator.
- */
 @UseCase
 class UpdateUserIsAdministrator(
     private val userAuthorizationRepository: UserAuthorizationRepository,
@@ -27,11 +24,8 @@ class UpdateUserIsAdministrator(
         actorEmail: String?,
     ) {
         val user =
-            try {
-                userAuthorizationRepository.findByHashedEmail(hashedEmail)
-            } catch (_: Throwable) {
-                throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "User not found")
-            }
+            userAuthorizationRepository.findByHashedEmailOrNull(hashedEmail)
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "User not found")
 
         if (isAdministrator && !user.isSuperUser) {
             throw BackendUsageException(BackendUsageErrorCode.COULD_NOT_UPDATE, "Only a CNSP user can be administrator")

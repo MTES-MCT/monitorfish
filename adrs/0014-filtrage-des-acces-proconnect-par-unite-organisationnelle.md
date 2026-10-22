@@ -35,7 +35,8 @@ permet pas de les distinguer, ni de restreindre l'accès aux seuls agents charg�
 
 ### Règle d'accès (à la connexion)
 
-Le filtre par domaine d'e-mail est supprimé. `GetIsAllowedToLogIn` autorise un utilisateur si :
+Le filtre par domaine d'e-mail est supprimé. Par minimisation des données, seuls les scopes `openid`, `email` et
+`organizational_unit` sont demandés à ProConnect (`idp_id` est toujours renvoyé). `GetIsAllowedToLogIn` autorise un utilisateur si :
 
 1. son e-mail est enregistré dans `user_authorizations` (super-utilisateurs CNSP et utilisateurs
    externes listés par administration) **et** il se connecte avec le fournisseur d'identité attendu : Cerbère pour les

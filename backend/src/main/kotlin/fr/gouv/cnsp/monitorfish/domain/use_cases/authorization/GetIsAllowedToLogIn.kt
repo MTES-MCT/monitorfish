@@ -7,17 +7,14 @@ import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizedOrganizationalUnitRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.findByHashedEmailOrNull
 import org.slf4j.LoggerFactory
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 /**
- * A user is allowed to log in when:
- * - their email is registered in `user_authorizations` (super users and listed external users) and they log in with
- *   the expected ProConnect identity: the identity provider of their administration (Cerbère for super users), and the
- *   `idp_id`/`sub` bound at their first login. The email alone is not trusted, as any identity provider of the
- *   ProConnect federation could assert it.
- * - or they come from Cerbère and their `organizational_unit` is within an authorized organizational unit.
+ * A registered email is not enough to log in: any identity provider of the ProConnect federation could assert it.
+ * The user must also come from the identity provider of its administration, with the identity of its first login.
  */
 @UseCase
 class GetIsAllowedToLogIn(
@@ -34,12 +31,7 @@ class GetIsAllowedToLogIn(
         organizationalUnit: String?,
     ): Boolean {
         val hashedEmail = hash(email)
-        val registeredUser =
-            try {
-                userAuthorizationRepository.findByHashedEmail(hashedEmail)
-            } catch (_: Throwable) {
-                null
-            }
+        val registeredUser = userAuthorizationRepository.findByHashedEmailOrNull(hashedEmail)
         if (registeredUser != null) {
             if (!isExpectedIdentity(registeredUser, idpId, sub)) {
                 return false
@@ -92,15 +84,8 @@ class GetIsAllowedToLogIn(
         idpId: String?,
         sub: String?,
     ): Boolean {
-        val expectedIdpId =
-            when {
-                user.isSuperUser -> oidcProperties.cerbereIdpId
-                user.administration == ExternalAdministration.DOUANE -> oidcProperties.douaneIdpId
-                user.administration == ExternalAdministration.GENDARMERIE_MARITIME -> oidcProperties.extenssoIdpId
-                user.administration == ExternalAdministration.GENDARMERIE_NATIONALE -> oidcProperties.extenssoIdpId
-                else -> ""
-            }
-        if (expectedIdpId.isNotBlank() && idpId != expectedIdpId) {
+        val expectedIdpId = getExpectedIdpId(user)
+        if (!expectedIdpId.isNullOrBlank() && idpId != expectedIdpId) {
             logger.warn("❌ Registered user logged in with an unexpected identity provider (idp_id: $idpId).")
 
             return false
@@ -122,10 +107,21 @@ class GetIsAllowedToLogIn(
         return true
     }
 
+    private fun getExpectedIdpId(user: UserAuthorization): String? {
+        if (user.isSuperUser) {
+            return oidcProperties.cerbereIdpId
+        }
+
+        return when (user.administration) {
+            ExternalAdministration.DOUANE -> oidcProperties.douaneIdpId
+            ExternalAdministration.GENDARMERIE_MARITIME, ExternalAdministration.GENDARMERIE_NATIONALE ->
+                oidcProperties.extenssoIdpId
+            null -> null
+        }
+    }
+
     companion object {
-        /**
-         * `DAM/DPMA` contains `DAM/DPMA` and `DAM/DPMA/CNSP`, but not `DAM/DPMAX`.
-         */
+        /** `DAM/DPMA` contains `DAM/DPMA` and `DAM/DPMA/CNSP`, but not `DAM/DPMAX`. */
         fun isWithinOrganizationalUnit(
             organizationalUnit: String,
             authorizedOrganizationalUnit: String,

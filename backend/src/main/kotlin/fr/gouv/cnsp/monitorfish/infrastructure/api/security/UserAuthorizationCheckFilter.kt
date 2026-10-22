@@ -81,10 +81,7 @@ class UserAuthorizationCheckFilter(
     }
 
     companion object {
-        /**
-         * Always administrator protected, whatever `monitorfish.api.protected.administrator-paths`:
-         * a missing configuration must not open user management to every logged user.
-         */
+        /** Protected even when `administrator-paths` is not configured. */
         const val ADMINISTRATOR_PATH_PREFIX = "/bff/v1/admin/"
     }
 }

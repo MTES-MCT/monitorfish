@@ -11,11 +11,9 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.findByHashedEmailOrNull
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * Adds a CNSP user (super user, with an optional service, possibly administrator) or an external user (attached to an administration).
- */
 @UseCase
 class AddUser(
     private val userAuthorizationRepository: UserAuthorizationRepository,
@@ -45,14 +43,7 @@ class AddUser(
         }
 
         val hashedEmail = hash(normalizedEmail)
-        val isAlreadyRegistered =
-            try {
-                userAuthorizationRepository.findByHashedEmail(hashedEmail)
-                true
-            } catch (_: Throwable) {
-                false
-            }
-        if (isAlreadyRegistered) {
+        if (userAuthorizationRepository.findByHashedEmailOrNull(hashedEmail) != null) {
             throw BackendUsageException(BackendUsageErrorCode.COULD_NOT_UPDATE, "User already exists: $normalizedEmail")
         }
 

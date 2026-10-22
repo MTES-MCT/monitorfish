@@ -12,6 +12,8 @@ export function getTableColumns(
   onDelete: (user: UserManagement.User) => void,
   onIsAdministratorChange: (user: UserManagement.User, isAdministrator: boolean) => void
 ): Array<AccessorColumnDef<UserManagement.User, any>> {
+  const isCurrentUser = (user: UserManagement.User) => user.email === currentUserEmail?.toLowerCase()
+
   return [
     {
       accessorFn: row => row.email ?? '',
@@ -42,8 +44,7 @@ export function getTableColumns(
         info.row.original.isSuperUser && (
           <Toggle
             checked={info.getValue<boolean>()}
-            // An administrator can't remove its own administrator rights
-            disabled={info.row.original.email === currentUserEmail?.toLowerCase()}
+            disabled={isCurrentUser(info.row.original)}
             isLabelHidden
             label={`Administrateur ${info.row.original.email ?? info.row.original.hashedEmail}`}
             name={`isAdministrator-${info.row.original.hashedEmail}`}
@@ -68,8 +69,7 @@ export function getTableColumns(
       cell: info => (
         <IconButton
           accent={Accent.TERTIARY}
-          // An administrator can't delete itself
-          disabled={info.row.original.email === currentUserEmail?.toLowerCase()}
+          disabled={isCurrentUser(info.row.original)}
           Icon={Icon.Delete}
           onClick={() => onDelete(info.row.original)}
           title="Supprimer cet utilisateur"

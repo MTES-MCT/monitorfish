@@ -12,10 +12,7 @@ interface UserAuthorizationRepository {
 
     fun upsertAll(users: List<UserAuthorization>)
 
-    /**
-     * Saves the login date, and binds the ProConnect identity (`idp_id`, `sub`) at the first login.
-     * Also fills the email of users created before plain emails were stored.
-     */
+    /** Only the first login binds the ProConnect identity, and fills the email of users created before it was stored. */
     fun saveLogin(
         hashedEmail: String,
         email: String,
@@ -28,3 +25,10 @@ interface UserAuthorizationRepository {
 
     fun deleteAll(hashedEmails: List<String>)
 }
+
+fun UserAuthorizationRepository.findByHashedEmailOrNull(hashedEmail: String): UserAuthorization? =
+    try {
+        findByHashedEmail(hashedEmail)
+    } catch (_: Throwable) {
+        null
+    }

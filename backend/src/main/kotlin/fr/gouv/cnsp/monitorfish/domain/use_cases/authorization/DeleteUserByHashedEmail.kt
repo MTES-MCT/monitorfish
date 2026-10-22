@@ -8,13 +8,10 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
 import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.findByHashedEmailOrNull
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * Users created before plain emails were stored can only be identified by their hashed email.
- * Administrators can't delete themselves nor the last administrator, so that user management is never left without
- * administrator.
- */
+/** Users created before plain emails were stored can only be identified by their hashed email. */
 @UseCase
 class DeleteUserByHashedEmail(
     private val userAuthorizationRepository: UserAuthorizationRepository,
@@ -26,11 +23,8 @@ class DeleteUserByHashedEmail(
         actorEmail: String?,
     ) {
         val user =
-            try {
-                userAuthorizationRepository.findByHashedEmail(hashedEmail)
-            } catch (_: Throwable) {
-                throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "User not found")
-            }
+            userAuthorizationRepository.findByHashedEmailOrNull(hashedEmail)
+                ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND, "User not found")
 
         if (actorEmail != null && hash(actorEmail) == hashedEmail) {
             throw BackendUsageException(BackendUsageErrorCode.COULD_NOT_UPDATE, "An administrator can't delete itself")

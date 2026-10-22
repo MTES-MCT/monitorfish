@@ -45,16 +45,9 @@ class OIDCClientConfig(
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri(redirectUri)
-                .scope(
-                    "openid",
-                    "email",
-                    "given_name",
-                    "usual_name",
-                    "uid",
-                    "siret",
-                    "organizational_unit",
-                    "belonging_population",
-                ).authorizationUri(authorizationUri)
+                // `idp_id` is always returned by ProConnect
+                .scope("openid", "email", "organizational_unit")
+                .authorizationUri(authorizationUri)
                 .tokenUri(tokenUri)
                 .userInfoUri(userInfoUri)
                 .userNameAttributeName("email")

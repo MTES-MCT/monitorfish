@@ -3,10 +3,9 @@ package fr.gouv.cnsp.monitorfish.domain.entities.authorization
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-/**
- * Trace of a change of the users authorizations, kept for the authorizations review.
- * `actorEmail` is null when the change has been made with the API key (or when OIDC is disabled).
- */
+/** Changes made with the API key (or with OIDC disabled) have no logged user. */
+val API_KEY_ACTOR_EMAIL: String? = null
+
 data class AuthorizationAuditLog(
     val id: Int? = null,
     val actorEmail: String?,

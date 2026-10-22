@@ -1,6 +1,6 @@
 import { ErrorWall } from '@components/ErrorWall'
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
-import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
+import { BackOfficeHeader } from '@features/BackOffice/components/BackOfficeHeader'
 import { useGetProducerOrganizationMembershipsQuery } from '@features/ProducerOrganizationMembership/apis'
 import { useBackofficeAppSelector } from '@hooks/useBackofficeAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -47,7 +47,7 @@ export function ProducerOrganizationMembershipTable() {
 
   return (
     <BackOfficeBody>
-      <BackOfficeTitle>Adhésions aux Organisations de Producteurs (OP)</BackOfficeTitle>
+      <BackOfficeHeader title="Adhésions aux Organisations de Producteurs (OP)" />
 
       <FilterBar />
 

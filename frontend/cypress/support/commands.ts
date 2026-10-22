@@ -10,6 +10,7 @@ import { hoverOrClickVesselByName } from './commands/hoverOrClickVesselByName'
 import { injectAxe } from './commands/injectAxe'
 import { login } from './commands/login'
 import { moveViewToWorldCopy } from './commands/moveViewToWorldCopy'
+import { requestWithCsrfToken } from './commands/requestWithCsrfToken'
 
 registerMonitorUiCustomCommands()
 
@@ -32,3 +33,4 @@ Cypress.Commands.add('resetCountRequestsByAlias', resetCountRequestsByAlias)
 Cypress.Commands.add('login', login)
 Cypress.Commands.add('moveViewToWorldCopy', moveViewToWorldCopy)
 Cypress.Commands.add('injectAxe', injectAxe)
+Cypress.Commands.overwrite('request', requestWithCsrfToken)

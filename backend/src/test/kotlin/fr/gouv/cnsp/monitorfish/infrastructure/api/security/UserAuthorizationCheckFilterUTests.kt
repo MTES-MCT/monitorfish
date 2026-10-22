@@ -214,7 +214,7 @@ class UserAuthorizationCheckFilterUTests {
         given(mockAuthentication.isAuthenticated).willReturn(true)
         given(mockAuthentication.principal).willReturn(mockOidcUser)
         given(mockOidcUser.email).willReturn("test@example.com")
-        given(getIsAuthorizedUser.execute("test@example.com", false)).willReturn(true)
+        given(getIsAuthorizedUser.execute("test@example.com", false, false)).willReturn(true)
         SecurityContextHolder.getContext().authentication = mockAuthentication
 
         // When
@@ -232,7 +232,47 @@ class UserAuthorizationCheckFilterUTests {
 
         // Then
         assertThat(response.status).isEqualTo(200)
-        verify(getIsAuthorizedUser).execute("test@example.com", false)
+        verify(getIsAuthorizedUser).execute("test@example.com", false, false)
+
+        // Cleanup
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `Should check administrator rights on admin paths When administrator paths are not configured`() {
+        // Given
+        val oidcProperties = OIDCProperties()
+        oidcProperties.enabled = true
+        val protectedPathsAPIProperties = ProtectedPathsAPIProperties()
+        protectedPathsAPIProperties.administratorPaths = null
+
+        val response = MockHttpServletResponse()
+        val chain = MockFilterChain()
+
+        val mockAuthentication = mock(Authentication::class.java)
+        val mockOidcUser = mock(OidcUser::class.java)
+        given(mockAuthentication.isAuthenticated).willReturn(true)
+        given(mockAuthentication.principal).willReturn(mockOidcUser)
+        given(mockOidcUser.email).willReturn("test@example.com")
+        given(getIsAuthorizedUser.execute("test@example.com", false, true)).willReturn(false)
+        SecurityContextHolder.getContext().authentication = mockAuthentication
+
+        // When
+        val request = MockHttpServletRequest()
+        request.requestURI = "/bff/v1/admin/users"
+        UserAuthorizationCheckFilter(
+            oidcProperties,
+            protectedPathsAPIProperties,
+            getIsAuthorizedUser,
+        ).doFilter(
+            request,
+            response,
+            chain,
+        )
+
+        // Then
+        assertThat(response.status).isEqualTo(401)
+        verify(getIsAuthorizedUser).execute("test@example.com", false, true)
 
         // Cleanup
         SecurityContextHolder.clearContext()

@@ -122,8 +122,8 @@ class SecurityConfig(
                 val claims = decodeAndVerifyJwtClaims(userRequest, jwtToken)
                 logger.debug("Successfully decoded JWT userinfo with claims: ${claims.keys}")
 
-                if (claims["sub"] != userRequest.idToken.subject) {
-                    throw IllegalArgumentException("UserInfo `sub` claim does not match the ID token subject")
+                require(claims["sub"] == userRequest.idToken.subject) {
+                    "UserInfo `sub` claim does not match the ID token subject"
                 }
 
                 // Create OidcUserInfo and OidcUser with the decoded claims

@@ -50,7 +50,7 @@ export function filterUsers(
 }
 
 export function isValidEmail(email: string): boolean {
-  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
+  return /^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/.test(email)
 }
 
 /**
@@ -59,11 +59,8 @@ export function isValidEmail(email: string): boolean {
 export function getEmailsFromRows(rows: unknown[][]): string[] {
   const emails = rows
     .flat()
-    .map(cell =>
-      String(cell ?? '')
-        .trim()
-        .toLowerCase()
-    )
+    .filter((cell): cell is string => typeof cell === 'string')
+    .map(cell => cell.trim().toLowerCase())
     .filter(isValidEmail)
 
   return [...new Set(emails)]

@@ -13,12 +13,28 @@ class OIDCProperties {
     var redirectUri: String = ""
     var loginUrl: String = ""
     var successUrl: String = ""
+
+    /**
+     * Frontend origins allowed to call the session-authenticated endpoints (all but the `/api` ones) with CORS.
+     * Defaults to the origin of `successUrl`.
+     */
+    var allowedOrigins: List<String> = listOf()
     var errorUrl: String = ""
 
     /**
      * ProConnect `idp_id` of Cerbère: users coming from this identity provider are filtered by `organizational_unit`.
      */
     var cerbereIdpId: String = ""
+
+    /**
+     * ProConnect `idp_id` of the DGDDI SSO: users of the `DOUANE` administration must log in with it.
+     */
+    var douaneIdpId: String = ""
+
+    /**
+     * ProConnect `idp_id` of Extensso: users of the `GENDARMERIE_*` administrations must log in with it.
+     */
+    var extenssoIdpId: String = ""
     var issuerUri: String = ""
 
     /**

@@ -4,11 +4,14 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditAction
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditLog
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.ExternalAdministration
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
+import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -26,6 +29,9 @@ class AddUserUTests {
     @MockitoBean
     private lateinit var userAuthorizationRepository: UserAuthorizationRepository
 
+    @MockitoBean
+    private lateinit var authorizationAuditLogRepository: AuthorizationAuditLogRepository
+
     @BeforeEach
     fun setUp() {
         given(userAuthorizationRepository.findByHashedEmail(any())).willThrow(EmptyResultDataAccessException(1))
@@ -34,7 +40,14 @@ class AddUserUTests {
     @Test
     fun `execute Should add a CNSP user with its service`() {
         // When
-        AddUser(userAuthorizationRepository).execute(" Agent@Email.gouv.fr ", true, true, CnspService.POLE_SIP, null)
+        AddUser(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+            " Agent@Email.gouv.fr ",
+            true,
+            true,
+            CnspService.POLE_SIP,
+            null,
+            "admin@email.gouv.fr",
+        )
 
         // Then
         val captor = argumentCaptor<UserAuthorization>()
@@ -45,17 +58,25 @@ class AddUserUTests {
         assertThat(captor.firstValue.isAdministrator).isTrue()
         assertThat(captor.firstValue.service).isEqualTo(CnspService.POLE_SIP)
         assertThat(captor.firstValue.administration).isNull()
+
+        val auditLogCaptor = argumentCaptor<AuthorizationAuditLog>()
+        verify(authorizationAuditLogRepository).save(auditLogCaptor.capture())
+        assertThat(auditLogCaptor.firstValue.actorEmail).isEqualTo("admin@email.gouv.fr")
+        assertThat(auditLogCaptor.firstValue.action).isEqualTo(AuthorizationAuditAction.ADD_USER)
+        assertThat(auditLogCaptor.firstValue.target).isEqualTo("agent@email.gouv.fr")
+        assertThat(auditLogCaptor.firstValue.details).containsEntry("isAdministrator", true)
     }
 
     @Test
     fun `execute Should add an external user with its administration`() {
         // When
-        AddUser(userAuthorizationRepository).execute(
+        AddUser(userAuthorizationRepository, authorizationAuditLogRepository).execute(
             "agent@douane.finances.gouv.fr",
             false,
             false,
             null,
             ExternalAdministration.DOUANE,
+            "admin@email.gouv.fr",
         )
 
         // Then
@@ -70,12 +91,20 @@ class AddUserUTests {
         // When
         val throwable =
             catchThrowable {
-                AddUser(userAuthorizationRepository).execute("agent@douane.finances.gouv.fr", false, false, null, null)
+                AddUser(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+                    "agent@douane.finances.gouv.fr",
+                    false,
+                    false,
+                    null,
+                    null,
+                    "admin@email.gouv.fr",
+                )
             }
 
         // Then
         assertThat(throwable).isInstanceOf(BackendUsageException::class.java)
         verify(userAuthorizationRepository, never()).upsert(any())
+        verify(authorizationAuditLogRepository, never()).save(any())
     }
 
     @Test
@@ -93,7 +122,10 @@ class AddUserUTests {
         // When
         val throwable =
             catchThrowable {
-                AddUser(userAuthorizationRepository).execute("another@email.com", true, false, null, null)
+                AddUser(
+                    userAuthorizationRepository,
+                    authorizationAuditLogRepository,
+                ).execute("another@email.com", true, false, null, null, null)
             }
 
         // Then
@@ -105,7 +137,12 @@ class AddUserUTests {
     fun `execute Should throw When the email is invalid`() {
         // When
         val throwable =
-            catchThrowable { AddUser(userAuthorizationRepository).execute("agent", true, false, null, null) }
+            catchThrowable {
+                AddUser(
+                    userAuthorizationRepository,
+                    authorizationAuditLogRepository,
+                ).execute("agent", true, false, null, null, null)
+            }
 
         // Then
         assertThat(throwable).isInstanceOf(BackendUsageException::class.java)

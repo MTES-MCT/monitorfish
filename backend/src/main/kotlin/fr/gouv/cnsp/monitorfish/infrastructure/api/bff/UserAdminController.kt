@@ -47,12 +47,14 @@ class UserAdminController(
     fun add(
         @RequestBody
         addUserAdminDataInput: AddUserAdminDataInput,
+        @AuthenticationPrincipal principal: OidcUser?,
     ) = addUser.execute(
         email = addUserAdminDataInput.email,
         isSuperUser = addUserAdminDataInput.isSuperUser,
         isAdministrator = addUserAdminDataInput.isAdministrator,
         service = addUserAdminDataInput.service,
         administration = addUserAdminDataInput.administration,
+        actorEmail = principal?.email,
     )
 
     @PutMapping(value = ["/administrations/{administration}"], consumes = ["application/json"])
@@ -62,9 +64,15 @@ class UserAdminController(
         administration: ExternalAdministration,
         @RequestBody
         replaceAdministrationUsersDataInput: ReplaceAdministrationUsersDataInput,
+        @AuthenticationPrincipal principal: OidcUser?,
     ): ReplacedAdministrationUsersDataOutput {
         val replacedAdministrationUsers =
-            replaceAdministrationUsers.execute(administration, replaceAdministrationUsersDataInput.emails)
+            replaceAdministrationUsers.execute(
+                administration = administration,
+                emails = replaceAdministrationUsersDataInput.emails,
+                isEmptyListConfirmed = replaceAdministrationUsersDataInput.isEmptyListConfirmed,
+                actorEmail = principal?.email,
+            )
 
         return ReplacedAdministrationUsersDataOutput.fromReplacedAdministrationUsers(replacedAdministrationUsers)
     }
@@ -80,7 +88,7 @@ class UserAdminController(
     ) = updateUserIsAdministrator.execute(
         hashedEmail = hashedEmail,
         isAdministrator = updateUserIsAdministratorDataInput.isAdministrator,
-        currentUserEmail = principal?.email,
+        actorEmail = principal?.email,
     )
 
     @DeleteMapping("/{hashedEmail}")
@@ -88,5 +96,6 @@ class UserAdminController(
     fun delete(
         @PathVariable(name = "hashedEmail")
         hashedEmail: String,
-    ) = deleteUserByHashedEmail.execute(hashedEmail)
+        @AuthenticationPrincipal principal: OidcUser?,
+    ) = deleteUserByHashedEmail.execute(hashedEmail, principal?.email)
 }

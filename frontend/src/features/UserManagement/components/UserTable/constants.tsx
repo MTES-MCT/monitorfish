@@ -68,6 +68,8 @@ export function getTableColumns(
       cell: info => (
         <IconButton
           accent={Accent.TERTIARY}
+          // An administrator can't delete itself
+          disabled={info.row.original.email === currentUserEmail?.toLowerCase()}
           Icon={Icon.Delete}
           onClick={() => onDelete(info.row.original)}
           title="Supprimer cet utilisateur"

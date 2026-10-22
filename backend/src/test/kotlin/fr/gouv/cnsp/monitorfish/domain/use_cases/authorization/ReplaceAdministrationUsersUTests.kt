@@ -4,10 +4,13 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditAction
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditLog
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.ExternalAdministration
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
+import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -21,6 +24,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class ReplaceAdministrationUsersUTests {
     @MockitoBean
     private lateinit var userAuthorizationRepository: UserAuthorizationRepository
+
+    @MockitoBean
+    private lateinit var authorizationAuditLogRepository: AuthorizationAuditLogRepository
 
     private fun externalUser(email: String) =
         UserAuthorization(
@@ -45,23 +51,74 @@ class ReplaceAdministrationUsersUTests {
 
         // When
         val result =
-            ReplaceAdministrationUsers(userAuthorizationRepository).execute(
+            ReplaceAdministrationUsers(userAuthorizationRepository, authorizationAuditLogRepository).execute(
                 ExternalAdministration.GENDARMERIE_MARITIME,
-                listOf(" Kept@Gendarmerie.fr ", "added@gendarmerie.fr", "added@gendarmerie.fr", ""),
+                listOf(" Kept@Gendarmerie.fr ", "added@gendarmerie.fr", "added@gendarmerie.fr", "", "douane@douane.fr"),
+                false,
+                "admin@email.gouv.fr",
             )
 
         // Then
         assertThat(result.addedEmails).containsExactly("added@gendarmerie.fr")
+        assertThat(result.movedEmails).containsExactly("douane@douane.fr")
         assertThat(result.removedEmails).containsExactly("removed@gendarmerie.fr")
         verify(userAuthorizationRepository).deleteAll(listOf(hash("removed@gendarmerie.fr")))
 
         val captor = argumentCaptor<List<UserAuthorization>>()
         verify(userAuthorizationRepository).upsertAll(captor.capture())
-        assertThat(captor.firstValue.map { it.email }).containsExactly("added@gendarmerie.fr")
+        assertThat(
+            captor.firstValue.map { it.email },
+        ).containsExactlyInAnyOrder("added@gendarmerie.fr", "douane@douane.fr")
         assertThat(captor.firstValue).allMatch {
             it.administration == ExternalAdministration.GENDARMERIE_MARITIME &&
                 !it.isSuperUser
         }
+
+        val auditLogCaptor = argumentCaptor<AuthorizationAuditLog>()
+        verify(authorizationAuditLogRepository).save(auditLogCaptor.capture())
+        assertThat(auditLogCaptor.firstValue.action).isEqualTo(AuthorizationAuditAction.REPLACE_ADMINISTRATION_USERS)
+        assertThat(auditLogCaptor.firstValue.target).isEqualTo("GENDARMERIE_MARITIME")
+        assertThat(auditLogCaptor.firstValue.details).containsEntry("removedEmails", listOf("removed@gendarmerie.fr"))
+    }
+
+    @Test
+    fun `execute Should throw When the list is empty and not confirmed`() {
+        // Given
+        given(userAuthorizationRepository.findAll()).willReturn(listOf(externalUser("kept@gendarmerie.fr")))
+
+        // When
+        val throwable =
+            catchThrowable {
+                ReplaceAdministrationUsers(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+                    ExternalAdministration.GENDARMERIE_MARITIME,
+                    listOf(" "),
+                    false,
+                    "admin@email.gouv.fr",
+                )
+            }
+
+        // Then
+        assertThat(throwable).isInstanceOf(BackendUsageException::class.java)
+        verify(userAuthorizationRepository, never()).deleteAll(any())
+    }
+
+    @Test
+    fun `execute Should remove all the users of the administration When the empty list is confirmed`() {
+        // Given
+        given(userAuthorizationRepository.findAll()).willReturn(listOf(externalUser("removed@gendarmerie.fr")))
+
+        // When
+        val result =
+            ReplaceAdministrationUsers(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+                ExternalAdministration.GENDARMERIE_MARITIME,
+                listOf(),
+                true,
+                "admin@email.gouv.fr",
+            )
+
+        // Then
+        assertThat(result.removedEmails).containsExactly("removed@gendarmerie.fr")
+        verify(userAuthorizationRepository).deleteAll(listOf(hash("removed@gendarmerie.fr")))
     }
 
     @Test
@@ -80,9 +137,12 @@ class ReplaceAdministrationUsersUTests {
 
         // When
         val result =
-            ReplaceAdministrationUsers(
-                userAuthorizationRepository,
-            ).execute(ExternalAdministration.GENDARMERIE_MARITIME, listOf("dummy@email.gouv.fr"))
+            ReplaceAdministrationUsers(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+                ExternalAdministration.GENDARMERIE_MARITIME,
+                listOf("dummy@email.gouv.fr"),
+                false,
+                null,
+            )
 
         // Then
         assertThat(result.addedEmails).isEmpty()
@@ -95,9 +155,12 @@ class ReplaceAdministrationUsersUTests {
         // When
         val throwable =
             catchThrowable {
-                ReplaceAdministrationUsers(
-                    userAuthorizationRepository,
-                ).execute(ExternalAdministration.GENDARMERIE_MARITIME, listOf("not-an-email"))
+                ReplaceAdministrationUsers(userAuthorizationRepository, authorizationAuditLogRepository).execute(
+                    ExternalAdministration.GENDARMERIE_MARITIME,
+                    listOf("not-an-email"),
+                    false,
+                    null,
+                )
             }
 
         // Then

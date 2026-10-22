@@ -1,6 +1,6 @@
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { EXTERNAL_ADMINISTRATION_LABEL, INACTIVITY_DELAY_IN_MONTHS } from './constants'
+import { API_KEY_ACTOR_LABEL, EXTERNAL_ADMINISTRATION_LABEL, INACTIVITY_DELAY_IN_MONTHS } from './constants'
 import { UserManagement } from './types'
 
 export function parseEmails(rawEmails: string | undefined): string[] {
@@ -89,11 +89,67 @@ export function getAdministrationEmailsDiff(
     .filter(user => user.administration === administration && !user.isSuperUser)
     .map(user => user.email ?? user.hashedEmail)
 
+  const otherAdministrationEmailsSet = new Set(
+    users
+      .filter(user => !!user.administration && user.administration !== administration && !user.isSuperUser)
+      .map(user => user.email)
+  )
   const currentEmailsSet = new Set(currentEmails)
   const nextEmailsSet = new Set(nextEmails)
 
   return {
-    addedEmails: nextEmails.filter(email => !currentEmailsSet.has(email)),
+    addedEmails: nextEmails.filter(email => !currentEmailsSet.has(email) && !otherAdministrationEmailsSet.has(email)),
+    movedEmails: nextEmails.filter(email => otherAdministrationEmailsSet.has(email)),
     removedEmails: currentEmails.filter(email => !nextEmailsSet.has(email))
+  }
+}
+
+export function getAuthorizationAuditLogActor(authorizationAuditLog: UserManagement.AuthorizationAuditLog): string {
+  return authorizationAuditLog.actorEmail ?? API_KEY_ACTOR_LABEL
+}
+
+export function getAuthorizationAuditLogTarget(authorizationAuditLog: UserManagement.AuthorizationAuditLog): string {
+  if (authorizationAuditLog.action === UserManagement.AuthorizationAuditAction.REPLACE_ADMINISTRATION_USERS) {
+    return (
+      EXTERNAL_ADMINISTRATION_LABEL[authorizationAuditLog.target as UserManagement.ExternalAdministration] ??
+      authorizationAuditLog.target
+    )
+  }
+
+  return authorizationAuditLog.target
+}
+
+export function getAuthorizationAuditLogDetails(authorizationAuditLog: UserManagement.AuthorizationAuditLog): string {
+  const { details } = authorizationAuditLog
+
+  switch (authorizationAuditLog.action) {
+    case UserManagement.AuthorizationAuditAction.ADD_USER:
+    case UserManagement.AuthorizationAuditAction.DELETE_USER:
+      if (details.isSuperUser === undefined) {
+        return ''
+      }
+      if (details.isSuperUser) {
+        return [details.service ? `CNSP · ${details.service}` : 'CNSP', details.isAdministrator ? 'administrateur' : '']
+          .filter(Boolean)
+          .join(', ')
+      }
+
+      return details.administration ? EXTERNAL_ADMINISTRATION_LABEL[details.administration] : 'Externe'
+
+    case UserManagement.AuthorizationAuditAction.REPLACE_ADMINISTRATION_USERS:
+      return [
+        ['Ajoutés', details.addedEmails],
+        ['Déplacés depuis une autre administration', details.movedEmails],
+        ['Supprimés', details.removedEmails]
+      ]
+        .filter((entry): entry is [string, string[]] => !!entry[1] && entry[1].length > 0)
+        .map(([label, emails]) => `${label} (${emails.length}) : ${emails.join(', ')}`)
+        .join(' · ')
+
+    case UserManagement.AuthorizationAuditAction.UPDATE_USER_IS_ADMINISTRATOR:
+      return details.isAdministrator ? 'Droits accordés' : 'Droits retirés'
+
+    default:
+      return ''
   }
 }

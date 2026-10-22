@@ -1,28 +1,41 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.authorization
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditAction
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditLog
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.ExternalAdministration
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageErrorCode
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.hash
+import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
 import org.springframework.transaction.annotation.Transactional
 
 /**
  * Replaces the users of an external administration by the given list of emails (used during the authorizations review).
- * Super users are never added nor removed by this use case.
+ * Super users are never added nor removed by this use case, and users of another administration are moved.
+ * An empty list removes all the users of the administration: it must be explicitly confirmed.
  */
 @UseCase
 class ReplaceAdministrationUsers(
     private val userAuthorizationRepository: UserAuthorizationRepository,
+    private val authorizationAuditLogRepository: AuthorizationAuditLogRepository,
 ) {
     @Transactional
     fun execute(
         administration: ExternalAdministration,
         emails: List<String>,
+        isEmptyListConfirmed: Boolean,
+        actorEmail: String?,
     ): ReplacedAdministrationUsers {
         val normalizedEmails = emails.map { it.trim().lowercase() }.filter { it.isNotEmpty() }.distinct()
+        if (normalizedEmails.isEmpty() && !isEmptyListConfirmed) {
+            throw BackendUsageException(
+                BackendUsageErrorCode.COULD_NOT_UPDATE,
+                "An empty list would remove all the users of the administration: it must be confirmed.",
+            )
+        }
         val invalidEmails = normalizedEmails.filterNot { EMAIL_REGEX.matches(it) }
         if (invalidEmails.isNotEmpty()) {
             throw BackendUsageException(
@@ -41,7 +54,17 @@ class ReplaceAdministrationUsers(
         val removedHashedEmails = currentHashedEmails - hashedEmails.keys
         userAuthorizationRepository.deleteAll(removedHashedEmails.toList())
 
-        val addedHashedEmails = hashedEmails.keys - currentHashedEmails - superUserHashedEmails
+        val movedHashedEmails =
+            hashedEmails.keys
+                .filter {
+                    val existingUser = usersByHashedEmail[it]
+
+                    existingUser != null &&
+                        !existingUser.isSuperUser &&
+                        existingUser.administration != null &&
+                        existingUser.administration != administration
+                }.toSet()
+        val addedHashedEmails = hashedEmails.keys - currentHashedEmails - superUserHashedEmails - movedHashedEmails
         // Users already listed in this administration with their email are left untouched
         val upsertedUsers =
             hashedEmails
@@ -62,15 +85,32 @@ class ReplaceAdministrationUsers(
                 }
         userAuthorizationRepository.upsertAll(upsertedUsers)
 
-        return ReplacedAdministrationUsers(
-            addedEmails = addedHashedEmails.mapNotNull { hashedEmails[it] }.sorted(),
-            removedEmails =
-                currentUsers.filter { it.hashedEmail in removedHashedEmails }.map {
-                    it.email
-                        ?: it.hashedEmail
-                },
-            ignoredSuperUserEmails = superUserHashedEmails.mapNotNull { hashedEmails[it] }.sorted(),
+        val replacedAdministrationUsers =
+            ReplacedAdministrationUsers(
+                addedEmails = addedHashedEmails.mapNotNull { hashedEmails[it] }.sorted(),
+                movedEmails = movedHashedEmails.mapNotNull { hashedEmails[it] }.sorted(),
+                removedEmails =
+                    currentUsers.filter { it.hashedEmail in removedHashedEmails }.map {
+                        it.email
+                            ?: it.hashedEmail
+                    },
+                ignoredSuperUserEmails = superUserHashedEmails.mapNotNull { hashedEmails[it] }.sorted(),
+            )
+        authorizationAuditLogRepository.save(
+            AuthorizationAuditLog(
+                actorEmail = actorEmail,
+                action = AuthorizationAuditAction.REPLACE_ADMINISTRATION_USERS,
+                target = administration.name,
+                details =
+                    mapOf(
+                        "addedEmails" to replacedAdministrationUsers.addedEmails,
+                        "movedEmails" to replacedAdministrationUsers.movedEmails,
+                        "removedEmails" to replacedAdministrationUsers.removedEmails,
+                    ),
+            ),
         )
+
+        return replacedAdministrationUsers
     }
 }
 
@@ -78,6 +118,8 @@ internal val EMAIL_REGEX = Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
 
 data class ReplacedAdministrationUsers(
     val addedEmails: List<String>,
+    /** Users of another administration, moved to this one. */
+    val movedEmails: List<String>,
     val removedEmails: List<String>,
     val ignoredSuperUserEmails: List<String>,
 )

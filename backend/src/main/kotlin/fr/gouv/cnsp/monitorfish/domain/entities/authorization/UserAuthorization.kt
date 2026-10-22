@@ -10,6 +10,9 @@ data class UserAuthorization(
     val isAdministrator: Boolean,
     val administration: ExternalAdministration? = null,
     val lastLoginAtUtc: ZonedDateTime? = null,
+    /** ProConnect identity (`idp_id`, `sub`) bound at the first login: later logins must match it. */
+    val idpId: String? = null,
+    val sub: String? = null,
 )
 
 enum class CnspService(

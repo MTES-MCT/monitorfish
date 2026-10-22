@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -38,7 +40,11 @@ class AuthorizedOrganizationalUnitAdminController(
     fun add(
         @RequestBody
         authorizedOrganizationalUnitDataInput: AuthorizedOrganizationalUnitDataInput,
-    ) = addAuthorizedOrganizationalUnit.execute(authorizedOrganizationalUnitDataInput.organizationalUnit)
+        @AuthenticationPrincipal principal: OidcUser?,
+    ) = addAuthorizedOrganizationalUnit.execute(
+        authorizedOrganizationalUnitDataInput.organizationalUnit,
+        principal?.email,
+    )
 
     @DeleteMapping("")
     @Operation(summary = "Delete an authorized organizational unit")
@@ -46,5 +52,6 @@ class AuthorizedOrganizationalUnitAdminController(
         @Parameter(description = "Organizational unit")
         @RequestParam(name = "organizationalUnit")
         organizationalUnit: String,
-    ) = deleteAuthorizedOrganizationalUnit.execute(organizationalUnit)
+        @AuthenticationPrincipal principal: OidcUser?,
+    ) = deleteAuthorizedOrganizationalUnit.execute(organizationalUnit, principal?.email)
 }

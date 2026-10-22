@@ -1,4 +1,4 @@
-import { Accent, Button, Dialog, Select, Tag, Textarea, THEME, pluralize } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Checkbox, Dialog, Select, Tag, Textarea, THEME, pluralize } from '@mtes-mct/monitor-ui'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -19,6 +19,7 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
   const [administration, setAdministration] = useState<UserManagement.ExternalAdministration | undefined>(undefined)
   const [rawEmails, setRawEmails] = useState<string | undefined>(undefined)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+  const [isEmptyListConfirmed, setIsEmptyListConfirmed] = useState(false)
 
   const emails = useMemo(() => parseEmails(rawEmails), [rawEmails])
   const invalidEmails = useMemo(() => emails.filter(email => !isValidEmail(email)), [emails])
@@ -26,7 +27,10 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
     () => (administration ? getAdministrationEmailsDiff(users, administration, emails) : undefined),
     [users, administration, emails]
   )
-  const canSubmit = administration !== undefined && invalidEmails.length === 0 && !isLoading
+  // An empty list removes all the users of the administration
+  const isEmptyList = emails.length === 0
+  const canSubmit =
+    administration !== undefined && invalidEmails.length === 0 && (!isEmptyList || isEmptyListConfirmed) && !isLoading
 
   const importEmails = (importedEmails: string[]) => {
     if (importedEmails.length === 0) {
@@ -44,7 +48,11 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
       return
     }
 
-    const result = await replaceAdministrationUsers({ administration, emails })
+    const result = await replaceAdministrationUsers({
+      administration,
+      emails,
+      isEmptyListConfirmed: isEmptyList && isEmptyListConfirmed
+    })
     if ('error' in result) {
       setErrorMessage((result.error as Error).message)
 
@@ -97,6 +105,21 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
                 ))}
               </DiffTags>
             </DiffGroup>
+            {diff.movedEmails.length > 0 && (
+              <DiffGroup>
+                <DiffTitle>
+                  {diff.movedEmails.length} {pluralize('utilisateur', diff.movedEmails.length)} à déplacer depuis une
+                  autre administration
+                </DiffTitle>
+                <DiffTags>
+                  {diff.movedEmails.map(email => (
+                    <Tag key={email} backgroundColor={THEME.color.goldenPoppy25} color={THEME.color.charcoal}>
+                      {email}
+                    </Tag>
+                  ))}
+                </DiffTags>
+              </DiffGroup>
+            )}
             <DiffGroup>
               <DiffTitle>
                 {diff.removedEmails.length} {pluralize('utilisateur', diff.removedEmails.length)} à supprimer
@@ -110,6 +133,14 @@ export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdmi
               </DiffTags>
             </DiffGroup>
           </Diff>
+        )}
+        {administration && isEmptyList && (
+          <Checkbox
+            checked={isEmptyListConfirmed}
+            label="Je confirme la suppression de tous les utilisateurs de cette administration"
+            name="isEmptyListConfirmed"
+            onChange={isChecked => setIsEmptyListConfirmed(!!isChecked)}
+          />
         )}
         {errorMessage && <Error>{errorMessage}</Error>}
       </StyledBody>

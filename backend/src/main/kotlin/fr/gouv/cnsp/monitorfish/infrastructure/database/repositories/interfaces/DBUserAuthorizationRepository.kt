@@ -44,13 +44,19 @@ interface DBUserAuthorizationRepository : CrudRepository<UserAuthorizationEntity
         nativeQuery = true,
         value = """
         UPDATE user_authorizations
-        SET email = COALESCE(email, :email), last_login_at_utc = :loginDateUtc
+        SET
+            email = COALESCE(email, :email),
+            idp_id = COALESCE(idp_id, :idpId),
+            sub = COALESCE(sub, :sub),
+            last_login_at_utc = :loginDateUtc
         WHERE hashed_email = :hashedEmail
     """,
     )
     fun saveLogin(
         hashedEmail: String,
         email: String,
+        idpId: String?,
+        sub: String?,
         loginDateUtc: ZonedDateTime,
     )
 }

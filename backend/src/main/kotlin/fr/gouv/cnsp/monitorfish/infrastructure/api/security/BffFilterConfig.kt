@@ -33,6 +33,10 @@ class BffFilterConfig(
         registrationBean.order = USER_AUTH_FILTER_PRECEDENCE
 
         val paths = protectedPathsAPIProperties.paths
+        check(oidcProperties.enabled != true || !paths.isNullOrEmpty()) {
+            "OIDC is enabled but no user authentication path is given: " +
+                "`monitorfish.api.protected.paths` is required to enforce super-user and administrator rights."
+        }
         if (paths != null) {
             registrationBean.setUrlPatterns(paths)
         } else {

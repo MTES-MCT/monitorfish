@@ -42,6 +42,24 @@ context('Authorization > Login filter', () => {
 
     // Reset
     cy.login('superuser')
-    cy.request('PUT', '/bff/v1/admin/users/administrations/GENDARMERIE_NATIONALE', { emails: [] })
+    cy.request('PUT', '/bff/v1/admin/users/administrations/GENDARMERIE_NATIONALE', {
+      emails: [],
+      isEmptyListConfirmed: true
+    })
+  })
+
+  it('Should reject a listed external user logging in with another identity provider than its administration', () => {
+    // `someone@external.fr` logs in with Extensso, whereas Douane users must log in with the DGDDI SSO
+    cy.login('superuser')
+    cy.request('PUT', '/bff/v1/admin/users/administrations/DOUANE', {
+      emails: ['another@email.com', 'someone@external.fr']
+    })
+
+    logInWithoutSession('externalUnlisted')
+    cy.url().should('contain', '/register')
+
+    // Reset
+    cy.login('superuser')
+    cy.request('PUT', '/bff/v1/admin/users/administrations/DOUANE', { emails: ['another@email.com'] })
   })
 })

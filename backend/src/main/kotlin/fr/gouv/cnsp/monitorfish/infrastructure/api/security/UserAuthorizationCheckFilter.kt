@@ -59,7 +59,8 @@ class UserAuthorizationCheckFilter(
                 )
             } ?: false
         val isAdministratorPath =
-            protectedPathsAPIProperties.administratorPaths?.any { request.requestURI.contains(it) } ?: false
+            request.requestURI.startsWith(ADMINISTRATOR_PATH_PREFIX) ||
+                protectedPathsAPIProperties.administratorPaths?.any { request.requestURI.contains(it) } ?: false
         val isAuthorized = getIsAuthorizedUser.execute(email, isSuperUserPath, isAdministratorPath)
         if (!isAuthorized) {
             logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} ($email)")
@@ -77,5 +78,13 @@ class UserAuthorizationCheckFilter(
         )
 
         filterChain.doFilter(request, response)
+    }
+
+    companion object {
+        /**
+         * Always administrator protected, whatever `monitorfish.api.protected.administrator-paths`:
+         * a missing configuration must not open user management to every logged user.
+         */
+        const val ADMINISTRATOR_PATH_PREFIX = "/bff/v1/admin/"
     }
 }

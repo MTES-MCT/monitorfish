@@ -106,7 +106,7 @@ class UserAdminControllerITests {
             // Then
             .andExpect(status().isCreated)
 
-        verify(addUser).execute("agent@email.gouv.fr", true, false, CnspService.POLE_SIP, null)
+        verify(addUser).execute("agent@email.gouv.fr", true, false, CnspService.POLE_SIP, null, null)
     }
 
     @Test
@@ -116,10 +116,13 @@ class UserAdminControllerITests {
             replaceAdministrationUsers.execute(
                 ExternalAdministration.GENDARMERIE_MARITIME,
                 listOf("added@gendarmerie.fr"),
+                false,
+                null,
             ),
         ).willReturn(
             ReplacedAdministrationUsers(
                 addedEmails = listOf("added@gendarmerie.fr"),
+                movedEmails = listOf(),
                 removedEmails = listOf("another@email.com"),
                 ignoredSuperUserEmails = listOf(),
             ),
@@ -164,6 +167,6 @@ class UserAdminControllerITests {
             // Then
             .andExpect(status().isOk)
 
-        verify(deleteUserByHashedEmail).execute("abc")
+        verify(deleteUserByHashedEmail).execute("abc", null)
     }
 }

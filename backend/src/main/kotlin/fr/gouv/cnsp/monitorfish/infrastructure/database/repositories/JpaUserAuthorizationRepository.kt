@@ -44,9 +44,11 @@ class JpaUserAuthorizationRepository(
     override fun saveLogin(
         hashedEmail: String,
         email: String,
+        idpId: String?,
+        sub: String?,
         loginDateUtc: ZonedDateTime,
     ) {
-        dbUserAuthorizationRepository.saveLogin(hashedEmail, email, loginDateUtc)
+        dbUserAuthorizationRepository.saveLogin(hashedEmail, email, idpId, sub, loginDateUtc)
     }
 
     @Modifying

@@ -35,6 +35,7 @@ export enum HttpStatusCode {
 
 export enum RtkCacheTagType {
   ActiveVessels = 'ActiveVessels',
+  AuthorizationAuditLogs = 'AuthorizationAuditLogs',
   AuthorizedOrganizationalUnits = 'AuthorizedOrganizationalUnits',
   FavoriteVessels = 'FavoriteVessels',
   PriorNotificationDocuments = 'PriorNotificationDocuments',

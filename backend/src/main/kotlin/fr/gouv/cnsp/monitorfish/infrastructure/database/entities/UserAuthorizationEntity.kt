@@ -27,6 +27,10 @@ data class UserAuthorizationEntity(
     val administration: String?,
     @Column(name = "last_login_at_utc", nullable = true)
     val lastLoginAtUtc: ZonedDateTime? = null,
+    @Column(name = "idp_id", nullable = true)
+    val idpId: String? = null,
+    @Column(name = "sub", nullable = true)
+    val sub: String? = null,
 ) {
     fun toUserAuthorization() =
         UserAuthorization(
@@ -37,6 +41,8 @@ data class UserAuthorizationEntity(
             isAdministrator = isAdministrator,
             administration = administration?.let { ExternalAdministration.valueOf(it) },
             lastLoginAtUtc = lastLoginAtUtc,
+            idpId = idpId,
+            sub = sub,
         )
 
     companion object {

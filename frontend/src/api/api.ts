@@ -9,6 +9,7 @@ import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
 import ky, { HTTPError } from 'ky'
 
 import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
+import { CSRF_HEADER_NAME, getCsrfToken } from './csrf'
 import { redirectToLoginIfUnauthorized } from '../auth/utils'
 
 import type { BackendApi } from './BackendApi.types'
@@ -69,7 +70,15 @@ const monitorfishBaseQuery = retry(
   fetchBaseQuery({
     // TODO Remove the /v1 from the baseUrl as it make harder to update APIs (vX are designed for that)
     baseUrl: `/bff/v1`,
-    credentials: 'include'
+    credentials: 'include',
+    prepareHeaders: headers => {
+      const csrfToken = getCsrfToken()
+      if (csrfToken) {
+        headers.set(CSRF_HEADER_NAME, csrfToken)
+      }
+
+      return headers
+    }
   }),
   {
     retryCondition: (error: BaseQueryError<BaseQueryError<any>>, _, { attempt }) => {
@@ -198,6 +207,14 @@ export const monitorfishApiKy = ky.extend({
 
         // `beforeError` hook expect an HTTPError, so we fake it with `as unknown as HTTPError`
         return new FrontendApiError(customError.status.toString(), customError) as unknown as HTTPError
+      }
+    ],
+    beforeRequest: [
+      request => {
+        const csrfToken = getCsrfToken()
+        if (csrfToken) {
+          request.headers.set(CSRF_HEADER_NAME, csrfToken)
+        }
       }
     ],
     beforeRetry: [

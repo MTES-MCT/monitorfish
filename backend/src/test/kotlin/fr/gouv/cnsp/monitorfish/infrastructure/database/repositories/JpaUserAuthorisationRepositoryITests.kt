@@ -169,7 +169,7 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `saveLogin Should save the login date and only fill a missing email`() {
+    fun `saveLogin Should save the login date and only fill a missing email and ProConnect identity`() {
         // Given
         val hashedEmail = hash("legacy@email.gouv.fr")
         jpaUserAuthorizationRepository.upsert(
@@ -180,17 +180,23 @@ class JpaUserAuthorisationRepositoryITests : AbstractDBTests() {
         jpaUserAuthorizationRepository.saveLogin(
             hashedEmail,
             "legacy@email.gouv.fr",
+            "idp",
+            "sub",
             ZonedDateTime.parse("2026-10-20T08:00:00Z"),
         )
         jpaUserAuthorizationRepository.saveLogin(
             hashedEmail,
             "other@email.gouv.fr",
+            "other-idp",
+            "other-sub",
             ZonedDateTime.parse("2026-10-21T09:00:00Z"),
         )
 
         // Then
         val user = jpaUserAuthorizationRepository.findAll().first { it.hashedEmail == hashedEmail }
         assertThat(user.email).isEqualTo("legacy@email.gouv.fr")
+        assertThat(user.idpId).isEqualTo("idp")
+        assertThat(user.sub).isEqualTo("sub")
         assertThat(user.lastLoginAtUtc?.toInstant()).isEqualTo(ZonedDateTime.parse("2026-10-21T09:00:00Z").toInstant())
     }
 

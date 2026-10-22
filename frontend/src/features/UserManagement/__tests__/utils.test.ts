@@ -5,6 +5,8 @@ import { UserManagement } from '../types'
 import {
   filterUsers,
   getAdministrationEmailsDiff,
+  getAuthorizationAuditLogActor,
+  getAuthorizationAuditLogDetails,
   getEmailsFromRows,
   getUserAffiliation,
   isValidEmail,
@@ -48,7 +50,7 @@ describe('features/UserManagement/utils', () => {
     expect(result).toEqual(['jean.dupont@douane.finances.gouv.fr', 'marie.martin@douane.finances.gouv.fr'])
   })
 
-  it('getAdministrationEmailsDiff() should compute added and removed emails of an administration, ignoring super users', () => {
+  it('getAdministrationEmailsDiff() should compute added, moved and removed emails of an administration, ignoring super users', () => {
     const users: UserManagement.User[] = [
       {
         administration: UserManagement.ExternalAdministration.GENDARMERIE_MARITIME,
@@ -90,10 +92,15 @@ describe('features/UserManagement/utils', () => {
 
     const result = getAdministrationEmailsDiff(users, UserManagement.ExternalAdministration.GENDARMERIE_MARITIME, [
       'kept@gendarmerie.fr',
-      'added@gendarmerie.fr'
+      'added@gendarmerie.fr',
+      'other@unit.fr'
     ])
 
-    expect(result).toEqual({ addedEmails: ['added@gendarmerie.fr'], removedEmails: ['removed@gendarmerie.fr'] })
+    expect(result).toEqual({
+      addedEmails: ['added@gendarmerie.fr'],
+      movedEmails: ['other@unit.fr'],
+      removedEmails: ['removed@gendarmerie.fr']
+    })
   })
 
   it('getUserAffiliation() should describe CNSP users with their service and external users with their administration', () => {
@@ -148,4 +155,55 @@ describe('features/UserManagement/utils', () => {
     ])
     expect(filterUsers(users, { ...noFilters, searchQuery: ' OLD ' }, now)).toEqual([inactiveCnspUser])
   })
+
+  it('getAuthorizationAuditLogActor() should fall back to the API key when there is no logged user', () => {
+    expect(getAuthorizationAuditLogActor(auditLog({ actorEmail: 'admin@email.gouv.fr' }))).toBe('admin@email.gouv.fr')
+    expect(getAuthorizationAuditLogActor(auditLog({ actorEmail: undefined }))).toBe('API (clé d’API)')
+  })
+
+  it('getAuthorizationAuditLogDetails() should describe the change', () => {
+    expect(
+      getAuthorizationAuditLogDetails(
+        auditLog({
+          action: UserManagement.AuthorizationAuditAction.ADD_USER,
+          details: { administration: null, isAdministrator: true, isSuperUser: true, service: 'Pôle SIP' }
+        })
+      )
+    ).toBe('CNSP · Pôle SIP, administrateur')
+    expect(
+      getAuthorizationAuditLogDetails(
+        auditLog({
+          action: UserManagement.AuthorizationAuditAction.DELETE_USER,
+          details: { administration: UserManagement.ExternalAdministration.DOUANE, isSuperUser: false }
+        })
+      )
+    ).toBe('Douane')
+    expect(
+      getAuthorizationAuditLogDetails(
+        auditLog({
+          details: { addedEmails: ['a@douane.fr'], movedEmails: [], removedEmails: ['b@douane.fr', 'c@douane.fr'] }
+        })
+      )
+    ).toBe('Ajoutés (1) : a@douane.fr · Supprimés (2) : b@douane.fr, c@douane.fr')
+    expect(
+      getAuthorizationAuditLogDetails(
+        auditLog({
+          action: UserManagement.AuthorizationAuditAction.UPDATE_USER_IS_ADMINISTRATOR,
+          details: { isAdministrator: false }
+        })
+      )
+    ).toBe('Droits retirés')
+  })
 })
+
+function auditLog(props: Partial<UserManagement.AuthorizationAuditLog>): UserManagement.AuthorizationAuditLog {
+  return {
+    action: UserManagement.AuthorizationAuditAction.REPLACE_ADMINISTRATION_USERS,
+    actorEmail: 'admin@email.gouv.fr',
+    createdAtUtc: '2026-10-22T08:00:00Z',
+    details: { addedEmails: [], movedEmails: [], removedEmails: ['removed@douane.fr'] },
+    id: 1,
+    target: 'DOUANE',
+    ...props
+  }
+}

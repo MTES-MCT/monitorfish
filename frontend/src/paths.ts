@@ -3,6 +3,7 @@ import { BackOfficeMenuKey, BackOfficeMenuPath } from '@features/BackOffice/comp
 export const ROUTER_PATHS = {
   accessibilityStatement: '/declaration_accessibilite',
   activityVisualization: '/activity_visualization',
+  authorizationAuditLogs: BackOfficeMenuPath[BackOfficeMenuKey.AUTHORIZATION_AUDIT_LOG_TABLE],
   backendForFrontend: '/bff',
   backoffice: '/backoffice',
   controlObjectives: BackOfficeMenuPath[BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES],

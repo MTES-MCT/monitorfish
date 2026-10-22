@@ -74,10 +74,11 @@ export function AddUserDialog({ onClose, users }: AddUserDialogProps) {
         {isCnspUser ? (
           <>
             <Select
-              label="Service CNSP"
+              label="Pôle CNSP"
               name="service"
               onChange={setService}
               options={CNSP_SERVICE_OPTIONS}
+              placement={'top'}
               value={service}
             />
             <Checkbox

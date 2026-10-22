@@ -71,7 +71,7 @@ class AuthorizedOrganizationalUnitAdminControllerITests {
             // Then
             .andExpect(status().isCreated)
 
-        verify(addAuthorizedOrganizationalUnit).execute("DAM/DIRM MEMN")
+        verify(addAuthorizedOrganizationalUnit).execute("DAM/DIRM MEMN", null)
     }
 
     @Test
@@ -82,6 +82,6 @@ class AuthorizedOrganizationalUnitAdminControllerITests {
             // Then
             .andExpect(status().isOk)
 
-        verify(deleteAuthorizedOrganizationalUnit).execute("DAM/DPMA")
+        verify(deleteAuthorizedOrganizationalUnit).execute("DAM/DPMA", null)
     }
 }

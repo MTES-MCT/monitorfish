@@ -27,8 +27,9 @@ export function AuthorizedOrganizationalUnitList() {
   return (
     <Wrapper>
       <Description>
-        Les agents connectés via Cerbère dont l’unité organisationnelle (ex : DAM/DPMA/CNSP) commence par l’une de ces
-        valeurs peuvent se connecter sans être inscrits dans la liste des utilisateurs.
+        Les agents connectés via Cerbère dont le service d’affectation dans l’annuaire du ministère (son « unité
+        organisationnelle », ex : DAM/DPMA/CNSP) est l’un de ces services, ou l’un de leurs sous-services, peuvent se
+        connecter sans être inscrits dans la liste des utilisateurs. Ainsi, DAM/DPMA autorise aussi DAM/DPMA/CNSP.
       </Description>
 
       <List data-cy="authorized-organizational-units">
@@ -41,7 +42,7 @@ export function AuthorizedOrganizationalUnitList() {
               onClick={() => {
                 void deleteAuthorizedOrganizationalUnit(organizationalUnit)
               }}
-              title={`Supprimer l’unité organisationnelle ${organizationalUnit}`}
+              title={`Supprimer le service autorisé ${organizationalUnit}`}
             />
           </Item>
         ))}
@@ -50,7 +51,7 @@ export function AuthorizedOrganizationalUnitList() {
       <AddForm>
         <TextInput
           isLabelHidden
-          label="Unité organisationnelle"
+          label="Service"
           name="organizationalUnit"
           onChange={setNextOrganizationalUnit}
           placeholder="ex : DAM/DIRM NAMO"

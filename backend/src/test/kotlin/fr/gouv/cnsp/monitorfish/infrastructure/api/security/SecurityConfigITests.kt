@@ -19,10 +19,14 @@ import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -105,6 +109,92 @@ class SecurityConfigITests {
                 )
                 // Then
                 .andExpect(status().isOk)
+        }
+
+        @Test
+        fun `Should reject a session-authenticated mutation without CSRF token`() {
+            // When
+            mockMvc
+                .perform(
+                    put("/bff/v1/ports").with(oidcLogin().idToken { it.claim("email", "test@example.com") }),
+                )
+                // Then
+                .andExpect(status().isForbidden)
+        }
+
+        @Test
+        fun `Should accept a session-authenticated mutation with a CSRF token`() {
+            // When
+            mockMvc
+                .perform(
+                    put("/bff/v1/ports")
+                        .with(oidcLogin().idToken { it.claim("email", "test@example.com") })
+                        .with(csrf()),
+                )
+                // Then
+                .andExpect(status().isMethodNotAllowed)
+        }
+
+        @Test
+        fun `Should not require a CSRF token on the API used by other apps`() {
+            // When
+            mockMvc
+                .perform(post("/api/v1/unknown"))
+                // Then
+                .andExpect(status().isNotFound)
+        }
+
+        @Test
+        fun `Should reject a CORS request from a foreign origin on session-authenticated endpoints`() {
+            // When
+            mockMvc
+                .perform(
+                    options("/bff/v1/ports")
+                        .header("Origin", "https://attacker.example.com")
+                        .header("Access-Control-Request-Method", "GET"),
+                )
+                // Then
+                .andExpect(status().isForbidden)
+        }
+
+        @Test
+        fun `Should accept a CORS request from the frontend origin on session-authenticated endpoints`() {
+            // When
+            mockMvc
+                .perform(
+                    options("/bff/v1/ports")
+                        .header("Origin", "http://localhost:8080")
+                        .header("Access-Control-Request-Method", "PUT")
+                        .header("Access-Control-Request-Headers", "X-XSRF-TOKEN"),
+                )
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:8080"))
+        }
+
+        @Test
+        fun `Should accept a CORS request from any origin on the API used by other apps`() {
+            // When
+            mockMvc
+                .perform(
+                    options("/api/v1/beacon_malfunctions/123")
+                        .header("Origin", "https://monitorenv.example.com")
+                        .header("Access-Control-Request-Method", "GET"),
+                )
+                // Then
+                .andExpect(status().isOk)
+                .andExpect(header().string("Access-Control-Allow-Origin", "https://monitorenv.example.com"))
+        }
+
+        @Test
+        fun `Should accept the local Keycloak login form posted with a null origin`() {
+            // When
+            mockMvc
+                .perform(
+                    post("/realms/monitor/login-actions/authenticate").header("Origin", "null"),
+                )
+                // Then
+                .andExpect(status().isNotFound)
         }
 
         @Test

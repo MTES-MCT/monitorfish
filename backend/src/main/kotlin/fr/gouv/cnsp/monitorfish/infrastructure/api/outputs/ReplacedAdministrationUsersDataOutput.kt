@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.ReplacedAdministr
 
 data class ReplacedAdministrationUsersDataOutput(
     val addedEmails: List<String>,
+    val movedEmails: List<String>,
     val removedEmails: List<String>,
     val ignoredSuperUserEmails: List<String>,
 ) {
@@ -11,6 +12,7 @@ data class ReplacedAdministrationUsersDataOutput(
         fun fromReplacedAdministrationUsers(replacedAdministrationUsers: ReplacedAdministrationUsers) =
             ReplacedAdministrationUsersDataOutput(
                 addedEmails = replacedAdministrationUsers.addedEmails,
+                movedEmails = replacedAdministrationUsers.movedEmails,
                 removedEmails = replacedAdministrationUsers.removedEmails,
                 ignoredSuperUserEmails = replacedAdministrationUsers.ignoredSuperUserEmails,
             )

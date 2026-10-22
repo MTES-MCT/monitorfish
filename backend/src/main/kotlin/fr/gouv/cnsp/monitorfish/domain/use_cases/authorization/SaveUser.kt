@@ -1,16 +1,22 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.authorization
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditAction
+import fr.gouv.cnsp.monitorfish.domain.entities.authorization.AuthorizationAuditLog
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.CnspService
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.ExternalAdministration
 import fr.gouv.cnsp.monitorfish.domain.entities.authorization.UserAuthorization
 import fr.gouv.cnsp.monitorfish.domain.hash
+import fr.gouv.cnsp.monitorfish.domain.repositories.AuthorizationAuditLogRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.UserAuthorizationRepository
+import org.springframework.transaction.annotation.Transactional
 
 @UseCase
 class SaveUser(
     private val userAuthorizationRepository: UserAuthorizationRepository,
+    private val authorizationAuditLogRepository: AuthorizationAuditLogRepository,
 ) {
+    @Transactional
     fun execute(
         email: String,
         isSuperUser: Boolean,
@@ -29,5 +35,14 @@ class SaveUser(
             )
 
         userAuthorizationRepository.upsert(user)
+        // Called with the API key: there is no logged user
+        authorizationAuditLogRepository.save(
+            AuthorizationAuditLog(
+                actorEmail = null,
+                action = AuthorizationAuditAction.ADD_USER,
+                target = user.email ?: user.hashedEmail,
+                details = getUserAuditDetails(user),
+            ),
+        )
     }
 }

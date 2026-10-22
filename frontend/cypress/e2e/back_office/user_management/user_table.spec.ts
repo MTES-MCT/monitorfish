@@ -57,7 +57,7 @@ context('BackOffice > Users', () => {
     cy.get('.Component-Dialog').contains('Cet utilisateur existe déjà.')
 
     cy.fill('E-mail', 'New.Agent@email.gouv.fr')
-    cy.fill('Service CNSP', 'Pôle SIP')
+    cy.fill('Pôle CNSP', 'Pôle SIP')
     cy.clickButton('Ajouter')
 
     cy.wait('@addUser').then(({ request, response }) => {
@@ -82,7 +82,10 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable').contains('gendarme@gendarmerie.interieur.gouv.fr')
 
     // Reset
-    cy.request('PUT', '/bff/v1/admin/users/administrations/GENDARMERIE_MARITIME', { emails: [] })
+    cy.request('PUT', '/bff/v1/admin/users/administrations/GENDARMERIE_MARITIME', {
+      emails: [],
+      isEmptyListConfirmed: true
+    })
     cy.request('GET', '/bff/v1/admin/users').then(({ body }) => {
       const addedUser = body.find(user => user.email === 'new.agent@email.gouv.fr')
       cy.request('DELETE', `/bff/v1/admin/users/${addedUser.hashedEmail}`)
@@ -113,6 +116,19 @@ context('BackOffice > Users', () => {
 
     // Reset
     cy.request('PUT', '/bff/v1/admin/users/administrations/DOUANE', { emails: ['another@email.com'] })
+  })
+
+  it('Should require a confirmation to remove all the users of an administration', () => {
+    cy.clickButton('Importer une liste')
+    cy.fill('Administration', 'Gendarmerie maritime')
+
+    cy.get('.Component-Dialog').contains('button', 'Mettre à jour').should('be.disabled')
+
+    cy.fill('Je confirme la suppression de tous les utilisateurs de cette administration', true)
+
+    cy.get('.Component-Dialog').contains('button', 'Mettre à jour').should('be.enabled')
+
+    cy.clickButton('Annuler')
   })
 
   it('Should import the emails of an administration from a CSV file', () => {
@@ -146,6 +162,11 @@ context('BackOffice > Users', () => {
       .contains(/\d{2}\/\d{2}\/\d{4} à \d{2}h\d{2}/)
     // An administrator can't remove its own administrator rights
     cy.get('.Table-SimpleTable tr').contains('tr', 'dummy@email.gouv.fr').find('.rs-toggle-disabled').should('exist')
+    // Nor delete itself
+    cy.get('.Table-SimpleTable tr')
+      .contains('tr', 'dummy@email.gouv.fr')
+      .find('button[title="Supprimer cet utilisateur"]')
+      .should('be.disabled')
 
     cy.clickButton('Ajouter un utilisateur')
     cy.fill('E-mail', 'future.admin@email.gouv.fr')
@@ -165,16 +186,16 @@ context('BackOffice > Users', () => {
   })
 
   it('Should add and delete an authorized organizational unit', () => {
-    cy.get('[role="tab"]').contains('Unités organisationnelles autorisées (Cerbère)').click()
+    cy.get('[role="tab"]').contains('Services autorisés (Cerbère)').click()
 
     cy.get('[data-cy="authorized-organizational-units"]').contains('DAM/DPMA')
 
-    cy.fill('Unité organisationnelle', 'DAM/DIRM MEMN')
+    cy.fill('Service', 'DAM/DIRM MEMN')
     cy.clickButton('Ajouter')
 
     cy.get('[data-cy="authorized-organizational-units"]').contains('DAM/DIRM MEMN')
 
-    cy.clickButton('Supprimer l’unité organisationnelle DAM/DIRM MEMN')
+    cy.clickButton('Supprimer le service autorisé DAM/DIRM MEMN')
 
     cy.get('[data-cy="authorized-organizational-units"]').should('not.contain', 'DAM/DIRM MEMN')
   })

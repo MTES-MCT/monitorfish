@@ -8,6 +8,7 @@ import { ProducerOrganizationMembershipTable } from '@features/ProducerOrganizat
 import { RegulationForm } from '@features/Regulation/components/RegulationForm'
 import { RegulationTables } from '@features/Regulation/components/RegulationTables'
 import { SideWindow } from '@features/SideWindow'
+import { AuthorizationAuditLogTable } from '@features/UserManagement/components/AuthorizationAuditLogTable'
 import { UserTable } from '@features/UserManagement/components/UserTable'
 import { ActivityVisualizationPage } from '@pages/ActivityVisualizationPage'
 import { BackofficePage } from '@pages/BackofficePage'
@@ -172,6 +173,14 @@ export const routes = [
         element: (
           <RequireAuth redirect requireAdministrator requireSuperUser>
             <UserTable />
+          </RequireAuth>
+        )
+      },
+      {
+        path: ROUTER_PATHS.authorizationAuditLogs,
+        element: (
+          <RequireAuth redirect requireAdministrator requireSuperUser>
+            <AuthorizationAuditLogTable />
           </RequireAuth>
         )
       }

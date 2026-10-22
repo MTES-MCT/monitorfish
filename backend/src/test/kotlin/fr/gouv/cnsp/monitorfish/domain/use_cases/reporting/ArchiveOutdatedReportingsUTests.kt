@@ -141,11 +141,30 @@ class ArchiveOutdatedReportingsUTests {
         given(reportingRepository.findExpiredReportings()).willReturn(listOf(2))
         given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
             .willReturn(listOf(3, 4))
+        given(reportingRepository.findOutdatedReportingsForSmallVessels())
+            .willReturn(listOf(5))
 
         // When
         ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
 
         // Then
-        verify(reportingRepository).archiveReportings(eq(listOf(100, 2, 3, 4)))
+        verify(reportingRepository).archiveReportings(eq(listOf(100, 2, 3, 4, 5)))
+    }
+
+    @Test
+    fun `execute Should archive reportings older than 7 days for small vessels`() {
+        // Given
+        given(reportingRepository.findUnarchivedReportingsAfterNewVoyage()).willReturn(emptyList())
+        given(positionAlertSpecification.findAllByIsDeletedIsFalse()).willReturn(emptyList())
+        given(reportingRepository.findExpiredReportings()).willReturn(emptyList())
+        given(reportingRepository.findUnarchivedNonAlertReportingsWithDepValidityAfterNewVoyage())
+            .willReturn(emptyList())
+        given(reportingRepository.findOutdatedReportingsForSmallVessels()).willReturn(listOf(20, 21))
+
+        // When
+        ArchiveOutdatedReportings(reportingRepository, positionAlertSpecification).execute()
+
+        // Then
+        verify(reportingRepository).archiveReportings(eq(listOf(20, 21)))
     }
 }

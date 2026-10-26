@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.rapportnav
 
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -17,6 +18,7 @@ data class Inquiry(
     val service: InquiryService?,
     val infractions: List<InquiryInfraction>,
     val observations: List<String>,
+    val controlUnits: List<LegacyControlUnit> = listOf(),
 )
 
 data class InquiryService(

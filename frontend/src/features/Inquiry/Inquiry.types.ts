@@ -1,9 +1,12 @@
+import type { LegacyControlUnit } from '@features/ControlUnit/legacyControlUnit'
+
 /**
  * Contrôle croisé fetched from RapportNav
  */
 export namespace Inquiry {
   export interface Inquiry {
     conclusion: InquiryConclusion | undefined
+    controlUnits: LegacyControlUnit.LegacyControlUnit[]
     endDateTimeUtc: string | undefined
     id: string
     infractions: InquiryInfraction[]

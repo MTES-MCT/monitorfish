@@ -162,6 +162,7 @@ class MissionActionsControllerITests {
                                 ),
                             ),
                         observations = listOf("Commentaire de l'unité"),
+                        controlUnits = listOf(LegacyControlUnit(10449, "DDTM", false, "ULAM 56", listOf())),
                     ),
                 ),
             ),
@@ -191,6 +192,8 @@ class MissionActionsControllerITests {
             .andExpect(jsonPath("$.inquiries[0].infractions[0].controlType", equalTo("LANDING_OBLIGATION")))
             .andExpect(jsonPath("$.inquiries[0].infractions[0].natinfs[0]", equalTo("7064")))
             .andExpect(jsonPath("$.inquiries[0].observations[0]", equalTo("Commentaire de l'unité")))
+            .andExpect(jsonPath("$.inquiries[0].controlUnits[0].name", equalTo("ULAM 56")))
+            .andExpect(jsonPath("$.inquiries[0].controlUnits[0].administration", equalTo("DDTM")))
 
         runBlocking {
             Mockito.verify(getVesselControls).execute(123, ZonedDateTime.parse("2020-05-04T03:04:05Z"), "")

@@ -1,5 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
+import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.Inquiry
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.InquiryInfraction
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.InquiryService
@@ -20,6 +21,7 @@ data class InquiryDataOutput(
     val service: InquiryServiceDataOutput?,
     val infractions: List<InquiryInfractionDataOutput>,
     val observations: List<String>,
+    val controlUnits: List<LegacyControlUnit>,
 ) {
     companion object {
         fun fromInquiry(inquiry: Inquiry) =
@@ -37,6 +39,7 @@ data class InquiryDataOutput(
                 service = inquiry.service?.let { InquiryServiceDataOutput.fromInquiryService(it) },
                 infractions = inquiry.infractions.map { InquiryInfractionDataOutput.fromInquiryInfraction(it) },
                 observations = inquiry.observations,
+                controlUnits = inquiry.controlUnits,
             )
     }
 }

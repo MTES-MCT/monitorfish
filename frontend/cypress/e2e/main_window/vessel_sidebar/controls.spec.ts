@@ -249,16 +249,14 @@ context('Vessel sidebar controls tab', () => {
 
     // Then
     cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).contains('1 contrôle croisé en cours')
-    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2025"]`).contains(
-      '2 contrôles dont 2 croisés, 2 infractions'
-    )
+    cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2025"]`).contains('2 contrôles croisés, 2 infractions')
 
     // In progress inquiry
     cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).find('[data-cy="vessel-controls-year"]').click()
     cy.getDataCy('vessel-inquiry')
       .first()
       .should('contain', 'CONTRÔLE CROISÉ EN COURS - OUVERT LE 13/04/2026')
-      .and('contain', 'ULAM 56')
+      .and('contain', 'ULAM 56 – DDTM')
       .and('contain', 'Origine : signalement CNSP')
       .and('not.contain', 'Voir la marée du contrôle')
     cy.get(`[data-cy="vessel-control-years"] > li[title="Année 2026"]`).find('[data-cy="vessel-controls-year"]').click()

@@ -16,7 +16,7 @@ export function getFeaturesFromRegulatoryZones(geojsonFeatures: Partial<Regulato
   }
 
   return geojsonFeatures
-    .filter(regulatoryZone => regulatoryZone)
+    .filter(regulatoryZone => !!regulatoryZone?.geometry)
     .map(regulatoryZone => {
       const properties = omit(regulatoryZone, ['geometry'])
 
@@ -27,5 +27,4 @@ export function getFeaturesFromRegulatoryZones(geojsonFeatures: Partial<Regulato
 
       return feature
     })
-    .filter((feature): feature is Feature<Geometry> => Boolean(feature))
 }

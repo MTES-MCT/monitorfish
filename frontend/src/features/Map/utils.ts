@@ -2,6 +2,7 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { FrontendError } from '@libs/FrontendError'
 import { getCoordinatesInWorldCopyOf, getExtentInWorldCopyOf } from '@utils/worldCopy'
 import { GeoJSON } from 'ol/format'
+import { MultiPolygon } from 'ol/geom'
 
 import { AdminLayerProperties, OPENLAYERS_PROJECTION, OpenLayersGeometryType, WSG84_PROJECTION } from './constants'
 
@@ -10,7 +11,7 @@ import type { Geometry as GeoJSONGeometry, MultiPolygon as GeoJSONMultiPolygon }
 import type { Coordinate } from 'ol/coordinate'
 import type { Extent } from 'ol/extent'
 import type { FeatureLike } from 'ol/Feature'
-import type { MultiPolygon, Polygon } from 'ol/geom'
+import type { Polygon } from 'ol/geom'
 import type Geometry from 'ol/geom/Geometry'
 import type OpenLayerMap from 'ol/Map'
 import type { AtPixelOptions } from 'ol/Map'
@@ -31,19 +32,13 @@ export function addGeometryToMultiPolygonGeoJSON(
   multiPolygon: GeoJSONMultiPolygon,
   polygonToAdd: Geometry
 ): GeoJSONGeometry | undefined {
-  const nextGeometry = new GeoJSON({
-    featureProjection: OPENLAYERS_PROJECTION
-  }).readGeometry(multiPolygon)
-
-  if (!nextGeometry) {
-    return undefined
-  }
+  const nextGeometry = readMultiPolygonOrEmpty(multiPolygon)
 
   if (
     nextGeometry.getType() === OpenLayersGeometryType.MULTIPOLYGON &&
     polygonToAdd.getType() === OpenLayersGeometryType.POLYGON
   ) {
-    ;(nextGeometry as MultiPolygon).appendPolygon(polygonToAdd as Polygon)
+    nextGeometry.appendPolygon(polygonToAdd as Polygon)
   }
 
   return convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(nextGeometry)
@@ -53,19 +48,29 @@ export function keepOnlyInitialGeometriesOfMultiPolygon(
   multiPolygon: GeoJSONMultiPolygon,
   initialFeatureNumber: number
 ): GeoJSONMultiPolygon | undefined {
-  const nextGeometry = new GeoJSON({
-    featureProjection: OPENLAYERS_PROJECTION
-  }).readGeometry(multiPolygon) as MultiPolygon
+  const nextGeometry = readMultiPolygonOrEmpty(multiPolygon)
 
   const coordinates = nextGeometry.getCoordinates()
-  if (!coordinates?.length) {
+  if (!coordinates.length) {
     return multiPolygon
   }
 
   const nextCoordinates = coordinates.slice(0, initialFeatureNumber)
-  nextGeometry?.setCoordinates(nextCoordinates)
+  nextGeometry.setCoordinates(nextCoordinates)
 
   return convertToGeoJSONGeometryObject<GeoJSONMultiPolygon>(nextGeometry)
+}
+
+/**
+ * Since OpenLayers 10.11, `readGeometry()` returns `null` for a geometry with empty coordinates,
+ * which is what a reset zone drawing produces.
+ */
+function readMultiPolygonOrEmpty(multiPolygon: GeoJSONMultiPolygon): MultiPolygon {
+  const geometry = new GeoJSON({
+    featureProjection: OPENLAYERS_PROJECTION
+  }).readGeometry(multiPolygon)
+
+  return (geometry as MultiPolygon | null) ?? new MultiPolygon([])
 }
 
 export function layersNotInCurrentOLMap(olLayers, layer) {

@@ -354,10 +354,11 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     // -------------------------------------------------------------------------
     // Superuser opens the prior notification sent messages
 
+    // Not limited with `times`: tag invalidations and fingerprint changes refetch the sent messages
+    // a timing-dependent number of times, so each stub answers until the next one overrides it.
     cy.intercept(
       {
         method: 'GET',
-        times: 2,
         url: '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000000/sent_messages'
       },
       {
@@ -445,7 +446,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.intercept(
       {
         method: 'GET',
-        times: 2,
         url: '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000000/sent_messages'
       },
       {
@@ -529,7 +529,6 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     cy.intercept(
       {
         method: 'GET',
-        times: 1,
         url: '/bff/v1/prior_notifications/00000000-0000-4000-0000-000000000000/sent_messages'
       },
       {

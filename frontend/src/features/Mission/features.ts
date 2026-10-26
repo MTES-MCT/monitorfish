@@ -96,11 +96,13 @@ export const getMissionFeatureZone = (
   mission: Mission.Mission | MissionMainFormValuesWithId,
   type: MonitorFishMap.MonitorFishLayer
 ): Feature => {
-  const geoJSON = new GeoJSON()
-  const geometry = geoJSON.readGeometry(mission.geom, {
-    dataProjection: WSG84_PROJECTION,
-    featureProjection: OPENLAYERS_PROJECTION
-  })
+  // A new mission draft has no `geom` yet, and `readGeometry()` throws on a nullish source since OpenLayers 10.11
+  const geometry = mission.geom
+    ? new GeoJSON().readGeometry(mission.geom, {
+        dataProjection: WSG84_PROJECTION,
+        featureProjection: OPENLAYERS_PROJECTION
+      })
+    : undefined
 
   const missionStatus = getMissionStatus(mission)
   const feature = new Feature({

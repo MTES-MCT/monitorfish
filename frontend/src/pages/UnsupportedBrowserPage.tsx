@@ -15,6 +15,7 @@ export function UnsupportedBrowserPage() {
           <br />
           Merci d&apos;utiliser une version de Firefox supérieure à la version 62, ou une version de Chrome supérieure à
           la version 69.
+          <UserAgent>Navigateur détecté : {window.navigator.userAgent}</UserAgent>
         </Text>
       </Alert>
     </Wrapper>
@@ -24,6 +25,13 @@ export function UnsupportedBrowserPage() {
 const Text = styled.span`
   width: 700px;
   display: inline-block;
+`
+
+const UserAgent = styled.span`
+  display: block;
+  margin-top: 24px;
+  font-size: 11px;
+  user-select: all;
 `
 
 const Title = styled.span`

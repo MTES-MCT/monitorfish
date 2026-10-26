@@ -9,6 +9,8 @@ import {
   keepOnlyInitialGeometriesOfMultiPolygon
 } from '../utils'
 
+import type { MultiPolygon as GeoJSONMultiPolygon } from 'geojson'
+
 describe('@features/Map/utils.ts', () => {
   it('.addGeometryToMultiPolygonGeoJSON() Should add a geometry with OpenLayers projection to an existing MultiPolygon GeoJSON', () => {
     // Given
@@ -66,6 +68,33 @@ describe('@features/Map/utils.ts', () => {
       ],
       type: 'MultiPolygon'
     })
+  })
+
+  it('.addGeometryToMultiPolygonGeoJSON() Should add a geometry to an empty MultiPolygon GeoJSON', () => {
+    // Given
+    const geometry = new Polygon([
+      [
+        [-78.35780634789, 36.01344090021],
+        [-78.23975068421, 36.01344090021],
+        [-78.36178387341, 47.81056747476],
+        [-78.35780634789, 36.01344090021]
+      ]
+    ])
+
+    // When
+    const result = addGeometryToMultiPolygonGeoJSON({ coordinates: [], type: 'MultiPolygon' }, geometry)
+
+    // Then
+    expect(result?.type).toEqual('MultiPolygon')
+    expect((result as GeoJSONMultiPolygon).coordinates).toHaveLength(1)
+  })
+
+  it('.keepOnlyInitialGeometriesOfMultiPolygon() Should return an empty MultiPolygon unchanged', () => {
+    const emptyMultiPolygon: GeoJSONMultiPolygon = { coordinates: [], type: 'MultiPolygon' }
+
+    const result = keepOnlyInitialGeometriesOfMultiPolygon(emptyMultiPolygon, 0)
+
+    expect(result).toEqual(emptyMultiPolygon)
   })
 
   it('.keepOnlyInitialGeometriesOfMultiPolygon() Should filter 1 polygon of MultiPolygon', () => {

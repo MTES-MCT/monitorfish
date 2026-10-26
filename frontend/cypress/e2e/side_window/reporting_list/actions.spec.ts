@@ -184,6 +184,9 @@ context('Side Window > Reporting List > Actions', () => {
 
   it('A reporting Should be downloaded', () => {
     cy.cleanDownloadedFiles()
+    cy.intercept({ method: 'GET', pathname: '/bff/v1/reportings', query: { searchQuery: 'PROMETTRE' } }).as(
+      'getSearchedReportings'
+    )
 
     // Given
     cy.login('superuser')
@@ -191,30 +194,14 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait(500)
     cy.getDataCy('side-window-reporting-tab').click()
 
-    // There should be one reporting either in SA or NAME sea front, depending on the previous
-    // Cypress test file runned by the CI
-    cy.getDataCy('side-window-sub-menu-NAMO').then($number => {
-      if ($number.text().includes('1')) {
-        downloadReporting(
-          'NAMO',
-          '"Cross Etel","Pêche sans VMS ni JPE","Pêche thon rouge sans VMS détecté ni JPE",27689,"FR","RENCONTRER VEILLER APPARTEMENT""","ABC000597493","JL026591","CMQ7994","NON","NAMO"'
-        )
-
-        return
-      }
-
-      downloadReporting(
-        'SA',
-        '"Alerte auto.","Pêche dans les 12 milles sans droits historiques","Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
-      )
-    })
-  })
-
-  function downloadReporting(seafront, csvValues) {
-    cy.getDataCy(`side-window-sub-menu-${seafront}`).click()
+    // Other specs archive, delete and edit NAMO reportings on the shared E2E backend:
+    // this SA reporting is the only one left untouched.
+    cy.getDataCy('side-window-sub-menu-SA').click()
     cy.fill('Type de signalement', "Suspicion d'infraction")
-    // Keeps the single-reporting expectation below: archived reportings are listed by default.
+    // Archived reportings are listed by default.
     cy.fill('Statut', 'En cours')
+    cy.fill('Rechercher dans les signalements', 'PROMETTRE')
+    cy.wait('@getSearchedReportings')
     // The table keeps the previous rows (and their selection) while the filtered list is refetched.
     cy.getDataCy('ReportingTable-reporting').should('have.length', 1)
     cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
@@ -231,7 +218,10 @@ context('Side Window > Reporting List > Actions', () => {
           'contains',
           'Date début,Source,Titre,Description,NATINF,Pavillon,Navire,CFR,Marquage ext.,C/S,Navire sous charte,Façade,Statut,INN,Latitude,Longitude'
         )
-        .should('contains', csvValues)
+        .should(
+          'contains',
+          '"Alerte auto.","Pêche dans les 12 milles sans droits historiques","Pour tous les navires UE - hors navires allemands, espagnols, néerlandais et belges - ou tiers en pêche dans les 12 milles.",2610,"FR","PROMETTRE INTÉRIEUR SAINT","ABC000232227","ZJ472279","TMG5756","NON","SA"'
+        )
     })
-  }
+  })
 })

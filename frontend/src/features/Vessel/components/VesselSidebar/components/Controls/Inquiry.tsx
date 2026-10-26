@@ -63,10 +63,17 @@ export function Inquiry({ inquiry }: InquiryProps) {
       <ContentColumn data-cy="vessel-inquiry">
         <ControlCardTitle data-cy="vessel-inquiry-title" title={title}>
           {title}
-          {inquiry.service?.name && (
+          {inquiry.controlUnits.length > 0 && (
             <>
               <br />
-              <ControlCardUnit>{inquiry.service.name}</ControlCardUnit>
+              <ControlCardUnit>
+                {inquiry.controlUnits
+                  .map(
+                    controlUnit =>
+                      `${controlUnit.name.replace('(historique)', '').trim()} – ${controlUnit.administration}`
+                  )
+                  .join(', ')}
+              </ControlCardUnit>
             </>
           )}
         </ControlCardTitle>

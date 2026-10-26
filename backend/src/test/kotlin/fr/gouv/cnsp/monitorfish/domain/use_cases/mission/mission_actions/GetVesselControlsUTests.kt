@@ -12,10 +12,12 @@ import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Infracti
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionAction
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.MissionActionType
 import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.Inquiry
+import fr.gouv.cnsp.monitorfish.domain.entities.rapportnav.InquiryService
 import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.InfractionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
@@ -55,6 +57,9 @@ class GetVesselControlsUTests {
     @MockitoBean
     private lateinit var getAuthorizedUser: GetAuthorizedUser
 
+    @MockitoBean
+    private lateinit var legacyControlUnitRepository: LegacyControlUnitRepository
+
     private val email = "dummy@email.gouv.fr"
 
     private fun givenAuthorizedUser(isSuperUser: Boolean) {
@@ -63,22 +68,24 @@ class GetVesselControlsUTests {
         )
     }
 
-    private fun inquiry(status: String) =
-        Inquiry(
-            id = UUID.randomUUID(),
-            vesselId = 1,
-            missionId = 1,
-            type = "VEHICLE",
-            origin = null,
-            status = status,
-            conclusion = null,
-            startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
-            endDateTimeUtc = null,
-            isSignedByInspector = null,
-            service = null,
-            infractions = listOf(),
-            observations = listOf(),
-        )
+    private fun inquiry(
+        status: String,
+        service: InquiryService? = null,
+    ) = Inquiry(
+        id = UUID.randomUUID(),
+        vesselId = 1,
+        missionId = 1,
+        type = "VEHICLE",
+        origin = null,
+        status = status,
+        conclusion = null,
+        startDateTimeUtc = ZonedDateTime.parse("2024-03-01T10:00:00Z"),
+        endDateTimeUtc = null,
+        isSignedByInspector = null,
+        service = service,
+        infractions = listOf(),
+        observations = listOf(),
+    )
 
     private fun buildGetVesselControls() =
         GetVesselControls(
@@ -92,6 +99,7 @@ class GetVesselControlsUTests {
                 ),
             inquiryRepository = inquiryRepository,
             getAuthorizedUser = getAuthorizedUser,
+            legacyControlUnitRepository = legacyControlUnitRepository,
         )
 
     @Test
@@ -260,6 +268,32 @@ class GetVesselControlsUTests {
 
             // Then
             assertThat(controlResumeAndControls.inquiries).containsExactly(closedInquiry)
+        }
+    }
+
+    @Test
+    fun `execute Should return the inquiries with the control units of their service`() {
+        runBlocking {
+            // Given
+            val now = ZonedDateTime.now().minusDays(1)
+            val ulam = LegacyControlUnit(10449, "DDTM", false, "ULAM 56", listOf())
+            val inquiry =
+                inquiry(
+                    status = "CLOSED",
+                    service = InquiryService(id = 6, name = "ULAM_56", controlUnitIds = listOf(10449, 99999)),
+                )
+            given(missionActionsRepository.findVesselMissionActionsAfterDateTime(any(), any())).willReturn(listOf())
+            given(inquiryRepository.findAllByVesselId(1, now)).willReturn(listOf(inquiry))
+            given(legacyControlUnitRepository.findAll()).willReturn(
+                listOf(ulam, LegacyControlUnit(10066, "DDTM", false, "DPM 56", listOf())),
+            )
+            givenAuthorizedUser(isSuperUser = false)
+
+            // When
+            val controlResumeAndControls = buildGetVesselControls().execute(1, now, email)
+
+            // Then
+            assertThat(controlResumeAndControls.inquiries.single().controlUnits).containsExactly(ulam)
         }
     }
 }

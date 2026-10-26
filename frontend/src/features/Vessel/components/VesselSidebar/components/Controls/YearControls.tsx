@@ -114,7 +114,8 @@ export function YearControls({ year, yearControls, yearInquiries }: YearControls
     return (
       <>
         {numberOfControls} {pluralize('contrôle', numberOfControls)}
-        {closedInquiries.length > 0 && (
+        {closedInquiries.length === numberOfControls && <> {pluralize('croisé', numberOfControls)}</>}
+        {closedInquiries.length > 0 && closedInquiries.length < numberOfControls && (
           <>
             {' '}
             dont {closedInquiries.length} {pluralize('croisé', closedInquiries.length)}

@@ -8,6 +8,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendInternalException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
 import fr.gouv.cnsp.monitorfish.domain.repositories.GearRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.InquiryRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.LegacyControlUnitRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetAuthorizedUser
@@ -25,6 +26,7 @@ class GetVesselControls(
     private val enrichMissionAction: EnrichMissionAction,
     private val inquiryRepository: InquiryRepository,
     private val getAuthorizedUser: GetAuthorizedUser,
+    private val legacyControlUnitRepository: LegacyControlUnitRepository,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselControls::class.java)
 
@@ -111,17 +113,30 @@ class GetVesselControls(
         afterDateTime: ZonedDateTime,
     ): List<Inquiry> =
         try {
-            val inquiries = inquiryRepository.findAllByVesselId(vesselId, afterDateTime)
+            val inquiries =
+                inquiryRepository
+                    .findAllByVesselId(vesselId, afterDateTime)
+                    .filter { isSuperUser || it.status != "IN_PROGRESS" }
 
-            if (!isSuperUser) {
-                return inquiries.filter { it.status != "IN_PROGRESS" }
-            }
-
-            inquiries
+            withControlUnits(inquiries)
         } catch (e: BackendInternalException) {
             // Inquiries come from RapportNav: its unavailability must not hide the vessel controls
             logger.error(e.message, e)
 
             listOf()
         }
+
+    private fun withControlUnits(inquiries: List<Inquiry>): List<Inquiry> {
+        val controlUnitsById = legacyControlUnitRepository.findAll().associateBy { it.id }
+
+        return inquiries.map { inquiry ->
+            val controlUnits =
+                inquiry.service
+                    ?.controlUnitIds
+                    .orEmpty()
+                    .mapNotNull { controlUnitsById[it] }
+
+            inquiry.copy(controlUnits = controlUnits)
+        }
+    }
 }

@@ -11,6 +11,7 @@ import {
 
 const DUMMY_INQUIRY: Inquiry.Inquiry = {
   conclusion: undefined,
+  controlUnits: [],
   endDateTimeUtc: undefined,
   id: 'b2f6a1c4-3d5e-4f7a-8b9c-0d1e2f3a4b5c',
   infractions: [],

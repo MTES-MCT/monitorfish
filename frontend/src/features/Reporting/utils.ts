@@ -5,6 +5,12 @@ import Point from 'ol/geom/Point'
 
 import { type DisplayedReporting, type Reporting, ReportingTypeCharacteristics } from './types'
 
+import type { Option } from '@mtes-mct/monitor-ui'
+
+export function getGearLabel(gearsAsOptions: Option[] | undefined, gearCode: string | undefined): string | undefined {
+  return gearsAsOptions?.find(option => option.value === gearCode)?.label ?? gearCode
+}
+
 export function getDefaultReportingsStartDate(): Date {
   return customDayjs().utc().subtract(3, 'year').startOf('year').toDate()
 }

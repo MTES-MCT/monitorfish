@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { numberOptional, numberOrUndefined, stringOrUndefined } from '../../../types'
 
 export const DeclaredLogbookSpeciesSchema = z.strictObject({
-  faoZone: z.string(),
+  faoZone: stringOrUndefined,
   gear: stringOrUndefined,
   species: z.string(),
   weight: numberOrUndefined

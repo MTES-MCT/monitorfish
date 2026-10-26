@@ -23,7 +23,10 @@ const PRIOR_NOTIFICATION = {
     { faoZone: '27.7.e', species: 'SOL', weight: undefined }
   ] as Logbook.Catch[],
   purposeCode: PriorNotification.PurposeCode.LAN,
+  reportId: 'FAKE_REPORT_ID',
+  riskFactor: 2.3456,
   tripGears: [{ gear: 'OTB' }, { gear: 'OTB' }, { gear: 'GNS' }] as Logbook.Gear[],
+  tripNumber: '20260042',
   tripSegments: [{ code: 'SWW01', name: 'Segment' }],
   types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4, name: 'Préavis type A' }],
   vesselFlagCountryCode: 'FR'
@@ -39,6 +42,9 @@ describe('features/PriorNotification/components/PriorNotificationList/csvMap', (
       'Détail captures (kg)': 'COD 1200 / HKE 300 / SOL 0',
       Engins: 'OTB / GNS',
       Espèces: 'COD / HKE / SOL',
+      'Identifiant du message': 'FAKE_REPORT_ID',
+      Marée: '20260042',
+      'Note de risque': 2.3,
       Pavillon: 'FR',
       'Poids total (kg)': 1500,
       Raison: 'Débarquement',
@@ -57,5 +63,17 @@ describe('features/PriorNotification/components/PriorNotificationList/csvMap', (
       'Poids total (kg)': 0,
       'Zones FAO': ''
     })
+  })
+
+  it('should label an undefined flag state as unknown', () => {
+    const result = toCsvRow({ ...PRIOR_NOTIFICATION, vesselFlagCountryCode: 'UNDEFINED' })
+
+    expect(result).toMatchObject({ Pavillon: 'Inconnu' })
+  })
+
+  it('should return an empty risk factor when there is none', () => {
+    const result = toCsvRow({ ...PRIOR_NOTIFICATION, riskFactor: undefined })
+
+    expect(result).toMatchObject({ 'Note de risque': '' })
   })
 })

@@ -27,6 +27,7 @@ export namespace PriorNotification {
     sentAt: string | undefined
     state: State | undefined
     tripGears: Logbook.Gear[]
+    tripNumber: string | undefined
     tripSegments: Logbook.Segment[]
     types: Type[]
     verificationReasons: PnoVerificationScopeReason[]

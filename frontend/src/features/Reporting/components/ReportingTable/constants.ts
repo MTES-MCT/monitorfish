@@ -1,5 +1,6 @@
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { getReportingOrigin, getReportingTitle } from '@features/Reporting/components/ReportingTable/utils'
+import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { getCoordinates } from '@mtes-mct/monitor-ui'
 
 import type { CoordinatesFormat } from '@features/Map/constants'
@@ -23,6 +24,17 @@ function getFormattedCoordinate(
   )
 }
 
+function getNatinfCodes(reporting: Reporting.Reporting): number | string {
+  switch (reporting.type) {
+    case ReportingType.ALERT:
+      return reporting.value.natinfCode
+    case ReportingType.INFRACTION_SUSPICION:
+      return reporting.value.infractions.map(({ natinfCode }) => natinfCode).join(' / ')
+    default:
+      return ''
+  }
+}
+
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const getReportingCsvMap = (coordinatesFormat: CoordinatesFormat): DownloadAsCsvMap<Reporting.Reporting> => ({
   reportingDate: 'Date début',
@@ -35,8 +47,14 @@ export const getReportingCsvMap = (coordinatesFormat: CoordinatesFormat): Downlo
     transform: getReportingTitle
   },
   'value.description': 'Description',
-  'value.natinfCode': 'NATINF',
-  flagState: 'Pavillon',
+  natinf: {
+    label: 'NATINF',
+    transform: getNatinfCodes
+  },
+  flagState: {
+    label: 'Pavillon',
+    transform: reporting => (reporting.flagState === 'UNDEFINED' ? 'Inconnu' : reporting.flagState)
+  },
   vesselName: 'Navire',
   cfr: 'CFR',
   externalMarker: 'Marquage ext.',

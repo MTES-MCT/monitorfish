@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinates
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import java.time.ZonedDateTime
@@ -14,6 +15,8 @@ class DisplayedReportingDataOutput(
     val id: Int,
     val type: ReportingType,
     val vesselName: String? = null,
+    val targetType: ReportingTargetType,
+    val gearCode: String? = null,
     val title: String,
     val description: String,
     val infractions: List<Infraction> = listOf(),
@@ -58,6 +61,13 @@ class DisplayedReportingDataOutput(
                         listOf()
                     },
                 vesselName = reporting.vesselName,
+                targetType =
+                    when (reporting) {
+                        is Reporting.InfractionSuspicion -> reporting.targetType
+                        is Reporting.Observation -> reporting.targetType
+                        is Reporting.Alert -> ReportingTargetType.VESSEL
+                    },
+                gearCode = reporting.gearCode,
                 flagState = reporting.flagState,
                 reportingDate = reporting.reportingDate,
                 validationDate = reporting.validationDate,

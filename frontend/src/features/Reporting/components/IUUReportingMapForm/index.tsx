@@ -11,6 +11,7 @@ import { reportingActions } from '@features/Reporting/slice'
 import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { deleteReporting } from '@features/Reporting/useCases/deleteReporting'
+import { getGearLabel } from '@features/Reporting/utils'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
@@ -193,9 +194,7 @@ export function IUUReportingMapForm() {
   const lastUpdateDate = autoSavedLastUpdateDate ?? editedReporting?.lastUpdateDate
 
   const isTargetingGear = targetType === ReportingTargetType.GEAR
-  const gearLabel = isTargetingGear
-    ? (gearsAsOptions?.find(option => option.value === gearCode)?.label ?? gearCode)
-    : undefined
+  const gearLabel = isTargetingGear ? getGearLabel(gearsAsOptions, gearCode) : undefined
 
   const title = (() => {
     if (!lastUpdateDate) {

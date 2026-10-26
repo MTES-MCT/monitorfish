@@ -6,14 +6,16 @@ export function hoverOrClickVesselByName(
   action: 'hover' | 'click' = 'hover',
   topNegativeOffset: number = 0,
   /** Targets the vessel's copy `worldOffset` worlds away (as displayed after panning around the globe). */
-  worldOffset: number = 0
+  worldOffset: number = 0,
+  /** Feature property matched against `vesselName`, e.g. `title` for a reporting targeting a gear. */
+  featureProperty: string = 'vesselName'
 ): Cypress.Chainable {
   return cy.get(`.${layerName}`).then($mapElement =>
     cy.window().then(win => {
       // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
       const features = win.olTestUtils.getFeaturesFromLayer(layerName)
 
-      const vessel = features.find((feature: any) => feature.get('vesselName') === vesselName)
+      const vessel = features.find((feature: any) => feature.get(featureProperty) === vesselName)
       if (!vessel) {
         throw new Error(`Vessel "${vesselName}" not found in ${layerName} layer`)
       }

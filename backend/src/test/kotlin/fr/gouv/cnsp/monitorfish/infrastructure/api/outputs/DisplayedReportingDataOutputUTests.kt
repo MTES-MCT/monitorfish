@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.InfractionSuspicionThr
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.OtherSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
+import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingTargetType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.SatelliteSource
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -250,5 +251,31 @@ class DisplayedReportingDataOutputUTests {
         val reporting = makeInfractionSuspicion(ReportingSource.OPS).copy(description = longDescription)
         val output = DisplayedReportingDataOutput.fromReporting(reporting)
         assertThat(output.description).hasSize(DisplayedReportingDataOutput.THREE_LINES_CHARACTERS)
+    }
+
+    // --- target ---
+
+    @Test
+    fun `fromReporting Should expose the target type and gear code of a gear reporting`() {
+        val reporting =
+            makeObservation(ReportingSource.SIP).copy(
+                vesselId = null,
+                cfr = null,
+                vesselIdentifier = null,
+                targetType = ReportingTargetType.GEAR,
+                gearCode = "FAD",
+            )
+
+        val output = DisplayedReportingDataOutput.fromReporting(reporting)
+
+        assertThat(output.targetType).isEqualTo(ReportingTargetType.GEAR)
+        assertThat(output.gearCode).isEqualTo("FAD")
+    }
+
+    @Test
+    fun `fromReporting Should set the target type to VESSEL for Alert`() {
+        val output = DisplayedReportingDataOutput.fromReporting(makeAlert())
+        assertThat(output.targetType).isEqualTo(ReportingTargetType.VESSEL)
+        assertThat(output.gearCode).isNull()
     }
 }

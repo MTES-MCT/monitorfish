@@ -26,7 +26,8 @@ const getWeightBySpecies = (catches: Logbook.Catch[]): Array<[string, number]> =
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const PRIOR_NOTIFICATIONS_CSV_MAP: DownloadAsCsvMap<PriorNotification.PriorNotification> = {
-  reportId: 'Réf.',
+  reportId: 'Identifiant du message',
+  tripNumber: 'Marée',
   sentAt: {
     label: 'Date de réception (UTC)',
     transform: priorNotification => formatDate(priorNotification.sentAt)
@@ -43,7 +44,11 @@ export const PRIOR_NOTIFICATIONS_CSV_MAP: DownloadAsCsvMap<PriorNotification.Pri
   vesselInternalReferenceNumber: 'CFR',
   vesselExternalReferenceNumber: 'Marquage ext.',
   vesselIrcs: 'C/S',
-  vesselFlagCountryCode: 'Pavillon',
+  vesselFlagCountryCode: {
+    label: 'Pavillon',
+    transform: priorNotification =>
+      priorNotification.vesselFlagCountryCode === 'UNDEFINED' ? 'Inconnu' : priorNotification.vesselFlagCountryCode
+  },
   vesselLength: 'Longueur (m)',
   portName: 'Port',
   portLocode: 'Locode port',
@@ -87,7 +92,11 @@ export const PRIOR_NOTIFICATIONS_CSV_MAP: DownloadAsCsvMap<PriorNotification.Pri
     label: 'Poids total (kg)',
     transform: priorNotification => sumWeight(priorNotification.onBoardCatches)
   },
-  riskFactor: 'Note de risque',
+  riskFactor: {
+    label: 'Note de risque',
+    transform: priorNotification =>
+      priorNotification.riskFactor !== undefined ? Math.round(priorNotification.riskFactor * 10) / 10 : ''
+  },
   reportingCount: 'Signalements',
   vesselLastControlDateTime: {
     label: 'Dernier contrôle (UTC)',

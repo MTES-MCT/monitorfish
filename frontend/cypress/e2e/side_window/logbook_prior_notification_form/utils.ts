@@ -116,6 +116,7 @@ export function getPriorNotificationsFakeResponse({
         sentAt: createdAt,
         state,
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
+        tripNumber: null,
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
         types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
         verificationReasons: [PnoVerificationReason.FOREIGN_FLAG_COUNTRY],

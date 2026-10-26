@@ -5,8 +5,13 @@ import { openVesselBySearch } from '../main_window/utils'
 // sometimes lands before the WebGL hit-detection buffer / reporting data are ready, so the overlay
 // never appears or renders without its content. Re-hover until the overlay shows every expected
 // text, nudging the pointer away in between so each retry re-triggers the hover.
-function hoverReportingOverlay(vesselName: string, expectedTexts: string[], attempt = 0): Cypress.Chainable {
-  hoverOrClickVesselByName(vesselName, 'REPORTING', 'hover', 12)
+function hoverReportingOverlay(
+  vesselName: string,
+  expectedTexts: string[],
+  attempt = 0,
+  featureProperty = 'vesselName'
+): Cypress.Chainable {
+  hoverOrClickVesselByName(vesselName, 'REPORTING', 'hover', 12, 0, featureProperty)
 
   return cy.get('body').then($body => {
     const overlay = $body.find('[data-cy="reporting-overlay"]:visible')
@@ -22,7 +27,7 @@ function hoverReportingOverlay(vesselName: string, expectedTexts: string[], atte
       cy.get('.REPORTING').trigger('pointermove', { clientX: 5, clientY: 5, force: true, pointerId: 1 })
       cy.wait(300)
 
-      return hoverReportingOverlay(vesselName, expectedTexts, attempt + 1)
+      return hoverReportingOverlay(vesselName, expectedTexts, attempt + 1, featureProperty)
     }
 
     return cy.wrap(overlay)
@@ -130,6 +135,49 @@ context('Reporting map form', () => {
 
     cy.clickButton('Fermer')
     cy.get('*[data-cy^="vessel-sidebar"]').should('be.visible')
+  })
+
+  it('Should display the gear as title of a reporting targeting a gear', () => {
+    // NAMO area
+    cy.visit('/#@-545000,6135000,10.50')
+    cy.wait('@displayReportings')
+    cy.wait(3000)
+    cy.intercept('POST', '/bff/v1/reportings').as('createReporting')
+
+    cy.clickButton('Signalements')
+    cy.clickButton('Afficher les signalements')
+    cy.clickButton('Créer un nouveau signalement INN')
+    cy.get('*[data-cy="map-reporting-form"]').should('be.visible')
+
+    cy.get('input[name="reportingSource"][value="OTHER"]').click()
+    cy.fill('Autres types de source', 'DIRM')
+    cy.fill('Identité de l’émetteur', 'Jean Bon (0612365896)')
+
+    cy.clickButton('Ajouter un point')
+    cy.wait(250)
+    cy.get('body').trigger('click', { clientX: 200, clientY: 200, force: true, pointerId: 1 })
+    cy.get('body').click(150, 150)
+    cy.wait(250)
+    cy.clickButton('Valider le point de signalement')
+    cy.fill('Type de cible', 'Engin')
+    cy.fill("Type d'engin", 'FAD')
+    cy.fill('Titre', 'Test INN - DCP dérivant')
+    cy.fill('Type d’infraction et NATINF 1', ['27717'])
+
+    cy.wait('@createReporting')
+    cy.wait('@displayReportings')
+    cy.get('*[data-cy="map-reporting-form"]').contains('Dispositif de concentration de poissons (DCP) (FAD)')
+
+    cy.clickButton('Fermer')
+    cy.get('*[data-cy="map-reporting-form"]').should('not.exist')
+
+    hoverReportingOverlay(
+      'Test INN - DCP dérivant',
+      ['Dispositif de concentration de poissons (DCP) (FAD)'],
+      0,
+      'title'
+    )
+    cy.getDataCy('reporting-overlay').should('not.contain', 'Navire inconnu')
   })
 
   it('Should delete a reporting after confirming the modal', () => {

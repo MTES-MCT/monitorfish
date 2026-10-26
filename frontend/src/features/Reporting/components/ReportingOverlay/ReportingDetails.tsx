@@ -1,6 +1,9 @@
 import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
+import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { getGearLabel } from '@features/Reporting/utils'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
+import { useGetGearsAsOptions } from '@hooks/useGetGearsAsOptions'
 import { Accent, Button, Dot, Icon, IconButton, Size, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
@@ -40,6 +43,7 @@ export function ReportingDetails({
   overlayPosition,
   reporting
 }: ReportingDetailsProps) {
+  const { gearsAsOptions } = useGetGearsAsOptions()
   const descriptionRef = useRef<HTMLDivElement>(null)
   const infractionTagsRef = useRef<HTMLDivElement>(null)
 
@@ -76,6 +80,17 @@ export function ReportingDetails({
   }, [reporting.infractions, onInfractionTagsHeightChange])
   const typeName = Object.values(ReportingTypeCharacteristics).find(c => c.code === reporting.type)?.displayName
   const color = reporting.type === ReportingType.OBSERVATION ? THEME.color.blueGray : THEME.color.maximumRed
+  const hasManyTargets = reporting.numberOfTargets !== undefined && reporting.numberOfTargets > 1
+
+  const title = (() => {
+    if (reporting.targetType === ReportingTargetType.GEAR) {
+      const gearLabel = getGearLabel(gearsAsOptions, reporting.gearCode) ?? 'Engin inconnu'
+
+      return hasManyTargets ? `${reporting.numberOfTargets} ${gearLabel}` : gearLabel
+    }
+
+    return hasManyTargets ? `${reporting.numberOfTargets} navires` : (reporting.vesselName ?? 'Navire inconnu')
+  })()
 
   return (
     <>
@@ -85,9 +100,7 @@ export function ReportingDetails({
             {!!reporting.flagState && reporting.flagState !== UNKNOWN_VESSEL.flagState && (
               <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
             )}
-            {reporting.numberOfTargets !== undefined && reporting.numberOfTargets > 1
-              ? `${reporting.numberOfTargets} navires`
-              : `${reporting.vesselName ?? 'Navire inconnu'}`}
+            {title}
           </VesselName>
           {isSelected && (
             <CloseButton

@@ -1,3 +1,4 @@
+import { isNotNullish } from '@utils/isNotNullish'
 import { uniq } from 'lodash-es'
 
 import type { Gear } from '../../../../domain/types/Gear'
@@ -53,7 +54,7 @@ export function getFaoZones(riskFactor: RiskFactor | undefined): string[] {
     return []
   }
 
-  const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone)
+  const nextFaoZones = riskFactor.speciesOnboard.map(species => species.faoZone).filter(isNotNullish)
 
   return uniq(nextFaoZones)
 }

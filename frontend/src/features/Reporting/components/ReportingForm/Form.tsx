@@ -182,8 +182,13 @@ export function Form({
       return []
     }
 
-    return mapControlUnitsToUniqueSortedIdsAsOptions(controlUnitsQuery.data)
-  }, [controlUnitsQuery.data])
+    // An archived unit stays listed when already selected, so that editing an older reporting keeps its source
+    const selectableControlUnits = controlUnitsQuery.data.filter(
+      ({ id, isArchived }) => !isArchived || id === values.controlUnitId
+    )
+
+    return mapControlUnitsToUniqueSortedIdsAsOptions(selectableControlUnits)
+  }, [controlUnitsQuery.data, values.controlUnitId])
 
   function clearVesselValues(override?: Partial<FormEditedReporting>) {
     void setValues({

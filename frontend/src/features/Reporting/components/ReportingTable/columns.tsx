@@ -7,6 +7,7 @@ import { getReportingOrigin, getReportingTitle } from '@features/Reporting/compo
 import { type Reporting, ReportingsSortColumn, ReportingTypeCharacteristics } from '@features/Reporting/types'
 import { ReportingTargetType } from '@features/Reporting/types/ReportingTargetType'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
+import { getGearLabel } from '@features/Reporting/utils'
 import { Accent, Tag, TableWithSelectableRows, type Option } from '@mtes-mct/monitor-ui'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import dayjs from 'dayjs'
@@ -80,7 +81,7 @@ export function getReportingTableColumns(
       // all group together when sorting by this column. Sorting by target is a known limitation.
       accessorFn: row => {
         if (row.targetType === ReportingTargetType.GEAR) {
-          return gearsAsOptions?.find(option => option.value === row.gearCode)?.label ?? row.gearCode ?? '-'
+          return getGearLabel(gearsAsOptions, row.gearCode) ?? '-'
         }
 
         return row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-')

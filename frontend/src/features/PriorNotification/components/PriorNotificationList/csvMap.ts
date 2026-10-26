@@ -26,7 +26,7 @@ const getWeightBySpecies = (catches: Logbook.Catch[]): Array<[string, number]> =
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const PRIOR_NOTIFICATIONS_CSV_MAP: DownloadAsCsvMap<PriorNotification.PriorNotification> = {
-  reportId: 'Identifiant',
+  reportId: 'Identifiant du message',
   tripNumber: 'Marée',
   sentAt: {
     label: 'Date de réception (UTC)',

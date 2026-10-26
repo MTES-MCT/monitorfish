@@ -42,7 +42,7 @@ describe('features/PriorNotification/components/PriorNotificationList/csvMap', (
       'Détail captures (kg)': 'COD 1200 / HKE 300 / SOL 0',
       Engins: 'OTB / GNS',
       Espèces: 'COD / HKE / SOL',
-      Identifiant: 'FAKE_REPORT_ID',
+      'Identifiant du message': 'FAKE_REPORT_ID',
       Marée: '20260042',
       'Note de risque': 2.3,
       Pavillon: 'FR',

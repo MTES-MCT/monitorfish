@@ -1,7 +1,5 @@
-import { FrontendApiError } from '@libs/FrontendApiError'
+import { logSoftError } from '@utils/logSoftError'
 import { browserName, browserVersion, engineName, engineVersion } from 'react-device-detect'
-
-import { mainStore } from '../store'
 
 type BrowserInfo = {
   browserName: string
@@ -11,12 +9,19 @@ type BrowserInfo = {
 }
 
 export function isBrowserSupported(): boolean {
-  return isBrowserSupportedFor({ browserName, browserVersion, engineName, engineVersion }, userMessage =>
-    FrontendApiError.handleIfAny({ userMessage }, mainStore.dispatch)
-  )
+  const browser = { browserName, browserVersion, engineName, engineVersion }
+  const isSupported = isBrowserSupportedFor(browser)
+  if (!isSupported) {
+    logSoftError({
+      context: { ...browser, userAgent: window.navigator.userAgent },
+      message: `Navigateur non supporté: "${browserName} v${browserVersion}" (${engineName} v${engineVersion})`
+    })
+  }
+
+  return isSupported
 }
 
-export function isBrowserSupportedFor(browser: BrowserInfo, onUnknownBrowser: (message: string) => void): boolean {
+export function isBrowserSupportedFor(browser: BrowserInfo): boolean {
   const browserVersionAsNumber = parseInt(browser.browserVersion, 10)
 
   switch (browser.browserName) {
@@ -45,7 +50,7 @@ export function isBrowserSupportedFor(browser: BrowserInfo, onUnknownBrowser: (m
       return browserVersionAsNumber >= 12
 
     default:
-      return isEngineSupported(browser, onUnknownBrowser)
+      return isEngineSupported(browser)
   }
 }
 
@@ -53,7 +58,7 @@ export function isBrowserSupportedFor(browser: BrowserInfo, onUnknownBrowser: (m
  * Rebranded or packaged browsers (e.g. administration Firefox builds, LibreWolf, Vivaldi)
  * don't expose a known browser name, so we fall back on their rendering engine.
  */
-function isEngineSupported(browser: BrowserInfo, onUnknownBrowser: (message: string) => void): boolean {
+function isEngineSupported(browser: BrowserInfo): boolean {
   const engineVersionAsNumber = parseInt(browser.engineVersion, 10)
 
   switch (browser.engineName) {
@@ -67,10 +72,6 @@ function isEngineSupported(browser: BrowserInfo, onUnknownBrowser: (message: str
       return true
 
     default:
-      onUnknownBrowser(
-        `Navigateur inconnu: "${browser.browserName} v${browser.browserVersion}" (${browser.engineName} v${browser.engineVersion})`
-      )
-
       return false
   }
 }

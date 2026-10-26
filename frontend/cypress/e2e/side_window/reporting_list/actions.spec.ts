@@ -215,7 +215,9 @@ context('Side Window > Reporting List > Actions', () => {
     cy.fill('Type de signalement', "Suspicion d'infraction")
     // Keeps the single-reporting expectation below: archived reportings are listed by default.
     cy.fill('Statut', 'En cours')
-    cy.get('table .rs-checkbox-control').eq(0).click({ force: true })
+    // The table keeps the previous rows (and their selection) while the filtered list is refetched.
+    cy.getDataCy('ReportingTable-reporting').should('have.length', 1)
+    cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
 
     // When
     cy.clickButton('Télécharger 1 signalement')

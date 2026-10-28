@@ -110,7 +110,7 @@ data class PositionAlertSpecificationDataOutput(
                 excludedVesselIds = positionAlertSpecification.excludedVesselIds,
                 excludedVessels =
                     positionAlertSpecification.excludedVessels.map {
-                        VesselIdentityDataOutput.fromVessel(it)
+                        it.toVesselIdentityDataOutput()
                     },
                 districtCodes = positionAlertSpecification.districtCodes,
                 producerOrganizations = positionAlertSpecification.producerOrganizations,

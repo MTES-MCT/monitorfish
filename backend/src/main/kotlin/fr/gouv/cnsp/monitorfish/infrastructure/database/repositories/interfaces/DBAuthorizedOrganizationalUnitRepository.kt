@@ -1,0 +1,6 @@
+package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces
+
+import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.AuthorizedOrganizationalUnitEntity
+import org.springframework.data.repository.CrudRepository
+
+interface DBAuthorizedOrganizationalUnitRepository : CrudRepository<AuthorizedOrganizationalUnitEntity, String>

@@ -35,6 +35,8 @@ export enum HttpStatusCode {
 
 export enum RtkCacheTagType {
   ActiveVessels = 'ActiveVessels',
+  AuthorizationAuditLogs = 'AuthorizationAuditLogs',
+  AuthorizedOrganizationalUnits = 'AuthorizedOrganizationalUnits',
   FavoriteVessels = 'FavoriteVessels',
   PriorNotificationDocuments = 'PriorNotificationDocuments',
   PriorNotificationSubscribers = 'PriorNotificationSubscribers',
@@ -44,6 +46,7 @@ export enum RtkCacheTagType {
   ProducerOrganizationMemberships = 'ProducerOrganizationMemberships',
   Reportings = 'Reportings',
   SelectedVessel = 'SelectedVessel',
+  Users = 'Users',
   Vessel = 'Vessel',
   VesselGroups = 'VesselGroups'
 }

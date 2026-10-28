@@ -1,10 +1,17 @@
 package fr.gouv.cnsp.monitorfish.domain.entities.authorization
 
+import java.time.ZonedDateTime
+
 data class UserAuthorization(
     val hashedEmail: String,
+    val email: String? = null,
     val isSuperUser: Boolean,
     val service: CnspService?,
     val isAdministrator: Boolean,
+    val administration: ExternalAdministration? = null,
+    val lastLoginAtUtc: ZonedDateTime? = null,
+    val idpId: String? = null,
+    val sub: String? = null,
 )
 
 enum class CnspService(

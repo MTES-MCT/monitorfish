@@ -19,18 +19,35 @@
       ],
       "publicClient": false,
       "secret": "BHKLjYpcN2NzFlU2kTu63z8rDxQgUl8z",
-      "defaultClientScopes": ["openid", "profile", "email", "siret"],
-      "optionalClientScopes": []
+      "attributes": {
+        "user.info.response.signature.alg": "RS256",
+        "id.token.signed.response.alg": "RS256"
+      },
+      "defaultClientScopes": [
+        "openid",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "given_name",
+        "usual_name",
+        "uid",
+        "siret",
+        "siren",
+        "organizational_unit",
+        "belonging_population",
+        "phone",
+        "chorusdt"
+      ]
     }
   ],
   "clientScopes": [
     {
       "name": "openid",
-      "description": "OpenID Connect built-in scope: openid",
+      "description": "OpenID Connect built-in scope, with the claims ProConnect always returns (sub, idp_id, organization_label)",
       "protocol": "openid-connect",
       "attributes": {
-        "consent.screen.text": "OpenID Connect",
-        "display.on.consent.screen": "true"
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
       },
       "protocolMappers": [
         {
@@ -39,16 +56,44 @@
           "protocolMapper": "oidc-sub-mapper",
           "consentRequired": false,
           "config": {}
+        },
+        {
+          "name": "idp_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "false",
+            "claim.name": "idp_id",
+            "jsonType.label": "String",
+            "user.attribute": "idp_id"
+          }
+        },
+        {
+          "name": "organization_label",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "false",
+            "claim.name": "organization_label",
+            "jsonType.label": "String",
+            "user.attribute": "organization_label"
+          }
         }
       ]
     },
     {
       "name": "email",
-      "description": "OpenID Connect built-in scope: email",
+      "description": "ProConnect: adresse e-mail",
       "protocol": "openid-connect",
       "attributes": {
-        "consent.screen.text": "Email address",
-        "display.on.consent.screen": "true"
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
       },
       "protocolMappers": [
         {
@@ -59,21 +104,21 @@
           "config": {
             "userinfo.token.claim": "true",
             "id.token.claim": "true",
-            "access.token.claim": "true",
+            "access.token.claim": "false",
             "claim.name": "email",
-            "jsonType.label": "string",
+            "jsonType.label": "String",
             "user.attribute": "email"
           }
         },
         {
-          "name": "email verified",
+          "name": "email_verified",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-property-mapper",
           "consentRequired": false,
           "config": {
             "userinfo.token.claim": "true",
             "id.token.claim": "true",
-            "access.token.claim": "true",
+            "access.token.claim": "false",
             "claim.name": "email_verified",
             "jsonType.label": "boolean",
             "user.attribute": "emailVerified"
@@ -82,51 +127,232 @@
       ]
     },
     {
-      "name": "siret",
-      "description": "SIRET scope for accessing SIRET information",
+      "name": "given_name",
+      "description": "ProConnect: prénoms",
       "protocol": "openid-connect",
       "attributes": {
-        "consent.screen.text": "Access to SIRET information",
-        "display.on.consent.screen": "true"
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
       },
       "protocolMappers": [
         {
-          "name": "siret-mapper",
+          "name": "given_name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "given_name",
+            "jsonType.label": "String",
+            "user.attribute": "firstName"
+          }
+        }
+      ]
+    },
+    {
+      "name": "usual_name",
+      "description": "ProConnect: nom d'usage",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "usual_name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "usual_name",
+            "jsonType.label": "String",
+            "user.attribute": "lastName"
+          }
+        }
+      ]
+    },
+    {
+      "name": "uid",
+      "description": "ProConnect: identifiant chez le fournisseur d'identité",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "uid",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-attribute-mapper",
           "consentRequired": false,
           "config": {
             "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "uid",
+            "jsonType.label": "String",
+            "user.attribute": "uid"
+          }
+        }
+      ]
+    },
+    {
+      "name": "siret",
+      "description": "ProConnect: SIRET de l'établissement",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "siret",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
             "claim.name": "siret",
-            "jsonType.label": "json",
+            "jsonType.label": "String",
             "user.attribute": "siret"
+          }
+        }
+      ]
+    },
+    {
+      "name": "siren",
+      "description": "ProConnect: SIREN de l'entité",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "siren",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "siren",
+            "jsonType.label": "String",
+            "user.attribute": "siren"
+          }
+        }
+      ]
+    },
+    {
+      "name": "organizational_unit",
+      "description": "ProConnect: ministère, direction ou service",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "organizational_unit",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "organizational_unit",
+            "jsonType.label": "String",
+            "user.attribute": "organizational_unit"
+          }
+        }
+      ]
+    },
+    {
+      "name": "belonging_population",
+      "description": "ProConnect: population (agent, prestataire...)",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "belonging_population",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "belonging_population",
+            "jsonType.label": "String",
+            "user.attribute": "belonging_population"
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone",
+      "description": "ProConnect: téléphone",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "phone",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "phone",
+            "jsonType.label": "String",
+            "user.attribute": "phone"
+          }
+        }
+      ]
+    },
+    {
+      "name": "chorusdt",
+      "description": "ProConnect: entité ministérielle / matricule",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "chorusdt",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "chorusdt",
+            "jsonType.label": "String",
+            "user.attribute": "chorusdt"
           }
         }
       ]
     }
   ],
   "users": [
-    {
-      "username": "user",
-      "email": "another@email.com",
-      "firstName": "User",
-      "lastName": "Fish",
-      "enabled": true,
-      "emailVerified": true,
-      "credentials": [
-        {
-          "type": "password",
-          "value": "fish",
-          "temporary": false
-        }
-      ],
-      "attributes":
-      {
-        "siret": ["1234567890"]
-      }
-    },
     {
       "username": "superuser",
       "email": "dummy@email.gouv.fr",
@@ -141,9 +367,98 @@
           "temporary": false
         }
       ],
-      "attributes":
-      {
-        "siret": ["1234567890"]
+      "attributes": {
+        "idp_id": [
+          "4106b71b-094a-48f0-974a-cb2c2a9649b3"
+        ],
+        "organization_label": [
+          "Direction générale des affaires maritimes"
+        ],
+        "uid": [
+          "superuser"
+        ],
+        "siret": [
+          "13002526500013"
+        ],
+        "siren": [
+          "130025265"
+        ],
+        "organizational_unit": [
+          "DAM/DPMA/CNSP"
+        ],
+        "belonging_population": [
+          "agent"
+        ]
+      }
+    },
+    {
+      "username": "user",
+      "email": "another@email.com",
+      "firstName": "User",
+      "lastName": "Fish",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "fish",
+          "temporary": false
+        }
+      ],
+      "attributes": {
+        "idp_id": [
+          "aff5881f-3cff-4489-9c95-c0792fc25813"
+        ],
+        "organization_label": [
+          "Douane"
+        ],
+        "uid": [
+          "user"
+        ],
+        "siret": [
+          "11004601800013"
+        ],
+        "siren": [
+          "110046018"
+        ]
+      }
+    },
+    {
+      "username": "cerbereUser",
+      "email": "agent@email.gouv.fr",
+      "firstName": "Agent",
+      "lastName": "Cerbere",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "fish",
+          "temporary": false
+        }
+      ],
+      "attributes": {
+        "idp_id": [
+          "4106b71b-094a-48f0-974a-cb2c2a9649b3"
+        ],
+        "organization_label": [
+          "DIRM Nord Atlantique - Manche Ouest"
+        ],
+        "uid": [
+          "cerbereUser"
+        ],
+        "siret": [
+          "13002526500013"
+        ],
+        "siren": [
+          "130025265"
+        ],
+        "organizational_unit": [
+          "DAM/DIRM NAMO/DML 29"
+        ],
+        "belonging_population": [
+          "agent"
+        ]
       }
     },
     {
@@ -160,9 +475,60 @@
           "temporary": false
         }
       ],
-      "attributes":
-      {
-        "siret": ["1111111111"]
+      "attributes": {
+        "idp_id": [
+          "4106b71b-094a-48f0-974a-cb2c2a9649b3"
+        ],
+        "organization_label": [
+          "Secrétariat général"
+        ],
+        "uid": [
+          "lambdaUser"
+        ],
+        "siret": [
+          "13001727000013"
+        ],
+        "siren": [
+          "130017270"
+        ],
+        "organizational_unit": [
+          "SG/DNUM/PNM/DPNM4/Prestataire"
+        ],
+        "belonging_population": [
+          "prestataire"
+        ]
+      }
+    },
+    {
+      "username": "externalUnlisted",
+      "email": "someone@external.fr",
+      "firstName": "Someone",
+      "lastName": "External",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "fish",
+          "temporary": false
+        }
+      ],
+      "attributes": {
+        "idp_id": [
+          "b95309cd-b87d-460d-be2d-f8086965290f"
+        ],
+        "organization_label": [
+          "Gendarmerie nationale"
+        ],
+        "uid": [
+          "externalUnlisted"
+        ],
+        "siret": [
+          "11004601800013"
+        ],
+        "siren": [
+          "110046018"
+        ]
       }
     }
   ]

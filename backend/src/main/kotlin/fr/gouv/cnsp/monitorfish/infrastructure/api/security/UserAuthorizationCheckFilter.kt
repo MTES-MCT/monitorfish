@@ -58,7 +58,10 @@ class UserAuthorizationCheckFilter(
                     it,
                 )
             } ?: false
-        val isAuthorized = getIsAuthorizedUser.execute(email, isSuperUserPath)
+        val isAdministratorPath =
+            request.requestURI.startsWith(ADMINISTRATOR_PATH_PREFIX) ||
+                protectedPathsAPIProperties.administratorPaths?.any { request.requestURI.contains(it) } ?: false
+        val isAuthorized = getIsAuthorizedUser.execute(email, isSuperUserPath, isAdministratorPath)
         if (!isAuthorized) {
             logger.info("$INSUFFICIENT_AUTHORIZATION_MESSAGE: ${request.requestURI!!} ($email)")
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, INSUFFICIENT_AUTHORIZATION_MESSAGE)
@@ -75,5 +78,10 @@ class UserAuthorizationCheckFilter(
         )
 
         filterChain.doFilter(request, response)
+    }
+
+    companion object {
+        /** Protected even when `administrator-paths` is not configured. */
+        const val ADMINISTRATOR_PATH_PREFIX = "/bff/v1/admin/"
     }
 }

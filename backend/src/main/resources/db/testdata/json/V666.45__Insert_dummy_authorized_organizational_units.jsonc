@@ -1,0 +1,13 @@
+[
+    {
+        "table": "authorized_organizational_units",
+        "data": [
+            {
+                "organizational_unit": "DAM/DPMA"
+            },
+            {
+                "organizational_unit": "DAM/DIRM NAMO"
+            }
+        ]
+    }
+]

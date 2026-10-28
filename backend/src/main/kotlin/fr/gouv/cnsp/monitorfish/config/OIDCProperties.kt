@@ -7,14 +7,22 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "monitorfish.oidc")
 class OIDCProperties {
     var enabled: Boolean? = false
-    var bypassEmailDomainsFilter: String? = "false"
+    var bypassLoginFilter: String? = "false"
     var clientId: String = ""
     var clientSecret: String = ""
     var redirectUri: String = ""
     var loginUrl: String = ""
     var successUrl: String = ""
+
+    /** Defaults to the origin of `successUrl`. */
+    var allowedOrigins: List<String> = listOf()
     var errorUrl: String = ""
-    var authorizedEmailDomains: List<String> = listOf()
+
+    var cerbereIdpId: String = ""
+
+    var douaneIdpId: String = ""
+
+    var extenssoIdpId: String = ""
     var issuerUri: String = ""
 
     /**

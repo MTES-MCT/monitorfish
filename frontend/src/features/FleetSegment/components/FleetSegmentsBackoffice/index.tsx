@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { CreateOrEditFleetSegmentModal } from './CreateOrEditFleetSegmentModal'
 import { FleetSegmentsTable } from './FleetSegmentsTable'
-import { BackOfficeTitle } from '../../../BackOffice/components/BackOfficeTitle'
+import { BackOfficeHeader } from '../../../BackOffice/components/BackOfficeHeader'
 import { addFleetSegmentYear } from '../../useCases/addFleetSegmentYear'
 import { createFleetSegment } from '../../useCases/createFleetSegment'
 import { deleteFleetSegment as deleteFleetSegmentAction } from '../../useCases/deleteFleetSegment'
@@ -118,36 +118,36 @@ export function FleetSegmentsBackoffice() {
 
   return (
     <Wrapper>
-      <Header>
-        <TitleBox>
-          <BackOfficeTitle>Segments de flotte</BackOfficeTitle>
-          <YearSelectPicker
-            cleanable={false}
-            isLabelHidden
-            label="Année"
-            name="fleet-segments-select-year"
-            onChange={_year => fetchFleetSegments(_year as number)}
-            options={yearEntries}
-            placeholder="Année"
-            popupWidth={100}
-            value={year}
-          />
-        </TitleBox>
-
-        <AddYearBox>
-          <AddYear>Ajouter</AddYear>
-          <Select
-            cleanable={false}
-            isLabelHidden
-            label="l'année"
-            name="fleet-segments-add-year"
-            onChange={_year => addYearEntry(Number(_year))}
-            options={yearsToAdd}
-            placeholder="l'année"
-            value={undefined}
-          />
-        </AddYearBox>
-      </Header>
+      <BackOfficeHeader
+        actions={
+          <AddYearBox>
+            <AddYear>Ajouter</AddYear>
+            <Select
+              cleanable={false}
+              isLabelHidden
+              label="l'année"
+              name="fleet-segments-add-year"
+              onChange={_year => addYearEntry(Number(_year))}
+              options={yearsToAdd}
+              placeholder="l'année"
+              value={undefined}
+            />
+          </AddYearBox>
+        }
+        title="Segments de flotte"
+      >
+        <YearSelectPicker
+          cleanable={false}
+          isLabelHidden
+          label="Année"
+          name="fleet-segments-select-year"
+          onChange={_year => fetchFleetSegments(_year as number)}
+          options={yearEntries}
+          placeholder="Année"
+          popupWidth={100}
+          value={year}
+        />
+      </BackOfficeHeader>
 
       {fleetSegments.length ? (
         <>
@@ -199,13 +199,6 @@ const Wrapper = styled.div`
   }
 `
 
-const Header = styled.div`
-  align-items: flex-start;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`
-
 const AddYear = styled.span`
   color: ${THEME.color.gunMetal};
   margin-right: 10px;
@@ -222,11 +215,6 @@ const YearSelectPicker = styled(Select)`
 const Loading = styled.div`
   margin-left: calc(50vw - 200px);
   margin-top: 200px;
-`
-
-const TitleBox = styled.div`
-  align-items: flex-start;
-  display: flex;
 `
 
 const AddYearBox = styled.div`

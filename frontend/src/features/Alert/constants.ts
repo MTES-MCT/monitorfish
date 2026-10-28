@@ -39,7 +39,8 @@ export const AdministrativeAreaTypeLabel: Record<AdministrativeAreaType, string>
 export enum AdministrativeAreaValueLabel {
   '0-12_MINUS_DE_FISHING_AREA' = '12 milles (sans la ZEE DE)',
   '0-12_MINUS_ES_FISHING_AREA' = '12 milles (sans la ZEE ESP)',
-  '0-3' = '3 milles',
+  '0-3' = '3 milles (hors zones de dérogation)',
+  '0-3_DEROG_AREAS' = '3 milles (zones de dérogation)',
   '12_MINUS_BE_AND_NL_FISHING_AREAS' = '12 milles (sans les ZEEs BEL et NLD)',
   '3-6' = 'Entre 3 et 6 milles',
   '6-12' = 'Entre 6 et 12 milles'

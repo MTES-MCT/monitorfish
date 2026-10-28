@@ -20,7 +20,10 @@ class APILegacyControlUnitRepository(
 ) : LegacyControlUnitRepository {
     private val logger: Logger = LoggerFactory.getLogger(APILegacyControlUnitRepository::class.java)
 
-    @Cacheable(value = ["legacy_control_units"])
+    @Volatile
+    private var lastKnownLegacyControlUnits: List<LegacyControlUnit> = listOf()
+
+    @Cacheable(value = ["legacy_control_units"], unless = "#result.isEmpty()")
     override fun findAll(): List<LegacyControlUnit> =
         runBlocking {
             val legacyControlUnitsUrl = "${monitorenvProperties.url}/api/v1/control_units"
@@ -30,10 +33,11 @@ class APILegacyControlUnitRepository(
                     .get(legacyControlUnitsUrl)
                     .body<List<LegacyControlUnitDataResponse>>()
                     .map { it.toLegacyControlUnit() }
+                    .also { lastKnownLegacyControlUnits = it }
             } catch (e: Exception) {
-                logger.error("Could not fetch legacy control units at $legacyControlUnitsUrl", e)
+                logger.error("Could not fetch legacy control units at $legacyControlUnitsUrl, using last known ones", e)
 
-                listOf()
+                lastKnownLegacyControlUnits
             }
         }
 }

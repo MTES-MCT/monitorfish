@@ -242,6 +242,7 @@ BACKOFFICE_REGULATION_URL = MONITORFISH_URL + "backoffice/regulation"
 # Backend endpoints
 API_ENDPOINT = MONITORFISH_URL + "api/v1/"
 BEACON_MALFUNCTIONS_ENDPOINT = API_ENDPOINT + "beacon_malfunctions/"
+CONTROL_UNITS_ENDPOINT = API_ENDPOINT + "control_units"
 HEALTHCHECK_ENDPOINT = API_ENDPOINT + "healthcheck"
 PENDING_ALERT_VALIDATION_ENDPOINT_TEMPLATE = (
     API_ENDPOINT + "operational_alerts/{pending_alert_id}/validate"
@@ -253,10 +254,6 @@ PORTS_CACHE_INVALIDATION_ENDPOINT = API_ENDPOINT + "ports/invalidate"
 
 # Backend api key
 BACKEND_API_KEY = get_key(DOTENV_PATH, "MONITORFISH_BACKEND_API_KEY")
-
-# Monitorenv endpoint
-MONITORENV_URL = get_key(DOTENV_PATH, "MONITORENV_URL")
-MONITORENV_API_ENDPOINT = MONITORENV_URL + "api/v2/"
 
 # External endpoints
 BATHYMETRY_API_URL = "https://rest.emodnet-bathymetry.eu"

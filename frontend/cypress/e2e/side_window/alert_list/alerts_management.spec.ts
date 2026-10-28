@@ -256,8 +256,8 @@ context('Side Window > Alert Management', () => {
   })
 
   it('Alerts specifications Should be shown in the table', () => {
-    cy.get('.Table-SimpleTable tr').should('have.length', 25)
-    cy.getDataCy('alerts-specification-list-length').contains('24 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 26)
+    cy.getDataCy('alerts-specification-list-length').contains('25 alertes')
 
     /**
      * Activate/deactivate an alert
@@ -274,8 +274,8 @@ context('Side Window > Alert Management', () => {
     cy.get('[title*="Supprimer"][title*="Alerte 1"]').click()
     cy.clickButton('Confirmer la suppression')
 
-    cy.get('.Table-SimpleTable tr').should('have.length', 24)
-    cy.getDataCy('alerts-specification-list-length').contains('23 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 25)
+    cy.getDataCy('alerts-specification-list-length').contains('24 alertes')
 
     /**
      * Search an alert

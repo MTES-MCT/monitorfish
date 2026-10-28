@@ -9,6 +9,7 @@ import { useMapAnimation } from '../hooks/useMapAnimation'
 import { useMapClick } from '../hooks/useMapClick'
 import { useMapMount } from '../hooks/useMapMount'
 import { useMapPointerMove } from '../hooks/useMapPointerMove'
+import { useWorldCopyJump } from '../hooks/useWorldCopyJump'
 import { monitorfishMap } from '../monitorfishMap'
 
 import type { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
@@ -75,6 +76,7 @@ export function BaseMap({
 
   useMapMount(monitorfishMap, mapElement)
   useMapClick(monitorfishMap)
+  useWorldCopyJump(monitorfishMap)
   useMapPointerMove(monitorfishMap, handlePointerMove, setCurrentFeature, showCoordinates ? saveCoordinates : undefined)
   useMapAnimation(isInitRenderDone)
 

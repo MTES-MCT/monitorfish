@@ -53,8 +53,7 @@ function UnmemoizedMeasurementLayer() {
         format: new GeoJSON<Feature<Geometry>>({
           dataProjection: WSG84_PROJECTION,
           featureProjection: OPENLAYERS_PROJECTION
-        }),
-        wrapX: false
+        })
       })
     }
 

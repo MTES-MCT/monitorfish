@@ -181,6 +181,26 @@ context('Map world wrap', () => {
     cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
     cy.get('*[data-cy="vessel-sidebar"]').should('not.exist')
 
+    cy.log('The view Should jump back to the main world when 2 world copies away, to keep features clickable')
+    // When
+    setMapView(-824534.42, 6082993.21, 8.7, -2)
+
+    // Then
+    assertViewIsOnWorldCopy(0)
+    cy.hoverOrClickVesselByName('EN RÉPÉTER PÈRE', 'VESSELS_POINTS', 'click', 0, 0)
+    cy.get('*[data-cy="vessel-sidebar"]').should('be.visible')
+    cy.get('*[data-cy="vessel-search-selected-vessel-close-title"]').click()
+    cy.get('*[data-cy="vessel-sidebar"]').should('not.exist')
+
+    // When
+    setMapView(-188008.06, 6245230.27, 8.7, -2)
+
+    // Then
+    assertViewIsOnWorldCopy(0)
+    cy.get('#root').click(331, 789)
+    cy.get('*[data-cy="mission-overlay"]').contains('BGC LORIENT')
+    assertIsInsideViewport('*[data-cy="mission-overlay"]')
+
     cy.log('A mission overlay Should be displayed next to the clicked mission copy')
     setMapView(-188008.06, 6245230.27, 8.7, 1)
 

@@ -1,8 +1,11 @@
 import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { FrontendError } from '@libs/FrontendError'
-import { getCoordinatesInWorldCopyOf, getExtentInWorldCopyOf } from '@utils/worldCopy'
+import { getCoordinatesInWorldCopyOf, getExtentInWorldCopyOf, WORLD_WIDTH } from '@utils/worldCopy'
 import { GeoJSON } from 'ol/format'
 import { MultiPolygon } from 'ol/geom'
+import Draw from 'ol/interaction/Draw'
+import Modify from 'ol/interaction/Modify'
+import VectorLayer from 'ol/layer/Vector'
 
 import { AdminLayerProperties, OPENLAYERS_PROJECTION, OpenLayersGeometryType, WSG84_PROJECTION } from './constants'
 
@@ -139,6 +142,51 @@ export function getTopmostFeatureAtPixel(
   )
 
   return topmostFeature
+}
+
+/**
+ * Moves the view back to the main world when it is 2 or more world copies away, like Leaflet's `worldCopyJump`.
+ * `map.forEachFeatureAtPixel()` only hits features up to 1 world copy away from the main world.
+ * Overlays and the features of non-wrapping layers follow the jump, so the rendered map stays the same.
+ */
+export function jumpToMainWorldIfTooFar(map: OpenLayerMap) {
+  const view = map.getView()
+  const center = view.getCenter()
+  if (!center) {
+    return
+  }
+
+  const worldIndex = Math.round(center[0]! / WORLD_WIDTH)
+  if (Math.abs(worldIndex) < 2) {
+    return
+  }
+
+  // A geometry being drawn or edited stays on the displayed world copy, out of reach of `Modify` after a jump
+  const isDrawingOrModifying = map
+    .getInteractions()
+    .getArray()
+    .some(interaction => (interaction instanceof Draw || interaction instanceof Modify) && interaction.getActive())
+  if (isDrawingOrModifying) {
+    return
+  }
+
+  const shift = -worldIndex * WORLD_WIDTH
+
+  map.getOverlays().forEach(overlay => {
+    const position = overlay.getPosition()
+    if (position) {
+      overlay.setPosition([position[0]! + shift, position[1]!])
+    }
+  })
+
+  map.getAllLayers().forEach(layer => {
+    const source = layer instanceof VectorLayer ? layer.getSource() : undefined
+    if (source && !source.getWrapX()) {
+      source.getFeatures().forEach(feature => feature.getGeometry()?.translate(shift, 0))
+    }
+  })
+
+  view.setCenter([center[0]! + shift, center[1]!])
 }
 
 /** Moves, in place, a geometry to the world copy displayed by the map. */

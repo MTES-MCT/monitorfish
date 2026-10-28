@@ -7,7 +7,6 @@ import { editSideWindowMissionListMissionWithId } from '../mission_list/utils'
 
 context('Side Window > Mission Form > Action List', () => {
   it('Should focus to the last action selected', () => {
-    cy.intercept('GET', '/bff/v1/mission_actions/is-in-inn-area*').as('getIsInInnArea')
     openSideWindowNewMission()
 
     cy.clickButton('Ajouter')
@@ -15,9 +14,8 @@ context('Side Window > Mission Form > Action List', () => {
     cy.clickButton('Ajouter un contrôle en mer')
     cy.get('*[data-cy="action-list-item"]').contains('Contrôle en mer')
     cy.get('*[data-cy="action-list-item"]').should('have.css', 'outline', 'rgb(86, 151, 210) solid 2px')
-    // 13 until the INN area query answers: it is not in one, so `isINNControl` stops being required
-    cy.wait('@getIsInInnArea')
-    cy.getDataCy('action-completion-status').contains('12 champs nécessaires aux statistiques à compléter')
+    // The exact count settles on async lookups (INN area, FAO areas...) that this focus test doesn't need to wait for
+    cy.getDataCy('action-completion-status').contains(/\d+ champs nécessaires aux statistiques à compléter/)
     cy.getDataCy('action-contains-missing-fields').eq(0).should('exist')
 
     cy.wait(250)

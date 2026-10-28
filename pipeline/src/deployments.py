@@ -52,6 +52,7 @@ from src.flows.missing_dep_alerts import missing_dep_alerts_flow
 from src.flows.missing_far_alerts import missing_far_alerts_flow
 from src.flows.missing_trip_numbers import missing_trip_numbers_flow
 from src.flows.missions import missions_flow
+from src.flows.natinfs_checkup import natinfs_checkup_flow
 from src.flows.notify_beacon_malfunctions import notify_beacon_malfunctions_flow
 from src.flows.ports import ports_flow
 from src.flows.position_alert import position_alert_flow
@@ -266,6 +267,10 @@ flows_to_deploy = [
                 parameters={"number_of_months": 200},
             )
         ],
+    ),
+    FlowAndSchedules(
+        flow=natinfs_checkup_flow,
+        schedules=[Schedule(cron="10 6 * * 1")],
     ),
     FlowAndSchedules(
         flow=notify_beacon_malfunctions_flow,

@@ -110,8 +110,8 @@ class CaffeineConfiguration {
         val findBeaconCache = buildMinutesCache(findBeacon, ticker, 60)
 
         // Control Units
-        val controlUnitsCache = buildMinutesCache(controlUnits, ticker, oneDay)
-        val legacyControlUnitsCache = buildMinutesCache(legacyControlUnits, ticker, oneDay)
+        val controlUnitsCache = buildMinutesCache(controlUnits, ticker, 10)
+        val legacyControlUnitsCache = buildMinutesCache(legacyControlUnits, ticker, 10)
 
         // FAO Areas
         val faoAreasCache = buildMinutesCache(faoAreas, ticker, oneWeek)

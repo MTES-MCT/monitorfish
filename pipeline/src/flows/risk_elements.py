@@ -207,7 +207,12 @@ def compute_occurrences_vessels_risk_elements(
     )
 
     res["metrics"] = df_to_dict_series(
-        res[["occurrences", ids_column]],
+        res[["occurrences", ids_column]].rename(
+            columns={
+                "reporting_ids": "reportingIds",
+                "beacon_malfunction_ids": "beaconMalfunctionIds",
+            }
+        ),
         result_colname="metrics",
     )
 
@@ -246,9 +251,9 @@ def compute_vessels_risk_elements(
             COALESCE(
                 LIST(
                     {
-                        'trip_number': trip_number,
-                        'start_datetime_utc': strftime(start_datetime_utc, '%Y-%m-%dT%H:%M:%SZ'),
-                        'end_datetime_utc': strftime(end_datetime_utc, '%Y-%m-%dT%H:%M:%SZ')
+                        'tripNumber': trip_number,
+                        'startDateTimeUtc': strftime(start_datetime_utc, '%Y-%m-%dT%H:%M:%SZ'),
+                        'endDateTimeUtc': strftime(end_datetime_utc, '%Y-%m-%dT%H:%M:%SZ')
                     }
                     ORDER BY end_datetime_utc DESC NULLS LAST, trip_number DESC
                 ) FILTER (WHERE NOT is_compliant),
@@ -268,7 +273,14 @@ def compute_vessels_risk_elements(
                 "share_of_non_compliant_trips",
                 "non_compliant_trips",
             ]
-        ],
+        ].rename(
+            columns={
+                "total_trips": "totalTrips",
+                "compliant_trips": "compliantTrips",
+                "share_of_non_compliant_trips": "shareOfNonCompliantTrips",
+                "non_compliant_trips": "nonCompliantTrips",
+            }
+        ),
         result_colname="metrics",
     )
 

@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.NonCompliantTrip
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.RiskElementMetrics
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.VesselRiskElement
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
@@ -16,7 +14,6 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.Type
 import java.io.Serializable
-import java.time.ZonedDateTime
 
 @Embeddable
 data class VesselRiskElementId(
@@ -40,40 +37,21 @@ data class VesselRiskElementEntity(
     @Column(name = "risk_level", nullable = false)
     val riskLevel: Int,
 ) {
-    fun toVesselRiskElement(mapper: ObjectMapper): VesselRiskElement =
-        VesselRiskElement(
+    fun toVesselRiskElement(mapper: ObjectMapper): VesselRiskElement {
+        val metricsNode = mapper.readTree(metrics)
+        val metricsClass =
+            if (metricsNode.has("totalTrips")) {
+                RiskElementMetrics.Trips::class.java
+            } else {
+                RiskElementMetrics.Occurrences::class.java
+            }
+
+        return VesselRiskElement(
             cfr = id.cfr,
             code = id.riskElementCode,
             name = riskElement.name,
             riskLevel = riskLevel,
-            metrics = toRiskElementMetrics(mapper.readTree(metrics)),
-        )
-
-    /** The metrics are written by the `risk_elements` pipeline flow, with snake_case keys. */
-    private fun toRiskElementMetrics(metricsNode: JsonNode): RiskElementMetrics {
-        if (metricsNode.has("total_trips")) {
-            return RiskElementMetrics.Trips(
-                totalTrips = metricsNode["total_trips"].asInt(),
-                compliantTrips = metricsNode["compliant_trips"].asInt(),
-                shareOfNonCompliantTrips = metricsNode["share_of_non_compliant_trips"].asDouble(),
-                nonCompliantTrips =
-                    metricsNode.path("non_compliant_trips").map { trip ->
-                        NonCompliantTrip(
-                            tripNumber = trip["trip_number"].asText(),
-                            startDateTimeUtc = trip.toZonedDateTimeOrNull("start_datetime_utc"),
-                            endDateTimeUtc = trip.toZonedDateTimeOrNull("end_datetime_utc"),
-                        )
-                    },
-            )
-        }
-
-        return RiskElementMetrics.Occurrences(
-            occurrences = metricsNode["occurrences"].asInt(),
-            reportingIds = metricsNode.path("reporting_ids").map { it.asInt() },
-            beaconMalfunctionIds = metricsNode.path("beacon_malfunction_ids").map { it.asInt() },
+            metrics = mapper.treeToValue(metricsNode, metricsClass),
         )
     }
-
-    private fun JsonNode.toZonedDateTimeOrNull(fieldName: String): ZonedDateTime? =
-        this[fieldName]?.takeUnless { it.isNull }?.let { ZonedDateTime.parse(it.asText()) }
 }

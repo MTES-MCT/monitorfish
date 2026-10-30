@@ -120,29 +120,24 @@ USER monitorfish
 RUN JAVA_TOOL_OPTIONS= java -Djarmode=tools -jar "monitorfish-${VERSION}.jar" extract --destination app \
     && rm "monitorfish-${VERSION}.jar"
 
-# AOT cache training run: the context is refreshed then the JVM exits. No DB nor Kafka is reachable at build time,
-# hence the dummy values and the disabled Flyway/Hibernate schema validation (only for this run).
-# The JMX agent of JAVA_TOOL_OPTIONS is not started here, but its module must match the runtime one or the cache is rejected.
+# 1. AOT cache training run: the context is refreshed then the JVM exits. No DB nor Kafka is reachable at build time,
+#    hence the dummy values and the disabled Flyway/Hibernate schema validation (only for this run).
+#    The JMX agent of JAVA_TOOL_OPTIONS is not started here, but its module must match the runtime one or the cache is rejected.
+# 2. The JVM silently ignores a cache it cannot use: fail the build instead if the runtime options (JAVA_TOOL_OPTIONS included)
+#    do not match the cache. -XX:AOTMode=on makes the JVM exit when the cache cannot be loaded.
 COPY infra/docker/app/aot-training.env /tmp/aot-training.env
 ARG AOT_TRAINING_ARGS="--spring.flyway.enabled=false --spring.jpa.hibernate.ddl-auto=none --spring.jpa.properties.hibernate.boot.allow_jdbc_metadata_access=false"
 RUN env JAVA_TOOL_OPTIONS= $(grep -v '^#' /tmp/aot-training.env | xargs) \
     java -XX:AOTCacheOutput=app/app.aot -Dspring.context.exit=onRefresh \
       --add-modules jdk.management.agent \
       -jar "app/monitorfish-${VERSION}.jar" ${AOT_TRAINING_ARGS} \
-    && rm -rf /home/monitorfish/logs/*
-
-# The JVM silently ignores a cache it cannot use: fail the build instead if the runtime options (JAVA_TOOL_OPTIONS included)
-# do not match the cache. -XX:AOTMode=on makes the JVM exit when the cache cannot be loaded.
-RUN env $(grep -v '^#' /tmp/aot-training.env | xargs) \
+    && env $(grep -v '^#' /tmp/aot-training.env | xargs) \
     java -XX:AOTCache=app/app.aot -XX:AOTMode=on -Dspring.context.exit=onRefresh \
       -jar "app/monitorfish-${VERSION}.jar" ${AOT_TRAINING_ARGS} \
     && rm -rf /home/monitorfish/logs/*
 
+COPY --chmod=755 infra/docker/app/start.sh /home/monitorfish/
+
 ENTRYPOINT ["/home/monitorfish/env.sh"]
 
-# The JVM falls back to a regular startup if the AOT cache cannot be used
-CMD exec java -XX:AOTCache=app/app.aot \
-              -Dhttp.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttp.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
-              -Dhttps.proxyHost=${MONITORFISH_HTTP_PROXY_HOST} -Dhttps.proxyPort=${MONITORFISH_HTTP_PROXY_PORT} \
-              -Dhttp.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} -Dhttps.nonProxyHosts=${MONITORFISH_HTTP_NON_PROXY_HOSTS} \
-              -jar "app/monitorfish-${VERSION}.jar"
+CMD ["/home/monitorfish/start.sh"]

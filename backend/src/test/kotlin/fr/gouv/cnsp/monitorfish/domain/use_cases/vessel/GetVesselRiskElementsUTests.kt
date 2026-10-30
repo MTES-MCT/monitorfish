@@ -60,7 +60,6 @@ class GetVesselRiskElementsUTests {
                 RiskElementMetrics.Occurrences(
                     occurrences = reportingIds.size,
                     reportingIds = reportingIds,
-                    beaconMalfunctionIds = emptyList(),
                 ),
         )
 

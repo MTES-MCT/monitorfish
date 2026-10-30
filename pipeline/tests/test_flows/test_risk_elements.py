@@ -176,7 +176,7 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
                         },
                     ],
                 },
-                {"occurrences": 1, "beaconMalfunctionIds": [5]},
+                {"occurrences": 1},
                 {"occurrences": 0, "reportingIds": []},
                 {
                     "totalTrips": 2,
@@ -195,9 +195,9 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
                         },
                     ],
                 },
-                {"occurrences": 0, "beaconMalfunctionIds": []},
+                {"occurrences": 0},
                 {"occurrences": 1, "reportingIds": [57]},
-                {"occurrences": 0, "beaconMalfunctionIds": []},
+                {"occurrences": 0},
                 {
                     "totalTrips": 1,
                     "compliantTrips": 0,

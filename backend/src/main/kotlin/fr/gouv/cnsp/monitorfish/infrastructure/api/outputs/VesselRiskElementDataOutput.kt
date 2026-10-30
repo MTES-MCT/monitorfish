@@ -47,7 +47,6 @@ sealed class RiskElementMetricsDataOutput(
 
     data class Occurrences(
         val occurrences: Int,
-        val beaconMalfunctionIds: List<Int>,
     ) : RiskElementMetricsDataOutput(RiskElementMetricsType.OCCURRENCES)
 
     companion object {
@@ -69,7 +68,6 @@ sealed class RiskElementMetricsDataOutput(
                 is RiskElementMetrics.Occurrences ->
                     Occurrences(
                         occurrences = metrics.occurrences,
-                        beaconMalfunctionIds = metrics.beaconMalfunctionIds,
                     )
             }
     }

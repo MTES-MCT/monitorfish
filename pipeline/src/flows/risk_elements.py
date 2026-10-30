@@ -194,25 +194,18 @@ def extract_compliant_trips(
 def compute_occurrences_vessels_risk_elements(
     vessels: pd.DataFrame, occurrences: pd.DataFrame, risk_element: RiskElement
 ):
-    ids_columns = {
-        RiskElement.CLA_CM: "reporting_ids",
-        RiskElement.VMS_MR: "beacon_malfunction_ids",
-    }
-    ids_column = ids_columns[risk_element]
-
     res = vessels[["cfr"]].merge(occurrences, on="cfr", how="left")
     res["occurrences"] = res.occurrences.fillna(0).astype(int)
-    res[ids_column] = res[ids_column].apply(
-        lambda ids: ids if isinstance(ids, list) else []
-    )
+    metrics_columns = {"occurrences": "occurrences"}
+
+    if "reporting_ids" in occurrences.columns:
+        res["reporting_ids"] = res.reporting_ids.apply(
+            lambda ids: ids if isinstance(ids, list) else []
+        )
+        metrics_columns["reporting_ids"] = "reportingIds"
 
     res["metrics"] = df_to_dict_series(
-        res[["occurrences", ids_column]].rename(
-            columns={
-                "reporting_ids": "reportingIds",
-                "beacon_malfunction_ids": "beaconMalfunctionIds",
-            }
-        ),
+        res[list(metrics_columns)].rename(columns=metrics_columns),
         result_colname="metrics",
     )
 

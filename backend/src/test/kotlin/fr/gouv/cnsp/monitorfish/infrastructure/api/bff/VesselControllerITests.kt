@@ -1241,7 +1241,6 @@ class VesselControllerITests {
                                 RiskElementMetrics.Occurrences(
                                     occurrences = 2,
                                     reportingIds = listOf(2, 1),
-                                    beaconMalfunctionIds = emptyList(),
                                 ),
                         ),
                     reportings =

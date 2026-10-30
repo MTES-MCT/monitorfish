@@ -63,14 +63,12 @@ class JpaVesselRiskElementRepositoryITests : AbstractDBTests() {
             RiskElementMetrics.Occurrences(
                 occurrences = 3,
                 reportingIds = listOf(1, 2, 3),
-                beaconMalfunctionIds = emptyList(),
             ),
         )
         assertThat(riskElements.last().metrics).isEqualTo(
             RiskElementMetrics.Occurrences(
                 occurrences = 0,
                 reportingIds = emptyList(),
-                beaconMalfunctionIds = emptyList(),
             ),
         )
     }

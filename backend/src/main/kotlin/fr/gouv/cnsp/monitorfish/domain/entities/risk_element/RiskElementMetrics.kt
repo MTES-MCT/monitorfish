@@ -15,7 +15,6 @@ sealed class RiskElementMetrics {
         val occurrences: Int,
         /** Sorted from the most recent occurrence to the oldest one */
         val reportingIds: List<Int> = emptyList(),
-        val beaconMalfunctionIds: List<Int> = emptyList(),
     ) : RiskElementMetrics()
 }
 

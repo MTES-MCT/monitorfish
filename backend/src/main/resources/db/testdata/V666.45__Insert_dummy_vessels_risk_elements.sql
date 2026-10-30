@@ -18,6 +18,6 @@ INSERT INTO vessels_risk_elements (
     ),
     (
         'VMS_MR', 'ABC000180832',
-        '{"occurrences": 0, "beaconMalfunctionIds": []}',
+        '{"occurrences": 0}',
         1
     );

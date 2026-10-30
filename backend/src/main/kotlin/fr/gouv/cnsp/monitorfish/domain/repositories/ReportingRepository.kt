@@ -27,6 +27,8 @@ interface ReportingRepository {
 
     fun findById(reportingId: Int): Reporting
 
+    fun findAllByIds(reportingIds: List<Int>): List<Reporting>
+
     fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,

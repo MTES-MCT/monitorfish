@@ -1,6 +1,7 @@
 SELECT 
     internal_reference_number AS cfr,
-    COUNT(*) AS occurrences
+    COUNT(*) AS occurrences,
+    ARRAY_AGG(id ORDER BY validation_date DESC) AS reporting_ids
 FROM reportings
 WHERE value->>'name' IN (
         'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur',

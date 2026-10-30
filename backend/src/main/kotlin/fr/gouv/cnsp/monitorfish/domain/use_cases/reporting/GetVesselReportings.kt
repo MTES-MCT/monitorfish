@@ -1,8 +1,6 @@
 package fr.gouv.cnsp.monitorfish.domain.use_cases.reporting
 
 import fr.gouv.cnsp.monitorfish.config.UseCase
-import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.LegacyControlUnit
-import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.Reporting
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingAndOccurrences
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
@@ -19,13 +17,6 @@ import java.time.ZonedDateTime
 import kotlin.collections.map
 import kotlin.time.measureTimedValue
 
-/**
- * Date at which a reporting occurred: alerts and infraction suspicions are dated by their validation,
- * and reportings still awaiting validation fall back to their creation.
- */
-private val Reporting.occurrenceDate: ZonedDateTime
-    get() = validationDate ?: creationDate
-
 @UseCase
 class GetVesselReportings(
     private val reportingRepository: ReportingRepository,
@@ -33,6 +24,7 @@ class GetVesselReportings(
     private val getAllLegacyControlUnits: GetAllLegacyControlUnits,
 ) {
     private val logger = LoggerFactory.getLogger(GetVesselReportings::class.java)
+    private val reportingEnricher = ReportingEnricher(infractionRepository)
 
     fun execute(
         vesselId: Int?,
@@ -66,7 +58,7 @@ class GetVesselReportings(
                 getReportingsAndOccurrences(reportings.filter { !it.isArchived })
                     .sortedWith(compareByDescending { it.reporting.occurrenceDate })
                     .map { reportingAndOccurrences ->
-                        enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
+                        reportingEnricher.enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                     }
             }
         logger.info("TIME_RECORD - 'current' took $currentTimeTaken")
@@ -83,7 +75,7 @@ class GetVesselReportings(
                     return@associateWith getReportingsAndOccurrences(reportingsOfYear)
                         .sortedWith(compareByDescending { it.reporting.occurrenceDate })
                         .map { reportingAndOccurrences ->
-                            enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
+                            reportingEnricher.enrichWithInfractionAndControlUnit(reportingAndOccurrences, controlUnits)
                         }
                 }
             }
@@ -158,70 +150,6 @@ class GetVesselReportings(
                     }
             }
     }
-
-    private fun enrichWithInfractionAndControlUnit(
-        reportingAndOccurrences: ReportingAndOccurrences,
-        controlUnits: List<LegacyControlUnit>,
-    ): ReportingAndOccurrences {
-        val reporting = reportingAndOccurrences.reporting
-
-        val updatedReporting =
-            when (reporting) {
-                is Reporting.Alert ->
-                    reporting.copy(
-                        infraction = getInfraction(reporting),
-                    )
-                is Reporting.InfractionSuspicion ->
-                    enrichInfractions(reporting)
-                is Reporting.Observation ->
-                    reporting
-            }
-
-        val updatedReportingAndOccurrences =
-            reportingAndOccurrences.copy(
-                reporting = updatedReporting,
-            )
-
-        if (updatedReporting.type == ReportingType.ALERT) {
-            return updatedReportingAndOccurrences
-        }
-
-        val controlUnitId =
-            when (updatedReporting) {
-                is Reporting.InfractionSuspicion -> updatedReporting.controlUnitId
-                is Reporting.Observation -> updatedReporting.controlUnitId
-                is Reporting.Alert -> null
-            }
-        val foundControlUnit = controlUnits.find { it.id == controlUnitId }
-
-        return updatedReportingAndOccurrences.copy(controlUnit = foundControlUnit)
-    }
-
-    private fun enrichInfractions(reporting: Reporting.InfractionSuspicion): Reporting.InfractionSuspicion {
-        val enriched =
-            reporting.infractions.map { item ->
-                val detail =
-                    try {
-                        infractionRepository.findInfractionByNatinfCode(item.natinfCode)
-                    } catch (e: NatinfCodeNotFoundException) {
-                        logger.warn(e.message)
-                        null
-                    }
-                item.copy(infraction = detail)
-            }
-        return reporting.copy(infractions = enriched)
-    }
-
-    private fun getInfraction(reporting: Reporting.Alert): Infraction? =
-        reporting.natinfCode.let { natinfCode ->
-            try {
-                infractionRepository.findInfractionByNatinfCode(natinfCode)
-            } catch (e: NatinfCodeNotFoundException) {
-                logger.warn(e.message)
-
-                null
-            }
-        }
 
     private fun getReportingsAndOccurrences(reportings: List<Reporting>): List<ReportingAndOccurrences> {
         val reportingsWithoutAlerts: List<ReportingAndOccurrences> =

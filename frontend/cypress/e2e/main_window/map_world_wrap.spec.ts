@@ -70,6 +70,51 @@ function hoverReportingCopy(vesselName: string, attempt = 0): Cypress.Chainable 
   })
 }
 
+// Same retry as `hoverReportingCopy()`: a single hover sometimes lands before the WebGL hit-detection buffer is ready
+function hoverTrackPointCopy(attempt = 0): Cypress.Chainable {
+  cy.window().then(win => {
+    // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+    const { getFeaturesFromLayer, getPixelFromCoordinate, monitorfishMap } = win.olTestUtils
+    // A position in the middle of the track, away from the last position where the vessel icon is drawn on top
+    const trackPositions = getFeaturesFromLayer('VESSEL_TRACK').filter(feature =>
+      String(feature.getId()).includes(':position:')
+    )
+    const trackPoint = trackPositions[Math.floor(trackPositions.length / 2)]
+    expect(trackPoint, 'a track position').to.not.equal(undefined)
+
+    const [x, y] = trackPoint.getGeometry().getCoordinates()
+    const trackPointCopy = [x + WORLD_WIDTH_IN_METERS, y]
+    monitorfishMap.getView().setCenter(trackPointCopy)
+    monitorfishMap.renderSync()
+    const pixel = getPixelFromCoordinate(trackPointCopy)
+    const features = monitorfishMap.getFeaturesAtPixel(pixel, {
+      hitTolerance: 5,
+      layerFilter: layer => layer.get('code') === 'VESSEL_TRACK'
+    })
+
+    expect(features.length).to.be.greaterThan(0)
+
+    // When hovering this track point copy
+    const mapRect = monitorfishMap.getViewport().getBoundingClientRect()
+    hoverMapAt(Math.round(pixel[0] + mapRect.left), Math.round(pixel[1] + mapRect.top))
+  })
+  cy.wait(300)
+
+  return cy.get('body').then($body => {
+    if ($body.find('[data-cy="vessel-track-card-longitude"]:visible').length > 0) {
+      return cy.wrap($body)
+    }
+    if (attempt >= 10) {
+      throw new Error(`Track point card was not displayed after ${attempt} hovers`)
+    }
+
+    cy.get('.VESSELS_POINTS').trigger('pointermove', { clientX: 5, clientY: 5, force: true, pointerId: 1 })
+    cy.wait(300)
+
+    return hoverTrackPointCopy(attempt + 1)
+  })
+}
+
 /**
  * All scenarios run inside a single `it()` to avoid paying the login/visit/wait setup cost multiple times.
  * Instead of visiting another `/#@x,y,zoom` URL, each scenario sets the map view with `setMapView()`.
@@ -149,32 +194,10 @@ context('Map world wrap', () => {
     assertViewIsOnWorldCopy(1)
 
     // And the track is displayed and hoverable on this world copy
-    cy.window().then(win => {
-      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-      const { getFeaturesFromLayer, getPixelFromCoordinate, monitorfishMap } = win.olTestUtils
-      // A position in the middle of the track, away from the last position where the vessel icon is drawn on top
-      const trackPositions = getFeaturesFromLayer('VESSEL_TRACK').filter(feature =>
-        String(feature.getId()).includes(':position:')
-      )
-      const trackPoint = trackPositions[Math.floor(trackPositions.length / 2)]
-      expect(trackPoint, 'a track position').to.not.equal(undefined)
-
-      const [x, y] = trackPoint.getGeometry().getCoordinates()
-      const trackPointCopy = [x + WORLD_WIDTH_IN_METERS, y]
-      monitorfishMap.getView().setCenter(trackPointCopy)
-      monitorfishMap.renderSync()
-      const pixel = getPixelFromCoordinate(trackPointCopy)
-      const features = monitorfishMap.getFeaturesAtPixel(pixel, {
-        hitTolerance: 5,
-        layerFilter: layer => layer.get('code') === 'VESSEL_TRACK'
-      })
-
-      expect(features.length).to.be.greaterThan(0)
-
-      // When hovering this track point copy
-      const mapRect = monitorfishMap.getViewport().getBoundingClientRect()
-      hoverMapAt(Math.round(pixel[0] + mapRect.left), Math.round(pixel[1] + mapRect.top))
+    cy.getFeaturesFromLayer('VESSEL_TRACK').should(features => {
+      expect(features.filter(feature => String(feature.getId()).includes(':position:')).length).to.be.greaterThan(0)
     })
+    hoverTrackPointCopy()
 
     // Then the track point card is displayed next to the hovered copy
     assertIsInsideViewport('*[data-cy="vessel-track-card-longitude"]')

@@ -19,10 +19,15 @@ java {
     withSourcesJar()
 }
 
+// Built with the backend JDK but kept on Java 21 bytecode and APIs for consumers (e.g. RapportNav)
+tasks.withType<JavaCompile> {
+    options.release.set(21)
+}
+
 kotlin {
-    jvmToolchain(21)
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)
+        freeCompilerArgs.add("-Xjdk-release=21")
     }
 }
 

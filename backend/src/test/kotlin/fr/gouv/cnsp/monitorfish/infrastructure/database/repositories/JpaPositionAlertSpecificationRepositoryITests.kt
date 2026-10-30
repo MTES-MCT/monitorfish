@@ -26,8 +26,8 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
         val alerts = jpaPositionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
 
         // then
-        assertThat(alerts).hasSize(17)
-        assertThat(alerts.first().name).isEqualTo("Chalutage dans les 3 milles")
+        assertThat(alerts).hasSize(18)
+        assertThat(alerts.first().name).isEqualTo("Chalutage dans les 3 milles (hors zones de dérogation)")
     }
 
     @Test
@@ -69,7 +69,9 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
         val alertsAfter = jpaPositionAlertSpecificationRepository.findAllByIsDeletedIsFalse()
         val alertAfter = alertsAfter.first { it.id == alertId }
         assertThat(alertAfter.isActivated).isFalse()
-        assertThat(alertAfter.name).isEqualTo("Chalutage dans les 3 milles") // Verify we got the right alert
+        assertThat(alertAfter.name).isEqualTo(
+            "Chalutage dans les 3 milles (hors zones de dérogation)",
+        ) // Verify we got the right alert
     }
 
     @Test

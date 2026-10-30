@@ -4,6 +4,7 @@ export const EditedAlertSpecificationSchema = AlertSpecificationSchema.omit({
   createdAtUtc: true,
   createdBy: true,
   errorReason: true,
+  excludedVessels: true,
   hasAutomaticArchiving: true,
   isActivated: true,
   isInError: true,

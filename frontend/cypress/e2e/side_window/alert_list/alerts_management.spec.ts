@@ -256,8 +256,8 @@ context('Side Window > Alert Management', () => {
   })
 
   it('Alerts specifications Should be shown in the table', () => {
-    cy.get('.Table-SimpleTable tr').should('have.length', 25)
-    cy.getDataCy('alerts-specification-list-length').contains('24 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 26)
+    cy.getDataCy('alerts-specification-list-length').contains('25 alertes')
 
     /**
      * Activate/deactivate an alert
@@ -274,15 +274,15 @@ context('Side Window > Alert Management', () => {
     cy.get('[title*="Supprimer"][title*="Alerte 1"]').click()
     cy.clickButton('Confirmer la suppression')
 
-    cy.get('.Table-SimpleTable tr').should('have.length', 24)
-    cy.getDataCy('alerts-specification-list-length').contains('23 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 25)
+    cy.getDataCy('alerts-specification-list-length').contains('24 alertes')
 
     /**
      * Search an alert
      */
     cy.fill('Rechercher une alerte', '12 milles')
-    cy.getDataCy('alerts-specification-list-length').contains('5 alertes')
-    cy.get('.Table-SimpleTable tr').should('have.length', 6)
+    cy.getDataCy('alerts-specification-list-length').contains('6 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 7)
 
     cy.get('[title="Pêche dans les 12 milles sans droits historiques (ES)"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:6"]').contains('Nationalités, Zones (VMS)')
@@ -315,7 +315,7 @@ context('Side Window > Alert Management', () => {
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains('Zone REG "Mediterranée - filets - Zone A"')
 
     cy.clickButton('En savoir plus sur le fonctionnement des alertes')
-    cy.get('.Component-Dialog').contains('Aujourd’hui, MonitorFish compte au total 21 alertes :')
+    cy.get('.Component-Dialog').contains('Aujourd’hui, MonitorFish compte au total 22 alertes :')
     cy.clickButton('Fermer')
   })
 })

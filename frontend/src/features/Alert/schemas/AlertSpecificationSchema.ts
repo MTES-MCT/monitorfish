@@ -34,6 +34,8 @@ export const AlertSpecificationSchema = z.strictObject({
   description: z.string({ message: 'Champ Description requis' }).min(1, 'Champ Description requis'),
   districtCodes: z.array(z.string()),
   errorReason: stringOrUndefined,
+  excludedVesselIds: z.array(z.number()),
+  excludedVessels: z.array(VesselIdentitySchema),
   flagStatesIso2: z.array(z.string()),
   gears: z.array(GearSpecificationSchema),
   hasAutomaticArchiving: z.boolean(),

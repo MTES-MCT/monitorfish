@@ -33,6 +33,8 @@ data class PositionAlertSpecification(
     val flagStatesIso2: List<String> = listOf(),
     val vesselIds: List<Int> = listOf(),
     val vessels: List<Vessel> = listOf(),
+    val excludedVesselIds: List<Int> = listOf(),
+    val excludedVessels: List<Vessel> = listOf(),
     val districtCodes: List<String> = listOf(),
     val producerOrganizations: List<String> = listOf(),
     val createdBy: String? = null,

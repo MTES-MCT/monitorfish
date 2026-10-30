@@ -39,6 +39,10 @@ import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingSource
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ReportingType
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.ThreatSummary
 import fr.gouv.cnsp.monitorfish.domain.entities.reporting.VesselReportings
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.NonCompliantTrip
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.RiskElementMetrics
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.VesselRiskElement
+import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.VesselRiskElementAndReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ControlledVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
@@ -63,6 +67,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselContactToUpdateByVesselId
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskElements
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVMSAndAISPositions
@@ -76,6 +81,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.TestUtils.g
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
@@ -142,6 +148,9 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getVesselRiskFactor: GetVesselRiskFactor
+
+    @MockitoBean
+    private lateinit var getVesselRiskElements: GetVesselRiskElements
 
     @MockitoBean
     private lateinit var getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions
@@ -1213,6 +1222,100 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun `Should get vessel risk elements`() {
+        // Given
+        val now = ZonedDateTime.parse("2026-08-28T10:00:00Z")
+        given(this.getVesselRiskElements.execute("FAK000999999")).willReturn(
+            listOf(
+                VesselRiskElementAndReportings(
+                    riskElement =
+                        VesselRiskElement(
+                            cfr = "FAK000999999",
+                            code = "CLA_CM",
+                            name = "Fishing in closed area",
+                            riskLevel = 3,
+                            metrics =
+                                RiskElementMetrics.Occurrences(
+                                    occurrences = 2,
+                                    reportingIds = listOf(2, 1),
+                                    beaconMalfunctionIds = emptyList(),
+                                ),
+                        ),
+                    reportings =
+                        ReportingAndOccurrences(
+                            otherOccurrencesOfSameAlert =
+                                listOf(
+                                    TestUtils.createCurrentReporting(
+                                        internalReferenceNumber = "FAK000999999",
+                                        id = 1,
+                                        validationDate = now.minusDays(10),
+                                        type = ReportingType.ALERT,
+                                        alertType = AlertType.POSITION_ALERT,
+                                    ),
+                                ),
+                            reporting =
+                                TestUtils.createCurrentReporting(
+                                    internalReferenceNumber = "FAK000999999",
+                                    id = 2,
+                                    validationDate = now,
+                                    type = ReportingType.ALERT,
+                                    alertType = AlertType.POSITION_ALERT,
+                                ),
+                            controlUnit = null,
+                        ),
+                ),
+                VesselRiskElementAndReportings(
+                    riskElement =
+                        VesselRiskElement(
+                            cfr = "FAK000999999",
+                            code = "MOT_MR",
+                            name = "Exceeding the margin of tolerance",
+                            riskLevel = 4,
+                            metrics =
+                                RiskElementMetrics.Trips(
+                                    totalTrips = 345,
+                                    compliantTrips = 281,
+                                    shareOfNonCompliantTrips = 0.1855,
+                                    nonCompliantTrips =
+                                        listOf(
+                                            NonCompliantTrip(
+                                                tripNumber = "20260087",
+                                                startDateTimeUtc = ZonedDateTime.parse("2026-08-24T06:00:00Z"),
+                                                endDateTimeUtc = ZonedDateTime.parse("2026-08-28T18:00:00Z"),
+                                            ),
+                                        ),
+                                ),
+                        ),
+                    reportings = null,
+                ),
+            ),
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/risk_elements?internalReferenceNumber=FAK000999999")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(2)))
+            .andExpect(jsonPath("$[0].code", equalTo("CLA_CM")))
+            .andExpect(jsonPath("$[0].riskLevel", equalTo(3)))
+            .andExpect(jsonPath("$[0].metrics.type", equalTo("OCCURRENCES")))
+            .andExpect(jsonPath("$[0].metrics.occurrences", equalTo(2)))
+            .andExpect(jsonPath("$[0].reportings.reporting.id", equalTo(2)))
+            .andExpect(jsonPath("$[0].reportings.otherOccurrencesOfSameAlert[0].id", equalTo(1)))
+            .andExpect(jsonPath("$[1].code", equalTo("MOT_MR")))
+            .andExpect(jsonPath("$[1].metrics.type", equalTo("TRIPS")))
+            .andExpect(jsonPath("$[1].metrics.totalTrips", equalTo(345)))
+            .andExpect(jsonPath("$[1].metrics.compliantTrips", equalTo(281)))
+            .andExpect(jsonPath("$[1].metrics.nonCompliantTrips[0].tripNumber", equalTo("20260087")))
+            .andExpect(jsonPath("$[1].metrics.nonCompliantTrips[0].startDateTimeUtc", equalTo("2026-08-24T06:00:00Z")))
+            .andExpect(jsonPath("$[1].reportings", nullValue()))
     }
 
     @Test

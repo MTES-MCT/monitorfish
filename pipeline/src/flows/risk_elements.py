@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Tuple
 
 import duckdb
 import pandas as pd
@@ -13,10 +12,10 @@ from src.shared_tasks.dates import date_trunc, get_utcnow, make_relativedelta
 
 
 @task
-def extract_total_trips(from_datetime_utc: datetime) -> pd.DataFrame:
+def extract_trips(from_datetime_utc: datetime) -> pd.DataFrame:
     return extract(
         db_name="monitorfish_remote",
-        query_filepath="monitorfish/total_trips.sql",
+        query_filepath="monitorfish/trips.sql",
         params={
             "from_datetime_utc": from_datetime_utc,
         },
@@ -114,7 +113,7 @@ def evaluate_trips_pnos(
                        to_minutes(5))
                 THEN true
                 ELSE false
-            END AS is_valid
+            END AS is_compliant
         FROM trips_subject_to_pno t
         LEFT JOIN rtps r
         ON r.cfr = t.cfr AND r.trip_number = t.trip_number
@@ -129,33 +128,21 @@ def evaluate_trips_pnos(
 
 
 @task
-def compute_pno_mr_trips_per_vessel(
-    evaluated_trips_pnos: pd.DataFrame,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    total_trips = duckdb.sql(
+def evaluate_trips_margin_of_tolerance(
+    trips: pd.DataFrame, compliant_trips: pd.DataFrame
+) -> pd.DataFrame:
+    return duckdb.sql(
         """
         SELECT
-            cfr,
-            COUNT(*) AS total_trips
-        FROM evaluated_trips_pnos
-        GROUP BY cfr
-        ORDER BY cfr
+            t.cfr,
+            t.trip_number,
+            ct.trip_number IS NOT NULL AS is_compliant
+        FROM trips t
+        LEFT JOIN compliant_trips ct
+        ON ct.cfr = t.cfr AND ct.trip_number::VARCHAR = t.trip_number
+        ORDER BY t.cfr, t.trip_number
     """
     ).to_df()
-
-    compliant_trips = duckdb.sql(
-        """
-        SELECT
-            cfr,
-            COUNT(*) AS compliant_trips
-        FROM evaluated_trips_pnos
-        WHERE is_valid
-        GROUP BY cfr
-        ORDER BY cfr
-    """
-    ).to_df()
-
-    return (total_trips, compliant_trips)
 
 
 @task
@@ -207,19 +194,20 @@ def extract_compliant_trips(
 def compute_occurrences_vessels_risk_elements(
     vessels: pd.DataFrame, occurrences: pd.DataFrame, risk_element: RiskElement
 ):
-    res = duckdb.sql(
-        """
-        SELECT
-            v.cfr,
-            COALESCE(o.occurrences, 0) AS occurrences
-        FROM vessels v
-        LEFT JOIN occurrences o
-        ON v.cfr = o.cfr
-    """
-    ).to_df()
+    ids_columns = {
+        RiskElement.CLA_CM: "reporting_ids",
+        RiskElement.VMS_MR: "beacon_malfunction_ids",
+    }
+    ids_column = ids_columns[risk_element]
+
+    res = vessels[["cfr"]].merge(occurrences, on="cfr", how="left")
+    res["occurrences"] = res.occurrences.fillna(0).astype(int)
+    res[ids_column] = res[ids_column].apply(
+        lambda ids: ids if isinstance(ids, list) else []
+    )
 
     res["metrics"] = df_to_dict_series(
-        res[["occurrences"]],
+        res[["occurrences", ids_column]],
         result_colname="metrics",
     )
 
@@ -234,23 +222,53 @@ def compute_occurrences_vessels_risk_elements(
 
 @task
 def compute_vessels_risk_elements(
-    total_trips: pd.DataFrame, compliant_trips: pd.DataFrame, risk_element: RiskElement
+    evaluated_trips: pd.DataFrame, trips: pd.DataFrame, risk_element: RiskElement
 ):
     res = duckdb.sql(
         """
+        WITH evaluated_trips_with_dates AS (
+            SELECT
+                et.cfr,
+                et.trip_number::VARCHAR AS trip_number,
+                et.is_compliant,
+                t.start_datetime_utc,
+                t.end_datetime_utc
+            FROM evaluated_trips et
+            LEFT JOIN trips t
+            ON t.cfr = et.cfr AND t.trip_number = et.trip_number::VARCHAR
+        )
+
         SELECT
-            tt.cfr,
-            total_trips,
-            COALESCE(compliant_trips, 0) AS compliant_trips,
-            GREATEST(total_trips - COALESCE(compliant_trips, 0), 0) / total_trips AS share_of_non_compliant_trips
-        FROM total_trips tt
-        LEFT JOIN compliant_trips ct
-        ON ct.cfr = tt.cfr
+            cfr,
+            COUNT(*) AS total_trips,
+            COUNT(*) FILTER (WHERE is_compliant) AS compliant_trips,
+            COUNT(*) FILTER (WHERE NOT is_compliant) / COUNT(*) AS share_of_non_compliant_trips,
+            COALESCE(
+                LIST(
+                    {
+                        'trip_number': trip_number,
+                        'start_datetime_utc': strftime(start_datetime_utc, '%Y-%m-%dT%H:%M:%SZ'),
+                        'end_datetime_utc': strftime(end_datetime_utc, '%Y-%m-%dT%H:%M:%SZ')
+                    }
+                    ORDER BY end_datetime_utc DESC NULLS LAST, trip_number DESC
+                ) FILTER (WHERE NOT is_compliant),
+                []
+            ) AS non_compliant_trips
+        FROM evaluated_trips_with_dates
+        GROUP BY cfr
+        ORDER BY cfr
     """
     ).to_df()
 
     res["metrics"] = df_to_dict_series(
-        res[["total_trips", "compliant_trips", "share_of_non_compliant_trips"]],
+        res[
+            [
+                "total_trips",
+                "compliant_trips",
+                "share_of_non_compliant_trips",
+                "non_compliant_trips",
+            ]
+        ],
         result_colname="metrics",
     )
 
@@ -292,7 +310,7 @@ def risk_elements_flow():
     today = date_trunc(now, "DAY")
     from_datetime_utc = today - make_relativedelta(years=1)
 
-    total_trips = extract_total_trips(from_datetime_utc=from_datetime_utc)
+    trips = extract_trips(from_datetime_utc=from_datetime_utc)
     vms_vessels = extract_vms_vessels(from_datetime_utc=from_datetime_utc)
     trips_subject_to_pno = extract_trips_subject_to_pno(
         from_datetime_utc=from_datetime_utc
@@ -312,8 +330,11 @@ def risk_elements_flow():
     )
 
     # Transform
+    mot_mr_evaluated_trips = evaluate_trips_margin_of_tolerance(
+        trips, mot_mr_compliant_trips
+    )
     mot_mr_vessels_risk_elements = compute_vessels_risk_elements(
-        total_trips, mot_mr_compliant_trips, RiskElement.MOT_MR
+        mot_mr_evaluated_trips, trips, RiskElement.MOT_MR
     )
     cla_cm_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
         vms_vessels, cla_cm_occurrences, RiskElement.CLA_CM
@@ -324,12 +345,8 @@ def risk_elements_flow():
     evaluated_trips_pno = evaluate_trips_pnos(
         trips_subject_to_pno, rtps, manual_pnos, logbook_pnos
     )
-
-    pno_total_trips, pno_mr_compliant_trips = compute_pno_mr_trips_per_vessel(
-        evaluated_trips_pno
-    )
     pno_mr_risk_elements = compute_vessels_risk_elements(
-        pno_total_trips, pno_mr_compliant_trips, RiskElement.PNO_MR
+        evaluated_trips_pno, trips, RiskElement.PNO_MR
     )
 
     # Load

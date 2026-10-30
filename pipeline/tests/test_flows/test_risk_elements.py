@@ -6,7 +6,9 @@ import pytest
 
 from src.entities.risk_elements import RiskElement
 from src.flows.risk_elements import (
+    compute_occurrences_vessels_risk_elements,
     compute_vessels_risk_elements,
+    evaluate_trips_margin_of_tolerance,
     evaluate_trips_pnos,
     risk_elements_flow,
 )
@@ -84,7 +86,7 @@ def expected_evaluated_trips() -> pd.DataFrame:
                 "cfr2",
             ],
             "trip_number": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "is_valid": [
+            "is_compliant": [
                 True,
                 False,
                 False,
@@ -150,31 +152,63 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
                 "XXX123456789",
             ],
             "metrics": [
-                {"occurrences": 0},
+                {"occurrences": 0, "reporting_ids": []},
                 {
                     "total_trips": 2,
                     "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.0,
+                    "non_compliant_trips": [],
                 },
                 {
                     "total_trips": 4,
                     "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.5,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "Trip_6",
+                            "start_datetime_utc": "2050-04-12T10:56:00Z",
+                            "end_datetime_utc": "2050-04-12T10:56:00Z",
+                        },
+                        {
+                            "trip_number": "8",
+                            "start_datetime_utc": None,
+                            "end_datetime_utc": None,
+                        },
+                    ],
                 },
-                {"occurrences": 1},
-                {"occurrences": 0},
+                {"occurrences": 1, "beacon_malfunction_ids": [5]},
+                {"occurrences": 0, "reporting_ids": []},
                 {
                     "total_trips": 2,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "nok_trip",
+                            "start_datetime_utc": "2050-04-12T10:56:00Z",
+                            "end_datetime_utc": "2050-04-12T10:56:00Z",
+                        },
+                        {
+                            "trip_number": "3",
+                            "start_datetime_utc": "2050-04-12T10:56:00Z",
+                            "end_datetime_utc": "2050-04-12T10:56:00Z",
+                        },
+                    ],
                 },
-                {"occurrences": 0},
-                {"occurrences": 1},
-                {"occurrences": 0},
+                {"occurrences": 0, "beacon_malfunction_ids": []},
+                {"occurrences": 1, "reporting_ids": [57]},
+                {"occurrences": 0, "beacon_malfunction_ids": []},
                 {
                     "total_trips": 1,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "XXX_00",
+                            "start_datetime_utc": "2050-04-12T10:56:00Z",
+                            "end_datetime_utc": "2050-04-12T10:56:00Z",
+                        },
+                    ],
                 },
             ],
             "risk_level": [1, 1, 4, 2, 1, 4, 1, 2, 1, 4],
@@ -183,21 +217,61 @@ def expected_vessels_risk_elements() -> pd.DataFrame:
 
 
 @pytest.fixture
-def total_trips() -> pd.DataFrame:
+def trips() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_tt_only"],
-            "total_trips": [100, 100, 100, 100],
+            "cfr": ["cfr1"] * 4 + ["cfr2"] * 2 + ["cfr3"],
+            "trip_number": ["1", "2", "3", "4", "5", "6", "7"],
+            "start_datetime_utc": [
+                pd.Timestamp("2020-01-01 06:00:00"),
+                pd.Timestamp("2020-01-10 06:00:00"),
+                pd.Timestamp("2020-01-03 06:00:00"),
+                pd.Timestamp("2020-01-05 06:00:00"),
+                pd.Timestamp("2020-01-01 06:00:00"),
+                pd.Timestamp("2020-01-02 06:00:00"),
+                pd.Timestamp("2020-01-01 06:00:00"),
+            ],
+            "end_datetime_utc": [
+                pd.Timestamp("2020-01-02 18:00:00"),
+                pd.Timestamp("2020-01-12 18:30:00"),
+                pd.Timestamp("2020-01-04 18:00:00"),
+                pd.Timestamp("2020-01-07 18:00:00"),
+                pd.Timestamp("2020-01-01 18:00:00"),
+                pd.Timestamp("2020-01-02 18:00:00"),
+                pd.Timestamp("2020-01-01 18:00:00"),
+            ],
         }
     )
 
 
 @pytest.fixture
-def compliant_trips() -> pd.DataFrame:
+def mot_mr_compliant_trips() -> pd.DataFrame:
     return pd.DataFrame(
         {
-            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_ct_only"],
-            "compliant_trips": [95, 83, 110, 100],
+            "cfr": ["cfr1", "cfr2", "cfr2", "cfr_compliant_trip_only"],
+            "trip_number": ["1", "5", "6", "8"],
+        }
+    )
+
+
+@pytest.fixture
+def expected_mot_mr_evaluated_trips() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["cfr1"] * 4 + ["cfr2"] * 2 + ["cfr3"],
+            "trip_number": ["1", "2", "3", "4", "5", "6", "7"],
+            "is_compliant": [True, False, False, False, True, True, False],
+        }
+    )
+
+
+@pytest.fixture
+def evaluated_trips() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["cfr1"] * 4 + ["cfr2"] * 2 + ["cfr3", "cfr_trip_not_in_trips"],
+            "trip_number": ["1", "2", "3", "4", "5", "6", "7", "9"],
+            "is_compliant": [True, False, False, False, True, True, False, False],
         }
     )
 
@@ -207,30 +281,94 @@ def expected_computed_vessels_risk_elements() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "risk_element_code": ["MOT_MR", "MOT_MR", "MOT_MR", "MOT_MR"],
-            "cfr": ["cfr1", "cfr2", "cfr_more_cc_than_tt", "cfr_tt_only"],
+            "cfr": ["cfr1", "cfr2", "cfr3", "cfr_trip_not_in_trips"],
             "metrics": [
                 {
-                    "total_trips": 100,
-                    "compliant_trips": 95,
-                    "share_of_non_compliant_trips": 0.05,
+                    "total_trips": 4,
+                    "compliant_trips": 1,
+                    "share_of_non_compliant_trips": 0.75,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "2",
+                            "start_datetime_utc": "2020-01-10T06:00:00Z",
+                            "end_datetime_utc": "2020-01-12T18:30:00Z",
+                        },
+                        {
+                            "trip_number": "4",
+                            "start_datetime_utc": "2020-01-05T06:00:00Z",
+                            "end_datetime_utc": "2020-01-07T18:00:00Z",
+                        },
+                        {
+                            "trip_number": "3",
+                            "start_datetime_utc": "2020-01-03T06:00:00Z",
+                            "end_datetime_utc": "2020-01-04T18:00:00Z",
+                        },
+                    ],
                 },
                 {
-                    "total_trips": 100,
-                    "compliant_trips": 83,
-                    "share_of_non_compliant_trips": 0.17,
-                },
-                {
-                    "total_trips": 100,
-                    "compliant_trips": 110,
+                    "total_trips": 2,
+                    "compliant_trips": 2,
                     "share_of_non_compliant_trips": 0.0,
+                    "non_compliant_trips": [],
                 },
                 {
-                    "total_trips": 100,
+                    "total_trips": 1,
                     "compliant_trips": 0,
                     "share_of_non_compliant_trips": 1.0,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "7",
+                            "start_datetime_utc": "2020-01-01T06:00:00Z",
+                            "end_datetime_utc": "2020-01-01T18:00:00Z",
+                        },
+                    ],
+                },
+                {
+                    "total_trips": 1,
+                    "compliant_trips": 0,
+                    "share_of_non_compliant_trips": 1.0,
+                    "non_compliant_trips": [
+                        {
+                            "trip_number": "9",
+                            "start_datetime_utc": None,
+                            "end_datetime_utc": None,
+                        },
+                    ],
                 },
             ],
-            "risk_level": [1, 3, 1, 4],
+            "risk_level": [4, 1, 4, 4],
+        }
+    )
+
+
+@pytest.fixture
+def vessels() -> pd.DataFrame:
+    return pd.DataFrame({"cfr": ["cfr1", "cfr2", "cfr3"]})
+
+
+@pytest.fixture
+def occurrences() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "cfr": ["cfr1", "cfr3", "cfr_not_in_vessels"],
+            "occurrences": [2, 1, 1],
+            "reporting_ids": [[12, 4], [7], [8]],
+        }
+    )
+
+
+@pytest.fixture
+def expected_computed_occurrences_vessels_risk_elements() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "risk_element_code": ["CLA_CM", "CLA_CM", "CLA_CM"],
+            "cfr": ["cfr1", "cfr2", "cfr3"],
+            "metrics": [
+                {"occurrences": 2, "reporting_ids": [12, 4]},
+                {"occurrences": 0, "reporting_ids": []},
+                {"occurrences": 1, "reporting_ids": [7]},
+            ],
+            "risk_level": [3, 1, 2],
         }
     )
 
@@ -245,11 +383,19 @@ def test_evaluate_trips_pnos(
     pd.testing.assert_frame_equal(evaluated_trips, expected_evaluated_trips)
 
 
+def test_evaluate_trips_margin_of_tolerance(
+    trips, mot_mr_compliant_trips, expected_mot_mr_evaluated_trips
+):
+    evaluated_trips = evaluate_trips_margin_of_tolerance(trips, mot_mr_compliant_trips)
+
+    pd.testing.assert_frame_equal(evaluated_trips, expected_mot_mr_evaluated_trips)
+
+
 def test_compute_vessels_risk_elements(
-    total_trips, compliant_trips, expected_computed_vessels_risk_elements
+    evaluated_trips, trips, expected_computed_vessels_risk_elements
 ):
     computed_vessels_risk_elements = compute_vessels_risk_elements(
-        total_trips, compliant_trips, RiskElement.MOT_MR
+        evaluated_trips, trips, RiskElement.MOT_MR
     )
     pd.testing.assert_frame_equal(
         computed_vessels_risk_elements, expected_computed_vessels_risk_elements
@@ -297,4 +443,16 @@ def test_risk_elements_flow(
     )
     pd.testing.assert_frame_equal(
         final_vessels_risk_elements, expected_vessels_risk_elements
+    )
+
+
+def test_compute_occurrences_vessels_risk_elements(
+    vessels, occurrences, expected_computed_occurrences_vessels_risk_elements
+):
+    computed_vessels_risk_elements = compute_occurrences_vessels_risk_elements(
+        vessels, occurrences, RiskElement.CLA_CM
+    )
+    pd.testing.assert_frame_equal(
+        computed_vessels_risk_elements,
+        expected_computed_occurrences_vessels_risk_elements,
     )

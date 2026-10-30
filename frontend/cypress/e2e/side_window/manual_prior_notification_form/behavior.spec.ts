@@ -489,6 +489,9 @@ context('Side Window > Manual Prior Notification Form > Behavior', () => {
     ).as('verifyAndSendFakePriorNotification')
 
     cy.clickButton('Diffuser')
+    // Opening the details before the pending state is applied lets the form re-render and collapse them
+    cy.wait('@verifyAndSendFakePriorNotification')
+    cy.contains('Diffusion en cours').should('be.visible')
 
     // -------------------------------------------------------------------------
     // Superuser opens the prior notification sent messages

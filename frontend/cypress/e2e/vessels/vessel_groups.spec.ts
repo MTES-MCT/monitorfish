@@ -1,3 +1,15 @@
+// Clicking all the tags' buttons at once fails when the number of tags changes while they are being removed
+function removeAllFilterTags() {
+  cy.get('body').then($body => {
+    if ($body.find('.Component-SingleTag button').length === 0) {
+      return
+    }
+
+    cy.get('.Component-SingleTag button').first().click()
+    removeAllFilterTags()
+  })
+}
+
 context('Vessel groups', () => {
   it('A dynamic vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
@@ -240,14 +252,9 @@ context('Vessel groups', () => {
      * Select vessels
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
-    cy.get('.Component-SingleTag')
-      .first()
-      .within(() => {
-        cy.get('button').click()
-      })
-    cy.get('.Component-SingleTag').within(() => {
-      cy.get('button').click()
-    })
+    // Wait for the default filters to be displayed, then remove them one by one
+    cy.get('.Component-SingleTag').should('have.length.greaterThan', 0)
+    removeAllFilterTags()
 
     cy.fill('Rechercher un navire', '103914')
     cy.get('[data-id="VESSELS_POINTS:ABC000103914/UNKNOWN/TQ736775"]').within(() => {
@@ -362,6 +369,7 @@ context('Vessel groups', () => {
     /**
      * Download a group
      */
+    cy.cleanDownloadedFiles()
     cy.get('[title="Lorem ipsum"]').click()
     cy.get('[title=\'Télécharger le groupe "Lorem ipsum"\']').click({ force: true })
 
@@ -372,7 +380,9 @@ context('Vessel groups', () => {
         throw new Error('Vessel group CSV was never downloaded')
       }
 
-      return cy.task<string[]>('listDownloadedFiles').then(([downloadedCSVFilename]) => {
+      return cy.task<string[]>('listDownloadedFiles').then(downloadedFilenames => {
+        // Ignore the browser's temporary files, which are renamed once the download is complete
+        const downloadedCSVFilename = downloadedFilenames.find(filename => filename.endsWith('.csv'))
         if (!downloadedCSVFilename) {
           cy.wait(200)
 

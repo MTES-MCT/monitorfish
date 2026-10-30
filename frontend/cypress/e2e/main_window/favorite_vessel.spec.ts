@@ -115,24 +115,22 @@ context('Favorite Vessel', () => {
 
     // When (PHENOMENE is the last row, list is sorted by name)
     cy.get('*[data-cy="favorite-vessel-show-vessel-track"]').last().click()
-    cy.wait(1500)
 
-    // Then
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
+    // Then (`should` retries until the track is loaded)
+    cy.getFeaturesFromLayer('VESSEL_TRACK').should(features => {
       expect(features.length).to.be.equal(7)
     })
 
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.fill('Afficher depuis', '1 semaine')
-    cy.wait(1500)
 
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
+    cy.getFeaturesFromLayer('VESSEL_TRACK').should(features => {
       expect(features.length).to.be.equal(28)
     })
 
     cy.get('*[data-cy^="close-vessel-track"]').click({ force: true })
     cy.get('*[data-cy^="close-vessel-track"]').should('not.exist')
-    cy.getFeaturesFromLayer('VESSEL_TRACK').then(features => {
+    cy.getFeaturesFromLayer('VESSEL_TRACK').should(features => {
       expect(features.length).to.be.equal(0)
     })
   })

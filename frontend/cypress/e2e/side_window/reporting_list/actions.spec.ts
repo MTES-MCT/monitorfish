@@ -204,7 +204,10 @@ context('Side Window > Reporting List > Actions', () => {
     cy.wait('@getSearchedReportings')
     // The table keeps the previous rows (and their selection) while the filtered list is refetched.
     cy.getDataCy('ReportingTable-reporting').should('have.length', 1)
+    cy.getDataCy('ReportingTable-reporting').first().contains('PROMETTRE INTÉRIEUR SAINT')
     cy.get('table .rs-checkbox-control').eq(1).click({ force: true })
+    // Wait for the selection to be applied (`clickButton()` does not retry)
+    cy.get('button[title="Télécharger 1 signalement"]').should('not.be.disabled')
 
     // When
     cy.clickButton('Télécharger 1 signalement')

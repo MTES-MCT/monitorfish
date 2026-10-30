@@ -320,7 +320,7 @@ context('Sidebars > Regulatory Layers', () => {
       expect(request.body.displayedAdministrativeLayers).length(1)
       expect(request.body.displayedAdministrativeLayers[0].type).equal('eez_areas')
     })
-    cy.getFeaturesFromLayer('eez_areas').then(features => {
+    cy.getFeaturesFromLayer('eez_areas').should(features => {
       expect(features.length).to.be.equal(7)
     })
 
@@ -332,8 +332,7 @@ context('Sidebars > Regulatory Layers', () => {
       expect(response?.body.displayedAdministrativeLayers).length(1)
       expect(response?.body.displayedAdministrativeLayers[0].type).equal('eez_areas')
     })
-    cy.wait(5000)
-    cy.getFeaturesFromLayer('eez_areas').then(features => {
+    cy.getFeaturesFromLayer('eez_areas').should(features => {
       expect(features.length).to.be.equal(7)
     })
   })

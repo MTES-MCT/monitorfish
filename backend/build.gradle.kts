@@ -26,7 +26,7 @@ plugins {
 group = "fr.gouv.cnsp"
 version = "VERSION_TO_CHANGE"
 description = "MonitorFish"
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -69,7 +69,7 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 noArg {
@@ -82,7 +82,7 @@ configurations.all {
 
 tasks.withType<KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_25)
         freeCompilerArgs.set(listOf("-Xjsr305=strict"))
     }
 }
@@ -152,7 +152,7 @@ dependencies {
     implementation("io.sentry:sentry-log4j2:8.60.0")
 
     // Runtime
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")
 
     // Test
     testImplementation("io.ktor:ktor-client-mock-jvm:3.6.0")

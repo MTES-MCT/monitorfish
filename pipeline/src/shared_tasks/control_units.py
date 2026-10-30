@@ -4,14 +4,16 @@ import pandas as pd
 import requests
 from prefect import task
 
-from config import MONITORENV_API_ENDPOINT
+from config import BACKEND_API_KEY, CONTROL_UNITS_ENDPOINT
 from src.entities.control_units import ControlUnit
 from src.processing import remove_nones_from_list
 
 
 @task
 def fetch_control_units() -> List[ControlUnit]:
-    r = requests.get(MONITORENV_API_ENDPOINT + "control_units")
+    r = requests.get(
+        CONTROL_UNITS_ENDPOINT, headers={"X-API-KEY": BACKEND_API_KEY}, timeout=30
+    )
 
     r.raise_for_status()
     df = pd.DataFrame(r.json())

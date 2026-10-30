@@ -20,7 +20,10 @@ class APIControlUnitRepository(
 ) : ControlUnitRepository {
     private val logger: Logger = LoggerFactory.getLogger(APIControlUnitRepository::class.java)
 
-    @Cacheable(value = ["control_units"])
+    @Volatile
+    private var lastKnownControlUnits: List<FullControlUnit> = listOf()
+
+    @Cacheable(value = ["control_units"], unless = "#result.isEmpty()")
     override fun findAll(): List<FullControlUnit> =
         runBlocking {
             val controlUnitsUrl = "${monitorenvProperties.url}/api/v2/control_units"
@@ -30,10 +33,11 @@ class APIControlUnitRepository(
                     .get(controlUnitsUrl)
                     .body<List<FullControlUnitDataResponse>>()
                     .map { it.toFullControlUnit() }
+                    .also { lastKnownControlUnits = it }
             } catch (e: Exception) {
-                logger.error("Could not fetch control units at $controlUnitsUrl", e)
+                logger.error("Could not fetch control units at $controlUnitsUrl, using last known ones", e)
 
-                listOf()
+                lastKnownControlUnits
             }
         }
 }

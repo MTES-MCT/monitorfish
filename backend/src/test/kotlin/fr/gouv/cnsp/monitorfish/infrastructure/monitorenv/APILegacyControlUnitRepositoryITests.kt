@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.ApiClient
 import fr.gouv.cnsp.monitorfish.config.MonitorenvProperties
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
+import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
@@ -62,5 +63,61 @@ class APILegacyControlUnitRepositoryITests {
 
         assertThat(controlUnits).hasSize(3)
         assertThat(controlUnits.first().id).isEqualTo(10016)
+    }
+
+    @Test
+    fun `findAll Should return the last known control units When MonitorEnv is down`() {
+        // Given
+        var isMonitorEnvDown = false
+        val mockEngine =
+            MockEngine { _ ->
+                if (isMonitorEnvDown) {
+                    return@MockEngine respondError(HttpStatusCode.ServiceUnavailable)
+                }
+
+                respond(
+                    content =
+                        ByteReadChannel(
+                            """[
+                        {
+                          "id": 10016,
+                          "administration": "Douane",
+                          "isArchived": false,
+                          "name": "BSN Ste Maxime",
+                          "resources": [],
+                          "contact": null
+                        }
+                      ]""",
+                        ),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+        val monitorenvProperties = MonitorenvProperties()
+        monitorenvProperties.url = "http://test"
+        val repository = APILegacyControlUnitRepository(monitorenvProperties, ApiClient(mockEngine))
+        repository.findAll()
+        isMonitorEnvDown = true
+
+        // When
+        val controlUnits = repository.findAll()
+
+        // Then
+        assertThat(controlUnits).hasSize(1)
+        assertThat(controlUnits.first().id).isEqualTo(10016)
+    }
+
+    @Test
+    fun `findAll Should return no control units When MonitorEnv is down and none were fetched before`() {
+        // Given
+        val mockEngine = MockEngine { _ -> respondError(HttpStatusCode.ServiceUnavailable) }
+        val monitorenvProperties = MonitorenvProperties()
+        monitorenvProperties.url = "http://test"
+
+        // When
+        val controlUnits = APILegacyControlUnitRepository(monitorenvProperties, ApiClient(mockEngine)).findAll()
+
+        // Then
+        assertThat(controlUnits).isEmpty()
     }
 }

@@ -19,4 +19,10 @@ def test_fetch_control_units_contacts(
 
     mock_requests.get.return_value = response
     res = fetch_control_units()
+
+    mock_requests.get.assert_called_once_with(
+        "https://monitor.fish/api/v1/control_units",
+        headers={"X-API-KEY": "backend_api_key"},
+        timeout=30,
+    )
     assert res == monitorenv_control_units

@@ -2809,7 +2809,9 @@ def test_flow(
     assert state.is_completed()
 
     mock_requests.get.assert_called_once_with(
-        "https://monitor.env/api/v2/control_units"
+        "https://monitor.fish/api/v1/control_units",
+        headers={"X-API-KEY": "backend_api_key"},
+        timeout=30,
     )
 
     if is_integration:

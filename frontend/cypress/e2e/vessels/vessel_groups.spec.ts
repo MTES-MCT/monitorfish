@@ -233,6 +233,8 @@ context('Vessel groups', () => {
 
   it('A fixed vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
+    // Vessel list filters are persisted: make sure none leaks from the previous test
+    cy.clearLocalStorage(/persist/)
     cy.visit('/side_window')
     cy.wait(250)
 
@@ -240,14 +242,12 @@ context('Vessel groups', () => {
      * Select vessels
      */
     cy.getDataCy('side-window-menu-vessel-list').click()
-    cy.get('.Component-SingleTag')
-      .first()
-      .within(() => {
-        cy.get('button').click()
-      })
-    cy.get('.Component-SingleTag').within(() => {
-      cy.get('button').click()
-    })
+    // Remove the default filters ("En mer" and "Dernière position")
+    cy.get('.vessel-list-filter-tags .Component-SingleTag').should('have.length', 2)
+    cy.get('.vessel-list-filter-tags .Component-SingleTag').first().find('button').click()
+    cy.get('.vessel-list-filter-tags .Component-SingleTag').should('have.length', 1)
+    cy.get('.vessel-list-filter-tags .Component-SingleTag').first().find('button').click()
+    cy.get('.vessel-list-filter-tags .Component-SingleTag').should('not.exist')
 
     cy.fill('Rechercher un navire', '103914')
     cy.get('[data-id="VESSELS_POINTS:ABC000103914/UNKNOWN/TQ736775"]').within(() => {

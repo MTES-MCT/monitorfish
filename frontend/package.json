@@ -156,7 +156,7 @@
     "cypress-axe": "1.7.0",
     "dotenv": "17.4.2",
     "eslint": "9.39.4",
-    "eslint-plugin-cypress": "3.5.0",
+    "eslint-plugin-cypress": "7.0.2",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-mocha": "10.5.0",
     "eslint-plugin-react": "7.37.5",

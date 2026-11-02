@@ -152,7 +152,7 @@ const Title = styled.div`
 
 const Wrapper = styled.div`
   padding-top: 1px;
-  box-shadow: 0 3px 6px #70778540;
+  box-shadow: 0 3px 6px #5e667c40;
   line-height: 20px;
   text-align: left;
   width: 310px;

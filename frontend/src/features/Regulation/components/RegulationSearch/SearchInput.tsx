@@ -236,7 +236,7 @@ const Search = styled.div`
   height: 40px;
   width: 100%;
   position: relative;
-  box-shadow: 0px 3px 6px #70778540;
+  box-shadow: 0px 3px 6px #5e667c40;
 `
 
 const StyledTextInput = styled(TextInput)`

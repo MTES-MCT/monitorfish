@@ -26,7 +26,7 @@ const Wrapper = styled.div<{
   $color: string
 }>`
   border: 1px solid ${p => p.theme.color.lightGray};
-  box-shadow: 0px 2px 3px #70778580;
+  box-shadow: 0px 2px 3px #5e667c80;
   line-height: 20px;
   cursor: grabbing;
   height: 20px;

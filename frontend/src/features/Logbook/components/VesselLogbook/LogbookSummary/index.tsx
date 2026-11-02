@@ -7,6 +7,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -37,6 +38,7 @@ type LogbookSummaryProps = Readonly<{
 
 export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const logbookMessages = useMainAppSelector(state => state.fishingActivities.logbookMessages)
@@ -71,7 +73,6 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
           segments={selectedVessel?.riskFactor?.segments}
         />
         <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
-        <StyledLogbookRiskElements />
       </Body>
     )
   }
@@ -250,7 +251,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
               <NoMessage>Aucun message reçu</NoMessage>
             )}
           </SidebarZone>
-          <StyledLogbookRiskElements />
+          {isSuperUser && <StyledLogbookRiskElements />}
         </Body>
       ) : null}
     </>

@@ -1,6 +1,6 @@
 import {
-  ListItem,
   SidebarHeader,
+  SidebarList,
   SidebarLoadMoreYears,
   SidebarZone
 } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
@@ -32,13 +32,11 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
         <NoReporting>{`Aucun signalement depuis ${customDayjs(fromDate).get('year')}`}</NoReporting>
       )}
       {reportingsByYearAsPairs.length > 0 && (
-        <List>
+        <SidebarList>
           {reportingsByYearAsPairs.map(([year, reportingAndOccurences]) => (
-            <ListItem key={year}>
-              <YearReportings reportingAndOccurences={reportingAndOccurences} year={year} />
-            </ListItem>
+            <YearReportings key={year} reportingAndOccurences={reportingAndOccurences} year={year} />
           ))}
-        </List>
+        </SidebarList>
       )}
       <SidebarLoadMoreYears>
         <Button accent={Accent.SECONDARY} onClick={onMore}>
@@ -48,12 +46,6 @@ export function ArchivedReportingList({ fromDate, onMore, vesselReportings }: Ar
     </SidebarZone>
   )
 }
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-`
 
 const NoReporting = styled.div`
   color: ${THEME.color.gunMetal};

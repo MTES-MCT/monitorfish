@@ -48,8 +48,5 @@ compliant_trips AS (
     HAVING Min(elw_weight BETWEEN min_allowed_elw AND max_allowed_elw) = 1
 )
 
-SELECT
-    cfr,
-    COUNT(*) AS compliant_trips
+SELECT cfr, trip_number
 FROM compliant_trips
-GROUP BY cfr

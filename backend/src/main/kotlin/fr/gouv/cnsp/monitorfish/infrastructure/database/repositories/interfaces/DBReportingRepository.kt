@@ -80,6 +80,18 @@ interface DBReportingRepository : CrudRepository<ReportingEntity, Int> {
 
     @Query(
         value = """
+        SELECT *
+        FROM reportings
+        WHERE
+            id IN (:ids) AND
+            deleted IS FALSE
+        """,
+        nativeQuery = true,
+    )
+    fun findAllNotDeletedByIds(ids: List<Int>): List<ReportingEntity>
+
+    @Query(
+        value = """
         SELECT
             id,
             type,

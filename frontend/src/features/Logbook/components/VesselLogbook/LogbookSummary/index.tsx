@@ -1,11 +1,13 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { LogbookRiskElements } from '@features/RiskElement/components/LogbookRiskElements'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
+import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -36,6 +38,7 @@ type LogbookSummaryProps = Readonly<{
 
 export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const dispatch = useMainAppDispatch()
+  const isSuperUser = useIsSuperUser()
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const logbookMessages = useMainAppSelector(state => state.fishingActivities.logbookMessages)
@@ -248,6 +251,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
               <NoMessage>Aucun message reçu</NoMessage>
             )}
           </SidebarZone>
+          {isSuperUser && <StyledLogbookRiskElements />}
         </Body>
       ) : null}
     </>
@@ -395,6 +399,10 @@ const TextValue = styled.div<{
   .rs-stack {
     min-width: 125px;
   }
+`
+
+const StyledLogbookRiskElements = styled(LogbookRiskElements)`
+  margin-top: 10px;
 `
 
 const Body = styled.div`

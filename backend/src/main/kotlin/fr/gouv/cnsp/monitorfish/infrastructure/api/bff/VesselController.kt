@@ -14,6 +14,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVessel
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselBeaconMalfunctions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselContactToUpdateByVesselId
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskElements
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVMSAndAISPositions
@@ -34,6 +35,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SpeciesControlPrefill
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselContactToUpdateDataOutput.Companion.fromVesselContactToUpdate
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselReportingsDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VesselRiskElementDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.VoyageDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toVesselIdentityDataOutput
 import io.swagger.v3.oas.annotations.Operation
@@ -73,6 +75,7 @@ class VesselController(
     private val getVesselBeaconMalfunctions: GetVesselBeaconMalfunctions,
     private val getVesselReportings: GetVesselReportings,
     private val getVesselRiskFactor: GetVesselRiskFactor,
+    private val getVesselRiskElements: GetVesselRiskElements,
     private val getVesselTripNumbers: GetVesselTripNumbers,
     private val getSpeciesControlPrefillFromLogbook: GetSpeciesControlPrefillFromLogbook,
     private val getHasFilledLogbookForCurrentTrip: GetHasFilledLogbookForCurrentTrip,
@@ -426,6 +429,17 @@ class VesselController(
 
         return RiskFactorDataOutput.fromVesselRiskFactor(riskFactor)
     }
+
+    @GetMapping("/risk_elements")
+    @Operation(summary = "Get vessel risk elements")
+    fun getVesselRiskElements(
+        @Parameter(description = "Vessel internal reference number (CFR)")
+        @RequestParam(name = "internalReferenceNumber")
+        internalReferenceNumber: String,
+    ): List<VesselRiskElementDataOutput> =
+        getVesselRiskElements
+            .execute(internalReferenceNumber)
+            .map { VesselRiskElementDataOutput.fromVesselRiskElementAndReportings(it) }
 
     @GetMapping("/contact_method/{vesselId}")
     @Operation(summary = "Get vessel contact method to update from its vessel ID")

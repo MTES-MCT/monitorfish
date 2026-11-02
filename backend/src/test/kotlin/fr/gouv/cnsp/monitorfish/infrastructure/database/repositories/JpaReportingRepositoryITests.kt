@@ -31,6 +31,26 @@ class JpaReportingRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `findAllByIds Should return the reportings that are not deleted`() {
+        // When
+        val reportings = jpaReportingRepository.findAllByIds(listOf(1, 2, 3))
+
+        // Then
+        assertThat(reportings.map { it.id }).containsExactlyInAnyOrder(1, 2)
+    }
+
+    @Test
+    @Transactional
+    fun `findAllByIds Should return an empty list When no ids are given`() {
+        // When
+        val reportings = jpaReportingRepository.findAllByIds(emptyList())
+
+        // Then
+        assertThat(reportings).isEmpty()
+    }
+
+    @Test
+    @Transactional
     fun `save Should save a reporting from the pending alert`() {
         // Given
         val creationDate = ZonedDateTime.now()

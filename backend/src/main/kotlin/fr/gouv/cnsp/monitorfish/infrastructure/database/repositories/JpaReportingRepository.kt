@@ -200,6 +200,19 @@ class JpaReportingRepository(
     override fun findById(reportingId: Int): Reporting =
         dbReportingRepository.findById(reportingId).get().toReporting(mapper)
 
+    override fun findAllByIds(reportingIds: List<Int>): List<Reporting> {
+        // `IN ()` is not valid SQL
+        if (reportingIds.isEmpty()) {
+            return emptyList()
+        }
+
+        return dbReportingRepository
+            .findAllNotDeletedByIds(reportingIds)
+            .map {
+                it.toReporting(mapper)
+            }
+    }
+
     override fun findCurrentAndArchivedByVesselIdentifierEquals(
         vesselIdentifier: VesselIdentifier,
         value: String,

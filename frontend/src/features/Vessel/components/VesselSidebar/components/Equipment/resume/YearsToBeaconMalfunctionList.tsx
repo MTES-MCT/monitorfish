@@ -1,4 +1,4 @@
-import { ListItem, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import { SidebarList, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -25,17 +25,16 @@ export function YearsToBeaconMalfunctionList({
     <SidebarZone>
       <Title>Historique des avaries VMS</Title>
       {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
-        <List data-cy="vessel-beacon-malfunctions-history">
+        <SidebarList data-cy="vessel-beacon-malfunctions-history">
           {sortedYears.map(year => (
-            <ListItem key={year}>
-              <YearBeaconMalfunctions
-                setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-                year={year}
-                yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
-              />
-            </ListItem>
+            <YearBeaconMalfunctions
+              key={year}
+              setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+              year={year}
+              yearBeaconMalfunctions={yearsToBeaconMalfunctions[year] ?? []}
+            />
           ))}
-        </List>
+        </SidebarList>
       ) : (
         <NoBeaconMalfunction>
           Aucune avarie {`depuis ${vesselBeaconMalfunctionsFromDate.getUTCFullYear() + 1}`}
@@ -44,12 +43,6 @@ export function YearsToBeaconMalfunctionList({
     </SidebarZone>
   )
 }
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-`
 
 const NoBeaconMalfunction = styled.div`
   color: ${THEME.color.gunMetal};

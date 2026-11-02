@@ -264,4 +264,23 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy="LogbookMessage"]').should('have.length', 1)
     cy.get('*[data-cy="LogbookMessage"]').eq(0).contains('Déclaration de capture')
   })
+
+  it('Fishing Should contain the analysis of the vessel fishing declarations', () => {
+    openVesselBySearch('Pheno')
+    cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
+
+    cy.getDataCy('vessel-logbook-risk-elements').contains('Analyse des déclarations de pêche (12 derniers mois)')
+    cy.getDataCy('risk-element-PNO_MR').contains('PNO – 1/10 marées non conformes')
+    cy.getDataCy('risk-element-PNO_MR').find('[data-cy="risk-element-level"]').contains('1')
+    cy.getDataCy('risk-element-MOT_MR').contains('Marge 10% – 2/4 marées non conformes')
+    cy.getDataCy('risk-element-MOT_MR').find('[data-cy="risk-element-level"]').contains('4')
+
+    cy.getDataCy('risk-element-MOT_MR').find('[title="Ouvrir"]').click()
+    cy.getDataCy('risk-element-MOT_MR').contains('ne respecte pas la marge de 10%')
+    cy.getDataCy('risk-element-MOT_MR').contains('Marée n°9463714 (17/02/19 au 09/08/20)')
+    cy.getDataCy('risk-element-MOT_MR').should('not.contain', 'Marée n°9463715')
+
+    cy.getDataCy('risk-element-MOT_MR').contains('Voir les dates des autres occurrences').click()
+    cy.getDataCy('risk-element-MOT_MR').contains('Marée n°9463715 (11/10/19 au 11/10/19)')
+  })
 })

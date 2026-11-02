@@ -1,6 +1,6 @@
 import {
-  ListItem,
   SidebarHeader,
+  SidebarList,
   SidebarZone
 } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -26,29 +26,22 @@ export function YearsToControlList({ controlsFromDate, yearsToControls, yearsToI
     <SidebarZone>
       <SidebarHeader>Historique des contrôles</SidebarHeader>
       {sortedYears.length ? (
-        <List data-cy="vessel-control-years">
+        <SidebarList data-cy="vessel-control-years">
           {sortedYears.map(year => (
-            <ListItem key={year} title={`Année ${year}`}>
-              <YearControls
-                year={year}
-                yearControls={yearsToControls[year] ?? []}
-                yearInquiries={yearsToInquiries[year] ?? []}
-              />
-            </ListItem>
+            <YearControls
+              key={year}
+              year={year}
+              yearControls={yearsToControls[year] ?? []}
+              yearInquiries={yearsToInquiries[year] ?? []}
+            />
           ))}
-        </List>
+        </SidebarList>
       ) : (
         <NoControls>Aucun contrôle {`depuis ${customDayjs(controlsFromDate).get('year')}`}</NoControls>
       )}
     </SidebarZone>
   )
 }
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-  width: 100%;
-`
 
 const NoControls = styled.div`
   text-align: center;

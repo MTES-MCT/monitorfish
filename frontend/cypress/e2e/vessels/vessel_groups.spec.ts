@@ -245,6 +245,8 @@ context('Vessel groups', () => {
 
   it('A fixed vessel group Should be created and displayed on the map', () => {
     cy.login('superuser')
+    // Vessel list filters are persisted: make sure none leaks from the previous test
+    cy.clearLocalStorage(/persist/)
     cy.visit('/side_window')
     cy.wait(250)
 

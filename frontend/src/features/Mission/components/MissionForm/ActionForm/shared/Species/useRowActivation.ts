@@ -34,6 +34,9 @@ export function useRowActivation() {
   // Id of a field a `WeightInput` should self-focus once mounted — keyboard row navigation can't focus the
   // target synchronously since it isn't in the DOM yet.
   const [focusRequestId, setFocusRequestId] = useState<string | undefined>(undefined)
+  // Row whose species picker should open as soon as it mounts — a freshly added row, so the user can type
+  // the species right away instead of clicking its picker first.
+  const [autoOpenedPickerIndex, setAutoOpenedPickerIndex] = useState<number | undefined>(undefined)
 
   // Debounce hover so a cursor merely sweeping across rows doesn't mount each row's (heavy) editors.
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>()
@@ -103,18 +106,30 @@ export function useRowActivation() {
   const clearFocusRequest = () => setFocusRequestId(undefined)
 
   const handlePickerOpen = (index: number) => setOpenPickerIndex(index)
-  const handlePickerClose = (index: number) => setOpenPickerIndex(prev => (prev === index ? undefined : prev))
+  // Also drops the auto-open flag: row keys include their index, so a row shifting into that index (after a
+  // removal) would otherwise remount with its picker open.
+  const handlePickerClose = (index: number) => {
+    setOpenPickerIndex(prev => (prev === index ? undefined : prev))
+    setAutoOpenedPickerIndex(prev => (prev === index ? undefined : prev))
+  }
+
+  const openPickerOnMount = (index: number) => {
+    setAutoOpenedPickerIndex(index)
+    setOpenPickerIndex(index)
+  }
 
   const deactivate = () => {
     clearTimeout(hoverTimerRef.current)
     setHoveredIndex(undefined)
     setFocusedIndex(undefined)
     setOpenPickerIndex(undefined)
+    setAutoOpenedPickerIndex(undefined)
   }
 
   return {
     activateRowForNavigation,
     activateRowNow,
+    autoOpenedPickerIndex,
     clearFocusRequest,
     deactivate,
     focusRequestId,
@@ -126,6 +141,7 @@ export function useRowActivation() {
     handleRowMouseLeave,
     hoveredIndex,
     isRowActive,
+    openPickerOnMount,
     requestFocus
   }
 }

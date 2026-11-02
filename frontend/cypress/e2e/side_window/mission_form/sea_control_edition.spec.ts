@@ -1,4 +1,4 @@
-import { editSideWindowMission } from './utils'
+import { addSpeciesRow, editSideWindowMission } from './utils'
 import { ALL_SEAFRONT_GROUP, SeafrontGroup } from '../../../../src/constants/seafront'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
@@ -25,10 +25,7 @@ context('Side Window > Mission Form > Sea Control Edition', () => {
     cy.fill('Ajouter un engin', 'PTM')
 
     cy.intercept('POST', 'bff/v1/fleet_segments/compute').as('computeFleetSegment')
-    // Adding a species is now a two-step in-table flow: click the "Ajouter une espèce" row to append an
-    // empty row (its species Select renders immediately), then pick the species in that Select.
-    cy.clickButton('Ajouter une espèce')
-    cy.fill('Espèce', 'SPR')
+    addSpeciesRow('Ajouter une espèce', 'species-onboard-row-0', 'SPR')
     cy.wait('@computeFleetSegment')
 
     cy.wait(500)

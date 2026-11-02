@@ -47,6 +47,7 @@ type SpeciesSelectCellProps = Readonly<{
   isDisabled: boolean
   isHovered: boolean
   isNotLanded?: boolean
+  isOpenedOnMount?: boolean
   name: string
   onChange: (newSpecy: Specy | undefined) => void
   onPickerClose: () => void
@@ -62,6 +63,7 @@ export function SpeciesSelectCell({
   isDisabled,
   isHovered,
   isNotLanded,
+  isOpenedOnMount = false,
   name,
   onChange,
   onPickerClose,
@@ -81,6 +83,7 @@ export function SpeciesSelectCell({
           className="Field-SpeciesSelect"
           cleanable={false}
           customSearch={customSearch}
+          defaultOpen={isOpenedOnMount}
           disabled={isDisabled}
           isLabelHidden
           isLight
@@ -88,6 +91,7 @@ export function SpeciesSelectCell({
           name={name}
           onChange={onChange}
           onClose={onPickerClose}
+          onEntered={focusSearchInput}
           onOpen={onPickerOpen}
           options={options}
           optionValueKey="code"
@@ -99,6 +103,12 @@ export function SpeciesSelectCell({
       )}
     </StyledPickerTd>
   )
+}
+
+// Rsuite only forwards keystrokes typed on the toggle to its search input: put the caret there directly so
+// a picker opened programmatically (see `isOpenedOnMount`) can be typed into right away.
+const focusSearchInput = (popup: HTMLElement) => {
+  popup.querySelector<HTMLInputElement>('input[role="searchbox"]')?.focus()
 }
 
 type WeightCellProps = Readonly<{

@@ -6,20 +6,23 @@ import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFor
 import type { Mission } from '@features/Mission/mission.types'
 
 /**
- * Picks a species in a hover-edit species/discard row's searchable Select, by exact code.
+ * Adds a species/discard row through its in-table add button, then picks its species by exact code.
+ *
+ * A new row opens its species picker with the caret already in the search input (issue #5391), so the code
+ * is typed straight away, without clicking the picker first.
  *
  * `cy.fill('Espèce', code)` can't be used here: its Select handler clicks the first option whose text
  * *contains* the typed value, so typing "COD" matches "SMS - SAC**COD**ERMA …" before "COD - MORUE …".
- * Scoping to the row's own Select (options are "<code> - <name>") and clicking the option whose label
- * starts with the exact "<code> - " makes the pick deterministic.
+ * Clicking the option whose label starts with the exact "<code> - " makes the pick deterministic.
  */
-export const pickHoverEditSpecies = (rowDataCy: string, code: string) => {
-  cy.get(`[data-cy="${rowDataCy}"]`).find('.rs-picker-toggle').first().click({ force: true })
+export const addSpeciesRow = (addButtonLabel: string, rowDataCy: string, code: string) => {
+  cy.clickButton(addButtonLabel)
+  cy.get(`[data-cy="${rowDataCy}"]`).find('input[role="searchbox"]').should('have.focus')
   cy.get('.rs-picker-popup')
     .filter(':visible')
     .last()
     .within(() => {
-      cy.get('input[role="searchbox"]').clear({ force: true }).type(code, { force: true }).wait(250)
+      cy.get('input[role="searchbox"]').type(code, { force: true }).wait(250)
       cy.contains('[role="option"]', new RegExp(`^${code} - `)).click({ force: true })
     })
 }

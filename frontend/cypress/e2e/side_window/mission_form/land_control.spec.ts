@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
+import { addSpeciesRow, fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
 context('Side Window > Mission Form > Land Control', () => {
@@ -80,10 +80,8 @@ context('Side Window > Mission Form > Land Control', () => {
     cy.get('[name="gearOnboard[1].gearWasControlled"]').eq(1).click()
     cy.fill("Marquage de l'engin conforme", 'Non', { index: 1 })
 
-    // Inspection des espèces — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3). Adding is the
-    // in-table flow: click the "Ajouter une espèce" row, then pick the species in the new row's Select.
-    cy.clickButton('Ajouter une espèce')
-    pickHoverEditSpecies('species-onboard-row-3', 'COD')
+    // Inspection des espèces — HKE/NEP/BLI are prefilled catches; add COD as a 4th (row 3).
+    addSpeciesRow('Ajouter une espèce', 'species-onboard-row-3', 'COD')
     // The "Pour les espèces non débarquées" section only appears below the species table once a
     // species is marked as not landed (see the HKE toggle below).
     cy.contains("Enregistrement séparé des poissons n'ayant pas la taille requise").should('not.exist')

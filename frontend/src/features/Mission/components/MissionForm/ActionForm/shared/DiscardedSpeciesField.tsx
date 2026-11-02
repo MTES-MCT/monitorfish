@@ -40,7 +40,15 @@ export function DiscardedSpeciesField() {
   const { customSearch, faoAreasAsOptions, getSpecyNameFromSpecyCode, speciesAsOptions } = useSpeciesAndFaoOptions()
 
   const activation = useRowActivation()
-  const { deactivate, handlePickerClose, handlePickerOpen, hoveredIndex, isRowActive } = activation
+  const {
+    autoOpenedPickerIndex,
+    deactivate,
+    handlePickerClose,
+    handlePickerOpen,
+    hoveredIndex,
+    isRowActive,
+    openPickerOnMount
+  } = activation
 
   const addEmptyDiscard = () => {
     const newDiscard: MissionAction.DiscardedSpeciesControl = {
@@ -50,6 +58,7 @@ export function DiscardedSpeciesField() {
       speciesCode: ''
     }
 
+    openPickerOnMount(input.value?.length ?? 0)
     helper.setValue([...(input.value ?? []), newDiscard])
   }
 
@@ -141,6 +150,7 @@ export function DiscardedSpeciesField() {
                     isActive={isActive}
                     isDisabled={isDisabled}
                     isHovered={isHovered}
+                    isOpenedOnMount={index === autoOpenedPickerIndex}
                     name={`discardedSpecies[${index}].speciesCode`}
                     onChange={newSpecy => setSpecies(index, newSpecy)}
                     onPickerClose={() => handlePickerClose(index)}

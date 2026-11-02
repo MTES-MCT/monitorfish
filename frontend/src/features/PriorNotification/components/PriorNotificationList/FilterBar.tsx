@@ -271,14 +271,14 @@ export function FilterBar() {
           disabled={!priorNotificationTypesAsOptions}
           isLabelHidden
           isTransparent
-          label="Types de préavis"
+          label="Critères réglementaires"
           name="priorNotificationTypes"
           onChange={updatePriorNotificationTypes}
           options={priorNotificationTypesAsOptions ?? []}
-          placeholder="Types de préavis"
+          placeholder="Critères réglementaires"
           popupWidth={240}
           renderValue={(_, items) =>
-            items.length > 0 ? <SelectValue>Types de préavis ({items.length})</SelectValue> : <></>
+            items.length > 0 ? <SelectValue>Critères réglementaires ({items.length})</SelectValue> : <></>
           }
           searchable
           value={listFilterValues.priorNotificationTypes}

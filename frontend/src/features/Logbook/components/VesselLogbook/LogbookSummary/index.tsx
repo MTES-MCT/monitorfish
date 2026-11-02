@@ -1,5 +1,6 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { LogbookRiskElements } from '@features/RiskElement/components/LogbookRiskElements'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -70,6 +71,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
           segments={selectedVessel?.riskFactor?.segments}
         />
         <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
+        <StyledLogbookRiskElements />
       </Body>
     )
   }
@@ -248,6 +250,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
               <NoMessage>Aucun message reçu</NoMessage>
             )}
           </SidebarZone>
+          <StyledLogbookRiskElements />
         </Body>
       ) : null}
     </>
@@ -395,6 +398,10 @@ const TextValue = styled.div<{
   .rs-stack {
     min-width: 125px;
   }
+`
+
+const StyledLogbookRiskElements = styled(LogbookRiskElements)`
+  margin-top: 10px;
 `
 
 const Body = styled.div`

@@ -1,15 +1,9 @@
 import { ReportingCard } from '@features/Reporting/components/ReportingCard'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
-import {
-  YearListChevronIcon,
-  YearListContent,
-  YearListRow,
-  YearListTitle,
-  YearListTitleText
-} from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
+import { CollapsibleListItem } from '@features/Vessel/components/VesselSidebar/components/common/CollapsibleListItem'
 import { trackEvent } from '@hooks/useTracking'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import type { ReportingAndOccurrences } from '@features/Reporting/types'
@@ -20,8 +14,6 @@ type YearReportingsProps = Readonly<{
 }>
 
 export function YearReportings({ reportingAndOccurences, year }: YearReportingsProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
   const numberOfReportings = useMemo(
     () =>
       reportingAndOccurences.reduce(
@@ -48,79 +40,51 @@ export function YearReportings({ reportingAndOccurences, year }: YearReportingsP
 
   const numberOfObservations = numberOfReportings - numberOfInfractionsSuspicion
 
-  const handleOpen = (): void => {
-    if (!reportingAndOccurences.length) {
-      return
-    }
-
-    if (!isOpen) {
-      trackEvent({
-        action: `Affichage de l'année ${year}`,
-        category: 'REPORTING',
-        name: 'CNSP'
-      })
-    }
-
-    setIsOpen(!isOpen)
-  }
+  const trackYearOpening = () =>
+    trackEvent({
+      action: `Affichage de l'année ${year}`,
+      category: 'REPORTING',
+      name: 'CNSP'
+    })
 
   return (
-    <div>
-      <YearListRow>
-        <YearListTitle
-          as={!reportingAndOccurences.length ? 'div' : 'button'}
-          data-cy="vessel-sidebar-reporting-archive-year"
-          onClick={handleOpen}
-        >
-          <YearListTitleText>
-            <Year>{year}</Year>
-            <YearResume data-cy="vessel-reporting-year">
-              {!reportingAndOccurences.length && 'Pas de signalement'}
-              {!!numberOfInfractionsSuspicion && (
-                <>
-                  {numberOfInfractionsSuspicion} suspicion{numberOfInfractionsSuspicion > 1 ? 's' : ''}{' '}
-                  d&apos;infraction
-                  {numberOfInfractionsSuspicion > 1 ? 's' : ''} <Red />
-                </>
-              )}
-              {!!numberOfObservations && (
-                <>
-                  {numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal />
-                </>
-              )}
-            </YearResume>
-          </YearListTitleText>
-        </YearListTitle>
-        {!!reportingAndOccurences.length && <YearListChevronIcon isOpen={isOpen} onClick={handleOpen} />}
-      </YearListRow>
-
-      {isOpen && (
-        <Row>
-          <YearListContentWithPadding name={year.toString()}>
-            {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
-              <ReportingCard
-                key={reporting.id}
-                isArchived
-                otherOccurrencesOfSameAlert={otherOccurrencesOfSameAlert}
-                reporting={reporting}
-              />
-            ))}
-          </YearListContentWithPadding>
-        </Row>
-      )}
-    </div>
+    <CollapsibleListItem
+      isEmpty={!reportingAndOccurences.length}
+      onOpen={trackYearOpening}
+      title={
+        <>
+          <Year>{year}</Year>
+          <YearResume data-cy="vessel-reporting-year">
+            {!reportingAndOccurences.length && 'Pas de signalement'}
+            {!!numberOfInfractionsSuspicion && (
+              <>
+                {numberOfInfractionsSuspicion} suspicion{numberOfInfractionsSuspicion > 1 ? 's' : ''} d&apos;infraction
+                {numberOfInfractionsSuspicion > 1 ? 's' : ''} <Red />
+              </>
+            )}
+            {!!numberOfObservations && (
+              <>
+                {numberOfObservations} observation{numberOfObservations > 1 ? 's' : ''} <Opal />
+              </>
+            )}
+          </YearResume>
+        </>
+      }
+      titleDataCy="vessel-sidebar-reporting-archive-year"
+    >
+      <Content>
+        {reportingAndOccurences.map(({ otherOccurrencesOfSameAlert, reporting }) => (
+          <ReportingCard
+            key={reporting.id}
+            isArchived
+            otherOccurrencesOfSameAlert={otherOccurrencesOfSameAlert}
+            reporting={reporting}
+          />
+        ))}
+      </Content>
+    </CollapsibleListItem>
   )
 }
-
-export const Row = styled.div`
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
-`
 
 const Red = styled.span`
   background-color: ${p => p.theme.color.maximumRed};
@@ -152,6 +116,6 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const YearListContentWithPadding = styled(YearListContent)`
+const Content = styled.div`
   padding: 16px 16px 0 16px;
 `

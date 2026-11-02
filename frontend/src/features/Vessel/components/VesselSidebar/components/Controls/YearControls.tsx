@@ -1,12 +1,5 @@
-import {
-  YearListChevronIcon,
-  YearListContent,
-  YearListRow,
-  YearListTitle,
-  YearListTitleText
-} from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
+import { CollapsibleListItem } from '@features/Vessel/components/VesselSidebar/components/common/CollapsibleListItem'
 import { pluralize } from '@utils/pluralize'
-import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Control } from './Control'
@@ -35,7 +28,6 @@ type YearItem =
   | { control?: never; date: string | undefined; inquiry: InquiryType.Inquiry }
 
 export function YearControls({ year, yearControls, yearInquiries }: YearControlsProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
   const closedInquiries = yearInquiries.filter(isInquiryClosed)
   const numberOfInProgressInquiries = yearInquiries.length - closedInquiries.length
   const numberOfControls = yearControls.length + closedInquiries.length
@@ -137,49 +129,32 @@ export function YearControls({ year, yearControls, yearInquiries }: YearControls
   ].sort((a, b) => (a.date && b.date && a.date > b.date ? -1 : 1))
 
   return (
-    <div>
-      <YearListRow>
-        <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
-          <YearListTitleText>
-            <Year>{year}</Year>
-            <YearResume data-cy="vessel-controls-year">
-              {numberOfControlsText}
-              {numberOfInfractionsText}
-            </YearResume>
-          </YearListTitleText>
-        </YearListTitle>
-        {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
-      </YearListRow>
-
-      {isOpen && (
-        <Row>
-          <YearListContent>
-            {sortedItems.map(item =>
-              item.control ? (
-                <Control key={item.control.id} control={item.control} />
-              ) : (
-                <Inquiry key={item.inquiry.id} inquiry={item.inquiry} />
-              )
-            )}
-          </YearListContent>
-        </Row>
+    <CollapsibleListItem
+      isEmpty={isEmpty}
+      title={
+        <>
+          <Year>{year}</Year>
+          <YearResume data-cy="vessel-controls-year">
+            {numberOfControlsText}
+            {numberOfInfractionsText}
+          </YearResume>
+        </>
+      }
+      titleAttribute={`Année ${year}`}
+    >
+      {sortedItems.map(item =>
+        item.control ? (
+          <Control key={item.control.id} control={item.control} />
+        ) : (
+          <Inquiry key={item.inquiry.id} inquiry={item.inquiry} />
+        )
       )}
-    </div>
+    </CollapsibleListItem>
   )
 }
 
 const InProgress = styled.span`
   font-style: italic;
-`
-
-export const Row = styled.div`
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
 `
 
 const Red = styled.span`

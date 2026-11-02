@@ -1,11 +1,6 @@
 import { getNumberOfSeaAndLandBeaconMalfunctions } from '@features/BeaconMalfunction/utils'
-import {
-  YearListChevronIcon,
-  YearListTitle,
-  YearListTitleText
-} from '@features/Vessel/components/VesselSidebar/components/common/YearList.style'
+import { CollapsibleListItem } from '@features/Vessel/components/VesselSidebar/components/common/CollapsibleListItem'
 import { THEME } from '@mtes-mct/monitor-ui'
-import { useState } from 'react'
 import styled from 'styled-components'
 
 import { BeaconMalfunctionCard } from './BeaconMalfunctionCard'
@@ -23,7 +18,6 @@ export function YearBeaconMalfunctions({
   year,
   yearBeaconMalfunctions
 }: YearBeaconMalfunctionsProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const isEmpty = yearBeaconMalfunctions.length === 0
   const numberOfMalfunctions = getNumberOfSeaAndLandBeaconMalfunctions(yearBeaconMalfunctions)
 
@@ -34,40 +28,35 @@ export function YearBeaconMalfunctions({
   )
 
   return (
-    yearBeaconMalfunctions && (
-      <div>
-        <Row>
-          <YearListTitle as={isEmpty ? 'div' : 'button'} onClick={() => !isEmpty && setIsOpen(!isOpen)}>
-            <YearListTitleText>
-              <Year>{year}</Year>
-              <YearResume>
-                {isEmpty && 'Aucune avarie'}
-                {numberOfMalfunctions && (
-                  <>
-                    {numberOfMalfunctions?.atSea} avarie
-                    {numberOfMalfunctions?.atSea > 1 ? 's' : ''} en mer <AtSeaCircle /> {numberOfMalfunctions?.atPort}{' '}
-                    avarie
-                    {numberOfMalfunctions?.atPort > 1 ? 's' : ''} à quai <AtPortCircle />
-                  </>
-                )}
-              </YearResume>
-            </YearListTitleText>
-          </YearListTitle>
-          {!isEmpty && <YearListChevronIcon isOpen={isOpen} onClick={() => !isEmpty && setIsOpen(!isOpen)} />}
-        </Row>
-        {isOpen && (
-          <Column>
-            {sortedMalfunctions.map(beaconMalfunctionWithDetails => (
-              <BeaconMalfunctionCard
-                key={beaconMalfunctionWithDetails.beaconMalfunction.id}
-                beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
-                setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
-              />
-            ))}
-          </Column>
-        )}
-      </div>
-    )
+    <CollapsibleListItem
+      isEmpty={isEmpty}
+      title={
+        <>
+          <Year>{year}</Year>
+          <YearResume>
+            {isEmpty && 'Aucune avarie'}
+            {numberOfMalfunctions && (
+              <>
+                {numberOfMalfunctions?.atSea} avarie
+                {numberOfMalfunctions?.atSea > 1 ? 's' : ''} en mer <AtSeaCircle /> {numberOfMalfunctions?.atPort}{' '}
+                avarie
+                {numberOfMalfunctions?.atPort > 1 ? 's' : ''} à quai <AtPortCircle />
+              </>
+            )}
+          </YearResume>
+        </>
+      }
+    >
+      <Column>
+        {sortedMalfunctions.map(beaconMalfunctionWithDetails => (
+          <BeaconMalfunctionCard
+            key={beaconMalfunctionWithDetails.beaconMalfunction.id}
+            beaconMalfunctionWithDetails={beaconMalfunctionWithDetails}
+            setIsCurrentBeaconMalfunctionDetails={setIsCurrentBeaconMalfunctionDetails}
+          />
+        ))}
+      </Column>
+    </CollapsibleListItem>
   )
 }
 
@@ -102,18 +91,9 @@ const YearResume = styled.span`
   vertical-align: text-bottom;
 `
 
-const Row = styled.div`
-  align-items: center;
-  background: ${p => p.theme.color.white};
-  color: ${p => p.theme.color.gunMetal};
+const Column = styled.div`
   display: flex;
-  line-height: 1.9em;
-  white-space: nowrap;
-`
-
-const Column = styled(Row)`
   flex-direction: column;
-  border-top: 1px solid ${p => p.theme.color.lightGray};
   gap: 10px;
   padding: 10px 20px;
 `

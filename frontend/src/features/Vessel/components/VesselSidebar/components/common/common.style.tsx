@@ -48,3 +48,9 @@ export const NoValue = styled.span`
 export const ListItem = styled.li`
   border-bottom: 1px solid ${THEME.color.lightGray};
 `
+
+export const SidebarList = styled.ul`
+  margin: 0;
+  padding: 0;
+  width: 100%;
+`

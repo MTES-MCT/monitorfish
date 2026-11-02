@@ -11,7 +11,7 @@ id,name,minimum_notification_period,has_designated_ports
 10,Préavis navire tiers,4.0,True
 11,Préavis communautaire,4.0,False
 12,Préavis senne de plage,4.0,False
-13,Préavis sans capture à bord,0.5,False
+13,Préavis sans capture,0.5,False
 14,Préavis MEMN - marée ≥ 96h,4.0,False
 15,Préavis MEMN - marée < 96h,2.0,False
 16,Préavis NAMO - marée ≥ 96h,4.0,False

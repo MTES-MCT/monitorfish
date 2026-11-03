@@ -26,18 +26,22 @@ data class PublicControlUnitDataOutput(
 }
 
 data class PublicControlUnitContactDataOutput(
+    val cellPhone: String?,
     val email: String?,
     val isEmailSubscriptionContact: Boolean,
     val isSmsSubscriptionContact: Boolean,
     val phone: String?,
+    val role: String?,
 ) {
     companion object {
         fun fromControlUnitContact(controlUnitContact: ControlUnitContact): PublicControlUnitContactDataOutput =
             PublicControlUnitContactDataOutput(
+                cellPhone = controlUnitContact.cellPhone,
                 email = controlUnitContact.email,
                 isEmailSubscriptionContact = controlUnitContact.isEmailSubscriptionContact,
                 isSmsSubscriptionContact = controlUnitContact.isSmsSubscriptionContact,
                 phone = controlUnitContact.phone,
+                role = controlUnitContact.role,
             )
     }
 }

@@ -24,8 +24,10 @@
         },
         "controlUnitId": 10141,
         "email": "pam.dirm-med@mer.gouv.fr",
-        "name": "COMMANDER_A",
-        "phone": "07 64 45 13 62"
+        "name": "",
+        "phone": "",
+        "cellPhone": "07 64 45 13 62",
+        "role": "COMMANDER_A"
       },
       {
         "id": 285,
@@ -40,8 +42,10 @@
         },
         "controlUnitId": 10121,
         "email": null,
-        "name": "COMMANDER_A",
-        "phone": "06 65 51 86 24"
+        "name": "",
+        "phone": "",
+        "cellPhone": "06 65 51 86 24",
+        "role": "COMMANDER_A"
       },
       {
         "id": 283,
@@ -56,8 +60,10 @@
         },
         "controlUnitId": 10121,
         "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
-        "name": "COMMANDER_A",
-        "phone": "06 65 51 86 24"
+        "name": "",
+        "phone": "",
+        "cellPhone": "06 65 51 86 24",
+        "role": "COMMANDER_A"
       },
       {
         "id": 284,
@@ -72,8 +78,10 @@
         },
         "controlUnitId": 10121,
         "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
-        "name": "COMMANDER_B",
-        "phone": "06 50 38 02 13"
+        "name": "",
+        "phone": "",
+        "cellPhone": "06 50 38 02 13",
+        "role": "COMMANDER_B"
       },
       {
         "id": 336,
@@ -88,8 +96,10 @@
         },
         "controlUnitId": 10141,
         "email": "pam.dirm-med@mer.gouv.fr",
-        "name": "COMMANDER_B",
-        "phone": "06 19 42 86 03"
+        "name": "",
+        "phone": "",
+        "cellPhone": "06 19 42 86 03",
+        "role": "COMMANDER_B"
       },
       {
         "id": 286,
@@ -104,8 +114,10 @@
         },
         "controlUnitId": 10121,
         "email": null,
-        "name": "COMMANDER_B",
-        "phone": "06 50 38 02 13"
+        "name": "",
+        "phone": "",
+        "cellPhone": "06 50 38 02 13",
+        "role": "COMMANDER_B"
       },
       {
         "id": 993,
@@ -121,7 +133,9 @@
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
         "name": "Dml Auray",
-        "phone": "02 97 24 01 43"
+        "phone": "02 97 24 01 43",
+        "cellPhone": null,
+        "role": null
       },
       {
         "id": 994,
@@ -137,7 +151,9 @@
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
         "name": "Dml Lorient",
-        "phone": "02 97 37 16 22"
+        "phone": "02 97 37 16 22",
+        "cellPhone": null,
+        "role": null
       },
       {
         "id": 287,
@@ -152,8 +168,10 @@
         },
         "controlUnitId": 10121,
         "email": null,
-        "name": "ONBOARD_PHONE",
-        "phone": "00 47 2341261"
+        "name": null,
+        "phone": "00 47 2341261",
+        "cellPhone": null,
+        "role": "ONBOARD_PHONE"
       },
       {
         "id": 290,
@@ -168,8 +186,10 @@
         },
         "controlUnitId": 10121,
         "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
-        "name": "ONBOARD_PHONE",
-        "phone": "+881677110865"
+        "name": null,
+        "phone": "+881677110865",
+        "cellPhone": null,
+        "role": "ONBOARD_PHONE"
       },
       {
         "id": 339,
@@ -184,8 +204,10 @@
         },
         "controlUnitId": 10141,
         "email": null,
-        "name": "ONBOARD_PHONE",
-        "phone": "+881 677 121 122"
+        "name": "",
+        "phone": "",
+        "cellPhone": "+881 677 121 122",
+        "role": "ONBOARD_PHONE"
       },
       {
         "id": 281,
@@ -200,8 +222,10 @@
         },
         "controlUnitId": 10121,
         "email": "alexandre.eveno@developpement-durable.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "02 35 43 38 70"
+        "name": null,
+        "phone": "02 35 43 38 70",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 282,
@@ -216,8 +240,10 @@
         },
         "controlUnitId": 10121,
         "email": "alexandre.eveno@developpement-durable.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "02 76 89 98 97"
+        "name": null,
+        "phone": "02 76 89 98 97",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 333,
@@ -232,8 +258,10 @@
         },
         "controlUnitId": 10141,
         "email": "aurelia.sargeot@mer.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "04 86 94 67 48"
+        "name": null,
+        "phone": "04 86 94 67 48",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 334,
@@ -248,8 +276,10 @@
         },
         "controlUnitId": 10141,
         "email": "aurelia.sargeot@mer.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "06 69 17 61 82"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 69 17 61 82",
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 726,
@@ -264,8 +294,10 @@
         },
         "controlUnitId": 10336,
         "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "02 98 22 22 17"
+        "name": null,
+        "phone": "02 98 22 22 17",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1012,
@@ -280,8 +312,10 @@
         },
         "controlUnitId": 10454,
         "email": "sebastien.perusson@ofb.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "02 38 45 99 71"
+        "name": null,
+        "phone": "02 38 45 99 71",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1013,
@@ -296,8 +330,10 @@
         },
         "controlUnitId": 10454,
         "email": "sebastien.perusson@ofb.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "06 25 03 23 81"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 25 03 23 81",
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1015,
@@ -312,8 +348,10 @@
         },
         "controlUnitId": 10455,
         "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "02 98 22 22 17"
+        "name": null,
+        "phone": "02 98 22 22 17",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1073,
@@ -328,8 +366,10 @@
         },
         "controlUnitId": 10484,
         "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "06 64 57 64 04"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 64 57 64 04",
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1074,
@@ -344,8 +384,10 @@
         },
         "controlUnitId": 10484,
         "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-        "name": "OPERATIONAL_CENTER",
-        "phone": "09 70 27 51 94"
+        "name": null,
+        "phone": "09 70 27 51 94",
+        "cellPhone": null,
+        "role": "OPERATIONAL_CENTER"
       },
       {
         "id": 1016,
@@ -360,8 +402,10 @@
         },
         "controlUnitId": 10455,
         "email": null,
-        "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "06 84 76 97 62"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 84 76 97 62",
+        "role": "PERMANENT_CONTACT_ONBOARD"
       },
       {
         "id": 1017,
@@ -377,7 +421,9 @@
         "controlUnitId": 10455,
         "email": null,
         "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "06 85 72 02 20"
+        "phone": null,
+        "cellPhone": "06 85 72 02 20",
+        "role": "PERMANENT_CONTACT_ONBOARD"
       },
       {
         "id": 1075,
@@ -393,7 +439,9 @@
         "controlUnitId": 10484,
         "email": null,
         "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "06 64 57 64 58"
+        "phone": null,
+        "cellPhone": "06 64 57 64 58",
+        "role": "PERMANENT_CONTACT_ONBOARD"
       },
       {
         "id": 337,
@@ -409,7 +457,9 @@
         "controlUnitId": 10141,
         "email": null,
         "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "+47 23 41 25 84"
+        "phone": "+47 23 41 25 84",
+        "cellPhone": null,
+        "role": "PERMANENT_CONTACT_ONBOARD"
       },
       {
         "id": 338,
@@ -424,8 +474,10 @@
         },
         "controlUnitId": 10141,
         "email": null,
-        "name": "PERMANENT_CONTACT_ONBOARD",
-        "phone": "+47 23 41 25 85"
+        "name": null,
+        "phone": "+47 23 41 25 85",
+        "cellPhone": null,
+        "role": "PERMANENT_CONTACT_ONBOARD"
       },
       {
         "id": 165,
@@ -440,8 +492,10 @@
         },
         "controlUnitId": 10066,
         "email": "ddtm-samel@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 64 85 06"
+        "name": null,
+        "phone": "02 97 64 85 06",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 995,
@@ -456,8 +510,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 29 34 92"
+        "name": null,
+        "phone": "02 97 29 34 92",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 996,
@@ -472,8 +528,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 29 34 92"
+        "name": null,
+        "phone": "02 97 29 34 92",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 997,
@@ -488,8 +546,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 37 17 47"
+        "name": null,
+        "phone": "02 97 37 17 47",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 998,
@@ -504,8 +564,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 37 17 47"
+        "name": null,
+        "phone": "02 97 37 17 47",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 999,
@@ -520,8 +582,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 63 73 05 59"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 63 73 05 59",
+        "role": "UNKNOWN"
       },
       {
         "id": 1000,
@@ -536,8 +600,10 @@
         },
         "controlUnitId": 10449,
         "email": "ddtm-ulam@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 63 73 05 59"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 63 73 05 59",
+        "role": "UNKNOWN"
       },
       {
         "id": 1014,
@@ -552,8 +618,10 @@
         },
         "controlUnitId": 10454,
         "email": "fabrice.bernard.bmibpl@ofb.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 27 02 56 25"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 27 02 56 25",
+        "role": "UNKNOWN"
       },
       {
         "id": 1018,
@@ -568,8 +636,10 @@
         },
         "controlUnitId": 10455,
         "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 84 76 97 62"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 84 76 97 62",
+        "role": "UNKNOWN"
       },
       {
         "id": 1019,
@@ -584,8 +654,10 @@
         },
         "controlUnitId": 10455,
         "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 85 72 02 20"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 85 72 02 20",
+        "role": "UNKNOWN"
       },
       {
         "id": 1076,
@@ -600,8 +672,10 @@
         },
         "controlUnitId": 10484,
         "email": "bgc-lorient@douane.finances.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "09 70 27 46 12"
+        "name": null,
+        "phone": "09 70 27 46 12",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 288,
@@ -616,8 +690,10 @@
         },
         "controlUnitId": 10121,
         "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "+47 23 41 26 00"
+        "name": null,
+        "phone": "+47 23 41 26 00",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 289,
@@ -632,8 +708,10 @@
         },
         "controlUnitId": 10121,
         "email": "pam-jeanne-barret.dirm-memn@developpement-durable.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "+47 23 41 26 01"
+        "name": null,
+        "phone": "+47 23 41 26 01",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 1121,
@@ -648,8 +726,10 @@
         },
         "controlUnitId": 10499,
         "email": "ddtm-samel@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 56 63 75 32"
+        "name": null,
+        "phone": "02 56 63 75 32",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 1122,
@@ -664,8 +744,10 @@
         },
         "controlUnitId": 10499,
         "email": "ddtm-samel@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 64 85 06"
+        "name": null,
+        "phone": "02 97 64 85 06",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 366,
@@ -680,8 +762,10 @@
         },
         "controlUnitId": 10157,
         "email": "ddtm-pre@morbihan.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 56 63 72 00"
+        "name": null,
+        "phone": "02 56 63 72 00",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 727,
@@ -696,8 +780,10 @@
         },
         "controlUnitId": 10336,
         "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 12 40 67"
+        "name": null,
+        "phone": "02 97 12 40 67",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 728,
@@ -712,8 +798,10 @@
         },
         "controlUnitId": 10336,
         "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 12 40 67"
+        "name": null,
+        "phone": "02 97 12 40 67",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       },
       {
         "id": 729,
@@ -728,8 +816,10 @@
         },
         "controlUnitId": 10336,
         "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 72 95 29 02"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 72 95 29 02",
+        "role": "UNKNOWN"
       },
       {
         "id": 730,
@@ -744,8 +834,10 @@
         },
         "controlUnitId": 10336,
         "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "06 72 95 29 03"
+        "name": null,
+        "phone": null,
+        "cellPhone": "06 72 95 29 03",
+        "role": "UNKNOWN"
       },
       {
         "id": 733,
@@ -760,8 +852,10 @@
         },
         "controlUnitId": 10338,
         "email": "sd56@ofb.gouv.fr",
-        "name": "UNKNOWN",
-        "phone": "02 97 47 02 83"
+        "name": null,
+        "phone": "02 97 47 02 83",
+        "cellPhone": null,
+        "role": "UNKNOWN"
       }
     ]
   }

@@ -9,37 +9,53 @@ export type ItemProps = {
   controlUnitContact: ControlUnit.ControlUnitContactData
   onEdit: (controlUnitContactId: number) => Promisable<void>
 }
+
 export function Item({ controlUnitContact, onEdit }: ItemProps) {
   const handleEdit = useCallback(() => {
     onEdit(controlUnitContact.id)
   }, [controlUnitContact.id, onEdit])
 
-  const hasLongName =
-    (ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name]?.length ||
-      controlUnitContact.name?.length) >= 33
-
   return (
     <Wrapper data-cy="ControlUnitDialog-control-unit-contact" data-id={controlUnitContact.id}>
-      <Left $hasLongName={hasLongName}>
-        <NameAndContactContainer $hasLongName={hasLongName}>
-          <Name
-            title={ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name] || controlUnitContact.name}
-          >
-            {ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.name] || controlUnitContact.name}
-          </Name>
+      <Left>
+        <div
+          title={`${
+            controlUnitContact.role ? ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.role] : ''
+          } - ${controlUnitContact.name}`}
+        >
+          {controlUnitContact.role && (
+            <NameOrRole>{ControlUnit.ControlUnitContactPredefinedName[controlUnitContact.role]}</NameOrRole>
+          )}
+          {controlUnitContact.name && (
+            <NameOrRole>
+              {controlUnitContact.role ? ' - ' : ''}
+              {controlUnitContact.name}
+            </NameOrRole>
+          )}
+        </div>
+
+        <PhonesContainer>
+          {controlUnitContact.cellPhone && (
+            <CellPhone>
+              <span>{formatPhoneNumber(controlUnitContact.cellPhone)}</span>
+              {controlUnitContact.isSmsSubscriptionContact && (
+                <Icon.Subscription size={14} title="Numéro de diffusion pour les préavis et les rapports de contrôle" />
+              )}
+            </CellPhone>
+          )}
           {controlUnitContact.phone && <span>{formatPhoneNumber(controlUnitContact.phone)}</span>}
-          {controlUnitContact.isSmsSubscriptionContact && (
-            <Icon.Subscription size={14} title="Numéro de diffusion pour les préavis et les rapports de contrôle" />
-          )}
-        </NameAndContactContainer>
-        <MailContainer>
-          <Link href={`mailto:${controlUnitContact.email}`} rel="noreferrer" target="_blank">
-            {controlUnitContact.email}
-          </Link>
-          {controlUnitContact.isEmailSubscriptionContact && (
-            <Icon.Subscription size={14} title="Adresse de diffusion pour les préavis et les rapports de contrôle" />
-          )}
-        </MailContainer>
+        </PhonesContainer>
+        {controlUnitContact.email && (
+          <MailContainer>
+            <Link href={`mailto:${controlUnitContact.email}`} rel="noreferrer" target="_blank">
+              {controlUnitContact.email}
+            </Link>
+
+            {controlUnitContact.isEmailSubscriptionContact && (
+              <Icon.Subscription size={14} title="Adresse de diffusion pour les préavis et les rapports de contrôle" />
+            )}
+          </MailContainer>
+        )}
       </Left>
       <Right>
         <IconButton accent={Accent.TERTIARY} Icon={Icon.Edit} onClick={handleEdit} title="Éditer ce contact" />
@@ -61,35 +77,41 @@ const Wrapper = styled.div`
   }
 `
 
-const NameAndContactContainer = styled.p<{ $hasLongName: boolean }>`
-  align-items: end;
-  column-gap: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 16px;
-  > span {
-    line-height: initial;
-  }
-`
-
 const MailContainer = styled.p`
   align-items: end;
   display: flex;
   gap: 8px;
 `
 
-const Left = styled.div<{ $hasLongName: boolean }>`
+const Left = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   flex-wrap: wrap;
 `
 
-const Right = styled.div``
+const Right = styled.div`
+  .Element-IconButton {
+    padding: 0px;
+  }
+`
 
-const Name = styled.span`
+const PhonesContainer = styled.p`
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+`
+
+const NameOrRole = styled.span`
   color: ${p => p.theme.color.gunMetal};
   font-weight: bold;
   overflow-wrap: anywhere;
   max-width: 450px;
+`
+
+const CellPhone = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `

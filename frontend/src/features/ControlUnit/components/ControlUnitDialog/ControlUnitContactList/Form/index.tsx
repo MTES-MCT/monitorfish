@@ -1,11 +1,21 @@
 import { FormikEmailField } from '@features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/FormikEmailField'
 import { FormikPhoneField } from '@features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/FormikPhoneField'
-import { Accent, Button, ControlUnit, Icon, IconButton, THEME, useKey } from '@mtes-mct/monitor-ui'
+import {
+  Accent,
+  Button,
+  ControlUnit,
+  FormikSelect,
+  FormikTextInput,
+  Icon,
+  IconButton,
+  THEME,
+  useKey
+} from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import styled from 'styled-components'
 
-import { CONTROL_UNIT_CONTACT_FORM_SCHEMA } from '../constants'
-import { FormikNameSelect } from './FormikNameSelect'
+import { CONTROL_UNIT_CONTACT_FORM_SCHEMA, SORTED_CONTROL_UNIT_CONTACT_PREDEFINED_NAMES_AS_OPTIONS } from '../constants'
+import { FormikCellPhoneField } from './FormikCellPhoneField'
 
 import type { ControlUnitContactFormValues } from '../types'
 import type { CSSProperties } from 'react'
@@ -34,11 +44,19 @@ export function Form({ className, controlUnit, initialValues, onCancel, onDelete
       validationSchema={CONTROL_UNIT_CONTACT_FORM_SCHEMA}
     >
       {({ handleSubmit }) => (
-        <div className={className} style={style}>
+        <Wrapper className={className} style={style}>
           <Title>{isNew ? 'Ajouter un contact' : 'Éditer un contact'}</Title>
           <StyledForm data-cy="ControlUnitDialog-control-unit-contact-form" onSubmit={handleSubmit}>
-            <FormikNameSelect />
+            <FormikSelect
+              isLight
+              label="Fonction"
+              name="role"
+              options={SORTED_CONTROL_UNIT_CONTACT_PREDEFINED_NAMES_AS_OPTIONS}
+              searchable
+            />
+            <FormikTextInput isLight label="Nom du contact" name="name" />
             <FormikPhoneField />
+            <FormikCellPhoneField />
             <FormikEmailField controlUnit={controlUnit} />
 
             <ActionBar>
@@ -59,7 +77,7 @@ export function Form({ className, controlUnit, initialValues, onCancel, onDelete
               )}
             </ActionBar>
           </StyledForm>
-        </div>
+        </Wrapper>
       )}
     </Formik>
   )
@@ -74,6 +92,12 @@ const Title = styled.p`
   line-height: 1.3846;
 `
 
+const Wrapper = styled.div`
+  &,
+  & * {
+    box-sizing: border-box;
+  }
+`
 const StyledForm = styled.form`
   background-color: ${p => p.theme.color.gainsboro};
   padding: 16px;

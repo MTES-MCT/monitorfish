@@ -20,16 +20,29 @@
           "name": "DIRM / DM"
         },
         "administrationId": 1009,
-        "controlUnitContactIds": [288, 289, 287, 290, 284, 285, 286, 283, 281, 282],
+        "controlUnitContactIds": [
+          288,
+          289,
+          287,
+          290,
+          284,
+          285,
+          286,
+          283,
+          281,
+          282
+        ],
         "controlUnitContacts": [
           {
             "id": 288,
             "controlUnitId": 10121,
-            "email":"dummy@email.gouv.fr",
+            "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "+47 23 41 26 00"
+            "name": null,
+            "phone": "+47 23 41 26 00",
+            "cellPhone": null,
+            "role": "UNKNOWN"
           },
           {
             "id": 289,
@@ -37,8 +50,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "+47 23 41 26 01"
+            "name": null,
+            "phone": "+47 23 41 26 01",
+            "cellPhone": null,
+            "role": "UNKNOWN"
           },
           {
             "id": 287,
@@ -46,8 +61,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "ONBOARD_PHONE",
-            "phone": "00 47 2341261"
+            "name": null,
+            "phone": "00 47 2341261",
+            "cellPhone": null,
+            "role": "ONBOARD_PHONE"
           },
           {
             "id": 290,
@@ -55,8 +72,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "ONBOARD_PHONE",
-            "phone": "+881677110865"
+            "name": null,
+            "phone": null,
+            "cellPhone": "+881677110865",
+            "role": "ONBOARD_PHONE"
           },
           {
             "id": 284,
@@ -64,8 +83,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_B",
-            "phone": "06 50 38 02 13"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 50 38 02 13",
+            "role": "COMMANDER_B"
           },
           {
             "id": 285,
@@ -73,8 +94,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_A",
-            "phone": "06 65 51 86 24"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 65 51 86 24",
+            "role": "COMMANDER_A"
           },
           {
             "id": 286,
@@ -82,8 +105,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_B",
-            "phone": "06 50 38 02 13"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 50 38 02 13",
+            "role": "COMMANDER_B"
           },
           {
             "id": 283,
@@ -91,8 +116,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_A",
-            "phone": "06 65 51 86 24"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 65 51 86 24",
+            "role": "COMMANDER_A"
           },
           {
             "id": 281,
@@ -100,8 +127,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "02 35 43 38 70"
+            "name": null,
+            "phone": "02 35 43 38 70",
+            "cellPhone": null,
+            "role": "OPERATIONAL_CENTER"
           },
           {
             "id": 282,
@@ -109,11 +138,16 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "02 76 89 98 97"
+            "name": null,
+            "phone": "02 76 89 98 97",
+            "cellPhone": null,
+            "role": "OPERATIONAL_CENTER"
           }
         ],
-        "controlUnitResourceIds": [561, 175],
+        "controlUnitResourceIds": [
+          561,
+          175
+        ],
         "controlUnitResources": [
           {
             "id": 561,
@@ -181,7 +215,15 @@
           "name": "DIRM / DM"
         },
         "administrationId": 1009,
-        "controlUnitContactIds": [339, 335, 336, 333, 334, 337, 338],
+        "controlUnitContactIds": [
+          339,
+          335,
+          336,
+          333,
+          334,
+          337,
+          338
+        ],
         "controlUnitContacts": [
           {
             "id": 339,
@@ -247,7 +289,10 @@
             "phone": "+47 23 41 25 85"
           }
         ],
-        "controlUnitResourceIds": [329, 64],
+        "controlUnitResourceIds": [
+          329,
+          64
+        ],
         "controlUnitResources": [
           {
             "id": 329,
@@ -315,7 +360,12 @@
           "name": "Douane"
         },
         "administrationId": 2,
-        "controlUnitContactIds": [1076, 1073, 1074, 1075],
+        "controlUnitContactIds": [
+          1076,
+          1073,
+          1074,
+          1075
+        ],
         "controlUnitContacts": [
           {
             "id": 1076,
@@ -354,7 +404,9 @@
             "phone": "06 64 57 64 58"
           }
         ],
-        "controlUnitResourceIds": [553],
+        "controlUnitResourceIds": [
+          553
+        ],
         "controlUnitResources": [
           {
             "id": 553,
@@ -397,7 +449,13 @@
           "name": "Gendarmerie Maritime"
         },
         "administrationId": 4,
-        "controlUnitContactIds": [727, 728, 729, 730, 726],
+        "controlUnitContactIds": [
+          727,
+          728,
+          729,
+          730,
+          726
+        ],
         "controlUnitContacts": [
           {
             "id": 727,
@@ -445,7 +503,11 @@
             "phone": "02 98 22 22 17"
           }
         ],
-        "controlUnitResourceIds": [353, 90, 1042],
+        "controlUnitResourceIds": [
+          353,
+          90,
+          1042
+        ],
         "controlUnitResources": [
           {
             "id": 353,
@@ -538,7 +600,13 @@
           "name": "Gendarmerie Maritime"
         },
         "administrationId": 4,
-        "controlUnitContactIds": [1018, 1019, 1015, 1016, 1017],
+        "controlUnitContactIds": [
+          1018,
+          1019,
+          1015,
+          1016,
+          1017
+        ],
         "controlUnitContacts": [
           {
             "id": 1018,
@@ -586,7 +654,10 @@
             "phone": "06 85 72 02 20"
           }
         ],
-        "controlUnitResourceIds": [189, 251],
+        "controlUnitResourceIds": [
+          189,
+          251
+        ],
         "controlUnitResources": [
           {
             "id": 189,
@@ -673,7 +744,10 @@
           "name": "DDTM"
         },
         "administrationId": 1005,
-        "controlUnitContactIds": [1121, 1122],
+        "controlUnitContactIds": [
+          1121,
+          1122
+        ],
         "controlUnitContacts": [
           {
             "id": 1121,
@@ -694,7 +768,11 @@
             "phone": "02 97 64 85 06"
           }
         ],
-        "controlUnitResourceIds": [314, 323, 1208],
+        "controlUnitResourceIds": [
+          314,
+          323,
+          1208
+        ],
         "controlUnitResources": [
           {
             "id": 314,
@@ -787,7 +865,11 @@
           "name": "Office Français de la Biodiversité"
         },
         "administrationId": 1011,
-        "controlUnitContactIds": [1014, 1012, 1013],
+        "controlUnitContactIds": [
+          1014,
+          1012,
+          1013
+        ],
         "controlUnitContacts": [
           {
             "id": 1014,
@@ -817,7 +899,9 @@
             "phone": "06 25 03 23 81"
           }
         ],
-        "controlUnitResourceIds": [516],
+        "controlUnitResourceIds": [
+          516
+        ],
         "controlUnitResources": [
           {
             "id": 516,
@@ -860,7 +944,9 @@
           "name": "Office Français de la Biodiversité"
         },
         "administrationId": 1011,
-        "controlUnitContactIds": [733],
+        "controlUnitContactIds": [
+          733
+        ],
         "controlUnitContacts": [
           {
             "id": 733,
@@ -872,7 +958,12 @@
             "phone": "02 97 47 02 83"
           }
         ],
-        "controlUnitResourceIds": [211, 580, 388, 320],
+        "controlUnitResourceIds": [
+          211,
+          580,
+          388,
+          320
+        ],
         "controlUnitResources": [
           {
             "id": 211,
@@ -990,7 +1081,9 @@
           "name": "DDTM"
         },
         "administrationId": 1005,
-        "controlUnitContactIds": [366],
+        "controlUnitContactIds": [
+          366
+        ],
         "controlUnitContacts": [
           {
             "id": 366,
@@ -1002,7 +1095,9 @@
             "phone": "02 56 63 72 00"
           }
         ],
-        "controlUnitResourceIds": [579],
+        "controlUnitResourceIds": [
+          579
+        ],
         "controlUnitResources": [
           {
             "id": 579,
@@ -1045,7 +1140,9 @@
           "name": "DDTM"
         },
         "administrationId": 1005,
-        "controlUnitContactIds": [165],
+        "controlUnitContactIds": [
+          165
+        ],
         "controlUnitContacts": [
           {
             "id": 165,
@@ -1057,7 +1154,12 @@
             "phone": "02 97 64 85 06"
           }
         ],
-        "controlUnitResourceIds": [181, 133, 300, 1212],
+        "controlUnitResourceIds": [
+          181,
+          133,
+          300,
+          1212
+        ],
         "controlUnitResources": [
           {
             "id": 181,
@@ -1175,7 +1277,16 @@
           "name": "DDTM"
         },
         "administrationId": 1005,
-        "controlUnitContactIds": [993, 994, 995, 996, 997, 998, 999, 1000],
+        "controlUnitContactIds": [
+          993,
+          994,
+          995,
+          996,
+          997,
+          998,
+          999,
+          1000
+        ],
         "controlUnitContacts": [
           {
             "id": 993,
@@ -1250,7 +1361,13 @@
             "phone": "06 63 73 05 59"
           }
         ],
-        "controlUnitResourceIds": [361, 134, 259, 512, 1219],
+        "controlUnitResourceIds": [
+          361,
+          134,
+          259,
+          512,
+          1219
+        ],
         "controlUnitResources": [
           {
             "id": 361,

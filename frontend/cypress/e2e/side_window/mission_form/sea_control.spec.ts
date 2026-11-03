@@ -1,6 +1,6 @@
 import { Mission } from '@features/Mission/mission.types'
 
-import { fillSideWindowMissionFormBase, openSideWindowNewMission, pickHoverEditSpecies } from './utils'
+import { addSpeciesRow, fillSideWindowMissionFormBase, openSideWindowNewMission } from './utils'
 import { customDayjs } from '../../utils/customDayjs'
 import { getUtcDateInMultipleFormats } from '../../utils/getUtcDateInMultipleFormats'
 
@@ -265,10 +265,9 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Zone de pêche', ['27.8.b'])
     cy.get('[data-cy="species-onboard-row-1"]').trigger('mouseout', { force: true })
 
-    // Add COD: click the in-table "Ajouter une espèce" row to append an empty species (index 2), then pick
-    // the species in that row's Select. Picking a species collapses the row, so hover it again to fill the rest.
-    cy.clickButton('Ajouter une espèce')
-    pickHoverEditSpecies('species-onboard-row-2', 'COD')
+    // Add COD (index 2) through the in-table add row. Picking a species collapses the row, so hover it again
+    // to fill the rest.
+    addSpeciesRow('Ajouter une espèce', 'species-onboard-row-2', 'COD')
     // The COD number inputs are filled via a re-querying `cy.get('[id="speciesOnboard[2]…"]').type()` instead
     // of `cy.fill()`: the weight inputs are mounted on every row, so a label lookup would be ambiguous, and
     // each edit fires an async `bff/v1/fleet_segments/compute` that remounts the field — `cy.fill()` caches
@@ -288,11 +287,10 @@ context('Side Window > Mission Form > Sea Control', () => {
     cy.fill('Observations (hors infraction) sur les espèces', 'Une observation hors infraction sur les espèces.')
 
     // Rejets — NEP and BIB are prefilled from the logbook DIS message (both DIM); add COD (RET). The
-    // "Rejets" card is now the same hover-to-edit table: click the in-table add row to append the COD
-    // discard (index 2), pick its species, then fill its editors on hover. Editors only render for the
+    // "Rejets" card is the same hover-to-edit table: add the COD discard (index 2) through the in-table
+    // add row, then fill its editors on hover. Editors only render for the
     // hovered row, so each field label is unambiguous (no index needed).
-    cy.clickButton('Ajouter une espèce rejetée')
-    pickHoverEditSpecies('discarded-species-row-2', 'COD')
+    addSpeciesRow('Ajouter une espèce rejetée', 'discarded-species-row-2', 'COD')
     cy.get('[data-cy="discarded-species-row-2"]').trigger('mouseover', { force: true })
     cy.get('[data-cy="discarded-species-row-2"]').find('.Field-CheckPicker').should('exist')
     cy.fill('Nature du rejet', 'RET - espèces interdites')
@@ -1305,10 +1303,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     cy.clickButton('Ajouter')
     cy.clickButton('Ajouter un contrôle en mer')
-    // Adding a species is a two-step in-table flow: click the "Ajouter une espèce" row to append an empty
-    // row, then pick the species in that row's Select.
-    cy.clickButton('Ajouter une espèce')
-    pickHoverEditSpecies('species-onboard-row-0', 'COD')
+    addSpeciesRow('Ajouter une espèce', 'species-onboard-row-0', 'COD')
 
     // The weight cells are real inputs at all times, hover or not: typing works on the row just picked,
     // and moving the cursor off the row keeps both the caret and the typed value (issue #5286). React
@@ -1319,8 +1314,7 @@ context('Side Window > Mission Form > Sea Control', () => {
 
     // Add a second species, then remove it through the confirmation modal: cancelling keeps the row,
     // confirming deletes only the targeted row.
-    cy.clickButton('Ajouter une espèce')
-    pickHoverEditSpecies('species-onboard-row-1', 'HKE')
+    addSpeciesRow('Ajouter une espèce', 'species-onboard-row-1', 'HKE')
 
     // ArrowDown/ArrowUp move focus to the same weight field on the row below/above. Row 1 is deliberately
     // left un-hovered, to prove ArrowDown reaches it on its own.

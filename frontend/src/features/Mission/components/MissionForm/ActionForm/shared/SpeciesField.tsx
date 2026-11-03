@@ -84,6 +84,7 @@ export function SpeciesField() {
   const activation = useRowActivation()
   const {
     activateRowForNavigation,
+    autoOpenedPickerIndex,
     clearFocusRequest,
     deactivate,
     focusRequestId,
@@ -91,6 +92,7 @@ export function SpeciesField() {
     handlePickerOpen,
     hoveredIndex,
     isRowActive,
+    openPickerOnMount,
     requestFocus
   } = activation
   const rowCount = input.value?.length ?? 0
@@ -169,6 +171,7 @@ export function SpeciesField() {
       underSizedWeight: undefined
     }
 
+    openPickerOnMount(rowCount)
     helper.setValue([...(input.value ?? []), newSpecies])
   }
 
@@ -253,7 +256,7 @@ export function SpeciesField() {
         <SimpleTable.Table>
           <SimpleTable.Head>
             <tr>
-              <SimpleTable.Th $width={isEISREnabled ? 165 : 320}>Espèce</SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 145 : 320}>Espèce</SimpleTable.Th>
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
                 {isEISREnabled ? 'Déclaré' : 'Qté déclarée'}
               </SimpleTable.Th>
@@ -263,7 +266,7 @@ export function SpeciesField() {
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
                 {isEISREnabled ? 'Ss-taille' : 'Sous-taille'}
               </SimpleTable.Th>
-              {isEISREnabled && <SimpleTable.Th $width={70}>Présentation</SimpleTable.Th>}
+              {isEISREnabled && <SimpleTable.Th $width={90}>Présentation</SimpleTable.Th>}
               {isEISREnabled && (
                 <SimpleTable.Th $width={70}>
                   Zone <RequiredAsterisk>*</RequiredAsterisk>
@@ -292,6 +295,7 @@ export function SpeciesField() {
                     isDisabled={isDisabled}
                     isHovered={isHovered}
                     isNotLanded={!!specyOnboard.isNotLanded}
+                    isOpenedOnMount={index === autoOpenedPickerIndex}
                     name={`speciesOnboard[${index}].speciesCode`}
                     onChange={newSpecy => setSpecies(index, newSpecy)}
                     onPickerClose={() => handlePickerClose(index)}

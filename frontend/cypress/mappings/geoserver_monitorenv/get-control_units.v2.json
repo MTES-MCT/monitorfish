@@ -231,8 +231,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "ONBOARD_PHONE",
-            "phone": "+881 677 121 122"
+            "name": null,
+            "phone": null,
+            "role": "ONBOARD_PHONE",
+            "cellPhone": "+881 677 121 122"
           },
           {
             "id": 335,
@@ -240,8 +242,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_A",
-            "phone": "07 64 45 13 62"
+            "name": null,
+            "phone": null,
+            "role": "COMMANDER_A",
+            "cellPhone": "07 64 45 13 62"
           },
           {
             "id": 336,
@@ -249,8 +253,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "COMMANDER_B",
-            "phone": "06 19 42 86 03"
+            "name": null,
+            "phone": null,
+            "role": "COMMANDER_B",
+            "cellPhone": "06 19 42 86 03"
           },
           {
             "id": 333,
@@ -258,8 +264,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "04 86 94 67 48"
+            "phone": "04 86 94 67 48",
+            "name": null,
+            "role": "OPERATIONAL_CENTER",
+            "cellPhone": "06 19 42 86 03"
           },
           {
             "id": 334,
@@ -267,8 +275,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "06 69 17 61 82"
+            "name": null,
+            "phone": null,
+            "role": "OPERATIONAL_CENTER",
+            "cellPhone": "06 69 17 61 82"
           },
           {
             "id": 337,
@@ -276,8 +286,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "PERMANENT_CONTACT_ONBOARD",
-            "phone": "+47 23 41 25 84"
+            "phone": "+47 23 41 25 84",
+            "name": null,
+            "role": "PERMANENT_CONTACT_ONBOARD",
+            "cellPhone": "06 69 17 61 82"
           },
           {
             "id": 338,
@@ -285,8 +297,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "PERMANENT_CONTACT_ONBOARD",
-            "phone": "+47 23 41 25 85"
+            "phone": "+47 23 41 25 85",
+            "name": null,
+            "role": "PERMANENT_CONTACT_ONBOARD",
+            "cellPhone": "06 69 17 61 82"
           }
         ],
         "controlUnitResourceIds": [
@@ -374,7 +388,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
-            "phone": "09 70 27 46 12"
+            "phone": "09 70 27 46 12",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 1073,
@@ -382,8 +398,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "06 64 57 64 04"
+            "name": null,
+            "phone": null,
+            "role": "OPERATIONAL_CENTER",
+            "cellPhone": "06 64 57 64 04"
           },
           {
             "id": 1074,
@@ -391,8 +409,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "09 70 27 51 94"
+            "name": null,
+            "phone": "09 70 27 51 94",
+            "role": "OPERATIONAL_CENTER",
+            "cellPhone": null
           },
           {
             "id": 1075,
@@ -400,8 +420,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "PERMANENT_CONTACT_ONBOARD",
-            "phone": "06 64 57 64 58"
+            "name": null,
+            "phone": null,
+            "role": "PERMANENT_CONTACT_ONBOARD",
+            "cellPhone": "06 64 57 64 58"
           }
         ],
         "controlUnitResourceIds": [
@@ -463,8 +485,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 12 40 67"
+            "name": null,
+            "phone": "02 97 12 40 67",
+            "cellPhone": "06 64 57 64 58",
+            "role": "UNKNOWN"
           },
           {
             "id": 728,
@@ -472,8 +496,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 12 40 67"
+            "name": null,
+            "phone": "02 97 12 40 67",
+            "cellPhone": "06 64 57 64 58",
+            "role": "UNKNOWN"
           },
           {
             "id": 729,
@@ -481,8 +507,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 72 95 29 02"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 72 95 29 02",
+            "role": "UNKNOWN"
           },
           {
             "id": 730,
@@ -490,8 +518,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 72 95 29 03"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 72 95 29 03",
+            "role": "UNKNOWN"
           },
           {
             "id": 726,
@@ -500,7 +530,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "OPERATIONAL_CENTER",
-            "phone": "02 98 22 22 17"
+            "phone": "02 98 22 22 17",
+            "cellPhone": null,
+            "role": "OPERATIONAL_CENTER"
           }
         ],
         "controlUnitResourceIds": [
@@ -614,8 +646,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 84 76 97 62"
+            "name": null,
+            "phone": null,
+            "role": "UNKNOWN",
+            "cellPhone": "06 84 76 97 62"
           },
           {
             "id": 1019,
@@ -623,8 +657,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 85 72 02 20"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 85 72 02 20",
+            "role": "UNKNOWN"
           },
           {
             "id": 1015,
@@ -632,8 +668,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "02 98 22 22 17"
+            "name": null,
+            "phone": "02 98 22 22 17",
+            "cellPhone": null,
+            "role": "OPERATIONAL_CENTER"
           },
           {
             "id": 1016,
@@ -642,7 +680,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "PERMANENT_CONTACT_ONBOARD",
-            "phone": "06 84 76 97 62"
+            "phone": null,
+            "cellPhone": "06 84 76 97 62",
+            "role": "PERMANENT_CONTACT_ONBOARD"
           },
           {
             "id": 1017,
@@ -650,8 +690,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "PERMANENT_CONTACT_ONBOARD",
-            "phone": "06 85 72 02 20"
+            "name": null,
+            "phone": null,
+            "cellPhone": "06 85 72 02 20",
+            "role": "PERMANENT_CONTACT_ONBOARD"
           }
         ],
         "controlUnitResourceIds": [
@@ -756,7 +798,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
-            "phone": "02 56 63 75 32"
+            "phone": "02 56 63 75 32",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 1122,
@@ -764,8 +808,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 64 85 06"
+            "name": null,
+            "phone": "02 97 64 85 06",
+            "role": "UNKNOWN",
+            "cellPhone": null
           }
         ],
         "controlUnitResourceIds": [
@@ -877,8 +923,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 27 02 56 25"
+            "name": null,
+            "phone": null,
+            "role": "UNKNOWN",
+            "cellPhone": "06 27 02 56 25"
           },
           {
             "id": 1012,
@@ -886,8 +934,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "02 38 45 99 71"
+            "name": null,
+            "phone": "02 38 45 99 71",
+            "role": "OPERATIONAL_CENTER",
+            "cellPhone": null
           },
           {
             "id": 1013,
@@ -895,8 +945,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "OPERATIONAL_CENTER",
-            "phone": "06 25 03 23 81"
+            "name": null,
+            "cellPhone": "06 25 03 23 81",
+            "role": "OPERATIONAL_CENTER",
+            "phone": null
           }
         ],
         "controlUnitResourceIds": [
@@ -1092,7 +1144,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "UNKNOWN",
-            "phone": "02 56 63 72 00"
+            "phone": "02 56 63 72 00",
+            "role": "UNKNOWN",
+            "cellPhone": null
           }
         ],
         "controlUnitResourceIds": [
@@ -1150,8 +1204,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 64 85 06"
+            "name": null,
+            "phone": "02 97 64 85 06",
+            "role": "UNKNOWN",
+            "cellPhone": null
           }
         ],
         "controlUnitResourceIds": [
@@ -1295,7 +1351,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "Dml Auray",
-            "phone": "02 97 24 01 43"
+            "phone": "02 97 24 01 43",
+            "role": null,
+            "cellPhone": null
           },
           {
             "id": 994,
@@ -1304,7 +1362,9 @@
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
             "name": "Dml Lorient",
-            "phone": "02 97 37 16 22"
+            "phone": "02 97 37 16 22",
+            "role": null,
+            "cellPhone": null
           },
           {
             "id": 995,
@@ -1312,8 +1372,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 29 34 92"
+            "name": null,
+            "phone": "02 97 29 34 92",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 996,
@@ -1321,8 +1383,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 29 34 92"
+            "name": null,
+            "phone": "02 97 29 34 92",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 997,
@@ -1330,8 +1394,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 37 17 47"
+            "name": null,
+            "phone": "02 97 37 17 47",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 998,
@@ -1339,8 +1405,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "02 97 37 17 47"
+            "name": null,
+            "phone": "02 97 37 17 47",
+            "role": "UNKNOWN",
+            "cellPhone": null
           },
           {
             "id": 999,
@@ -1348,8 +1416,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 63 73 05 59"
+            "name": null,
+            "cellPhone": "06 63 73 05 59",
+            "role": "UNKNOWN",
+            "phone": null
           },
           {
             "id": 1000,
@@ -1357,8 +1427,10 @@
             "email": "dummy@email.gouv.fr",
             "isEmailSubscriptionContact": false,
             "isSmsSubscriptionContact": false,
-            "name": "UNKNOWN",
-            "phone": "06 63 73 05 59"
+            "name": null,
+            "cellPhone": "06 63 73 05 59",
+            "role": "UNKNOWN",
+            "phone": null
           }
         ],
         "controlUnitResourceIds": [

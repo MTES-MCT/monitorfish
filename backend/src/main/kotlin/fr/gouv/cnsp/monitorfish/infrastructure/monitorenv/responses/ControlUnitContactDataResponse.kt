@@ -6,14 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ControlUnitContactDataResponse(
     val id: Int,
-    val cellPhone: String?,
+    val cellPhone: String? = null,
     val controlUnitId: Int,
-    val email: String?,
+    val email: String? = null,
     val isEmailSubscriptionContact: Boolean,
     val isSmsSubscriptionContact: Boolean,
-    val name: String,
-    val phone: String?,
-    val role: String?,
+    val name: String? = null,
+    val phone: String? = null,
+    val role: String? = null,
 ) {
     fun toControlUnitContact(): ControlUnitContact =
         ControlUnitContact(

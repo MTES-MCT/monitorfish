@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselProfileRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBVesselProfileRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,7 +16,7 @@ class JpaVesselProfileRepository(
 ) : VesselProfileRepository {
     private val logger: Logger = LoggerFactory.getLogger(JpaVesselProfileRepository::class.java)
 
-    @Cacheable(value = ["vessel_profile"])
+    @Cacheable(value = [CacheName.VESSEL_PROFILE])
     override fun findByCfr(cfr: String): VesselProfile? =
         try {
             dbVesselProfileRepository.findByCfr(cfr).toVesselProfile()

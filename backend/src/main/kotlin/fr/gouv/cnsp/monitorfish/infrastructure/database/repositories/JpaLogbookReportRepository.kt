@@ -15,6 +15,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.BackendUsageException
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoERSMessagesFound
 import fr.gouv.cnsp.monitorfish.domain.exceptions.NoLogbookFishingTripFound
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.LogbookReportEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBLogbookReportRepository
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.utils.toSqlArrayString
@@ -94,7 +95,7 @@ class JpaLogbookReportRepository(
             }
     }
 
-    @Cacheable(value = ["pno_for_active_vessels"], sync = true)
+    @Cacheable(value = [CacheName.PNO_FOR_ACTIVE_VESSELS], sync = true)
     override fun findAllAcknowledgedPriorNotificationsForActiveVessels(): List<PriorNotification> {
         val now = ZonedDateTime.now()
         val filter =
@@ -106,7 +107,7 @@ class JpaLogbookReportRepository(
         return findAllAcknowledgedPriorNotifications(filter)
     }
 
-    @Cacheable(value = ["pno_to_verify"], sync = true)
+    @Cacheable(value = [CacheName.PNO_TO_VERIFY], sync = true)
     override fun findAllPriorNotificationsToVerify(): List<PriorNotification> {
         val filter =
             PriorNotificationsFilter(
@@ -146,7 +147,7 @@ class JpaLogbookReportRepository(
         }
     }
 
-    @Cacheable(value = ["all_trips"])
+    @Cacheable(value = [CacheName.ALL_TRIPS])
     override fun findAllTrips(internalReferenceNumber: String): List<VoyageDatesAndTripNumber> =
         try {
             dbLogbookReportRepository.findAllTrips(internalReferenceNumber).map {
@@ -165,7 +166,7 @@ class JpaLogbookReportRepository(
             )
         }
 
-    @Cacheable(value = ["logbook_messages"])
+    @Cacheable(value = [CacheName.LOGBOOK_MESSAGES])
     override fun findAllMessagesByTripNumberBetweenOperationDates(
         internalReferenceNumber: String,
         firstOperationDateTime: ZonedDateTime,
@@ -193,14 +194,14 @@ class JpaLogbookReportRepository(
         }
     }
 
-    @Cacheable(value = ["logbook_pno_types"])
+    @Cacheable(value = [CacheName.LOGBOOK_PNO_TYPES], sync = true)
     override fun findDistinctPriorNotificationTypes(): List<String> =
         dbLogbookReportRepository.findDistinctPriorNotificationType() ?: emptyList()
 
     override fun findById(id: Long): LogbookMessage =
         dbLogbookReportRepository.findById(id).get().toLogbookMessage(objectMapper)
 
-    @Cacheable(value = ["last_logbook_operation_datetime_utc"])
+    @Cacheable(value = [CacheName.LAST_LOGBOOK_OPERATION_DATETIME_UTC], sync = true)
     override fun findLastMessageDate(): ZonedDateTime {
         return try {
             dbLogbookReportRepository.findLastOperationDateTime().atZone(UTC)
@@ -216,7 +217,7 @@ class JpaLogbookReportRepository(
     override fun findLastOperationNumber(internalReferenceNumber: String): String? =
         dbLogbookReportRepository.findLastOperationNumber(internalReferenceNumber)
 
-    @Cacheable(value = ["all_visiocaptures_vessels"], sync = true)
+    @Cacheable(value = [CacheName.ALL_VISIOCAPTURES_VESSELS], sync = true)
     override fun findAllCfrWithVisioCaptures(): List<String> = dbLogbookReportRepository.findAllCfrWithVisioCaptures()
 
     /**
@@ -224,7 +225,7 @@ class JpaLogbookReportRepository(
      * concurrently as soon as the cache entry expires, and the resulting contention makes them all hit the JDBC
      * query timeout. `cfrs` is the cache key, so callers must pass it sorted to avoid spurious misses.
      */
-    @Cacheable(value = ["last_dep_current_trips_by_cfr"], sync = true)
+    @Cacheable(value = [CacheName.LAST_DEP_CURRENT_TRIPS_BY_CFR], sync = true)
     override fun findLastDepDatetimeOfCurrentTripsPerCfr(cfrs: List<String>): Map<String, ZonedDateTime> {
         if (cfrs.isEmpty()) {
             return emptyMap()
@@ -279,7 +280,7 @@ class JpaLogbookReportRepository(
         )
 
     @Transactional
-    @CacheEvict(value = ["pno_to_verify", "pno_for_active_vessels"], allEntries = true)
+    @CacheEvict(value = [CacheName.PNO_TO_VERIFY, CacheName.PNO_FOR_ACTIVE_VESSELS], allEntries = true)
     override fun updatePriorNotificationState(
         reportId: String,
         operationDate: ZonedDateTime,
@@ -349,7 +350,7 @@ class JpaLogbookReportRepository(
     }
 
     @Transactional
-    @CacheEvict(value = ["pno_to_verify", "pno_for_active_vessels"], allEntries = true)
+    @CacheEvict(value = [CacheName.PNO_TO_VERIFY, CacheName.PNO_FOR_ACTIVE_VESSELS], allEntries = true)
     override fun invalidate(
         reportId: String,
         operationDate: ZonedDateTime,

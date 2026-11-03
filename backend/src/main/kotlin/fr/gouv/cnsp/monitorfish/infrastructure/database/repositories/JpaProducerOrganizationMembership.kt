@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.producer_organization.ProducerOrganizationMembership
 import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembershipRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.ProducerOrganizationMembershipEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBProducerOrganizationMembership
 import org.springframework.cache.annotation.Cacheable
@@ -24,7 +25,7 @@ class JpaProducerOrganizationMembership(
         )
     }
 
-    @Cacheable(value = ["vessel_producer_organization"])
+    @Cacheable(value = [CacheName.VESSEL_PRODUCER_ORGANIZATION])
     override fun findByInternalReferenceNumber(internalReferenceNumber: String): ProducerOrganizationMembership? =
         dbProducerOrganizationMembership
             .findById(internalReferenceNumber)

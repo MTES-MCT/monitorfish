@@ -3,6 +3,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.public_api
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.PortDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toPortDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.cache.CacheManager
@@ -28,8 +29,8 @@ class PublicPortController(
     @PutMapping(value = ["/invalidate"])
     @Operation(summary = "Invalidate ports cache")
     fun invalidatePorts() {
-        cacheManager.getCache("ports")?.invalidate()
-        cacheManager.getCache("port")?.invalidate()
-        cacheManager.getCache("active_ports")?.invalidate()
+        cacheManager.getCache(CacheName.PORTS)?.invalidate()
+        cacheManager.getCache(CacheName.PORT)?.invalidate()
+        cacheManager.getCache(CacheName.ACTIVE_PORTS)?.invalidate()
     }
 }

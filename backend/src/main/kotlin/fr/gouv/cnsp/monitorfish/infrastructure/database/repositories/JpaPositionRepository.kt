@@ -2,6 +2,7 @@ package fr.gouv.cnsp.monitorfish.infrastructure.database.repositories
 
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
+import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.database.entities.PositionEntity
 import fr.gouv.cnsp.monitorfish.infrastructure.database.repositories.interfaces.DBPositionRepository
 import jakarta.transaction.Transactional
@@ -11,6 +12,16 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+
+/**
+ * Truncates the track window to the minute — the cache TTL — so that two consecutive polls, whose
+ * `from` and `to` are derived from `ZonedDateTime.now()`, share a key instead of each missing.
+ * Without it the key is unique on every call and the cache only ever accumulates entries.
+ */
+private const val TRACK_WINDOW_CACHE_KEY =
+    "{#root.args[0], " +
+        "#root.args[1].truncatedTo(T(java.time.temporal.ChronoUnit).MINUTES), " +
+        "#root.args[2].truncatedTo(T(java.time.temporal.ChronoUnit).MINUTES)}"
 
 @Repository
 class JpaPositionRepository(
@@ -45,7 +56,7 @@ class JpaPositionRepository(
         return listOf()
     }
 
-    @Cacheable(value = ["vessel_track"])
+    @Cacheable(value = [CacheName.VESSEL_TRACK], key = TRACK_WINDOW_CACHE_KEY)
     override fun findVesselLastPositionsByInternalReferenceNumber(
         internalReferenceNumber: String,
         from: ZonedDateTime,
@@ -55,7 +66,7 @@ class JpaPositionRepository(
             .findLastByInternalReferenceNumber(internalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
 
-    @Cacheable(value = ["vessel_track"])
+    @Cacheable(value = [CacheName.VESSEL_TRACK], key = TRACK_WINDOW_CACHE_KEY)
     override fun findVesselLastPositionsByIrcs(
         ircs: String,
         from: ZonedDateTime,
@@ -65,7 +76,7 @@ class JpaPositionRepository(
             .findLastByIrcs(ircs, from, to)
             .map(PositionEntity::toPosition)
 
-    @Cacheable(value = ["vessel_track"])
+    @Cacheable(value = [CacheName.VESSEL_TRACK], key = TRACK_WINDOW_CACHE_KEY)
     override fun findVesselLastPositionsByExternalReferenceNumber(
         externalReferenceNumber: String,
         from: ZonedDateTime,
@@ -86,7 +97,7 @@ class JpaPositionRepository(
             .findAllByMmsi(mmsi)
             .map(PositionEntity::toPosition)
 
-    @Cacheable(value = ["last_position_date"])
+    @Cacheable(value = [CacheName.LAST_POSITION_DATE], sync = true)
     override fun findLastPositionDate(): ZonedDateTime =
         dbPositionRepository.findLastPositionDateTime().atZone(ZoneOffset.UTC)
 }

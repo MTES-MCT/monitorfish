@@ -46,20 +46,9 @@
     "ws": ">=7.5.10",
     "@remix-run/router": "1.23.2",
     "picomatch": "4.0.4",
+    "typescript": "$typescript",
+    "eslint": "$eslint",
     "@babel/plugin-transform-runtime": "^7.29.0",
-    "eslint-plugin-typescript-sort-keys": {
-      "eslint": "$eslint",
-      "typescript": "$typescript"
-    },
-    "@typescript-eslint/eslint-plugin": {
-      "typescript": "$typescript"
-    },
-    "tsconfck": {
-      "typescript": "$typescript"
-    },
-    "@typescript-eslint/parser": {
-      "typescript": "$typescript"
-    },
     "@mtes-mct/monitor-ui": {
       "cypress": "$cypress"
     },

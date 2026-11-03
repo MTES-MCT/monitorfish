@@ -114,7 +114,7 @@ export const HTML_STYLE = `
     --gainsboro: #E5E5EB;
     --light-gray: #CCCFD6;
     --cadet-grey: #8E9A9F;
-    --slate-gray: #707785;
+    --slate-gray: #5E667C;
     --gunmetal: #282F3E;
     --maximum-red-15: #FBD9DB;
     --grullo: #B89B8C;
@@ -232,7 +232,7 @@ hr {
 }
 
 .data-label {
-    color: #707785;
+    color: #5E667C;
     padding-right: 16px;
     vertical-align: top;
 }
@@ -297,7 +297,7 @@ tr {
 }
 
 footer {
-    color: #707785;
+    color: #5E667C;
     line-height: 11x;
     padding-right: 64px;
     padding-left: 64px;

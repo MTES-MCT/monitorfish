@@ -388,7 +388,7 @@ const SaveHeadBand = styled.div`
   font-style: italic;
   padding: 9px 16px;
   height: 22px;
-  box-shadow: 0 3px 4px #7077854d;
+  box-shadow: 0 3px 4px #5e667c4d;
   display: flex;
 `
 

@@ -152,5 +152,5 @@ const MultipleWarningsHeadband = styled.li<{
   font: normal normal bold 16px/22px Marianne;
   transition: all 0.5s;
   opacity: ${p => (p.$isOpen ? 1 : 0)};
-  ${p => p.$isLast && `box-shadow: 0px 2px ${p.$isOpen ? 4 : 0}px #707785bf;`}
+  ${p => p.$isLast && `box-shadow: 0px 2px ${p.$isOpen ? 4 : 0}px #5E667Cbf;`}
 `

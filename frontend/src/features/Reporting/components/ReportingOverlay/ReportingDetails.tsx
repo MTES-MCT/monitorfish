@@ -183,7 +183,7 @@ const Wrapper = styled.div`
   background: ${p => p.theme.color.white};
   padding: 12px;
   border-radius: 1px;
-  box-shadow: 0 3px 6px #70778540;
+  box-shadow: 0 3px 6px #5e667c40;
   width: 324px;
 `
 

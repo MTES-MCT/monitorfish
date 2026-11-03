@@ -53,7 +53,7 @@ const NoBeaconMalfunction = styled.div`
 `
 
 const Title = styled.div`
-  color: ${THEME.color.slateGray};
+  color: ${THEME.color.gunMetal};
   background: ${THEME.color.lightGray};
   display: flex;
   flex-shrink: 0;

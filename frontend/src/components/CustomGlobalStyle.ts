@@ -211,12 +211,12 @@ export const CustomGlobalStyle = createGlobalStyle`
   }
 
   .active-tab {
-    background-color: #707785;
+    background-color: #5E667C;
   }
 
   .rs-table-body-info {
     font-size: 13px;
-    color: #707785;
+    color: #5E667C;
   }
 
   table:not(.horizontal) th,
@@ -395,13 +395,13 @@ export const CustomGlobalStyle = createGlobalStyle`
     .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
     .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
     .rs-picker-select-menu-item {
-      color: #707785 !important;
+      color: #5E667C !important;
       font-size: 13px;
       font-weight: normal;
       max-width: 600px;
     }
   }
-  
+
   .Component-Dialog {
     div:nth-child(2) > div:nth-child(2) > *, b, p, span {
       font-size: inherit;

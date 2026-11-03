@@ -490,7 +490,7 @@ const NoCriteria = styled.span`
 export const Header = styled.div`
   align-items: center;
   background-color: ${p => p.theme.color.white};
-  box-shadow: 0 3px 4px #7077854d;
+  box-shadow: 0 3px 4px #5e667c4d;
   z-index: 1;
   display: flex;
   max-height: 62px;

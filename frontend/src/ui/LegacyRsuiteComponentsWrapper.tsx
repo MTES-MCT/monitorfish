@@ -13,7 +13,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-slider-mark {
     font-size: 13px;
-    color: #707785;
+    color: #5e667c;
   }
 
   .rs-slider {
@@ -77,20 +77,20 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover,
   .rs-picker-default:not(.rs-picker-disabled) .rs-btn.active,
   .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
-    border-color: #707785 !important;
+    border-color: #5e667c !important;
   }
 
   .rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner,
   .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
-    background-color: #707785;
+    background-color: #5e667c;
   }
 
   .rs-table-column-resize-spanner::before {
-    border-color: transparent #707785 transparent transparent;
+    border-color: transparent #5e667c transparent transparent;
   }
 
   .rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
-    border: 1px solid #707785 !important;
+    border: 1px solid #5e667c !important;
   }
 
   .rs-picker-toggle.rs-btn-sm {
@@ -154,7 +154,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-table-body-info {
     font-size: 13px;
-    color: #707785;
+    color: #5e667c;
   }
 
   .rs-modal-full .rs-modal-dialog {
@@ -190,7 +190,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   }
 
   .rs-table-cell[role='columnheader'] > .rs-table-cell-content {
-    color: #707785;
+    color: #5e667c;
   }
 
   .rs-table-cell {
@@ -232,7 +232,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
   .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
   .rs-picker-select-menu-item {
-    color: #707785;
+    color: #5e667c;
     font-size: 13px;
     font-weight: normal;
     max-width: 600px;
@@ -244,12 +244,12 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-picker-select-menu-items.rs-picker-select-menu-group.rs-picker-select-menu-group-title {
     font-size: 13px;
-    color: #707785;
+    color: #5e667c;
   }
 
   .rs-picker-toggle-clean,
   .rs-picker-toggle-caret {
-    color: #707785;
+    color: #5e667c;
   }
 
   .rs-picker-check-menu {

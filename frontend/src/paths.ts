@@ -3,6 +3,7 @@ import { BackOfficeMenuKey, BackOfficeMenuPath } from '@features/BackOffice/comp
 export const ROUTER_PATHS = {
   accessibilityStatement: '/declaration_accessibilite',
   activityVisualization: '/activity_visualization',
+  authorizationAuditLogs: BackOfficeMenuPath[BackOfficeMenuKey.AUTHORIZATION_AUDIT_LOG_TABLE],
   backendForFrontend: '/bff',
   backoffice: '/backoffice',
   controlObjectives: BackOfficeMenuPath[BackOfficeMenuKey.CONTROL_OBJECTIVE_TABLES],
@@ -19,5 +20,6 @@ export const ROUTER_PATHS = {
   producerOrganizationMembership: BackOfficeMenuPath[BackOfficeMenuKey.PRODUCER_ORGANIZATION_TABLE],
   register: '/register',
   regulations: BackOfficeMenuPath[BackOfficeMenuKey.REGULATORY_ZONE_TABLE],
-  sideWindow: '/side_window'
+  sideWindow: '/side_window',
+  users: BackOfficeMenuPath[BackOfficeMenuKey.USER_TABLE]
 }

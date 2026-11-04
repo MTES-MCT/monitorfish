@@ -1,5 +1,6 @@
 import { monitorfishApiKy } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { getCsrfHeaders } from '@api/csrf'
 import {
   priorNotificationApi,
   useGetPriorNotificationUploadsQuery
@@ -84,6 +85,7 @@ export function UploadFiles({ isManualPriorNotification, isReadOnly, operationDa
         action={action}
         defaultFileList={uploadAsFileTypes}
         draggable
+        headers={getCsrfHeaders()}
         onPreview={download}
         onRemove={remove}
         onSuccess={refetch}

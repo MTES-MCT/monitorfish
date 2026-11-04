@@ -37,7 +37,7 @@ context('BackOffice > Fleet Segments Table', () => {
     cy.log('Should update the segment')
 
     // When
-    cy.intercept('PUT', `/bff/v1/admin/fleet_segments?segment=ATL01`).as('updateFleetSegment')
+    cy.intercept('PUT', `/bff/v1/backoffice/fleet_segments?segment=ATL01`).as('updateFleetSegment')
 
     cy.get('[aria-rowindex="2"]').find('[title="Editer la ligne"]').click()
     cy.fill('Code', 'ATL0036')
@@ -96,7 +96,7 @@ context('BackOffice > Fleet Segments Table', () => {
 
   it('Should create a new fleet segment and delete it', () => {
     // Given
-    cy.intercept('POST', '/bff/v1/admin/fleet_segments').as('createFleetSegment')
+    cy.intercept('POST', '/bff/v1/backoffice/fleet_segments').as('createFleetSegment')
 
     // When
     cy.clickButton('Ajouter un segment')
@@ -156,7 +156,9 @@ context('BackOffice > Fleet Segments Table', () => {
     // -------------------------------------------------------------------------
     cy.log('Should delete a fleet segment')
 
-    cy.intercept('DELETE', `/bff/v1/admin/fleet_segments?year=${currentYear}&segment=ABC123`).as('deleteFleetSegment')
+    cy.intercept('DELETE', `/bff/v1/backoffice/fleet_segments?year=${currentYear}&segment=ABC123`).as(
+      'deleteFleetSegment'
+    )
     cy.get('[aria-rowindex="2"]').find('[title="Supprimer la ligne"]').click()
     cy.wait('@deleteFleetSegment')
 

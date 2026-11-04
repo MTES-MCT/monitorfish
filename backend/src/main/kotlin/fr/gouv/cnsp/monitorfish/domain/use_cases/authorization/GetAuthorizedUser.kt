@@ -14,11 +14,12 @@ class GetAuthorizedUser(
 
     fun execute(email: String?): AuthorizedUser {
         if (email == null) {
-            logger.info("⚠ No email provided (OIDC disabled), defaulting to super-user=true")
+            logger.info("⚠ No email provided (OIDC disabled), defaulting to super-user=true and administrator=true")
             return AuthorizedUser(
                 email = null,
                 isSuperUser = true,
                 service = null,
+                isAdministrator = true,
             )
         }
 

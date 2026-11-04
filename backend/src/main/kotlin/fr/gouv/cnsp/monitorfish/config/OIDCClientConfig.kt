@@ -45,7 +45,7 @@ class OIDCClientConfig(
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri(redirectUri)
-                .scope("openid", "email", "siret")
+                .scope("openid", "email", "idp_id", "organizational_unit")
                 .authorizationUri(authorizationUri)
                 .tokenUri(tokenUri)
                 .userInfoUri(userInfoUri)

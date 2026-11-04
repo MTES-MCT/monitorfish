@@ -103,6 +103,7 @@
                     "isInVerificationScope": false,
                     "isSent": false,
                     "isVerified": false,
+                    "tripDurationHours": 13.0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -113,6 +114,12 @@
                             "pnoTypeName": "Préavis type B",
                             "minimumNotificationPeriod": 8.0,
                             "hasDesignatedPorts": true
+                        },
+                        {
+                            "pnoTypeName": "Marée < 24h",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false,
+                            "isDurationClass": true
                         }
                     ],
                     "port": "FRSML",
@@ -196,11 +203,18 @@
                     "isInVerificationScope": false,
                     "isSent": false,
                     "isVerified": false,
+                    "tripDurationHours": 14.0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
                             "minimumNotificationPeriod": 4.0,
                             "hasDesignatedPorts": false
+                        },
+                        {
+                            "pnoTypeName": "Marée < 24h",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false,
+                            "isDurationClass": true
                         }
                     ],
                     "port": "FRBES",
@@ -278,18 +292,25 @@
                     "isInVerificationScope": false,
                     "isSent": true,
                     "isVerified": false,
+                    "tripDurationHours": 60.0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type C",
                             "minimumNotificationPeriod": 4.0,
                             "hasDesignatedPorts": false
+                        },
+                        {
+                            "pnoTypeName": "Marée 24-96h",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false,
+                            "isDurationClass": true
                         }
                     ],
                     "port": "FRBES",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '57 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "updatedAt": null,
                     "updatedBy": null
                 }
@@ -409,6 +430,7 @@
                     "isInVerificationScope": false,
                     "isSent": false,
                     "isVerified": true,
+                    "tripDurationHours": 120.0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",
@@ -419,13 +441,19 @@
                             "pnoTypeName": "Préavis type B",
                             "minimumNotificationPeriod": 8.0,
                             "hasDesignatedPorts": true
+                        },
+                        {
+                            "pnoTypeName": "Marée ≥ 96h",
+                            "minimumNotificationPeriod": 4.0,
+                            "hasDesignatedPorts": false,
+                            "isDurationClass": true
                         }
                     ],
                     "port": "FRVNE",
                     "predictedArrivalDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '3 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "predictedLandingDatetimeUtc:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' + INTERVAL '4 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "purpose": "LAN",
-                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '10 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
+                    "tripStartDate:sql": "TO_CHAR(NOW() AT TIME ZONE 'UTC' - INTERVAL '117 hours', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"')",
                     "updatedAt": null,
                     "updatedBy": null
                 }
@@ -487,6 +515,7 @@
                     "isInVerificationScope": false,
                     "isSent": false,
                     "isVerified": true,
+                    "tripDurationHours": 13.0,
                     "pnoTypes": [
                         {
                             "pnoTypeName": "Préavis type A",

@@ -83,7 +83,7 @@ def reset_pnos(period: Period):
                 "SET "
                 "    enriched = false,"
                 "    trip_gears = NULL,"
-                "    value = value - 'pnoTypes' - 'riskFactor',"
+                "    value = value - 'pnoTypes' - 'riskFactor' - 'tripDurationHours',"
                 "    trip_segments = NULL "
                 "WHERE p.operation_datetime_utc >= :start "
                 "AND p.operation_datetime_utc <= :end "
@@ -301,6 +301,7 @@ def compute_pno_types(
           - pno_type_name `str` `"Ports désignés thon rouge"`
           - minimum_notification_period `float` `4.0`
           - has_designated_ports `bool` `True`
+          - is_duration_class `bool` `False`
           - pno_type_rule_id `int` `1`
           - species `List[str]` `["COD", ...]`
           - gears `List[str]` `["OTB", ...]`
@@ -337,10 +338,12 @@ def compute_pno_types(
                     {
                         "pnoTypeName": "Type 1",
                         "minimumNotificationPeriod": 4.0,
-                        "hasDesignatedPorts": True
+                        "hasDesignatedPorts": True,
+                        "isDurationClass": False
                     },
                     {...}
                 ]```
+            - trip_duration_hours `float` `36.5` (null when unknown)
     """
     trip_gear_codes = (  # noqa: F841
         pno_catches[["logbook_reports_pno_id", "trip_gears"]]
@@ -360,8 +363,9 @@ def compute_pno_types(
             "country_code_iso2",
             "flag_state",
             "predicted_arrival_datetime_utc",
+            "trip_duration_hours",
         ]
-    ].drop_duplicates()
+    ].drop_duplicates(subset=["logbook_reports_pno_id"])
 
     pnos_trip_gears = pno_catches.drop_duplicates(  # noqa: F841
         subset=["logbook_reports_pno_id"]
@@ -389,6 +393,7 @@ def compute_pno_types(
                 t.pno_type_name,
                 t.minimum_notification_period,
                 t.has_designated_ports,
+                t.is_duration_class,
                 t.minimum_quantity_kg,
                 SUM(COALESCE(weight, 0)) OVER (PARTITION BY pc.logbook_reports_pno_id, pno_type_rule_id) AS pno_quantity_kg
             FROM pno_catches pc
@@ -416,7 +421,8 @@ def compute_pno_types(
             LIST_SORT(ARRAY_AGG(DISTINCT {
                 'pnoTypeName': pno_type_name,
                 'minimumNotificationPeriod': minimum_notification_period,
-                'hasDesignatedPorts': has_designated_ports
+                'hasDesignatedPorts': has_designated_ports,
+                'isDurationClass': is_duration_class
             })) AS pno_types
         FROM pnos_pno_types_tmp
         WHERE pno_quantity_kg >= minimum_quantity_kg
@@ -632,6 +638,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    enriched BOOLEAN,"
                 "    trip_gears JSONB,"
                 "    pno_types JSONB,"
+                "    trip_duration_hours DOUBLE PRECISION,"
                 "    trip_segments JSONB,"
                 "    is_in_verification_scope BOOLEAN,"
                 "    is_verified BOOLEAN,"
@@ -653,6 +660,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
             "logbook_reports_pno_id",
             "trip_gears",
             "pno_types",
+            "trip_duration_hours",
             "trip_segments",
             "is_in_verification_scope",
             "is_verified",
@@ -687,7 +695,8 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "           'isVerified', is_verified, "
                 "           'isSent', is_sent, "
                 "           'isBeingSent', is_being_sent, "
-                "           'riskFactor', risk_factor "
+                "           'riskFactor', risk_factor, "
+                "           'tripDurationHours', trip_duration_hours "
                 "       ) || value"
                 "   ), "
                 "    trip_segments = CASE "

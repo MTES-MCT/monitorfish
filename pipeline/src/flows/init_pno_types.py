@@ -27,7 +27,7 @@ def extract_pno_types():
     return pd.read_csv(
         LIBRARY_LOCATION / "data/pno_types.csv",
         encoding="utf8",
-        dtype={"has_designated_ports": bool},
+        dtype={"has_designated_ports": bool, "is_duration_class": bool},
     )
 
 

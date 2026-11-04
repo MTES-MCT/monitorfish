@@ -315,7 +315,7 @@ const LicenceExpired = styled.span`
   height: 8px;
   width: 8px;
   margin-left: 5px;
-  background-color: #e1000f;
+  background-color: ${p => p.theme.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
 `

@@ -91,7 +91,7 @@ const StyledMapToolBox = styled(MapComponent)<{
   border-radius: 2px;
   position: absolute;
   transition: all 0.3s;
-  box-shadow: ${p => (p.$hideBoxShadow ? 'unset' : '0px 3px 10px rgba(59, 69, 89, 0.5)')};
+  box-shadow: ${p => (p.$hideBoxShadow ? 'unset' : `0px 3px 10px ${p.theme.color.charcoalShadow}`)};
 
   ${p => p.isHidden && 'display: none;'}
 `

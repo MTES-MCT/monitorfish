@@ -302,7 +302,7 @@ const Wrapper = styled.div<{ $isEnvironmentBoxVisible: boolean }>`
 
   .loader {
     animation: rotation 1s linear infinite;
-    border: 2px solid #5e667c;
+    border: 2px solid ${p => p.theme.color.slateGray};
     border-bottom-color: transparent;
     border-radius: 50%;
     box-sizing: border-box;

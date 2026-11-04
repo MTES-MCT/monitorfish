@@ -182,7 +182,7 @@ export const CustomGlobalStyle = createGlobalStyle`
   }
 
   .ol-control button {
-    background-color: #3b4559;
+    background-color: ${p => p.theme.color.charcoal};
   }
 
   .ol-control {
@@ -196,7 +196,7 @@ export const CustomGlobalStyle = createGlobalStyle`
   .ol-control button,
   .ol-control button:hover,
   .ol-control button:focus {
-    background-color: #3b4559;
+    background-color: ${p => p.theme.color.charcoal};
     border-radius: 2px;
     font-size: 15px;
     padding-bottom: 5px;
@@ -211,12 +211,12 @@ export const CustomGlobalStyle = createGlobalStyle`
   }
 
   .active-tab {
-    background-color: #5E667C;
+    background-color: ${p => p.theme.color.slateGray};
   }
 
   .rs-table-body-info {
     font-size: 13px;
-    color: #5E667C;
+    color: ${p => p.theme.color.slateGray};
   }
 
   table:not(.horizontal) th,
@@ -257,18 +257,18 @@ export const CustomGlobalStyle = createGlobalStyle`
 
   .update-vessels .fingerprint-spinner {
     border: 1px solid transparent !important;
-    border-top-color: #3b4559 !important;
+    border-top-color: ${p => p.theme.color.charcoal} !important;
   }
 
   .update-vessels > .spinner-ring {
     border: 1px solid transparent !important;
-    border-top-color: #3b4559 !important;
+    border-top-color: ${p => p.theme.color.charcoal} !important;
   }
 
   .highlight {
     margin: 0;
     padding: 0;
-    background-color: #cccfd6;
+    background-color: ${p => p.theme.color.lightGray};
     color: rgb(81, 81, 81);
   }
 
@@ -284,7 +284,7 @@ export const CustomGlobalStyle = createGlobalStyle`
     text-decoration: none;
     text-align: center;
     height: 18px;
-    background-color: #3b4559;
+    background-color: ${p => p.theme.color.charcoal};
     border: none;
     border-radius: 2px;
   }
@@ -297,7 +297,7 @@ export const CustomGlobalStyle = createGlobalStyle`
 
   a:hover,
   a:focus {
-    color: #282f3e;
+    color: ${p => p.theme.color.gunMetal};
   }
 
   .base-layers-selection > .rs-radio > .rs-radio-checker > label > .rs-radio-wrapper {
@@ -328,7 +328,7 @@ export const CustomGlobalStyle = createGlobalStyle`
   }
 
   .ol-control button {
-    background-color: #3B4559;
+    background-color: ${p => p.theme.color.charcoal};
     color: var(--gainsboro);
   }
 
@@ -343,7 +343,7 @@ export const CustomGlobalStyle = createGlobalStyle`
   .ol-control button,
   .ol-control button:hover,
   .ol-control button:focus {
-    background-color: #3B4559;
+    background-color: ${p => p.theme.color.charcoal};
     border-radius: 2px;
     font-size: 15px;
     padding-bottom: 5px;
@@ -361,7 +361,7 @@ export const CustomGlobalStyle = createGlobalStyle`
     text-decoration: none;
     text-align: center;
     height: 18px;
-    background-color: #3B4559;
+    background-color: ${p => p.theme.color.charcoal};
     border: none;
     border-radius: 2px;
   }
@@ -395,7 +395,7 @@ export const CustomGlobalStyle = createGlobalStyle`
     .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
     .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
     .rs-picker-select-menu-item {
-      color: #5E667C !important;
+      color: ${p => p.theme.color.slateGray} !important;
       font-size: 13px;
       font-weight: normal;
       max-width: 600px;

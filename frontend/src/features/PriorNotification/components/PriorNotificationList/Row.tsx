@@ -9,6 +9,7 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
 import { FixedTag, None } from './styles'
+import { getTripDurationLabel } from './utils'
 import {
   displayOnboardFishingSpecies,
   getColorsFromState,
@@ -182,6 +183,8 @@ export function Row({ row }: RowProps) {
                 <Link onClick={openCard}>Voir plus de détail</Link>
               </p>
             )}
+            <ExpandedRowLabel style={{ display: 'block', marginTop: 16 }}>Durée de marée :</ExpandedRowLabel>
+            <ExpandedRowValue>{getTripDurationLabel(priorNotification)}</ExpandedRowValue>
           </ExpandedRowCell>
           <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
             <>

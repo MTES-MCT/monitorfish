@@ -1,30 +1,30 @@
-id,name,minimum_notification_period,has_designated_ports
-1,Autres espèces soumises à préavis,4.0,False
-2,Ports désignés cabillaud,4.0,True
-3,Ports désignés merlu,4.0,True
-4,Ports désignés espèces eaux profondes,4.0,True
-5,Ports désignés petits pélagiques,4.0,True
-6,Ports désignés sole,4.0,True
-7,Ports désignés thon rouge,4.0,True
-8,Ports désignés espadon,4.0,True
-9,Ports désignés corail rouge,4.0,True
-10,Préavis navire tiers,4.0,True
-11,Préavis communautaire,4.0,False
-12,Préavis senne de plage,4.0,False
-13,Préavis sans capture,0.5,False
-14,Préavis MEMN - marée ≥ 96h,4.0,False
-15,Préavis MEMN - marée < 96h,2.0,False
-16,Préavis NAMO - marée ≥ 96h,4.0,False
-17,Préavis NAMO - marée 24-96h,3.0,False
-18,Préavis NAMO - marée < 24h,1.0,False
-19,Préavis NAMO - coquille Saint-Jacques navires 22-29-35,0.5,False
-20,Préavis SA - marée ≥ 96h,4.0,False
-21,Préavis SA - marée 24-96h,3.0,False
-22,Préavis SA - marée < 24h,1.0,False
-23,Préavis MED - marée ≥ 24h,4.0,False
-24,Préavis MED - marée < 24h,1.0,False
-25,Préavis Corse,4.0,False
-26,Préavis thon rouge,4.0,False
-27,Préavis anchois,4.0,False
-28,Préavis espadon,4.0,False
-29,Préavis corail rouge,4.0,False
+id,name,minimum_notification_period,has_designated_ports,is_duration_class
+1,Autres espèces soumises à préavis,4.0,False,False
+2,Ports désignés cabillaud,4.0,True,False
+3,Ports désignés merlu,4.0,True,False
+4,Ports désignés espèces eaux profondes,4.0,True,False
+5,Ports désignés petits pélagiques,4.0,True,False
+6,Ports désignés sole,4.0,True,False
+7,Ports désignés thon rouge,4.0,True,False
+8,Ports désignés espadon,4.0,True,False
+9,Ports désignés corail rouge,4.0,True,False
+10,Préavis navire tiers,4.0,True,False
+11,Préavis communautaire,4.0,False,False
+12,Préavis senne de plage,4.0,False,False
+13,Préavis sans capture,0.5,False,False
+14,Marée ≥ 96h,4.0,False,True
+15,Marée < 96h,2.0,False,True
+16,Marée ≥ 96h,4.0,False,True
+17,Marée 24-96h,3.0,False,True
+18,Marée < 24h,1.0,False,True
+19,Préavis NAMO - coquille Saint-Jacques navires 22-29-35,0.5,False,False
+20,Marée ≥ 96h,4.0,False,True
+21,Marée 24-96h,3.0,False,True
+22,Marée < 24h,1.0,False,True
+23,Marée ≥ 24h,4.0,False,True
+24,Marée < 24h,1.0,False,True
+25,Préavis Corse,4.0,False,False
+26,Préavis thon rouge,4.0,False,False
+27,Préavis anchois,4.0,False,False
+28,Préavis espadon,4.0,False,False
+29,Préavis corail rouge,4.0,False,False

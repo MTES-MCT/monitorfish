@@ -5,12 +5,14 @@ data class PnoType(
     val name: String,
     val minimumNotificationPeriod: Double,
     val hasDesignatedPorts: Boolean,
+    val isDurationClass: Boolean = false,
     val pnoTypeRules: List<PnoTypeRule>,
 ) {
     fun toPriorNotificationType(): PriorNotificationType =
         PriorNotificationType(
-            hasDesignatedPorts,
-            minimumNotificationPeriod,
-            name,
+            hasDesignatedPorts = hasDesignatedPorts,
+            isDurationClass = isDurationClass,
+            minimumNotificationPeriod = minimumNotificationPeriod,
+            name = name,
         )
 }

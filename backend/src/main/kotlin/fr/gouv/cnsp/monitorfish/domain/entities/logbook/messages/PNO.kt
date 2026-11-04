@@ -77,6 +77,9 @@ class PNO : LogbookMessageValue {
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var tripStartDate: ZonedDateTime? = null
 
+    /** Trip duration in hours, computed by the `enrich_logbook` pipeline flow. */
+    var tripDurationHours: Double? = null
+
     @JsonDeserialize(using = ZonedDateTimeDeserializer::class)
     @JsonSerialize(using = ZonedDateTimeSerializer::class)
     var updatedAt: ZonedDateTime? = null

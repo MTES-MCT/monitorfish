@@ -81,6 +81,7 @@ def expected_pno_types() -> pd.DataFrame:
             ],
             "minimum_notification_period": [4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
             "has_designated_ports": [True, True, True, True, True, True, True],
+            "is_duration_class": [False] * 7,
             "pno_type_rule_id": [1, 2, 3, 4, 5, 6, 7],
             "species": [
                 ["HKE", "BSS", "COD", "ANF", "SOL"],
@@ -464,6 +465,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                 datetime(2023, 5, 10),
                 datetime(2023, 5, 11),
             ],
+            "trip_duration_hours": [12.0, 36.0, 100.0, np.nan, 48.0, 6.5, 20.0, 2.0],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -483,6 +485,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -490,11 +493,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -502,11 +507,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par pavillon",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -514,6 +521,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -521,11 +529,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 np.nan,
@@ -535,6 +545,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par engin",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
             ],
@@ -606,11 +617,13 @@ def pnos_to_load() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 None,
@@ -678,11 +691,13 @@ def expected_loaded_pnos() -> pd.DataFrame:
                     {
                         "pnoTypeName": "Préavis type 1",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                 ],
@@ -724,11 +739,13 @@ def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame
                     {
                         "pnoTypeName": "Préavis type 1",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                 ],
@@ -806,6 +823,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -813,11 +831,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -825,11 +845,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par pavillon",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -837,6 +859,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -844,11 +867,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 np.nan,
@@ -858,6 +883,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par engin",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
             ],
@@ -1095,6 +1121,7 @@ def pno_types_with_pno_level_criteria() -> pd.DataFrame:
                 "pno_type_name": name,
                 "minimum_notification_period": minimum_notification_period,
                 "has_designated_ports": False,
+                "is_duration_class": "marée" in name,
                 "pno_type_rule_id": i,
                 "minimum_quantity_kg": rule.get("minimum_quantity_kg", 0.0),
                 **{c: rule.get(c, []) for c in list_columns},

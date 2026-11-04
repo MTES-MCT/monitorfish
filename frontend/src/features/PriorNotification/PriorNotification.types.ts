@@ -26,6 +26,7 @@ export namespace PriorNotification {
     seafront: Seafront | undefined
     sentAt: string | undefined
     state: State | undefined
+    tripDurationHours: number | undefined
     tripGears: Logbook.Gear[]
     tripNumber: string | undefined
     tripSegments: Logbook.Segment[]
@@ -143,6 +144,8 @@ export namespace PriorNotification {
 
   export type Type = {
     hasDesignatedPorts: boolean
+    /** `true` for types only describing the trip duration class (ex: "Marée < 24h"). */
+    isDurationClass: boolean
     minimumNotificationPeriod: number
     name: string
   }

@@ -28,6 +28,7 @@
         "email"
       ],
       "optionalClientScopes": [
+        "idp_id",
         "given_name",
         "usual_name",
         "uid",
@@ -43,7 +44,7 @@
   "clientScopes": [
     {
       "name": "openid",
-      "description": "OpenID Connect built-in scope, with the claims ProConnect always returns (sub, idp_id, organization_label)",
+      "description": "OpenID Connect built-in scope, with the claims ProConnect always returns (sub, organization_label)",
       "protocol": "openid-connect",
       "attributes": {
         "include.in.token.scope": "true",
@@ -58,20 +59,6 @@
           "config": {}
         },
         {
-          "name": "idp_id",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "false",
-            "claim.name": "idp_id",
-            "jsonType.label": "String",
-            "user.attribute": "idp_id"
-          }
-        },
-        {
           "name": "organization_label",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-attribute-mapper",
@@ -83,6 +70,31 @@
             "claim.name": "organization_label",
             "jsonType.label": "String",
             "user.attribute": "organization_label"
+          }
+        }
+      ]
+    },
+    {
+      "name": "idp_id",
+      "description": "ProConnect: fournisseur d'identité utilisé, renvoyé uniquement sur demande de ce scope",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "idp_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "id.token.claim": "false",
+            "access.token.claim": "false",
+            "claim.name": "idp_id",
+            "jsonType.label": "String",
+            "user.attribute": "idp_id"
           }
         }
       ]

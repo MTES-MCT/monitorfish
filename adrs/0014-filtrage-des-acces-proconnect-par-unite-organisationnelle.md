@@ -16,9 +16,9 @@ e-mail figurait dans `MONITORFISH_OIDC_AUTHORIZED_EMAIL_DOMAINS`. Ce filtre éta
   était impossible de lister les utilisateurs ou de faire la revue annuelle des habilitations
   ([#4661](https://github.com/MTES-MCT/monitorfish/issues/4661)).
 
-ProConnect renvoie toujours le claim `idp_id` (fournisseur d'identité utilisé) et, sur demande du
-scope `organizational_unit` (à faire activer par le support ProConnect), l'unité organisationnelle
-de l'agent.
+ProConnect renvoie, sur demande des scopes correspondants (à faire activer par le support ProConnect),
+le claim `idp_id` (fournisseur d'identité utilisé) et l'unité organisationnelle de l'agent
+(`organizational_unit`).
 
 Les fournisseurs d'identité concernés (configuration ProConnect, environnement RIE) :
 
@@ -35,8 +35,8 @@ permet pas de les distinguer, ni de restreindre l'accès aux seuls agents charg�
 
 ### Règle d'accès (à la connexion)
 
-Le filtre par domaine d'e-mail est supprimé. Par minimisation des données, seuls les scopes `openid`, `email` et
-`organizational_unit` sont demandés à ProConnect (`idp_id` est toujours renvoyé). `GetIsAllowedToLogIn` autorise un utilisateur si :
+Le filtre par domaine d'e-mail est supprimé. Par minimisation des données, seuls les scopes `openid`, `email`, `idp_id` et
+`organizational_unit` sont demandés à ProConnect. `GetIsAllowedToLogIn` autorise un utilisateur si :
 
 1. son e-mail est enregistré dans `user_authorizations` (super-utilisateurs CNSP et utilisateurs
    externes listés par administration) **et** il se connecte avec le fournisseur d'identité attendu : Cerbère pour les
@@ -101,8 +101,8 @@ Les routes `/bff/v1/admin/*` sont toujours réservées aux administrateurs, mêm
 ### Environnement local et E2E
 
 Le Keycloak local imite ProConnect : userinfo renvoyé en JWT signé (`application/jwt`), scopes nommés
-comme ceux de ProConnect (`given_name`, `usual_name`, `uid`, `siret`, `organizational_unit`,
-`belonging_population`...), claims `idp_id` et `organization_label` toujours renvoyés. Les
+comme ceux de ProConnect (`idp_id`, `given_name`, `usual_name`, `uid`, `siret`, `organizational_unit`,
+`belonging_population`...), claim `organization_label` toujours renvoyé. Les
 utilisateurs de test couvrent chaque cas de la règle d'accès, et le filtre est actif dans les tests
 Cypress.
 
@@ -119,7 +119,7 @@ Cypress.
 - **Mise en production :** un utilisateur externe qui se connectait grâce au seul domaine de son
   e-mail, sans ligne dans `user_authorizations`, perd l'accès. Avant le déploiement, il faut importer
   les listes de chaque administration externe, renseigner les unités organisationnelles autorisées et
-  faire activer le scope `organizational_unit` par ProConnect.
+  faire activer les scopes `idp_id` et `organizational_unit` par ProConnect.
 - La règle n'est évaluée qu'à la connexion : un utilisateur retiré garde l'accès jusqu'à
   l'expiration de sa session.
 - **Mise en production :** les super-utilisateurs CNSP doivent se connecter via Cerbère, et les utilisateurs déjà

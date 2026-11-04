@@ -167,10 +167,11 @@ interface DBLogbookReportRepository :
 
     @Query(
         """
-        SELECT DISTINCT jsonb_array_elements(value->'pnoTypes')->>'pnoTypeName' AS uniquePnoTypeName
-        FROM logbook_reports
+        SELECT DISTINCT pno_type->>'pnoTypeName' AS uniquePnoTypeName
+        FROM logbook_reports, jsonb_array_elements(value->'pnoTypes') AS pno_type
         WHERE log_type = 'PNO'
         AND operation_datetime_utc > now() - interval '2 year'
+        AND COALESCE((pno_type->>'isDurationClass')::BOOLEAN, FALSE) = FALSE
         ORDER BY uniquePnoTypeName
         """,
         nativeQuery = true,

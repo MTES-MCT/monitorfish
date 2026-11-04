@@ -30,8 +30,9 @@ export function getPriorNotificationIdentifier(
 export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
   logbookMessagePnoTypes: Logbook.MessagePnoType[] | undefined
 ): PriorNotification.Type[] | undefined {
-  return logbookMessagePnoTypes?.map(({ pnoTypeName, ...rest }) => ({
+  return logbookMessagePnoTypes?.map(({ isDurationClass, pnoTypeName, ...rest }) => ({
     ...rest,
+    isDurationClass: isDurationClass ?? false,
     name: pnoTypeName
   }))
 }

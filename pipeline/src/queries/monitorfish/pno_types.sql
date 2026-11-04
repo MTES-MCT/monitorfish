@@ -3,6 +3,7 @@ SELECT
     t.name AS pno_type_name,
     t.minimum_notification_period,
     t.has_designated_ports,
+    t.is_duration_class,
     r.id AS pno_type_rule_id,
     r.species,
     r.fao_areas,

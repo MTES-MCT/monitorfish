@@ -804,6 +804,7 @@ def merged_pnos() -> pd.DataFrame:
                 datetime(2023, 5, 10),
                 datetime(2023, 5, 11),
             ],
+            "trip_duration_hours": [12.0, 36.0, 100.0, np.nan, 48.0, 6.5, 20.0, 2.0],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},

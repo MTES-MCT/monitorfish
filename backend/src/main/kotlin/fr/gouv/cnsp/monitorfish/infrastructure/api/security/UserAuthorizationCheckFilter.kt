@@ -53,11 +53,8 @@ class UserAuthorizationCheckFilter(
         logger.info("Authenticated user email/username: $email")
 
         val isSuperUserPath =
-            protectedPathsAPIProperties.superUserPaths?.any {
-                request.requestURI.contains(
-                    it,
-                )
-            } ?: false
+            request.requestURI.startsWith(SUPER_USER_PATH_PREFIX) ||
+                protectedPathsAPIProperties.superUserPaths?.any { request.requestURI.contains(it) } ?: false
         val isAdministratorPath =
             request.requestURI.startsWith(ADMINISTRATOR_PATH_PREFIX) ||
                 protectedPathsAPIProperties.administratorPaths?.any { request.requestURI.contains(it) } ?: false
@@ -83,5 +80,8 @@ class UserAuthorizationCheckFilter(
     companion object {
         /** Protected even when `administrator-paths` is not configured. */
         const val ADMINISTRATOR_PATH_PREFIX = "/bff/v1/admin/"
+
+        /** Protected even when `super-user-paths` is not configured. */
+        const val SUPER_USER_PATH_PREFIX = "/bff/v1/backoffice/"
     }
 }

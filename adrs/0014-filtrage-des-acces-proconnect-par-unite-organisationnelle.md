@@ -86,7 +86,9 @@ Lors du remplacement de la liste d'une administration, les utilisateurs d'une au
 signalés comme tels), et une liste vide doit être explicitement confirmée.
 
 Les routes `/bff/v1/admin/*` sont toujours réservées aux administrateurs, même si
-`MONITORFISH_API_PROTECTED_ADMINISTRATOR_PATHS` est absente.
+`MONITORFISH_API_PROTECTED_ADMINISTRATOR_PATHS` est absente. Les routes `/bff/v1/backoffice/*` (objectifs de
+contrôle, segments de flotte) sont réservées aux super-utilisateurs, même si
+`MONITORFISH_API_PROTECTED_SUPER_USER_PATHS` est absente.
 
 ### Sécurité de la session
 

@@ -277,4 +277,47 @@ class UserAuthorizationCheckFilterUTests {
         // Cleanup
         SecurityContextHolder.clearContext()
     }
+
+    @Test
+    fun `Should only require a super user on backoffice paths When super user paths are not configured`() {
+        listOf(
+            "/bff/v1/backoffice/control_objectives/2021",
+            "/bff/v1/backoffice/fleet_segments/years",
+        ).forEach { path ->
+            // Given
+            val oidcProperties = OIDCProperties()
+            oidcProperties.enabled = true
+            val protectedPathsAPIProperties = ProtectedPathsAPIProperties()
+            protectedPathsAPIProperties.superUserPaths = null
+
+            val mockAuthentication = mock(Authentication::class.java)
+            val mockOidcUser = mock(OidcUser::class.java)
+            given(mockAuthentication.isAuthenticated).willReturn(true)
+            given(mockAuthentication.principal).willReturn(mockOidcUser)
+            given(mockOidcUser.email).willReturn("test@example.com")
+            given(getIsAuthorizedUser.execute("test@example.com", true, false)).willReturn(true)
+            SecurityContextHolder.getContext().authentication = mockAuthentication
+
+            val response = MockHttpServletResponse()
+
+            // When
+            val request = MockHttpServletRequest()
+            request.requestURI = path
+            UserAuthorizationCheckFilter(
+                oidcProperties,
+                protectedPathsAPIProperties,
+                getIsAuthorizedUser,
+            ).doFilter(
+                request,
+                response,
+                MockFilterChain(),
+            )
+
+            // Then
+            assertThat(response.status).isEqualTo(200)
+
+            // Cleanup
+            SecurityContextHolder.clearContext()
+        }
+    }
 }

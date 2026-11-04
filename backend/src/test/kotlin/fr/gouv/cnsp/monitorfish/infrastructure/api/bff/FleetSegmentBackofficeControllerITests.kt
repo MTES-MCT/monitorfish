@@ -33,8 +33,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     SentryConfig::class,
 )
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(FleetSegmentAdminController::class)])
-class FleetSegmentAdminControllerITests {
+@WebMvcTest(value = [(FleetSegmentBackofficeController::class)])
+class FleetSegmentBackofficeControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
@@ -84,7 +84,7 @@ class FleetSegmentAdminControllerITests {
         // When
         api
             .perform(
-                put("/bff/v1/admin/fleet_segments?segment=A_SEGMENT/WITH/SLASH")
+                put("/bff/v1/backoffice/fleet_segments?segment=A_SEGMENT/WITH/SLASH")
                     .content(
                         objectMapper.writeValueAsString(
                             CreateOrUpdateFleetSegmentDataInput(
@@ -115,7 +115,7 @@ class FleetSegmentAdminControllerITests {
     fun `Should return Ok When a delete of a fleet segment is done`() {
         // When
         api
-            .perform(delete("/bff/v1/admin/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
+            .perform(delete("/bff/v1/backoffice/fleet_segments?year=2021&segment=A_SEGMENT/WITH/SLASH"))
             // Then
             .andExpect(status().isOk)
     }
@@ -124,7 +124,7 @@ class FleetSegmentAdminControllerITests {
     fun `Should return Ok When a new year is created`() {
         // When
         api
-            .perform(post("/bff/v1/admin/fleet_segments/2023"))
+            .perform(post("/bff/v1/backoffice/fleet_segments/2023"))
             // Then
             .andExpect(status().isCreated)
     }
@@ -154,7 +154,7 @@ class FleetSegmentAdminControllerITests {
         // When
         api
             .perform(
-                post("/bff/v1/admin/fleet_segments")
+                post("/bff/v1/backoffice/fleet_segments")
                     .content(
                         objectMapper.writeValueAsString(
                             CreateOrUpdateFleetSegmentDataInput(

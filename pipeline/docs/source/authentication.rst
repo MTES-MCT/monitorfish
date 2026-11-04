@@ -43,7 +43,8 @@ to authorize users, and the plain email and administration are stored to list us
 
 See :doc:`access-rights` for the features available to each type of user.
 
-Routes of the frontend API (``/bff/v1/*``) require an authorized user, and some routes require a super user.
+Routes of the frontend API (``/bff/v1/*``) require an authorized user, and some routes require a super user
+(``/bff/v1/backoffice/*``, always protected, and ``MONITORFISH_API_PROTECTED_SUPER_USER_PATHS``).
 User management routes (``/bff/v1/admin/*``, always protected, and ``MONITORFISH_API_PROTECTED_ADMINISTRATOR_PATHS``)
 require a super user who is also an **administrator**. Only administrators see the backoffice "Utilisateurs" and
 "Journal des habilitations" pages. An administrator can't remove its own rights nor delete itself, and the last

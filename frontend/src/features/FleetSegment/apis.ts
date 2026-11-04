@@ -33,7 +33,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     addFleetSegmentYear: builder.mutation<void, number>({
       query: nextYear => ({
         method: 'POST',
-        url: `/admin/fleet_segments/${nextYear}`
+        url: `/backoffice/fleet_segments/${nextYear}`
       }),
       transformErrorResponse: response => new FrontendApiError(ADD_FLEET_SEGMENT_YEAR_ERROR_MESSAGE, response)
     }),
@@ -52,7 +52,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
       query: segmentFields => ({
         body: segmentFields,
         method: 'POST',
-        url: '/admin/fleet_segments'
+        url: '/backoffice/fleet_segments'
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment) =>
@@ -61,7 +61,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
     deleteFleetSegment: builder.mutation<FleetSegment[], { segment: string; year: number }>({
       query: ({ segment, year }) => ({
         method: 'DELETE',
-        url: `/admin/fleet_segments?year=${year}&segment=${segment}`
+        url: `/backoffice/fleet_segments?year=${year}&segment=${segment}`
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_FLEET_SEGMENT_ERROR_MESSAGE, response),
       transformResponse: (baseQueryReturnValue: FleetSegment[]) =>
@@ -82,7 +82,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         )
     }),
     getFleetSegmentYearEntries: builder.query<number[], void>({
-      query: () => '/admin/fleet_segments/years',
+      query: () => '/backoffice/fleet_segments/years',
       transformErrorResponse: response => new FrontendApiError(GET_FLEET_SEGMENT_YEAR_ENTRIES_ERROR_MESSAGE, response)
     }),
     updateFleetSegment: builder.query<FleetSegment, UpdateFleetSegmentParams>({
@@ -92,7 +92,7 @@ export const fleetSegmentApi = monitorfishApi.injectEndpoints({
         return {
           body: updatedSegment,
           method: 'PUT',
-          url: `/admin/fleet_segments?segment=${params.segment}`
+          url: `/backoffice/fleet_segments?segment=${params.segment}`
         }
       },
       transformErrorResponse: response => new FrontendApiError(UPDATE_FLEET_SEGMENT_ERROR_MESSAGE, response),

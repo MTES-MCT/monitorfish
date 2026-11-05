@@ -105,7 +105,7 @@ context('Side Window > Prior Notification List > Filter Bar', () => {
     cy.intercept('GET', `${apiPathBase}*priorNotificationTypes=${encodeURI('Préavis type A,Préavis type C')}*`).as(
       'getPriorNotificationsTypes'
     )
-    cy.fill('Types de préavis', ['Préavis type A', 'Préavis type C'])
+    cy.fill('Critères réglementaires', ['Préavis type A', 'Préavis type C'])
     cy.wait('@getPriorNotificationsTypes')
     cy.get('.Table-SimpleTable tr').should('have.length.to.be.greaterThan', 0)
     cy.getDataCy('prior-notification-reset-filters').click()

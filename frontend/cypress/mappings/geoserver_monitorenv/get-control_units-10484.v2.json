@@ -30,29 +30,37 @@
           "id": 1076,
           "controlUnitId": 10484,
           "email": "bgc-lorient@douane.finances.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "09 70 27 46 12"
+          "name": null,
+          "phone": "09 70 27 46 12",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 1073,
           "controlUnitId": 10484,
           "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "06 64 57 64 04"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 64 57 64 04",
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 1074,
           "controlUnitId": 10484,
           "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "09 70 27 51 94"
+          "name": null,
+          "phone": "09 70 27 51 94",
+          "cellPhone": null,
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 1075,
           "controlUnitId": 10484,
           "email": null,
-          "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "06 64 57 64 58"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 64 57 64 58",
+          "role": "PERMANENT_CONTACT_ONBOARD"
         }
       ],
       "controlUnitResourceIds": [

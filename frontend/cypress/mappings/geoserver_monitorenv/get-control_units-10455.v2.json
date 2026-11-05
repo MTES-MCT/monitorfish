@@ -31,46 +31,56 @@
           "id": 1018,
           "controlUnitId": 10455,
           "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 84 76 97 62",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 84 76 97 62",
+          "role": "UNKNOWN"
         },
         {
           "id": 1019,
           "controlUnitId": 10455,
           "email": "pgmarc720.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 85 72 02 20",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 85 72 02 20",
+          "role": "UNKNOWN"
         },
         {
           "id": 1015,
           "controlUnitId": 10455,
           "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
+          "name": null,
           "phone": "02 98 22 22 17",
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": null,
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 1016,
           "controlUnitId": 10455,
           "email": null,
-          "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "06 84 76 97 62",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 84 76 97 62",
+          "role": "PERMANENT_CONTACT_ONBOARD"
         },
         {
           "id": 1017,
           "controlUnitId": 10455,
           "email": null,
-          "name": "PERMANENT_CONTACT_ONBOARD",
-          "phone": "06 85 72 02 20",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 85 72 02 20",
+          "role": "PERMANENT_CONTACT_ONBOARD"
         }
       ],
       "controlUnitResourceIds": [

@@ -55,21 +55,25 @@ class FullControlUnitFaker {
 
         private fun fakeControlUnitContact(
             id: Int = 1,
+            cellPhone: String? = "0678456782",
             controlUnitId: Int = 1,
             email: String? = "contact@example.com",
             isEmailSubscriptionContact: Boolean = true,
             isSmsSubscriptionContact: Boolean = false,
-            name: String = "Fake Contact Name",
+            name: String? = "Fake Contact Name",
             phone: String? = "+1234567890",
+            role: String? = "ADJUNCT",
         ): ControlUnitContact =
             ControlUnitContact(
                 id = id,
+                cellPhone = cellPhone,
                 controlUnitId = controlUnitId,
                 email = email,
                 isEmailSubscriptionContact = isEmailSubscriptionContact,
                 isSmsSubscriptionContact = isSmsSubscriptionContact,
                 name = name,
                 phone = phone,
+                role = role,
             )
 
         private fun fakeFullControlUnitResource(

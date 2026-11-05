@@ -1215,11 +1215,6 @@
                     "isVerified": false,
                     "pnoTypes": [
                         {
-                            "pnoTypeName": "Autres espèces soumises à préavis",
-                            "hasDesignatedPorts": true,
-                            "minimumNotificationPeriod": 4.0
-                        },
-                        {
                             "pnoTypeName": "Préavis navire tiers",
                             "hasDesignatedPorts": true,
                             "minimumNotificationPeriod": 4.0

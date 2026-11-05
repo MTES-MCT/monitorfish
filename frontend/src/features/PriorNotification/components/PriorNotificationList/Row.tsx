@@ -9,11 +9,11 @@ import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import styled from 'styled-components'
 
 import { FixedTag, None } from './styles'
-import { getTripDurationLabel } from './utils'
 import {
   displayOnboardFishingSpecies,
   getColorsFromState,
   getExpandableRowCellCustomStyle,
+  getTripDurationLabel,
   getVesselIdentityFromPriorNotification
 } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'

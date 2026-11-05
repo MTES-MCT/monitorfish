@@ -628,6 +628,7 @@ def pnos_to_load() -> pd.DataFrame:
                 ],
                 None,
             ],
+            "trip_duration_hours": [25.5, np.nan],
             "trip_segments": [
                 None,
                 [
@@ -703,6 +704,7 @@ def expected_loaded_pnos() -> pd.DataFrame:
                 ],
                 [],
             ],
+            "trip_duration_hours": [np.nan, 25.5, np.nan],
             "trip_segments": [
                 None,
                 [],
@@ -720,7 +722,7 @@ def expected_loaded_pnos() -> pd.DataFrame:
 
 
 @pytest.fixture
-def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame:
+def expected_loaded_pnos_bis() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "id": [8, 13, 14],
@@ -751,6 +753,7 @@ def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame
                 ],
                 [],
             ],
+            "trip_duration_hours": [np.nan, 25.5, np.nan],
             "trip_segments": [
                 None,
                 [],
@@ -1289,6 +1292,7 @@ def test_load_then_reset_logbook(
         "enriched, "
         "trip_gears, "
         "value->'pnoTypes' AS pno_types, "
+        "(value->>'tripDurationHours')::DOUBLE PRECISION AS trip_duration_hours, "
         "trip_segments, "
         "(value->>'isInVerificationScope')::BOOLEAN AS is_in_verification_scope, "
         "(value->>'isVerified')::BOOLEAN AS is_verified, "

@@ -82,7 +82,7 @@ const Wrapper = styled.div`
   .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
   .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
   .rs-picker-select-menu-item {
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
     font-size: 13px;
     font-weight: normal;
   }
@@ -111,7 +111,7 @@ const Wrapper = styled.div`
 
   .rs-btn-toggle {
     background: #c8dce6 0% 0% no-repeat padding-box;
-    border: 1px solid #5e667c;
+    border: 1px solid ${p => p.theme.color.slateGray};
     border-radius: 7px;
     margin: 3px 7px 0 7px;
   }

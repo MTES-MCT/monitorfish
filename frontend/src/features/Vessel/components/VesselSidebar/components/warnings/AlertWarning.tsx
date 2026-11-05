@@ -165,8 +165,8 @@ const AlertIcon = styled(AlertSVG)`
 
 const Alerts = styled.div`
   /* TODO Replace with theme color. */
-  background: #e1000f;
-  color: #fff;
+  background: ${p => p.theme.color.maximumRed};
+  color: ${p => p.theme.color.white};
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;

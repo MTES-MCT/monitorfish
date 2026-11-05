@@ -5,7 +5,7 @@ export const StyledModalHeader = styled(Modal.Header)`
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   padding: ${p => (p.$isFull ? '5px 14px 8px 14px' : '4px 14px 5px 14px')};
-  background: #3b4559;
+  background: ${p => p.theme.color.charcoal};
 
   .rs-modal-title {
     color: #f0f0f0;
@@ -16,7 +16,7 @@ export const StyledModalHeader = styled(Modal.Header)`
   .rs-modal-header-close {
     right: 13px;
     top: 10px;
-    color: #e5e5eb;
+    color: ${p => p.theme.color.gainsboro};
     margin: unset;
     padding: unset;
 

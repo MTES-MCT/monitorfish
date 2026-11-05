@@ -74,7 +74,7 @@ const RegulatoryZoneMetadataShifter = styled.div<{
   margin-top: 45px;
   top: 0;
   opacity: ${p => (p.$isOpen ? '1' : '0')};
-  background: linear-gradient(${THEME.color.gainsboro} 70%, rgb(0, 0, 0, 0));
+  background: linear-gradient(${THEME.color.gainsboro} 70%, transparent);
   z-index: -1;
   transition: all 0.3s;
 `

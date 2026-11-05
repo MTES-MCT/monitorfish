@@ -79,7 +79,7 @@ const ActivityDetectedLabel = styled.span`
   margin-right: 5px;
   padding: 0 8px 0 8px;
   /* TODO Replace this color with a theme color. */
-  background: #e1000f 0% 0% no-repeat padding-box;
+  background: ${p => p.theme.color.maximumRed} 0% 0% no-repeat padding-box;
   border-radius: 11px;
   color: ${p => p.theme.color.white};
   font-size: 13px;

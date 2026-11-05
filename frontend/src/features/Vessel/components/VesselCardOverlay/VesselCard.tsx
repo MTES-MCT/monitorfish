@@ -260,7 +260,7 @@ const NoLogbook = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  background-color: #e1000f;
+  background-color: ${p => p.theme.color.maximumRed};
   border-radius: 50%;
   display: inline-block;
 `

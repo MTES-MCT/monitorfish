@@ -1,19 +1,20 @@
-// TODO Replace with theme colors.
+import { THEME } from '@mtes-mct/monitor-ui'
+
 export const getRiskFactorColor = (riskFactor: number) => {
   if (riskFactor >= 1 && riskFactor < 1.75) {
-    return '#8E9A9F'
+    return THEME.color.cadetGray
   }
 
   if (riskFactor >= 1.75 && riskFactor < 2.5) {
-    return '#B89B8C'
+    return THEME.color.grullo
   }
 
   if (riskFactor >= 2.5 && riskFactor < 3.25) {
-    return '#CF6A4E'
+    return THEME.color.copperRed
   }
 
   if (riskFactor >= 3.25 && riskFactor <= 4) {
-    return '#A13112'
+    return THEME.color.chineseRed
   }
 
   return undefined

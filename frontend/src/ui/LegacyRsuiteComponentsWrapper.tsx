@@ -13,7 +13,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-slider-mark {
     font-size: 13px;
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-slider {
@@ -42,7 +42,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   }
 
   .rs-slider-handle::before {
-    background: #cccfd6;
+    background: ${p => p.theme.color.lightGray};
     border: unset;
     top: -6px;
     margin-left: -5px;
@@ -65,7 +65,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   }
 
   .rs-slider-graduated > div:nth-child(3)::before {
-    background: #3b4559;
+    background: ${p => p.theme.color.charcoal};
     z-index: 99;
   }
 
@@ -77,20 +77,20 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle:hover,
   .rs-picker-default:not(.rs-picker-disabled) .rs-btn.active,
   .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle.active {
-    border-color: #5e667c !important;
+    border-color: ${p => p.theme.color.slateGray} !important;
   }
 
   .rs-table:not(.rs-table-column-resizing) .rs-table-cell-header .rs-table-cell:hover ~ .rs-table-column-resize-spanner,
   .rs-table:not(.rs-table-column-resizing) .rs-table-column-resize-spanner:hover {
-    background-color: #5e667c;
+    background-color: ${p => p.theme.color.slateGray};
   }
 
   .rs-table-column-resize-spanner::before {
-    border-color: transparent #5e667c transparent transparent;
+    border-color: transparent ${p => p.theme.color.slateGray} transparent transparent;
   }
 
   .rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
-    border: 1px solid #5e667c !important;
+    border: 1px solid ${p => p.theme.color.slateGray} !important;
   }
 
   .rs-picker-toggle.rs-btn-sm {
@@ -109,8 +109,8 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
     color: #f0f0f0;
-    border-color: #3b4559;
-    background-color: #3b4559;
+    border-color: ${p => p.theme.color.charcoal};
+    background-color: ${p => p.theme.color.charcoal};
   }
 
   .rs-calendar-table-cell-in-range::before {
@@ -122,18 +122,18 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     font-size: 13px;
     line-height: 1.42857143;
     border-radius: 2px;
-    color: #fff;
-    background-color: #3b4559;
+    color: ${p => p.theme.color.white};
+    background-color: ${p => p.theme.color.charcoal};
   }
 
   .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled,
   .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover,
   .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled:hover:active {
-    background-color: #3b4559;
+    background-color: ${p => p.theme.color.charcoal};
   }
 
   .rs-picker-toolbar-right-btn-ok:not(.rs-btn-disabled):hover {
-    background-color: #3b4559;
+    background-color: ${p => p.theme.color.charcoal};
   }
 
   .rs-input-group.rs-input-group-inside .rs-input-group-addon {
@@ -154,7 +154,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-table-body-info {
     font-size: 13px;
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-modal-full .rs-modal-dialog {
@@ -180,17 +180,17 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-table-cell[role='columnheader']:focus,
   .rs-table-cell-header:hover,
   .rs-table-cell[role='columnheader']:hover {
-    background: #e5e5eb;
+    background: ${p => p.theme.color.gainsboro};
     color: white;
   }
 
   .rs-table-hover .rs-table-row-header:hover .rs-table-cell-group,
   .rs-table-hover .rs-table-row-header:hover .rs-table-cell {
-    background: #e5e5eb;
+    background: ${p => p.theme.color.gainsboro};
   }
 
   .rs-table-cell[role='columnheader'] > .rs-table-cell-content {
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-table-cell {
@@ -200,7 +200,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-table-cell-content {
     font-size: 13px;
     font-weight: 500;
-    color: #282f3e;
+    color: ${p => p.theme.color.gunMetal};
     padding: 9px 7px;
     text-align: left;
   }
@@ -212,7 +212,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
     padding-left: 15px;
     font-size: 13px;
     font-weight: normal;
-    color: #282f3e;
+    color: ${p => p.theme.color.gunMetal};
   }
 
   .rs-table-scrollbar-handle,
@@ -232,7 +232,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-picker-select-menu-item:not(.rs-picker-select-menu-item-disabled):hover,
   .rs-picker-select-menu-item.rs-picker-select-menu-item-focus,
   .rs-picker-select-menu-item {
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
     font-size: 13px;
     font-weight: normal;
     max-width: 600px;
@@ -244,12 +244,12 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
 
   .rs-picker-select-menu-items.rs-picker-select-menu-group.rs-picker-select-menu-group-title {
     font-size: 13px;
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-picker-toggle-clean,
   .rs-picker-toggle-caret {
-    color: #5e667c;
+    color: ${p => p.theme.color.slateGray};
   }
 
   .rs-picker-check-menu {
@@ -275,7 +275,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   .rs-table-hover .rs-table-row:not(.rs-table-row-header):hover,
   .rs-table-hover .rs-table-row:hover .rs-table-cell-group,
   .rs-table-hover .rs-table-row:hover .rs-table-cell {
-    background: #d4dde7 !important; /* blueYonder 25 */
+    background: ${p => p.theme.color.blueYonder25} !important;
   }
 
   .rs-table-cell,
@@ -295,7 +295,7 @@ export const LegacyRsuiteComponentsWrapper = styled.div`
   }
 
   .hover-border:hover {
-    border-bottom: 1px solid rgb(40, 47, 62);
+    border-bottom: 1px solid ${p => p.theme.color.gunMetal};
     box-sizing: border-box;
   }
 

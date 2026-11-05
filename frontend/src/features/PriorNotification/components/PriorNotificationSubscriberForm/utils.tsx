@@ -3,8 +3,7 @@ import { Accent, Checkbox, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { PriorNotificationSubscriber } from '../../PriorNotificationSubscriber.types'
-import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import type { AccessorColumnDef } from '@tanstack/react-table'
+import type { CellContext, ColumnDef, AccessorColumnDef } from '@tanstack/react-table'
 import type { Promisable } from 'type-fest'
 
 export function getFormDataFromSubscriber(

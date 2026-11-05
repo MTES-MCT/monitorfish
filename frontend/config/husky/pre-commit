@@ -3,6 +3,16 @@ set -e
 # Frontend: lint + format staged files (oxlint --fix / prettier, re-staged by lint-staged).
 npx lint-staged --cwd ./frontend
 
+# Pipeline: run the Python pre-commit config (autoflake / isort / black / flake8) on staged Python files.
+# Husky is the single git hook entry point: do NOT run `pre-commit install`, it would fight with
+# `core.hooksPath` (set by husky) and one of the two would silently stop running.
+pipeline_files=$(git diff --cached --name-only --relative=pipeline --diff-filter=ACMR -- 'pipeline/*.py')
+if [ -n "$pipeline_files" ]; then
+  # Run from pipeline/ so isort/black pick up pipeline/pyproject.toml; paths are relative to it.
+  # shellcheck disable=SC2086
+  (cd pipeline && poetry run pre-commit run --config .pre-commit-config.yaml --files $pipeline_files)
+fi
+
 # Backend: format staged Kotlin files via the standalone ktlint CLI (fast, per-file), re-staged
 # by lint-staged. Skipped entirely when no Kotlin file is staged, so commits stay fast (< 20s).
 if git diff --cached --name-only --diff-filter=ACMR -- '*.kt' '*.kts' | grep -q .; then

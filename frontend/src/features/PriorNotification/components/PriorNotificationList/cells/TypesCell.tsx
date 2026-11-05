@@ -22,7 +22,7 @@ export function TypesCell({ priorNotification }: TypesCellProps) {
 
   const durationClassTypeLabels = [
     ...new Set(priorNotification.types.filter(({ isDurationClass }) => isDurationClass).map(({ name }) => name))
-  ].sort()
+  ].sort((a, b) => a.localeCompare(b))
   const regulatoryTypes = priorNotification.types.filter(({ isDurationClass }) => !isDurationClass)
 
   const sortedTypeLabels =

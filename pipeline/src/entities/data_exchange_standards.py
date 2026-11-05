@@ -7,6 +7,7 @@ class ZippedFileType(Enum):
     UN_JBE = "UN_JBE"
     UN_NVE = "UN_NVE"
     ERS3_NVE = "ERS3_NVE"
+    ERS3_SAL = "ERS3_SAL"
 
 
 class TransmissionFormat(Enum):
@@ -19,6 +20,7 @@ class TransmissionFormat(Enum):
             ZippedFileType.ERS3_JBE: TransmissionFormat.ERS,
             ZippedFileType.ERS3_ACK_JBE: TransmissionFormat.ERS,
             ZippedFileType.ERS3_NVE: TransmissionFormat.ERS,
+            ZippedFileType.ERS3_SAL: TransmissionFormat.ERS,
             ZippedFileType.UN_JBE: TransmissionFormat.FLUX,
             ZippedFileType.UN_NVE: TransmissionFormat.FLUX,
         }
@@ -37,5 +39,6 @@ class DataDomain(Enum):
             ZippedFileType.UN_JBE: DataDomain.LOGBOOK,
             ZippedFileType.UN_NVE: DataDomain.SALES,
             ZippedFileType.ERS3_NVE: DataDomain.SALES,
+            ZippedFileType.ERS3_SAL: DataDomain.SALES,
         }
         return mapping[t]

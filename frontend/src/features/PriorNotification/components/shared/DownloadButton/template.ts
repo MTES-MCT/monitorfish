@@ -1,3 +1,5 @@
+import { THEME } from '@mtes-mct/monitor-ui'
+
 import type { TemplateData } from './types'
 
 export const generateHTML = (data: TemplateData) => `
@@ -110,18 +112,18 @@ export const HTML_STYLE = `
 }
 
 :root {
-    --white: #FFFFFF;
-    --gainsboro: #E5E5EB;
-    --light-gray: #CCCFD6;
-    --cadet-grey: #8E9A9F;
-    --slate-gray: #5E667C;
-    --gunmetal: #282F3E;
-    --maximum-red-15: #FBD9DB;
-    --grullo: #B89B8C;
-    --copper-red: #CF6A4E;
-    --chinese-red: #A13112;
-    --maximum-red: #E1000F;
-    --medium-sea-green: #29B361;
+    --white: ${THEME.color.white};
+    --gainsboro: ${THEME.color.gainsboro};
+    --light-gray: ${THEME.color.lightGray};
+    --cadet-grey: ${THEME.color.cadetGray};
+    --slate-gray: ${THEME.color.slateGray};
+    --gunmetal: ${THEME.color.gunMetal};
+    --maximum-red-15: ${THEME.color.maximumRed15};
+    --grullo: ${THEME.color.grullo};
+    --copper-red: ${THEME.color.copperRed};
+    --chinese-red: ${THEME.color.chineseRed};
+    --maximum-red: ${THEME.color.maximumRed};
+    --medium-sea-green: ${THEME.color.mediumSeaGreen};
 }
 
 html {
@@ -148,7 +150,7 @@ header {
     padding-bottom: 25px;
     padding-right: 64px;
     padding-left: 64px;
-    background-color: #CCCFD6;
+    background-color: var(--light-gray);
     font-size: 10px;
     line-height: 14px;
 }
@@ -228,11 +230,11 @@ h2 {
 
 hr {
     border: 1px solid;
-    color: #CCCFD6;
+    color: var(--light-gray);
 }
 
 .data-label {
-    color: #5E667C;
+    color: var(--slate-gray);
     padding-right: 16px;
     vertical-align: top;
 }
@@ -261,13 +263,13 @@ tr {
 
 .dataframe {
     line-height: 22px;
-    border-color: #CCCFD6;
+    border-color: var(--light-gray);
 }
 
 .dataframe, .dataframe th, .dataframe td {
     border: 1px solid;
     border-collapse: collapse;
-    border-color: #CCCFD6;
+    border-color: var(--light-gray);
     padding-left: 8px;
 }
 
@@ -297,7 +299,7 @@ tr {
 }
 
 footer {
-    color: #5E667C;
+    color: var(--slate-gray);
     line-height: 11x;
     padding-right: 64px;
     padding-left: 64px;

@@ -1,23 +1,23 @@
-import { browserTracingIntegration, init, replayIntegration } from '@sentry/react'
+import { init } from '@sentry/react'
 import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
+import { getSentryOptions } from './libs/getSentryOptions'
 
 import 'rsuite/dist/rsuite.min.css'
 import 'ol/ol.css'
 import '@mtes-mct/monitor-ui/assets/stylesheets/rsuite-override.css'
 
 if (import.meta.env.FRONTEND_SENTRY_DSN && import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS) {
-  init({
-    dsn: import.meta.env.FRONTEND_SENTRY_DSN,
-    environment: import.meta.env.FRONTEND_SENTRY_ENV ?? 'development',
-    integrations: [browserTracingIntegration(), replayIntegration()],
-    release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? 'v0.0.0',
-    replaysOnErrorSampleRate: 1.0,
-    replaysSessionSampleRate: 0.1,
-    tracePropagationTargets: [import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS],
-    tracesSampleRate: 1.0
-  })
+  init(
+    getSentryOptions({
+      dsn: import.meta.env.FRONTEND_SENTRY_DSN,
+      environment: import.meta.env.FRONTEND_SENTRY_ENV ?? 'development',
+      pathname: window.location.pathname,
+      release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? 'v0.0.0',
+      tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
+    })
+  )
 }
 
 const container = document.getElementById('root')

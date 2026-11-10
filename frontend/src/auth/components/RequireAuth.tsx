@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { LoginBackground } from './LoginBackground'
 import { UserAccountContext } from '../../context/UserAccountContext'
 import { ROUTER_PATHS } from '../../paths'
 import { LoadingSpinnerWall } from '../../ui/LoadingSpinnerWall'
@@ -18,9 +18,10 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
   const { isLoading, userAccount } = useGetUserAccount()
   if (isLoading) {
     return (
-      <LoginBackground>
+      // Not the `LoginBackground`: its image would be downloaded on every launch of the app
+      <LoadingWrapper>
         <LoadingSpinnerWall isVesselShowed />
-      </LoginBackground>
+      </LoadingWrapper>
     )
   }
 
@@ -34,3 +35,10 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
 
   return <UserAccountContext.Provider value={userAccount}>{children}</UserAccountContext.Provider>
 }
+
+const LoadingWrapper = styled.div`
+  background: ${p => p.theme.color.charcoal};
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+`

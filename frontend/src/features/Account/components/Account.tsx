@@ -1,11 +1,13 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
+import { switchLightMode } from '@features/LightMode/utils'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
 import { layerActions } from '@features/Map/layer.slice'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
+import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
@@ -28,6 +30,7 @@ export function Account() {
   const { trackEvent } = useTracking()
   const { serviceWorker } = useGetServiceWorker()
   const isSuperUser = useIsSuperUser()
+  const isInLightMode = useIsInLightMode()
   const userAccount = useContext(UserAccountContext)
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
   const isBaseMapCachedLocally = useMainAppSelector(state => state.layer.isBaseMapCachedLocally)
@@ -69,6 +72,15 @@ export function Account() {
       category: 'CACHE',
       name: isSuperUser ? 'CNSP' : 'EXT'
     })
+  }
+
+  const toggleLightMode = (isEnabled: boolean) => {
+    trackEvent({
+      action: isEnabled ? 'Activation du mode connexion lente' : 'Désactivation du mode connexion lente',
+      category: 'LIGHT_MODE',
+      name: isSuperUser ? 'CNSP' : 'EXT'
+    })
+    switchLightMode(isEnabled)
   }
 
   const toggleCacheBaseMap = (isCached: boolean) => {
@@ -139,6 +151,13 @@ export function Account() {
             </MapMenuDialog.Body>
             {userAccount.email && (
               <StyledFooter>
+                <MapPropertyTrigger
+                  booleanProperty={isInLightMode}
+                  booleanVerbs={['Désactiver', 'Activer']}
+                  Icon={Icon.Signal}
+                  text="le mode connexion lente"
+                  updateBooleanProperty={toggleLightMode}
+                />
                 <MapPropertyTrigger
                   booleanProperty={isBaseMapCachedLocally}
                   booleanVerbs={['Ne pas télécharger', 'Télécharger']}

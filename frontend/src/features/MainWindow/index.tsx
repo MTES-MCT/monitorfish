@@ -1,4 +1,5 @@
 import { EnvironmentBox } from '@components/EnvironmentBox'
+import { LightModeSuggestion } from '@features/LightMode/components/LightModeSuggestion'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { MainMap } from '@features/Map/components/MainMap'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
@@ -69,6 +70,7 @@ export function MainWindow() {
       <Wrapper $isEnvironmentBoxVisible={isEnvironmentBoxVisible} id="mainWindowWrapper">
         <EnvironmentBox />
         <BannerStack />
+        <LightModeSuggestion />
         <StartupNotification />
 
         <VesselFiltersHeadband />

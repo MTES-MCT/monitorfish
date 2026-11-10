@@ -76,7 +76,7 @@ export function ControlDetails({ control, isSelected }: ControlDetailsProps) {
             {control.flagState && (
               <Flag
                 rel="preload"
-                src={`flags/${control.flagState.toLowerCase()}.svg`}
+                src={`flags/${control.flagState.toLowerCase()}.webp`}
                 style={{ marginLeft: 8, marginTop: -2, width: 17 }}
                 title={countries.getName(control.flagState.toLowerCase(), 'fr')}
               />

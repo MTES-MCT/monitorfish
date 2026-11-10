@@ -60,7 +60,7 @@ export function VesselName({ focusOnVesselSearchInput }) {
     >
       {selectedVesselIdentity?.flagState && (
         <Flag
-          src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.svg`}
+          src={`flags/${selectedVesselIdentity.flagState.toLowerCase()}.webp`}
           title={countries.getName(selectedVesselIdentity.flagState, 'fr')}
         />
       )}

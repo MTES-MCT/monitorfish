@@ -224,7 +224,7 @@ export function IUUReportingMapForm() {
                 <Icon.Report color={THEME.color.white} />
                 <StyledTitle>
                   {!!flagState && flagState !== UNKNOWN_VESSEL.flagState && (
-                    <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.svg`} />
+                    <Flag rel="preload" src={`flags/${flagState?.toLowerCase()}.webp`} />
                   )}
                   {title}
                 </StyledTitle>

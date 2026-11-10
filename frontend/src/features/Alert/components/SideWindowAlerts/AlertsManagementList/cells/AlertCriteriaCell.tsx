@@ -93,7 +93,7 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
               <span key={vessel.internalReferenceNumber} title={vessel.internalReferenceNumber}>
                 <Flag
                   rel="preload"
-                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.svg`}
+                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.webp`}
                   style={{ marginLeft: 5, marginRight: 5, marginTop: -1, width: 13 }}
                   title={countries.getName(vessel.flagState.toLowerCase(), 'fr')}
                 />
@@ -111,7 +111,7 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
               <span key={vessel.internalReferenceNumber} title={vessel.internalReferenceNumber}>
                 <Flag
                   rel="preload"
-                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.svg`}
+                  src={`${baseUrl ? `${baseUrl}/` : ''}flags/${vessel.flagState.toLowerCase()}.webp`}
                   style={{ marginLeft: 5, marginRight: 5, marginTop: -1, width: 13 }}
                   title={countries.getName(vessel.flagState.toLowerCase(), 'fr')}
                 />

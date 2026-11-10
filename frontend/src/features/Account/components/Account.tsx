@@ -128,9 +128,6 @@ export function Account() {
             </StyledHeader>
             <MapMenuDialog.Body>
               {userAccount.email ?? 'Vous n’êtes pas connecté'}
-              <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount?.logout}>
-                Se déconnecter
-              </StyledButton>
               {isSuperUser && (
                 <StyledButton
                   accent={Accent.SECONDARY}
@@ -142,6 +139,9 @@ export function Account() {
                   Accéder au backoffice
                 </StyledButton>
               )}
+              <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount?.logout}>
+                Se déconnecter
+              </StyledButton>
               {isBaseMapCachedLocally && (
                 <>
                   <hr />

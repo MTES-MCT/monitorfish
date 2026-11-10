@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it } from '@jest/globals'
-import { getArea, getIntersection, type Extent } from 'ol/extent'
 import { get as getProjection } from 'ol/proj'
 
 import { getAdministrativeZoneFromAPI } from '../../../../api/geoserver'
 import { getVectorOLLayer } from '../utils'
+
+import type { Extent } from 'ol/extent'
 
 jest.mock('../../../../api/geoserver', () => ({
   getAdministrativeZoneFromAPI: jest.fn(() => Promise.resolve({ features: [], type: 'FeatureCollection' }))
@@ -25,8 +26,9 @@ const RESOLUTION_AT_ZOOM_7 = 1222.99
 const RESOLUTION_AT_ZOOM_9 = 305.75
 // A 1400x900 px viewport over Brittany at zoom 7
 const BRITTANY_EXTENT: Extent = [-1_350_000, 5_700_000, 362_000, 6_800_000]
-const PANNED_EXTENT: Extent = [-1_200_000, 5_750_000, 512_000, 6_850_000]
+const INSIDE_BRITTANY_EXTENT: Extent = [-1_200_000, 5_750_000, 200_000, 6_700_000]
 const ZOOMED_IN_EXTENT: Extent = [-700_000, 6_000_000, -270_000, 6_280_000]
+const MEDITERRANEAN_EXTENT: Extent = [300_000, 4_800_000, 2_000_000, 5_900_000]
 
 const getRequestedExtents = (): Extent[] => getAdministrativeZoneFromAPIMock.mock.calls.map(call => call[1] as Extent)
 
@@ -35,29 +37,39 @@ describe('AdministrativeZone/layers/utils', () => {
     getAdministrativeZoneFromAPIMock.mockClear()
   })
 
-  it('Should not download again the zones of an area already downloaded, when moving or zooming in the map', async () => {
+  it('Should download the zones of the visible extent in a single request', async () => {
     const source = getVectorOLLayer('cgpm_areas', undefined).getSource()!
 
     source.loadFeatures(BRITTANY_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
     await flushPromises()
-    const firstDisplayExtents = getRequestedExtents()
 
-    source.loadFeatures(PANNED_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
+    // Large zones (as EEZ or FAO areas) would be downloaded once per tile with a tile strategy
+    expect(getRequestedExtents()).toEqual([BRITTANY_EXTENT])
+  })
+
+  it('Should not download again the zones of an extent already downloaded, when moving or zooming in it', async () => {
+    const source = getVectorOLLayer('cgpm_areas', undefined).getSource()!
+    source.loadFeatures(BRITTANY_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
+    await flushPromises()
+
+    source.loadFeatures(INSIDE_BRITTANY_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
+    source.loadFeatures(ZOOMED_IN_EXTENT, RESOLUTION_AT_ZOOM_9, PROJECTION)
+    await flushPromises()
+
+    expect(getRequestedExtents()).toEqual([BRITTANY_EXTENT])
+  })
+
+  it('Should download the zones of a new extent, keeping the ones already downloaded', async () => {
+    const source = getVectorOLLayer('cgpm_areas', undefined).getSource()!
+    source.loadFeatures(BRITTANY_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
+    await flushPromises()
+
+    source.loadFeatures(MEDITERRANEAN_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
     await flushPromises()
     source.loadFeatures(BRITTANY_EXTENT, RESOLUTION_AT_ZOOM_7, PROJECTION)
     await flushPromises()
-    source.loadFeatures(ZOOMED_IN_EXTENT, RESOLUTION_AT_ZOOM_9, PROJECTION)
-    await flushPromises()
-    const nextExtents = getRequestedExtents().slice(firstDisplayExtents.length)
 
-    expect(firstDisplayExtents.length).toBeGreaterThan(0)
-    // Tiles exceeding the visible extent are downloaded, but not much more
-    const firstDisplayArea = firstDisplayExtents.reduce((total, extent) => total + getArea(extent), 0)
-    expect(firstDisplayArea / getArea(BRITTANY_EXTENT)).toBeLessThan(3)
-    // Only the areas not yet downloaded are requested
-    const reDownloadedArea = nextExtents
-      .flatMap(nextExtent => firstDisplayExtents.map(firstExtent => getIntersection(nextExtent, firstExtent)))
-      .reduce((total, intersection) => total + getArea(intersection), 0)
-    expect(reDownloadedArea).toBe(0)
+    // Back to Brittany: still displayed, not downloaded again
+    expect(getRequestedExtents()).toEqual([BRITTANY_EXTENT, MEDITERRANEAN_EXTENT])
   })
 })

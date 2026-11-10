@@ -1,9 +1,8 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
-import { all, tile as tileStrategy } from 'ol/loadingstrategy'
+import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
-import { createXYZ } from 'ol/tilegrid'
 
 import { getAdministrativeLayerStyle } from './styles/administrativeLayer.style'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
@@ -57,13 +56,10 @@ function buildWholeVectorSource(type: string, zone: string | undefined): VectorS
 }
 
 /**
- * Zones are downloaded by tiles: moving the map only downloads the tiles not yet downloaded (instead of the whole
- * visible extent), and the same URLs can be cached.
- * Capped at a low zoom level, so zooming in reuses the same tiles (tiles of different levels are never considered
- * as included in one another by OpenLayers, due to floating point errors).
+ * The zones of the visible extent are downloaded in a single request (a tile strategy would download large zones,
+ * as EEZ or FAO areas, once per tile). The downloaded zones are kept: moving or zooming in an extent
+ * already downloaded does not download them again.
  */
-const ADMINISTRATIVE_ZONES_TILE_GRID = createXYZ({ maxZoom: 6, tileSize: 512 })
-
 function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource<Feature<Geometry>>({
     format: new GeoJSON<Feature<Geometry>>({
@@ -73,7 +69,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
     loader: extent => {
       getAdministrativeZoneFromAPI(type, extent, zone)
         .then(administrativeZone => {
-          // Features overlapping several tiles are only added once, as they have the same id
+          // Features of overlapping extents are only added once, as they have the same id
           const features = vectorSource.getFormat()?.readFeatures(administrativeZone)
           if (!features) {
             return
@@ -85,7 +81,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
           vectorSource.removeLoadedExtent(extent)
         })
     },
-    strategy: tileStrategy(ADMINISTRATIVE_ZONES_TILE_GRID)
+    strategy: bboxStrategy
   })
 
   return vectorSource

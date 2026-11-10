@@ -350,8 +350,18 @@ stop-data-warehouse:
 	export DATA_WAREHOUSE_INPUT_DATA_FOLDER=$(DATA_WAREHOUSE_INPUT_DATA_FOLDER) && \
 	docker compose -f ./pipeline/tests/docker-compose.yml down -v
 
+# In CI, DATA_WAREHOUSE_DEPLOY_KEY_FILE is set to clone the private repository over SSH with a deploy key.
+# Locally, it is unset and the repository is cloned over HTTPS as before.
+ifdef DATA_WAREHOUSE_DEPLOY_KEY_FILE
+DATA_WAREHOUSE_GIT_ENV=GIT_SSH_COMMAND="ssh -i $(DATA_WAREHOUSE_DEPLOY_KEY_FILE) -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+DATA_WAREHOUSE_GIT_URL=git@github.com:MTES-MCT/fisheries-and-environment-data-warehouse.git
+else
+DATA_WAREHOUSE_GIT_ENV=
+DATA_WAREHOUSE_GIT_URL=https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse.git
+endif
+
 fetch-external-data-prefect-3:
-	git clone --depth=1 --branch=main https://github.com/MTES-MCT/fisheries-and-environment-data-warehouse.git ./pipeline/tests/test_data/external/data_warehouse || echo "Data Warehouse repository already present - skipping git clone"
+	$(DATA_WAREHOUSE_GIT_ENV) git clone --depth=1 --branch=main $(DATA_WAREHOUSE_GIT_URL) ./pipeline/tests/test_data/external/data_warehouse || echo "Data Warehouse repository already present - skipping git clone"
 
 erase-external-data-prefect-3:
 	rm -rf pipeline/tests/test_data/external/data_warehouse

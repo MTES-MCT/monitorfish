@@ -73,8 +73,13 @@ jobs:
       - name: Set DOCKER_GROUP
         run: echo "DOCKER_GROUP=$(getent group docker | cut --delimiter=":" -f3)" >> $GITHUB_ENV
 
+      - name: Write data warehouse deploy key
+        run: |
+          install -m 600 /dev/null "$RUNNER_TEMP/data_warehouse_deploy_key"
+          echo "${{ secrets.DATA_WAREHOUSE_DEPLOY_KEY }}" > "$RUNNER_TEMP/data_warehouse_deploy_key"
+
       - name: Test docker image
-        run: make docker-test-pipeline-prefect-3
+        run: make docker-test-pipeline-prefect-3 DATA_WAREHOUSE_DEPLOY_KEY_FILE="$RUNNER_TEMP/data_warehouse_deploy_key"
 
       - name: Push docker image to registry
         if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v1') || startsWith(github.ref, 'refs/heads/v1') || startsWith(github.ref, 'refs/tags/v2') || startsWith(github.ref, 'refs/heads/v2')

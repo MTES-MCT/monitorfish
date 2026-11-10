@@ -1,29 +1,32 @@
 import { VESSELS_VECTOR_LAYER, VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
-import { vesselSelectors } from '@features/Vessel/slice'
+import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { selectFilteredVesselFeatureIdsSet, vesselSelectors } from '@features/Vessel/slice'
+import { getDisplayedVesselGroups } from '@features/Vessel/useCases/rendering/getDisplayedVesselGroups'
 import { renderLayersDependingOnVesselLayer } from '@features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer'
 import { buildFeature } from '@features/Vessel/utils'
 import { selectVesselGroupsIdsFiltered } from '@features/VesselGroup/slice'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
-
+import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
-export const renderVesselFeatures = (): MainAppThunk => async (dispatch, getState) => {
+export const renderVesselFeatures = (): MainAppThunk => (dispatch, getState) => {
   const { vesselGroupsIdsDisplayed, vesselGroupsIdsPinned } = getState().vesselGroup
   const vesselGroupsIdsFiltered = selectVesselGroupsIdsFiltered(getState())
   const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
+  const filteredVesselFeatureIds = selectFilteredVesselFeatureIdsSet(getState())
 
-  const vesselsWithPositionAndDisplayedVesselsGroups =
-    await MonitorFishWorker.getActiveVesselsWithPositionAndDisplayedVesselsGroups(
-      vessels,
-      vesselGroupsIdsDisplayed,
-      vesselGroupsIdsPinned,
-      vesselGroupsIdsFiltered
+  const features = vessels
+    .filter(
+      (vessel): vessel is Vessel.ActiveVesselEmittingPosition => vessel.activityType === ActivityType.POSITION_BASED
     )
-
-  const features = vesselsWithPositionAndDisplayedVesselsGroups
-    .map(([vessel, displayedGroups]) => buildFeature(vessel, displayedGroups))
+    .map(vessel =>
+      buildFeature(
+        vessel,
+        getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned, vesselGroupsIdsFiltered),
+        filteredVesselFeatureIds.has(vessel.vesselFeatureId)
+      )
+    )
     .filter((feature): feature is NonNullable<typeof feature> => feature !== undefined)
 
   VESSELS_VECTOR_SOURCE.clear(true)

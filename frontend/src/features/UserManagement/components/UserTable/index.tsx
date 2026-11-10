@@ -1,7 +1,7 @@
 import { ConfirmationModal } from '@components/ConfirmationModal'
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
 import { BackOfficeHeader } from '@features/BackOffice/components/BackOfficeHeader'
-import { Accent, Button, DataTable, Icon, Select, TextInput, pluralize } from '@mtes-mct/monitor-ui'
+import { DataTable, Dropdown, Icon, Select, TextInput, pluralize } from '@mtes-mct/monitor-ui'
 import { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -133,14 +133,12 @@ export function UserTable() {
                 value={filters.activity}
               />
             </Filters>
-            <Actions>
-              <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={() => setIsAddDialogOpen(true)}>
-                Ajouter un utilisateur
-              </Button>
-              <Button accent={Accent.PRIMARY} Icon={Icon.Download} onClick={() => setIsReplaceDialogOpen(true)}>
+            <StyledDropdown Icon={Icon.Plus} placement="bottomEnd" title="Ajouter des utilisateurs">
+              <Dropdown.Item onClick={() => setIsAddDialogOpen(true)}>Ajouter un utilisateur</Dropdown.Item>
+              <Dropdown.Item onClick={() => setIsReplaceDialogOpen(true)}>
                 Importer une administration externe
-              </Button>
-            </Actions>
+              </Dropdown.Item>
+            </StyledDropdown>
           </Toolbar>
 
           <TableLegend data-cy="users-results">
@@ -211,10 +209,8 @@ const Filters = styled.div`
   }
 `
 
-const Actions = styled.div`
-  display: flex;
+const StyledDropdown = styled(Dropdown)`
   flex-shrink: 0;
-  gap: 8px;
 `
 
 const TableLegend = styled.p`

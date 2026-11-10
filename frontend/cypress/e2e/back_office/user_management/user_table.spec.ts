@@ -61,6 +61,7 @@ context('BackOffice > Users', () => {
       .should('be.disabled')
 
     // Add a CNSP user and grant its administrator rights
+    cy.clickButton('Ajouter des utilisateurs')
     cy.clickButton('Ajouter un utilisateur')
     cy.fill('E-mail', 'another@email.com')
     cy.get('.Component-Dialog').contains('Cet utilisateur existe déjà.')
@@ -113,6 +114,7 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable').should('not.contain', 'new.agent@email.gouv.fr')
 
     // Removing all the users of an administration must be confirmed
+    cy.clickButton('Ajouter des utilisateurs')
     cy.clickButton('Importer une administration externe')
     cy.fill('Administration', 'Gendarmerie maritime')
 
@@ -125,6 +127,7 @@ context('BackOffice > Users', () => {
     cy.clickButton('Annuler')
 
     // Add an external user
+    cy.clickButton('Ajouter des utilisateurs')
     cy.clickButton('Ajouter un utilisateur')
     cy.fill('E-mail', 'gendarme@gendarmerie.interieur.gouv.fr')
     cy.fill('Type d’utilisateur', 'Externe')
@@ -141,6 +144,7 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable').contains('gendarme@gendarmerie.interieur.gouv.fr')
 
     // Import the emails of an administration from a CSV file
+    cy.clickButton('Ajouter des utilisateurs')
     cy.clickButton('Importer une administration externe')
     cy.fill('Administration', 'Douane')
 

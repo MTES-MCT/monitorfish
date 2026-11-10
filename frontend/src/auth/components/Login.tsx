@@ -75,7 +75,7 @@ export function Login() {
 
 const Main = styled.main`
   flex: 1 0 auto;
-  background: url('landing_background.png') no-repeat center center;
+  background: url('landing_background.webp') no-repeat center center;
   background-size: cover;
 `
 

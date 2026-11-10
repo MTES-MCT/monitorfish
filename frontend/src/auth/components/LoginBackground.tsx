@@ -10,7 +10,7 @@ export const LoginBackground = styled.div`
   flex-direction: column;
   align-items: center;
 
-  background: url('landing_background.png') no-repeat center center fixed;
+  background: url('landing_background.webp') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

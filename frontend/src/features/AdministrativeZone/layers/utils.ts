@@ -1,8 +1,9 @@
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@features/Map/constants'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorImageLayer from 'ol/layer/VectorImage'
-import { all, bbox as bboxStrategy } from 'ol/loadingstrategy'
+import { all, tile as tileStrategy } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
+import { createXYZ } from 'ol/tilegrid'
 
 import { getAdministrativeLayerStyle } from './styles/administrativeLayer.style'
 import { getAdministrativeZoneFromAPI } from '../../../api/geoserver'
@@ -55,6 +56,14 @@ function buildWholeVectorSource(type: string, zone: string | undefined): VectorS
   return vectorSource
 }
 
+/**
+ * Zones are downloaded by tiles: moving the map only downloads the tiles not yet downloaded (instead of the whole
+ * visible extent), and the same URLs can be cached.
+ * Capped at a low zoom level, so zooming in reuses the same tiles (tiles of different levels are never considered
+ * as included in one another by OpenLayers, due to floating point errors).
+ */
+const ADMINISTRATIVE_ZONES_TILE_GRID = createXYZ({ maxZoom: 6, tileSize: 512 })
+
 function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource<Feature<Geometry>>({
     format: new GeoJSON<Feature<Geometry>>({
@@ -64,7 +73,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
     loader: extent => {
       getAdministrativeZoneFromAPI(type, extent, zone)
         .then(administrativeZone => {
-          vectorSource.clear(true)
+          // Features overlapping several tiles are only added once, as they have the same id
           const features = vectorSource.getFormat()?.readFeatures(administrativeZone)
           if (!features) {
             return
@@ -76,7 +85,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
           vectorSource.removeLoadedExtent(extent)
         })
     },
-    strategy: bboxStrategy
+    strategy: tileStrategy(ADMINISTRATIVE_ZONES_TILE_GRID)
   })
 
   return vectorSource

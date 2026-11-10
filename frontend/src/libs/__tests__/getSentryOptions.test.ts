@@ -4,8 +4,21 @@ import { getSentryOptions } from '../getSentryOptions'
 
 import type { BrowserOptions } from '@sentry/react'
 
-const getIntegrationNames = (options: BrowserOptions) =>
-  (options.integrations as Array<{ name: string }>).map(integration => integration.name)
+type Integration = Parameters<Extract<NonNullable<BrowserOptions['integrations']>, (...args: any[]) => any>>[0][number]
+
+// A subset of the default integrations of `@sentry/react`
+const DEFAULT_INTEGRATIONS = [
+  { name: 'BrowserSession' },
+  { name: 'Dedupe' },
+  { name: 'GlobalHandlers' }
+] as Integration[]
+
+const getIntegrationNames = (options: BrowserOptions) => {
+  const integrations =
+    typeof options.integrations === 'function' ? options.integrations(DEFAULT_INTEGRATIONS) : options.integrations
+
+  return (integrations ?? []).map(integration => integration.name)
+}
 
 const ENV = {
   dsn: 'https://key@sentry.example/1',
@@ -27,6 +40,14 @@ describe('getSentryOptions()', () => {
     expect(options.replaysSessionSampleRate).toBe(0)
     expect(options.replaysOnErrorSampleRate).toBe(1)
     expect(getIntegrationNames(options)).toContain('Replay')
+  })
+
+  it('Should track a single session per page load, not one per map move (the URL hash changes)', () => {
+    const options = getSentryOptions({ ...ENV, pathname: '/' })
+
+    expect(getIntegrationNames(options)).not.toContain('BrowserSession')
+    expect(getIntegrationNames(options)).toContain('PageLoadSession')
+    expect(getIntegrationNames(options)).toEqual(expect.arrayContaining(['Dedupe', 'GlobalHandlers']))
   })
 
   it('Should not record replays in the light (low-bandwidth) mode', () => {

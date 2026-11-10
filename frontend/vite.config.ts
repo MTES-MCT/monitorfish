@@ -4,9 +4,23 @@ import importMetaEnv from '@import-meta-env/unplugin'
 import replace from '@rollup/plugin-replace'
 import react from '@vitejs/plugin-react'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { fileURLToPath } from 'url'
 import { defineConfig, type PluginOption } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
+
+/**
+ * monitor-ui can't be tree-shaken (single module): the worker would bundle the whole library for a few helpers.
+ * @see src/workers/monitorUiWorkerShim.ts
+ */
+const monitorUiWorkerShim: PluginOption = {
+  enforce: 'pre',
+  name: 'monitor-ui-worker-shim',
+  resolveId: source =>
+    source === '@mtes-mct/monitor-ui'
+      ? fileURLToPath(new URL('./src/workers/monitorUiWorkerShim.ts', import.meta.url))
+      : undefined
+}
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
@@ -61,7 +75,7 @@ export default defineConfig({
     })
   ],
   worker: {
-    plugins: () => [viteTsconfigPaths()]
+    plugins: () => [monitorUiWorkerShim, viteTsconfigPaths()]
   },
 
   server: {

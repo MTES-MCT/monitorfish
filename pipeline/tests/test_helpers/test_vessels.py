@@ -43,10 +43,10 @@ def test_make_add_vessels_columns_query(reset_test_data):
 def test_make_find_vessels_query(reset_test_data):
     vessels = pd.DataFrame(
         {
-            "cfr": ["A", "B", "C", None],
-            "ircs": ["AA", None, "duplicated", "duplicated"],
-            "external_immatriculation": ["AAA", None, "CCC", None],
-            "other_vessels_data": ["a", "b", "c", "d"],
+            "cfr": ["AA", "BB", "CC", None, "D"],
+            "ircs": ["AAA", None, "duplicated", "duplicated", "X"],
+            "external_immatriculation": ["AAAA", None, "CCCC", None, ""],
+            "other_vessels_data": ["a", "b", "c", "d", "e"],
         }
     )
 
@@ -63,9 +63,9 @@ def test_make_find_vessels_query(reset_test_data):
         "public.vessels.ircs, "
         "public.vessels.external_immatriculation \n"
         "FROM public.vessels \n"
-        "WHERE public.vessels.cfr IN ('A', 'B', 'C') OR "
-        "public.vessels.external_immatriculation IN ('AAA', 'CCC') OR "
-        "public.vessels.ircs IN ('AA', 'duplicated')"
+        "WHERE public.vessels.cfr IN ('AA', 'BB', 'CC') OR "
+        "public.vessels.external_immatriculation IN ('AAAA', 'CCCC') OR "
+        "public.vessels.ircs IN ('AAA', 'duplicated')"
     )
 
     assert query_string == expected_query_string

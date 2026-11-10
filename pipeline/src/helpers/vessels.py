@@ -86,17 +86,22 @@ def make_find_vessels_query(
     assert "ircs" in vessels
     assert "external_immatriculation" in vessels
 
+    def searched_identifiers(column: str) -> list:
+        """Non-null identifiers with a length strictly greater than 1."""
+        values = vessels[column].dropna().drop_duplicates()
+        return values[values.astype(str).str.len() > 1].to_list()
+
     q = select(
         vessels_table.c.id.label("vessel_id"),
         vessels_table.c.cfr,
         vessels_table.c.ircs,
         vessels_table.c.external_immatriculation,
     ).where(
-        vessels_table.c.cfr.in_(vessels.cfr.dropna().drop_duplicates().to_list())
+        vessels_table.c.cfr.in_(searched_identifiers("cfr"))
         | vessels_table.c.external_immatriculation.in_(
-            vessels.external_immatriculation.dropna().drop_duplicates().to_list()
+            searched_identifiers("external_immatriculation")
         )
-        | vessels_table.c.ircs.in_(vessels.ircs.dropna().drop_duplicates().to_list())
+        | vessels_table.c.ircs.in_(searched_identifiers("ircs"))
     )
 
     return q

@@ -9,6 +9,7 @@ object CacheName {
     const val ACTIVE_PORTS = "active_ports"
     const val ACTIVE_VESSEL = "active_vessel"
     const val ACTIVE_VESSELS = "active_vessels"
+    const val ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS = "active_vessels_without_vessel_groups"
     const val ALL_SPECIES = "all_species"
     const val ALL_SPECIES_GROUPS = "all_species_groups"
     const val ALL_TRIPS = "all_trips"

@@ -21,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.BeaconRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LastPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookRawMessageRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.ManualPriorNotificationRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ProducerOrganizationMembershipRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
@@ -56,6 +57,7 @@ class GetVesselUTests {
 
     @Mock
     private val reportingRepository: ReportingRepository = mock()
+    private val manualPriorNotificationRepository: ManualPriorNotificationRepository = mock()
 
     @MockitoBean
     private lateinit var vesselRepository: VesselRepository
@@ -132,6 +134,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -216,6 +223,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -260,6 +272,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",
@@ -307,6 +324,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -351,6 +373,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = null,
                     internalReferenceNumber = "FR224226850",
@@ -483,6 +510,11 @@ class GetVesselUTests {
                     vesselProfileRepository = vesselProfileRepository,
                     lastPositionRepository = lastPositionRepository,
                     reportingRepository = reportingRepository,
+                    getVesselLandingPort =
+                        GetVesselLandingPort(
+                            logbookReportRepository,
+                            manualPriorNotificationRepository,
+                        ),
                 ).execute(
                     vesselId = 123,
                     internalReferenceNumber = "FR224226850",

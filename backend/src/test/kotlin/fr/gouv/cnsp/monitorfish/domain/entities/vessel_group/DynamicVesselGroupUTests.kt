@@ -1119,4 +1119,75 @@ class DynamicVesselGroupUTests {
         // Then
         assertThat(containsVessel).isFalse
     }
+
+    @Test
+    fun `containsActiveVessel should return false when landing port locode filter is set and the vessel has no landing port`() {
+        // Given
+        val landingPortLocode = "FRLEH"
+        val landingPortLocodesFilter = listOf(landingPortLocode)
+        val vessel =
+            EnrichedActiveVessel(
+                lastPosition = null,
+                vesselProfile = DUMMY_VESSEL_PROFILE,
+                vessel =
+                    Vessel(
+                        id = 123,
+                        internalReferenceNumber = "FR224226850",
+                        vesselName = "MY AWESOME VESSEL",
+                        flagState = CountryCode.FR,
+                        declaredFishingGears = listOf("Trémails"),
+                        vesselType = "Fishing",
+                        underCharter = true,
+                        hasLogbookEsacapt = false,
+                    ),
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+                landingPort = null,
+            )
+
+        val group =
+            DynamicVesselGroup(
+                id = 1,
+                isDeleted = false,
+                name = "Dummy group",
+                description = "",
+                pointsOfAttention = "",
+                color = "",
+                sharing = Sharing.PRIVATE,
+                createdBy = "dummy@email.gouv.fr",
+                createdAtUtc = ZonedDateTime.now(),
+                updatedAtUtc = null,
+                endOfValidityUtc = null,
+                startOfValidityUtc = null,
+                filters =
+                    VesselGroupFilters(
+                        countryCodes = listOf(),
+                        districtCodes = listOf(),
+                        fleetSegments = emptyList(),
+                        emitsPositions = listOf(),
+                        gearCodes = emptyList(),
+                        hasLogbook = null,
+                        lastControlAtQuayPeriod = null,
+                        lastControlAtSeaPeriod = null,
+                        landingPortLocodes = landingPortLocodesFilter,
+                        lastPositionHoursAgo = null,
+                        producerOrganizations = emptyList(),
+                        riskFactors = emptyList(),
+                        specyCodes = emptyList(),
+                        vesselSize = null,
+                        vesselsLocation = emptyList(),
+                        zones = emptyList(),
+                    ),
+            )
+
+        // When
+        val containsVessel =
+            group.containsActiveVessel(
+                activeVessel = vessel,
+                now = ZonedDateTime.now(),
+            )
+
+        // Then
+        assertThat(containsVessel).isFalse
+    }
 }

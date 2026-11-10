@@ -74,9 +74,9 @@ data class DynamicVesselGroup(
         activeVessel: EnrichedActiveVessel,
         now: ZonedDateTime,
     ): Boolean {
-        val hasLandingPort = activeVessel.landingPort != null
+        // As the vessel list filter: a vessel without landing port does not match a landing port filter
         val hasLandingPortMatch =
-            if (hasLandingPort) activeVessel.landingPort.isInGroup(vesselGroup = this) else true
+            filters.landingPortLocodes.isEmpty() || activeVessel.landingPort?.isInGroup(vesselGroup = this) == true
 
         val emitsPositions = filters.emitsPositions.singleOrNull()
         val hasPositionsMatch =

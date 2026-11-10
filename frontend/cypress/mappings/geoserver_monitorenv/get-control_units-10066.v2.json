@@ -27,8 +27,10 @@
           "id": 165,
           "controlUnitId": 10066,
           "email": "ddtm-samel@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 64 85 06"
+          "name": null,
+          "phone": "02 97 64 85 06",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         }
       ],
       "controlUnitResourceIds": [

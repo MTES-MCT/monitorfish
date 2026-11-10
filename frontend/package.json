@@ -46,20 +46,9 @@
     "ws": ">=7.5.10",
     "@remix-run/router": "1.23.2",
     "picomatch": "4.0.4",
+    "typescript": "$typescript",
+    "eslint": "$eslint",
     "@babel/plugin-transform-runtime": "^7.29.0",
-    "eslint-plugin-typescript-sort-keys": {
-      "eslint": "$eslint",
-      "typescript": "$typescript"
-    },
-    "@typescript-eslint/eslint-plugin": {
-      "typescript": "$typescript"
-    },
-    "tsconfck": {
-      "typescript": "$typescript"
-    },
-    "@typescript-eslint/parser": {
-      "typescript": "$typescript"
-    },
     "@mtes-mct/monitor-ui": {
       "cypress": "$cypress"
     },
@@ -71,7 +60,7 @@
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/modifiers": "6.0.1",
     "@gouvfr/dsfr": "1.15.3",
-    "@mtes-mct/monitor-ui": "24.60.2",
+    "@mtes-mct/monitor-ui": "24.63.0",
     "@reduxjs/toolkit": "2.13.0",
     "@sentry/react": "8.53.0",
     "@tanstack/react-table": "8.21.3",

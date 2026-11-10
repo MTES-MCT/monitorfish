@@ -1,5 +1,6 @@
 // https://github.com/bondz/react-epic-spinners/blob/c5b731c58edd75a93753ab95857dbc633e387fb1/src/components/LoopingRhombusesSpinner.js
 
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import type { HTMLAttributes } from 'react'
@@ -19,7 +20,7 @@ type LoopingRhombusesSpinnerProps = Readonly<
 export function LoopingRhombusesSpinner({
   animationDuration = 2500,
   className = '',
-  color = '#fff',
+  color = THEME.color.white,
   size = 15,
   ...props
 }: LoopingRhombusesSpinnerProps) {

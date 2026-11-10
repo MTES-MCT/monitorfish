@@ -74,7 +74,7 @@ const RegulationModal = styled.div<{
   width: 100%;
   height: 100vh;
   z-index: 1000;
-  background-color: rgba(59, 69, 89, 0.5);
+  background-color: ${p => p.theme.color.charcoalShadow};
   position: fixed;
   top: 0;
 `

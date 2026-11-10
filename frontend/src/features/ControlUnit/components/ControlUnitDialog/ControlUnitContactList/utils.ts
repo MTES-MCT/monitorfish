@@ -26,19 +26,21 @@ export function sortControlUnitContactsByQualifiedName(
 }
 
 export function formatPhoneNumber(phoneNumber: string) {
-  if (phoneNumber.startsWith('00')) {
-    if (phoneNumber.length === 12) {
-      return phoneNumber.match(/.{1,2}/g)?.join(' ')
+  const trimmedPhoneNumber = phoneNumber.split(' ').join('')
+
+  if (trimmedPhoneNumber.startsWith('00')) {
+    if (trimmedPhoneNumber.length === 12) {
+      return trimmedPhoneNumber.match(/.{1,2}/g)?.join(' ')
     }
 
-    return `00 ${phoneNumber
+    return `00 ${trimmedPhoneNumber
       .slice(2)
       .match(/.{1,3}/g)
       ?.join(' ')}`
   }
-  if (phoneNumber.startsWith('0')) {
-    return phoneNumber.match(/.{1,2}/g)?.join(' ')
+  if (trimmedPhoneNumber.startsWith('0')) {
+    return trimmedPhoneNumber.match(/.{1,2}/g)?.join(' ')
   }
 
-  return phoneNumber.match(/.{1,3}/g)?.join(' ')
+  return trimmedPhoneNumber.match(/.{1,3}/g)?.join(' ')
 }

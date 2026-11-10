@@ -8,9 +8,11 @@
       "request": {
         "method": "POST",
         "url": "/api/v2/control_unit_contacts",
-        "bodyPatterns" : [ {
-          "matches": ".*\"foo@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"foo@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 201,
@@ -21,12 +23,14 @@
         },
         "jsonBody": {
           "id": 1077,
+          "cellPhone": "0623456789",
           "controlUnitId": 10484,
           "email": "foo@example.org",
           "isEmailSubscriptionContact": true,
           "isSmsSubscriptionContact": true,
-          "name": "ADJUNCT",
-          "phone": "0123456789"
+          "name": null,
+          "phone": null,
+          "role": "ADJUNCT"
         }
       }
     },
@@ -66,25 +70,31 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "role": "UNKNOWN",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "role": "OPERATIONAL_CENTER",
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
+              "cellPhone": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
               "phone": "09 70 27 51 94"
@@ -95,17 +105,21 @@
               "email": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "name": null,
+              "phone": null,
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
+              "cellPhone": "0623456789",
               "controlUnitId": 10484,
               "email": "foo@example.org",
               "isEmailSubscriptionContact": true,
               "isSmsSubscriptionContact": true,
               "name": "ADJUNCT",
-              "phone": "0123456789"
+              "phone": null,
+              "role": "ADJUNCT"
             }
           ],
           "controlUnitResourceIds": [
@@ -154,9 +168,11 @@
       "request": {
         "method": "PATCH",
         "urlPattern": "/api/v1/control_unit_contacts/1077",
-        "bodyPatterns" : [ {
-          "matches": ".*\"bar@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"bar@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 200,
@@ -169,12 +185,14 @@
         },
         "jsonBody": {
           "id": 1077,
+          "cellPhone": "0606060606",
           "controlUnitId": 10484,
           "email": "bar@example.org",
           "isEmailSubscriptionContact": true,
           "isSmsSubscriptionContact": true,
-          "name": "BRIDGE",
-          "phone": "9876543210"
+          "name": "my name",
+          "phone": null,
+          "role": "BRIDGE"
         }
       }
     },
@@ -214,28 +232,34 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "role": "UNKNOWN",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "role": "OPERATIONAL_CENTER",
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "role": "OPERATIONAL_CENTER",
+              "cellPhone": null
             },
             {
               "id": 1075,
@@ -243,17 +267,21 @@
               "email": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "name": null,
+              "phone": null,
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
+              "cellPhone": "0606060606",
               "controlUnitId": 10484,
               "email": "bar@example.org",
               "isEmailSubscriptionContact": true,
               "isSmsSubscriptionContact": true,
-              "name": "BRIDGE",
-              "phone": "9876543210"
+              "name": "my name",
+              "phone": null,
+              "role": "BRIDGE"
             }
           ],
           "controlUnitResourceIds": [

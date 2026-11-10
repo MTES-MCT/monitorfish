@@ -61,7 +61,7 @@ export function YearBeaconMalfunctions({
 }
 
 const AtSeaCircle = styled.span`
-  background-color: #9ed7d9;
+  background-color: ${p => p.theme.color.powderBlue};
   border-radius: 50%;
   display: inline-block;
   height: 10px;

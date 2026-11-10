@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   margin-top: 16px;
 
   .rs-uploader-trigger-btn {
-    border: 1px dashed #3b4559 !important;
+    border: 1px dashed ${p => p.theme.color.charcoal} !important;
     cursor: pointer;
     text-align: center;
   }

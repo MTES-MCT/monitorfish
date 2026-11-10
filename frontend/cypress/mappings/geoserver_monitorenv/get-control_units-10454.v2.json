@@ -29,22 +29,28 @@
           "id": 1014,
           "controlUnitId": 10454,
           "email": "fabrice.bernard.bmibpl@ofb.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 27 02 56 25"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 27 02 56 25",
+          "role": "UNKNOWN"
         },
         {
           "id": 1012,
           "controlUnitId": 10454,
           "email": "sebastien.perusson@ofb.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "02 38 45 99 71"
+          "name": null,
+          "phone": "02 38 45 99 71",
+          "cellPhone": null,
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 1013,
           "controlUnitId": 10454,
           "email": "sebastien.perusson@ofb.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "06 25 03 23 81"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 25 03 23 81",
+          "role": "OPERATIONAL_CENTER"
         }
       ],
       "controlUnitResourceIds": [

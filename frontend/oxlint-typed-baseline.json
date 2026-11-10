@@ -72,9 +72,6 @@
   "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Form/index.tsx": {
     "typescript(no-misused-promises)": 2
   },
-  "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/Item.tsx": {
-    "typescript(prefer-nullish-coalescing)": 3
-  },
   "src/features/ControlUnit/components/ControlUnitDialog/ControlUnitContactList/index.tsx": {
     "typescript(no-misused-promises)": 2
   },

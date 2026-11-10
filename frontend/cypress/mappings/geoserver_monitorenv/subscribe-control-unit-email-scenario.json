@@ -8,9 +8,11 @@
       "request": {
         "method": "POST",
         "url": "/api/v2/control_unit_contacts",
-        "bodyPatterns" : [ {
-          "matches": ".*\"first.contact@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"first.contact@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 201,
@@ -25,8 +27,9 @@
           "email": "first.contact@example.org",
           "isEmailSubscriptionContact": false,
           "isSmsSubscriptionContact": false,
-          "name": "ADJUNCT",
-          "phone": "0111111111"
+          "role": "ADJUNCT",
+          "cellPhone": "0111111111",
+          "phone": null
         }
       }
     },
@@ -66,46 +69,56 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
               "controlUnitId": 10484,
               "email": "first.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0111111111"
+              "role": "ADJUNCT",
+              "cellPhone": "0111111111",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -154,9 +167,11 @@
       "request": {
         "method": "POST",
         "url": "/api/v2/control_unit_contacts",
-        "bodyPatterns" : [ {
-          "matches": ".*\"second.contact@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"second.contact@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 201,
@@ -212,55 +227,67 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
               "controlUnitId": 10484,
               "email": "first.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0111111111"
+              "role": "ADJUNCT",
+              "cellPhone": "0111111111",
+              "phone": null
             },
             {
               "id": 1078,
               "controlUnitId": 10484,
               "email": "second.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0222222222"
+              "role": "ADJUNCT",
+              "cellPhone": "0222222222",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -309,9 +336,11 @@
       "request": {
         "method": "PATCH",
         "urlPattern": "/api/v1/control_unit_contacts/1077",
-        "bodyPatterns" : [ {
-          "matches": ".*\"first.contact@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"first.contact@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 200,
@@ -328,8 +357,8 @@
           "email": "first.contact@example.org",
           "isEmailSubscriptionContact": true,
           "isSmsSubscriptionContact": true,
-          "name": "ADJUNCT",
-          "phone": "0111111111"
+          "role": "ADJUNCT",
+          "cellPhone": "0111111111"
         }
       }
     },
@@ -369,55 +398,67 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
               "controlUnitId": 10484,
               "email": "first.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": true,
               "isSmsSubscriptionContact": true,
-              "name": "ADJUNCT",
-              "phone": "0111111111"
+              "role": "ADJUNCT",
+              "cellPhone": "0111111111",
+              "phone": null
             },
             {
               "id": 1078,
               "controlUnitId": 10484,
               "email": "second.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0222222222"
+              "role": "ADJUNCT",
+              "cellPhone": "0222222222",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -466,9 +507,11 @@
       "request": {
         "method": "PATCH",
         "urlPattern": "/api/v1/control_unit_contacts/1078",
-        "bodyPatterns" : [ {
-          "matches": ".*\"second.contact@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"second.contact@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 200,
@@ -485,8 +528,8 @@
           "email": "second.contact@example.org",
           "isEmailSubscriptionContact": true,
           "isSmsSubscriptionContact": true,
-          "name": "ADJUNCT",
-          "phone": "0222222222"
+          "role": "ADJUNCT",
+          "cellPhone": "0222222222"
         }
       }
     },
@@ -526,55 +569,67 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
               "controlUnitId": 10484,
               "email": "first.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0111111111"
+              "role": "ADJUNCT",
+              "cellPhone": "0111111111",
+              "phone": null
             },
             {
               "id": 1078,
               "controlUnitId": 10484,
               "email": "second.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": true,
               "isSmsSubscriptionContact": true,
-              "name": "ADJUNCT",
-              "phone": "0222222222"
+              "role": "ADJUNCT",
+              "cellPhone": "0222222222",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -623,9 +678,11 @@
       "request": {
         "method": "PATCH",
         "urlPattern": "/api/v1/control_unit_contacts/1078",
-        "bodyPatterns" : [ {
-          "matches": ".*\"second.contact@example.org\".*"
-        } ]
+        "bodyPatterns": [
+          {
+            "matches": ".*\"second.contact@example.org\".*"
+          }
+        ]
       },
       "response": {
         "status": 200,
@@ -642,8 +699,8 @@
           "email": "second.contact@example.org",
           "isEmailSubscriptionContact": false,
           "isSmsSubscriptionContact": false,
-          "name": "ADJUNCT",
-          "phone": "0222222222"
+          "role": "ADJUNCT",
+          "cellPhone": "0222222222"
         }
       }
     },
@@ -683,55 +740,67 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1077,
               "controlUnitId": 10484,
               "email": "first.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0111111111"
+              "role": "ADJUNCT",
+              "cellPhone": "0111111111",
+              "phone": null
             },
             {
               "id": 1078,
               "controlUnitId": 10484,
               "email": "second.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0222222222"
+              "role": "ADJUNCT",
+              "cellPhone": "0222222222",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -829,46 +898,56 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             },
             {
               "id": 1078,
               "controlUnitId": 10484,
               "email": "second.contact@example.org",
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "ADJUNCT",
-              "phone": "0222222222"
+              "role": "ADJUNCT",
+              "cellPhone": "0222222222",
+              "phone": null
             }
           ],
           "controlUnitResourceIds": [
@@ -966,37 +1045,45 @@
               "id": 1076,
               "controlUnitId": 10484,
               "email": "bgc-lorient@douane.finances.gouv.fr",
-              "name": "UNKNOWN",
+              "name": null,
+              "role": "UNKNOWN",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 46 12"
+              "phone": "09 70 27 46 12",
+              "cellPhone": null
             },
             {
               "id": 1073,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "06 64 57 64 04"
+              "phone": null,
+              "cellPhone": "06 64 57 64 04"
             },
             {
               "id": 1074,
               "controlUnitId": 10484,
               "email": "sgcd-nantes-codm@douane.finances.gouv.fr",
-              "name": "OPERATIONAL_CENTER",
+              "name": null,
+              "role": "OPERATIONAL_CENTER",
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "phone": "09 70 27 51 94"
+              "phone": "09 70 27 51 94",
+              "cellPhone": null
             },
             {
               "id": 1075,
               "controlUnitId": 10484,
               "email": null,
+              "name": null,
               "isEmailSubscriptionContact": false,
               "isSmsSubscriptionContact": false,
-              "name": "PERMANENT_CONTACT_ONBOARD",
-              "phone": "06 64 57 64 58"
+              "role": "PERMANENT_CONTACT_ONBOARD",
+              "phone": null,
+              "cellPhone": "06 64 57 64 58"
             }
           ],
           "controlUnitResourceIds": [

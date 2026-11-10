@@ -33,64 +33,78 @@
           "id": 339,
           "controlUnitId": 10141,
           "email": null,
-          "name": "ONBOARD_PHONE",
-          "phone": "+881 677 121 122",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "+881 677 121 122",
+          "role": "ONBOARD_PHONE"
         },
         {
           "id": 335,
           "controlUnitId": 10141,
           "email": "pam.dirm-med@mer.gouv.fr",
-          "name": "COMMANDER_A",
-          "phone": "07 64 45 13 62",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "07 64 45 13 62",
+          "role": "COMMANDER_A"
         },
         {
           "id": 336,
           "controlUnitId": 10141,
           "email": "pam.dirm-med@mer.gouv.fr",
-          "name": "COMMANDER_B",
-          "phone": "06 19 42 86 03",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 19 42 86 03",
+          "role": "COMMANDER_B"
         },
         {
           "id": 333,
           "controlUnitId": 10141,
           "email": "aurelia.sargeot@mer.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
+          "name": null,
           "phone": "04 86 94 67 48",
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": null,
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 334,
           "controlUnitId": 10141,
           "email": "aurelia.sargeot@mer.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "06 69 17 61 82",
+          "name": null,
+          "phone": null,
           "isEmailSubscriptionContact": true,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": "06 69 17 61 82",
+          "role": "OPERATIONAL_CENTER"
         },
         {
           "id": 337,
           "controlUnitId": 10141,
           "email": null,
-          "name": "PERMANENT_CONTACT_ONBOARD",
+          "name": null,
           "phone": "+47 23 41 25 84",
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": true
+          "isSmsSubscriptionContact": true,
+          "cellPhone": null,
+          "role": "PERMANENT_CONTACT_ONBOARD"
         },
         {
           "id": 338,
           "controlUnitId": 10141,
           "email": null,
-          "name": "PERMANENT_CONTACT_ONBOARD",
+          "name": null,
           "phone": "+47 23 41 25 85",
           "isEmailSubscriptionContact": false,
-          "isSmsSubscriptionContact": false
+          "isSmsSubscriptionContact": false,
+          "cellPhone": null,
+          "role": "PERMANENT_CONTACT_ONBOARD"
         }
       ],
       "controlUnitResourceIds": [

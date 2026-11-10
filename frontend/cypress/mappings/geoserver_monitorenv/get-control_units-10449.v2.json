@@ -35,56 +35,72 @@
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
           "name": "Dml Auray",
-          "phone": "02 97 24 01 43"
+          "phone": "02 97 24 01 43",
+          "cellPhone": null,
+          "role": null
         },
         {
           "id": 994,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
           "name": "Dml Lorient",
-          "phone": "02 97 37 16 22"
+          "phone": "02 97 37 16 22",
+          "cellPhone": null,
+          "role": null
         },
         {
           "id": 995,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 29 34 92"
+          "name": null,
+          "phone": "02 97 29 34 92",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 996,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 29 34 92"
+          "name": null,
+          "phone": "02 97 29 34 92",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 997,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 37 17 47"
+          "name": null,
+          "phone": "02 97 37 17 47",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 998,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 37 17 47"
+          "name": null,
+          "phone": "02 97 37 17 47",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 999,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 63 73 05 59"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 63 73 05 59",
+          "role": "UNKNOWN"
         },
         {
           "id": 1000,
           "controlUnitId": 10449,
           "email": "ddtm-ulam@morbihan.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 63 73 05 59"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 63 73 05 59",
+          "role": "UNKNOWN"
         }
       ],
       "controlUnitResourceIds": [

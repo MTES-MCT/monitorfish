@@ -31,36 +31,46 @@
           "id": 727,
           "controlUnitId": 10336,
           "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 12 40 67"
+          "name": null,
+          "phone": "02 97 12 40 67",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 728,
           "controlUnitId": 10336,
           "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "02 97 12 40 67"
+          "name": null,
+          "phone": "02 97 12 40 67",
+          "cellPhone": null,
+          "role": "UNKNOWN"
         },
         {
           "id": 729,
           "controlUnitId": 10336,
           "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 72 95 29 02"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 72 95 29 02",
+          "role": "UNKNOWN"
         },
         {
           "id": 730,
           "controlUnitId": 10336,
           "email": "bsl.lorient@gendarmerie.defense.gouv.fr",
-          "name": "UNKNOWN",
-          "phone": "06 72 95 29 03"
+          "name": null,
+          "phone": null,
+          "cellPhone": "06 72 95 29 03",
+          "role": "UNKNOWN"
         },
         {
           "id": 726,
           "controlUnitId": 10336,
           "email": "ggmaratlan@gendarmerie.defense.gouv.fr",
-          "name": "OPERATIONAL_CENTER",
-          "phone": "02 98 22 22 17"
+          "name": null,
+          "phone": "02 98 22 22 17",
+          "cellPhone": null,
+          "role": "OPERATIONAL_CENTER"
         }
       ],
       "controlUnitResourceIds": [

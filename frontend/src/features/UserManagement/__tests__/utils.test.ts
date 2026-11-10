@@ -153,8 +153,7 @@ describe('features/UserManagement/utils', () => {
       filterUsers(users, { ...noFilters, administration: UserManagement.ExternalAdministration.DOUANE }, now)
     ).toEqual([neverLoggedInExternalUser])
     expect(filterUsers(users, { ...noFilters, activity: UserManagement.Activity.INACTIVE }, now)).toEqual([
-      inactiveCnspUser,
-      neverLoggedInExternalUser
+      inactiveCnspUser
     ])
     expect(filterUsers(users, { ...noFilters, activity: UserManagement.Activity.NEVER_LOGGED_IN }, now)).toEqual([
       neverLoggedInExternalUser
@@ -162,10 +161,10 @@ describe('features/UserManagement/utils', () => {
     expect(filterUsers(users, { ...noFilters, searchQuery: ' OLD ' }, now)).toEqual([inactiveCnspUser])
   })
 
-  it('isInactiveUser() should flag users who never logged in or not for 6 months', () => {
+  it('isInactiveUser() should flag users who did not log in for 6 months, but not those who never logged in', () => {
     const now = customDayjs.utc('2026-10-21T12:00:00Z')
 
-    expect(isInactiveUser(user({ lastLoginAtUtc: undefined }), now)).toBe(true)
+    expect(isInactiveUser(user({ lastLoginAtUtc: undefined }), now)).toBe(false)
     expect(isInactiveUser(user({ lastLoginAtUtc: '2026-04-20T12:00:00Z' }), now)).toBe(true)
     expect(isInactiveUser(user({ lastLoginAtUtc: '2026-04-22T12:00:00Z' }), now)).toBe(false)
   })

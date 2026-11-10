@@ -26,7 +26,7 @@ export function getUserAffiliation(user: UserManagement.User): string {
 
 export function isInactiveUser(user: UserManagement.User, now = customDayjs.utc()): boolean {
   return (
-    !user.lastLoginAtUtc ||
+    !!user.lastLoginAtUtc &&
     customDayjs.utc(user.lastLoginAtUtc).isBefore(now.subtract(INACTIVITY_DELAY_IN_MONTHS, 'month'))
   )
 }

@@ -38,10 +38,17 @@ export function UserTable() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isReplaceDialogOpen, setIsReplaceDialogOpen] = useState(false)
   const [userToDelete, setUserToDelete] = useState<UserManagement.User | undefined>(undefined)
+  const [userToRevokeAdministrator, setUserToRevokeAdministrator] = useState<UserManagement.User | undefined>(undefined)
 
   const columns = useMemo(
     () =>
       getTableColumns(userAccount.email, setUserToDelete, (user, isAdministrator) => {
+        if (!isAdministrator) {
+          setUserToRevokeAdministrator(user)
+
+          return
+        }
+
         void updateUserIsAdministrator({ hashedEmail: user.hashedEmail, isAdministrator })
       }),
     [userAccount.email, updateUserIsAdministrator]
@@ -53,6 +60,13 @@ export function UserTable() {
     (nextValue: UserManagement.Filters[K]) =>
       setFilters(previousFilters => ({ ...previousFilters, [key]: nextValue }))
 
+  const updateUserTypeFilter = (nextUserType: UserManagement.UserType | undefined) =>
+    setFilters(previousFilters => ({
+      ...previousFilters,
+      administration: nextUserType === UserManagement.UserType.CNSP ? undefined : previousFilters.administration,
+      userType: nextUserType
+    }))
+
   const confirmDeletion = async () => {
     if (!userToDelete) {
       return
@@ -61,6 +75,17 @@ export function UserTable() {
     await deleteUser(userToDelete.hashedEmail)
     setUserToDelete(undefined)
   }
+
+  const confirmAdministratorRevocation = async () => {
+    if (!userToRevokeAdministrator) {
+      return
+    }
+
+    await updateUserIsAdministrator({ hashedEmail: userToRevokeAdministrator.hashedEmail, isAdministrator: false })
+    setUserToRevokeAdministrator(undefined)
+  }
+
+  const isUserToDeleteAdministrator = !!userToDelete?.isSuperUser && !!userToDelete.isAdministrator
 
   return (
     <BackOfficeBody>
@@ -83,12 +108,13 @@ export function UserTable() {
                 isLabelHidden
                 label="Filtrer par type"
                 name="userTypeFilter"
-                onChange={updateFilter('userType')}
+                onChange={updateUserTypeFilter}
                 options={USER_TYPE_AS_OPTIONS}
                 placeholder="Type"
                 value={filters.userType}
               />
               <Select
+                disabled={filters.userType === UserManagement.UserType.CNSP}
                 isLabelHidden
                 label="Filtrer par administration"
                 name="administrationFilter"
@@ -112,7 +138,7 @@ export function UserTable() {
                 Ajouter un utilisateur
               </Button>
               <Button accent={Accent.PRIMARY} Icon={Icon.Download} onClick={() => setIsReplaceDialogOpen(true)}>
-                Importer une liste
+                Importer une administration externe
               </Button>
             </Actions>
           </Toolbar>
@@ -143,10 +169,20 @@ export function UserTable() {
       {userToDelete && (
         <ConfirmationModal
           confirmationButtonLabel="Supprimer"
-          message={`Êtes-vous sûr de vouloir supprimer l’utilisateur ${userToDelete.email ?? userToDelete.hashedEmail} ?`}
+          message={`Êtes-vous sûr de vouloir supprimer ${isUserToDeleteAdministrator ? 'l’administrateur' : 'l’utilisateur'} ${userToDelete.email ?? userToDelete.hashedEmail} ?`}
           onCancel={() => setUserToDelete(undefined)}
           onConfirm={confirmDeletion}
-          title="Supprimer l’utilisateur"
+          title={isUserToDeleteAdministrator ? 'Supprimer l’administrateur' : 'Supprimer l’utilisateur'}
+        />
+      )}
+
+      {userToRevokeAdministrator && (
+        <ConfirmationModal
+          confirmationButtonLabel="Retirer"
+          message={`Êtes-vous sûr de vouloir retirer l’accès administrateur de l’utilisateur ${userToRevokeAdministrator.email ?? userToRevokeAdministrator.hashedEmail} ?`}
+          onCancel={() => setUserToRevokeAdministrator(undefined)}
+          onConfirm={confirmAdministratorRevocation}
+          title="Retirer l’accès administrateur"
         />
       )}
     </BackOfficeBody>

@@ -3,6 +3,7 @@ context('BackOffice > Users', () => {
     cy.intercept('GET', '/bff/v1/admin/users').as('getUsers')
     cy.intercept('POST', '/bff/v1/admin/users').as('addUser')
     cy.intercept('PUT', '/bff/v1/admin/users/*/administrator').as('updateUserIsAdministrator')
+    cy.intercept('DELETE', '/bff/v1/admin/users/*').as('deleteUser')
     cy.intercept('PUT', '/bff/v1/admin/users/administrations/DOUANE').as('replaceAdministrationUsers')
     cy.intercept('GET', '/bff/v1/admin/authorized_organizational_units').as('getAuthorizedOrganizationalUnits')
 
@@ -79,8 +80,40 @@ context('BackOffice > Users', () => {
       expect(request.body).to.deep.equal({ isAdministrator: true })
     })
 
+    // Revoking the administrator rights must be confirmed
+    cy.get('.Table-SimpleTable tr').contains('tr', 'new.agent@email.gouv.fr').find('.rs-toggle').click()
+    cy.get('.Component-Dialog').contains('Retirer l’accès administrateur')
+    cy.clickButton('Annuler')
+    cy.get('.Component-Dialog').should('not.exist')
+    cy.get('.Table-SimpleTable tr').contains('tr', 'new.agent@email.gouv.fr').find('.rs-toggle-checked').should('exist')
+
+    cy.get('.Table-SimpleTable tr').contains('tr', 'new.agent@email.gouv.fr').find('.rs-toggle').click()
+    cy.clickButton('Retirer')
+    cy.wait('@updateUserIsAdministrator').then(({ request }) => {
+      expect(request.body).to.deep.equal({ isAdministrator: false })
+    })
+    cy.get('.Table-SimpleTable tr')
+      .contains('tr', 'new.agent@email.gouv.fr')
+      .find('.rs-toggle-checked')
+      .should('not.exist')
+
+    // Deleting an administrator must be confirmed
+    cy.get('.Table-SimpleTable tr').contains('tr', 'new.agent@email.gouv.fr').find('.rs-toggle').click()
+    cy.wait('@updateUserIsAdministrator')
+    cy.get('.Table-SimpleTable tr')
+      .contains('tr', 'new.agent@email.gouv.fr')
+      .find('button[title="Supprimer cet utilisateur"]')
+      .click()
+    cy.get('.Component-Dialog').contains('Supprimer l’administrateur')
+    cy.get('.Component-Dialog').contains(
+      'Êtes-vous sûr de vouloir supprimer l’administrateur new.agent@email.gouv.fr ?'
+    )
+    cy.get('.Component-Dialog').contains('button', 'Supprimer').click()
+    cy.wait('@deleteUser')
+    cy.get('.Table-SimpleTable').should('not.contain', 'new.agent@email.gouv.fr')
+
     // Removing all the users of an administration must be confirmed
-    cy.clickButton('Importer une liste')
+    cy.clickButton('Importer une administration externe')
     cy.fill('Administration', 'Gendarmerie maritime')
 
     cy.get('.Component-Dialog').contains('button', 'Mettre à jour').should('be.disabled')
@@ -108,7 +141,7 @@ context('BackOffice > Users', () => {
     cy.get('.Table-SimpleTable').contains('gendarme@gendarmerie.interieur.gouv.fr')
 
     // Import the emails of an administration from a CSV file
-    cy.clickButton('Importer une liste')
+    cy.clickButton('Importer une administration externe')
     cy.fill('Administration', 'Douane')
 
     cy.get('.Component-Dialog input[type=file]').selectFile('cypress/fixtures/utilisateurs_administration.csv', {
@@ -163,10 +196,6 @@ context('BackOffice > Users', () => {
     cy.request('PUT', '/bff/v1/admin/users/administrations/GENDARMERIE_MARITIME', {
       emails: [],
       isEmptyListConfirmed: true
-    })
-    cy.request('GET', '/bff/v1/admin/users').then(({ body }) => {
-      const addedUser = body.find(user => user.email === 'new.agent@email.gouv.fr')
-      cy.request('DELETE', `/bff/v1/admin/users/${addedUser.hashedEmail}`)
     })
   })
 })

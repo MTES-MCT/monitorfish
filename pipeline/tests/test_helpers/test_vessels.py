@@ -108,3 +108,28 @@ def test_merge_vessel_id():
 
     assert len(logger.method_calls) == 2
     assert logger.warning.call_count == 2
+
+
+def test_merge_vessel_id_does_not_match_on_ignored_identifier_values():
+    vessels = pd.DataFrame(
+        {
+            "cfr": [None, None],
+            "ircs": ["SOMEIRCS", None],
+            "external_immatriculation": ["-", "-"],
+        }
+    )
+
+    found_vessels = pd.DataFrame(
+        {
+            "vessel_id": [1, 2, 3],
+            "cfr": [None, None, None],
+            "ircs": ["SOMEIRCS", None, None],
+            "external_immatriculation": ["-", "-", "-"],
+        }
+    )
+
+    res = merge_vessel_id(vessels, found_vessels, MagicMock(spec=Logger))
+
+    # The first vessel is matched on its ircs only, the second one is not matched
+    assert res.vessel_id.iloc[0] == 1
+    assert pd.isna(res.vessel_id.iloc[1])

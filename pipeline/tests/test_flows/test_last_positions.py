@@ -609,6 +609,57 @@ def test_join():
     pd.testing.assert_frame_equal(expected_res, res)
 
 
+def test_join_does_not_match_on_placeholder_identifiers():
+    last_positions = pd.DataFrame(
+        {
+            "vessel_id": [1, None],
+            "cfr": [None, None],
+            "ircs": ["SOMEIRCS", "SOMEIRCS"],
+            "external_immatriculation": [None, "-"],
+            "last_position_datetime_utc": [datetime(2021, 1, 1, 10, 0, 0)] * 2,
+            "latitude": [45.0, 45.0],
+            "longitude": [-5.0, -5.0],
+        }
+    )
+
+    # Vessel 1 is the vessel with ircs "SOMEIRCS", vessels 2 to 4 have a placeholder
+    # external immatriculation
+    risk_factors = pd.DataFrame(
+        {
+            "vessel_id": [1, 2, 3, 4],
+            "cfr": ["CFR1", "CFR2", "CFR3", None],
+            "ircs": ["SOMEIRCS", None, None, None],
+            "external_immatriculation": ["-", "-", "-", "-"],
+            "risk_factor": [1.8, 2.0, 3.0, 4.0],
+        }
+    )
+
+    empty = pd.DataFrame(
+        {
+            "vessel_id": pd.Series([], dtype=float),
+            "cfr": pd.Series([], dtype=object),
+            "ircs": pd.Series([], dtype=object),
+            "external_immatriculation": pd.Series([], dtype=object),
+        }
+    )
+
+    res = join(
+        last_positions,
+        risk_factors,
+        empty.assign(alerts=pd.Series([], dtype=object)),
+        empty.assign(reportings=pd.Series([], dtype=object)),
+        empty.assign(id=pd.Series([], dtype=float)),
+    )
+
+    # No row is multiplied
+    assert len(res) == 2
+    # Both positions match vessel 1 only (through vessel_id or ircs, never through the
+    # placeholder) and get its risk factor and cfr
+    assert res.vessel_id.tolist() == [1.0, 1.0]
+    assert res.cfr.tolist() == ["CFR1", "CFR1"]
+    assert res.risk_factor.tolist() == [1.8, 1.8]
+
+
 def test_join_keeps_ais_position_type_when_ais_datetime_equals_stored():
     """Regression: a vessel whose last_position_datetime_utc was already updated to
     the AIS timestamp in a previous run must keep position_type='AIS', not be reset

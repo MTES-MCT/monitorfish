@@ -697,6 +697,59 @@ def test_join_on_multiple_keys():
     )
 
 
+def test_join_on_multiple_keys_ignores_placeholder_values_by_default():
+    left = pd.DataFrame(
+        {
+            "key_1": [None, "x", "-"],
+            "key_2": ["a", "b", "c"],
+            "value_left": [1, 2, 3],
+        }
+    )
+    right = pd.DataFrame(
+        {
+            "key_1": ["-", "-", "x", None],
+            "key_2": ["a", "z", "y", "c"],
+            "value_right": ["R1", "R2", "R3", "R4"],
+        }
+    )
+
+    res = join_on_multiple_keys(
+        left,
+        right,
+        or_join_keys=["key_1", "key_2"],
+        how="left",
+        coalesce_common_columns=False,
+    )
+
+    # "-" in key_1 is never matched, rows fall back on key_2 (or are unmatched)
+    expected = pd.DataFrame(
+        {
+            "key_1": ["x", None, "-"],
+            "key_2": ["b", "a", "c"],
+            "value_left": [2, 1, 3],
+            "value_right": ["R3", "R1", "R4"],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        res.sort_values("value_left").reset_index(drop=True).convert_dtypes(),
+        expected.sort_values("value_left").reset_index(drop=True).convert_dtypes(),
+        check_dtype=False,
+    )
+
+
+def test_join_on_multiple_keys_ignored_key_values_can_be_overridden():
+    left = pd.DataFrame({"key": ["-", "a"], "value_left": [1, 2]})
+    right = pd.DataFrame({"key": ["-", "a"], "value_right": ["R1", "R2"]})
+
+    res = join_on_multiple_keys(
+        left, right, or_join_keys=["key"], how="inner", ignored_key_values=[]
+    )
+    assert res.value_right.tolist() == ["R1", "R2"]
+
+    res = join_on_multiple_keys(left, right, or_join_keys=["key"], how="inner")
+    assert res.value_right.tolist() == ["R2"]
+
+
 def test_left_isin_right_by_decreasing_priority():
     left = pd.DataFrame(
         {

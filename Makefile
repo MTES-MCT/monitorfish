@@ -220,8 +220,8 @@ run-front-for-puppeteer:
 
 prune-old-images: # Not using `docker image prune` because it would delete the data pipeline image if run when no flow is running
 	docker images --format "{{.Repository}}:{{.Tag}}" | \
-	awk -F: '{repos[$1]++; if(repos[$1]>2) print $0}' | \
-	xargs -r docker rmi
+	awk -F: '{repos[$$1]++; if(repos[$$1]>2) print $$0}' | \
+	xargs -r docker rmi || true
 
 .PHONY: restart-remote-app ##RUN ▶️  Restart app
 restart-remote-app: prune-old-images

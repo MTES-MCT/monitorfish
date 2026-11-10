@@ -4,14 +4,14 @@ import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displa
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { setSelectedVesselSidebarTab } from '@features/Vessel/slice'
-import { FishingActivitiesTab, VesselSidebarTab } from '@features/Vessel/types/vessel'
+import { FishingActivitiesTab, VesselSidebarTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 
 export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, getState) => {
   const {
-    fishingActivities: { fishingActivities },
+    fishingActivities: { vesselIdentity: logbookVesselIdentity },
     vessel: { selectedVesselIdentity }
   } = getState()
   dispatch(displayedErrorActions.unset(DisplayedErrorKey.VESSEL_SIDEBAR_ERROR))
@@ -33,7 +33,8 @@ export const openVesselSidebarTab = (tab: VesselSidebarTab) => async (dispatch, 
     case VesselSidebarTab.VOYAGES: {
       dispatch(logbookActions.setTab(FishingActivitiesTab.SUMMARY))
 
-      if (!fishingActivities) {
+      // Already fetched when the vessel was shown
+      if (!vesselsAreEquals(logbookVesselIdentity, selectedVesselIdentity)) {
         await dispatch(getVesselLogbook(selectedVesselIdentity, NavigateTo.LAST, true))
       }
 

@@ -54,7 +54,7 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
         <VesselCardHeader>
           {!!vesselProperties.flagState && (
             <>
-              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.svg`} />{' '}
+              <Flag rel="preload" src={`flags/${vesselProperties.flagState.toLowerCase()}.webp`} />{' '}
             </>
           )}
           <VesselCardTitle data-cy="vessel-card-name">

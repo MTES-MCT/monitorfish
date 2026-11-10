@@ -84,7 +84,7 @@ export function BeaconMalfunctionCard({
           {beaconMalfunction?.flagState ? (
             <Flag
               alt={`Drapeau ${beaconMalfunction?.flagState}`}
-              src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`}
+              src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.webp`}
             />
           ) : null}
           <VesselName

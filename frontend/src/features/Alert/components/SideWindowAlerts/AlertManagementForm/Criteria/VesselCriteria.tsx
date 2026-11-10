@@ -78,7 +78,7 @@ export function VesselCriteria({ isExclusion = false, onDelete, vessels }: Vesse
           return (
             <VesselRow key={getVesselCompositeIdentifier(vessel)}>
               <VesselColumn>
-                <Flag src={`${baseUrl}/flags/${vessel.flagState.toLowerCase()}.svg`} />
+                <Flag src={`${baseUrl}/flags/${vessel.flagState.toLowerCase()}.webp`} />
                 {vessel.vesselName}
                 {identifiers.length > 0 && (
                   <VesselInfo>

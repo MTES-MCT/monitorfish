@@ -21,7 +21,7 @@ export function VesselSearchResultItem({ baseUrl, onClick, searchQuery, vessel }
         {!!flagState && (
           <Flag
             rel="preload"
-            src={`${baseUrl}/flags/${flagState.toLowerCase()}.svg`}
+            src={`${baseUrl}/flags/${flagState.toLowerCase()}.webp`}
             title={countries.getName(flagState, 'fr')}
           />
         )}

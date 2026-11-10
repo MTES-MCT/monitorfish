@@ -35,7 +35,7 @@ export function getActionTitle(
       <StyledSpan title={details}>
         {!!subject && <>{subject}</>}
         <Strong>
-          {flagState && <StyledFlag src={`${baseUrl}/flags/${flagState.toLowerCase()}.svg`} />}
+          {flagState && <StyledFlag src={`${baseUrl}/flags/${flagState.toLowerCase()}.webp`} />}
           {isUnknown && <i>{details}</i>}
           {!isUnknown && details}
         </Strong>

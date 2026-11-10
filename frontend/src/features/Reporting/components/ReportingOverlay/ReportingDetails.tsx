@@ -98,7 +98,7 @@ export function ReportingDetails({
         <Header>
           <VesselName>
             {!!reporting.flagState && reporting.flagState !== UNKNOWN_VESSEL.flagState && (
-              <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.svg`} />
+              <Flag rel="preload" src={`${baseUrl}/flags/${reporting.flagState.toLowerCase()}.webp`} />
             )}
             {title}
           </VesselName>

@@ -4,7 +4,7 @@ import re
 from collections import ChainMap
 from functools import partial
 from io import StringIO
-from typing import Any, Hashable, List, Union
+from typing import Any, Hashable, List, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -12,6 +12,10 @@ import pytz
 import simplejson
 import sqlalchemy
 from sqlalchemy import select
+
+# Placeholder values used in some vessel identifiers, which must never be used as
+# join keys (they would match unrelated vessels together)
+IGNORED_IDENTIFIER_VALUES = ("-", 'X', '/')
 
 
 def get_unused_col_name(col_name: str, df: pd.DataFrame) -> str:
@@ -285,7 +289,7 @@ def explode_lists_of_dicts(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
 
 
 def zeros_ones_to_bools(
-    x: Union[pd.Series, pd.DataFrame]
+    x: Union[pd.Series, pd.DataFrame],
 ) -> Union[pd.Series, pd.DataFrame]:
     """
     Converts a pandas DataFrame or Series containing `str`, `int` or `float` values,
@@ -593,6 +597,7 @@ def join_on_multiple_keys(
     how: str = "inner",
     and_join_keys: list = None,
     coalesce_common_columns: bool = True,
+    ignored_key_values: Sequence[Any] = IGNORED_IDENTIFIER_VALUES,
 ):
     """
     Join two pandas DataFrames, attempting to match rows on several keys by
@@ -645,6 +650,10 @@ def join_on_multiple_keys(
           keys
         coalesce_common_columns (bool, optional): whether to coalesce values in the
           columns that are present in both DataFrames. Defaults to `True`.
+        ignored_key_values (Sequence, optional): values (placeholders like `"-"`) that are
+          considered null when used as join keys, i.e. rows with these values in a join
+          key column are never matched on this key. Defaults to
+          `IGNORED_IDENTIFIER_VALUES`. Pass an empty sequence to match on all values.
 
     Returns:
         pd.DataFrame: result of join operation
@@ -674,6 +683,14 @@ def join_on_multiple_keys(
 
         right_with_keys = right.dropna(subset=join_keys)
         left_with_keys = left.dropna(subset=join_keys)
+
+        if ignored_key_values:
+            right_with_keys = right_with_keys[
+                ~right_with_keys[join_keys].isin(ignored_key_values).any(axis=1)
+            ]
+            left_with_keys = left_with_keys[
+                ~left_with_keys[join_keys].isin(ignored_key_values).any(axis=1)
+            ]
 
         join = pd.merge(
             left_with_keys,

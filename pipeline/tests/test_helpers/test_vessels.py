@@ -43,10 +43,10 @@ def test_make_add_vessels_columns_query(reset_test_data):
 def test_make_find_vessels_query(reset_test_data):
     vessels = pd.DataFrame(
         {
-            "cfr": ["A", "B", "C", None],
-            "ircs": ["AA", None, "duplicated", "duplicated"],
-            "external_immatriculation": ["AAA", None, "CCC", None],
-            "other_vessels_data": ["a", "b", "c", "d"],
+            "cfr": ["AA", "BB", "CC", None, "D"],
+            "ircs": ["AAA", None, "duplicated", "duplicated", "X"],
+            "external_immatriculation": ["AAAA", None, "CCCC", None, ""],
+            "other_vessels_data": ["a", "b", "c", "d", "e"],
         }
     )
 
@@ -63,9 +63,9 @@ def test_make_find_vessels_query(reset_test_data):
         "public.vessels.ircs, "
         "public.vessels.external_immatriculation \n"
         "FROM public.vessels \n"
-        "WHERE public.vessels.cfr IN ('A', 'B', 'C') OR "
-        "public.vessels.external_immatriculation IN ('AAA', 'CCC') OR "
-        "public.vessels.ircs IN ('AA', 'duplicated')"
+        "WHERE public.vessels.cfr IN ('AA', 'BB', 'CC') OR "
+        "public.vessels.external_immatriculation IN ('AAAA', 'CCCC') OR "
+        "public.vessels.ircs IN ('AAA', 'duplicated')"
     )
 
     assert query_string == expected_query_string
@@ -108,3 +108,28 @@ def test_merge_vessel_id():
 
     assert len(logger.method_calls) == 2
     assert logger.warning.call_count == 2
+
+
+def test_merge_vessel_id_does_not_match_on_ignored_identifier_values():
+    vessels = pd.DataFrame(
+        {
+            "cfr": [None, None],
+            "ircs": ["SOMEIRCS", None],
+            "external_immatriculation": ["-", "-"],
+        }
+    )
+
+    found_vessels = pd.DataFrame(
+        {
+            "vessel_id": [1, 2, 3],
+            "cfr": [None, None, None],
+            "ircs": ["SOMEIRCS", None, None],
+            "external_immatriculation": ["-", "-", "-"],
+        }
+    )
+
+    res = merge_vessel_id(vessels, found_vessels, MagicMock(spec=Logger))
+
+    # The first vessel is matched on its ircs only, the second one is not matched
+    assert res.vessel_id.iloc[0] == 1
+    assert pd.isna(res.vessel_id.iloc[1])

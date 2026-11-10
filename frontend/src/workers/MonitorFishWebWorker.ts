@@ -23,9 +23,7 @@ import { point } from '@turf/helpers'
 import { isNotNullish } from '@utils/isNotNullish'
 import { logSoftError } from '@utils/logSoftError'
 import * as Comlink from 'comlink'
-import { asArray } from 'ol/color'
 
-import type { VesselGroupDisplayInformation } from './types'
 import type { Regulation } from '@features/Regulation/Regulation.types'
 import type { RegulatoryZone } from '@features/Regulation/types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
@@ -166,57 +164,6 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static getActiveVesselsWithPositionAndDisplayedVesselsGroups(
-    vessels: Vessel.ActiveVessel[],
-    vesselGroupsIdsDisplayed: number[],
-    vesselGroupsIdsPinned: number[],
-    vesselGroupsIdsFiltered: number[]
-  ): Array<[Vessel.ActiveVesselEmittingPosition, VesselGroupDisplayInformation]> {
-    return vessels
-      .filter(vessel => vessel.activityType === ActivityType.POSITION_BASED)
-      .map(vessel => [
-        vessel,
-        this.getDisplayedVesselGroups(vessel, vesselGroupsIdsDisplayed, vesselGroupsIdsPinned, vesselGroupsIdsFiltered)
-      ])
-  }
-
-  static getDisplayedVesselGroups(
-    vessel: Vessel.ActiveVesselEmittingPosition,
-    vesselGroupsIdsDisplayed: number[],
-    vesselGroupsIdsPinned: number[],
-    vesselGroupsIdsFiltered: number[]
-  ): VesselGroupDisplayInformation {
-    const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
-      vesselGroupsIdsPinned.includes(groupId)
-    )
-    const unpinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(
-      groupId => !vesselGroupsIdsPinned.includes(groupId)
-    )
-    const orderedDisplayedVesselGroups = pinnedAndDisplayedVesselGroups.concat(unpinnedAndDisplayedVesselGroups)
-
-    const filteredVesselGroups = orderedDisplayedVesselGroups.filter(groupId =>
-      vesselGroupsIdsFiltered.includes(groupId)
-    )
-
-    const groupsDisplayed = filteredVesselGroups
-      .map(id => vessel.vesselGroups.find(group => group.id === id))
-      .filter((group): group is Vessel.VesselGroupOfActiveVessel => !!group)
-      // Priority groups are displayed first (label icons and layer group color)
-      .sort((a, b) => Number(Boolean(b.isPriorityGroup)) - Number(Boolean(a.isPriorityGroup)))
-
-    const numberOfGroupsHidden =
-      vessel.vesselGroups.length > groupsDisplayed.length ? vessel.vesselGroups.length - groupsDisplayed.length : 0
-
-    const firstGroupDisplayed = groupsDisplayed[0]
-    const groupColor = firstGroupDisplayed?.color ? asArray(firstGroupDisplayed.color) : [0, 0, 0]
-
-    return {
-      groupColor,
-      groupsDisplayed,
-      numberOfGroupsHidden
-    }
-  }
-
   static getFilteredVesselGroups(
     vesselGroupsWithVessels: VesselGroupWithVessels[],
     vesselGroupsIdsPinned: number[],
@@ -323,30 +270,31 @@ export class MonitorFishWebWorker {
     const emitsPositions = filters.emitsPositions?.length === 1 ? filters.emitsPositions[0] : undefined
     const landingPortLocodesSet = filters.landingPortLocodes?.length ? new Set(filters.landingPortLocodes) : undefined
 
-    const fuse = new CustomSearch<Vessel.ActiveVessel>(
-      structuredClone(vessels),
-      [
-        {
-          getFn: vessel => vessel.vesselName ?? '',
-          name: 'vessel.vesselName'
-        },
-        {
-          getFn: vessel => vessel.internalReferenceNumber ?? '',
-          name: 'vessel.internalReferenceNumber'
-        },
-        {
-          getFn: vessel => vessel.externalReferenceNumber ?? '',
-          name: 'vessel.externalReferenceNumber'
-        },
-        {
-          getFn: vessel => vessel.ircs ?? '',
-          name: 'vessel.ircs'
-        }
-      ],
-      { isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
-    )
-
-    const searchedVessels = filters.searchQuery ? fuse.find(filters.searchQuery) : vessels
+    // Indexing thousands of vessels is only needed when searching
+    const searchedVessels = filters.searchQuery
+      ? new CustomSearch<Vessel.ActiveVessel>(
+          vessels,
+          [
+            {
+              getFn: vessel => vessel.vesselName ?? '',
+              name: 'vessel.vesselName'
+            },
+            {
+              getFn: vessel => vessel.internalReferenceNumber ?? '',
+              name: 'vessel.internalReferenceNumber'
+            },
+            {
+              getFn: vessel => vessel.externalReferenceNumber ?? '',
+              name: 'vessel.externalReferenceNumber'
+            },
+            {
+              getFn: vessel => vessel.ircs ?? '',
+              name: 'vessel.ircs'
+            }
+          ],
+          { isDiacriticSensitive: false, isStrict: true, threshold: 0.4 }
+        ).find(filters.searchQuery)
+      : vessels
 
     return searchedVessels
       .filter(vessel => {

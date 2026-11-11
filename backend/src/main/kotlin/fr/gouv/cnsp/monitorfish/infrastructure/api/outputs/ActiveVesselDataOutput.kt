@@ -121,6 +121,7 @@ sealed class ActiveVesselBaseDataOutput(
                     vesselGroups =
                         enrichedActiveVessel.vesselGroups.map {
                             LastPositionVesselGroupDataOutput(
+                                id = it.id!!,
                                 color = it.color,
                                 name = it.name,
                                 isPriorityGroup = it.isPriorityGroup,
@@ -339,6 +340,7 @@ data class ActiveVesselEmittingLogbookDataOutput(
     )
 
 data class LastPositionVesselGroupDataOutput(
+    val id: Int,
     val color: String,
     val name: String,
     val isPriorityGroup: Boolean,

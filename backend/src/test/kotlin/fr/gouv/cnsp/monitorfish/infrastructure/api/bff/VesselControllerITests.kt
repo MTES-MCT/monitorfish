@@ -280,6 +280,7 @@ class VesselControllerITests {
                 alerts = listOf("THREE_MILES_TRAWLING_ALERT"),
                 beaconMalfunctionId = 12,
             )
+        val vesselGroup = getDynamicVesselGroups().first()
         given(this.getActiveVessels.execute(any())).willReturn(
             listOf(
                 EnrichedActiveVessel(
@@ -288,7 +289,7 @@ class VesselControllerITests {
                     vessel = null,
                     producerOrganization = null,
                     riskFactor = VesselRiskFactor(),
-                    vesselGroups = listOf(),
+                    vesselGroups = listOf(vesselGroup),
                     landingPort = null,
                 ),
             ),
@@ -312,6 +313,9 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].isFiltered").doesNotExist())
             .andExpect(jsonPath("$[0].alerts[0]", equalTo("THREE_MILES_TRAWLING_ALERT")))
             .andExpect(jsonPath("$[0].beaconMalfunctionId", equalTo(12)))
+            // Not to be confused with the removed vessel `id`: used to display the vessel groups
+            .andExpect(jsonPath("$[0].vesselGroups[0].id", equalTo(vesselGroup.id)))
+            .andExpect(jsonPath("$[0].vesselGroups[0].name", equalTo(vesselGroup.name)))
     }
 
     @Test

@@ -1,7 +1,8 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
-import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
+import { normalizeActiveVessel } from '@features/Vessel/normalizeActiveVessel'
+import { ActiveVesselApiSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
 import { ControlledVesselSchema } from '@features/Vessel/schemas/ControlledVesselSchema'
@@ -48,14 +49,15 @@ export const vesselApi = monitorfishApi.injectEndpoints({
       /**
        * Thousands of vessels, to be processed without freezing the page on slow computers:
        * - only a sample is validated
+       * - the properties not sent by the API are rebuilt
        * - they are frozen, as Immer skips frozen objects instead of deeply walking them
        */
-      transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
-        parseSampleOrReturn<Vessel.ActiveVessel>(
+      transformResponse: (baseQueryReturnValue: Vessel.ActiveVesselFromApi[]) =>
+        parseSampleOrReturn<Vessel.ActiveVesselFromApi>(
           baseQueryReturnValue,
-          ActiveVesselSchema,
+          ActiveVesselApiSchema,
           ACTIVE_VESSELS_SAMPLE_SIZE
-        ).map(vessel => Object.freeze(vessel))
+        ).map((vessel, index) => Object.freeze(normalizeActiveVessel(vessel, index)))
     }),
 
     getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({

@@ -99,3 +99,22 @@ export const ActiveVesselSchema = z.discriminatedUnion('activityType', [
   ActiveVesselEmittingPositionSchema,
   ActiveVesselEmittingLogbookSchema
 ])
+
+/**
+ * As sent by the API: the properties the frontend can rebuild from the others are not sent,
+ * to lighten the payload (see `normalizeActiveVessel()`).
+ */
+export const ActiveVesselApiSchema = z.discriminatedUnion('activityType', [
+  ActiveVesselEmittingPositionSchema.omit({
+    coordinates: true,
+    hasAlert: true,
+    hasBeaconMalfunction: true,
+    isFiltered: true,
+    lastPositionSentAt: true,
+    vesselFeatureId: true
+  }),
+  ActiveVesselEmittingLogbookSchema.omit({
+    isFiltered: true,
+    vesselFeatureId: true
+  })
+])

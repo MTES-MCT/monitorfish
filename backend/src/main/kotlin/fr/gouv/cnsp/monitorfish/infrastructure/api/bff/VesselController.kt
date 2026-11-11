@@ -90,12 +90,7 @@ class VesselController(
         val email = principal?.email ?: ""
         val activeVessels = getActiveVessels.execute(email)
 
-        return activeVessels.mapIndexed { index, vessel ->
-            ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
-                enrichedActiveVessel = vessel,
-                index = index,
-            )
-        }
+        return activeVessels.map { ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(enrichedActiveVessel = it) }
     }
 
     @GetMapping("/ais")

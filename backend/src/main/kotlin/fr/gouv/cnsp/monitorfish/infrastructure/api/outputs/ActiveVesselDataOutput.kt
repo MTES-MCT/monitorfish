@@ -2,24 +2,25 @@ package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.neovisionaries.i18n.CountryCode
-import fr.gouv.cnsp.monitorfish.domain.entities.coordinates.transformCoordinatesToOpenlayersProjection
 import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityOrigin
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Duration
 import java.time.ZonedDateTime
 
 /**
- * We remove null fields from the payload to reduce JSON size.
+ * Sent to thousands of vessels: null fields and the properties the frontend can rebuild from the others
+ * (feature id, OpenLayers coordinates, WebGL flags... see `normalizeActiveVessel()`) are not sent,
+ * to reduce the JSON size.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 sealed class ActiveVesselBaseDataOutput(
     open val id: Int? = null,
     open val vesselId: Int? = null,
-    open val vesselFeatureId: String,
     open val activityType: ActivityType,
     open val activityOrigin: ActivityOrigin,
     open val internalReferenceNumber: String? = null,
@@ -46,7 +47,6 @@ sealed class ActiveVesselBaseDataOutput(
     open val isAtPort: Boolean,
     open val producerOrganization: String? = null,
     // Properties for efficient filtering in frontend
-    open val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     open val emitsPositions: Boolean,
     open val gearsArray: List<String>,
     open val hasInfractionSuspicion: Boolean,
@@ -55,9 +55,16 @@ sealed class ActiveVesselBaseDataOutput(
     open val hasCurrentTripInfractionSuspicion: Boolean,
 ) {
     companion object {
+        /** 5 decimals of a degree: ~1 m, while the estimated positions are computed with 15 decimals */
+        private fun roundToAboutOneMeter(degrees: Double): Double =
+            BigDecimal(degrees).setScale(5, RoundingMode.HALF_UP).toDouble()
+
+        /**
+         * @param indexInGroup Index of the vessel in its fixed vessel group (used to remove it from the group)
+         */
         fun fromEnrichedActiveVessel(
             enrichedActiveVessel: EnrichedActiveVessel,
-            index: Int,
+            indexInGroup: Int? = null,
         ): ActiveVesselBaseDataOutput =
             enrichedActiveVessel.lastPosition?.let { lastPosition ->
                 val riskFactor =
@@ -67,7 +74,7 @@ sealed class ActiveVesselBaseDataOutput(
                     )
 
                 ActiveVesselEmittingPositionDataOutput(
-                    id = index,
+                    id = indexInGroup,
                     vesselId = lastPosition.vesselId,
                     internalReferenceNumber = lastPosition.internalReferenceNumber,
                     ircs = lastPosition.ircs,
@@ -76,8 +83,8 @@ sealed class ActiveVesselBaseDataOutput(
                     dateTime = lastPosition.dateTime,
                     latitude = lastPosition.latitude,
                     longitude = lastPosition.longitude,
-                    estimatedCurrentLatitude = lastPosition.estimatedCurrentLatitude,
-                    estimatedCurrentLongitude = lastPosition.estimatedCurrentLongitude,
+                    estimatedCurrentLatitude = lastPosition.estimatedCurrentLatitude?.let(::roundToAboutOneMeter),
+                    estimatedCurrentLongitude = lastPosition.estimatedCurrentLongitude?.let(::roundToAboutOneMeter),
                     vesselName = lastPosition.vesselName,
                     speed = lastPosition.speed,
                     course = lastPosition.course,
@@ -108,23 +115,12 @@ sealed class ActiveVesselBaseDataOutput(
                     alerts = lastPosition.alerts ?: listOf(),
                     beaconMalfunctionId = lastPosition.beaconMalfunctionId,
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
-                    coordinates =
-                        transformCoordinatesToOpenlayersProjection(
-                            longitude = lastPosition.longitude,
-                            latitude = lastPosition.latitude,
-                        )?.toList(),
                     gearsArray = enrichedActiveVessel.gearsArray,
-                    hasAlert = lastPosition.alerts?.isNotEmpty() ?: false,
-                    hasBeaconMalfunction = lastPosition.beaconMalfunctionId != null,
                     hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
-                    isFiltered = 0,
-                    lastPositionSentAt = lastPosition.dateTime.toInstant().toEpochMilli(),
                     speciesArray = enrichedActiveVessel.speciesArray,
-                    vesselFeatureId = Vessel.getVesselCompositeIdentifier(lastPosition),
                     vesselGroups =
                         enrichedActiveVessel.vesselGroups.map {
                             LastPositionVesselGroupDataOutput(
-                                id = it.id!!,
                                 color = it.color,
                                 name = it.name,
                                 isPriorityGroup = it.isPriorityGroup,
@@ -144,9 +140,8 @@ sealed class ActiveVesselBaseDataOutput(
                     )
 
                 ActiveVesselEmittingLogbookDataOutput(
-                    id = index,
+                    id = indexInGroup,
                     vesselId = enrichedActiveVessel.vessel?.id,
-                    vesselFeatureId = enrichedActiveVessel.vessel?.toVesselCompositeIdentifier() ?: "",
                     internalReferenceNumber = enrichedActiveVessel.vesselProfile?.cfr,
                     ircs = enrichedActiveVessel.vessel?.ircs,
                     mmsi = enrichedActiveVessel.vessel?.mmsi,
@@ -175,7 +170,6 @@ sealed class ActiveVesselBaseDataOutput(
                     segments = enrichedActiveVessel.segments,
                     underCharter = enrichedActiveVessel.vessel?.underCharter,
                     isAtPort = false,
-                    isFiltered = 0,
                     producerOrganization = enrichedActiveVessel.producerOrganization?.organizationName,
                     gearsArray = enrichedActiveVessel.gearsArray,
                     hasInfractionSuspicion = enrichedActiveVessel.hasInfractionSuspicion,
@@ -193,7 +187,6 @@ sealed class ActiveVesselBaseDataOutput(
 data class ActiveVesselEmittingPositionDataOutput(
     override val id: Int? = null,
     override val vesselId: Int? = null,
-    override val vesselFeatureId: String,
     override val internalReferenceNumber: String? = null,
     override val mmsi: String? = null,
     override val ircs: String? = null,
@@ -223,12 +216,10 @@ data class ActiveVesselEmittingPositionDataOutput(
     override val gearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
-    override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     override val emitsPositions: Boolean,
     override val landingPortLocode: String?,
     override val hasCurrentTripInfractionSuspicion: Boolean,
     val alerts: List<String>,
-    val hasAlert: Boolean,
     val beaconMalfunctionId: Int? = null,
     val estimatedCurrentLatitude: Double? = null,
     val estimatedCurrentLongitude: Double? = null,
@@ -239,15 +230,10 @@ data class ActiveVesselEmittingPositionDataOutput(
     val dateTime: ZonedDateTime,
     val positionType: PositionType,
     val emissionPeriod: Duration? = null,
-    // Properties for WebGL
-    val coordinates: List<Double>?,
-    val hasBeaconMalfunction: Boolean,
-    val lastPositionSentAt: Long,
     val vesselGroups: List<LastPositionVesselGroupDataOutput>,
 ) : ActiveVesselBaseDataOutput(
         id = id,
         vesselId = vesselId,
-        vesselFeatureId = vesselFeatureId,
         internalReferenceNumber = internalReferenceNumber,
         mmsi = mmsi,
         ircs = ircs,
@@ -270,7 +256,6 @@ data class ActiveVesselEmittingPositionDataOutput(
         segments = segments,
         underCharter = underCharter,
         isAtPort = isAtPort,
-        isFiltered = isFiltered,
         emitsPositions = emitsPositions,
         producerOrganization = producerOrganization,
         gearsArray = gearsArray,
@@ -285,7 +270,6 @@ data class ActiveVesselEmittingPositionDataOutput(
 data class ActiveVesselEmittingLogbookDataOutput(
     override val id: Int? = null,
     override val vesselId: Int? = null,
-    override val vesselFeatureId: String,
     override val activityType: ActivityType,
     override val activityOrigin: ActivityOrigin,
     override val internalReferenceNumber: String? = null,
@@ -313,7 +297,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
     override val producerOrganization: String? = null,
     override val landingPortLocode: String?,
     // Properties for efficient filtering in frontend
-    override val isFiltered: Int, // 0 is False, 1 is True - for WebGL
     override val gearsArray: List<String>,
     override val hasInfractionSuspicion: Boolean,
     override val speciesArray: List<String>,
@@ -322,7 +305,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
 ) : ActiveVesselBaseDataOutput(
         id = id,
         vesselId = vesselId,
-        vesselFeatureId = vesselFeatureId,
         internalReferenceNumber = internalReferenceNumber,
         mmsi = mmsi,
         ircs = ircs,
@@ -349,7 +331,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
         gearsArray = gearsArray,
         hasInfractionSuspicion = hasInfractionSuspicion,
         speciesArray = speciesArray,
-        isFiltered = isFiltered,
         emitsPositions = emitsPositions,
         activityType = activityType,
         activityOrigin = activityOrigin,
@@ -358,7 +339,6 @@ data class ActiveVesselEmittingLogbookDataOutput(
     )
 
 data class LastPositionVesselGroupDataOutput(
-    val id: Int,
     val color: String,
     val name: String,
     val isPriorityGroup: Boolean,

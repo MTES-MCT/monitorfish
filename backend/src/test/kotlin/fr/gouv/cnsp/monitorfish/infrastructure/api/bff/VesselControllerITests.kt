@@ -256,6 +256,65 @@ class VesselControllerITests {
     }
 
     @Test
+    fun `Should not send the active vessels properties computed by the frontend, to lighten the payload`() {
+        // Given
+        val position =
+            LastPosition(
+                id = 0,
+                vesselId = 1,
+                internalReferenceNumber = "FR224226850",
+                mmsi = null,
+                ircs = null,
+                externalReferenceNumber = null,
+                vesselName = null,
+                flagState = CountryCode.FR,
+                positionType = PositionType.VMS,
+                latitude = 47.123456789,
+                longitude = -3.123456789,
+                estimatedCurrentLatitude = 47.12345678901234,
+                estimatedCurrentLongitude = -3.12345678901234,
+                speed = 1.8,
+                course = 180.0,
+                dateTime = ZonedDateTime.now(),
+                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                alerts = listOf("THREE_MILES_TRAWLING_ALERT"),
+                beaconMalfunctionId = 12,
+            )
+        given(this.getActiveVessels.execute(any())).willReturn(
+            listOf(
+                EnrichedActiveVessel(
+                    lastPosition = position,
+                    vesselProfile = null,
+                    vessel = null,
+                    producerOrganization = null,
+                    riskFactor = VesselRiskFactor(),
+                    vesselGroups = listOf(),
+                    landingPort = null,
+                ),
+            ),
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            // Rebuilt by the frontend from the other properties (see `normalizeActiveVessel()`)
+            .andExpect(jsonPath("$[0].id").doesNotExist())
+            .andExpect(jsonPath("$[0].vesselFeatureId").doesNotExist())
+            .andExpect(jsonPath("$[0].coordinates").doesNotExist())
+            .andExpect(jsonPath("$[0].lastPositionSentAt").doesNotExist())
+            .andExpect(jsonPath("$[0].hasAlert").doesNotExist())
+            .andExpect(jsonPath("$[0].hasBeaconMalfunction").doesNotExist())
+            .andExpect(jsonPath("$[0].isFiltered").doesNotExist())
+            .andExpect(jsonPath("$[0].alerts[0]", equalTo("THREE_MILES_TRAWLING_ALERT")))
+            .andExpect(jsonPath("$[0].beaconMalfunctionId", equalTo(12)))
+    }
+
+    @Test
     fun `Should get a controlled vessel by its id with its priority groups and current trip reportings`() {
         // Given
         val vessel =

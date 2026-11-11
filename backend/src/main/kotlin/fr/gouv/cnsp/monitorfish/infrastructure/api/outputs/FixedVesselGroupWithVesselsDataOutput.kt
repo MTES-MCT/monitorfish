@@ -17,7 +17,7 @@ data class FixedVesselGroupWithVesselsDataOutput(
                 vessels.map {
                     ActiveVesselBaseDataOutput.fromEnrichedActiveVessel(
                         enrichedActiveVessel = it.second,
-                        index = it.first,
+                        indexInGroup = it.first,
                     )
                 },
         )

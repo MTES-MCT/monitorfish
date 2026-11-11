@@ -1,5 +1,6 @@
 import {
   type ActiveVesselEmittingPositionSchema,
+  type ActiveVesselApiSchema,
   ActiveVesselSchema,
   type DeclaredLogbookSpeciesSchema,
   type VesselGroupOfActiveVesselSchema
@@ -77,6 +78,7 @@ export namespace Vessel {
 
   export type ActiveVesselEmittingPosition = z.infer<typeof ActiveVesselEmittingPositionSchema>
   export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
+  export type ActiveVesselFromApi = z.infer<typeof ActiveVesselApiSchema>
 
   export type VesselPosition = {
     course: number

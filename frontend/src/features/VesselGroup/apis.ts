@@ -1,5 +1,6 @@
 import { monitorfishApi } from '@api/api'
 import { RtkCacheTagType } from '@api/constants'
+import { normalizeActiveVessel } from '@features/Vessel/normalizeActiveVessel'
 import {
   type CreateOrUpdateDynamicVesselGroup,
   type CreateOrUpdateFixedVesselGroup,
@@ -15,6 +16,12 @@ import { FrontendApiError } from '@libs/FrontendApiError'
 import { parseOrReturn } from '@utils/parseOrReturn'
 import { orderBy } from 'lodash-es'
 import z from 'zod'
+
+import type { Vessel } from '@features/Vessel/Vessel.types'
+
+type VesselGroupWithVesselsFromApi = Omit<VesselGroupWithVessels, 'vessels'> & {
+  vessels: Vessel.ActiveVesselFromApi[]
+}
 
 const CREATE_VESSEL_GROUPS_ERROR_MESSAGE = "Nous n'avons pas pu créer le groupe de navires."
 const GET_VESSELS_GROUPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les groupes de navires."
@@ -79,7 +86,12 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
     getVesselGroupsWithVessels: builder.query<VesselGroupWithVessels[], void>({
       providesTags: () => [{ type: RtkCacheTagType.VesselGroups }],
       query: () => `/vessel_groups/vessels`,
-      transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response)
+      transformErrorResponse: response => new FrontendApiError(GET_VESSELS_GROUPS_ERROR_MESSAGE, response),
+      transformResponse: (baseQueryReturnValue: VesselGroupWithVesselsFromApi[]) =>
+        baseQueryReturnValue.map(groupWithVessels => ({
+          ...groupWithVessels,
+          vessels: groupWithVessels.vessels.map(normalizeActiveVessel)
+        }))
     })
   })
 })

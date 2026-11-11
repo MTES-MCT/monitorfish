@@ -48,6 +48,29 @@ describe('api/geoserver.getRegulatoryZoneFromAPI()', () => {
     expect(results.map(feature => feature.properties)).toEqual(ZONES)
   })
 
+  it('Should split many zones in several requests, to keep the URLs short enough for the proxies', async () => {
+    const zones = Array.from({ length: 15 }, (_, index) => ({
+      topic: 'Bretagne - Chaluts de fond',
+      zone: `Zone ${index}`
+    }))
+    fetchMock.mockImplementation(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            features: zones.map(({ topic, zone }) => buildFeature(topic, zone)),
+            type: 'FeatureCollection'
+          }),
+        status: 200
+      })
+    )
+
+    await Promise.all(zones.map(zone => getRegulatoryZoneFromAPI('regulations', zone as any, false)))
+
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    // Apache and Tomcat reject request lines (or headers) longer than 8 KB
+    fetchMock.mock.calls.forEach(([url]) => expect((url as string).length).toBeLessThan(4 * 1024))
+  })
+
   it('Should reject only the zone missing from the response', async () => {
     const results = await Promise.allSettled([
       getRegulatoryZoneFromAPI('regulations', ZONES[0] as any, false),

@@ -144,7 +144,7 @@ function getAdministrativeZoneURL(
   if (subZone) {
     const filter = `${encodeURIComponent(subZone).replace(/'/g, "''")}`
 
-    subZoneFilter = `&featureID=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
+    subZoneFilter = `&featureID=${filter.replaceAll("'", '%27').replaceAll(' ', '%20')}`
   }
 
   return (
@@ -163,8 +163,8 @@ type PendingRegulatoryZoneRequest = {
   resolve: (feature: Regulation.RegulatoryZoneGeoJsonFeature) => void
 }
 
-// Keeps the URL short enough for GeoServer and proxies
-const MAX_REGULATORY_ZONES_PER_REQUEST = 20
+// Keeps the URL far below the 8 KB request line limit of Apache and Tomcat (~250 characters per zone at most)
+const MAX_REGULATORY_ZONES_PER_REQUEST = 10
 const pendingRegulatoryZoneRequestsByBatchKey = new Map<string, PendingRegulatoryZoneRequest[]>()
 
 /**
@@ -199,7 +199,8 @@ export function getRegulatoryZoneFromAPI(
       pendingRegulatoryZoneRequestsByBatchKey.delete(batchKey)
 
       for (let index = 0; index < requests.length; index += MAX_REGULATORY_ZONES_PER_REQUEST) {
-        fetchRegulatoryZones(type, geoserverURL, requests.slice(index, index + MAX_REGULATORY_ZONES_PER_REQUEST))
+        // Never rejects: each pending request is resolved or rejected
+        void fetchRegulatoryZones(type, geoserverURL, requests.slice(index, index + MAX_REGULATORY_ZONES_PER_REQUEST))
       }
     })
   })
@@ -246,7 +247,7 @@ async function fetchRegulatoryZones(type: string, geoserverURL: string, requests
  * @description This API isn't authenticated
  */
 function getRegulatoryZonesURL(type: string, regulatoryZones: MonitorFishMap.ShowedLayer[], geoserverURL: string) {
-  const escapeCqlValue = (value: string) => encodeURIComponent(value).replace(/'/g, "''")
+  const escapeCqlValue = (value: string) => encodeURIComponent(value).replaceAll("'", "''")
   const filter = regulatoryZones
     .map(
       regulatoryZone =>

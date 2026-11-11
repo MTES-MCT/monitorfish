@@ -90,7 +90,7 @@ export const vesselGroupApi = monitorfishApi.injectEndpoints({
       transformResponse: (baseQueryReturnValue: VesselGroupWithVesselsFromApi[]) =>
         baseQueryReturnValue.map(groupWithVessels => ({
           ...groupWithVessels,
-          vessels: groupWithVessels.vessels.map(normalizeActiveVessel)
+          vessels: groupWithVessels.vessels.map((vessel, index) => normalizeActiveVessel(vessel, index))
         }))
     })
   })

@@ -1,4 +1,4 @@
-import { FrontendError } from '@libs/FrontendError'
+import { parseOrReturn } from './parseOrReturn'
 
 import type { z } from 'zod'
 
@@ -11,21 +11,13 @@ import type { z } from 'zod'
  */
 export function parseSampleOrReturn<T>(body: unknown, schema: z.ZodType<any>, sampleSize: number): T[] {
   if (!Array.isArray(body)) {
-    // eslint-disable-next-line no-new
-    new FrontendError('Failing validating type', new Error('Expected an array for parsing.'))
-
-    return body as T[]
+    // Reports the contract mismatch
+    return parseOrReturn<T>(body, schema, true)
   }
 
   const step = Math.max(1, Math.floor(body.length / sampleSize))
-  try {
-    for (let index = 0; index < body.length && index / step < sampleSize; index += step) {
-      schema.parse(body[index], { reportInput: true })
-    }
-  } catch (error) {
-    // eslint-disable-next-line no-new
-    new FrontendError('Failing validating type', error)
-  }
+  const sample = body.filter((_, index) => index % step === 0).slice(0, sampleSize)
+  parseOrReturn<T>(sample, schema, true)
 
   return body as T[]
 }

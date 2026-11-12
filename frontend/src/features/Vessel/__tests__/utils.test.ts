@@ -116,7 +116,7 @@ describe('utils/buildFeature()', () => {
       vesselIdentifier: VesselIdentifier.IRCS
     } as any
 
-    const result = buildFeature(vessel, vesselGroupDisplayed)
+    const result = buildFeature(vessel, vesselGroupDisplayed, true)
 
     expect(result).toBeUndefined()
   })

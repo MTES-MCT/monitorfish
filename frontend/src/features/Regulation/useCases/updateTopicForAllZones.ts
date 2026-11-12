@@ -1,3 +1,4 @@
+import { geoserverApi, REGULATORY_ZONES_TAG } from '@api/geoserverApi'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 import { Feature } from 'ol'
@@ -47,6 +48,7 @@ export const updateTopicForAllZones =
 
       try {
         await Promise.all(promiseList)
+        dispatch(geoserverApi.util.invalidateTags([REGULATORY_ZONES_TAG]))
 
         const newLayersTopicsByRegTerritory = mutateLayersTopicsWithNewTopic(
           layersTopicsByRegTerritory,

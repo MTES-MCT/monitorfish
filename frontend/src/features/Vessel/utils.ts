@@ -42,63 +42,69 @@ export function buildAISVesselFeature(vessel: AISVessel.AISVessel): AISVessel.AI
 
 export function buildFeature(
   vessel: Vessel.ActiveVesselEmittingPosition,
-  vesselGroupDisplayed: VesselGroupDisplayInformation
+  vesselGroupDisplayed: VesselGroupDisplayInformation,
+  isFiltered: boolean
 ): Vessel.VesselLastPositionFeature | undefined {
   if (!vessel.coordinates) {
     return undefined
   }
 
+  const feature = new Feature(new Point(vessel.coordinates)) as Vessel.VesselLastPositionFeature
   /**
    * The feature does contain ONLY required properties, it does not contain all properties of VesselLastPosition.
+   * Set silently: a change event per property, for thousands of vessels, slows down the rendering.
    */
-  const feature = new Feature({
-    activityOrigin: vessel.activityOrigin,
-    alerts: vessel.alerts,
-    beaconMalfunctionId: vessel.beaconMalfunctionId,
-    coordinates: vessel.coordinates,
-    course: vessel.course,
-    dateTime: vessel.dateTime,
-    detectabilityRiskFactor: vessel.detectabilityRiskFactor,
-    emissionPeriod: vessel.emissionPeriod,
-    estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
-    estimatedCurrentLongitude: vessel.estimatedCurrentLongitude,
-    externalReferenceNumber: vessel.externalReferenceNumber,
-    flagState: vessel.flagState,
-    geometry: new Point(vessel.coordinates),
-    groupColorBlue: vesselGroupDisplayed.groupColor[2],
-    groupColorGreen: vesselGroupDisplayed.groupColor[1],
-    groupColorRed: vesselGroupDisplayed.groupColor[0],
-    groupsDisplayed: vesselGroupDisplayed.groupsDisplayed,
-    hasAlert: vessel.hasAlert,
-    hasBeaconMalfunction: vessel.hasBeaconMalfunction,
-    hasCurrentTripInfractionSuspicion: vessel.hasCurrentTripInfractionSuspicion,
-    hasInfractionSuspicion: vessel.hasInfractionSuspicion,
-    impactRiskFactor: vessel.impactRiskFactor,
-    internalReferenceNumber: vessel.internalReferenceNumber,
-    ircs: vessel.ircs,
-    isAtPort: vessel.isAtPort,
-    isFiltered: vessel.isFiltered,
-    lastControlAtQuayDateTime: vessel.lastControlAtQuayDateTime,
-    lastControlAtSeaDateTime: vessel.lastControlAtSeaDateTime,
-    lastLogbookMessageDateTime: vessel.lastLogbookMessageDateTime,
-    lastPositionSentAt: vessel.lastPositionSentAt,
-    latitude: vessel.latitude,
-    length: vessel.length,
-    longitude: vessel.longitude,
-    mmsi: vessel.mmsi,
-    numberOfGroupsHidden: vesselGroupDisplayed.numberOfGroupsHidden,
-    positionType: vessel.positionType,
-    probabilityRiskFactor: vessel.probabilityRiskFactor,
-    riskFactor: vessel.riskFactor,
-    segments: vessel.segments,
-    speciesArray: vessel.speciesArray,
-    speed: vessel.speed,
-    underCharter: vessel.underCharter,
-    vesselFeatureId: vessel.vesselFeatureId,
-    vesselId: vessel.vesselId,
-    vesselIdentifier: vessel.vesselIdentifier,
-    vesselName: vessel.vesselName
-  }) as Vessel.VesselLastPositionFeature
+  feature.setProperties(
+    {
+      activityOrigin: vessel.activityOrigin,
+      alerts: vessel.alerts,
+      beaconMalfunctionId: vessel.beaconMalfunctionId,
+      coordinates: vessel.coordinates,
+      course: vessel.course,
+      dateTime: vessel.dateTime,
+      detectabilityRiskFactor: vessel.detectabilityRiskFactor,
+      emissionPeriod: vessel.emissionPeriod,
+      estimatedCurrentLatitude: vessel.estimatedCurrentLatitude,
+      estimatedCurrentLongitude: vessel.estimatedCurrentLongitude,
+      externalReferenceNumber: vessel.externalReferenceNumber,
+      flagState: vessel.flagState,
+      groupColorBlue: vesselGroupDisplayed.groupColor[2],
+      groupColorGreen: vesselGroupDisplayed.groupColor[1],
+      groupColorRed: vesselGroupDisplayed.groupColor[0],
+      groupsDisplayed: vesselGroupDisplayed.groupsDisplayed,
+      hasAlert: vessel.hasAlert,
+      hasBeaconMalfunction: vessel.hasBeaconMalfunction,
+      hasCurrentTripInfractionSuspicion: vessel.hasCurrentTripInfractionSuspicion,
+      hasInfractionSuspicion: vessel.hasInfractionSuspicion,
+      impactRiskFactor: vessel.impactRiskFactor,
+      internalReferenceNumber: vessel.internalReferenceNumber,
+      ircs: vessel.ircs,
+      isAtPort: vessel.isAtPort,
+      // A number, for WebGL styles
+      isFiltered: isFiltered ? 1 : 0,
+      lastControlAtQuayDateTime: vessel.lastControlAtQuayDateTime,
+      lastControlAtSeaDateTime: vessel.lastControlAtSeaDateTime,
+      lastLogbookMessageDateTime: vessel.lastLogbookMessageDateTime,
+      lastPositionSentAt: vessel.lastPositionSentAt,
+      latitude: vessel.latitude,
+      length: vessel.length,
+      longitude: vessel.longitude,
+      mmsi: vessel.mmsi,
+      numberOfGroupsHidden: vesselGroupDisplayed.numberOfGroupsHidden,
+      positionType: vessel.positionType,
+      probabilityRiskFactor: vessel.probabilityRiskFactor,
+      riskFactor: vessel.riskFactor,
+      segments: vessel.segments,
+      speciesArray: vessel.speciesArray,
+      speed: vessel.speed,
+      underCharter: vessel.underCharter,
+      vesselFeatureId: vessel.vesselFeatureId,
+      vesselId: vessel.vesselId,
+      vesselIdentifier: vessel.vesselIdentifier,
+      vesselName: vessel.vesselName
+    },
+    true
+  )
   feature.setId(vessel.vesselFeatureId)
 
   return feature

@@ -15,9 +15,6 @@ export async function launchChrome(): Promise<Browser> {
   })
 }
 
-/**
- * Log in through the local Keycloak, from a fresh browser (without session cookie).
- */
 export async function login(page: Page): Promise<void> {
   await page.goto(BASE_URL, { waitUntil: 'load' })
   await page.locator('button ::-p-text(ProConnect)').click()
@@ -27,9 +24,6 @@ export async function login(page: Page): Promise<void> {
   await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click('#kc-login')])
 }
 
-/**
- * Run `navigate` (a `goto()` or `reload()`) and wait until the active vessels are fetched and displayed.
- */
 export async function navigateAndWaitForVessels(page: Page, navigate: () => Promise<unknown>): Promise<void> {
   await Promise.all([
     page.waitForResponse(response => new URL(response.url()).pathname === '/bff/v1/vessels', {
@@ -40,7 +34,7 @@ export async function navigateAndWaitForVessels(page: Page, navigate: () => Prom
   await page.waitForSelector('[data-cy="first-loader"]', { hidden: true, timeout: 120 * 1000 })
 }
 
-export function recordRequests(page: Page): { paths: () => string[]; count: (path: string) => number } {
+export function recordRequests(page: Page): { count: (path: string) => number; paths: () => string[] } {
   const requests: HTTPRequest[] = []
   page.on('request', request => {
     requests.push(request)
@@ -54,9 +48,6 @@ export function recordRequests(page: Page): { paths: () => string[]; count: (pat
   }
 }
 
-/**
- * Start recording long animation frames (> 50 ms) in the page, to be read with `getBlockingDurationSince()`.
- */
 export async function recordLongAnimationFrames(page: Page): Promise<void> {
   await page.evaluateOnNewDocument(() => {
     const frames: Array<{ blockingDuration: number; duration: number; startTime: number }> = []

@@ -1,3 +1,4 @@
+import { geoserverApi, REGULATORY_ZONES_TAG } from '@api/geoserverApi'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -13,6 +14,7 @@ export const updateRegulation =
   async dispatch => {
     try {
       await sendRegulationTransaction(transaction)
+      dispatch(geoserverApi.util.invalidateTags([REGULATORY_ZONES_TAG]))
 
       if (type === RegulationActionType.Delete) {
         dispatch(regulationActions.setProcessingRegulationDeleted(true))

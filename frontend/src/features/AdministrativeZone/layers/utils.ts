@@ -55,6 +55,11 @@ function buildWholeVectorSource(type: string, zone: string | undefined): VectorS
   return vectorSource
 }
 
+/**
+ * The zones of the visible extent are downloaded in a single request (a tile strategy would download large zones,
+ * as EEZ or FAO areas, once per tile). The downloaded zones are kept: moving or zooming in an extent
+ * already downloaded does not download them again.
+ */
 function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSource<Feature<Geometry>> {
   const vectorSource = new VectorSource<Feature<Geometry>>({
     format: new GeoJSON<Feature<Geometry>>({
@@ -64,7 +69,7 @@ function buildBBOXVectorSource(type: string, zone: string | undefined): VectorSo
     loader: extent => {
       getAdministrativeZoneFromAPI(type, extent, zone)
         .then(administrativeZone => {
-          vectorSource.clear(true)
+          // Features of overlapping extents are only added once, as they have the same id
           const features = vectorSource.getFormat()?.readFeatures(administrativeZone)
           if (!features) {
             return

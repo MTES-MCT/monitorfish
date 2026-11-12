@@ -1,5 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.cache
 
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVesselsWithoutVesselGroups.Companion.ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS_CACHE
+
 /**
  * Cache names as compile-time constants, so that the `@Cacheable` / `@CacheEvict` annotations and
  * [MonitorfishCache] cannot drift apart. Annotations need a constant, which is why these are not
@@ -9,7 +11,7 @@ object CacheName {
     const val ACTIVE_PORTS = "active_ports"
     const val ACTIVE_VESSEL = "active_vessel"
     const val ACTIVE_VESSELS = "active_vessels"
-    const val ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS = "active_vessels_without_vessel_groups"
+    const val ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS = ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS_CACHE
     const val ALL_SPECIES = "all_species"
     const val ALL_SPECIES_GROUPS = "all_species_groups"
     const val ALL_TRIPS = "all_trips"

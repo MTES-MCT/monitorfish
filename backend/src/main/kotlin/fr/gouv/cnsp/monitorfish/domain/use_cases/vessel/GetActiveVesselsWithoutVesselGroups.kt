@@ -111,7 +111,6 @@ class GetActiveVesselsWithoutVesselGroups(
     }
 
     companion object {
-        // See `CacheName.ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS`
         const val ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS_CACHE = "active_vessels_without_vessel_groups"
     }
 }

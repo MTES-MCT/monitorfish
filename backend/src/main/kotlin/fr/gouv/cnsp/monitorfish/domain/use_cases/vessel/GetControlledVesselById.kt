@@ -24,8 +24,10 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselProfileRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
 @UseCase
@@ -39,24 +41,27 @@ class GetControlledVesselById(
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
     private val riskFactorRepository: RiskFactorRepository,
+    private val getVesselLandingPort: GetVesselLandingPort,
 ) {
     suspend fun execute(
         vesselId: Int,
         userEmail: String,
     ): ControlledVessel =
-        coroutineScope {
+        // The repositories are blocking: on the caller's dispatcher (e.g. `runBlocking`), they would run one after another
+        withContext(Dispatchers.IO) {
             val now = ZonedDateTime.now()
             val vessel =
                 vesselRepository.findVesselById(vesselId)
                     ?: throw BackendUsageException(BackendUsageErrorCode.NOT_FOUND)
 
             val userVesselGroups = async { getAllUserVesselGroups.execute(userEmail) }
+            val tripReportings = async { findCurrentTripReportings(vessel, vesselId) }
             val enrichedActiveVessel = enrichVessel(vessel, vesselId)
 
             ControlledVessel(
                 controlledVessel = vessel,
                 groups = findSharedGroups(userVesselGroups.await(), enrichedActiveVessel, now),
-                tripReportings = findCurrentTripReportings(vessel, vesselId),
+                tripReportings = tripReportings.await(),
             )
         }
 
@@ -77,16 +82,17 @@ class GetControlledVesselById(
                     vessel.internalReferenceNumber?.let { vesselProfileRepository.findByCfr(it) }
                 }
             val riskFactor = async { riskFactorRepository.findByVesselId(vesselId) }
-            val lastPosition = lastPositionRepository.findByVesselId(vesselId)
+            val lastPosition = async { lastPositionRepository.findByVesselId(vesselId) }
+            val landingPort = async { getVesselLandingPort.execute(vessel.internalReferenceNumber) }
 
             EnrichedActiveVessel(
-                lastPosition = lastPosition,
+                lastPosition = lastPosition.await(),
                 beacon = beacon.await(),
                 vesselProfile = vesselProfile.await(),
                 vessel = vessel,
                 producerOrganization = producerOrganization.await(),
                 riskFactor = riskFactor.await() ?: VesselRiskFactor(),
-                landingPort = null,
+                landingPort = landingPort.await(),
             )
         }
 

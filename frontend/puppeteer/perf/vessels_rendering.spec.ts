@@ -27,7 +27,7 @@ describe('Vessels rendering (non-super-user)', () => {
     page = await browser.newPage()
     await login(page)
     await recordLongAnimationFrames(page)
-    await delayRequests(page, '/bff/v1/vessels', VESSELS_DELAY_MS)
+    await delayRequests(page, '/bff/v1/vessels/changes', VESSELS_DELAY_MS)
   })
 
   afterAll(async () => {
@@ -42,7 +42,7 @@ describe('Vessels rendering (non-super-user)', () => {
       setTimeout(resolve, RENDERING_WINDOW_MS)
     })
 
-    const vesselsResponseEnd = await getResponseEndTime(page, '/bff/v1/vessels')
+    const vesselsResponseEnd = await getResponseEndTime(page, '/bff/v1/vessels/changes')
     const blockedDuration = await getLongAnimationFramesDurationSince(page, vesselsResponseEnd!)
     await page.emulateCPUThrottling(null)
 

@@ -44,6 +44,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.RiskElementMetrics
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.VesselRiskElement
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_element.VesselRiskElementAndReportings
 import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActiveVesselsChanges
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ControlledVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
@@ -60,6 +61,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVesselsChanges
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetSpeciesControlPrefillFromLogbook
@@ -145,6 +147,9 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getVesselReportings: GetVesselReportings
+
+    @MockitoBean
+    private lateinit var getActiveVesselsChanges: GetActiveVesselsChanges
 
     @MockitoBean
     private lateinit var getVesselRiskFactor: GetVesselRiskFactor
@@ -253,6 +258,76 @@ class VesselControllerITests {
             .andExpect(jsonPath("$[0].gearsArray.length()", equalTo(1)))
             .andExpect(jsonPath("$[0].gearsArray[0]", equalTo("OTB")))
             .andExpect(jsonPath("$[0].alerts.length()", equalTo(0)))
+    }
+
+    @Test
+    fun `Should get the active vessels changes since the given state`() {
+        // Given
+        val movedVessel =
+            EnrichedActiveVessel(
+                lastPosition =
+                    LastPosition(
+                        internalReferenceNumber = "FR224226850",
+                        ircs = "FQ7058",
+                        flagState = CountryCode.FR,
+                        positionType = PositionType.VMS,
+                        latitude = 47.5,
+                        longitude = -3.5,
+                        speed = 8.2,
+                        course = 90.0,
+                        dateTime = ZonedDateTime.parse("2026-11-11T10:20:00Z"),
+                        vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                    ),
+                vesselProfile = null,
+                vessel = null,
+                producerOrganization = null,
+                riskFactor = VesselRiskFactor(),
+                landingPort = null,
+            )
+        val vesselGroup = getDynamicVesselGroups().first()
+        given(this.getActiveVesselsChanges.execute(any(), eq("abc.123"))).willReturn(
+            ActiveVesselsChanges(
+                asOf = "abc.456",
+                isFull = false,
+                vessels = listOf(),
+                positions = listOf(movedVessel),
+                removedVesselFeatureIds = listOf("VESSELS:FR263418260/UNKNOWN/SB125334"),
+                activeVesselsCount = 2,
+                fingerprint = 2497665112L,
+                vesselGroupsByVesselFeatureId =
+                    mapOf("VESSELS_POINTS:FR224226850/FQ7058/UNKNOWN" to listOf(vesselGroup)),
+            ),
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/changes?after=abc.123")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.asOf", equalTo("abc.456")))
+            .andExpect(jsonPath("$.isFull", equalTo(false)))
+            .andExpect(jsonPath("$.vessels.length()", equalTo(0)))
+            .andExpect(jsonPath("$.positions.length()", equalTo(1)))
+            .andExpect(jsonPath("$.positions[0].vesselFeatureId", equalTo("VESSELS_POINTS:FR224226850/FQ7058/UNKNOWN")))
+            .andExpect(jsonPath("$.positions[0].latitude", equalTo(47.5)))
+            .andExpect(jsonPath("$.positions[0].speed", equalTo(8.2)))
+            .andExpect(jsonPath("$.positions[0].coordinates.length()", equalTo(2)))
+            .andExpect(jsonPath("$.positions[0].lastPositionSentAt", equalTo(1794392400000L)))
+            // Only the position: not the other properties of the vessel
+            .andExpect(jsonPath("$.positions[0].riskFactor").doesNotExist())
+            .andExpect(jsonPath("$.removedVesselFeatureIds[0]", equalTo("VESSELS:FR263418260/UNKNOWN/SB125334")))
+            .andExpect(jsonPath("$.vesselGroups[0].id", equalTo(vesselGroup.id)))
+            .andExpect(jsonPath("$.vesselGroups[0].name", equalTo(vesselGroup.name)))
+            .andExpect(
+                jsonPath(
+                    "$.vesselGroupIdsByVesselFeatureId['VESSELS_POINTS:FR224226850/FQ7058/UNKNOWN'][0]",
+                    equalTo(vesselGroup.id),
+                ),
+            ).andExpect(jsonPath("$.activeVesselsCount", equalTo(2)))
+            .andExpect(jsonPath("$.fingerprint", equalTo(2497665112L)))
     }
 
     @Test

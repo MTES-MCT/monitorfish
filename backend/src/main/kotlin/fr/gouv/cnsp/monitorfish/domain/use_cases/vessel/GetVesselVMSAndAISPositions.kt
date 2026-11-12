@@ -8,8 +8,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.AisPositionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PositionRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneOffset
@@ -43,7 +44,8 @@ class GetVesselVMSAndAISPositions(
         val aisFrom = ZonedDateTime.now(ZoneOffset.UTC).minusHours(12)
         val aisTo = ZonedDateTime.now(ZoneOffset.UTC)
 
-        return coroutineScope {
+        // The repositories are blocking: on the caller's dispatcher (e.g. `runBlocking`), they would run one after another
+        return withContext(Dispatchers.IO) {
             val vmsFuture =
                 findPositionsAsync(
                     vesselIdentifier = vesselIdentifier,

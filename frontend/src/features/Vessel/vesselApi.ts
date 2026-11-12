@@ -1,6 +1,7 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
 import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
+import { ActiveVesselsChangesSchema } from '@features/Vessel/schemas/ActiveVesselsChangesSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
 import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchema'
@@ -14,16 +15,30 @@ import { parseSampleOrReturn } from '@utils/parseSampleOrReturn'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
+import { createActiveVesselsSync } from './createActiveVesselsSync'
 import { getVesselIdentityFromLegacyVesselIdentity, getVesselIdentityPropsAsEmptyStringsWhenUndefined } from './utils'
 import { Vessel } from './Vessel.types'
 
 import type { Meta } from '@api/BackendApi.types'
+import type { CustomResponseError } from '@api/types'
 import type { VesselReportings } from '@features/Reporting/types'
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
 import type { VesselLocation } from '@features/Vessel/types/vessel'
 
 const ACTIVE_VESSELS_SAMPLE_SIZE = 100
+
+const getActiveVesselsFromChanges = createActiveVesselsSync()
+
+/** Thousands of vessels on a full download: only a sample is validated, not to freeze the page on slow computers */
+function parseActiveVesselsChanges(response: Vessel.ActiveVesselsChanges): Vessel.ActiveVesselsChanges {
+  const changes = parseOrReturn<Vessel.ActiveVesselsChanges>(response, ActiveVesselsChangesSchema, false)
+
+  return {
+    ...changes,
+    vessels: parseSampleOrReturn<Vessel.ActiveVessel>(changes.vessels, ActiveVesselSchema, ACTIVE_VESSELS_SAMPLE_SIZE)
+  }
+}
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -44,18 +59,22 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
     getActiveVessels: builder.query<Vessel.ActiveVessel[], void>({
       providesTags: () => [{ type: RtkCacheTagType.ActiveVessels }],
-      query: () => `/vessels`,
-      /**
-       * Thousands of vessels, to be processed without freezing the page on slow computers:
-       * - only a sample is validated
-       * - they are frozen, as Immer skips frozen objects instead of deeply walking them
-       */
-      transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
-        parseSampleOrReturn<Vessel.ActiveVessel>(
-          baseQueryReturnValue,
-          ActiveVesselSchema,
-          ACTIVE_VESSELS_SAMPLE_SIZE
-        ).map(vessel => Object.freeze(vessel))
+      queryFn: async (_arg, _api, _extraOptions, baseQuery) => {
+        try {
+          const vessels = await getActiveVesselsFromChanges(async after => {
+            const result = await baseQuery(getUrlOrPathWithQueryParams('/vessels/changes', { after }))
+            if (result.error) {
+              throw result.error
+            }
+
+            return parseActiveVesselsChanges(result.data as Vessel.ActiveVesselsChanges)
+          })
+
+          return { data: vessels }
+        } catch (error) {
+          return { error: error as CustomResponseError }
+        }
+      }
     }),
 
     getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({

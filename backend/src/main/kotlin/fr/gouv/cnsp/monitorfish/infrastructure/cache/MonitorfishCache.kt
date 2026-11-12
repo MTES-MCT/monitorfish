@@ -30,6 +30,9 @@ enum class MonitorfishCache(
     ACTIVE_PORTS(CacheName.ACTIVE_PORTS, NEVER_EXPIRES, SINGLE_ENTRY),
     ACTIVE_VESSEL(CacheName.ACTIVE_VESSEL, 60.seconds, BOUNDED_KEY),
     ACTIVE_VESSELS(CacheName.ACTIVE_VESSELS, 60.seconds, BOUNDED_KEY),
+
+    /** Refreshed every 30 seconds by [RefreshActiveVesselsCache]: only expires if the refresh fails. */
+    ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS(CacheName.ACTIVE_VESSELS_WITHOUT_VESSEL_GROUPS, 2.minutes, SINGLE_ENTRY),
     ALL_SPECIES(CacheName.ALL_SPECIES, 7.days, SINGLE_ENTRY),
     ALL_SPECIES_GROUPS(CacheName.ALL_SPECIES_GROUPS, 7.days, SINGLE_ENTRY),
     ALL_TRIPS(CacheName.ALL_TRIPS, 10.minutes, HEAVY_OR_FREE_FORM_KEY),

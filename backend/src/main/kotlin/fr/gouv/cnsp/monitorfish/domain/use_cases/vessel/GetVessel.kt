@@ -21,8 +21,9 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.RiskFactorRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselProfileRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel_groups.GetAllUserVesselGroups
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -40,6 +41,7 @@ class GetVessel(
     private val vesselProfileRepository: VesselProfileRepository,
     private val lastPositionRepository: LastPositionRepository,
     private val reportingRepository: ReportingRepository,
+    private val getVesselLandingPort: GetVesselLandingPort,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(GetVessel::class.java)
 
@@ -54,19 +56,22 @@ class GetVessel(
         fromDateTime: ZonedDateTime?,
         toDateTime: ZonedDateTime?,
     ): Pair<Boolean, EnrichedActiveVesselWithPositions> =
-        coroutineScope {
+        // The repositories are blocking: on the caller's dispatcher (e.g. `runBlocking`), they would run one after another
+        withContext(Dispatchers.IO) {
             val now = ZonedDateTime.now()
 
-            val (vesselTrackHasBeenModified, positions) =
-                getVesselVMSAndAISPositions.execute(
-                    internalReferenceNumber = internalReferenceNumber,
-                    externalReferenceNumber = externalReferenceNumber,
-                    ircs = ircs,
-                    trackDepth = trackDepth,
-                    vesselIdentifier = vesselIdentifier,
-                    fromDateTime = fromDateTime,
-                    toDateTime = toDateTime,
-                )
+            val vesselTrackAndPositionsFuture =
+                async {
+                    getVesselVMSAndAISPositions.execute(
+                        internalReferenceNumber = internalReferenceNumber,
+                        externalReferenceNumber = externalReferenceNumber,
+                        ircs = ircs,
+                        trackDepth = trackDepth,
+                        vesselIdentifier = vesselIdentifier,
+                        fromDateTime = fromDateTime,
+                        toDateTime = toDateTime,
+                    )
+                }
 
             val reportingsByCfrFuture =
                 async {
@@ -115,39 +120,52 @@ class GetVessel(
                 async {
                     getVesselRiskFactor(vesselId, internalReferenceNumber)
                 }
-            val logbookSoftware = logbookReportRepository.findLastReportSoftware(internalReferenceNumber)
-            val lastLogbookOperationNumber = logbookReportRepository.findLastOperationNumber(internalReferenceNumber)
-            val lastLogbookRawMessage =
-                lastLogbookOperationNumber?.let {
-                    logbookRawMessageRepository.findRawMessage(it)
+            val logbookSoftwareFuture =
+                async {
+                    logbookReportRepository.findLastReportSoftware(internalReferenceNumber)
                 }
-            val bossNameAndAddress = extractBossNameAndAddressFromERS(lastLogbookRawMessage)
-
-            val allCfrWithVisioCaptures = logbookReportRepository.findAllCfrWithVisioCaptures()
-            val hasVisioCaptures = allCfrWithVisioCaptures.firstOrNull { it == internalReferenceNumber } != null
-
-            val lastPosition =
-                when (vesselIdentifier) {
-                    VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
-                        lastPositionRepository.findByVesselIdentifier(
-                            vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
-                            value = internalReferenceNumber,
-                        )
-
-                    VesselIdentifier.IRCS ->
-                        lastPositionRepository.findByVesselIdentifier(
-                            vesselIdentifier = VesselIdentifier.IRCS,
-                            value = ircs,
-                        )
-
-                    VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
-                        lastPositionRepository.findByVesselIdentifier(
-                            vesselIdentifier = VesselIdentifier.EXTERNAL_REFERENCE_NUMBER,
-                            value = externalReferenceNumber,
-                        )
-
-                    null -> null
+            val lastLogbookRawMessageFuture =
+                async {
+                    logbookReportRepository.findLastOperationNumber(internalReferenceNumber)?.let {
+                        logbookRawMessageRepository.findRawMessage(it)
+                    }
                 }
+            val landingPortFuture =
+                async {
+                    getVesselLandingPort.execute(internalReferenceNumber)
+                }
+            val allCfrWithVisioCapturesFuture =
+                async {
+                    logbookReportRepository.findAllCfrWithVisioCaptures()
+                }
+
+            val lastPositionFuture =
+                async {
+                    when (vesselIdentifier) {
+                        VesselIdentifier.INTERNAL_REFERENCE_NUMBER ->
+                            lastPositionRepository.findByVesselIdentifier(
+                                vesselIdentifier = VesselIdentifier.INTERNAL_REFERENCE_NUMBER,
+                                value = internalReferenceNumber,
+                            )
+
+                        VesselIdentifier.IRCS ->
+                            lastPositionRepository.findByVesselIdentifier(
+                                vesselIdentifier = VesselIdentifier.IRCS,
+                                value = ircs,
+                            )
+
+                        VesselIdentifier.EXTERNAL_REFERENCE_NUMBER ->
+                            lastPositionRepository.findByVesselIdentifier(
+                                vesselIdentifier = VesselIdentifier.EXTERNAL_REFERENCE_NUMBER,
+                                value = externalReferenceNumber,
+                            )
+
+                        null -> null
+                    }
+                }
+
+            val bossNameAndAddress = extractBossNameAndAddressFromERS(lastLogbookRawMessageFuture.await())
+            val hasVisioCaptures = allCfrWithVisioCapturesFuture.await().any { it == internalReferenceNumber }
 
             val reportingTypes =
                 (
@@ -158,19 +176,19 @@ class GetVessel(
 
             val enrichedActiveVessel =
                 EnrichedActiveVessel(
-                    lastPosition = lastPosition,
+                    lastPosition = lastPositionFuture.await(),
                     beacon = beacon.await(),
                     vesselProfile = vesselProfile.await(),
                     vessel =
                         vessel.await()?.copy(
                             hasVisioCaptures = hasVisioCaptures,
-                            logbookSoftware = logbookSoftware,
+                            logbookSoftware = logbookSoftwareFuture.await(),
                             bossName = bossNameAndAddress?.first,
                             bossAddress = bossNameAndAddress?.second,
                         ),
                     producerOrganization = vesselProducerOrganization.await(),
                     riskFactor = vesselRiskFactor.await() ?: VesselRiskFactor(),
-                    landingPort = null,
+                    landingPort = landingPortFuture.await(),
                     reportingTypes = reportingTypes,
                 )
 
@@ -182,6 +200,8 @@ class GetVessel(
                         is PriorityVesselGroup -> vesselGroup.containsActiveVessel(enrichedActiveVessel)
                     }
                 }
+
+            val (vesselTrackHasBeenModified, positions) = vesselTrackAndPositionsFuture.await()
 
             Pair(
                 vesselTrackHasBeenModified,

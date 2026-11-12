@@ -26,6 +26,14 @@ data class EnrichedActiveVessel(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(EnrichedActiveVessel::class.java)
 
+    /**
+     * Identifier of the vessel feature in the frontend (`vesselFeatureId`).
+     */
+    fun getFeatureId(): String =
+        lastPosition?.let { Vessel.getVesselCompositeIdentifier(it) }
+            ?: vessel?.toVesselCompositeIdentifier()
+            ?: ""
+
     val activityType: ActivityType
     val segments: List<String>
     val gearsArray: List<String>

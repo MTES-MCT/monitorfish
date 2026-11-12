@@ -26,7 +26,7 @@ export async function login(page: Page): Promise<void> {
 
 export async function navigateAndWaitForVessels(page: Page, navigate: () => Promise<unknown>): Promise<void> {
   await Promise.all([
-    page.waitForResponse(response => new URL(response.url()).pathname === '/bff/v1/vessels', {
+    page.waitForResponse(response => new URL(response.url()).pathname === '/bff/v1/vessels/changes', {
       timeout: 120 * 1000
     }),
     navigate()
@@ -102,5 +102,21 @@ export function delayRequests(page: Page, pathToDelay: string, delayMs: number):
 export async function wait(durationMs: number): Promise<void> {
   await new Promise(resolve => {
     setTimeout(resolve, durationMs)
+  })
+}
+
+/**
+ * Runs the long timers of the page (≥ 1 minute: the refreshes) 1000 times faster:
+ * a 5 minutes refresh happens every 300 ms.
+ */
+export async function accelerateLongTimers(page: Page): Promise<void> {
+  await page.evaluateOnNewDocument(() => {
+    const ACCELERATION = 1000
+    const accelerate = (delay?: number) => (delay && delay >= 60 * 1000 ? delay / ACCELERATION : delay)
+    const { setInterval: nativeSetInterval, setTimeout: nativeSetTimeout } = window
+    ;(window as any).setInterval = (handler: TimerHandler, delay?: number, ...args: any[]) =>
+      nativeSetInterval(handler, accelerate(delay), ...args)
+    ;(window as any).setTimeout = (handler: TimerHandler, delay?: number, ...args: any[]) =>
+      nativeSetTimeout(handler, accelerate(delay), ...args)
   })
 }

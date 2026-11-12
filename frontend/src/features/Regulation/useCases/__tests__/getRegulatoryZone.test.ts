@@ -86,6 +86,24 @@ describe('features/Regulation/useCases/getRegulatoryZone()', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
+  it('Should keep a zone no longer displayed for an hour', async () => {
+    jest.useFakeTimers({ doNotFake: ['nextTick', 'queueMicrotask', 'requestAnimationFrame'] })
+    try {
+      const store = createStore()
+      await store.dispatch(getRegulatoryZone(ZONES[0]!))
+
+      jest.advanceTimersByTime(59 * 60 * 1000)
+      await store.dispatch(getRegulatoryZone(ZONES[0]!))
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+
+      jest.advanceTimersByTime(61 * 60 * 1000)
+      await store.dispatch(getRegulatoryZone(ZONES[0]!))
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+    } finally {
+      jest.useRealTimers()
+    }
+  })
+
   it('Should fetch again a zone after a regulation update', async () => {
     const store = createStore()
     await store.dispatch(getRegulatoryZone(ZONES[0]!))

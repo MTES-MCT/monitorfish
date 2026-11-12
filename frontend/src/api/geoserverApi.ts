@@ -82,6 +82,7 @@ export const geoserverApi = createApi({
     }),
 
     getRegulatoryZones: builder.query<Regulation.RegulatoryZoneGeoJsonFeature[], GetRegulatoryZonesParams>({
+      keepUnusedDataFor: 60 * 60,
       providesTags: [REGULATORY_ZONES_TAG],
       queryFn: async ({ fromBackoffice, zones }) => {
         const urls = getRegulatoryZonesUrls(zones, fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL)

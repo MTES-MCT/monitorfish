@@ -33,5 +33,11 @@ class StaticResourcesCacheConfig(
             .addResourceHandler("/flags/**")
             .addResourceLocations(*staticLocations.map { "${it}flags/" }.toTypedArray())
             .setCacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePublic())
+
+        // Requested again by the browser each time the map updates the URL
+        registry
+            .addResourceHandler("/favicon*.ico")
+            .addResourceLocations(*staticLocations.toTypedArray())
+            .setCacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePublic())
     }
 }

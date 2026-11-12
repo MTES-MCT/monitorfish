@@ -1,0 +1,54 @@
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
+
+import {
+  delayRequests,
+  getLongAnimationFramesDurationSince,
+  getResponseEndTime,
+  launchChrome,
+  login,
+  navigateAndWaitForVessels,
+  recordLongAnimationFrames
+} from './utils'
+
+import type { Browser, Page } from 'puppeteer'
+
+// Slow office computers
+const CPU_SLOWDOWN_RATE = 6
+// The other startup tasks are done when the vessels are received, as on a vessels update
+const VESSELS_DELAY_MS = 10 * 1000
+// Time given to the app to process and render the vessels once received
+const RENDERING_WINDOW_MS = 10 * 1000
+
+describe('Vessels rendering (non-super-user)', () => {
+  let browser: Browser
+  let page: Page
+
+  beforeAll(async () => {
+    browser = await launchChrome()
+    page = await browser.newPage()
+    await login(page)
+    await recordLongAnimationFrames(page)
+    await delayRequests(page, '/bff/v1/vessels', VESSELS_DELAY_MS)
+  })
+
+  afterAll(async () => {
+    await browser.close()
+  })
+
+  it('does not freeze the page while processing the active vessels', async () => {
+    await page.emulateCPUThrottling(CPU_SLOWDOWN_RATE)
+
+    await navigateAndWaitForVessels(page, () => page.reload())
+    await new Promise(resolve => {
+      setTimeout(resolve, RENDERING_WINDOW_MS)
+    })
+
+    const vesselsResponseEnd = await getResponseEndTime(page, '/bff/v1/vessels')
+    const blockedDuration = await getLongAnimationFramesDurationSince(page, vesselsResponseEnd!)
+    await page.emulateCPUThrottling(null)
+
+    console.info(`Long animation frames after receiving vessels: ${Math.round(blockedDuration)} ms`)
+    // 2026-11: 2.7 to 3.6 s before optimizing the vessels processing, ~1.3 s after
+    expect(blockedDuration).toBeLessThan(1800)
+  })
+})

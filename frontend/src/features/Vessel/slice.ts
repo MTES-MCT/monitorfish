@@ -5,7 +5,13 @@ import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { atLeastOneVesselSelected, VesselFeature, VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
-import { createEntityAdapter, createSlice, type EntityState, type PayloadAction } from '@reduxjs/toolkit'
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  type EntityState,
+  type PayloadAction
+} from '@reduxjs/toolkit'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
@@ -18,6 +24,8 @@ export const vesselsAdapter = createEntityAdapter({
 
 // TODO Properly type this redux state.
 export type VesselState = {
+  /** Vessels matching the vessel list filters (stored apart from the vessels, as updating thousands of entities is slow). */
+  filteredVesselFeatureIds: Vessel.VesselFeatureId[]
   hideNonSelectedVessels: boolean
   highlightedVesselTrackPosition: Vessel.VesselPosition | null
   isFilteringVesselList: boolean
@@ -39,6 +47,7 @@ export type VesselState = {
   vesselTrackExtent: any | null
 }
 const INITIAL_STATE: VesselState = {
+  filteredVesselFeatureIds: [],
   hideNonSelectedVessels: false,
   highlightedVesselTrackPosition: null,
   isFilteringVesselList: false,
@@ -311,43 +320,9 @@ const vesselSlice = createSlice({
       state.selectedVesselPositions = null
     },
 
-    setAllVesselsAsUnfiltered(state) {
-      const vessels = vesselSelectors.selectAll(state.vessels)
-      const vesselIds = state.vessels.ids
-
-      // Check if any vessel has `isFiltered` set to true
-      if (!vessels.some(vessel => vessel.isFiltered)) {
-        return
-      }
-
-      // Update all vessels' `isFiltered` field to 0
-      vesselsAdapter.updateMany(
-        state.vessels,
-        vesselIds.map(vesselId => ({
-          changes: {
-            isFiltered: 0
-          },
-          id: vesselId
-        }))
-      )
-    },
-
     setFilteredVesselsFeatures(state, action: PayloadAction<Vessel.VesselFeatureId[]>) {
       state.isFilteringVesselList = false
-
-      const filteredVesselsFeaturesUids = action.payload
-      const vesselIds = state.vessels.ids
-
-      // Update only the vessels that match the filtered IDs
-      vesselsAdapter.updateMany(
-        state.vessels,
-        vesselIds.map(vesselId => ({
-          changes: {
-            isFiltered: filteredVesselsFeaturesUids.includes(vesselId) ? 1 : 0
-          },
-          id: vesselId
-        }))
-      )
+      state.filteredVesselFeatureIds = action.payload
     },
 
     /**
@@ -547,3 +522,8 @@ export const {
 export const vesselActions = vesselSlice.actions
 export const vesselReducer = vesselSlice.reducer
 export const vesselSelectors = vesselsAdapter.getSelectors()
+
+export const selectFilteredVesselFeatureIdsSet = createSelector(
+  [(state: { vessel: VesselState }) => state.vessel.filteredVesselFeatureIds],
+  filteredVesselFeatureIds => new Set(filteredVesselFeatureIds)
+)

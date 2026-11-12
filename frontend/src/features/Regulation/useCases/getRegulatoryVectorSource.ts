@@ -9,7 +9,7 @@ import { all } from 'ol/loadingstrategy'
 import VectorSource from 'ol/source/Vector'
 import simplify from 'simplify-geojson'
 
-import { getRegulatoryZoneFromAPI } from '../../../api/geoserver'
+import { getRegulatoryZone } from './getRegulatoryZone'
 import { isNumeric } from '../../../utils/isNumeric'
 import { animateToRegulatoryLayer } from '../../Map/slice'
 
@@ -31,8 +31,11 @@ class CustomBaseEvent extends BaseEvent {
 const IRRETRIEVABLE_FEATURES_EVENT = 'IRRETRIEVABLE_FEATURES'
 
 export const getRegulatoryVectorSource =
-  (regulatoryZoneProperties: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorSource<Feature<Geometry>>> =>
-  (dispatch, getState) => {
+  (
+    regulatoryZoneProperties: MonitorFishMap.ShowedLayer,
+    zonesFetchedTogether: MonitorFishMap.ShowedLayer[]
+  ): HybridAppThunk<VectorSource<Feature<Geometry>>> =>
+  dispatch => {
     const zoneName = `${LayerProperties.REGULATORY.code}:${regulatoryZoneProperties.topic}:${regulatoryZoneProperties.zone}`
 
     const vectorSource = new VectorSource<Feature<Geometry>>({
@@ -43,11 +46,7 @@ export const getRegulatoryVectorSource =
       loader: extent => {
         ;(async () => {
           try {
-            const regulatoryZone = await getRegulatoryZoneFromAPI(
-              LayerProperties.REGULATORY.code,
-              regulatoryZoneProperties,
-              getState().global.isBackoffice
-            )
+            const regulatoryZone = await dispatch(getRegulatoryZone(regulatoryZoneProperties, zonesFetchedTogether))
 
             if (!regulatoryZone.geometry) {
               vectorSource.dispatchEvent(createIrretrievableFeaturesEvent(new Error('Aucune géometrie dans la zone')))

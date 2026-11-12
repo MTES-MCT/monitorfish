@@ -25,7 +25,7 @@ function throwIrretrievableAdministrativeZoneError(e, type) {
   throw new FrontendApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
 }
 
-function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
+export function getIrretrievableRegulatoryZoneError(e: unknown, regulatoryZone: MonitorFishMap.ShowedLayer) {
   return Error(
     `Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`
   )
@@ -157,96 +157,11 @@ function getAdministrativeZoneURL(
 /**
  * @description This API isn't authenticated
  */
-type PendingRegulatoryZoneRequest = {
-  regulatoryZone: MonitorFishMap.ShowedLayer
-  reject: (error: Error) => void
-  resolve: (feature: Regulation.RegulatoryZoneGeoJsonFeature) => void
-}
-
-// Keeps the URL far below the 8 KB request line limit of Apache and Tomcat (~250 characters per zone at most)
-const MAX_REGULATORY_ZONES_PER_REQUEST = 10
-const pendingRegulatoryZoneRequestsByBatchKey = new Map<string, PendingRegulatoryZoneRequest[]>()
-
-/**
- * The zones requested during the same task (e.g. the zones of a layer, displayed together) are fetched
- * in a single request: on a satellite connection, each request costs seconds.
- */
-export function getRegulatoryZoneFromAPI(
+export function getRegulatoryZonesURL(
   type: string,
-  regulatoryZone: MonitorFishMap.ShowedLayer,
-  fromBackoffice: boolean
-): Promise<Regulation.RegulatoryZoneGeoJsonFeature> {
-  if (!regulatoryZone.topic || !regulatoryZone.zone) {
-    return Promise.reject(
-      getIrretrievableRegulatoryZoneError("Le nom de la couche ou de la zone n'est pas renseigné", regulatoryZone)
-    )
-  }
-
-  const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
-  const batchKey = `${geoserverURL}|${type}`
-
-  return new Promise((resolve, reject) => {
-    const pendingRequests = pendingRegulatoryZoneRequestsByBatchKey.get(batchKey)
-    if (pendingRequests) {
-      pendingRequests.push({ regulatoryZone, reject, resolve })
-
-      return
-    }
-
-    pendingRegulatoryZoneRequestsByBatchKey.set(batchKey, [{ regulatoryZone, reject, resolve }])
-    queueMicrotask(() => {
-      const requests = pendingRegulatoryZoneRequestsByBatchKey.get(batchKey) ?? []
-      pendingRegulatoryZoneRequestsByBatchKey.delete(batchKey)
-
-      for (let index = 0; index < requests.length; index += MAX_REGULATORY_ZONES_PER_REQUEST) {
-        // Never rejects: each pending request is resolved or rejected
-        void fetchRegulatoryZones(type, geoserverURL, requests.slice(index, index + MAX_REGULATORY_ZONES_PER_REQUEST))
-      }
-    })
-  })
-}
-
-async function fetchRegulatoryZones(type: string, geoserverURL: string, requests: PendingRegulatoryZoneRequest[]) {
-  try {
-    // A single zone keeps the historical URL (cached and stubbed in E2E tests)
-    const url =
-      requests.length === 1 && requests[0]
-        ? getRegulatoryZoneURL(type, requests[0].regulatoryZone, geoserverURL)
-        : getRegulatoryZonesURL(
-            type,
-            requests.map(({ regulatoryZone }) => regulatoryZone),
-            geoserverURL
-          )
-    const response = await fetch(url)
-    if (response.status !== HttpStatusCode.OK) {
-      throw new Error(await response.text())
-    }
-
-    const body = (await response.json()) as Regulation.RegulatoryZoneGeoJsonFeatureCollection
-    requests.forEach(({ regulatoryZone, reject, resolve }) => {
-      const features = body.features.filter(
-        feature =>
-          feature.properties?.topic === regulatoryZone.topic && feature.properties?.zone === regulatoryZone.zone
-      )
-
-      // There must be only one feature per regulation
-      if (features.length !== 1 || !features[0]) {
-        reject(getIrretrievableRegulatoryZoneError(`${features.length} features found for this zone`, regulatoryZone))
-
-        return
-      }
-
-      resolve(features[0])
-    })
-  } catch (error) {
-    requests.forEach(({ regulatoryZone, reject }) => reject(getIrretrievableRegulatoryZoneError(error, regulatoryZone)))
-  }
-}
-
-/**
- * @description This API isn't authenticated
- */
-function getRegulatoryZonesURL(type: string, regulatoryZones: MonitorFishMap.ShowedLayer[], geoserverURL: string) {
+  regulatoryZones: MonitorFishMap.ShowedLayer[],
+  geoserverURL: string
+) {
   const escapeCqlValue = (value: string) => encodeURIComponent(value).replaceAll("'", "''")
   const filter = regulatoryZones
     .map(

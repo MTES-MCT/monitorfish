@@ -29,13 +29,13 @@ const ENV = {
 
 describe('getSentryOptions()', () => {
   it('Should sample a small part of the transactions to spare low-bandwidth connections', () => {
-    const options = getSentryOptions({ ...ENV, pathname: '/' })
+    const options = getSentryOptions(ENV)
 
     expect(options.tracesSampleRate).toBeLessThanOrEqual(0.1)
   })
 
   it('Should only send replays when an error occurs', () => {
-    const options = getSentryOptions({ ...ENV, pathname: '/' })
+    const options = getSentryOptions(ENV)
 
     expect(options.replaysSessionSampleRate).toBe(0)
     expect(options.replaysOnErrorSampleRate).toBe(1)
@@ -43,16 +43,10 @@ describe('getSentryOptions()', () => {
   })
 
   it('Should track a single session per page load, not one per map move (the URL hash changes)', () => {
-    const options = getSentryOptions({ ...ENV, pathname: '/' })
+    const options = getSentryOptions(ENV)
 
     expect(getIntegrationNames(options)).not.toContain('BrowserSession')
     expect(getIntegrationNames(options)).toContain('PageLoadSession')
     expect(getIntegrationNames(options)).toEqual(expect.arrayContaining(['Dedupe', 'GlobalHandlers']))
-  })
-
-  it('Should not record replays in the light (low-bandwidth) mode', () => {
-    const options = getSentryOptions({ ...ENV, pathname: '/light' })
-
-    expect(getIntegrationNames(options)).not.toContain('Replay')
   })
 })

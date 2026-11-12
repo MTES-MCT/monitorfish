@@ -58,11 +58,13 @@ class GetActiveVesselsUTests {
 
     private val getActiveVessels =
         GetActiveVessels(
-            lastPositionRepository,
-            reportingRepository,
+            GetActiveVesselsWithoutVesselGroups(
+                lastPositionRepository,
+                reportingRepository,
+                logbookReportRepository,
+                manualPriorNotificationRepository,
+            ),
             getAllUserVesselGroups,
-            logbookReportRepository,
-            manualPriorNotificationRepository,
         )
 
     @Test

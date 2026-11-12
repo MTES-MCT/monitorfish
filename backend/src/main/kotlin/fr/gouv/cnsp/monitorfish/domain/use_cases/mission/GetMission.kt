@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.exceptions.CouldNotFindException
 import fr.gouv.cnsp.monitorfish.domain.repositories.MissionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.RapportNavMissionActionsRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.mission.mission_actions.GetMissionActions
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
@@ -19,7 +20,8 @@ class GetMission(
     suspend fun execute(missionId: Int): MissionAndActions {
         return coroutineScope {
             val missionFuture = async { missionRepository.findById(missionId) }
-            val actionsFuture = async { getMissionActions.execute(missionId) }
+            // A blocking database query: on the caller's dispatcher (e.g. `runBlocking`), it would block the HTTP calls
+            val actionsFuture = async(Dispatchers.IO) { getMissionActions.execute(missionId) }
             val rapportNavActionsFuture =
                 async {
                     rapportNavMissionActionsRepository.findRapportNavMissionActionsById(missionId)

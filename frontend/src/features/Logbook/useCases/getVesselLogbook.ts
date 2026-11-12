@@ -83,9 +83,6 @@ export const getVesselLogbook =
     }
   }
 
-/**
- * Start fetching the last voyage of a vessel, to be given to `getVesselLogbook()` once the vessel is displayed.
- */
 export function prefetchVesselLastVoyage(
   vesselIdentity: Vessel.VesselIdentity
 ): MainAppThunk<Promise<Logbook.VesselVoyage | undefined>> {

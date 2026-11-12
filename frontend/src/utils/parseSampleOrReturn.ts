@@ -3,9 +3,6 @@ import { parseOrReturn } from './parseOrReturn'
 import type { z } from 'zod'
 
 /**
- * Validate a sample of a large collection (spread over it, from a random start) against a schema,
- * and return the collection as is.
- *
  * Validating each item of thousands (as the active vessels) freezes the page on slow computers,
  * while a sample is enough to detect a contract mismatch with the API.
  * Only use it with schemas without transformation (as `parse()` results are not returned).

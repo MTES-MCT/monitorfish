@@ -16,7 +16,6 @@ import type { Browser, Page } from 'puppeteer'
 const CPU_SLOWDOWN_RATE = 6
 // The other startup tasks are done when the vessels are received, as on a vessels update
 const VESSELS_DELAY_MS = 10 * 1000
-// Time given to the app to process and render the vessels once received
 const RENDERING_WINDOW_MS = 10 * 1000
 
 describe('Vessels rendering (non-super-user)', () => {
@@ -48,7 +47,6 @@ describe('Vessels rendering (non-super-user)', () => {
     await page.emulateCPUThrottling(null)
 
     console.info(`Long animation frames after receiving vessels: ${Math.round(blockedDuration)} ms`)
-    // 2026-11: 2.7 to 3.6 s before optimizing the vessels processing, ~1.3 s after
     expect(blockedDuration).toBeLessThan(1800)
   })
 })

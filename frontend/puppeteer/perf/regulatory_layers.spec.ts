@@ -4,7 +4,6 @@ import { BASE_URL, launchChrome, login, navigateAndWaitForVessels, recordRequest
 
 import type { Browser, Page } from 'puppeteer'
 
-// Focus the map on Corsica
 const CORSICA_URL = `${BASE_URL}/#@997505.75,5180266.24,8.70`
 const SHOW_TOPIC_BUTTON = '[title=\'Afficher la thématique "Corse - Chaluts"\']'
 const HIDE_TOPIC_BUTTON = '[title=\'Cacher la thématique "Corse - Chaluts"\']'
@@ -87,7 +86,6 @@ describe('Regulatory layers (non-super-user)', () => {
     })
 
     expect(requests.paths().length).toBeGreaterThan(0)
-    // The 4 zones of "Corse - Chaluts" in one request
     expect(urls).toHaveLength(1)
     expect(zoneErrors).toEqual([])
   })

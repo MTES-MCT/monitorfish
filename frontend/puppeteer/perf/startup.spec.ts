@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
 
-import { BASE_URL, delayRequests, launchChrome, login, navigateAndWaitForVessels, recordRequests } from './utils'
+import { BASE_URL, delayRequests, launchChrome, login, navigateAndWaitForVessels, recordRequests, wait } from './utils'
 
 import type { Browser, Page } from 'puppeteer'
 
@@ -31,6 +31,16 @@ describe('Startup of the main window (non-super-user)', () => {
     expect(requests.count('/api/v1/infractions')).toBe(1)
     expect(requests.count('/bff/v1/species')).toBe(1)
     expect(requests.count('/bff/v1/vessels')).toBe(1)
+  })
+
+  it('does not download the icons of the layers only displayed to super-users', async () => {
+    const requests = recordRequests(page)
+
+    await navigateAndWaitForVessels(page, () => page.reload())
+    await wait(3000)
+
+    expect(requests.paths().filter(path => path.startsWith('/map-icons/icon_mission'))).toHaveLength(0)
+    expect(requests.paths().filter(path => path.startsWith('/map-icons/icon_reporting'))).toHaveLength(0)
   })
 
   it('downloads a small login background while the user account is loading', async () => {

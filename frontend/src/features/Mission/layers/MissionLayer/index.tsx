@@ -5,7 +5,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect, useMemo } from 'react'
 
-import { MISSIONS_VECTOR_LAYER, MISSIONS_VECTOR_SOURCE } from './constants'
+import { getMissionsVectorLayer, MISSIONS_VECTOR_SOURCE } from './constants'
 import { useGetFilteredMissionsQuery } from '../../components/MissionList/hooks/useGetFilteredMissionsQuery'
 import { getMissionFeaturePoint } from '../../features'
 
@@ -19,8 +19,9 @@ function UnmemoizedMissionLayer() {
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const { missions } = useGetFilteredMissionsQuery()
 
-  useMapLayer(MISSIONS_VECTOR_LAYER)
-  useWebGLLayerVisibility(MISSIONS_VECTOR_LAYER, isMissionsLayerDisplayed)
+  const missionsVectorLayer = getMissionsVectorLayer()
+  useMapLayer(missionsVectorLayer)
+  useWebGLLayerVisibility(missionsVectorLayer, isMissionsLayerDisplayed)
 
   const editedMissionFeaturePoint = useMemo(() => {
     if (!draft?.mainFormValues) {

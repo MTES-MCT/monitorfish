@@ -98,3 +98,9 @@ export function delayRequests(page: Page, pathToDelay: string, delayMs: number):
 
   return page.setRequestInterception(true)
 }
+
+export async function wait(durationMs: number): Promise<void> {
+  await new Promise(resolve => {
+    setTimeout(resolve, durationMs)
+  })
+}

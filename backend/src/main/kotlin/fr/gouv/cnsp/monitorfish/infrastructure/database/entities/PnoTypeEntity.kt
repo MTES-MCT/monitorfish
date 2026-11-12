@@ -20,6 +20,8 @@ data class PnoTypeEntity(
     val minimumNotificationPeriod: Double = -1.0,
     @Column(name = "has_designated_ports", nullable = false)
     val hasDesignatedPorts: Boolean = false,
+    @Column(name = "is_duration_class", nullable = false)
+    val isDurationClass: Boolean = false,
     @OneToMany(mappedBy = "pnoType", cascade = [CascadeType.ALL], orphanRemoval = true)
     val pnoTypeRules: List<PnoTypeRuleEntity> = listOf(),
 ) {
@@ -29,6 +31,7 @@ data class PnoTypeEntity(
             name = name,
             minimumNotificationPeriod = minimumNotificationPeriod,
             hasDesignatedPorts = hasDesignatedPorts,
+            isDurationClass = isDurationClass,
             pnoTypeRules = pnoTypeRules.map { it.toPnoTypeRule() },
         )
 }

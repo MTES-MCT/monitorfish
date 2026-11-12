@@ -4,9 +4,12 @@ import fr.gouv.cnsp.monitorfish.config.UseCase
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookFishingCatch
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.ManualPriorNotificationComputedValues
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotification
+import fr.gouv.cnsp.monitorfish.domain.exceptions.CodeNotFoundException
+import fr.gouv.cnsp.monitorfish.domain.repositories.DistrictRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoFleetSegmentSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoPortSubscriptionRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.PnoVesselSubscriptionRepository
+import fr.gouv.cnsp.monitorfish.domain.repositories.PortRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.ReportingRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.SpeciesRepository
 import fr.gouv.cnsp.monitorfish.domain.repositories.VesselRepository
@@ -24,6 +27,8 @@ class ComputeManualPriorNotification(
     private val computeFleetSegments: ComputeFleetSegments,
     private val computePnoTypes: ComputePnoTypes,
     private val computeRiskFactor: ComputeRiskFactor,
+    private val portRepository: PortRepository,
+    private val districtRepository: DistrictRepository,
 ) {
     fun execute(
         fishingCatches: List<LogbookFishingCatch>,
@@ -52,7 +57,31 @@ class ComputeManualPriorNotification(
 
         val speciesCatch = getSpeciesCatchesForSegmentCalculation(tripGearCodes, fishingCatchesWithFaoArea, species)
         val tripSegments = computeFleetSegments.execute(year, vessel.id, speciesCatch)
-        val types = computePnoTypes.execute(fishingCatchesWithFaoArea, tripGearCodes, vesselFlagCountryCode)
+        val port =
+            try {
+                portRepository.findByLocode(portLocode)
+            } catch (_: CodeNotFoundException) {
+                null
+            }
+        val vesselDepartmentCode =
+            vessel.districtCode?.let { districtCode ->
+                try {
+                    districtRepository.find(districtCode).departmentCode
+                } catch (_: CodeNotFoundException) {
+                    null
+                }
+            }
+        // The trip start date is not entered in manual prior notifications, so the trip duration is unknown
+        val types =
+            computePnoTypes.execute(
+                catchToLand = fishingCatchesWithFaoArea,
+                gearCodes = tripGearCodes,
+                flagState = vesselFlagCountryCode,
+                portFacade = port?.facade,
+                vesselDepartmentCode = vesselDepartmentCode,
+                vesselLength = vessel.length,
+                tripDurationHours = null,
+            )
         val vesselRiskFactor = computeRiskFactor.execute(portLocode, tripSegments, vesselCfr)
 
         val isInVerificationScope =

@@ -340,7 +340,7 @@ def transform_modified_regulations(
     modified_regulations[
         "Modification"
     ] = modified_regulations.extraction_occurence.map(
-        lambda s: "Ajout de document" if s == "latest" else "Suppression de document"
+        lambda s: ("Ajout de document" if s == "latest" else "Suppression de document")
     )
 
     modified_regulations["Référence réglementaire"] = make_html_hyperlinks(

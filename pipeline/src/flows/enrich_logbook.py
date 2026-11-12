@@ -83,7 +83,7 @@ def reset_pnos(period: Period):
                 "SET "
                 "    enriched = false,"
                 "    trip_gears = NULL,"
-                "    value = value - 'pnoTypes' - 'riskFactor',"
+                "    value = value - 'pnoTypes' - 'riskFactor' - 'tripDurationHours',"
                 "    trip_segments = NULL "
                 "WHERE p.operation_datetime_utc >= :start "
                 "AND p.operation_datetime_utc <= :end "
@@ -289,6 +289,10 @@ def compute_pno_types(
           - flag_state `str` `'FRA'`
           - locode `str` `CCXXX`
           - country_code_iso2 `'FR'`
+          - facade `str` `'NAMO'`
+          - trip_duration_hours `float` `36.5`
+          - vessel_length `float` `14.2`
+          - vessel_department_code `str` `'29'`
 
         pno_types (pd.DataFrame): DataFrame of pno_types definitions. 1 line = 1 rule.
           Must have columns :
@@ -297,12 +301,27 @@ def compute_pno_types(
           - pno_type_name `str` `"Ports désignés thon rouge"`
           - minimum_notification_period `float` `4.0`
           - has_designated_ports `bool` `True`
+          - is_duration_class `bool` `False`
           - pno_type_rule_id `int` `1`
           - species `List[str]` `["COD", ...]`
           - gears `List[str]` `["OTB", ...]`
           - fao_areas `List[str]` `["27.8", ...]`
           - flag_states `List[str]` `["GBR", ...]`
           - minimum_quantity_kg `float` `2500.0`
+          - facades `List[str]` `["NAMO", ...]`
+          - vessel_department_codes `List[str]` `["29", ...]`
+          - min_vessel_length `float` `12.0` (inclusive)
+          - max_vessel_length `float` `12.0` (exclusive)
+          - min_trip_duration_hours `float` `24.0` (inclusive)
+          - max_trip_duration_hours `float` `96.0` (exclusive)
+          - has_catches_on_board `bool` `True`
+
+          Empty lists and null values mean that the rule does not filter on the
+          corresponding criterion.
+
+          When unknown, the vessel length and the trip duration are considered
+          infinite, so that the strictest rules (vessels >= 12m, longest trips)
+          apply.
 
     Returns:
         pd.DataFrame: DataFrame of PNOs with attributed PNO types. 1 line = 1 PNO.
@@ -319,10 +338,12 @@ def compute_pno_types(
                     {
                         "pnoTypeName": "Type 1",
                         "minimumNotificationPeriod": 4.0,
-                        "hasDesignatedPorts": True
+                        "hasDesignatedPorts": True,
+                        "isDurationClass": False
                     },
                     {...}
                 ]```
+            - trip_duration_hours `float` `36.5` (null when unknown)
     """
     trip_gear_codes = (  # noqa: F841
         pno_catches[["logbook_reports_pno_id", "trip_gears"]]
@@ -342,8 +363,9 @@ def compute_pno_types(
             "country_code_iso2",
             "flag_state",
             "predicted_arrival_datetime_utc",
+            "trip_duration_hours",
         ]
-    ].drop_duplicates()
+    ].drop_duplicates(subset=["logbook_reports_pno_id"])
 
     pnos_trip_gears = pno_catches.drop_duplicates(  # noqa: F841
         subset=["logbook_reports_pno_id"]
@@ -353,15 +375,30 @@ def compute_pno_types(
 
     pnos_pno_types = db.sql(
         """
-        WITH pnos_pno_types_tmp AS (
+        WITH pnos AS (
+            SELECT
+                logbook_reports_pno_id,
+                FIRST(facade) AS facade,
+                FIRST(vessel_department_code) AS vessel_department_code,
+                COALESCE(FIRST(vessel_length), 'Infinity'::DOUBLE) AS vessel_length,
+                COALESCE(FIRST(trip_duration_hours), 'Infinity'::DOUBLE) AS trip_duration_hours,
+                SUM(COALESCE(weight, 0)) > 0 AS has_catches_on_board
+            FROM pno_catches
+            GROUP BY logbook_reports_pno_id
+        ),
+
+        pnos_pno_types_tmp AS (
             SELECT
                 pc.logbook_reports_pno_id,
                 t.pno_type_name,
                 t.minimum_notification_period,
                 t.has_designated_ports,
+                t.is_duration_class,
                 t.minimum_quantity_kg,
                 SUM(COALESCE(weight, 0)) OVER (PARTITION BY pc.logbook_reports_pno_id, pno_type_rule_id) AS pno_quantity_kg
             FROM pno_catches pc
+            JOIN pnos p
+            ON p.logbook_reports_pno_id = pc.logbook_reports_pno_id
             LEFT JOIN trip_gear_codes tgc
             ON tgc.logbook_reports_pno_id = pc.logbook_reports_pno_id
             JOIN pno_types t
@@ -369,7 +406,14 @@ def compute_pno_types(
                 (pc.species = ANY(t.species) OR t.species = '[]'::VARCHAR[]) AND
                 (list_has_any(tgc.trip_gear_codes::VARCHAR[], t.gears) OR t.gears = '[]'::VARCHAR[]) AND
                 (length(filter(t.fao_areas, a -> pc.fao_area LIKE a || '%')) > 0 OR t.fao_areas = '[]'::VARCHAR[]) AND
-                (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[])
+                (pc.flag_state = ANY(t.flag_states) OR t.flag_states = '[]'::VARCHAR[]) AND
+                (p.facade = ANY(t.facades) OR t.facades = '[]'::VARCHAR[]) AND
+                (p.vessel_department_code = ANY(t.vessel_department_codes) OR t.vessel_department_codes = '[]'::VARCHAR[]) AND
+                (p.vessel_length >= t.min_vessel_length OR t.min_vessel_length IS NULL) AND
+                (p.vessel_length < t.max_vessel_length OR t.max_vessel_length IS NULL) AND
+                (p.trip_duration_hours >= t.min_trip_duration_hours OR t.min_trip_duration_hours IS NULL) AND
+                (p.trip_duration_hours < t.max_trip_duration_hours OR t.max_trip_duration_hours IS NULL) AND
+                (p.has_catches_on_board = t.has_catches_on_board OR t.has_catches_on_board IS NULL)
         )
 
         SELECT
@@ -377,7 +421,8 @@ def compute_pno_types(
             LIST_SORT(ARRAY_AGG(DISTINCT {
                 'pnoTypeName': pno_type_name,
                 'minimumNotificationPeriod': minimum_notification_period,
-                'hasDesignatedPorts': has_designated_ports
+                'hasDesignatedPorts': has_designated_ports,
+                'isDurationClass': is_duration_class
             })) AS pno_types
         FROM pnos_pno_types_tmp
         WHERE pno_quantity_kg >= minimum_quantity_kg
@@ -593,6 +638,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "    enriched BOOLEAN,"
                 "    trip_gears JSONB,"
                 "    pno_types JSONB,"
+                "    trip_duration_hours DOUBLE PRECISION,"
                 "    trip_segments JSONB,"
                 "    is_in_verification_scope BOOLEAN,"
                 "    is_verified BOOLEAN,"
@@ -614,6 +660,7 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
             "logbook_reports_pno_id",
             "trip_gears",
             "pno_types",
+            "trip_duration_hours",
             "trip_segments",
             "is_in_verification_scope",
             "is_verified",
@@ -648,7 +695,8 @@ def load_enriched_pnos(enriched_pnos: pd.DataFrame, period: Period, logger: Logg
                 "           'isVerified', is_verified, "
                 "           'isSent', is_sent, "
                 "           'isBeingSent', is_being_sent, "
-                "           'riskFactor', risk_factor "
+                "           'riskFactor', risk_factor, "
+                "           'tripDurationHours', trip_duration_hours "
                 "       ) || value"
                 "   ), "
                 "    trip_segments = CASE "

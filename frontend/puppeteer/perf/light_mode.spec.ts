@@ -32,7 +32,6 @@ describe('Light mode (non-super-user)', () => {
       page.locator('[data-cy="light-mode-suggestion"] ::-p-text(Activer)').click()
     ])
     expect(new URL(page.url()).pathname).toBe('/light')
-    // The map position is kept
     expect(new URL(page.url()).hash).toBe(mapPositionHash)
 
     await page.emulateNetworkConditions(null)

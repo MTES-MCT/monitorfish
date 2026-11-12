@@ -59,9 +59,6 @@ export function setLightModePreference(preference: LightModePreference): void {
   }
 }
 
-/**
- * Returns the light mode URL when the main window is opened by a user who enabled the light mode.
- */
 export function getLightModeRedirection(pathname: string, hash: string): string | undefined {
   if (pathname !== ROUTER_PATHS.home || getLightModePreference() !== LightModePreference.ENABLED) {
     return undefined

@@ -46,7 +46,7 @@ export function EditReporting() {
         </Row>
         <Row $topMargin={6}>
           {showForm && editedReporting.flagState && (
-            <Flag rel="preload" src={`${baseUrl}/flags/${editedReporting.flagState.toLowerCase()}.svg`} />
+            <Flag rel="preload" src={`${baseUrl}/flags/${editedReporting.flagState.toLowerCase()}.webp`} />
           )}
           <VesselName title={editedReporting?.vesselName ?? 'Aucun nom'}>
             {editedReporting?.vesselName ?? 'Aucun nom'}

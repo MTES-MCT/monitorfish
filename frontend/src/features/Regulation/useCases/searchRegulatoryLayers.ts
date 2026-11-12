@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js'
 
+import { getRegulatoryZonesSearch } from './getRegulatoryZonesSearch'
 import { getRegulatoryZonesInExtentFromAPI } from '../../../api/geoserver'
 import { getExtentFromGeoJSON } from '../../../utils'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
@@ -44,9 +45,9 @@ export const searchRegulatoryLayers =
       return Promise.resolve(undefined)
     }
 
-    // TODO Cache that somewhere rather than re-creating it every time.
-    const fuse = new Fuse(regulatoryZones, REGULATION_SEARCH_OPTIONS)
-    const items = fuse.search(searchQuery).map(result => result.item)
+    const items = getRegulatoryZonesSearch(regulatoryZones)
+      .search(searchQuery)
+      .map(result => result.item)
 
     return monitorFishWorker.getStructuredRegulationLawTypes(items)
   }

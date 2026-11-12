@@ -44,13 +44,16 @@ export function filterNonSelectedVessels(
   hideNonSelectedVessels: boolean,
   selectedVesselIdentity: Vessel.VesselIdentity | undefined
 ) {
+  if (!hideNonSelectedVessels) {
+    return () => true
+  }
+
   return (feature: Vessel.VesselPointFeature) => {
+    // `getProperties()` copies all the properties: called for each vessel only when needed
     const properties = feature.getProperties()
     const vesselTrackShowed = vesselsTracksShowed[getVesselCompositeIdentifier(properties)]
 
-    return hideNonSelectedVessels
-      ? vesselIsShowed(properties as Vessel.VesselIdentity, vesselTrackShowed, selectedVesselIdentity)
-      : true
+    return vesselIsShowed(properties as Vessel.VesselIdentity, vesselTrackShowed, selectedVesselIdentity)
   }
 }
 

@@ -23,7 +23,7 @@ export const getRegulatoryLayersToAdd =
       layersToInsert
         // TODO Is it really necessary?
         .filter(isNotNullish)
-        .map(layerToInsert => dispatch(getVectorOLLayer(layerToInsert)))
+        .map(layerToInsert => dispatch(getVectorOLLayer(layerToInsert, layersToInsert)))
         // TODO Is it really necessary?
         .filter(isNotNullish)
     )

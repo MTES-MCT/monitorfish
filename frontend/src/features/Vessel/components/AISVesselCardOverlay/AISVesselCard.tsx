@@ -43,7 +43,7 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
     <>
       <CardWrapper>
         <VesselCardHeader>
-          {!!flagState && <Flag alt={flagState} rel="preload" src={`flags/${flagState}.svg`} />}
+          {!!flagState && <Flag alt={flagState} rel="preload" src={`flags/${flagState}.webp`} />}
           <VesselCardTitle data-cy="vessel-card-name">
             {vesselProperties.vesselName ?? 'NOM INCONNU'}
             {!!flagState && ` (${flagState.toUpperCase()})`}

@@ -87,7 +87,7 @@ export function VesselLabelContent({
                   $rel="preload"
                   alt={identity.flagState}
                   draggable="false"
-                  src={`flags/${identity.flagState.toLowerCase()}.svg`}
+                  src={`flags/${identity.flagState.toLowerCase()}.webp`}
                 />
               )}
               <ZoneText

@@ -1,7 +1,7 @@
 import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
-import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
+import { getVesselLogbook, prefetchVesselLastVoyage } from '@features/Logbook/useCases/getVesselLogbook'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { resetLoadingVessel } from '@features/Vessel/slice'
 import { UNKNOWN_VESSEL, VesselSidebarTab } from '@features/Vessel/types/vessel'
@@ -33,9 +33,11 @@ export const showVessel =
       dispatch(resetDisplayedLogbookMessageOverlays())
 
       dispatch(getSidebarTabData(selectedVesselSidebarTab, vesselIdentity))
+      // Fetched in parallel to spare a round trip, but applied once the vessel is displayed
+      const lastVoyage = dispatch(prefetchVesselLastVoyage(vesselIdentity))
       await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
-      await dispatch(getVesselLogbook(vesselIdentity, undefined, false))
+      await dispatch(getVesselLogbook(vesselIdentity, undefined, false, undefined, lastVoyage))
       await dispatch(displayLogbookMessageOverlays())
     } catch (error) {
       dispatch(

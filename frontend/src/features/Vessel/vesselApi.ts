@@ -10,6 +10,7 @@ import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { FrontendApiError } from '@libs/FrontendApiError'
 import { getUrlOrPathWithQueryParams } from '@utils/getUrlOrPathWithQueryParams'
 import { parseOrReturn } from '@utils/parseOrReturn.ts'
+import { parseSampleOrReturn } from '@utils/parseSampleOrReturn'
 import { displayedErrorActions } from 'domain/shared_slices/DisplayedError'
 import { displayOrLogError } from 'domain/use_cases/error/displayOrLogError'
 
@@ -21,6 +22,8 @@ import type { VesselReportings } from '@features/Reporting/types'
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
 import type { VesselLocation } from '@features/Vessel/types/vessel'
+
+const ACTIVE_VESSELS_SAMPLE_SIZE = 100
 
 const GET_VESSEL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les informations de ce navire."
 const GET_VESSEL_REPORTINGS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les signalements de ce navire."
@@ -42,8 +45,17 @@ export const vesselApi = monitorfishApi.injectEndpoints({
     getActiveVessels: builder.query<Vessel.ActiveVessel[], void>({
       providesTags: () => [{ type: RtkCacheTagType.ActiveVessels }],
       query: () => `/vessels`,
+      /**
+       * Thousands of vessels, to be processed without freezing the page on slow computers:
+       * - only a sample is validated
+       * - they are frozen, as Immer skips frozen objects instead of deeply walking them
+       */
       transformResponse: (baseQueryReturnValue: Vessel.ActiveVessel[]) =>
-        parseOrReturn<Vessel.ActiveVessel>(baseQueryReturnValue, ActiveVesselSchema, true)
+        parseSampleOrReturn<Vessel.ActiveVessel>(
+          baseQueryReturnValue,
+          ActiveVesselSchema,
+          ACTIVE_VESSELS_SAMPLE_SIZE
+        ).map(vessel => Object.freeze(vessel))
     }),
 
     getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({

@@ -59,7 +59,7 @@ export function BeaconMalfunctionDetails({
         </Row>
         <Row $topMargin={10}>
           {beaconMalfunction?.flagState ? (
-            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.svg`} />
+            <Flag src={`${baseUrl}/flags/${beaconMalfunction?.flagState.toLowerCase()}.webp`} />
           ) : null}
           <VesselName data-cy="side-window-beacon-malfunctions-detail-vessel-name">
             {beaconMalfunction?.vesselName || 'Aucun nom'}

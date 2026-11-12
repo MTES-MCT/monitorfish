@@ -37,7 +37,7 @@ export function getPendingAlertsTableColumns(
           <Ellipsised style={{ alignItems: 'center', display: 'flex' }}>
             <Flag
               rel="preload"
-              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState.toLowerCase()}.svg`}
+              src={`${baseUrl ? `${baseUrl}/` : ''}flags/${alert.flagState.toLowerCase()}.webp`}
               style={{ marginLeft: 0, marginRight: 5, marginTop: 1, width: 18 }}
               title={countries.getName(alert.flagState.toLowerCase(), 'fr')}
             />

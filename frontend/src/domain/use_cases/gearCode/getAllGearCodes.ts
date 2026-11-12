@@ -1,7 +1,7 @@
+import { gearApi } from '@api/gear'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import { getAllGearsFromAPI } from '../../../api/gearCode'
 import { REGULATED_GEARS_KEYS } from '../../entities/backoffice'
 import { gearActions } from '../../shared_slices/Gear'
 
@@ -22,6 +22,8 @@ import type { Gear } from 'domain/types/Gear'
  * (1, 'Engins traînants'),
  * (2, 'Engins dormants');
  */
+const GEAR_CODES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les codes des engins de pêches"
+
 const getGroupName = (groupId: 1 | 2): string | undefined => {
   switch (groupId) {
     case 1:
@@ -44,7 +46,10 @@ export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk
     }
 
     try {
-      const gears = await getAllGearsFromAPI()
+      // Shares the RTK cache (and in-flight request) with the components using `useGetGearsQuery()`
+      const gears = await (dispatch as MainAppDispatch)(
+        gearApi.endpoints.getGears.initiate(undefined, { subscribe: false })
+      ).unwrap()
       const categoriesToGears: Record<string, Gear[]> = {}
       const groupToCategories: Partial<Record<REGULATED_GEARS_KEYS, string[]>> = {}
       const gearsByCode: Record<string, Gear> = {}
@@ -71,7 +76,7 @@ export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk
 
       dispatch(
         gearActions.setGears(
-          gears.sort((a, b) => {
+          [...gears].sort((a, b) => {
             if (a.code && b.code) {
               return a.code.localeCompare(b.code)
             }
@@ -83,11 +88,11 @@ export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk
       dispatch(gearActions.setCategoriesToGears(categoriesToGears))
       dispatch(gearActions.setGroupsToCategories(groupToCategories))
       dispatch(gearActions.setGearsByCode(gearsByCode))
-    } catch (err) {
+    } catch {
       /* TODO: understand type error if no `as any` */
       dispatch(
         addMainWindowBanner({
-          children: (err as Error).message,
+          children: GEAR_CODES_ERROR_MESSAGE,
           closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,

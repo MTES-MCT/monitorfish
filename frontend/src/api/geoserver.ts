@@ -25,7 +25,7 @@ function throwIrretrievableAdministrativeZoneError(e, type) {
   throw new FrontendApiError(`Nous n'avons pas pu récupérer la zone ${type}`, e)
 }
 
-function getIrretrievableRegulatoryZoneError(e, regulatoryZone) {
+export function getIrretrievableRegulatoryZoneError(e: unknown, regulatoryZone: MonitorFishMap.ShowedLayer) {
   return Error(
     `Nous n'avons pas pu récupérer la zone réglementaire ${regulatoryZone.topic}/${regulatoryZone.zone} : ${e}`
   )
@@ -144,7 +144,7 @@ function getAdministrativeZoneURL(
   if (subZone) {
     const filter = `${encodeURIComponent(subZone).replace(/'/g, "''")}`
 
-    subZoneFilter = `&featureID=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
+    subZoneFilter = `&featureID=${filter.replaceAll("'", '%27').replaceAll(' ', '%20')}`
   }
 
   return (
@@ -157,35 +157,24 @@ function getAdministrativeZoneURL(
 /**
  * @description This API isn't authenticated
  */
-export async function getRegulatoryZoneFromAPI(
+export function getRegulatoryZonesURL(
   type: string,
-  regulatoryZone: MonitorFishMap.ShowedLayer,
-  fromBackoffice: boolean
-): Promise<Regulation.RegulatoryZoneGeoJsonFeature> {
-  try {
-    const geoserverURL = fromBackoffice ? GEOSERVER_BACKOFFICE_URL : GEOSERVER_URL
+  regulatoryZones: MonitorFishMap.ShowedLayer[],
+  geoserverURL: string
+) {
+  const escapeCqlValue = (value: string) => encodeURIComponent(value).replaceAll("'", "''")
+  const filter = regulatoryZones
+    .map(
+      regulatoryZone =>
+        `(topic='${escapeCqlValue(regulatoryZone.topic ?? '')}' AND zone='${escapeCqlValue(regulatoryZone.zone ?? '')}')`
+    )
+    .join(' OR ')
 
-    return await fetch(getRegulatoryZoneURL(type, regulatoryZone, geoserverURL))
-      .then(response => {
-        if (response.status === HttpStatusCode.OK) {
-          return response
-            .json()
-            .then(body => getFirstFeature(body))
-            .catch(e => {
-              throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
-            })
-        }
-
-        return response.text().then(bodyAsText => {
-          throw getIrretrievableRegulatoryZoneError(bodyAsText, regulatoryZone)
-        })
-      })
-      .catch(e => {
-        throw getIrretrievableRegulatoryZoneError(e, regulatoryZone)
-      })
-  } catch (e) {
-    return Promise.reject(getIrretrievableRegulatoryZoneError(e, regulatoryZone))
-  }
+  return (
+    `${geoserverURL}/geoserver/wfs?service=WFS` +
+    `&version=1.1.0&request=GetFeature&typename=monitorfish:${type}` +
+    `&outputFormat=application/json&CQL_FILTER=${filter.replace(/'/g, '%27').replace(/ /g, '%20')}`
+  )
 }
 
 /**

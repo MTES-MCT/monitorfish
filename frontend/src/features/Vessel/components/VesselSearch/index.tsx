@@ -270,7 +270,7 @@ const Input = styled.input<{
   width: 100%;
   flex: 3;
   background: ${p =>
-    p.$flagState ? `url(${p.$baseUrl}/flags/${p.$flagState.toLowerCase()}.svg) no-repeat scroll, white` : 'white'};
+    p.$flagState ? `url(${p.$baseUrl}/flags/${p.$flagState.toLowerCase()}.webp) no-repeat scroll, white` : 'white'};
   background-size: 20px;
   background-position-y: center;
   background-position-x: 16px;

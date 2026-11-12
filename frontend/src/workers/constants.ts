@@ -5,7 +5,7 @@ export const SHOM_BASEMAP = 'data.shom.'
 
 export const WHITELISTED_BASE_MAPS_PATHS = [CARTOCDN_BASEMAP, MAPBOX_BASEMAP, OPENSTREETMAP_BASEMAP, SHOM_BASEMAP]
 
-export const STATIC_ASSETS = ['/landing_background.png']
+export const STATIC_ASSETS = ['/landing_background.webp']
 
 export const APPLICATION_ROUTES = [
   '/light',

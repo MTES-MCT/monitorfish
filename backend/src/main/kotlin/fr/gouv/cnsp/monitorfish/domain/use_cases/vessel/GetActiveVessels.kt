@@ -13,11 +13,17 @@ class GetActiveVessels(
     private val getActiveVesselsWithoutVesselGroups: GetActiveVesselsWithoutVesselGroups,
     private val getAllUserVesselGroups: GetAllUserVesselGroups,
 ) {
-    fun execute(userEmail: String): List<EnrichedActiveVessel> {
+    fun execute(userEmail: String): List<EnrichedActiveVessel> =
+        addVesselGroups(getActiveVesselsWithoutVesselGroups.execute(), userEmail)
+
+    fun addVesselGroups(
+        activeVessels: List<EnrichedActiveVessel>,
+        userEmail: String,
+    ): List<EnrichedActiveVessel> {
         val now = ZonedDateTime.now()
         val vesselGroups = getAllUserVesselGroups.execute(userEmail)
 
-        return getActiveVesselsWithoutVesselGroups.execute().map { activeVessel ->
+        return activeVessels.map { activeVessel ->
             val foundVesselGroups =
                 vesselGroups
                     .filter { vesselGroup ->

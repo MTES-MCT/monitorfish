@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVesselsChanges
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetSpeciesControlPrefillFromLogbook
@@ -25,6 +26,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.input.VesselContactToUpdateDataInput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActiveVesselBaseDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ActiveVesselsChangesDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionsResumeAndHistoryDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlledVesselDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.LastPositionAISDataOutput
@@ -64,6 +66,7 @@ import java.time.ZonedDateTime
 @Tag(name = "APIs for Vessels")
 class VesselController(
     private val getActiveVessels: GetActiveVessels,
+    private val getActiveVesselsChanges: GetActiveVesselsChanges,
     private val getLastPositionsAIS: GetLastPositionsAIS,
     private val getVessel: GetVessel,
     private val getControlledVesselById: GetControlledVesselById,
@@ -96,6 +99,20 @@ class VesselController(
                 index = index,
             )
         }
+    }
+
+    @GetMapping("/changes")
+    @Operation(summary = "Get the active vessels changes since a previous state (slow connections)")
+    fun getVesselsChanges(
+        @AuthenticationPrincipal principal: OidcUser?,
+        @Parameter(description = "State (`asOf`) of the previous response, all the vessels are returned without it")
+        @RequestParam(name = "after", required = false)
+        after: String?,
+    ): ActiveVesselsChangesDataOutput {
+        val email = principal?.email ?: ""
+        val changes = getActiveVesselsChanges.execute(userEmail = email, after = after)
+
+        return ActiveVesselsChangesDataOutput.fromActiveVesselsChanges(changes)
     }
 
     @GetMapping("/ais")

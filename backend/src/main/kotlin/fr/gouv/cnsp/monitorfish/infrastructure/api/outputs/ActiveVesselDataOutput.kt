@@ -7,7 +7,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityOrigin
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ActivityType
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
-import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -120,7 +119,7 @@ sealed class ActiveVesselBaseDataOutput(
                     isFiltered = 0,
                     lastPositionSentAt = lastPosition.dateTime.toInstant().toEpochMilli(),
                     speciesArray = enrichedActiveVessel.speciesArray,
-                    vesselFeatureId = Vessel.getVesselCompositeIdentifier(lastPosition),
+                    vesselFeatureId = enrichedActiveVessel.getFeatureId(),
                     vesselGroups =
                         enrichedActiveVessel.vesselGroups.map {
                             LastPositionVesselGroupDataOutput(
@@ -146,7 +145,7 @@ sealed class ActiveVesselBaseDataOutput(
                 ActiveVesselEmittingLogbookDataOutput(
                     id = index,
                     vesselId = enrichedActiveVessel.vessel?.id,
-                    vesselFeatureId = enrichedActiveVessel.vessel?.toVesselCompositeIdentifier() ?: "",
+                    vesselFeatureId = enrichedActiveVessel.getFeatureId(),
                     internalReferenceNumber = enrichedActiveVessel.vesselProfile?.cfr,
                     ircs = enrichedActiveVessel.vessel?.ircs,
                     mmsi = enrichedActiveVessel.vessel?.mmsi,

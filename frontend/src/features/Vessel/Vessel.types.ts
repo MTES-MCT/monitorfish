@@ -1,4 +1,8 @@
 import {
+  type ActiveVesselPositionSchema,
+  type ActiveVesselsChangesSchema
+} from '@features/Vessel/schemas/ActiveVesselsChangesSchema'
+import {
   type ActiveVesselEmittingPositionSchema,
   ActiveVesselSchema,
   type DeclaredLogbookSpeciesSchema,
@@ -77,6 +81,10 @@ export namespace Vessel {
 
   export type ActiveVesselEmittingPosition = z.infer<typeof ActiveVesselEmittingPositionSchema>
   export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
+  export type ActiveVesselPosition = z.infer<typeof ActiveVesselPositionSchema>
+  export type ActiveVesselsChanges = Omit<z.infer<typeof ActiveVesselsChangesSchema>, 'vessels'> & {
+    vessels: ActiveVessel[]
+  }
 
   export type VesselPosition = {
     course: number

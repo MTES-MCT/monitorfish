@@ -30,7 +30,7 @@ describe('Startup of the main window (non-super-user)', () => {
     expect(requests.count('/bff/v1/gears')).toBe(1)
     expect(requests.count('/api/v1/infractions')).toBe(1)
     expect(requests.count('/bff/v1/species')).toBe(1)
-    expect(requests.count('/bff/v1/vessels')).toBe(1)
+    expect(requests.count('/bff/v1/vessels/changes')).toBe(1)
   })
 
   it('does not download the icons of the layers only displayed to super-users', async () => {

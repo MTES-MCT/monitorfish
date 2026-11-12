@@ -3,8 +3,8 @@ import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { usePinnedReportings } from '@features/Reporting/hooks/usePinnedReportings'
 import {
+  getReportingsVectorLayer,
   REPORTINGS_LINE_VECTOR_LAYER,
-  REPORTINGS_VECTOR_LAYER,
   REPORTINGS_VECTOR_SOURCE,
   REPORTINGS_ZONE_FILTER_VECTOR_LAYER,
   REPORTINGS_ZONE_FILTER_VECTOR_SOURCE
@@ -54,9 +54,10 @@ function UnmemoizedReportingLayer() {
     return [...(filteredReportings ?? []), ...(pinnedReportings ?? []).filter(d => !filteredReportingIds.has(d.id))]
   }, [pinnedReportings, filteredReportings, isReportingLayerDisplayed])
 
-  useMapLayer(REPORTINGS_VECTOR_LAYER)
+  const reportingsVectorLayer = getReportingsVectorLayer()
+  useMapLayer(reportingsVectorLayer)
   useMapLayer(REPORTINGS_LINE_VECTOR_LAYER)
-  useWebGLLayerVisibility(REPORTINGS_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
+  useWebGLLayerVisibility(reportingsVectorLayer, isReportingLayerDisplayed || !!pinnedReportings?.length)
   useWebGLLayerVisibility(REPORTINGS_LINE_VECTOR_LAYER, isReportingLayerDisplayed || !!pinnedReportings?.length)
   useMapLayer(REPORTINGS_ZONE_FILTER_VECTOR_LAYER)
 

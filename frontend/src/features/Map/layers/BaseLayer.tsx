@@ -1,4 +1,3 @@
-import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import TileLayer from 'ol/layer/Tile'
 import { OSM } from 'ol/source'
@@ -16,7 +15,6 @@ import type Tile from 'ol/Tile'
 const CARTO_KEY = import.meta.env.FRONTEND_CARTO_KEY
 
 function UnmemoizedBaseLayer() {
-  const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
 
   const tileCacheMapRef = useRef(new Map<string, string>())
@@ -74,8 +72,8 @@ function UnmemoizedBaseLayer() {
         new TileLayer({
           className: LayerProperties.BASE_LAYER.code,
           source: new XYZ({
-            maxZoom: isInLightMode ? 11 : 19,
-            tileLoadFunction: isInLightMode ? undefined : loadTileFromCacheOrFetch,
+            maxZoom: 19,
+            tileLoadFunction: loadTileFromCacheOrFetch,
             urls: ['a', 'b', 'c', 'd'].map(
               subdomain => `https://${subdomain}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${CARTO_KEY}`
             )
@@ -115,7 +113,7 @@ function UnmemoizedBaseLayer() {
           zIndex: 0
         })
     }),
-    [loadTileFromCacheOrFetch, isInLightMode]
+    [loadTileFromCacheOrFetch]
   )
 
   useEffect(() => {

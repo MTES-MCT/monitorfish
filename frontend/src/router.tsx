@@ -12,13 +12,18 @@ import { ActivityVisualizationPage } from '@pages/ActivityVisualizationPage'
 import { BackofficePage } from '@pages/BackofficePage'
 import { HomePage } from '@pages/HomePage'
 import { LightBackoffice } from '@pages/LightBackoffice'
-import { LightHomePage } from '@pages/LightHomePage'
 import { LoginPage } from '@pages/LoginPage'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 
 import { Register } from './auth/components/Register'
 import { RequireAuth } from './auth/components/RequireAuth'
 import { ROUTER_PATHS } from './paths'
+
+function RedirectToHomeKeepingMapPosition() {
+  const { hash } = useLocation()
+
+  return <Navigate replace to={{ hash, pathname: ROUTER_PATHS.home }} />
+}
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 export const routes = [
@@ -38,17 +43,7 @@ export const routes = [
   },
   {
     path: ROUTER_PATHS.light,
-    element: <LightHomePage />,
-    children: [
-      {
-        index: true,
-        element: (
-          <RequireAuth redirect>
-            <MainWindow />
-          </RequireAuth>
-        )
-      }
-    ]
+    element: <RedirectToHomeKeepingMapPosition />
   },
   {
     path: ROUTER_PATHS.login,

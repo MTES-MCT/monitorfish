@@ -3,10 +3,9 @@ import { layerActions } from '@features/Map/layer.slice'
 import { selectBaseLayer } from '@features/Map/slice'
 import { closeRegulatoryZoneMetadata } from '@features/Regulation/useCases/closeRegulatoryZoneMetadata'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
-import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { RadioGroup } from 'rsuite'
 import styled from 'styled-components'
 
@@ -16,17 +15,10 @@ import { BaseLayer, LayerType } from '../../constants'
 
 export function BaseLayers() {
   const dispatch = useMainAppDispatch()
-  const isInLightMode = useIsInLightMode()
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const layersSidebarOpenedLayerType = useMainAppSelector(state => state.layer.layersSidebarOpenedLayerType)
 
-  const baseLayers = useMemo(() => {
-    if (isInLightMode) {
-      return [BaseLayer.LIGHT.code]
-    }
-
-    return Object.keys(BaseLayer)
-  }, [isInLightMode])
+  const baseLayers = Object.keys(BaseLayer)
 
   const { isOpened, isRendered } = useDisplayMapBox(layersSidebarOpenedLayerType === LayerType.BASE_LAYER)
 

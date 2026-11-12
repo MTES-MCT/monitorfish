@@ -9,6 +9,7 @@ describe('utils/parseSampleOrReturn()', () => {
   it('Should only validate a sample of the items, spread over the whole collection', () => {
     const items = Array.from({ length: 1000 }, (_, index) => ({ id: index }))
     const parseSpy = jest.spyOn(ItemSchema, 'parse')
+    const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0)
 
     const result = parseSampleOrReturn(items, ItemSchema, 10)
 
@@ -18,6 +19,21 @@ describe('utils/parseSampleOrReturn()', () => {
       0, 100, 200, 300, 400, 500, 600, 700, 800, 900
     ])
     parseSpy.mockRestore()
+    randomSpy.mockRestore()
+  })
+
+  it('Should validate other items at each call, so that the successive calls cover the whole collection', () => {
+    const items = Array.from({ length: 1000 }, (_, index) => ({ id: index }))
+    const parseSpy = jest.spyOn(ItemSchema, 'parse')
+    const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0.37)
+
+    parseSampleOrReturn(items, ItemSchema, 10)
+
+    expect(parseSpy.mock.calls.map(([item]) => (item as { id: number }).id)).toEqual([
+      37, 137, 237, 337, 437, 537, 637, 737, 837, 937
+    ])
+    parseSpy.mockRestore()
+    randomSpy.mockRestore()
   })
 
   it('Should validate every item of a small collection', () => {

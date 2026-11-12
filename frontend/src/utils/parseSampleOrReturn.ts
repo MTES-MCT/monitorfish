@@ -3,7 +3,8 @@ import { parseOrReturn } from './parseOrReturn'
 import type { z } from 'zod'
 
 /**
- * Validate a sample of a large collection (spread over it) against a schema, and return the collection as is.
+ * Validate a sample of a large collection (spread over it, from a random start) against a schema,
+ * and return the collection as is.
  *
  * Validating each item of thousands (as the active vessels) freezes the page on slow computers,
  * while a sample is enough to detect a contract mismatch with the API.
@@ -16,7 +17,9 @@ export function parseSampleOrReturn<T>(body: unknown, schema: z.ZodType<any>, sa
   }
 
   const step = Math.max(1, Math.floor(body.length / sampleSize))
-  const sample = body.filter((_, index) => index % step === 0).slice(0, sampleSize)
+  // A random start, so that the successive calls (e.g. the refreshes) end up validating every item
+  const offset = Math.floor(Math.random() * step)
+  const sample = body.filter((_, index) => index % step === offset).slice(0, sampleSize)
   parseOrReturn<T>(sample, schema, true)
 
   return body as T[]

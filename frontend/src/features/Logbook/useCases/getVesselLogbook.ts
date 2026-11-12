@@ -21,7 +21,8 @@ export const getVesselLogbook =
     vesselIdentity: Vessel.VesselIdentity | undefined,
     navigateTo: NavigateTo | undefined,
     isFromUserAction: boolean,
-    nextTripNumber?: string
+    nextTripNumber?: string,
+    prefetchedVoyage?: Promise<Logbook.VesselVoyage | undefined>
   ): MainAppThunk<Promise<Logbook.VesselVoyage | undefined>> =>
   async (dispatch, getState) => {
     if (!vesselIdentity) {
@@ -48,7 +49,8 @@ export const getVesselLogbook =
     }
 
     try {
-      const voyage = await dispatch(fetchVesselVoyage(vesselIdentity, nextTripNumber, nextNavigateTo))
+      const voyage = await (prefetchedVoyage ??
+        dispatch(fetchVesselVoyage(vesselIdentity, nextTripNumber, nextNavigateTo)))
       if (!voyage) {
         dispatch(handleNoVoyageFound(isSameVesselAsCurrentlyShowed))
 
@@ -80,6 +82,23 @@ export const getVesselLogbook =
       return undefined
     }
   }
+
+/**
+ * Start fetching the last voyage of a vessel, to be given to `getVesselLogbook()` once the vessel is displayed.
+ */
+export function prefetchVesselLastVoyage(
+  vesselIdentity: Vessel.VesselIdentity
+): MainAppThunk<Promise<Logbook.VesselVoyage | undefined>> {
+  return dispatch => {
+    const voyage: Promise<Logbook.VesselVoyage | undefined> = dispatch(
+      fetchVesselVoyage(vesselIdentity, undefined, NavigateTo.LAST)
+    )
+    // The rejection is handled when `getVesselLogbook()` awaits it
+    voyage.catch(() => undefined)
+
+    return voyage
+  }
+}
 
 function fetchVesselVoyage(
   vesselIdentity: Vessel.VesselIdentity,

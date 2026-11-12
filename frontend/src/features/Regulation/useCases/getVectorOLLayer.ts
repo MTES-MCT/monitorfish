@@ -11,10 +11,13 @@ import type { Geometry } from 'ol/geom'
 import type VectorSource from 'ol/source/Vector'
 
 export const getVectorOLLayer =
-  (nextVisibleLayer: MonitorFishMap.ShowedLayer): HybridAppThunk<VectorImageLayer<VectorSource<Feature<Geometry>>>> =>
+  (
+    nextVisibleLayer: MonitorFishMap.ShowedLayer,
+    zonesFetchedTogether: MonitorFishMap.ShowedLayer[]
+  ): HybridAppThunk<VectorImageLayer<VectorSource<Feature<Geometry>>>> =>
   dispatch => {
     const name = `${LayerProperties.REGULATORY.code}:${nextVisibleLayer.topic}:${nextVisibleLayer.zone}`
-    const source = dispatch(getRegulatoryVectorSource(nextVisibleLayer))
+    const source = dispatch(getRegulatoryVectorSource(nextVisibleLayer, zonesFetchedTogether))
 
     const newLayer = new VectorImageLayer({
       className: 'regulatory',

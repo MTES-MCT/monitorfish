@@ -1,10 +1,10 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
-import { LayerProperties } from '@features/Map/constants'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import { getRegulatoryZoneFromAPI, REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../api/geoserver'
+import { REGULATORY_ZONE_METADATA_ERROR_MESSAGE } from '../../../api/geoserver'
 import { STATUS } from '../components/RegulationTables/constants'
 import { regulationActions } from '../slice'
+import { getRegulatoryZone } from './getRegulatoryZone'
 import { mapToRegulatoryZone, DEFAULT_REGULATORY_TEXT } from '../utils'
 
 import type { MonitorFishMap } from '@features/Map/Map.types'
@@ -17,11 +17,7 @@ export const showRegulationToEdit =
     dispatch(regulationActions.setStatus(STATUS.LOADING))
 
     try {
-      const feature = await getRegulatoryZoneFromAPI(
-        LayerProperties.REGULATORY.code,
-        regulatoryZone,
-        getState().global.isBackoffice
-      )
+      const feature = await dispatch(getRegulatoryZone(regulatoryZone))
 
       const regulatoryZoneMetadata = mapToRegulatoryZone(feature, speciesByCode)
       if (!regulatoryZoneMetadata) {

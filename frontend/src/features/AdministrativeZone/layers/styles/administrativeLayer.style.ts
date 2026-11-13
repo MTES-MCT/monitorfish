@@ -1,7 +1,6 @@
 // TODO Remove legacy colors.
 
 import { AdminLayerProperties } from '@features/Map/constants'
-import { getColorWithAlpha } from '@features/Map/layers/styles/utils'
 import { THEME } from '@mtes-mct/monitor-ui'
 import { Style } from 'ol/style'
 import Fill from 'ol/style/Fill'
@@ -66,17 +65,10 @@ export function getAdministrativeLayerStyle(type: string) {
   }
 
   const adminLayer = Object.values(AdminLayerProperties).find(p => p.code === type)
-  if (!adminLayer) {
-    return () =>
-      new Style({
-        fill: new Fill({ color: getColorWithAlpha('#7B9FCC', 0.2) }),
-        stroke: new Stroke({ color: getColorWithAlpha('#7B9FCC', 0.6), width: 2 })
-      })
-  }
 
   return makeZoneStyle('#767AB2', getStrokeWidth(type), {
     overflow: type === AdminLayerProperties.FAO.code,
-    propertyKey: adminLayer.zoneNamePropertyKey,
+    propertyKey: adminLayer?.zoneNamePropertyKey,
     textStrokeColor: getTextStrokeColor(type)
   })
 }

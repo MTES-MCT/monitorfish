@@ -333,19 +333,6 @@ const Wrapper = styled(LegacyRsuiteComponentsWrapper)`
     font-size: 13px;
     font-weight: normal;
   }
-  .rs-btn rs-btn-default rs-picker-toggle {
-    background: #1675e0 !important;
-  }
-  .rs-btn-toggle {
-    background: #c8dce6 0% 0% no-repeat padding-box;
-    border: 1px solid ${p => p.theme.color.slateGray};
-    border-radius: 7px;
-    margin: 3px 7px 0 7px;
-  }
-  .rs-btn-toggle::after {
-    background: ${THEME.color.slateGray} 0% 0% no-repeat padding-box;
-    top: 1px;
-  }
   .rs-toggle {
     margin-right: 5px;
     margin-left: 5px;

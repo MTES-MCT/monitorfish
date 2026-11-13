@@ -71,33 +71,6 @@ export const CustomGlobalStyle = createGlobalStyle`
     padding: unset;
   }
 
-  @-webkit-keyframes pulse {
-    0% {
-      -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
-    }
-    70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
-    }
-    100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
-    }
-  }
-
-  @keyframes pulse {
-    0% {
-      -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
-      box-shadow: 0 0 0 0 rgba(81, 81, 81, 0.4);
-    }
-    70% {
-      -moz-box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
-      box-shadow: 0 0 0 10px rgba(81, 81, 81, 0);
-    }
-    100% {
-      -moz-box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
-      box-shadow: 0 0 0 0 rgba(81, 81, 81, 0);
-    }
-  }
-
   ul, ol, menu {
     list-style: none;
     padding-left: 0;
@@ -232,10 +205,6 @@ export const CustomGlobalStyle = createGlobalStyle`
 
   table tr {
     display: table-row;
-  }
-
-  .primary {
-    background: rgba(5, 5, 94, 1);
   }
 
   tbody {

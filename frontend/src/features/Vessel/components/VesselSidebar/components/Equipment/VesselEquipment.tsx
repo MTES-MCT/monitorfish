@@ -71,9 +71,6 @@ const Wrapper = styled.div`
   margin: 10px;
   overflow: hidden;
 
-  .rs-btn rs-btn-default rs-picker-toggle {
-    background: #1675e0 !important;
-  }
   .rs-picker-toggle-wrapper {
     display: block;
   }
@@ -107,16 +104,5 @@ const Wrapper = styled.div`
   .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret,
   .rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
     top: 5px;
-  }
-
-  .rs-btn-toggle {
-    background: #c8dce6 0% 0% no-repeat padding-box;
-    border: 1px solid ${p => p.theme.color.slateGray};
-    border-radius: 7px;
-    margin: 3px 7px 0 7px;
-  }
-  .rs-btn-toggle::after {
-    background: ${p => p.theme.color.slateGray} 0% 0% no-repeat padding-box;
-    top: 1px;
   }
 `

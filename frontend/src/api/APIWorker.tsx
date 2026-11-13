@@ -7,6 +7,7 @@ import { openBeaconMalfunctionInKanban } from '@features/BeaconMalfunction/useCa
 import { fleetSegmentApi } from '@features/FleetSegment/apis'
 import { getAllRegulatoryLayers } from '@features/Regulation/useCases/getAllRegulatoryLayers'
 import { SideWindowStatus } from '@features/SideWindow/constants'
+import { getAreFirstActiveVesselsDisplayed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayed'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -29,6 +30,7 @@ export const TWENTY_MINUTES = 20 * 60 * 1000
 export function APIWorker() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
+  const areFirstActiveVesselsDisplayed = useMainAppSelector(getAreFirstActiveVesselsDisplayed)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
   const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
@@ -42,10 +44,10 @@ export function APIWorker() {
   const sideWindowInterval = useRef<number>()
   const beaconMalfunctionInKanbanInterval = useRef<number>()
   const vesselBeaconMalfunctionInterval = useRef<number>()
+  const loadedReferentialsForIsSuperUser = useRef<boolean>()
   const [updateVesselSidebarTab, setUpdateVesselSidebarTab] = useState(false)
 
-  const load = useCallback(async () => {
-    dispatch(setIsUpdatingVessels())
+  const loadReferentials = useCallback(() => {
     dispatch(getAllGearCodes<MainAppAsyncThunk>())
 
     if (isSuperUser) {
@@ -56,10 +58,23 @@ export function APIWorker() {
     }
 
     dispatch(getInfractions())
-    // This `await` must be kept at the end of the function to prevent blocking of other fetch
-    await dispatch(getAllSpecies<MainAppAsyncThunk>())
-    dispatch(getAllRegulatoryLayers())
+    const speciesLoading = dispatch(getAllSpecies<MainAppAsyncThunk>())
+    dispatch(getAllRegulatoryLayers(speciesLoading))
   }, [dispatch, isSuperUser])
+
+  // On a satellite link, these downloads would share its bandwidth with the vessels, delaying their display
+  useEffect(() => {
+    if (
+      isSuperUser === undefined ||
+      !areFirstActiveVesselsDisplayed ||
+      loadedReferentialsForIsSuperUser.current === isSuperUser
+    ) {
+      return
+    }
+
+    loadedReferentialsForIsSuperUser.current = isSuperUser
+    loadReferentials()
+  }, [areFirstActiveVesselsDisplayed, isSuperUser, loadReferentials])
 
   const poll = useCallback(() => {
     dispatch(setIsUpdatingVessels())
@@ -76,7 +91,7 @@ export function APIWorker() {
       return () => {}
     }
 
-    load()
+    dispatch(setIsUpdatingVessels())
 
     // TODO Use a RTK query hook with polling, within a global hook if really necessary.
     const interval = setInterval(poll, FIVE_MINUTES)
@@ -84,7 +99,7 @@ export function APIWorker() {
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch, isSuperUser, load, poll])
+  }, [dispatch, isSuperUser, poll])
 
   useEffect(() => {
     if (isSuperUser && sideWindow.status !== SideWindowStatus.CLOSED) {

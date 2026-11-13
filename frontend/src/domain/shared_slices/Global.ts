@@ -13,6 +13,7 @@ const lastSearchedVesselsLocalStorageKey = 'lastSearchedVessels'
 
 // TODO Properly type this redux state.
 export type GlobalState = {
+  areActiveVesselsDisplayed: boolean
   // TODO Rename this prop.
   healthcheckTextWarning: string[]
   isBackoffice: boolean
@@ -28,6 +29,7 @@ export type GlobalState = {
   userType: string
 }
 const INITIAL_STATE: GlobalState = {
+  areActiveVesselsDisplayed: false,
   healthcheckTextWarning: [],
   isBackoffice: false,
   isUpdatingVessels: false,
@@ -83,6 +85,7 @@ export const globalSlice = createSlice({
 
     resetIsUpdatingVessels(state) {
       state.isUpdatingVessels = false
+      state.areActiveVesselsDisplayed = true
     },
 
     /**

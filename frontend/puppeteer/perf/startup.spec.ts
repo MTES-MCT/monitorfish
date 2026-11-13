@@ -23,7 +23,13 @@ describe('Startup of the main window (non-super-user)', () => {
     const pageErrors: string[] = []
     page.on('pageerror', error => pageErrors.push(String(error)))
 
+    // The referentials are downloaded once the vessels are displayed
+    const speciesResponse = page.waitForResponse(response => new URL(response.url()).pathname === '/bff/v1/species', {
+      timeout: 120 * 1000
+    })
     await navigateAndWaitForVessels(page, () => page.reload())
+    await speciesResponse
+    await wait(1000)
 
     expect(pageErrors).toEqual([])
 

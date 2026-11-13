@@ -15,41 +15,47 @@ import type { RegulatoryZone } from '../types'
 import type { UserLayers } from '@features/UserLayers/types'
 import type { MainAppThunk } from '@store'
 
-export const getAllRegulatoryLayers = (): MainAppThunk<Promise<void>> => async (dispatch, getState) => {
-  const monitorFishWorker = await MonitorFishWorker
-  const { isBackoffice } = getState().global
-  const { speciesByCode } = getState().species
+/**
+ * @param speciesLoading - Species being downloaded: the regulatory zones are downloaded in the meantime
+ */
+export const getAllRegulatoryLayers =
+  (speciesLoading?: Promise<unknown>): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
+    const monitorFishWorker = await MonitorFishWorker
+    const { isBackoffice } = getState().global
 
-  try {
-    const features = await getAllRegulatoryLayersFromAPI(isBackoffice)
+    try {
+      const features = await getAllRegulatoryLayersFromAPI(isBackoffice)
+      await speciesLoading
+      const { speciesByCode } = getState().species
 
-    const regulatoryZones = await monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode)
-    dispatch(regulationActions.setRegulatoryZones(regulatoryZones))
+      const regulatoryZones = await monitorFishWorker.mapGeoserverToRegulatoryZones(features, speciesByCode)
+      dispatch(regulationActions.setRegulatoryZones(regulatoryZones))
 
-    const { layersTopicsByRegulatoryTerritory, layersWithoutGeometry } =
-      await monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
+      const { layersTopicsByRegulatoryTerritory, layersWithoutGeometry } =
+        await monitorFishWorker.convertGeoJSONFeaturesToStructuredRegulatoryObject(features, speciesByCode)
 
-    dispatch(regulationActions.setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
-    dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
+      dispatch(regulationActions.setLayersTopicsByRegTerritory(layersTopicsByRegulatoryTerritory))
+      dispatch(regulationActions.setRegulatoryLayerLawTypes(layersTopicsByRegulatoryTerritory))
 
-    if (isBackoffice) {
-      return
+      if (isBackoffice) {
+        return
+      }
+
+      await dispatch(applyUserLayers(layersWithoutGeometry))
+    } catch (error) {
+      console.error(error)
+      dispatch(
+        addMainWindowBanner({
+          children: (error as Error).message,
+          closingDelay: 6000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
     }
-
-    await dispatch(applyUserLayers(layersWithoutGeometry))
-  } catch (error) {
-    console.error(error)
-    dispatch(
-      addMainWindowBanner({
-        children: (error as Error).message,
-        closingDelay: 6000,
-        isClosable: true,
-        level: Level.ERROR,
-        withAutomaticClosing: true
-      })
-    )
   }
-}
 
 /**
  * Apply the user layers to the regulatory zones just fetched.

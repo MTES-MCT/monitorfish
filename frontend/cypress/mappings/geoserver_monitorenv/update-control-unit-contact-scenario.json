@@ -7,7 +7,7 @@
       "newScenarioState": "control-unit-contact-updated",
       "request": {
         "method": "POST",
-        "url": "/api/v2/control_unit_contacts",
+        "url": "/api/v3/control_unit_contacts",
         "bodyPatterns": [
           {
             "matches": ".*\"foo@example.org\".*"
@@ -167,7 +167,7 @@
       "newScenarioState": "control-unit-contact-patched",
       "request": {
         "method": "PATCH",
-        "urlPattern": "/api/v1/control_unit_contacts/1077",
+        "urlPattern": "/api/v2/control_unit_contacts/1077",
         "bodyPatterns": [
           {
             "matches": ".*\"bar@example.org\".*"

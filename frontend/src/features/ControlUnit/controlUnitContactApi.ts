@@ -16,7 +16,7 @@ export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
       query: newControlUnitContactData => ({
         body: newControlUnitContactData,
         method: 'POST',
-        url: `/v2/control_unit_contacts`
+        url: `/v3/control_unit_contacts`
       }),
       transformErrorResponse: response => new FrontendApiError(CREATE_CONTROL_UNIT_CONTACT_ERROR_MESSAGE, response)
     }),
@@ -47,7 +47,7 @@ export const monitorenvControlUnitContactApi = monitorenvApi.injectEndpoints({
       query: nextControlUnitContactData => ({
         body: nextControlUnitContactData,
         method: 'PATCH',
-        url: `/v1/control_unit_contacts/${nextControlUnitContactData.id}`
+        url: `/v2/control_unit_contacts/${nextControlUnitContactData.id}`
       })
     }),
 

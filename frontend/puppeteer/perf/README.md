@@ -25,12 +25,14 @@ cd frontend && npm run test:perf
 
 ## Budgets
 
-| Spec                        | Budget                                                                        |
-| --------------------------- | ----------------------------------------------------------------------------- |
-| `bundle.spec.ts`            | Web worker < 150 KB gzipped                                                   |
-| `startup.spec.ts`           | Each referential fetched once, no login background downloaded on the map      |
-| `vessels_rendering.spec.ts` | < 1.8 s of long animation frames to process the vessels, with a CPU slowed ×6 |
-| `vessel_sidebar.spec.ts`    | The logbook is fetched in parallel of the vessel                              |
-| `regulatory_layers.spec.ts` | The zones of a regulatory layer are fetched in a single request               |
+| Spec                        | Budget                                                                         |
+| --------------------------- | ------------------------------------------------------------------------------ |
+| `bundle.spec.ts`            | Web worker < 150 KB gzipped                                                    |
+| `startup.spec.ts`           | Each referential fetched once, no login background downloaded on the map       |
+| `startup_order.spec.ts`     | Referentials downloaded after the vessels, regulatory catalog with the species |
+| `vessels_rendering.spec.ts` | < 1.8 s of long animation frames to process the vessels, with a CPU slowed ×6  |
+| `vessel_sidebar.spec.ts`    | The logbook is fetched in parallel of the vessel                               |
+| `regulatory_layers.spec.ts` | The zones of a regulatory layer are fetched in a single request                |
+| `polling.spec.ts`           | Super-user: the side window lists are polled only while displayed              |
 
 Local data is smaller than production: absolute durations and sizes must also be checked on production.

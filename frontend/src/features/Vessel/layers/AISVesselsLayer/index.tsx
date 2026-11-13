@@ -1,4 +1,4 @@
-import { TWO_MINUTES } from '@api/APIWorker'
+import { TWO_MINUTES } from '@constants/index'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { monitorfishMap } from '@features/Map/monitorfishMap'

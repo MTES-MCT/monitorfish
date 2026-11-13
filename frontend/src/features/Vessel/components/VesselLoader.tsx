@@ -1,4 +1,4 @@
-import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
+import { FIVE_MINUTES, TWENTY_MINUTES } from '@constants/index'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { useGetActiveVesselsQuery } from '@features/Vessel/vesselApi'

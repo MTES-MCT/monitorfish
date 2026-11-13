@@ -1,5 +1,6 @@
 import { EnvironmentBox } from '@components/EnvironmentBox'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
+import { useMainWindowDataLoading } from '@features/MainWindow/hooks/useMainWindowDataLoading'
 import { MainMap } from '@features/Map/components/MainMap'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
@@ -16,7 +17,6 @@ import styled from 'styled-components'
 import { LegacyRsuiteComponentsWrapper } from 'ui/LegacyRsuiteComponentsWrapper'
 
 import { PreviewFilteredVessels } from './components/PreviewFilteredVessels'
-import { APIWorker } from '../../api/APIWorker'
 import { useIsSuperUser } from '../../auth/hooks/useIsSuperUser'
 import { useMainAppSelector } from '../../hooks/useMainAppSelector'
 import { ControlUnitDialog } from '../ControlUnit/components/ControlUnitDialog'
@@ -59,6 +59,7 @@ export function MainWindow() {
 
   useBeforeUnload(warnOnUnload)
   useSaveUserLayersOnChange()
+  useMainWindowDataLoading()
 
   return (
     <>
@@ -80,8 +81,6 @@ export function MainWindow() {
         <MainMap />
 
         {isControlUnitDialogDisplayed && <ControlUnitDialog />}
-
-        <APIWorker />
 
         <IUUReportingMapForm />
         {status !== SideWindowStatus.CLOSED && <SideWindowLauncher />}

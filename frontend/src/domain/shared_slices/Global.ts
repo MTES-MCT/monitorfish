@@ -17,7 +17,6 @@ export type GlobalState = {
   // TODO Rename this prop.
   healthcheckTextWarning: string[]
   isBackoffice: boolean
-  isUpdatingVessels: boolean
   /** @deprecated Can be replaced by a non-Redux function once `@features/VesselSearch` is replaced with `@features/Vessel/components/VesselSearch`. */
   lastSearchedVessels: any[]
   leftMapBoxOpened: MapBox | undefined
@@ -32,7 +31,6 @@ const INITIAL_STATE: GlobalState = {
   areActiveVesselsDisplayed: false,
   healthcheckTextWarning: [],
   isBackoffice: false,
-  isUpdatingVessels: false,
   lastSearchedVessels: getLocalStorageState([], lastSearchedVesselsLocalStorageKey),
   leftMapBoxOpened: undefined,
   previewFilteredVesselsMode: undefined,
@@ -83,8 +81,7 @@ export const globalSlice = createSlice({
       state.rightMenuIsOpen = true
     },
 
-    resetIsUpdatingVessels(state) {
-      state.isUpdatingVessels = false
+    setAreActiveVesselsDisplayed(state) {
       state.areActiveVesselsDisplayed = true
     },
 
@@ -100,10 +97,6 @@ export const globalSlice = createSlice({
      */
     setIsBackoffice(state, action: PayloadAction<boolean>) {
       state.isBackoffice = action.payload
-    },
-
-    setIsUpdatingVessels(state) {
-      state.isUpdatingVessels = true
     },
 
     /**
@@ -150,10 +143,9 @@ export const {
   addSearchedVessel,
   contractRightMenu,
   expandRightMenu,
-  resetIsUpdatingVessels,
+  setAreActiveVesselsDisplayed,
   setHealthcheckTextWarning,
   setIsBackoffice,
-  setIsUpdatingVessels,
   setLeftMapBoxOpened,
   setPreviewFilteredVesselsMode,
   setUserType

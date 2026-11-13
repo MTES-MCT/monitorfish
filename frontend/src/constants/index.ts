@@ -15,6 +15,8 @@ export const BOOLEAN_AS_OPTIONS: Array<Option<boolean>> = [
 export const HALF_A_SECOND = 500
 export const ONE_MINUTE = 60 * 1000
 export const FIVE_MINUTES = 5 * 60 * 1000
+export const TWO_MINUTES = 2 * 60 * 1000
+export const TWENTY_MINUTES = 20 * 60 * 1000
 
 export const COUNTRIES_AS_ALPHA2_OPTIONS: Option<string>[] = Object.keys(Countries.getAlpha2Codes()).map(code => ({
   label: Countries.getName(code, 'fr') ?? code,

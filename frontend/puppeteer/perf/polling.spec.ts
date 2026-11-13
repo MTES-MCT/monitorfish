@@ -6,8 +6,8 @@ import type { Browser, Page } from 'puppeteer'
 
 const ALERTS_PATH = '/bff/v1/operational_alerts'
 const BEACON_MALFUNCTIONS_PATH = '/bff/v1/beacon_malfunctions'
-// The side window lists are polled every minute
-const POLLING_WAIT_MS = 70 * 1000
+const SIDE_WINDOW_POLLING_INTERVAL_MS = 60 * 1000
+const POLLING_WAIT_MS = SIDE_WINDOW_POLLING_INTERVAL_MS + 10 * 1000
 
 describe('Polling of the side window (super-user)', () => {
   let browser: Browser

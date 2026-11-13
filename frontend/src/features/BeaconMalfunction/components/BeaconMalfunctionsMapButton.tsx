@@ -5,7 +5,7 @@ import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToo
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
-import { getAreFirstActiveVesselsDisplayed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayed'
+import { getAreFirstActiveVesselsDisplayedOrFailed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayedOrFailed'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useOnPolledQueryData } from '@hooks/useOnPolledQueryData'
@@ -19,12 +19,12 @@ export function BeaconMalfunctionsMapButton() {
   const beaconMalfunctions = useMainAppSelector(state => state.beaconMalfunction.beaconMalfunctions)
   const sideWindow = useMainAppSelector(state => state.sideWindow)
 
-  const areFirstActiveVesselsDisplayed = useMainAppSelector(getAreFirstActiveVesselsDisplayed)
+  const areFirstActiveVesselsDisplayedOrFailed = useMainAppSelector(getAreFirstActiveVesselsDisplayedOrFailed)
 
   const beaconMalfunctionsQuery = beaconMalfunctionApi.endpoints.getAllBeaconMalfunctions.useQuery(undefined, {
     pollingInterval: FIVE_MINUTES,
     // On a satellite link, it would share its bandwidth with the vessels, delaying their display
-    skip: !areFirstActiveVesselsDisplayed
+    skip: !areFirstActiveVesselsDisplayedOrFailed
   })
   useOnPolledQueryData(
     beaconMalfunctionsQuery,

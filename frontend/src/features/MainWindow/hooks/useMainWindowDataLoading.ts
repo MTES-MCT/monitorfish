@@ -1,5 +1,5 @@
 import { loadMainWindowReferentials } from '@features/MainWindow/useCases/loadMainWindowReferentials'
-import { getAreFirstActiveVesselsDisplayed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayed'
+import { getAreFirstActiveVesselsDisplayedOrFailed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayedOrFailed'
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -21,7 +21,7 @@ export function useMainWindowDataLoading() {
             listenerApi.unsubscribe()
             listenerApi.dispatch(loadMainWindowReferentials(isSuperUser))
           },
-          predicate: (_action, state) => getAreFirstActiveVesselsDisplayed(state)
+          predicate: (_action, state) => getAreFirstActiveVesselsDisplayedOrFailed(state)
         })
       ),
     [dispatch, isSuperUser]

@@ -4,11 +4,10 @@ import { BASE_URL, delayRequests, launchChrome, login, navigateAndWaitForVessels
 
 import type { Browser, HTTPRequest, Page } from 'puppeteer'
 
+const SATELLITE_VESSELS_DOWNLOAD_DELAY_MS = 2000
+
 const isRegulatoryCatalogRequest = (request: HTTPRequest) => request.url().includes('propertyName=id,law_type')
 
-/**
- * Records when each request is sent and when its response is received, in milliseconds since the start.
- */
 function recordRequestTimes(page: Page) {
   const startedAt = Date.now()
   const times: Array<{ finishedAt?: number; request: HTTPRequest; sentAt: number }> = []
@@ -44,8 +43,7 @@ describe('Startup order of the main window (non-super-user)', () => {
 
   it('downloads the referentials after the vessels, not to share the bandwidth of a satellite link with them', async () => {
     const page = await browser.newPage()
-    // As the download of the vessels on a satellite link
-    await delayRequests(page, '/bff/v1/vessels', 2000)
+    await delayRequests(page, '/bff/v1/vessels', SATELLITE_VESSELS_DOWNLOAD_DELAY_MS)
     const times = recordRequestTimes(page)
 
     await navigateAndWaitForVessels(page, () => page.goto(BASE_URL))

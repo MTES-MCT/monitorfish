@@ -15,9 +15,6 @@ import type { RegulatoryZone } from '../types'
 import type { UserLayers } from '@features/UserLayers/types'
 import type { MainAppThunk } from '@store'
 
-/**
- * @param speciesLoading - Species being downloaded: the regulatory zones are downloaded in the meantime
- */
 export const getAllRegulatoryLayers =
   (speciesLoading?: Promise<unknown>): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {

@@ -1,3 +1,4 @@
+import { ONE_MINUTE } from '@constants/index'
 import {
   pointerWithin,
   DndContext,
@@ -8,12 +9,15 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
+import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
 import { BeaconMalfunctionVesselStatus, STAGE_RECORD, VESSEL_STATUS } from '@features/BeaconMalfunction/constants'
 import { addSideWindowBanner } from '@features/SideWindow/useCases/addSideWindowBanner'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useOnPolledQueryData } from '@hooks/useOnPolledQueryData'
 import { Level, THEME } from '@mtes-mct/monitor-ui'
 import { createSelector } from '@reduxjs/toolkit'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -23,6 +27,10 @@ import { Droppable } from './Droppable'
 import { StageColumn } from './StageColumn'
 import { getBeaconMalfunctionsByStage, searchInBeaconMalfunctions } from './utils'
 import { VesselStatusSelect } from './VesselStatusSelect'
+import {
+  setBeaconMalfunctions,
+  setOpenedBeaconMalfunctionsInKanban
+} from '../../../../domain/shared_slices/BeaconMalfunction'
 import { LegacyRsuiteComponentsWrapper } from '../../../../ui/LegacyRsuiteComponentsWrapper'
 import SearchIconSVG from '../../../icons/Loupe_dark.svg?react'
 import { getAllBeaconMalfunctions } from '../../useCases/getAllBeaconMalfunctions'
@@ -78,6 +86,27 @@ export function BeaconMalfunctionBoard() {
     }
   })
   const sensors = useSensors(mouseSensor, pointerSensor, touchSensor)
+
+  const pollingOptions = { pollingInterval: ONE_MINUTE, refetchOnMountOrArgChange: ONE_MINUTE / 1000 }
+  const beaconMalfunctionsQuery = beaconMalfunctionApi.endpoints.getAllBeaconMalfunctions.useQuery(
+    undefined,
+    pollingOptions
+  )
+  const openedBeaconMalfunctionQuery = beaconMalfunctionApi.endpoints.getBeaconMalfunction.useQuery(
+    openedBeaconMalfunctionInKanban?.beaconMalfunction.id ?? skipToken,
+    pollingOptions
+  )
+  useOnPolledQueryData(
+    beaconMalfunctionsQuery,
+    useCallback(nextBeaconMalfunctions => dispatch(setBeaconMalfunctions(nextBeaconMalfunctions)), [dispatch])
+  )
+  useOnPolledQueryData(
+    openedBeaconMalfunctionQuery,
+    useCallback(
+      beaconMalfunctionWithDetails => dispatch(setOpenedBeaconMalfunctionsInKanban(beaconMalfunctionWithDetails)),
+      [dispatch]
+    )
+  )
 
   useEffect(() => {
     // @ts-ignore

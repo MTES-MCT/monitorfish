@@ -33,5 +33,6 @@ cd frontend && npm run test:perf
 | `vessels_rendering.spec.ts` | < 1.8 s of long animation frames to process the vessels, with a CPU slowed ×6  |
 | `vessel_sidebar.spec.ts`    | The logbook is fetched in parallel of the vessel                               |
 | `regulatory_layers.spec.ts` | The zones of a regulatory layer are fetched in a single request                |
+| `polling.spec.ts`           | Super-user: the side window lists are polled only while displayed              |
 
 Local data is smaller than production: absolute durations and sizes must also be checked on production.

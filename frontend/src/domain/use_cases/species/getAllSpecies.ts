@@ -1,7 +1,6 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import { SPECIES_ERROR_MESSAGE } from '../../../api/species'
 import { specyApi } from '../../../api/specy'
 import { speciesActions } from '../../shared_slices/Species'
 
@@ -14,6 +13,8 @@ import type {
   MainAppAsyncThunk
 } from '@store'
 import type { Specy } from 'domain/types/specy'
+
+const SPECIES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les espèces"
 
 export function getAllSpecies<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
 export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {

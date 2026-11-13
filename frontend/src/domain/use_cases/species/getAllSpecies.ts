@@ -1,7 +1,8 @@
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 
-import { getAllSpeciesFromAPI } from '../../../api/species'
+import { SPECIES_ERROR_MESSAGE } from '../../../api/species'
+import { specyApi } from '../../../api/specy'
 import { speciesActions } from '../../shared_slices/Species'
 
 import type {
@@ -25,8 +26,10 @@ export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
     }
 
     try {
-      const speciesAndSpeciesGroups = await getAllSpeciesFromAPI()
-      const { groups, species } = speciesAndSpeciesGroups
+      // Shares the RTK cache (and in-flight request) with the components using `useGetSpeciesQuery()`
+      const { groups, species } = await (dispatch as MainAppDispatch)(
+        specyApi.endpoints.getSpecies.initiate(undefined, { subscribe: false })
+      ).unwrap()
 
       const speciesByCode = species.reduce<Record<string, Specy>>((map, specy) => {
         // We use param reassign for performance reason
@@ -43,11 +46,11 @@ export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
           speciesByCode
         })
       )
-    } catch (err) {
+    } catch {
       /* TODO: understand type error if no `as any` */
       dispatch(
         addMainWindowBanner({
-          children: (err as Error).message,
+          children: SPECIES_ERROR_MESSAGE,
           closingDelay: 6000,
           isClosable: true,
           level: Level.ERROR,

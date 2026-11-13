@@ -28,6 +28,12 @@ private fun assertStaticResourcesCacheHeaders(mockMvc: MockMvc) {
         .andExpect(status().isOk)
         .andExpect(header().string("Cache-Control", "max-age=604800, public"))
 
+    // Requested again by the browser each time the map updates the URL
+    mockMvc
+        .perform(get("/faviconBW.ico"))
+        .andExpect(status().isOk)
+        .andExpect(header().string("Cache-Control", "max-age=604800, public"))
+
     // The index references the current assets: it must be revalidated
     mockMvc
         .perform(get("/index.html"))

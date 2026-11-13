@@ -60,13 +60,30 @@ export async function recordLongAnimationFrames(page: Page): Promise<void> {
   })
 }
 
-export async function getLongAnimationFramesDurationSince(page: Page, sinceMs: number): Promise<number> {
+export async function getLongAnimationFramesDurationBetween(
+  page: Page,
+  sinceMs: number,
+  untilMs: number
+): Promise<number> {
   return page.evaluate(
-    since =>
+    (since, until) =>
       ((window as any).__longAnimationFrames as Array<{ duration: number; startTime: number }>)
-        .filter(frame => frame.startTime >= since)
+        .filter(frame => frame.startTime >= since && frame.startTime < until)
         .reduce((total, frame) => total + frame.duration, 0),
-    sinceMs
+    sinceMs,
+    untilMs
+  )
+}
+
+export async function getRequestStartTime(page: Page, path: string): Promise<number | undefined> {
+  return page.evaluate(
+    resourcePath =>
+      performance
+        .getEntriesByType('resource')
+        .filter(entry => new URL(entry.name).pathname === resourcePath)
+        .map(entry => entry.startTime)
+        .at(-1),
+    path
   )
 }
 

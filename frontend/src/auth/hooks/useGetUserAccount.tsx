@@ -24,6 +24,7 @@ export function useGetUserAccount(): { isLoading: boolean; userAccount: UserAcco
     if (!oidcEnabled) {
       return {
         email: '',
+        isAdministrator: true,
         isAuthenticated: true,
         isSuperUser: true
       }
@@ -35,6 +36,7 @@ export function useGetUserAccount(): { isLoading: boolean; userAccount: UserAcco
 
     return {
       email: user.email,
+      isAdministrator: user.isAdministrator,
       isAuthenticated: true,
       isSuperUser: user.isSuperUser,
       logout: () => {

@@ -1,5 +1,6 @@
 export type AuthorizedUser = {
   email: string
+  isAdministrator: boolean
   isSuperUser: boolean
 }
 

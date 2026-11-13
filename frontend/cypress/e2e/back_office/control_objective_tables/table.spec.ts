@@ -5,7 +5,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     const currentYear = new Date().getFullYear()
 
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
-    cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')
+    cy.intercept('GET', `/bff/v1/backoffice/control_objectives/${currentYear}`).as('controlObjectives')
 
     cy.login('superuser')
 
@@ -47,7 +47,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     /**
      * targetNumberOfControlsAtPort
      */
-    cy.intercept('PUT', '/bff/v1/admin/control_objectives/88').as('updateObjective')
+    cy.intercept('PUT', '/bff/v1/backoffice/control_objectives/88').as('updateObjective')
     cy.wait(50)
     cy.get('*[data-cy="row-88-targetNumberOfControlsAtPort"]')
       .type('{backspace}{backspace}{backspace}{backspace}{backspace}')
@@ -97,7 +97,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('[data-cy="row-88-infringementRiskLevel"]').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
+    cy.intercept('GET', '/bff/v1/backoffice/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
@@ -109,7 +109,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
   it('Should delete an objective', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 86)
-    cy.intercept('DELETE', '/bff/v1/admin/control_objectives/88').as('deleteObjective')
+    cy.intercept('DELETE', '/bff/v1/backoffice/control_objectives/88').as('deleteObjective')
 
     // When
     cy.get('*[data-cy="delete-row-88"]').click()
@@ -120,7 +120,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('.rs-table-row').should('have.length', 85)
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
+    cy.intercept('GET', '/bff/v1/backoffice/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
@@ -131,7 +131,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
   it('Should add an objective', () => {
     // Given
     cy.get('.rs-table-row').should('have.length', 85)
-    cy.intercept('POST', '/bff/v1/admin/control_objectives').as('addObjective')
+    cy.intercept('POST', '/bff/v1/backoffice/control_objectives').as('addObjective')
     cy.wait(200)
 
     // When
@@ -144,7 +144,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('.rs-table-row').should('have.length', 86)
 
     // Update the row when the value is updated in local memory
-    cy.intercept('PUT', '/bff/v1/admin/control_objectives/144').as('updateObjective')
+    cy.intercept('PUT', '/bff/v1/backoffice/control_objectives/144').as('updateObjective')
     cy.get('[data-cy="row-144-targetNumberOfControlsAtPort"]').type(
       '{backspace}{backspace}{backspace}{backspace}{backspace}'
     )
@@ -154,7 +154,7 @@ context('BackOffice > Control Objective Tables > Table', () => {
     cy.get('[data-cy="row-144-targetNumberOfControlsAtPort"]').should('exist')
 
     // The value is saved in database when I refresh the page
-    cy.intercept('GET', '/bff/v1/admin/control_objectives').as('controlObjectives')
+    cy.intercept('GET', '/bff/v1/backoffice/control_objectives').as('controlObjectives')
     cy.visit('/backoffice/control_objectives')
     cy.wait('@controlObjectives')
     cy.wait(50)
@@ -166,8 +166,8 @@ context('BackOffice > Control Objective Tables > Table', () => {
     const nextYear = currentYear + 1
 
     cy.intercept('GET', `/bff/v1/fleet_segments/${currentYear}`).as('fleetSegments')
-    cy.intercept('GET', `/bff/v1/admin/control_objectives/${currentYear}`).as('controlObjectives')
-    cy.intercept('POST', '/bff/v1/admin/control_objectives/years').as('addObjectiveYear')
+    cy.intercept('GET', `/bff/v1/backoffice/control_objectives/${currentYear}`).as('controlObjectives')
+    cy.intercept('POST', '/bff/v1/backoffice/control_objectives/years').as('addObjectiveYear')
 
     cy.log('Should allow adding a control objective for a year that has not yet been added')
 

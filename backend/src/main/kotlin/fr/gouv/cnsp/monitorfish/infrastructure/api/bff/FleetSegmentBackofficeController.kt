@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/bff/v1/admin/fleet_segments")
+@RequestMapping("/bff/v1/backoffice/fleet_segments")
 @Tag(name = "APIs for administration of Fleet segments")
-class FleetSegmentAdminController(
+class FleetSegmentBackofficeController(
     private val updateFleetSegment: UpdateFleetSegment,
     private val deleteFleetSegment: DeleteFleetSegment,
     private val createFleetSegment: CreateFleetSegment,

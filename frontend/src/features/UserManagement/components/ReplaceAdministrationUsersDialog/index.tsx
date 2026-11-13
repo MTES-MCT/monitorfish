@@ -1,0 +1,201 @@
+import { Accent, Button, Checkbox, Dialog, Select, Tag, Textarea, THEME, pluralize } from '@mtes-mct/monitor-ui'
+import { useMemo, useState } from 'react'
+import styled from 'styled-components'
+
+import { UploadEmailsFile } from './UploadEmailsFile'
+import { EXTERNAL_ADMINISTRATION_AS_OPTIONS } from '../../constants'
+import { useReplaceAdministrationUsersMutation } from '../../userManagementApi'
+import { getAdministrationEmailsDiff, isValidEmail, parseEmails } from '../../utils'
+
+import type { UserManagement } from '../../types'
+
+type ReplaceAdministrationUsersDialogProps = Readonly<{
+  onClose: () => void
+  users: UserManagement.User[]
+}>
+export function ReplaceAdministrationUsersDialog({ onClose, users }: ReplaceAdministrationUsersDialogProps) {
+  const [replaceAdministrationUsers, { isLoading }] = useReplaceAdministrationUsersMutation()
+
+  const [administration, setAdministration] = useState<UserManagement.ExternalAdministration | undefined>(undefined)
+  const [rawEmails, setRawEmails] = useState<string | undefined>(undefined)
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+  const [isEmptyListConfirmed, setIsEmptyListConfirmed] = useState(false)
+
+  const emails = useMemo(() => parseEmails(rawEmails), [rawEmails])
+  const invalidEmails = useMemo(() => emails.filter(email => !isValidEmail(email)), [emails])
+  const diff = useMemo(
+    () => (administration ? getAdministrationEmailsDiff(users, administration, emails) : undefined),
+    [users, administration, emails]
+  )
+  // An empty list removes all the users of the administration
+  const isEmptyList = emails.length === 0
+  const canSubmit =
+    administration !== undefined && invalidEmails.length === 0 && (!isEmptyList || isEmptyListConfirmed) && !isLoading
+
+  const importEmails = (importedEmails: string[]) => {
+    if (importedEmails.length === 0) {
+      setErrorMessage('Aucun e-mail n’a été trouvé dans ce fichier.')
+
+      return
+    }
+
+    setErrorMessage(undefined)
+    setRawEmails(importedEmails.join('\n'))
+  }
+
+  const submit = async () => {
+    if (!administration) {
+      return
+    }
+
+    const result = await replaceAdministrationUsers({
+      administration,
+      emails,
+      isEmptyListConfirmed: isEmptyList && isEmptyListConfirmed
+    })
+    if ('error' in result) {
+      setErrorMessage((result.error as Error).message)
+
+      return
+    }
+
+    onClose()
+  }
+
+  return (
+    <Dialog isAbsolute>
+      <Dialog.Title onClose={onClose}>Importer une liste d’utilisateurs</Dialog.Title>
+      <StyledBody>
+        <p>
+          Lors de la revue des habilitations, collez ou importez (CSV) la liste complète des e-mails de
+          l’administration. Les utilisateurs absents de la liste perdront leur accès.
+        </p>
+        <Select
+          label="Administration"
+          name="administration"
+          onChange={setAdministration}
+          options={EXTERNAL_ADMINISTRATION_AS_OPTIONS}
+          value={administration}
+        />
+        <Textarea
+          label="E-mails (un par ligne, ou séparés par des virgules)"
+          name="emails"
+          onChange={setRawEmails}
+          rows={10}
+          value={rawEmails}
+        />
+        <UploadEmailsFile onChange={importEmails} />
+
+        {invalidEmails.length > 0 && (
+          <ErrorText>
+            {pluralize('E-mail invalide', invalidEmails.length)} : {invalidEmails.join(', ')}
+          </ErrorText>
+        )}
+        {diff && invalidEmails.length === 0 && (
+          <Diff data-cy="replace-administration-users-diff">
+            <DiffGroup>
+              <DiffTitle>
+                {diff.addedEmails.length} {pluralize('utilisateur', diff.addedEmails.length)} à ajouter
+              </DiffTitle>
+              <DiffTags>
+                {diff.addedEmails.map(email => (
+                  <Tag key={email} backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.charcoal}>
+                    {email}
+                  </Tag>
+                ))}
+              </DiffTags>
+            </DiffGroup>
+            {diff.movedEmails.length > 0 && (
+              <DiffGroup>
+                <DiffTitle>
+                  {diff.movedEmails.length} {pluralize('utilisateur', diff.movedEmails.length)} à déplacer depuis une
+                  autre administration
+                </DiffTitle>
+                <DiffTags>
+                  {diff.movedEmails.map(email => (
+                    <Tag key={email} backgroundColor={THEME.color.goldenPoppy25} color={THEME.color.charcoal}>
+                      {email}
+                    </Tag>
+                  ))}
+                </DiffTags>
+              </DiffGroup>
+            )}
+            <DiffGroup>
+              <DiffTitle>
+                {diff.removedEmails.length} {pluralize('utilisateur', diff.removedEmails.length)} à supprimer
+              </DiffTitle>
+              <DiffTags>
+                {diff.removedEmails.map(email => (
+                  <Tag key={email} backgroundColor={THEME.color.maximumRed15} color={THEME.color.charcoal}>
+                    {email}
+                  </Tag>
+                ))}
+              </DiffTags>
+            </DiffGroup>
+          </Diff>
+        )}
+        {administration && isEmptyList && (
+          <Checkbox
+            checked={isEmptyListConfirmed}
+            label="Je confirme la suppression de tous les utilisateurs de cette administration"
+            name="isEmptyListConfirmed"
+            onChange={isChecked => setIsEmptyListConfirmed(!!isChecked)}
+          />
+        )}
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+      </StyledBody>
+      <Dialog.Action>
+        <Button accent={Accent.SECONDARY} onClick={onClose}>
+          Annuler
+        </Button>
+        <Button
+          accent={Accent.PRIMARY}
+          disabled={!canSubmit}
+          onClick={() => {
+            void submit()
+          }}
+        >
+          Mettre à jour
+        </Button>
+      </Dialog.Action>
+    </Dialog>
+  )
+}
+
+const StyledBody = styled(Dialog.Body)`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 40px;
+  text-align: left;
+  width: 600px;
+`
+
+const Diff = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 240px;
+  overflow-y: auto;
+`
+
+const DiffGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+const DiffTitle = styled.p`
+  font-weight: 500;
+  margin: 0;
+`
+
+const DiffTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+`
+
+const ErrorText = styled.p`
+  color: ${THEME.color.maximumRed};
+`

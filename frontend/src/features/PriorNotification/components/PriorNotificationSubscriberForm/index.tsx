@@ -1,5 +1,5 @@
 import { BackOfficeBody } from '@features/BackOffice/components/BackofficeBody'
-import { BackOfficeTitle } from '@features/BackOffice/components/BackOfficeTitle'
+import { BackOfficeHeader } from '@features/BackOffice/components/BackOfficeHeader'
 import {
   priorNotificationSubscriberApi,
   useGetPriorNotificationSubscriberQuery
@@ -122,7 +122,9 @@ export function PriorNotificationSubscriberForm() {
 
   return (
     <Wrapper>
-      <BackOfficeTitle>{`${subscriber.controlUnit.name} (${subscriber.controlUnit.administration.name}) – Paramétrage de la diffusion des préavis`}</BackOfficeTitle>
+      <BackOfficeHeader
+        title={`${subscriber.controlUnit.name} (${subscriber.controlUnit.administration.name}) – Paramétrage de la diffusion des préavis`}
+      />
 
       <AllPortSubscriptionsField
         isDisabled={isFetching}

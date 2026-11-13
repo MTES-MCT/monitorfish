@@ -76,7 +76,7 @@ class PositionAlertSpecificationControllerITests {
         given(getPositionAlertSpecifications.execute()).willReturn(
             listOf(DUMMY_POSITION_ALERT),
         )
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
 
         // When
         api
@@ -94,7 +94,7 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should activate an alert specification`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
 
         // When
         api
@@ -112,7 +112,7 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should deactivate an alert specification`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
 
         // When
         api
@@ -130,7 +130,7 @@ class PositionAlertSpecificationControllerITests {
 
     @Test
     fun `Should delete an alert specification`() {
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
 
         // When
         api
@@ -187,7 +187,7 @@ class PositionAlertSpecificationControllerITests {
                 "producerOrganizations": []
             }
             """.trimIndent()
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
 
         // When
         api
@@ -221,7 +221,7 @@ class PositionAlertSpecificationControllerITests {
     @Test
     fun `Should update an alert specification`() {
         // Given
-        given(getIsAuthorizedUser.execute(any(), any())).willReturn(true)
+        given(getIsAuthorizedUser.execute(any(), any(), any())).willReturn(true)
         val alertId = 123
         val alertSpecificationJson =
             """

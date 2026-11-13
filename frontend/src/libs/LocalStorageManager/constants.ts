@@ -1,5 +1,6 @@
 export enum LocalStorageKey {
   BackofficeLayersShowedOnMap = 'backofficelayersShowedOnMap',
+  BackofficeMenuCollapsed = 'backofficeMenuCollapsed',
   BaseLayer = 'baseLayer',
   FavoriteVessels = 'favoriteVessels',
   LastSearchVessels = 'lastSearchedVessels',

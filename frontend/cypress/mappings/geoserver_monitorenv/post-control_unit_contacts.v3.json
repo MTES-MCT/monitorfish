@@ -1,10 +1,10 @@
 {
   "request": {
-    "method": "PATCH",
-    "urlPattern": "/api/v1/control_unit_contacts/[0-9]+"
+    "method": "POST",
+    "url": "/api/v3/control_unit_contacts"
   },
   "response": {
-    "status": 200,
+    "status": 201,
     "headers": {
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "*",

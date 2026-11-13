@@ -7,7 +7,7 @@
       "newScenarioState": "control-unit-contact-updated",
       "request": {
         "method": "POST",
-        "url": "/api/v2/control_unit_contacts",
+        "url": "/api/v3/control_unit_contacts",
         "bodyPatterns": [
           {
             "matches": ".*\"first.contact@example.org\".*"
@@ -166,7 +166,7 @@
       "newScenarioState": "control-unit-contact-updated-2",
       "request": {
         "method": "POST",
-        "url": "/api/v2/control_unit_contacts",
+        "url": "/api/v3/control_unit_contacts",
         "bodyPatterns": [
           {
             "matches": ".*\"second.contact@example.org\".*"
@@ -335,7 +335,7 @@
       "newScenarioState": "control-unit-contact-patched",
       "request": {
         "method": "PATCH",
-        "urlPattern": "/api/v1/control_unit_contacts/1077",
+        "urlPattern": "/api/v2/control_unit_contacts/1077",
         "bodyPatterns": [
           {
             "matches": ".*\"first.contact@example.org\".*"
@@ -506,7 +506,7 @@
       "newScenarioState": "control-unit-contact-patched-2",
       "request": {
         "method": "PATCH",
-        "urlPattern": "/api/v1/control_unit_contacts/1078",
+        "urlPattern": "/api/v2/control_unit_contacts/1078",
         "bodyPatterns": [
           {
             "matches": ".*\"second.contact@example.org\".*"
@@ -677,7 +677,7 @@
       "newScenarioState": "control-unit-contact-patched-3",
       "request": {
         "method": "PATCH",
-        "urlPattern": "/api/v1/control_unit_contacts/1078",
+        "urlPattern": "/api/v2/control_unit_contacts/1078",
         "bodyPatterns": [
           {
             "matches": ".*\"second.contact@example.org\".*"

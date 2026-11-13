@@ -33,7 +33,7 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
     // -------------------------------------------------------------------------
     // Create
 
-    cy.intercept('POST', `/api/v2/control_unit_contacts`).as('createControlUnitContact')
+    cy.intercept('POST', `/api/v3/control_unit_contacts`).as('createControlUnitContact')
 
     cy.clickButton('Ajouter un contact')
 
@@ -69,7 +69,7 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
       // -------------------------------------------------------------------------
       // Edit
 
-      cy.intercept('PATCH', `/api/v1/control_unit_contacts/${newControlUnitContactId}`).as('patchControlUnitContact')
+      cy.intercept('PATCH', `/api/v2/control_unit_contacts/${newControlUnitContactId}`).as('patchControlUnitContact')
 
       cy.get('[data-cy="ControlUnitDialog-control-unit-contact"]')
         .filter(`[data-id="${newControlUnitContactId}"]`)
@@ -135,7 +135,7 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
     cy.contains('Centre opérationnel').should('be.visible')
 
     // -------------------------------------------------------------------------
-    cy.intercept('POST', `/api/v2/control_unit_contacts`).as('createControlUnitContact')
+    cy.intercept('POST', `/api/v3/control_unit_contacts`).as('createControlUnitContact')
     // Delete
 
     cy.clickButton('Ajouter un contact')
@@ -164,10 +164,10 @@ context('Main Window > Control Unit Dialog > Contact List', () => {
 
         const secondControlUnitContactId = secondCreateInterception.response.body.id
 
-        cy.intercept('PATCH', `/api/v1/control_unit_contacts/${firstControlUnitContactId}`).as(
+        cy.intercept('PATCH', `/api/v2/control_unit_contacts/${firstControlUnitContactId}`).as(
           'patchFirstControlUnitContact'
         )
-        cy.intercept('PATCH', `/api/v1/control_unit_contacts/${secondControlUnitContactId}`).as(
+        cy.intercept('PATCH', `/api/v2/control_unit_contacts/${secondControlUnitContactId}`).as(
           'patchSecondControlUnitContact'
         )
 

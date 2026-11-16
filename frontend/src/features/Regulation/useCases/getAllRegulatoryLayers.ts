@@ -1,4 +1,5 @@
 import { getAllRegulatoryLayersFromAPI } from '@api/geoserver'
+import { referentialApi } from '@api/referential'
 import { renderAdministrativeLayers } from '@features/AdministrativeZone/useCases/renderAdministrativeLayers'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { layerActions } from '@features/Map/layer.slice'
@@ -11,6 +12,7 @@ import { Level } from '@mtes-mct/monitor-ui'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { regulationActions } from '../slice'
 
+import type { Regulation } from '../Regulation.types'
 import type { RegulatoryZone } from '../types'
 import type { UserLayers } from '@features/UserLayers/types'
 import type { MainAppThunk } from '@store'
@@ -22,7 +24,10 @@ export const getAllRegulatoryLayers =
     const { isBackoffice } = getState().global
 
     try {
-      const features = await getAllRegulatoryLayersFromAPI(isBackoffice)
+      // The backoffice edits the regulations from GeoServer: it reads them there, without any cache
+      const features = isBackoffice
+        ? await getAllRegulatoryLayersFromAPI(true)
+        : await dispatch(getRegulatoryCatalogue())
       await speciesLoading
       const { speciesByCode } = getState().species
 
@@ -51,6 +56,19 @@ export const getAllRegulatoryLayers =
           withAutomaticClosing: true
         })
       )
+    }
+  }
+
+const REGULATORY_CATALOGUE_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les zones réglementaires"
+
+const getRegulatoryCatalogue =
+  (): MainAppThunk<Promise<Regulation.RegulatoryZoneGeoJsonFeatureCollection>> => async dispatch => {
+    try {
+      return await dispatch(
+        referentialApi.endpoints.getRegulatoryCatalogue.initiate(undefined, { forceRefetch: true, subscribe: false })
+      ).unwrap()
+    } catch {
+      throw new Error(REGULATORY_CATALOGUE_ERROR_MESSAGE)
     }
   }
 

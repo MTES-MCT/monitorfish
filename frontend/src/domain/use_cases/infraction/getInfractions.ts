@@ -6,24 +6,26 @@ import { setInfractions } from '../../shared_slices/Infraction'
 
 import type { MainAppThunk } from '@store'
 
-export const getInfractions = (): MainAppThunk<Promise<void>> => async dispatch => {
-  const request = dispatch(infractionApi.endpoints.getInfractions.initiate())
+export const getInfractions =
+  (isForced = false): MainAppThunk<Promise<void>> =>
+  async dispatch => {
+    const request = dispatch(infractionApi.endpoints.getInfractions.initiate(undefined, { forceRefetch: isForced }))
 
-  try {
-    const infractions = await request.unwrap()
+    try {
+      const infractions = await request.unwrap()
 
-    dispatch(setInfractions([...infractions].sort((a, b) => a.natinfCode - b.natinfCode)))
-  } catch {
-    dispatch(
-      addSideWindowBanner({
-        children: INFRACTIONS_ERROR_MESSAGE,
-        closingDelay: 6000,
-        isClosable: true,
-        level: Level.ERROR,
-        withAutomaticClosing: true
-      })
-    )
-  } finally {
-    request.unsubscribe()
+      dispatch(setInfractions([...infractions].sort((a, b) => a.natinfCode - b.natinfCode)))
+    } catch {
+      dispatch(
+        addSideWindowBanner({
+          children: INFRACTIONS_ERROR_MESSAGE,
+          closingDelay: 6000,
+          isClosable: true,
+          level: Level.ERROR,
+          withAutomaticClosing: true
+        })
+      )
+    } finally {
+      request.unsubscribe()
+    }
   }
-}

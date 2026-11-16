@@ -16,6 +16,8 @@ const SPECIES_AND_GROUPS = {
   ]
 }
 
+const VERSIONS = { gears: 'g1', infractions: 'i1', ports: 'p1', regulations: 'r1', species: 's1' }
+
 function createStore() {
   const store = configureStore({
     middleware: getDefaultMiddleware =>
@@ -34,7 +36,13 @@ describe('domain/use_cases/species/getAllSpecies()', () => {
   let fetchMock: jest.Mock
 
   beforeEach(() => {
-    fetchMock = jest.fn(() => Promise.resolve(new Response(JSON.stringify(SPECIES_AND_GROUPS), { status: 200 })))
+    fetchMock = jest.fn((request: Request) =>
+      Promise.resolve(
+        new Response(JSON.stringify(request.url.includes('/referentials/versions') ? VERSIONS : SPECIES_AND_GROUPS), {
+          status: 200
+        })
+      )
+    )
     global.fetch = fetchMock as any
   })
 
@@ -50,7 +58,10 @@ describe('domain/use_cases/species/getAllSpecies()', () => {
       store.dispatch(getAllSpecies<MainAppAsyncThunk>())
     ])
 
-    expect(fetchMock).toHaveBeenCalledTimes(1)
+    const speciesRequests = fetchMock.mock.calls
+      .map(([request]) => (request as Request).url)
+      .filter(url => url.includes('/species'))
+    expect(speciesRequests).toEqual([expect.stringContaining('/bff/v1/species?v=s1')])
     expect(store.getState().species.speciesByCode.COD?.name).toBe('Morue')
   })
 })

@@ -6,7 +6,8 @@ import type { Browser, HTTPRequest, Page } from 'puppeteer'
 
 const SATELLITE_VESSELS_DOWNLOAD_DELAY_MS = 2000
 
-const isRegulatoryCatalogRequest = (request: HTTPRequest) => request.url().includes('propertyName=id,law_type')
+const isRegulatoryCatalogRequest = (request: HTTPRequest) =>
+  new URL(request.url()).pathname === '/bff/v1/regulations/catalogue'
 
 function recordRequestTimes(page: Page) {
   const startedAt = Date.now()

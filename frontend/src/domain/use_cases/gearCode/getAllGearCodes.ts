@@ -35,20 +35,20 @@ const getGroupName = (groupId: 1 | 2): string | undefined => {
   }
 }
 
-export function getAllGearCodes<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
-export function getAllGearCodes(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
+export function getAllGearCodes<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(isForced?: boolean): T
+export function getAllGearCodes(isForced = false): MainAppAsyncThunk | BackofficeAppPromiseThunk {
   return async (
     dispatch: BackofficeAppDispatch | MainAppDispatch,
     getState: BackofficeAppGetState | MainAppGetState
   ) => {
-    if (getState().gear.gears?.length) {
+    if (!isForced && getState().gear.gears?.length) {
       return
     }
 
     try {
       // Shares the RTK cache (and in-flight request) with the components using `useGetGearsQuery()`
       const gears = await (dispatch as MainAppDispatch)(
-        gearApi.endpoints.getGears.initiate(undefined, { subscribe: false })
+        gearApi.endpoints.getGears.initiate(undefined, { forceRefetch: isForced, subscribe: false })
       ).unwrap()
       const categoriesToGears: Record<string, Gear[]> = {}
       const groupToCategories: Partial<Record<REGULATED_GEARS_KEYS, string[]>> = {}

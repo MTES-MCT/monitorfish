@@ -1,9 +1,17 @@
+import {
+  REFERENTIAL_VERSIONS_POLLING_INTERVAL,
+  referentialApi,
+  saveLastReferentialVersions,
+  useGetReferentialVersionsQuery
+} from '@api/referential'
 import { loadMainWindowReferentials } from '@features/MainWindow/useCases/loadMainWindowReferentials'
+import { refreshChangedReferentials } from '@features/MainWindow/useCases/refreshChangedReferentials'
 import { getAreFirstActiveVesselsDisplayedOrFailed } from '@features/Vessel/selectors/getAreFirstActiveVesselsDisplayedOrFailed'
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { addMainAppListener } from '@store/listenerMiddleware'
+import { isEqual } from 'lodash-es'
 import { useEffect } from 'react'
 
 import { useIsSuperUser } from '../../../auth/hooks/useIsSuperUser'
@@ -36,6 +44,29 @@ export function useMainWindowDataLoading() {
             listenerApi.dispatch(updateVesselTracks())
           },
           matcher: vesselApi.endpoints.getActiveVessels.matchFulfilled
+        })
+      ),
+    [dispatch]
+  )
+
+  useGetReferentialVersionsQuery(undefined, { pollingInterval: REFERENTIAL_VERSIONS_POLLING_INTERVAL })
+
+  useEffect(
+    () =>
+      dispatch(
+        addMainAppListener({
+          effect: (action, listenerApi) => {
+            saveLastReferentialVersions(action.payload)
+
+            const previousVersions = referentialApi.endpoints.getReferentialVersions.select()(
+              listenerApi.getOriginalState()
+            ).data
+            // The first versions are the ones the referentials are loaded with
+            if (previousVersions && !isEqual(previousVersions, action.payload)) {
+              listenerApi.dispatch(refreshChangedReferentials(previousVersions, action.payload))
+            }
+          },
+          matcher: referentialApi.endpoints.getReferentialVersions.matchFulfilled
         })
       ),
     [dispatch]

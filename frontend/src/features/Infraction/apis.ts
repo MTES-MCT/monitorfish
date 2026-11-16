@@ -1,4 +1,5 @@
 import { monitorfishPublicApi } from '@api/api'
+import { getVersionedReferential } from '@api/referential'
 
 import type { Infraction, Threat } from '@features/Infraction/types'
 
@@ -6,7 +7,7 @@ export const infractionApi = monitorfishPublicApi.injectEndpoints({
   endpoints: builder => ({
     getInfractions: builder.query<Infraction[], void>({
       providesTags: () => [{ type: 'Infractions' }],
-      query: () => `/v1/infractions`
+      queryFn: getVersionedReferential<Infraction[]>('infractions', '/v1/infractions')
     }),
     getThreatCharacterizations: builder.query<Threat[], void>({
       query: () => `/v1/infractions/threats`

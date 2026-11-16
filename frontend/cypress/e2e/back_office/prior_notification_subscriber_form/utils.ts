@@ -7,7 +7,7 @@ export const editBackOfficePriorNotificationSubscriber = (controlUnitId: number)
 
   cy.intercept('GET', `/bff/v1/prior_notification_subscribers/${controlUnitId}`).as('getPriorNotificationSubscriber')
   cy.intercept('GET', `/bff/v1/fleet_segments/${dayjs().year()}`).as('getFleetSegments')
-  cy.intercept('GET', `/bff/v1/ports`).as('getPorts')
+  cy.intercept('GET', '/bff/v1/ports*').as('getPorts')
 
   openBackOfficePriorNotificationSubscriberList()
 

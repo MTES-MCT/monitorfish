@@ -71,7 +71,7 @@ const AtSeaCircle = styled.span`
 `
 
 const AtPortCircle = styled.span`
-  background-color: #f4deaf;
+  background-color: ${THEME.color.wheat};
   border-radius: 50%;
   display: inline-block;
   height: 10px;

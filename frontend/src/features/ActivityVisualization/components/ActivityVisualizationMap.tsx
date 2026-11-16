@@ -1,5 +1,6 @@
 import { useGetActivityVisualizationQuery } from '@features/ActivityVisualization/apis'
 import { trackEvent } from '@hooks/useTracking'
+import { THEME } from '@mtes-mct/monitor-ui'
 import { useEffect } from 'react'
 
 import { LoginBackground } from '../../../auth/components/LoginBackground'
@@ -50,7 +51,7 @@ export function ActivityVisualizationMap() {
       height="100%"
       id="kepler_iframe"
       srcDoc={html}
-      style={{ background: '#2c353c' }}
+      style={{ background: THEME.color.charcoal }}
       title="MonitorFish - Visualization des données d'activité"
       width="100%"
     />

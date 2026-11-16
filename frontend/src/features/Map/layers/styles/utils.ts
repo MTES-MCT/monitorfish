@@ -7,6 +7,8 @@ import Stroke from 'ol/style/Stroke'
 import type { DateInterval } from '../../../Regulation/types'
 import type { Dayjs } from 'dayjs'
 
+export const LAVENDER_GREY = '#767AB2'
+
 /**
  * Get hash number between [0, 11] for a given string - Uses the DJB2 hash function
  */
@@ -62,7 +64,7 @@ export function getStyle(color: string | undefined, isSelected: boolean, strokeC
   })
 
   const stroke = new Stroke({
-    color: strokeColor ?? 'rgba(5, 5, 94, 0.7)',
+    color: strokeColor ?? LAVENDER_GREY,
     width: isSelected ? 3 : 1
   })
 

@@ -126,7 +126,7 @@ const HealthcheckWarnings = styled.div`
   height: 22px;
   text-align: center;
   padding: 13px;
-  border-bottom: 2px solid #e3be05;
+  border-bottom: 2px solid ${p => p.theme.color.goldenPoppy};
   color: ${p => p.theme.color.gunMetal};
   display: flex;
   justify-content: center;
@@ -146,7 +146,7 @@ const MultipleWarningsHeadband = styled.li<{
   height: ${p => (p.$isOpen ? 22 : 0)}px;
   text-align: center;
   padding: ${p => (p.$isOpen ? '13px 0 13px 0' : '0 0 0 0')};
-  border-bottom: 2px solid #e3be05;
+  border-bottom: 2px solid ${p => p.theme.color.goldenPoppy};
   color: ${p => p.theme.color.gunMetal};
   z-index: 1044;
   font: normal normal bold 16px/22px Marianne;

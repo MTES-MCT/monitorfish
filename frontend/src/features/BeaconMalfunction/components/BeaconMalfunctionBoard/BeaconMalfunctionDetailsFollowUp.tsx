@@ -207,7 +207,7 @@ export function BeaconMalfunctionDetailsFollowUp({ beaconMalfunctionWithDetails,
             ref={textareaRef}
             data-cy="side-window-beacon-malfunctions-detail-comment-textarea"
             onChange={event => setComment(event.target.value)}
-            style={addCommentStyle(userType)}
+            style={addCommentStyle}
             value={comment}
           />
           <SubmitCommentRow style={submitCommentRowStyle}>
@@ -265,16 +265,16 @@ const submitCommentRowStyle = {
 }
 
 const AddComment = styled.textarea``
-const addCommentStyle = userType => ({
-  background: `${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray} 0% 0% no-repeat padding-box`,
-  border: '1px solid #9DC0D2',
+const addCommentStyle = {
+  background: `${THEME.color.blueGray25} 0% 0% no-repeat padding-box`,
+  border: `1px solid ${THEME.color.lightGray}`,
   height: 50,
   marginBottom: 5,
   marginTop: 20,
   maxHeight: 150,
   padding: 5,
   width: '100%'
-})
+}
 
 const CommentsAndActions = styled.div``
 const commentsAndActionsStyle: (isSmall: boolean, textAreaHeight: number) => CSSProperties = (

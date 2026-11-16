@@ -256,7 +256,7 @@ export function SpeciesField() {
         <SimpleTable.Table>
           <SimpleTable.Head>
             <tr>
-              <SimpleTable.Th $width={isEISREnabled ? 145 : 320}>Espèce</SimpleTable.Th>
+              <SimpleTable.Th $width={isEISREnabled ? 145 : undefined}>Espèce</SimpleTable.Th>
               <SimpleTable.Th $width={isEISREnabled ? 55 : 80}>
                 {isEISREnabled ? 'Déclaré' : 'Qté déclarée'}
               </SimpleTable.Th>

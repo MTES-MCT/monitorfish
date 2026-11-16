@@ -1,5 +1,8 @@
+import requests
 from prefect import flow, get_run_logger, task
 from sqlalchemy import DDL
+
+from config import INFRACTIONS_CACHE_INVALIDATION_ENDPOINT
 
 from src.generic_tasks import extract, load
 from src.sentry import report_flow_failure_to_sentry
@@ -43,6 +46,11 @@ def load_infractions(infractions):
     )
 
 
+@task
+def invalidate_cache():
+    requests.put(INFRACTIONS_CACHE_INVALIDATION_ENDPOINT)
+
+
 @flow(
     name="Monitorfish - Infractions",
     on_failure=[report_flow_failure_to_sentry],
@@ -51,4 +59,5 @@ def load_infractions(infractions):
 def infractions_flow():
     infractions = extract_infractions()
     infractions = clean_infractions(infractions)
-    load_infractions(infractions)
+    loaded_infractions = load_infractions(infractions)
+    invalidate_cache(wait_for=[loaded_infractions])

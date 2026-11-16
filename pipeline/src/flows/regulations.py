@@ -1,5 +1,8 @@
 import pandas as pd
+import requests
 from prefect import flow, get_run_logger, task
+
+from config import REGULATIONS_CACHE_INVALIDATION_ENDPOINT
 
 from src.generic_tasks import delete_rows, extract, load
 from src.sentry import report_flow_failure_to_sentry
@@ -115,6 +118,11 @@ def load_new_regulations(new_regulations: pd.DataFrame):
     )
 
 
+@task
+def invalidate_cache():
+    requests.put(REGULATIONS_CACHE_INVALIDATION_ENDPOINT)
+
+
 @flow(
     name="Monitorfish - Regulations",
     on_failure=[report_flow_failure_to_sentry],
@@ -135,3 +143,6 @@ def regulations_flow():
     if cond_update:
         new_regulations = extract_new_regulations(ids_to_update)
         load_new_regulations(new_regulations)
+
+    if cond_delete or cond_update:
+        invalidate_cache()

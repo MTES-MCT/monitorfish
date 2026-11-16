@@ -4,7 +4,11 @@ import pandas as pd
 import requests
 from prefect import flow, get_run_logger, task
 
-from config import DATA_GOUV_SPECIES_URL, PROXIES
+from config import (
+    DATA_GOUV_SPECIES_URL,
+    PROXIES,
+    SPECIES_CACHE_INVALIDATION_ENDPOINT,
+)
 from src.generic_tasks import load
 from src.processing import coalesce
 from src.sentry import report_flow_failure_to_sentry
@@ -141,6 +145,11 @@ def load_species(species: pd.DataFrame):
     )
 
 
+@task
+def invalidate_cache():
+    requests.put(SPECIES_CACHE_INVALIDATION_ENDPOINT)
+
+
 @flow(
     name="Monitorfish - Species",
     on_failure=[report_flow_failure_to_sentry],
@@ -149,4 +158,5 @@ def load_species(species: pd.DataFrame):
 def species_flow():
     species = extract_species(url=DATA_GOUV_SPECIES_URL, proxies=PROXIES)
     species = transform_species(species)
-    load_species(species)
+    loaded_species = load_species(species)
+    invalidate_cache(wait_for=[loaded_species])

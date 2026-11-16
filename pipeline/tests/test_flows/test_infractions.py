@@ -5,6 +5,7 @@ import pytest
 import sqlalchemy
 
 from src.flows.infractions import (
+    invalidate_cache,
     clean_infractions,
     extract_infractions,
     load_infractions,
@@ -104,3 +105,12 @@ def test_load_infractions(reset_test_data, cleaned_infractions):
     )
 
     pd.testing.assert_frame_equal(loaded_infractions, cleaned_infractions)
+
+
+@patch("src.flows.infractions.requests")
+def test_invalidate_cache(mock_requests):
+    invalidate_cache.fn()
+
+    mock_requests.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/infractions/invalidate"
+    )

@@ -36,11 +36,13 @@ export function App() {
   )
 }
 
-// The login page is styled by the DSFR, which these app-wide resets (e.g. `* { font-size: 13px }`) would break
+const DSFR_PATHS: string[] = [ROUTER_PATHS.login, ROUTER_PATHS.accessibilityStatement]
+
+// These pages are styled by the DSFR, which these app-wide resets (e.g. `* { font-size: 13px }`) would break
 function AppGlobalStyle() {
   const pathname = useSyncExternalStore(router.subscribe, () => router.state.location.pathname)
 
-  if (pathname === ROUTER_PATHS.login) {
+  if (DSFR_PATHS.includes(pathname)) {
     return null
   }
 

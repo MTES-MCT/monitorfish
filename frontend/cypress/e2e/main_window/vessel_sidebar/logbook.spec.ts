@@ -270,8 +270,7 @@ context('Vessel sidebar logbook tab', () => {
     cy.get('*[data-cy^="vessel-menu-fishing"]').click({ timeout: 10000 })
 
     cy.getDataCy('vessel-logbook-risk-elements').contains('Analyse des déclarations de pêche (12 derniers mois)')
-    cy.getDataCy('risk-element-PNO_MR').contains('PNO – 1/10 marées non conformes')
-    cy.getDataCy('risk-element-PNO_MR').find('[data-cy="risk-element-level"]').contains('1')
+    cy.getDataCy('risk-element-PNO_MR').should('not.exist')
     cy.getDataCy('risk-element-MOT_MR').contains('Marge 10% – 2/4 marées non conformes')
     cy.getDataCy('risk-element-MOT_MR').find('[data-cy="risk-element-level"]').contains('4')
 

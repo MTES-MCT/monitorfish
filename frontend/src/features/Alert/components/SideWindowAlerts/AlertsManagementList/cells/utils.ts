@@ -24,7 +24,7 @@ export function getAlertCriteriaSummary(alertSpecification: AlertSpecification):
   let summary: string[] = []
 
   if (alertSpecification.vesselIds.length > 0) {
-    summary = summary.concat('Navires')
+    summary = summary.concat('Navires inclus')
   }
   if (alertSpecification.excludedVesselIds.length > 0) {
     summary = summary.concat('Navires exclus')

@@ -87,7 +87,7 @@ export function AlertCriteriaCell({ alertSpecification }: AlertCriteriaCellProps
       )}
       {alertSpecification.vesselIds.length > 0 && (
         <p>
-          <ExpandedRowLabel>Navires :</ExpandedRowLabel>
+          <ExpandedRowLabel>Navires inclus :</ExpandedRowLabel>
           <ExpandedRowValue>
             {alertSpecification.vessels?.map(vessel => (
               <span key={vessel.internalReferenceNumber} title={vessel.internalReferenceNumber}>

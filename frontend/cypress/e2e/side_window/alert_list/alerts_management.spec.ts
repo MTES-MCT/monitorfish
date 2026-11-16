@@ -101,7 +101,7 @@ context('Side Window > Alert Management', () => {
      * Add vessels zones criteria
      */
     cy.clickButton('Ajouter un critère de déclenchement')
-    cy.clickButton('Navires')
+    cy.clickButton('Navires inclus')
     cy.getDataCy('VesselSearch-input').type('pheno')
     cy.getDataCy('VesselSearch-item').first().click()
     cy.contains('PHENOMENE').should('be.visible')
@@ -299,7 +299,7 @@ context('Side Window > Alert Management', () => {
     cy.fill('Rechercher une alerte', undefined)
     cy.get('[title="Alerte all-in"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:13"]').contains(
-      'Navires, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins'
+      'Navires inclus, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins'
     )
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains(
       "HKE - MERLU D'EUROPE (supérieure à 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"

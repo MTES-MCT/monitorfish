@@ -7,6 +7,8 @@ WHERE value->>'name' IN (
         'Pêche en zone EMV avec un engin de fond à plus de 400m de profondeur',
         'Pêche en zone RTC par un navire français',
         'Chalutage dans les 3 milles',
+        'Chalutage dans les 3 mn hors zone de dérogation',
+        'Chalutage dans les 3 mn en zone de dérogation',
         'Pêche en zone RTC par un navire étranger',
         'Chalutage de fond à plus de 800m de profondeur'
     )

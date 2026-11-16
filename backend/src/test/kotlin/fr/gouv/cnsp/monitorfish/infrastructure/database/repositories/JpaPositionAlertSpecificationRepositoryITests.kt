@@ -27,7 +27,7 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
 
         // then
         assertThat(alerts).hasSize(18)
-        assertThat(alerts.first().name).isEqualTo("Chalutage dans les 3 milles (hors zones de dérogation)")
+        assertThat(alerts.first().name).isEqualTo("Chalutage dans les 3 mn hors zone de dérogation")
     }
 
     @Test
@@ -70,7 +70,7 @@ class JpaPositionAlertSpecificationRepositoryITests : AbstractDBTests() {
         val alertAfter = alertsAfter.first { it.id == alertId }
         assertThat(alertAfter.isActivated).isFalse()
         assertThat(alertAfter.name).isEqualTo(
-            "Chalutage dans les 3 milles (hors zones de dérogation)",
+            "Chalutage dans les 3 mn hors zone de dérogation",
         ) // Verify we got the right alert
     }
 

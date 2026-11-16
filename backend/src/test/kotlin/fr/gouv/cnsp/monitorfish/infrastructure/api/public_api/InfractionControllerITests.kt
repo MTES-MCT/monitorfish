@@ -5,8 +5,10 @@ import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.Infraction
 import fr.gouv.cnsp.monitorfish.domain.entities.infraction.InfractionCategory
 import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractionThreatCharacterization
-import fr.gouv.cnsp.monitorfish.domain.use_cases.infraction.GetAllInfractions
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.InfractionDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.dummyInfractionThreatCharacterizations
+import fr.gouv.cnsp.monitorfish.infrastructure.api.referential.ReferentialSnapshots
+import fr.gouv.cnsp.monitorfish.infrastructure.api.referential.VersionedReferential
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -31,7 +34,7 @@ class InfractionControllerITests {
     private lateinit var api: MockMvc
 
     @MockitoBean
-    private lateinit var getAllInfractions: GetAllInfractions
+    private lateinit var referentialSnapshots: ReferentialSnapshots
 
     @MockitoBean
     private lateinit var getAllInfractionThreatCharacterization: GetAllInfractionThreatCharacterization
@@ -39,24 +42,28 @@ class InfractionControllerITests {
     @Test
     fun `Should get all fishing infractions`() {
         // Given
-        given(this.getAllInfractions.execute()).willReturn(
-            listOf(
-                Infraction(
-                    natinfCode = 7059,
-                    infractionCategory = InfractionCategory.FISHING,
-                ),
-                Infraction(
-                    natinfCode = 7065,
-                    infractionCategory = InfractionCategory.FISHING,
-                ),
+        given(this.referentialSnapshots.infractions()).willReturn(
+            VersionedReferential(
+                listOf(
+                    Infraction(
+                        natinfCode = 7059,
+                        infractionCategory = InfractionCategory.FISHING,
+                    ),
+                    Infraction(
+                        natinfCode = 7065,
+                        infractionCategory = InfractionCategory.FISHING,
+                    ),
+                ).map { InfractionDataOutput.fromInfraction(it) },
+                "a1b2",
             ),
         )
 
         // When
         api
-            .perform(get("/api/v1/infractions"))
+            .perform(get("/api/v1/infractions?v=a1b2"))
             // Then
             .andExpect(status().isOk)
+            .andExpect(header().string("Cache-Control", "max-age=31536000, private, immutable"))
             .andExpect(jsonPath("$.length()", equalTo(2)))
             .andExpect(jsonPath("$[0].natinfCode", equalTo(7059)))
             .andExpect(jsonPath("$[1].natinfCode", equalTo(7065)))

@@ -4,6 +4,7 @@ import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
 import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
+import fr.gouv.cnsp.monitorfish.infrastructure.api.referential.ReferentialInvalidation
 import fr.gouv.cnsp.monitorfish.infrastructure.cache.CacheName
 import fr.gouv.cnsp.monitorfish.infrastructure.cache.CaffeineConfiguration
 import org.assertj.core.api.Assertions.assertThat
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     MapperConfiguration::class,
     SentryConfig::class,
     CaffeineConfiguration::class,
+    ReferentialInvalidation::class,
 )
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = [PublicPortController::class])

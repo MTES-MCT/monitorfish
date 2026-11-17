@@ -221,6 +221,7 @@ class SecurityConfig(
                             "/*.js",
                             "/*.png",
                             "/*.svg",
+                            "/*.webp",
                             "/api/**",
                             "/asset-manifest.json",
                             "/assets/**",

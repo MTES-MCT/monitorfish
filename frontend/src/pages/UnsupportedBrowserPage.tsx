@@ -1,3 +1,4 @@
+import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import AlertSVG from '../features/icons/Picto_alerte.svg?react'
@@ -45,8 +46,8 @@ const Alert = styled.div`
   text-align: center;
   font: normal normal medium 22px/31px Marianne;
   letter-spacing: 0px;
-  color: #05065f;
-  background: #cad2d3 0% 0% no-repeat padding-box;
+  color: ${THEME.color.gunMetal};
+  background: ${THEME.color.lightGray} 0% 0% no-repeat padding-box;
   height: 100vh;
   width: 100vw;
   padding-top: 35vh;

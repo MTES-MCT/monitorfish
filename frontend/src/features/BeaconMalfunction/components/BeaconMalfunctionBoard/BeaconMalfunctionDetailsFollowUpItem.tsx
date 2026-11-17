@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { BeaconMalfunctionDetailsType } from './utils'
 import { getTime } from '../../../../utils'
-import { UserType } from '../../constants'
 
 export function BeaconMalfunctionDetailsFollowUpItem({ contentText, isLast, isLastDate, item, scrollToRef }) {
   return (
@@ -11,7 +10,7 @@ export function BeaconMalfunctionDetailsFollowUpItem({ contentText, isLast, isLa
       {item.type === BeaconMalfunctionDetailsType.COMMENT && (
         <div data-cy="side-window-beacon-malfunctions-detail-comment-content">
           <ItemRow ref={isLastDate && isLast ? scrollToRef : null} style={itemRow}>
-            <CommentText style={commentTextStyle(item.userType)}>{contentText}</CommentText>
+            <CommentText style={commentTextStyle}>{contentText}</CommentText>
           </ItemRow>
           <ItemRow style={itemRow}>
             <ItemUserType style={itemUserTypeStyle}>
@@ -51,13 +50,13 @@ const itemRow = {
 }
 
 const CommentText = styled.div``
-const commentTextStyle = userType => ({
-  background: `${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray} 0% 0% no-repeat padding-box`,
-  border: `1px solid ${userType === UserType.OPS ? '#C8DCE6' : THEME.color.lightGray}`,
+const commentTextStyle = {
+  background: `${THEME.color.blueGray25} 0% 0% no-repeat padding-box`,
+  border: `1px solid ${THEME.color.lightGray}`,
   marginTop: 10,
   maxWidth: 480,
   padding: '10px 15px'
-})
+}
 
 const ActionText = styled.div``
 const actionTextStyle = {

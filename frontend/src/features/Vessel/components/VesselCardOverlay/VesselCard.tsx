@@ -269,7 +269,7 @@ const LogbookOK = styled.span`
   height: 14px;
   margin-left: 3px;
   width: 14px;
-  background-color: #8cc61f;
+  background-color: ${THEME.color.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `

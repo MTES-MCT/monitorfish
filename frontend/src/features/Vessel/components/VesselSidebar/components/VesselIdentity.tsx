@@ -306,7 +306,7 @@ const LicenceActive = styled.span`
   height: 8px;
   margin-left: 5px;
   width: 8px;
-  background-color: #8cc61f;
+  background-color: ${THEME.color.mediumSeaGreen};
   border-radius: 50%;
   display: inline-block;
 `

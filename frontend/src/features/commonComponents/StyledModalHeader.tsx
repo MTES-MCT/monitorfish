@@ -8,7 +8,6 @@ export const StyledModalHeader = styled(Modal.Header)`
   background: ${p => p.theme.color.charcoal};
 
   .rs-modal-title {
-    color: #f0f0f0;
     font-size: ${p => (p.$isFull ? 22 : 16)}px;
     font-weight: normal;
   }

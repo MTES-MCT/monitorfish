@@ -48,7 +48,8 @@ export function IUUReportingMapForm() {
   const [targetType, setTargetType] = useState<ReportingTargetType | undefined>(undefined)
   const [gearCode, setGearCode] = useState<string | undefined>(undefined)
   const [autoSavedLastUpdateDate, setAutoSavedLastUpdateDate] = useState<string | undefined>(undefined)
-  const { gearsAsOptions } = useGetGearsAsOptions()
+  // Mounted with the map: the gears would otherwise be downloaded with the vessels
+  const { gearsAsOptions } = useGetGearsAsOptions({ skip: !isRendered })
   const formActionsRef = useRef<ReportingFormActions | undefined>(undefined)
   const isDirtyRef = useRef(false)
   const reportingIdRef = useRef(editedReporting?.id)

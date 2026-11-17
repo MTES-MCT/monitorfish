@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
 
-import { BASE_URL, delayRequests, launchChrome, login, navigateAndWaitForVessels, wait } from './utils'
+import { BASE_URL, delayRequests, launchChrome, login, navigateAndWaitForVessels, SUPER_USER, wait } from './utils'
 
 import type { Browser, HTTPRequest, Page } from 'puppeteer'
 
@@ -52,6 +52,7 @@ describe('Startup order of the main window (non-super-user)', () => {
     const vesselsReceivedAt = times.findByPath('/bff/v1/vessels')!.finishedAt!
     expect(times.findByPath('/bff/v1/species')!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
     expect(times.findByPath('/api/v1/infractions')!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
+    expect(times.findByPath('/bff/v1/gears')!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
     expect(times.find(isRegulatoryCatalogRequest)!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
 
     await page.close()
@@ -68,6 +69,36 @@ describe('Startup order of the main window (non-super-user)', () => {
     expect(times.find(isRegulatoryCatalogRequest)!.sentAt).toBeLessThan(
       times.findByPath('/bff/v1/species')!.finishedAt!
     )
+
+    await page.close()
+  })
+})
+
+describe('Startup order of the main window (super-user)', () => {
+  let browser: Browser
+
+  beforeAll(async () => {
+    browser = await launchChrome()
+    const page = await browser.newPage()
+    await login(page, SUPER_USER)
+    await page.close()
+  })
+
+  afterAll(async () => {
+    await browser.close()
+  })
+
+  it('downloads the referentials used by the missions layer after the vessels', async () => {
+    const page = await browser.newPage()
+    await delayRequests(page, '/bff/v1/vessels', SATELLITE_VESSELS_DOWNLOAD_DELAY_MS)
+    const times = recordRequestTimes(page)
+
+    await navigateAndWaitForVessels(page, () => page.goto(BASE_URL))
+    await wait(2000)
+
+    const vesselsReceivedAt = times.findByPath('/bff/v1/vessels')!.finishedAt!
+    expect(times.findByPath('/api/v1/infractions')!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
+    expect(times.findByPath('/bff/v1/gears')!.sentAt).toBeGreaterThanOrEqual(vesselsReceivedAt)
 
     await page.close()
   })

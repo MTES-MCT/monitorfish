@@ -11,11 +11,12 @@ import { NEW_MISSION_ID } from '../constants'
 import type { Feature } from 'ol'
 
 export function UnmemoizedSelectedMissionActionsLayer() {
-  const natinfsAsOptions = useGetNatinfsAsOptions()
   const { missions } = useGetFilteredMissionsQuery()
   const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const draft = useMainAppSelector(store => store.missionForm.draft)
+  // Mounted with the map: the infractions would otherwise be downloaded with the vessels
+  const natinfsAsOptions = useGetNatinfsAsOptions({ skip: !selectedMissionGeoJSON && !draft?.actionsFormValues })
 
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {

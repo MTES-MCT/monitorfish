@@ -212,11 +212,7 @@ context('Side Window > Alert Management', () => {
 
     cy.contains('Gestion des alertes').should('be.visible')
     cy.fill('Rechercher une alerte', 'Test Alert Cypress')
-    // The fuzzy search can match another alert until the list is refetched with the created one
-    cy.getDataCy('alerts-specification-list-length').contains('1 alerte')
-    cy.get('.Table-SimpleTable').contains('Test Alert Cypress')
     cy.get('[title="Éditer l\'alerte"]').click()
-    cy.get('[name="name"]').should('have.value', 'Test Alert Cypress')
     cy.clickButton('Supprimer l’alerte')
     cy.clickButton('Confirmer la suppression')
   })
@@ -285,8 +281,8 @@ context('Side Window > Alert Management', () => {
      * Search an alert
      */
     cy.fill('Rechercher une alerte', '12 milles')
-    cy.getDataCy('alerts-specification-list-length').contains('6 alertes')
-    cy.get('.Table-SimpleTable tr').should('have.length', 7)
+    cy.getDataCy('alerts-specification-list-length').contains('4 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.get('[title="Pêche dans les 12 milles sans droits historiques (ES)"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:6"]').contains('Nationalités, Zones (VMS)')

@@ -212,7 +212,11 @@ context('Side Window > Alert Management', () => {
 
     cy.contains('Gestion des alertes').should('be.visible')
     cy.fill('Rechercher une alerte', 'Test Alert Cypress')
+    // The fuzzy search can match another alert until the list is refetched with the created one
+    cy.getDataCy('alerts-specification-list-length').contains('1 alerte')
+    cy.get('.Table-SimpleTable').contains('Test Alert Cypress')
     cy.get('[title="Éditer l\'alerte"]').click()
+    cy.get('[name="name"]').should('have.value', 'Test Alert Cypress')
     cy.clickButton('Supprimer l’alerte')
     cy.clickButton('Confirmer la suppression')
   })

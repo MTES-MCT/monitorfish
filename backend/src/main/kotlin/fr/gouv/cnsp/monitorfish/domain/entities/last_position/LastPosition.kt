@@ -7,6 +7,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.DynamicVesselGroup
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselGroupBase
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselSize
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.ZoneFilter
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel_profile.VesselProfile
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
@@ -133,18 +134,7 @@ data class LastPosition(
                 } ?: false
             } ?: true
 
-        val hasZoneMatch =
-            filters.zones.takeIf { it.isNotEmpty() }?.let { zones ->
-                val point = GeometryFactory().createPoint(Coordinate(this.longitude, this.latitude))
-
-                return@let zones.any { zone ->
-                    val polygon = GeometryFactory().createPolygon(zone.feature.coordinates)
-
-                    // `envelopeInternal` is used to improve perf by checking first the bounding box before doing the actual contains
-                    return@any polygon.envelopeInternal.contains(point.coordinates.first()) && polygon.contains(point)
-                }
-            } ?: true
-
+        // The zones are the costliest filter: they are tested last, only when all the other filters match
         return hasCountryCodeMatch &&
             hasDistrictCodeMatch &&
             hasLogbookMatch &&
@@ -153,6 +143,18 @@ data class LastPosition(
             hasSpeciesMatch &&
             hasVesselLocationMatch &&
             hasVesselLengthMatch &&
-            hasZoneMatch
+            isInAnyZone(filters.zones)
+    }
+
+    private fun isInAnyZone(zones: List<ZoneFilter>): Boolean {
+        if (zones.isEmpty()) return true
+
+        val point = GEOMETRY_FACTORY.createPoint(Coordinate(this.longitude, this.latitude))
+
+        return zones.any { it.contains(point) }
+    }
+
+    companion object {
+        private val GEOMETRY_FACTORY = GeometryFactory()
     }
 }

@@ -4,8 +4,8 @@ import { z } from 'zod'
 import { RiskElement } from './types'
 
 export const NonCompliantTripSchema = z.strictObject({
-  endDateTimeUtc: z.string().nullable(),
-  startDateTimeUtc: z.string().nullable(),
+  endDateTimeUtc: z.string().optional(),
+  startDateTimeUtc: z.string().optional(),
   tripNumber: z.string()
 })
 
@@ -27,6 +27,6 @@ export const VesselRiskElementSchema = z.strictObject({
   code: z.string(),
   metrics: z.discriminatedUnion('type', [TripsMetricsSchema, OccurrencesMetricsSchema]),
   name: z.string(),
-  reportings: ReportingAndOccurrencesSchema.nullable(),
+  reportings: ReportingAndOccurrencesSchema.optional(),
   riskLevel: z.number()
 })

@@ -5,6 +5,12 @@ import type { StartQueryActionCreatorOptions, SubscriptionOptions } from '@redux
 
 export const RTK_MAX_RETRIES = 1
 
+/**
+ * Delays before retrying a query failing with a transient error: they cover a satellite link cut for a few seconds
+ * (as when the terminal changes of satellite), instead of failing until the next polling.
+ */
+export const RTK_TRANSIENT_ERROR_RETRY_DELAYS_MS = [1000, 3000, 6000]
+
 export const RTK_DEFAULT_REFETCH_QUERY_OPTIONS: Partial<RefetchConfigOptions> = {
   refetchOnMountOrArgChange: true,
   refetchOnReconnect: true
@@ -30,7 +36,10 @@ export enum HttpStatusCode {
   ACCEPTED = 202,
   NOT_FOUND = 404,
   UNAUTHORIZED = 401,
-  FORBIDDEN = 403
+  FORBIDDEN = 403,
+  BAD_GATEWAY = 502,
+  SERVICE_UNAVAILABLE = 503,
+  GATEWAY_TIMEOUT = 504
 }
 
 export enum RtkCacheTagType {

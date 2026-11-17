@@ -8,12 +8,12 @@ import { setMeasurement, startSpan } from '@sentry/react'
 import { normalizeRtkBaseQuery } from '@utils/normalizeRtkBaseQuery'
 import ky, { HTTPError } from 'ky'
 
-import { RTK_MAX_RETRIES, RtkCacheTagType } from './constants'
+import { HttpStatusCode, RTK_TRANSIENT_ERROR_RETRY_DELAYS_MS, RtkCacheTagType } from './constants'
+import { RTK_RETRY_OPTIONS } from './retry'
 import { redirectToLoginIfUnauthorized } from '../auth/utils'
 
 import type { BackendApi } from './BackendApi.types'
 import type { CustomResponseError, RTKBaseQueryArgs } from './types'
-import type { BaseQueryError } from '@reduxjs/toolkit/query'
 
 // Using local MonitorEnv stubs:
 export const MONITORENV_API_URL = import.meta.env.FRONTEND_MONITORENV_URL
@@ -26,7 +26,7 @@ const monitorenvApiBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: `${MONITORENV_API_URL}/api`
   }),
-  { maxRetries: RTK_MAX_RETRIES }
+  RTK_RETRY_OPTIONS
 )
 
 export const monitorenvApi = createApi({
@@ -71,15 +71,7 @@ const monitorfishBaseQuery = retry(
     baseUrl: `/bff/v1`,
     credentials: 'include'
   }),
-  {
-    retryCondition: (error: BaseQueryError<BaseQueryError<any>>, _, { attempt }) => {
-      if (attempt > RTK_MAX_RETRIES) {
-        return false
-      }
-
-      return !isUnauthorizedOrForbidden(error.status)
-    }
-  }
+  RTK_RETRY_OPTIONS
 )
 
 export const monitorfishApi = createApi({
@@ -140,7 +132,7 @@ const monitorfishPublicBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: `/api`
   }),
-  { maxRetries: RTK_MAX_RETRIES }
+  RTK_RETRY_OPTIONS
 )
 
 export const monitorfishPublicApi = createApi({
@@ -213,5 +205,10 @@ export const monitorfishApiKy = ky.extend({
       }
     ]
   },
-  retry: RTK_MAX_RETRIES
+  retry: {
+    delay: attemptCount =>
+      RTK_TRANSIENT_ERROR_RETRY_DELAYS_MS[Math.min(attemptCount, RTK_TRANSIENT_ERROR_RETRY_DELAYS_MS.length) - 1]!,
+    limit: RTK_TRANSIENT_ERROR_RETRY_DELAYS_MS.length,
+    statusCodes: [HttpStatusCode.BAD_GATEWAY, HttpStatusCode.SERVICE_UNAVAILABLE, HttpStatusCode.GATEWAY_TIMEOUT]
+  }
 })

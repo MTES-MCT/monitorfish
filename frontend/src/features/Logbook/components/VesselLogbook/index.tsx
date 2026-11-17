@@ -1,4 +1,4 @@
-import { FIVE_MINUTES } from '@api/APIWorker'
+import { FIVE_MINUTES } from '@constants/index'
 import { NavigateTo } from '@features/Logbook/constants'
 import { FishingActivitiesTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'

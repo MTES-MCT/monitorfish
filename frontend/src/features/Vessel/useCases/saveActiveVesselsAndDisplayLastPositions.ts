@@ -1,7 +1,7 @@
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
-import { resetIsUpdatingVessels } from '../../../domain/shared_slices/Global'
+import { setAreActiveVesselsDisplayed } from '../../../domain/shared_slices/Global'
 import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { setFilteredVesselsFeatures, setVessels } from '../slice'
 
@@ -20,5 +20,5 @@ export const saveActiveVesselsAndDisplayLastPositions =
 
     dispatch(renderVesselFeatures())
 
-    dispatch(resetIsUpdatingVessels())
+    dispatch(setAreActiveVesselsDisplayed())
   }

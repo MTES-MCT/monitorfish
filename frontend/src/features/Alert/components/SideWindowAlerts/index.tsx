@@ -1,15 +1,18 @@
+import { ONE_MINUTE } from '@constants/index'
 import { filterBySeafrontGroup, SeafrontGroup } from '@constants/seafront'
+import { alertApi } from '@features/Alert/apis'
 import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlerts/AlertListAndReportingList/constants'
 import { AlertManagementForm } from '@features/Alert/components/SideWindowAlerts/AlertManagementForm'
 import { AlertsManagementList } from '@features/Alert/components/SideWindowAlerts/AlertsManagementList'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useOnPolledQueryData } from '@hooks/useOnPolledQueryData'
 import { useCallback } from 'react'
 
 import { AlertListAndReportingList } from './AlertListAndReportingList'
 import { AdditionalSubMenu, ALERT_SUB_MENU_OPTIONS } from './constants'
 import { SilencedAlerts } from './SilencedAlerts'
-import { setSubMenu } from './slice'
+import { setPendingAlerts, setSilencedAlerts, setSubMenu } from './slice'
 import { SubMenu } from '../../../SideWindow/SubMenu'
 
 import type { AlertSubMenu } from './constants'
@@ -24,6 +27,18 @@ export function SideWindowAlerts({ isFromUrl }: SideWindowAlertsProps) {
   const subMenu = useMainAppSelector(state => state.alert.subMenu)
   const selectedTab = useMainAppSelector(state => state.alert.selectedTab)
   const perSeafrontGroupCount = useMainAppSelector(state => state.reportingTableFilters.perSeafrontGroupCount)
+
+  const pollingOptions = { pollingInterval: ONE_MINUTE, refetchOnMountOrArgChange: ONE_MINUTE / 1000 }
+  const operationalAlertsQuery = alertApi.endpoints.getOperationalAlerts.useQuery(undefined, pollingOptions)
+  const silencedAlertsQuery = alertApi.endpoints.getSilencedAlerts.useQuery(undefined, pollingOptions)
+  useOnPolledQueryData(
+    operationalAlertsQuery,
+    useCallback(alerts => dispatch(setPendingAlerts(alerts)), [dispatch])
+  )
+  useOnPolledQueryData(
+    silencedAlertsQuery,
+    useCallback(silencedAlerts => dispatch(setSilencedAlerts(silencedAlerts)), [dispatch])
+  )
 
   const handleSubMenuChange = useCallback(
     (nextSubMenu: AlertSubMenu) => {

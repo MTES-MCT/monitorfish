@@ -1,10 +1,10 @@
 import { TransparentButton } from '@components/style'
+import { FIVE_MINUTES } from '@constants/index'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { FIVE_MINUTES } from '../../../api/APIWorker'
 import { setHealthcheckTextWarning } from '../../../domain/shared_slices/Global'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
 import { useMainAppSelector } from '../../../hooks/useMainAppSelector'

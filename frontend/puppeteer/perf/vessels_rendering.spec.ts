@@ -2,7 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
 
 import {
   delayRequests,
-  getLongAnimationFramesDurationSince,
+  getLongAnimationFramesDurationBetween,
+  getRequestStartTime,
   getResponseEndTime,
   launchChrome,
   login,
@@ -43,7 +44,9 @@ describe('Vessels rendering (non-super-user)', () => {
     })
 
     const vesselsResponseEnd = await getResponseEndTime(page, '/bff/v1/vessels')
-    const blockedDuration = await getLongAnimationFramesDurationSince(page, vesselsResponseEnd!)
+    // The referentials are downloaded, then processed, once the vessels are displayed
+    const vesselsDisplayEnd = await getRequestStartTime(page, '/bff/v1/species')
+    const blockedDuration = await getLongAnimationFramesDurationBetween(page, vesselsResponseEnd!, vesselsDisplayEnd!)
     await page.emulateCPUThrottling(null)
 
     console.info(`Long animation frames after receiving vessels: ${Math.round(blockedDuration)} ms`)

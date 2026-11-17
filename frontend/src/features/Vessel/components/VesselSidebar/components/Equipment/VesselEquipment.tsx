@@ -1,13 +1,22 @@
+import { ONE_MINUTE } from '@constants/index'
+import { beaconMalfunctionApi } from '@features/BeaconMalfunction/apis'
+import { openBeaconMalfunction } from '@features/BeaconMalfunction/useCases/openBeaconMalfunction'
 import { vesselsAreEquals } from '@features/Vessel/types/vessel'
+import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
+import { useOnPolledQueryData } from '@hooks/useOnPolledQueryData'
 import { FingerprintLoader, THEME, usePrevious } from '@mtes-mct/monitor-ui'
-import { useEffect, useState } from 'react'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { EquipmentResume } from './resume/EquipmentResume'
 import { useIsSuperUser } from '../../../../../../auth/hooks/useIsSuperUser'
-import { setBeaconMalfunctionsTab } from '../../../../../../domain/shared_slices/BeaconMalfunction'
+import {
+  setBeaconMalfunctionsTab,
+  setVesselBeaconMalfunctionsResumeAndHistory
+} from '../../../../../../domain/shared_slices/BeaconMalfunction'
 import { BeaconMalfunctionDetails } from '../../../../../BeaconMalfunction/components/BeaconMalfunctionDetails'
 import { EquipmentTab } from '../../../../../BeaconMalfunction/constants'
 import { getVesselBeaconMalfunctions } from '../../../../../BeaconMalfunction/useCases/getVesselBeaconMalfunctions'
@@ -18,6 +27,7 @@ export function VesselEquipment() {
   const {
     beaconMalfunctionsTab,
     loadingVesselBeaconMalfunctions,
+    openedBeaconMalfunction,
     vesselBeaconMalfunctionsFromDate,
     vesselBeaconMalfunctionsResumeAndHistory
   } = useMainAppSelector(state => state.beaconMalfunction)
@@ -29,6 +39,35 @@ export function VesselEquipment() {
   useEffect(() => {
     dispatch(getVesselBeaconMalfunctions(true))
   }, [dispatch, selectedVesselIdentity])
+
+  const isPolled = isSuperUser && !!vesselBeaconMalfunctionsResumeAndHistory && !loadingVesselBeaconMalfunctions
+  const vesselBeaconMalfunctionsQuery = beaconMalfunctionApi.endpoints.getVesselBeaconsMalfunctions.useQuery(
+    isPolled && selectedVessel?.vesselId && vesselBeaconMalfunctionsFromDate
+      ? { fromDate: vesselBeaconMalfunctionsFromDate, vesselId: selectedVessel.vesselId }
+      : skipToken,
+    { pollingInterval: ONE_MINUTE }
+  )
+  useOnPolledQueryData(
+    vesselBeaconMalfunctionsQuery,
+    useCallback(
+      vesselBeaconMalfunctions => {
+        if (!selectedVessel) {
+          return
+        }
+
+        dispatch(
+          setVesselBeaconMalfunctionsResumeAndHistory({
+            ...vesselBeaconMalfunctions,
+            vesselIdentity: extractVesselIdentityProps(selectedVessel)
+          })
+        )
+        if (openedBeaconMalfunction) {
+          dispatch(openBeaconMalfunction(openedBeaconMalfunction, false))
+        }
+      },
+      [dispatch, openedBeaconMalfunction, selectedVessel]
+    )
+  )
 
   useEffect(() => {
     if (!vesselsAreEquals(previousSelectedVesselIdentity, selectedVesselIdentity)) {

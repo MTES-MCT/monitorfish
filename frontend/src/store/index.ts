@@ -13,6 +13,7 @@ import persistStore from 'redux-persist/es/persistStore'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 import storage from 'redux-persist/es/storage' // LocalStorage
 
+import { mainListenerMiddleware } from './listenerMiddleware'
 import { backofficeReducer, mainReducer } from './reducers'
 import { monitorenvApi, monitorfishApi, monitorfishPublicApi } from '../api/api'
 import { geoserverApi } from '../api/geoserverApi'
@@ -43,12 +44,14 @@ export const mainStore = configureStore({
       immutableCheck: false,
       // TODO Replace all Redux state Dates by strings & Error by a strict-typed POJO.
       serializableCheck: false
-    }).concat(
-      geoserverApi.middleware,
-      monitorenvApi.middleware,
-      monitorfishApi.middleware,
-      monitorfishPublicApi.middleware
-    ),
+    })
+      .prepend(mainListenerMiddleware.middleware)
+      .concat(
+        geoserverApi.middleware,
+        monitorenvApi.middleware,
+        monitorfishApi.middleware,
+        monitorfishPublicApi.middleware
+      ),
   reducer: persistedMainReducer
 })
 setupListeners(mainStore.dispatch)

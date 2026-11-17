@@ -2,9 +2,12 @@ import puppeteer, { type Browser, type HTTPRequest, type Page } from 'puppeteer'
 
 export const BASE_URL = process.env.PERF_BASE_URL ?? 'http://localhost:3000'
 
-// Non-super-user seeded in `infra/dev/keycloak/realm-monitor-dev.json`
-const USERNAME = process.env.PERF_USERNAME ?? 'user'
-const PASSWORD = process.env.PERF_PASSWORD ?? 'fish'
+// Seeded in `infra/dev/keycloak/realm-monitor-dev.json`
+const USER = { password: process.env.PERF_PASSWORD ?? 'fish', username: process.env.PERF_USERNAME ?? 'user' }
+export const SUPER_USER = {
+  password: process.env.PERF_SUPER_USER_PASSWORD ?? 'fish',
+  username: process.env.PERF_SUPER_USER_USERNAME ?? 'superuser'
+}
 
 export async function launchChrome(): Promise<Browser> {
   return puppeteer.launch({
@@ -15,12 +18,12 @@ export async function launchChrome(): Promise<Browser> {
   })
 }
 
-export async function login(page: Page): Promise<void> {
+export async function login(page: Page, { password, username } = USER): Promise<void> {
   await page.goto(BASE_URL, { waitUntil: 'load' })
   await page.locator('button ::-p-text(ProConnect)').click()
   await page.waitForSelector('#username')
-  await page.type('#username', USERNAME)
-  await page.type('#password', PASSWORD)
+  await page.type('#username', username)
+  await page.type('#password', password)
   await Promise.all([page.waitForNavigation({ waitUntil: 'load' }), page.click('#kc-login')])
 }
 
@@ -60,13 +63,30 @@ export async function recordLongAnimationFrames(page: Page): Promise<void> {
   })
 }
 
-export async function getLongAnimationFramesDurationSince(page: Page, sinceMs: number): Promise<number> {
+export async function getLongAnimationFramesDurationBetween(
+  page: Page,
+  sinceMs: number,
+  untilMs: number
+): Promise<number> {
   return page.evaluate(
-    since =>
+    (since, until) =>
       ((window as any).__longAnimationFrames as Array<{ duration: number; startTime: number }>)
-        .filter(frame => frame.startTime >= since)
+        .filter(frame => frame.startTime >= since && frame.startTime < until)
         .reduce((total, frame) => total + frame.duration, 0),
-    sinceMs
+    sinceMs,
+    untilMs
+  )
+}
+
+export async function getRequestStartTime(page: Page, path: string): Promise<number | undefined> {
+  return page.evaluate(
+    resourcePath =>
+      performance
+        .getEntriesByType('resource')
+        .filter(entry => new URL(entry.name).pathname === resourcePath)
+        .map(entry => entry.startTime)
+        .at(-1),
+    path
   )
 }
 

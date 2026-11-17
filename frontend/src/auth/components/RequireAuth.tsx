@@ -14,7 +14,7 @@ const handleRedirect = (path: string, shouldRedirect: boolean) => {
   return null
 }
 
-export function RequireAuth({ children, redirect = false, requireSuperUser = false }) {
+export function RequireAuth({ children, redirect = false, requireAdministrator = false, requireSuperUser = false }) {
   const { isLoading, userAccount } = useGetUserAccount()
   if (isLoading) {
     return (
@@ -30,6 +30,10 @@ export function RequireAuth({ children, redirect = false, requireSuperUser = fal
 
   if (requireSuperUser && !userAccount.isSuperUser) {
     return handleRedirect(ROUTER_PATHS.register, redirect)
+  }
+
+  if (requireAdministrator && !userAccount.isAdministrator) {
+    return handleRedirect(ROUTER_PATHS.backoffice, redirect)
   }
 
   return <UserAccountContext.Provider value={userAccount}>{children}</UserAccountContext.Provider>

@@ -1,11 +1,13 @@
 package fr.gouv.cnsp.monitorfish.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAllowedToLogIn
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.SpaController.Companion.FRONTEND_APP_ROUTES
+import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,24 +27,34 @@ import org.springframework.security.oauth2.core.OAuth2Error
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm
+import org.springframework.security.oauth2.jwt.JwtDecoder
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
+import org.springframework.security.web.csrf.CsrfFilter
+import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
+import org.springframework.security.web.util.matcher.AndRequestMatcher
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import java.util.Base64
+import org.springframework.web.filter.OncePerRequestFilter
+import java.net.URI
+import java.net.URISyntaxException
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     val oidcProperties: OIDCProperties,
     val clientRegistrationRepository: ClientRegistrationRepository?,
+    // Lazily resolved: the use case is only needed at login, and sliced web tests don't load it
+    private val getIsAllowedToLogIn: ObjectProvider<GetIsAllowedToLogIn>,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(SecurityConfig::class.java)
 
@@ -51,7 +63,7 @@ class SecurityConfig(
     fun customOidcUserService(): OidcUserService {
         return object : OidcUserService() {
             private val restTemplate = RestTemplate()
-            private val objectMapper = ObjectMapper()
+            private var userInfoJwtDecoder: JwtDecoder? = null
 
             override fun loadUser(userRequest: OidcUserRequest): OidcUser =
                 try {
@@ -107,8 +119,12 @@ class SecurityConfig(
 
                 val jwtToken = response.body ?: throw IllegalArgumentException("Empty userinfo response")
 
-                val claims = decodeJwtClaims(jwtToken)
+                val claims = decodeAndVerifyJwtClaims(userRequest, jwtToken)
                 logger.debug("Successfully decoded JWT userinfo with claims: ${claims.keys}")
+
+                require(claims["sub"] == userRequest.idToken.subject) {
+                    "UserInfo `sub` claim does not match the ID token subject"
+                }
 
                 // Create OidcUserInfo and OidcUser with the decoded claims
                 val userInfo = OidcUserInfo(claims)
@@ -119,60 +135,49 @@ class SecurityConfig(
                 )
             }
 
-            private fun decodeJwtClaims(jwtToken: String): Map<String, Any> {
-                val parts = jwtToken.split(".")
-                if (parts.size != 3) {
-                    throw IllegalArgumentException("Invalid JWT format: expected 3 parts, got ${parts.size}")
-                }
+            private fun decodeAndVerifyJwtClaims(
+                userRequest: OidcUserRequest,
+                jwtToken: String,
+            ): Map<String, Any> {
+                val jwkSetUri =
+                    userRequest.clientRegistration.providerDetails.jwkSetUri
+                        ?: throw IllegalArgumentException("Missing JWK set URI")
+                val decoder =
+                    userInfoJwtDecoder
+                        ?: NimbusJwtDecoder
+                            .withJwkSetUri(jwkSetUri)
+                            .jwsAlgorithms { it.addAll(listOf(SignatureAlgorithm.RS256, SignatureAlgorithm.ES256)) }
+                            .build()
+                            .also { userInfoJwtDecoder = it }
 
-                val payloadBase64 = parts[1]
-                val decodedBytes = Base64.getUrlDecoder().decode(payloadBase64)
-                val payloadJson = String(decodedBytes, Charsets.UTF_8)
-
-                @Suppress("UNCHECKED_CAST")
-                return objectMapper.readValue(payloadJson, LinkedHashMap::class.java) as Map<String, Any>
+                return decoder.decode(jwtToken).claims
             }
 
             private fun validateAndProcessUser(oidcUser: OidcUser): OidcUser {
-                logger.debug("========== Email Domain Validation ==========")
-                logger.debug(
-                    "MONITORFISH_OIDC_BYPASS_EMAIL_DOMAINS_FILTER=${oidcProperties.bypassEmailDomainsFilter}",
-                )
-
-                if (oidcProperties.bypassEmailDomainsFilter == "true") {
-                    logger.info("✅ OIDC is bypassing email domain checks.")
-                    return oidcUser
-                }
-
-                val emailClaim = oidcUser.claims["email"] as? String
-                logger.debug("User email from JWT: $emailClaim")
-
-                if (emailClaim.isNullOrBlank()) {
+                val email = oidcUser.claims["email"] as? String
+                if (email.isNullOrBlank()) {
                     val errorMsg = "Email claim is missing or empty in JWT"
                     logger.error("❌ $errorMsg")
                     throw OAuth2AuthenticationException(errorMsg)
                 }
 
-                val emailDomain = emailClaim.substringAfterLast("@")
-                logger.debug("Extracted email domain: $emailDomain")
-                logger.debug(
-                    "Configured authorized email domains: ${oidcProperties.authorizedEmailDomains}",
-                )
+                val idpId = oidcUser.claims["idp_id"] as? String
+                val organizationalUnit = oidcUser.claims["organizational_unit"] as? String
+                logger.debug("User idp_id: $idpId, organizational_unit: $organizationalUnit")
 
-                val isAuthorized =
-                    oidcProperties.authorizedEmailDomains.any { domain ->
-                        emailDomain.equals(domain, ignoreCase = true)
-                    }
-
-                if (!isAuthorized) {
-                    val errorMsg =
-                        "User not authorized. Email domain '$emailDomain' does not match any authorized domain: ${oidcProperties.authorizedEmailDomains}"
+                val isAllowed =
+                    getIsAllowedToLogIn.getObject().execute(
+                        email,
+                        idpId,
+                        oidcUser.subject,
+                        organizationalUnit,
+                    )
+                if (!isAllowed) {
+                    val errorMsg = "User not authorized (idp_id: '$idpId', organizational_unit: '$organizationalUnit')."
                     logger.error("❌ $errorMsg")
                     throw OAuth2AuthenticationException(errorMsg)
                 }
 
-                logger.info("✅ User authorized with email domain: $emailDomain")
-                logger.debug("========== End Email Domain Validation ==========")
                 return oidcUser
             }
         }
@@ -196,8 +201,21 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
-            .csrf { it.disable() }
-            .authorizeHttpRequests { authorize ->
+            .csrf { csrf ->
+                if (oidcProperties.enabled == true) {
+                    // Only the session-authenticated `/bff` API needs it: `/api` is called by other apps with an API key
+                    csrf
+                        .spa()
+                        .requireCsrfProtectionMatcher(
+                            AndRequestMatcher(
+                                CsrfFilter.DEFAULT_CSRF_MATCHER,
+                                PathPatternRequestMatcher.withDefaults().matcher("/bff/**"),
+                            ),
+                        )
+                } else {
+                    csrf.disable()
+                }
+            }.authorizeHttpRequests { authorize ->
                 if (oidcProperties.enabled == null || oidcProperties.enabled == false) {
                     logger.warn(
                         """
@@ -245,6 +263,10 @@ class SecurityConfig(
                         .authenticated()
                 }
             }
+
+        if (oidcProperties.enabled == true) {
+            http.addFilterAfter(CsrfCookieFilter(), CsrfFilter::class.java)
+        }
 
         // Bound to a local so the null check smart-casts: the Kotlin Spring plugin opens this class,
         // which makes the property getter open.
@@ -307,17 +329,65 @@ class SecurityConfig(
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration =
+        // Called by MonitorEnv and RapportNav (protected by API key on public paths, not by the session)
+        val externalApiConfiguration =
             CorsConfiguration().apply {
                 allowedOriginPatterns = listOf("*")
                 allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type")
                 allowCredentials = true
             }
+        val sessionConfiguration =
+            CorsConfiguration().apply {
+                allowedOrigins = getSessionAllowedOrigins()
+                allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type", CSRF_HEADER_NAME)
+                allowCredentials = true
+            }
+        logger.info("CORS allowed origins for session-authenticated endpoints: ${sessionConfiguration.allowedOrigins}")
 
         val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
+        source.registerCorsConfiguration("/api/**", externalApiConfiguration)
+        // Local Keycloak proxy (development and E2E only): its login form is posted with `Origin: null`,
+        // as Keycloak pages are served with `Referrer-Policy: no-referrer`
+        source.registerCorsConfiguration("/realms/**", externalApiConfiguration)
+        source.registerCorsConfiguration("/**", sessionConfiguration)
 
         return source
+    }
+
+    private fun getSessionAllowedOrigins(): List<String> {
+        val configuredOrigins = oidcProperties.allowedOrigins.map { it.trim().trimEnd('/') }.filter { it.isNotEmpty() }
+        if (configuredOrigins.isNotEmpty()) {
+            return configuredOrigins
+        }
+
+        return try {
+            val successUri = URI(oidcProperties.successUrl)
+            if (successUri.scheme == null || successUri.host == null) {
+                return listOf()
+            }
+            val port = if (successUri.port == -1) "" else ":${successUri.port}"
+
+            listOf("${successUri.scheme}://${successUri.host}$port")
+        } catch (_: URISyntaxException) {
+            listOf()
+        }
+    }
+
+    /** Spring Security loads the CSRF token lazily: the frontend needs its cookie before its first mutation. */
+    private class CsrfCookieFilter : OncePerRequestFilter() {
+        override fun doFilterInternal(
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            filterChain: FilterChain,
+        ) {
+            (request.getAttribute(CsrfToken::class.java.name) as? CsrfToken)?.token
+            filterChain.doFilter(request, response)
+        }
+    }
+
+    companion object {
+        const val CSRF_HEADER_NAME = "X-XSRF-TOKEN"
     }
 }

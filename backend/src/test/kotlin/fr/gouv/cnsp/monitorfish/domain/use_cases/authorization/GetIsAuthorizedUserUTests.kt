@@ -32,6 +32,7 @@ class GetIsAuthorizedUserUTests {
             GetIsAuthorizedUser(userAuthorizationRepository).execute(
                 "test",
                 true,
+                false,
             )
 
         // Then
@@ -54,6 +55,7 @@ class GetIsAuthorizedUserUTests {
             GetIsAuthorizedUser(userAuthorizationRepository).execute(
                 "test",
                 true,
+                false,
             )
 
         // Then
@@ -66,6 +68,7 @@ class GetIsAuthorizedUserUTests {
         val isAuthorized =
             GetIsAuthorizedUser(userAuthorizationRepository).execute(
                 "test",
+                false,
                 false,
             )
 
@@ -84,9 +87,46 @@ class GetIsAuthorizedUserUTests {
             GetIsAuthorizedUser(userAuthorizationRepository).execute(
                 "test",
                 true,
+                false,
             )
 
         // Then
         assertThat(isAuthorized).isFalse()
+    }
+
+    @Test
+    fun `execute Should only authorize a super user administrator When the path is administrator protected`() {
+        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "58GE5S8VXE871FGGd2",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = false,
+            ),
+        )
+
+        // When
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", false, true)
+
+        // Then
+        assertThat(isAuthorized).isFalse()
+    }
+
+    @Test
+    fun `execute Should authorize an administrator When the path is administrator protected`() {
+        given(userAuthorizationRepository.findByHashedEmail(any())).willReturn(
+            UserAuthorization(
+                hashedEmail = "58GE5S8VXE871FGGd2",
+                isSuperUser = true,
+                service = null,
+                isAdministrator = true,
+            ),
+        )
+
+        // When
+        val isAuthorized = GetIsAuthorizedUser(userAuthorizationRepository).execute("test", true, true)
+
+        // Then
+        assertThat(isAuthorized).isTrue()
     }
 }

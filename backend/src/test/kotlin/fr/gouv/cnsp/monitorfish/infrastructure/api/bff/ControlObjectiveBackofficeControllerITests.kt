@@ -34,8 +34,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     SentryConfig::class,
 )
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = [(ControlObjectiveAdminController::class)])
-class ControlObjectiveAdminControllerITests {
+@WebMvcTest(value = [(ControlObjectiveBackofficeController::class)])
+class ControlObjectiveBackofficeControllerITests {
     @Autowired
     private lateinit var api: MockMvc
 
@@ -65,7 +65,7 @@ class ControlObjectiveAdminControllerITests {
         // When
         api
             .perform(
-                put("/bff/v1/admin/control_objectives/123")
+                put("/bff/v1/backoffice/control_objectives/123")
                     .content(
                         objectMapper.writeValueAsString(
                             UpdateControlObjectiveDataInput(targetNumberOfControlsAtSea = 123),
@@ -80,7 +80,7 @@ class ControlObjectiveAdminControllerITests {
     fun `Should return Ok When a delete of a control objective is done`() {
         // When
         api
-            .perform(delete("/bff/v1/admin/control_objectives/123"))
+            .perform(delete("/bff/v1/backoffice/control_objectives/123"))
             // Then
             .andExpect(status().isOk)
     }
@@ -90,7 +90,7 @@ class ControlObjectiveAdminControllerITests {
         // When
         api
             .perform(
-                post("/bff/v1/admin/control_objectives")
+                post("/bff/v1/backoffice/control_objectives")
                     .content(
                         objectMapper.writeValueAsString(
                             AddControlObjectiveDataInput(segment = "SEGMENT", facade = "FACADE", year = 2021),
@@ -141,7 +141,7 @@ class ControlObjectiveAdminControllerITests {
 
         // When
         api
-            .perform(get("/bff/v1/admin/control_objectives/2021"))
+            .perform(get("/bff/v1/backoffice/control_objectives/2021"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(3)))
@@ -154,7 +154,7 @@ class ControlObjectiveAdminControllerITests {
 
         // When
         api
-            .perform(get("/bff/v1/admin/control_objectives/years"))
+            .perform(get("/bff/v1/backoffice/control_objectives/years"))
             // Then
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -165,7 +165,7 @@ class ControlObjectiveAdminControllerITests {
     fun `Should add a new control objective year`() {
         // When
         api
-            .perform(post("/bff/v1/admin/control_objectives/years"))
+            .perform(post("/bff/v1/backoffice/control_objectives/years"))
             // Then
             .andExpect(status().isCreated)
     }

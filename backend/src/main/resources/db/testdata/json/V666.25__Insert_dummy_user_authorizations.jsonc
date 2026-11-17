@@ -7,18 +7,24 @@
             **/
             {
                 "hashed_email": "620726063ea5a8121c70f16f1163c85319ee11f1495e85f63ea107b169864ba0",
+                "email": "dummy@email.gouv.fr",
                 "is_super_user": true,
                 "service": "Pôle OPS métropole",
-                "is_administrator": true
+                "is_administrator": true,
+                "administration": null,
+                "last_login_at_utc": "2026-10-20 08:30:00+00"
             },
             /**
             ** SHA256 of another@email.com
             **/
             {
                 "hashed_email": "a6ad88a1dcff3355c23693eaf12898065873d38e13f41d8841f05ee2c6a19f3a",
+                "email": "another@email.com",
                 "is_super_user": false,
                 "service": "Pôle OPS outre-mer",
-                "is_administrator": true
+                "is_administrator": true,
+                "administration": "DOUANE",
+                "last_login_at_utc": null
             }
         ]
     }

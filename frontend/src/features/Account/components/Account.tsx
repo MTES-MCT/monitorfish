@@ -10,6 +10,7 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useTracking } from '@hooks/useTracking'
 import { Accent, Button, Icon, Level, MapMenuDialog } from '@mtes-mct/monitor-ui'
+import { ROUTER_PATHS } from 'paths'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -127,6 +128,17 @@ export function Account() {
             </StyledHeader>
             <MapMenuDialog.Body>
               {userAccount.email ?? 'Vous n’êtes pas connecté'}
+              {isSuperUser && (
+                <StyledButton
+                  accent={Accent.SECONDARY}
+                  Icon={Icon.Settings}
+                  isFullWidth
+                  // In a new tab, so that the map and its opened panels are kept
+                  onClick={() => window.open(ROUTER_PATHS.backoffice, '_blank', 'noopener')}
+                >
+                  Accéder au backoffice
+                </StyledButton>
+              )}
               <StyledButton accent={Accent.SECONDARY} Icon={Icon.Logout} isFullWidth onClick={userAccount?.logout}>
                 Se déconnecter
               </StyledButton>

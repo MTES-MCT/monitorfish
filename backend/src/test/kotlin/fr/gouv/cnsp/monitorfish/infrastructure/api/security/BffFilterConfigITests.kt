@@ -39,7 +39,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         "monitorfish.oidc.login-url=http://localhost:8080/login",
         "monitorfish.oidc.success-url=http://localhost:8080/",
         "monitorfish.oidc.error-url=http://localhost:8080/error",
-        "monitorfish.oidc.authorized-sirets=123456789",
         "monitorfish.oidc.issuer-uri=http://localhost:8080/auth",
         "monitorfish.api.protected.paths=/bff/**",
         "monitorfish.api.protected.super-user-paths=/bff/**",

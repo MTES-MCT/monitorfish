@@ -33,6 +33,7 @@ class UserManagementController(
         isSuperUser = user.isSuperUser,
         service = user.service,
         isAdministrator = user.isAdministrator,
+        administration = user.administration,
     )
 
     @DeleteMapping(value = ["/{email}"])

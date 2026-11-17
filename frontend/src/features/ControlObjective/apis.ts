@@ -16,7 +16,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       query: createdFields => ({
         body: createdFields,
         method: 'POST',
-        url: '/admin/control_objectives'
+        url: '/backoffice/control_objectives'
       }),
       transformErrorResponse: response => new FrontendApiError(ADD_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
@@ -24,7 +24,7 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: 'ControlObjectivesYears' }],
       query: () => ({
         method: 'POST',
-        url: '/admin/control_objectives/years'
+        url: '/backoffice/control_objectives/years'
       }),
       transformErrorResponse: response => new FrontendApiError(ADD_CONTROL_OBJECTIVES_YEAR_ERROR_MESSAGE, response)
     }),
@@ -32,24 +32,24 @@ export const controlObjectiveApi = monitorfishApi.injectEndpoints({
       invalidatesTags: [{ type: 'ControlObjectives' }],
       query: id => ({
         method: 'DELETE',
-        url: `/admin/control_objectives/${id}`
+        url: `/backoffice/control_objectives/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(DELETE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     }),
     getControlObjectives: builder.query<ControlObjective[], number>({
       providesTags: () => [{ type: 'ControlObjectives' }],
-      query: year => `/admin/control_objectives/${year}`
+      query: year => `/backoffice/control_objectives/${year}`
     }),
     getControlObjectiveYears: builder.query<number[], void>({
       providesTags: () => [{ type: 'ControlObjectivesYears' }],
-      query: () => '/admin/control_objectives/years',
+      query: () => '/backoffice/control_objectives/years',
       transformResponse: (baseQueryReturnValue: number[]) => baseQueryReturnValue.sort((a, b) => a - b)
     }),
     updateControlObjective: builder.mutation<void, UpdateControlObjective>({
       query: ({ id, updatedFields }) => ({
         body: updatedFields,
         method: 'PUT',
-        url: `/admin/control_objectives/${id}`
+        url: `/backoffice/control_objectives/${id}`
       }),
       transformErrorResponse: response => new FrontendApiError(UPDATE_CONTROL_OBJECTIVES_ERROR_MESSAGE, response)
     })

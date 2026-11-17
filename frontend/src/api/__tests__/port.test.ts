@@ -30,13 +30,13 @@ describe('api/port', () => {
     jest.useRealTimers()
   })
 
-  it('getPorts Should not download the ports again When they are displayed again a few minutes later', async () => {
+  it('getPorts Should not download the ports again When they are displayed again days later in the same session', async () => {
     const store = createStore()
 
     const firstDisplay = store.dispatch(portApi.endpoints.getPorts.initiate())
     await firstDisplay
     firstDisplay.unsubscribe()
-    await jest.advanceTimersByTimeAsync(5 * 60 * 1000)
+    await jest.advanceTimersByTimeAsync(2 * 24 * 60 * 60 * 1000)
     await store.dispatch(portApi.endpoints.getPorts.initiate())
 
     expect(fetchMock).toHaveBeenCalledTimes(1)

@@ -1,10 +1,10 @@
 import { openVesselBySearch } from './main_window/utils'
 
-context('Light MonitorFish', () => {
+context('MonitorFish', () => {
   it('Should have some features removed When not logged as super user', () => {
     // Given
     cy.login('user')
-    cy.visit('/light#@-824534.42,6082993.21,8.70')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait(1000)
 
     // Then

@@ -33,6 +33,19 @@ describe('Startup of the main window (non-super-user)', () => {
     expect(requests.count('/bff/v1/vessels/changes')).toBe(1)
   })
 
+  it('redirects the former light mode page to the main page, keeping the map position', async () => {
+    const mapPosition = '#@-824534.42,6082993.21,8.70'
+
+    await navigateAndWaitForVessels(page, () => page.goto(`${BASE_URL}/light${mapPosition}`))
+
+    const { hash, pathname } = new URL(page.url())
+    expect(pathname).toBe('/')
+    const [x, y, zoom] = hash.replace('#@', '').split(',').map(Number)
+    expect(x).toBeCloseTo(-824534.42, 0)
+    expect(y).toBeCloseTo(6082993.21, 0)
+    expect(zoom).toBeCloseTo(8.7, 1)
+  })
+
   it('does not download the icons of the layers only displayed to super-users', async () => {
     const requests = recordRequests(page)
 

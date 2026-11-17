@@ -1,8 +1,7 @@
-import { FIVE_MINUTES, TWENTY_MINUTES } from '@api/APIWorker'
+import { FIVE_MINUTES } from '@api/APIWorker'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { saveActiveVesselsAndDisplayLastPositions } from '@features/Vessel/useCases/saveActiveVesselsAndDisplayLastPositions'
 import { useGetActiveVesselsQuery } from '@features/Vessel/vesselApi'
-import { useIsInLightMode } from '@hooks/useIsInLightMode'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FulfillingBouncingCircleLoader, Level } from '@mtes-mct/monitor-ui'
@@ -13,7 +12,6 @@ import { MapComponent } from '../../commonStyles/MapComponent'
 import VesselSVG from '../../icons/Icone_navire.svg?react'
 
 export function VesselLoader() {
-  const isInLightMode = useIsInLightMode()
   const dispatch = useMainAppDispatch()
 
   const loadingPositions = useMainAppSelector(state => state.vessel.loadingPositions)
@@ -24,7 +22,7 @@ export function VesselLoader() {
     isError,
     isFetching
   } = useGetActiveVesselsQuery(undefined, {
-    pollingInterval: isInLightMode ? TWENTY_MINUTES : FIVE_MINUTES
+    pollingInterval: FIVE_MINUTES
   })
 
   const [isAppLoaded, setIsAppLoaded] = useState(false)

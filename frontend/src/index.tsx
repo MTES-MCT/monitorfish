@@ -13,7 +13,6 @@ if (import.meta.env.FRONTEND_SENTRY_DSN && import.meta.env.FRONTEND_SENTRY_TRACI
     getSentryOptions({
       dsn: import.meta.env.FRONTEND_SENTRY_DSN,
       environment: import.meta.env.FRONTEND_SENTRY_ENV ?? 'development',
-      pathname: window.location.pathname,
       release: import.meta.env.FRONTEND_MONITORFISH_VERSION ?? 'v0.0.0',
       tracingOrigins: import.meta.env.FRONTEND_SENTRY_TRACING_ORIGINS
     })

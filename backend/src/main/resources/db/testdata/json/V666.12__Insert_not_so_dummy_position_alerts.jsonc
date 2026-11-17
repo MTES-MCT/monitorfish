@@ -5,7 +5,7 @@
         "data": [
             {
                 "id": 1,
-                "name": "Chalutage dans les 3 milles (hors zones de dérogation)",
+                "name": "Chalutage dans les 3 mn hors zone de dérogation",
                 "description": "Pour tous les navires en pêche dans la zone des 3 milles hors zones de dérogation et ayant déclaré un chalut dans un FAR de leur marée et d'une marée récente (moins de 2 semaines).",
                 "is_user_defined": false,
                 "natinf_code": 7059,
@@ -657,7 +657,7 @@
             },
             {
                 "id": 18,
-                "name": "Chalutage dans les 3 milles (zones de dérogation)",
+                "name": "Chalutage dans les 3 mn en zone de dérogation",
                 "description": "Pour tous les navires en pêche dans les zones de dérogation de la zone des 3 milles et ayant déclaré un chalut dans un FAR de leur marée et d'une marée récente (moins de 2 semaines).",
                 "is_user_defined": false,
                 "natinf_code": 7059,

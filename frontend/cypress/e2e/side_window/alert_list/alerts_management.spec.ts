@@ -101,7 +101,7 @@ context('Side Window > Alert Management', () => {
      * Add vessels zones criteria
      */
     cy.clickButton('Ajouter un critère de déclenchement')
-    cy.clickButton('Navires')
+    cy.clickButton('Navires inclus')
     cy.getDataCy('VesselSearch-input').type('pheno')
     cy.getDataCy('VesselSearch-item').first().click()
     cy.contains('PHENOMENE').should('be.visible')
@@ -281,8 +281,8 @@ context('Side Window > Alert Management', () => {
      * Search an alert
      */
     cy.fill('Rechercher une alerte', '12 milles')
-    cy.getDataCy('alerts-specification-list-length').contains('6 alertes')
-    cy.get('.Table-SimpleTable tr').should('have.length', 7)
+    cy.getDataCy('alerts-specification-list-length').contains('4 alertes')
+    cy.get('.Table-SimpleTable tr').should('have.length', 5)
 
     cy.get('[title="Pêche dans les 12 milles sans droits historiques (ES)"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:6"]').contains('Nationalités, Zones (VMS)')
@@ -299,7 +299,7 @@ context('Side Window > Alert Management', () => {
     cy.fill('Rechercher une alerte', undefined)
     cy.get('[title="Alerte all-in"]').scrollIntoView().click({ force: true })
     cy.get('[data-id="POSITION_ALERT:13"]').contains(
-      'Navires, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins'
+      'Navires inclus, Espèces à bord, Zones de capture (FAR), Nationalités, Quartiers, OPs, Zones (VMS), Engins'
     )
     cy.get('[data-id="POSITION_ALERT:13-expanded"]').contains(
       "HKE - MERLU D'EUROPE (supérieure à 713kg), LOB - CROUPIA ROCHE, SOL - SOLE COMMUNE"

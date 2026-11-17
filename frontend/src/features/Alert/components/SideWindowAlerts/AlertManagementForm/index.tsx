@@ -271,7 +271,7 @@ export function AlertManagementForm() {
                             setSelectedCriterias(previous => previous.concat(Criteria.VESSEL))
                           }}
                         >
-                          Navires
+                          Navires inclus
                         </Dropdown.Item>
                       )}
                       {!hasExcludedVesselCriteria && (

@@ -16,20 +16,20 @@ import type { Specy } from 'domain/types/specy'
 
 const SPECIES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les espèces"
 
-export function getAllSpecies<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(): T
-export function getAllSpecies(): MainAppAsyncThunk | BackofficeAppPromiseThunk {
+export function getAllSpecies<T extends MainAppAsyncThunk | BackofficeAppPromiseThunk>(isForced?: boolean): T
+export function getAllSpecies(isForced = false): MainAppAsyncThunk | BackofficeAppPromiseThunk {
   return async (
     dispatch: BackofficeAppDispatch | MainAppDispatch,
     getState: BackofficeAppGetState | MainAppGetState
   ) => {
-    if (!!getState().species.speciesByCode?.length || !!getState().species.speciesGroups?.length) {
+    if (!isForced && (!!getState().species.speciesByCode?.length || !!getState().species.speciesGroups?.length)) {
       return
     }
 
     try {
       // Shares the RTK cache (and in-flight request) with the components using `useGetSpeciesQuery()`
       const { groups, species } = await (dispatch as MainAppDispatch)(
-        specyApi.endpoints.getSpecies.initiate(undefined, { subscribe: false })
+        specyApi.endpoints.getSpecies.initiate(undefined, { forceRefetch: isForced, subscribe: false })
       ).unwrap()
 
       const speciesByCode = species.reduce<Record<string, Specy>>((map, specy) => {

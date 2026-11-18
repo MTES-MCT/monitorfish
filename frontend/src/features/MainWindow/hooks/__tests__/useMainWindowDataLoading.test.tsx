@@ -4,16 +4,21 @@ import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit'
 import { renderHook } from '@testing-library/react'
 import { Provider } from 'react-redux'
 
+import { referentialApi } from '../../../../api/referential'
 import { UserAccountContext } from '../../../../context/UserAccountContext'
 import { globalSliceReducer, setAreActiveVesselsDisplayed } from '../../../../domain/shared_slices/Global'
 import { vesselApi } from '../../../Vessel/vesselApi'
 import { loadMainWindowReferentials } from '../../useCases/loadMainWindowReferentials'
+import { refreshChangedReferentials } from '../../useCases/refreshChangedReferentials'
 import { useMainWindowDataLoading } from '../useMainWindowDataLoading'
 
 import type { ReactNode } from 'react'
 
 jest.mock('../../useCases/loadMainWindowReferentials', () => ({
   loadMainWindowReferentials: jest.fn(() => ({ type: 'TEST/loadMainWindowReferentials' }))
+}))
+jest.mock('../../useCases/refreshChangedReferentials', () => ({
+  refreshChangedReferentials: jest.fn(() => ({ type: 'TEST/refreshChangedReferentials' }))
 }))
 jest.mock('../../../Vessel/useCases/updateVesselTracks', () => ({
   updateVesselTracks: jest.fn(() => ({ type: 'TEST/updateVesselTracks' }))
@@ -85,5 +90,22 @@ describe('features/MainWindow/hooks/useMainWindowDataLoading()', () => {
     const { updateVesselTracks } = jest.requireMock<any>('../../../Vessel/useCases/updateVesselTracks')
     expect(loadMainWindowReferentials).not.toHaveBeenCalled()
     expect(updateVesselTracks).not.toHaveBeenCalled()
+  })
+
+  it('Should download again the referentials whose version changed since the previous check', async () => {
+    let versions = { gears: 'g1', infractions: 'i1', ports: 'p1', regulations: 'r1', species: 's1' }
+    global.fetch = jest.fn(() => Promise.resolve(new Response(JSON.stringify(versions), { status: 200 }))) as any
+    const { store } = renderMainWindowDataLoading(false)
+
+    await store.dispatch(referentialApi.endpoints.getReferentialVersions.initiate(undefined, { forceRefetch: true }))
+    expect(refreshChangedReferentials).not.toHaveBeenCalled()
+
+    versions = { ...versions, regulations: 'r2' }
+    await store.dispatch(referentialApi.endpoints.getReferentialVersions.initiate(undefined, { forceRefetch: true }))
+    expect(refreshChangedReferentials).toHaveBeenCalledTimes(1)
+    expect(refreshChangedReferentials).toHaveBeenCalledWith(
+      { gears: 'g1', infractions: 'i1', ports: 'p1', regulations: 'r1', species: 's1' },
+      { gears: 'g1', infractions: 'i1', ports: 'p1', regulations: 'r2', species: 's1' }
+    )
   })
 })

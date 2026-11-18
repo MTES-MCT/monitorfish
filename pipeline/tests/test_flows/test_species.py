@@ -57,7 +57,8 @@ def test_flow(reset_test_data, expected_loaded_species):
     query = "SELECT * FROM species ORDER BY id"
 
     initial_species = read_query(query, db="monitorfish_remote")
-    state = species_flow(return_state=True)
+    with patch("src.flows.species.requests") as mock_requests:
+        state = species_flow(return_state=True)
 
     assert state.is_completed()
     final_species = read_query(query, db="monitorfish_remote")
@@ -66,3 +67,6 @@ def test_flow(reset_test_data, expected_loaded_species):
         pd.testing.assert_frame_equal(initial_species, final_species)
 
     pd.testing.assert_frame_equal(final_species, expected_loaded_species)
+    mock_requests.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/species/invalidate"
+    )

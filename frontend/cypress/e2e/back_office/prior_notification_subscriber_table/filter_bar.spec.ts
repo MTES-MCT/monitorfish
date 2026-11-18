@@ -3,7 +3,7 @@ import { openBackOfficePriorNotificationSubscriberList } from './utils'
 context('BackOffice > Prior Notification Table > Filter Bar', () => {
   beforeEach(() => {
     cy.intercept('GET', `/api/v1/administrations`).as('getAdministrations')
-    cy.intercept('GET', `/bff/v1/ports`).as('getPorts')
+    cy.intercept('GET', '/bff/v1/ports*').as('getPorts')
 
     openBackOfficePriorNotificationSubscriberList()
 

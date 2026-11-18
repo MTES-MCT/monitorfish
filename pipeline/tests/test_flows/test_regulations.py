@@ -190,7 +190,7 @@ def test_flow(reset_test_data):
         "src.flows.regulations.extract_local_hashes", mock_extract_local_hashes
     ), patch(
         "src.flows.regulations.extract_new_regulations", mock_extract_new_regulations
-    ):
+    ), patch("src.flows.regulations.requests") as mock_requests:
         state = regulations_flow(return_state=True)
 
     assert state.is_completed()
@@ -199,6 +199,9 @@ def test_flow(reset_test_data):
         "SELECT * FROM regulations", db="monitorfish_remote"
     )
 
+    mock_requests.put.assert_called_once_with(
+        "https://monitor.fish/api/v1/regulations/invalidate"
+    )
     assert set(initial_remote_regulations.id) == {1, 2, 3, 4, 5, 6}
     assert set(final_remote_regulations.id) == {1, 2, 3, 4, 6, 7}
     assert final_remote_regulations.loc[

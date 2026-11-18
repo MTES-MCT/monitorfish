@@ -4,6 +4,7 @@ export enum LocalStorageKey {
   FavoriteVessels = 'favoriteVessels',
   LastSearchVessels = 'lastSearchedVessels',
   LayersShowedOnMap = 'homepagelayersShowedOnMap',
+  ReferentialVersions = 'referentialVersions',
   SelectedRegulatoryZoneIds = 'selectedRegulatoryZoneIds',
   SelectedRegulatoryZones = 'selectedRegulatoryZones'
 }

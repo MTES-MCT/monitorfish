@@ -4,13 +4,16 @@ import com.nhaarman.mockitokotlin2.given
 import fr.gouv.cnsp.monitorfish.config.KeycloakProxyProperties
 import fr.gouv.cnsp.monitorfish.config.MapperConfiguration
 import fr.gouv.cnsp.monitorfish.config.OIDCProperties
+import fr.gouv.cnsp.monitorfish.config.ReferentialsEtagConfig
 import fr.gouv.cnsp.monitorfish.config.SecurityConfig
 import fr.gouv.cnsp.monitorfish.config.SentryConfig
-import fr.gouv.cnsp.monitorfish.domain.use_cases.port.GetActivePorts
 import fr.gouv.cnsp.monitorfish.fakers.PortFaker
 import fr.gouv.cnsp.monitorfish.infrastructure.api.bff.PortController
 import fr.gouv.cnsp.monitorfish.infrastructure.api.log.CustomAuthenticationEntryPoint
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.toPortDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.public_api.VersionController
+import fr.gouv.cnsp.monitorfish.infrastructure.api.referential.ReferentialSnapshots
+import fr.gouv.cnsp.monitorfish.infrastructure.api.referential.VersionedReferential
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
@@ -56,7 +59,7 @@ class SecurityConfigITests {
         private lateinit var mockMvc: MockMvc
 
         @MockitoBean
-        private lateinit var getActivePorts: GetActivePorts
+        private lateinit var referentialSnapshots: ReferentialSnapshots
 
         @MockitoBean
         private lateinit var buildProperties: BuildProperties
@@ -67,10 +70,13 @@ class SecurityConfigITests {
         @Test
         fun `Should redirect to login when accessing protected paths without authentication`() {
             // Given
-            given(getActivePorts.execute()).willReturn(
-                listOf(
-                    PortFaker.fakePort(locode = "ET", name = "Etel"),
-                    PortFaker.fakePort(locode = "AY", name = "Auray"),
+            given(referentialSnapshots.ports()).willReturn(
+                VersionedReferential(
+                    listOf(
+                        PortFaker.fakePort(locode = "ET", name = "Etel"),
+                        PortFaker.fakePort(locode = "AY", name = "Auray"),
+                    ).map { it.toPortDataOutput() },
+                    "a1b2",
                 ),
             )
 
@@ -85,10 +91,13 @@ class SecurityConfigITests {
         @Test
         fun `Should allow access to protected paths with valid OIDC authentication`() {
             // Given
-            given(getActivePorts.execute()).willReturn(
-                listOf(
-                    PortFaker.fakePort(locode = "ET", name = "Etel"),
-                    PortFaker.fakePort(locode = "AY", name = "Auray"),
+            given(referentialSnapshots.ports()).willReturn(
+                VersionedReferential(
+                    listOf(
+                        PortFaker.fakePort(locode = "ET", name = "Etel"),
+                        PortFaker.fakePort(locode = "AY", name = "Auray"),
+                    ).map { it.toPortDataOutput() },
+                    "a1b2",
                 ),
             )
 
@@ -162,6 +171,7 @@ class SecurityConfigITests {
         KeycloakProxyProperties::class,
         SentryConfig::class,
         CustomAuthenticationEntryPoint::class,
+        ReferentialsEtagConfig::class,
     )
     @WebMvcTest(
         value = [PortController::class, VersionController::class],
@@ -174,7 +184,7 @@ class SecurityConfigITests {
         private lateinit var mockMvc: MockMvc
 
         @MockitoBean
-        private lateinit var getActivePorts: GetActivePorts
+        private lateinit var referentialSnapshots: ReferentialSnapshots
 
         @MockitoBean
         private lateinit var buildProperties: BuildProperties
@@ -185,10 +195,13 @@ class SecurityConfigITests {
         @Test
         fun `Should allow access to all paths when OIDC is disabled`() {
             // Given
-            given(getActivePorts.execute()).willReturn(
-                listOf(
-                    PortFaker.fakePort(locode = "ET", name = "Etel"),
-                    PortFaker.fakePort(locode = "AY", name = "Auray"),
+            given(referentialSnapshots.ports()).willReturn(
+                VersionedReferential(
+                    listOf(
+                        PortFaker.fakePort(locode = "ET", name = "Etel"),
+                        PortFaker.fakePort(locode = "AY", name = "Auray"),
+                    ).map { it.toPortDataOutput() },
+                    "a1b2",
                 ),
             )
 
@@ -197,6 +210,40 @@ class SecurityConfigITests {
                 .perform(get("/bff/v1/ports"))
                 // Then
                 .andExpect(status().isOk)
+        }
+
+        @Test
+        fun `Should keep the cache headers of a referential requested with its current version`() {
+            // Given
+            given(referentialSnapshots.ports()).willReturn(
+                VersionedReferential(
+                    listOf(PortFaker.fakePort(locode = "ET", name = "Etel").toPortDataOutput()),
+                    "a1b2",
+                ),
+            )
+
+            // When
+            val etag =
+                mockMvc
+                    .perform(get("/bff/v1/ports?v=a1b2"))
+                    // Then
+                    .andExpect(status().isOk)
+                    .andExpect(header().string("Cache-Control", "max-age=31536000, private, immutable"))
+                    .andExpect(header().doesNotExist("Expires"))
+                    .andExpect(header().doesNotExist("Pragma"))
+                    .andReturn()
+                    .response
+                    .getHeader("ETag")
+
+            // A proxy replacing these cache headers by `no-cache` makes the browser revalidate: no body is sent again
+            mockMvc
+                .perform(get("/bff/v1/ports?v=a1b2").header("If-None-Match", etag!!))
+                .andExpect(status().isNotModified)
+
+            mockMvc
+                .perform(get("/bff/v1/ports"))
+                .andExpect(status().isOk)
+                .andExpect(header().string("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate"))
         }
 
         @Test

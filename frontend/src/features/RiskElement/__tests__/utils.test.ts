@@ -13,7 +13,7 @@ const tripsRiskElement: RiskElement.VesselRiskElement = {
     type: RiskElement.MetricsType.TRIPS
   },
   name: 'Exceeding the margin of tolerance',
-  reportings: null,
+  reportings: undefined,
   riskLevel: 4
 }
 
@@ -29,7 +29,11 @@ describe('RiskElement/utils', () => {
   })
 
   it('getNonCompliantTripLabel() should return only the trip number when dates are missing', () => {
-    const result = getNonCompliantTripLabel({ endDateTimeUtc: null, startDateTimeUtc: null, tripNumber: '9463713' })
+    const result = getNonCompliantTripLabel({
+      endDateTimeUtc: undefined,
+      startDateTimeUtc: undefined,
+      tripNumber: '9463713'
+    })
 
     expect(result).toEqual('Marée n°9463713')
   })

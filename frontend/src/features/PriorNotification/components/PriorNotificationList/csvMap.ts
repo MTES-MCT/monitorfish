@@ -21,7 +21,9 @@ const getWeightBySpecies = (catches: Logbook.Catch[]): Array<[string, number]> =
     return accumulator
   }, {})
 
-  return Object.entries(weightBySpecies).sort(([a], [b]) => a.localeCompare(b))
+  return Object.entries(weightBySpecies).sort(
+    ([speciesA, weightA], [speciesB, weightB]) => weightB - weightA || speciesA.localeCompare(speciesB)
+  )
 }
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */

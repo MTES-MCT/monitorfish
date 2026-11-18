@@ -59,4 +59,56 @@ context('Side Window > Prior Notification List > Pagination', () => {
       cy.get('button').contains('Charger les 50 préavis suivants').should('not.exist')
     })
   })
+
+  it('Should download all prior notifications matching the filters When all loaded rows are selected', () => {
+    cy.intercept('GET', `${apiPathBase}*`).as('getPriorNotifications')
+
+    openSideWindowPriorNotificationListAsSuperUser()
+
+    cy.wait('@getPriorNotifications').then(interception => {
+      const responseBody: BackendApi.ResponseBodyPaginatedList<
+        PriorNotification.PriorNotification,
+        Logbook.ApiListExtraData
+      > = interception.response!.body
+
+      const fakeData = Array.from({ length: 100 }).map((_, index) => ({
+        ...responseBody.data[0]!,
+        reportId: `FAKE_REPORT_ID_${index}`
+      }))
+
+      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=50*`, {
+        body: {
+          ...responseBody,
+          data: fakeData.slice(0, 50),
+          lastPageNumber: 1,
+          pageNumber: 0,
+          pageSize: 50,
+          totalLength: 100
+        }
+      }).as('getPriorNotificationsFirstPage')
+      cy.intercept('GET', `${apiPathBase}*pageNumber=0&pageSize=100*`, {
+        body: {
+          ...responseBody,
+          data: fakeData,
+          lastPageNumber: 0,
+          pageNumber: 0,
+          pageSize: 100,
+          totalLength: 100
+        }
+      }).as('getAllPriorNotifications')
+
+      openSideWindowPriorNotificationListAsSuperUser()
+
+      cy.wait('@getPriorNotificationsFirstPage')
+
+      cy.get('label').contains('Sélectionner tous les préavis').click({ force: true })
+      cy.clickButton('Télécharger 100 préavis')
+
+      cy.wait('@getAllPriorNotifications')
+
+      cy.getDownloadedFileContent(content => {
+        content.should('contain', 'FAKE_REPORT_ID_0').should('contain', 'FAKE_REPORT_ID_99')
+      })
+    })
+  })
 })

@@ -5,6 +5,8 @@ import type { Infraction, Threat } from '@features/Infraction/types'
 export const infractionApi = monitorfishPublicApi.injectEndpoints({
   endpoints: builder => ({
     getInfractions: builder.query<Infraction[], void>({
+      // Reference data: kept for the whole session instead of being downloaded again once unused for a minute
+      keepUnusedDataFor: Infinity,
       providesTags: () => [{ type: 'Infractions' }],
       query: () => `/v1/infractions`
     }),

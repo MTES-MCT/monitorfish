@@ -272,7 +272,7 @@ class SecurityConfig(
                             PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"),
                         ).invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("SESSION")
                 }
         }
 

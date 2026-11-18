@@ -7,6 +7,11 @@ server:
         excluded-user-agents: ""
         mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
         min-response-size: 2048
+    servlet:
+        session:
+            cookie:
+                # Spring Session sets `SameSite=Lax` by default, the former Tomcat session cookie had no `SameSite`
+                same-site: omitted
 
 host:
     ip: ${HOST_IP}
@@ -108,6 +113,10 @@ spring:
     servlet:
         multipart:
             max-file-size: 5MB
+    session:
+        jdbc:
+            # Created by a Flyway migration
+            initialize-schema: never
     kafka:
         bootstrap-servers: ${MONITORFISH_KAFKA_AIS_SERVERS:}
         producer:

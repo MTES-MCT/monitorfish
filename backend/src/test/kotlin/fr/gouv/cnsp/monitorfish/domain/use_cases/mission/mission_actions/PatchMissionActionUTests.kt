@@ -58,6 +58,8 @@ class PatchMissionActionUTests {
                 actionDatetimeUtc = Optional.of(expectedDateTime),
                 actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
                 observationsByUnit = Optional.of("An observation"),
+                isLocked = null,
+                lastLockDatetimeUtc = null,
             )
 
         // When
@@ -106,6 +108,8 @@ class PatchMissionActionUTests {
                 actionDatetimeUtc = null,
                 actionEndDatetimeUtc = Optional.of(expectedEndDateTime),
                 observationsByUnit = null,
+                isLocked = null,
+                lastLockDatetimeUtc = null,
             )
 
         // When
@@ -116,6 +120,149 @@ class PatchMissionActionUTests {
             verify(missionActionsRepository).save(capture())
             assertThat(allValues.first().actionDatetimeUtc).isEqualTo(originalDateTime)
             assertThat(allValues.first().actionEndDatetimeUtc).isEqualTo(expectedEndDateTime)
+        }
+    }
+
+    @Test
+    fun `execute Should patch the lock fields of an existing action`() {
+        // Given
+        val originalDateTime = ZonedDateTime.now()
+        val lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z")
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = originalDateTime,
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
+        given(missionActionsRepository.findById(any())).willReturn(action)
+
+        val patch =
+            PatchableMissionAction(
+                actionDatetimeUtc = null,
+                actionEndDatetimeUtc = null,
+                observationsByUnit = null,
+                isLocked = Optional.of(true),
+                lastLockDatetimeUtc = Optional.of(lastLockDatetimeUtc),
+            )
+
+        // When
+        PatchMissionAction(missionActionsRepository, patchMissionAction).execute(123, patch)
+
+        // Then
+        argumentCaptor<MissionAction>().apply {
+            verify(missionActionsRepository).save(capture())
+            assertThat(allValues.first().isLocked).isTrue()
+            assertThat(allValues.first().lastLockDatetimeUtc).isEqualTo(lastLockDatetimeUtc)
+            assertThat(allValues.first().actionDatetimeUtc).isEqualTo(originalDateTime)
+        }
+    }
+
+    @Test
+    fun `execute Should erase the lock fields When they are set to null in the patch`() {
+        // Given
+        val originalDateTime = ZonedDateTime.now()
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = originalDateTime,
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+                isLocked = true,
+                lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z"),
+            )
+        given(missionActionsRepository.findById(any())).willReturn(action)
+
+        val patch =
+            PatchableMissionAction(
+                actionDatetimeUtc = null,
+                actionEndDatetimeUtc = null,
+                observationsByUnit = null,
+                isLocked = Optional.empty(),
+                lastLockDatetimeUtc = Optional.empty(),
+            )
+
+        // When
+        PatchMissionAction(missionActionsRepository, patchMissionAction).execute(123, patch)
+
+        // Then
+        argumentCaptor<MissionAction>().apply {
+            verify(missionActionsRepository).save(capture())
+            assertThat(allValues.first().isLocked).isNull()
+            assertThat(allValues.first().lastLockDatetimeUtc).isNull()
+        }
+    }
+
+    @Test
+    fun `execute Should keep the lock fields When they are not provided in the patch`() {
+        // Given
+        val originalDateTime = ZonedDateTime.now()
+        val lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z")
+        val action =
+            MissionAction(
+                id = null,
+                vesselId = null,
+                missionId = 1,
+                actionDatetimeUtc = originalDateTime,
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                completedBy = "XYZ",
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+                isLocked = true,
+                lastLockDatetimeUtc = lastLockDatetimeUtc,
+            )
+        given(missionActionsRepository.findById(any())).willReturn(action)
+
+        val patch =
+            PatchableMissionAction(
+                actionDatetimeUtc = null,
+                actionEndDatetimeUtc = null,
+                observationsByUnit = Optional.of("An observation"),
+                isLocked = null,
+                lastLockDatetimeUtc = null,
+            )
+
+        // When
+        PatchMissionAction(missionActionsRepository, patchMissionAction).execute(123, patch)
+
+        // Then
+        argumentCaptor<MissionAction>().apply {
+            verify(missionActionsRepository).save(capture())
+            assertThat(allValues.first().isLocked).isTrue()
+            assertThat(allValues.first().lastLockDatetimeUtc).isEqualTo(lastLockDatetimeUtc)
+            assertThat(allValues.first().observationsByUnit).isEqualTo("An observation")
         }
     }
 }

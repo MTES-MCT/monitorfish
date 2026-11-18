@@ -202,6 +202,47 @@ class PublicMissionActionsControllerITests {
     }
 
     @Test
+    fun `Should patch the lock fields of a mission action and return them`() {
+        // Given
+        val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")
+        val newMission =
+            TestUtils.getDummyMissionAction(dateTime).copy(
+                flagState = CountryCode.UNDEFINED,
+                isLocked = true,
+                lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z"),
+            )
+        given(patchMissionAction.execute(any(), any())).willReturn(newMission)
+        given(enrichPublicMissionAction.execute(any())).willAnswer { invocation ->
+            EnrichedMissionAction(missionAction = invocation.getArgument(0))
+        }
+
+        // When
+        api
+            .perform(
+                patch("/api/v1/mission_actions/123")
+                    .content(
+                        """
+                        {
+                            "isLocked": true,
+                            "lastLockDatetimeUtc": "2026-11-18T10:00:00Z"
+                        }
+                        """.trimIndent(),
+                    ).contentType(MediaType.APPLICATION_JSON),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.isLocked", equalTo(true)))
+            .andExpect(jsonPath("$.lastLockDatetimeUtc", equalTo("2026-11-18T10:00:00Z")))
+
+        val patchCaptor = argumentCaptor<PatchableMissionAction>()
+        Mockito.verify(patchMissionAction).execute(eq(123), patchCaptor.capture())
+        assertThat(patchCaptor.firstValue.isLocked).isEqualTo(Optional.of(true))
+        assertThat(patchCaptor.firstValue.lastLockDatetimeUtc)
+            .isEqualTo(Optional.of(ZonedDateTime.parse("2026-11-18T10:00:00Z")))
+        assertThat(patchCaptor.firstValue.observationsByUnit).isNull()
+    }
+
+    @Test
     fun `Should patch a mission action with both datetimes set and observationsByUnit erased`() {
         // Given
         val dateTime = ZonedDateTime.parse("2022-05-05T03:04:05.000Z")

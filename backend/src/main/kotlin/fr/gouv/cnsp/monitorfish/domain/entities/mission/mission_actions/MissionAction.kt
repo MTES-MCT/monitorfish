@@ -91,6 +91,10 @@ data class MissionAction(
     val isEISR: Boolean? = null,
     @Patchable
     var observationsByUnit: String? = null,
+    @Patchable
+    var isLocked: Boolean? = null,
+    @Patchable
+    var lastLockDatetimeUtc: ZonedDateTime? = null,
 ) {
     fun verify() {
         val controlTypes =

@@ -221,6 +221,10 @@ class MissionActionEntity(
     val isEISR: Boolean? = null,
     @Column(name = "observations_by_unit")
     val observationsByUnit: String? = null,
+    @Column(name = "is_locked")
+    val isLocked: Boolean? = null,
+    @Column(name = "last_lock_datetime_utc")
+    val lastLockDatetimeUtc: Instant? = null,
 ) {
     companion object {
         fun fromMissionAction(
@@ -302,6 +306,8 @@ class MissionActionEntity(
                 isUnitBoarded = missionAction.isUnitBoarded,
                 isEISR = missionAction.isEISR,
                 observationsByUnit = missionAction.observationsByUnit,
+                isLocked = missionAction.isLocked,
+                lastLockDatetimeUtc = missionAction.lastLockDatetimeUtc?.toInstant(),
             )
     }
 
@@ -395,6 +401,8 @@ class MissionActionEntity(
             isUnitBoarded = isUnitBoarded,
             isEISR = isEISR,
             observationsByUnit = observationsByUnit,
+            isLocked = isLocked,
+            lastLockDatetimeUtc = lastLockDatetimeUtc?.atZone(ZoneOffset.UTC),
         )
 
     private fun <T> deserializeJSONList(

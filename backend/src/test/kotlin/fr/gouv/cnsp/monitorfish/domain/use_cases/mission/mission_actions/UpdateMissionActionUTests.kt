@@ -103,6 +103,40 @@ class UpdateMissionActionUTests {
     }
 
     @Test
+    fun `execute Should keep the lock fields of the previous action`() {
+        // Given
+        val action =
+            MissionAction(
+                id = 123,
+                vesselId = 156,
+                missionId = 1,
+                actionDatetimeUtc = ZonedDateTime.now(),
+                portLocode = "AEFAT",
+                actionType = MissionActionType.LAND_CONTROL,
+                gearOnboard = listOf(),
+                seizureAndDiversion = true,
+                isDeleted = false,
+                hasSomeGearsSeized = false,
+                hasSomeSpeciesSeized = false,
+                isFromPoseidon = false,
+                flagState = CountryCode.FR,
+                userTrigram = "LTH",
+                completion = Completion.TO_COMPLETE,
+            )
+        val lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z")
+        given(missionActionsRepository.findById(any())).willReturn(
+            action.copy(isLocked = true, lastLockDatetimeUtc = lastLockDatetimeUtc),
+        )
+
+        // When
+        UpdateMissionAction(missionActionsRepository, getMissionActionFacade, getSpeciesFromCode)
+            .execute(123, action.copy(isLocked = false))
+
+        // Then
+        verify(missionActionsRepository).save(action.copy(isLocked = true, lastLockDatetimeUtc = lastLockDatetimeUtc))
+    }
+
+    @Test
     fun `execute Should enrich speciesOnboard with speciesName When speciesOnboard is provided`() {
         // Given
         val speciesCode = "COD"

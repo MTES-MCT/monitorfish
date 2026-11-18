@@ -31,4 +31,18 @@ class MapperConfigurationUTests {
         assertThat(input.actionEndDatetimeUtc).isEqualTo(Optional.of(ZonedDateTime.parse("2026-06-10T09:30:59Z")))
         assertThat(input.observationsByUnit).isEqualTo(Optional.empty<String>())
     }
+
+    @Test
+    fun `objectMapper Should deserialize the lock fields of a PATCH mission action payload`() {
+        // Given
+        val payload = """{"isLocked":true,"lastLockDatetimeUtc":null}"""
+
+        // When
+        val input = mapper.readValue(payload, PatchableMissionActionDataInput::class.java)
+
+        // Then
+        assertThat(input.isLocked).isEqualTo(Optional.of(true))
+        assertThat(input.lastLockDatetimeUtc).isEqualTo(Optional.empty<ZonedDateTime>())
+        assertThat(input.observationsByUnit).isNull()
+    }
 }

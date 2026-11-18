@@ -27,16 +27,13 @@ import {
   getExpandedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { downloadAsCsv } from '@utils/downloadAsCsv'
 import { isLegacyFirefox } from '@utils/isLegacyFirefox'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
-import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
-import { PRIOR_NOTIFICATIONS_CSV_MAP } from './csvMap'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -45,6 +42,7 @@ import { getTitle } from './utils'
 import { SkeletonRow } from '../../../../ui/Table/SkeletonRow'
 import { useGetPriorNotificationsQuery, useGetPriorNotificationsToVerifyQuery } from '../../priorNotificationApi'
 import { priorNotificationActions } from '../../slice'
+import { downloadPriorNotifications } from '../../useCases/downloadPriorNotifications'
 import { LogbookPriorNotificationForm } from '../LogbookPriorNotificationForm'
 import { ManualPriorNotificationForm } from '../ManualPriorNotificationForm'
 import { ReportingList } from '../ReportingList'
@@ -223,12 +221,20 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetching])
 
-  const download = () => {
-    const checkedPriorNotifications =
-      priorNotifications?.filter(priorNotification => rowSelectionAsArray.includes(priorNotification.reportId)) ?? []
-    const fileName = `${checkedPriorNotifications.length}-pno-${dayjs().format('DD-MM-YYYY')}`
+  const isAllSelected = table.getIsAllRowsSelected()
+  const downloadableCount = isAllSelected && totalLength !== undefined ? totalLength : rowSelectionAsArray.length
 
-    downloadAsCsv(fileName, checkedPriorNotifications, PRIOR_NOTIFICATIONS_CSV_MAP)
+  const download = () => {
+    dispatch(
+      downloadPriorNotifications({
+        apiSortingParams,
+        isAllSelected,
+        listFilter,
+        loadedPriorNotifications: priorNotifications ?? [],
+        selectedReportIds: rowSelectionAsArray,
+        totalLength: totalLength ?? 0
+      })
+    )
 
     trackEvent({
       action: `Export de PNOs au format CSV`,
@@ -267,7 +273,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
                 disabled={!rowSelectionAsArray.length}
                 Icon={Icon.Download}
                 onClick={download}
-                title={`Télécharger ${rowSelectionAsArray.length} préavis`}
+                title={`Télécharger ${downloadableCount} préavis`}
               />
               {isSuperUser && (
                 <Button

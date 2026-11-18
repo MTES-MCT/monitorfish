@@ -65,18 +65,20 @@ class SecurityConfigITests {
         private lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
         @Test
-        fun `Should redirect to login when accessing protected paths without authentication`() {
-            // Given
-            given(getActivePorts.execute()).willReturn(
-                listOf(
-                    PortFaker.fakePort(locode = "ET", name = "Etel"),
-                    PortFaker.fakePort(locode = "AY", name = "Auray"),
-                ),
-            )
-
+        fun `Should return 401 when accessing a BFF path without authentication`() {
             // When
             mockMvc
                 .perform(get("/bff/v1/ports"))
+                // Then
+                .andExpect(status().isUnauthorized)
+                .andExpect(header().doesNotExist("Location"))
+        }
+
+        @Test
+        fun `Should redirect to login when accessing other protected paths without authentication`() {
+            // When
+            mockMvc
+                .perform(get("/protected"))
                 // Then
                 .andExpect(status().isFound)
                 .andExpect(header().string("Location", "http://localhost:8080/oauth2/authorization/oidc"))

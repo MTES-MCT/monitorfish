@@ -54,6 +54,23 @@ describe('features/PriorNotification/components/PriorNotificationList/csvMap', (
     })
   })
 
+  it('should sort species by descending weight, then by species code', () => {
+    const result = toCsvRow({
+      ...PRIOR_NOTIFICATION,
+      onBoardCatches: [
+        { faoZone: '27.7.d', species: 'ANF', weight: 50 },
+        { faoZone: '27.7.d', species: 'SOL', weight: 800 },
+        { faoZone: '27.7.d', species: 'HKE', weight: 300 },
+        { faoZone: '27.7.e', species: 'BSS', weight: 300 }
+      ] as Logbook.Catch[]
+    })
+
+    expect(result).toMatchObject({
+      'Détail captures (kg)': 'SOL 800 / BSS 300 / HKE 300 / ANF 50',
+      Espèces: 'SOL / BSS / HKE / ANF'
+    })
+  })
+
   it('should return empty catch columns for a prior notification without catches', () => {
     const result = toCsvRow({ ...PRIOR_NOTIFICATION, onBoardCatches: [] })
 

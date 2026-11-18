@@ -46,6 +46,8 @@ enum class MissionActionType { SEA_CONTROL, LAND_CONTROL, AIR_CONTROL, AIR_SURVE
 
 enum class ReportingType { ALERT, OBSERVATION, INFRACTION_SUSPICION }
 
+enum class ScipSpeciesType { PELAGIC, DEMERSAL, TUNA, OTHER }
+
 enum class WeightControlMethod { WEIGHING, CRATE_COUNT, SAMPLING, NOT_APPLICABLE }
 
 enum class WireType { SINGLE, MANY }

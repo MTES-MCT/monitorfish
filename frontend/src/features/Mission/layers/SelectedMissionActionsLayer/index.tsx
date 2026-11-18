@@ -15,8 +15,10 @@ export function UnmemoizedSelectedMissionActionsLayer() {
   const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const draft = useMainAppSelector(store => store.missionForm.draft)
+  const draftActionsFormValues = draft?.actionsFormValues
+  const isDraftGeometryComputedFromControls = draft?.mainFormValues?.isGeometryComputedFromControls
   // Mounted with the map: the infractions would otherwise be downloaded with the vessels
-  const natinfsAsOptions = useGetNatinfsAsOptions({ skip: !selectedMissionGeoJSON && !draft?.actionsFormValues })
+  const natinfsAsOptions = useGetNatinfsAsOptions({ skip: !selectedMissionGeoJSON && !draftActionsFormValues })
 
   const selectedMissionActions = useMemo(() => {
     if (!selectedMissionGeoJSON) {
@@ -54,24 +56,12 @@ export function UnmemoizedSelectedMissionActionsLayer() {
 
   useMapLayer(SELECTED_MISSION_ACTIONS_VECTOR_LAYER)
 
-  useEffect(() => {
-    // If a mission is opened in the form, we can't display another selected mission
-    if (draft?.mainFormValues) {
-      return
+  const draftActionsFeatures = useMemo(() => {
+    if (!draftActionsFormValues) {
+      return undefined
     }
 
-    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.clear(true)
-
-    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(selectedMissionActions.concat(selectedMissionActionsZones))
-  }, [selectedMissionActions, selectedMissionActionsZones, draft?.mainFormValues])
-
-  useEffect(() => {
-    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.clear(true)
-    if (!draft?.actionsFormValues) {
-      return
-    }
-
-    const actionFeatures = draft.actionsFormValues
+    const actionFeatures = draftActionsFormValues
       .map(action => getMissionActionFeature(natinfsAsOptions, { ...action, missionId: missionId ?? NEW_MISSION_ID }))
       .filter((action): action is Feature => !!action)
 
@@ -79,14 +69,31 @@ export function UnmemoizedSelectedMissionActionsLayer() {
      * If the mission geometry is defined from actions, we create new OpenLayers Features
      * to create and display the zones around the controls.
      */
-    const actionZonesFeatures = draft?.mainFormValues?.isGeometryComputedFromControls
-      ? draft.actionsFormValues
+    const actionZonesFeatures = isDraftGeometryComputedFromControls
+      ? draftActionsFormValues
           .map(action => getMissionActionFeatureZone({ ...action }))
           .filter((action): action is Feature => !!action)
       : []
 
-    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(actionFeatures.concat(actionZonesFeatures))
-  }, [natinfsAsOptions, missionId, draft?.actionsFormValues, draft?.mainFormValues?.isGeometryComputedFromControls])
+    return actionFeatures.concat(actionZonesFeatures)
+  }, [natinfsAsOptions, missionId, draftActionsFormValues, isDraftGeometryComputedFromControls])
+
+  useEffect(() => {
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.clear(true)
+
+    if (draftActionsFeatures) {
+      SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(draftActionsFeatures)
+
+      return
+    }
+
+    // If a mission is opened in the form, we can't display another selected mission
+    if (draft?.mainFormValues) {
+      return
+    }
+
+    SELECTED_MISSION_ACTIONS_VECTOR_SOURCE.addFeatures(selectedMissionActions.concat(selectedMissionActionsZones))
+  }, [draftActionsFeatures, selectedMissionActions, selectedMissionActionsZones, draft?.mainFormValues])
 
   return null
 }

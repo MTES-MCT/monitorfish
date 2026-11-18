@@ -1,6 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.api.outputs
 
 import fr.gouv.cnsp.monitorfish.domain.entities.species.SpeciesAndSpeciesGroups
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.SpeciesDataOutput
 
 data class SpeciesAndSpeciesGroupsDataOutput(
     val species: List<SpeciesDataOutput>,
@@ -11,7 +12,7 @@ data class SpeciesAndSpeciesGroupsDataOutput(
             speciesAndSpeciesGroups: SpeciesAndSpeciesGroups,
         ): SpeciesAndSpeciesGroupsDataOutput =
             SpeciesAndSpeciesGroupsDataOutput(
-                speciesAndSpeciesGroups.species.map { SpeciesDataOutput.fromSpecies(it) },
+                speciesAndSpeciesGroups.species.map { it.toSpeciesDataOutput() },
                 speciesAndSpeciesGroups.groups.map { SpeciesGroupDataOutput.fromSpeciesGroup(it) },
             )
     }

@@ -9,6 +9,8 @@ copying them.
 | `PATCH /api/v1/mission_actions/{id}` | body `PatchableMissionActionDataInput`, response `PublicMissionActionDataOutput` |
 | `GET /api/v1/vessels`               | `List<VesselIdentityDataOutput>`                                      |
 | `GET /api/v1/ports`                 | `List<PortDataOutput>`                                                |
+| `GET /api/v1/species`               | `List<SpeciesDataOutput>`                                             |
+| `GET /api/v1/fao_areas`             | `List<String>`                                                        |
 
 ## Rules
 

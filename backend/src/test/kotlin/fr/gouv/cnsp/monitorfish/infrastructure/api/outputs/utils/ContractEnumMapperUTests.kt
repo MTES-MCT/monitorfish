@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.reflect.KClass
 import fr.gouv.cnsp.monitorfish.domain.entities.control_unit.ControlUnitResourceType as DomainControlUnitResourceType
+import fr.gouv.cnsp.monitorfish.domain.entities.fleet_segment.ScipSpeciesType as DomainScipSpeciesType
 import fr.gouv.cnsp.monitorfish.domain.entities.logbook.LogbookMessagePurpose as DomainLogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.Completion as DomainCompletion
 import fr.gouv.cnsp.monitorfish.domain.entities.mission.mission_actions.ControlCheck as DomainControlCheck
@@ -26,6 +27,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.InfractionType as Co
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.LogbookMessagePurpose as ContractLogbookMessagePurpose
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.MissionActionType as ContractMissionActionType
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ReportingType as ContractReportingType
+import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.ScipSpeciesType as ContractScipSpeciesType
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.WeightControlMethod as ContractWeightControlMethod
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.WireType as ContractWireType
 
@@ -44,6 +46,7 @@ class ContractEnumMapperUTests {
                 DomainLogbookMessagePurpose::class to ContractLogbookMessagePurpose::class,
                 DomainMissionActionType::class to ContractMissionActionType::class,
                 DomainReportingType::class to ContractReportingType::class,
+                DomainScipSpeciesType::class to ContractScipSpeciesType::class,
                 DomainWeightControlMethod::class to ContractWeightControlMethod::class,
                 DomainWireType::class to ContractWireType::class,
             )

@@ -1,4 +1,8 @@
-import { SidebarList, SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
+import {
+  SidebarHeader,
+  SidebarList,
+  SidebarZone
+} from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -23,7 +27,7 @@ export function YearsToBeaconMalfunctionList({
 
   return (
     <SidebarZone>
-      <Title>Historique des avaries VMS</Title>
+      <SidebarHeader>Historique des avaries VMS</SidebarHeader>
       {yearsToBeaconMalfunctions && Object.keys(yearsToBeaconMalfunctions)?.length ? (
         <SidebarList data-cy="vessel-beacon-malfunctions-history">
           {sortedYears.map(year => (
@@ -50,16 +54,4 @@ const NoBeaconMalfunction = styled.div`
   padding: 10px 0 10px 0;
   text-align: center;
   width: 100%;
-`
-
-const Title = styled.div`
-  color: ${THEME.color.gunMetal};
-  background: ${THEME.color.lightGray};
-  display: flex;
-  flex-shrink: 0;
-  flex-grow: 2;
-  font-size: 13px;
-  padding: 8.5px 10px 8px 20px;
-  width: 400px;
-  font-weight: 500;
 `

@@ -8,4 +8,6 @@ fun PatchableMissionActionDataInput.toPatchableMissionAction() =
         actionDatetimeUtc = actionDatetimeUtc,
         actionEndDatetimeUtc = actionEndDatetimeUtc,
         observationsByUnit = observationsByUnit,
+        isLocked = isLocked,
+        lastLockDatetimeUtc = lastLockDatetimeUtc,
     )

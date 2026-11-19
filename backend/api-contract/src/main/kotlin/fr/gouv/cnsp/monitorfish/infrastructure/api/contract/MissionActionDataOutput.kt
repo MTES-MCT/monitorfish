@@ -91,4 +91,6 @@ data class MissionActionDataOutput(
     val isUnitBoarded: Boolean? = null,
     val isEISR: Boolean? = null,
     val observationsByUnit: String? = null,
+    val isLocked: Boolean? = null,
+    val lastLockDatetimeUtc: ZonedDateTime? = null,
 )

@@ -11,4 +11,6 @@ data class PatchableMissionAction(
     var actionDatetimeUtc: Optional<ZonedDateTime>?,
     var actionEndDatetimeUtc: Optional<ZonedDateTime>?,
     var observationsByUnit: Optional<String>?,
+    var isLocked: Optional<Boolean>?,
+    var lastLockDatetimeUtc: Optional<ZonedDateTime>?,
 )

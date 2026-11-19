@@ -272,6 +272,43 @@ class JpaMissionActionRepositoryITests : AbstractDBTests() {
 
     @Test
     @Transactional
+    fun `save Should persist the lock fields and round-trip them correctly`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val lastLockDatetimeUtc = ZonedDateTime.parse("2026-11-18T10:00:00Z")
+        val newMission =
+            getDummyMissionAction(dateTime).copy(
+                isLocked = true,
+                lastLockDatetimeUtc = lastLockDatetimeUtc,
+            )
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.isLocked).isTrue()
+        assertThat(loaded.lastLockDatetimeUtc).isEqualTo(lastLockDatetimeUtc)
+    }
+
+    @Test
+    @Transactional
+    fun `save Should default the lock fields to null When not provided`() {
+        // Given
+        val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+        val newMission = getDummyMissionAction(dateTime)
+
+        // When
+        val saved = jpaMissionActionsRepository.save(newMission)
+        val loaded = jpaMissionActionsRepository.findById(saved.id!!)
+
+        // Then
+        assertThat(loaded.isLocked).isNull()
+        assertThat(loaded.lastLockDatetimeUtc).isNull()
+    }
+
+    @Test
+    @Transactional
     fun `save Should persist the vesselGroups and tripReportings snapshot and round-trip it intact`() {
         // Given
         val dateTime = ZonedDateTime.now(ZoneId.of("UTC"))

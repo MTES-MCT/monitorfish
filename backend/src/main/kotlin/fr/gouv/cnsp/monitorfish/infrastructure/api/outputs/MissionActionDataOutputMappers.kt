@@ -118,4 +118,6 @@ fun MissionAction.toMissionActionDataOutput(useThreatHierarchyForForm: Boolean =
         isUnitBoarded = isUnitBoarded,
         isEISR = isEISR,
         observationsByUnit = observationsByUnit,
+        isLocked = isLocked,
+        lastLockDatetimeUtc = lastLockDatetimeUtc,
     )

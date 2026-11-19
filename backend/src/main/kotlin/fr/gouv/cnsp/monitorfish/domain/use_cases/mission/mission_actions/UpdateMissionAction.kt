@@ -39,6 +39,8 @@ class UpdateMissionAction(
                 speciesOnboard = speciesOnboard,
                 actionEndDatetimeUtc = previousMissionAction.actionEndDatetimeUtc,
                 observationsByUnit = previousMissionAction.observationsByUnit,
+                isLocked = previousMissionAction.isLocked,
+                lastLockDatetimeUtc = previousMissionAction.lastLockDatetimeUtc,
                 id = actionId,
                 facade = facade,
                 isPrioritized = action.computeIsPrioritized(),

@@ -118,4 +118,23 @@ class ContractDeserializationUTests {
         // Then
         assertThat(json).isEqualTo("""{"actionEndDatetimeUtc":null,"observationsByUnit":"RAS"}""")
     }
+
+    @Test
+    fun `PatchableMissionActionDataInput Should send the lock fields When they are set`() {
+        // Given
+        val input =
+            PatchableMissionActionDataInput(
+                actionDatetimeUtc = null,
+                actionEndDatetimeUtc = null,
+                observationsByUnit = null,
+                isLocked = Optional.of(true),
+                lastLockDatetimeUtc = Optional.empty(),
+            )
+
+        // When
+        val json = mapper.writeValueAsString(input)
+
+        // Then
+        assertThat(json).isEqualTo("""{"isLocked":true,"lastLockDatetimeUtc":null}""")
+    }
 }

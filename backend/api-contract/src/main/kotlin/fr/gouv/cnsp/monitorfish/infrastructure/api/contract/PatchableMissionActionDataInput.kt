@@ -15,4 +15,6 @@ data class PatchableMissionActionDataInput(
     val actionDatetimeUtc: Optional<ZonedDateTime>?,
     val actionEndDatetimeUtc: Optional<ZonedDateTime>?,
     val observationsByUnit: Optional<String>?,
+    val isLocked: Optional<Boolean>? = null,
+    val lastLockDatetimeUtc: Optional<ZonedDateTime>? = null,
 )

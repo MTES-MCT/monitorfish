@@ -86,6 +86,8 @@
     // Its fixer strips `export {}` from .d.ts files, turning them into non-modules where
     // `declare global` no longer applies (breaks src/matomo.d.ts).
     "typescript/no-useless-empty-export": "off",
+    // Same fixer, same breakage.
+    "unicorn/require-module-specifiers": "off",
 
     "no-restricted-imports": [
       "error",

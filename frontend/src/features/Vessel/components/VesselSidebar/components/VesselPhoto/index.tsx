@@ -36,7 +36,7 @@ export function VesselPhoto() {
 
   if (photo && photo.url !== failedPhotoUrl) {
     return (
-      <Zone data-cy="vessel-photo">
+      <PhotoZone data-cy="vessel-photo">
         <PhotoFrame>
           <Photo
             alt="Photo du navire"
@@ -46,7 +46,7 @@ export function VesselPhoto() {
           />
           <Credits title={photo.attribution}>{photo.attribution}</Credits>
         </PhotoFrame>
-      </Zone>
+      </PhotoZone>
     )
   }
 
@@ -92,6 +92,10 @@ const Zone = styled.div<{ $height?: number }>`
   margin-bottom: 10px;
   padding: 10px;
   ${p => (p.$height ? `height: ${p.$height}px;` : '')}
+`
+
+const PhotoZone = styled(Zone)`
+  padding: 16px;
 `
 
 const PhotoFrame = styled.div`

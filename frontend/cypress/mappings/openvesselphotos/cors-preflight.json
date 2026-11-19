@@ -1,0 +1,16 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "OPTIONS",
+    "urlPattern": "/v1/.*"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Headers": "x-api-key",
+      "Access-Control-Max-Age": "86400"
+    }
+  }
+}

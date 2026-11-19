@@ -1,6 +1,7 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { WSG84_PROJECTION } from '@features/Map/constants'
 import { RiskFactorResume } from '@features/RiskFactor/components/RiskFactorResume'
+import { VesselPhoto } from '@features/Vessel/components/VesselSidebar/components/VesselPhoto'
 import { VesselProfile } from '@features/Vessel/components/VesselSidebar/components/VesselProfile'
 import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedVesselGroups'
@@ -43,6 +44,7 @@ export function VesselSummary() {
 
   return !loadingVessel ? (
     <Body>
+      <VesselPhoto />
       <ZoneWithoutBackground>
         <LatLon>
           <FieldName>Latitude</FieldName>

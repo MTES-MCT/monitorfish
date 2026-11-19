@@ -2,6 +2,10 @@
 
 import { openVesselBySearch } from '../utils'
 
+// On any host: it is a stub when running locally (see `FRONTEND_OPEN_VESSEL_PHOTOS_API_URL`)
+const OPEN_VESSEL_PHOTOS_VESSEL_URL = /^https?:\/\/[^/]+\/v1\/cfr\/[^/]+$/
+const OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL = /^https?:\/\/[^/]+\/v1\/submissions\?/
+
 context('Vessel sidebar resume tab', () => {
   beforeEach(() => {
     cy.login('superuser')
@@ -163,5 +167,143 @@ context('Vessel sidebar resume tab', () => {
 
     // Landing ports
     cy.get('[title="Brest (100.0%)"]').should('have.css', 'width', '416px').contains('Brest (100.0%)')
+  })
+
+  it('Vessel photo Should be displayed with its credits When Open Vessel Photos has one', () => {
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_VESSEL_URL, {
+      body: {
+        photos: [
+          {
+            attribution: 'Photo: Jean Dupont / Open Vessel Photos (CC BY 4.0)',
+            urls: { cfr: '/icone_navire_3B4559.png', mmsi: '/icone_navire_3B4559.png' }
+          }
+        ]
+      }
+    }).as('getOpenVesselPhoto')
+
+    openVesselBySearch('Pheno')
+    cy.wait('@getOpenVesselPhoto')
+
+    cy.getDataCy('vessel-photo').find('img').should('have.attr', 'src', '/icone_navire_3B4559.png')
+    cy.getDataCy('vessel-photo').contains('Photo : Jean Dupont / Open Vessel Photos (CC BY 4.0)')
+    cy.getDataCy('vessel-photo-missing').should('not.exist')
+  })
+
+  it('Vessel photo Should invite to add a photo on Open Vessel Photos When there is none', () => {
+    openVesselBySearch('Pheno')
+
+    cy.getDataCy('vessel-photo').should('not.exist')
+    cy.getDataCy('vessel-photo-missing').contains("Ce navire n'a pas encore de photo libre de droits.")
+
+    cy.clickButton('Ajouter une photo du navire')
+    cy.contains('Ajouter votre photo du navire').should('be.visible')
+
+    cy.window().then(win => {
+      cy.stub(win, 'open').as('openContributeForm')
+    })
+    cy.clickButton('Ajouter la photo sur Open Vessel Photos')
+
+    // The application and the contributor let MonitorFish follow the review of the photo
+    cy.get('@openContributeForm').should(
+      'be.calledWithMatch',
+      /^https:\/\/openvesselphotos\.org\/fr\/contribute\?cfr=FAK000999999&mmsi=224103750&app=app_[a-z0-9]{12}&contributorId=[0-9a-f]{64}$/,
+      '_blank'
+    )
+    cy.contains('Ajouter votre photo du navire').should('not.exist')
+  })
+
+  it('Vessel photo Should thank the user When the photo sent is received, and show it as pending', () => {
+    let submissions: object[] = []
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, request => {
+      request.reply({ body: submissions })
+    }).as('getSubmissions')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.wait('@getSubmissions')
+
+    openVesselBySearch('Pheno')
+    cy.getDataCy('vessel-photo-pending').should('not.exist')
+
+    // The user sends the photo on Open Vessel Photos, then comes back to MonitorFish
+    cy.then(() => {
+      submissions = [
+        {
+          cfr: 'FAK000999999',
+          id: 1,
+          mmsi: '224103750',
+          rejectReason: null,
+          reviewedAt: null,
+          status: 'PENDING',
+          submittedAt: '2026-11-19T09:00:00Z',
+          urls: null,
+          vesselName: 'PHENOMENE'
+        }
+      ]
+    })
+    cy.window().then(win => win.dispatchEvent(new Event('focus')))
+    cy.wait('@getSubmissions')
+
+    cy.contains('Merci pour votre contribution ! Vous serez notifié·e dans MonitorFish').should('be.visible')
+    cy.getDataCy('vessel-photo-pending').contains('elle est en attente de vérification')
+    cy.getDataCy('vessel-photo-missing').find('button').should('be.disabled')
+  })
+
+  it('Vessel photo Should congratulate the user When the photo sent is approved', () => {
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, {
+      body: [
+        {
+          cfr: 'FAK000999999',
+          id: 2,
+          mmsi: '224103750',
+          rejectReason: null,
+          reviewedAt: '2026-11-19T10:00:00Z',
+          status: 'APPROVED',
+          submittedAt: '2026-11-19T09:00:00Z',
+          urls: { cfr: '/icone_navire_3B4559.png', mmsi: '/icone_navire_3B4559.png' },
+          vesselName: 'PHENOMENE'
+        }
+      ]
+    }).as('getSubmissions')
+    cy.intercept('POST', /\/v1\/submissions\/2\/seen$/, { statusCode: 204 }).as('markSubmissionAsSeen')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+
+    cy.getDataCy('open-vessel-photo-submission-notification').contains("Ajout d'une photo du navire Phenomene")
+    cy.getDataCy('open-vessel-photo-submission-notification').contains('Félicitations !')
+    cy.getDataCy('open-vessel-photo-submission-notification').contains('a été vérifiée et ajoutée à MonitorFish')
+
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, { body: [] })
+    cy.clickButton('Fermer')
+
+    cy.wait('@markSubmissionAsSeen').its('request.headers').should('have.property', 'x-api-key')
+    cy.getDataCy('open-vessel-photo-submission-notification').should('not.exist')
+  })
+
+  it('Vessel photo Should tell the user why When the photo sent is rejected', () => {
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, {
+      body: [
+        {
+          cfr: 'FAK000999999',
+          id: 3,
+          mmsi: '224103750',
+          rejectReason: 'Poor quality or vessel not visible',
+          reviewedAt: '2026-11-19T10:00:00Z',
+          status: 'REJECTED',
+          submittedAt: '2026-11-19T09:00:00Z',
+          urls: null,
+          vesselName: 'PHENOMENE'
+        }
+      ]
+    })
+    cy.intercept('POST', /\/v1\/submissions\/3\/seen$/, { statusCode: 204 }).as('markSubmissionAsSeen')
+    cy.visit('/#@-824534.42,6082993.21,8.70')
+
+    cy.getDataCy('open-vessel-photo-submission-notification').contains(
+      "n'a pas été acceptée : Poor quality or vessel not visible"
+    )
+
+    cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, { body: [] })
+    cy.clickButton('Fermer')
+
+    cy.wait('@markSubmissionAsSeen')
+    cy.getDataCy('open-vessel-photo-submission-notification').should('not.exist')
   })
 })

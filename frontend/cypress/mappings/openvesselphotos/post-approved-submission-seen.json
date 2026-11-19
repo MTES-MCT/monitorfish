@@ -1,0 +1,22 @@
+{
+  "priority": 1,
+  "scenarioName": "Approved photo",
+  "newScenarioState": "Seen",
+  "request": {
+    "method": "POST",
+    "url": "/v1/submissions/2/seen",
+    "headers": {
+      "x-api-key": {
+        "equalTo": "ovp_local"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Headers": "x-api-key"
+    }
+  }
+}

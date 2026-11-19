@@ -54,6 +54,13 @@ services:
     volumes:
       - ./frontend/cypress/mappings/rapportnav:/home/wiremock/mappings
 
+  openvesselphotos-stubs:
+    image: rodolpheche/wiremock
+    ports:
+      - 8083:8080
+    volumes:
+      - ./frontend/cypress/mappings/openvesselphotos:/home/wiremock/mappings
+
   keycloak:
     container_name: monitorfish_keycloak
     image: quay.io/keycloak/keycloak:23.0.0

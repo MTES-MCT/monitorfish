@@ -185,7 +185,7 @@ context('Vessel sidebar resume tab', () => {
     cy.wait('@getOpenVesselPhoto')
 
     cy.getDataCy('vessel-photo').find('img').should('have.attr', 'src', '/icone_navire_3B4559.png')
-    cy.getDataCy('vessel-photo').contains('Photo : Jean Dupont / Open Vessel Photos (CC BY 4.0)')
+    cy.getDataCy('vessel-photo').contains('Photo: Jean Dupont / Open Vessel Photos (CC BY 4.0)')
     cy.getDataCy('vessel-photo-missing').should('not.exist')
   })
 
@@ -217,7 +217,7 @@ context('Vessel sidebar resume tab', () => {
     cy.intercept('GET', OPEN_VESSEL_PHOTOS_SUBMISSIONS_URL, request => {
       request.reply({ body: submissions })
     }).as('getSubmissions')
-    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.reload()
     cy.wait('@getSubmissions')
 
     openVesselBySearch('Pheno')
@@ -264,7 +264,7 @@ context('Vessel sidebar resume tab', () => {
       ]
     }).as('getSubmissions')
     cy.intercept('POST', /\/v1\/submissions\/2\/seen$/, { statusCode: 204 }).as('markSubmissionAsSeen')
-    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.reload()
 
     cy.getDataCy('open-vessel-photo-submission-notification').contains("Ajout d'une photo du navire Phenomene")
     cy.getDataCy('open-vessel-photo-submission-notification').contains('Félicitations !')
@@ -294,7 +294,7 @@ context('Vessel sidebar resume tab', () => {
       ]
     })
     cy.intercept('POST', /\/v1\/submissions\/3\/seen$/, { statusCode: 204 }).as('markSubmissionAsSeen')
-    cy.visit('/#@-824534.42,6082993.21,8.70')
+    cy.reload()
 
     cy.getDataCy('open-vessel-photo-submission-notification').contains(
       "n'a pas été acceptée : Poor quality or vessel not visible"

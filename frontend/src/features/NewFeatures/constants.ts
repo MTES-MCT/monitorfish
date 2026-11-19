@@ -7,6 +7,15 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-11-19',
+        description: `Les photos des navires sont de retour dans l'onglet « Résumé » de la fiche navire. Elles proviennent désormais d'[Open Vessel Photos](https://openvesselphotos.org/fr), une photothèque ouverte de navires sous licence libre, et sont affichées avec leurs crédits.
+
+Si un navire n'a pas encore de photo, le bouton « Ajouter une photo du navire » vous redirige vers le formulaire d'Open Vessel Photos, avec le CFR et le MMSI du navire déjà renseignés. La fiche navire indique ensuite que votre photo est en attente de vérification, et vous êtes notifié·e dans MonitorFish dès qu'elle est acceptée.`,
+        for: 'ALL',
+        title: `Fiche navire – Retour des photos des navires`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-10-21',
         description: `L'export CSV de la liste des signalements contient désormais la **position** des signalements (colonnes « Latitude » et « Longitude »), lorsqu'elle a été renseignée.
 

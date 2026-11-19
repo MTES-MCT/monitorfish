@@ -9,6 +9,19 @@ import type { StartupNotification } from '@features/StartupNotification/types'
  */
 export const STARTUP_NOTIFICATIONS: StartupNotification[] = [
   {
+    body: `Les photos des navires s'affichent à nouveau dans l'onglet « Résumé » de la fiche navire, grâce à **Open Vessel Photos**, une photothèque ouverte de navires sous licence libre.
+
+Beaucoup de navires n'ont pas encore de photo : **vous pouvez nous aider à les compléter !** Si vous photographiez un navire lors d'un contrôle, partagez-la en quelques clics depuis le bouton « Ajouter une photo du navire » de la fiche navire : le CFR et le MMSI sont déjà renseignés, et vous serez notifié·e dans MonitorFish dès qu'elle sera acceptée.
+
+Chaque photo partagée aide l'ensemble des utilisateurs de MonitorFish.
+
+Merci pour vos contributions !`,
+    for: 'ALL',
+    id: 'vessel-photos-2026-11',
+    title: 'Les photos des navires sont de retour !',
+    until: '2027-01-19'
+  },
+  {
     body: `Suite à vos retours sur le questionnaire d'utilisation du logiciel MonitorFish, le CNSP organise un webinaire de présentation et de prise en main de l'outil.
 
 Ce webinaire permettra de vous présenter en direct les différents modules de MonitorFish et de répondre à vos questions.

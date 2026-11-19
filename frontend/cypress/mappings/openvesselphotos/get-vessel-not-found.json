@@ -1,0 +1,20 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPattern": "/v1/(cfr|mmsi)/[^/]+"
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Headers": "x-api-key"
+    },
+    "jsonBody": {
+      "code": "NOT_FOUND",
+      "message": "No vessel with this key."
+    }
+  }
+}

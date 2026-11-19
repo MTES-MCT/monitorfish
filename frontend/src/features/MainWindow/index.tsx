@@ -6,6 +6,7 @@ import { IUUReportingMapForm } from '@features/Reporting/components/IUUReporting
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { StartupNotification } from '@features/StartupNotification/components'
 import { useSaveUserLayersOnChange } from '@features/UserLayers/hooks/useSaveUserLayersOnChange'
+import { OpenVesselPhotoSubmissionNotification } from '@features/Vessel/components/OpenVesselPhotoSubmissionNotification'
 import { VesselFiltersHeadband } from '@features/Vessel/components/VesselFiltersHeadband'
 import { VesselGroupMainWindowEdition } from '@features/VesselGroup/components/VesselGroupMainWindowEdition'
 import { trackEvent } from '@hooks/useTracking'
@@ -71,6 +72,7 @@ export function MainWindow() {
         <EnvironmentBox />
         <BannerStack />
         <StartupNotification />
+        <OpenVesselPhotoSubmissionNotification />
 
         <VesselFiltersHeadband />
 

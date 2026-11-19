@@ -1,0 +1,34 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "url": "/v1/cfr/ABC000670955"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Headers": "x-api-key"
+    },
+    "jsonBody": {
+      "cfr": "ABC000670955",
+      "mmsi": "616167786",
+      "name": "PRONONCER SYSTÈME CAS",
+      "photos": [
+        {
+          "n": 1,
+          "urls": {
+            "cfr": "https://openvesselphotos.org/v1/cfr/FRA000295304/photos/1.jpg",
+            "mmsi": "https://openvesselphotos.org/v1/cfr/FRA000295304/photos/1.jpg"
+          },
+          "credit": "Alf van Beem",
+          "licence": "CC0-1.0",
+          "licenceName": "CC0",
+          "attribution": "Photo: Alf van Beem / Open Vessel Photos (CC0)"
+        }
+      ]
+    }
+  }
+}

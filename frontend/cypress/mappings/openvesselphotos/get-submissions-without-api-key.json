@@ -1,0 +1,20 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPath": "/v1/submissions"
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Headers": "x-api-key"
+    },
+    "jsonBody": {
+      "code": "UNAUTHORIZED",
+      "message": "A valid API key is required (x-api-key header)."
+    }
+  }
+}

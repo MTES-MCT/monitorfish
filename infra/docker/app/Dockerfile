@@ -51,7 +51,7 @@ RUN npx pkg ./node_modules/@import-meta-env/cli/bin/import-meta-env.js \
 ######################
 # Create final image #
 ######################
-FROM azul/zulu-openjdk-alpine:25-jre
+FROM azul-zulu:25-jre-alpine
 
 ARG VERSION
 ENV VERSION=$VERSION

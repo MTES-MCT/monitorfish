@@ -129,4 +129,8 @@ beforeEach(() => {
   }).as('getUserLayers')
   cy.intercept('PUT', '/bff/v1/user_layers', request => request.reply(request.body)).as('saveUserLayers')
   cy.intercept('POST', '/bff/v1/user_layers/init', request => request.reply(request.body))
+  // No vessel photo nor photo sent by default, so that specs don't depend on Open Vessel Photos
+  // (on any host: it is a stub when running locally, see `FRONTEND_OPEN_VESSEL_PHOTOS_API_URL`)
+  cy.intercept({ url: /^https?:\/\/[^/]+\/v1\/(cfr|mmsi)\// }, { body: {}, statusCode: 404 })
+  cy.intercept({ url: /^https?:\/\/[^/]+\/v1\/submissions/ }, { body: [] })
 })

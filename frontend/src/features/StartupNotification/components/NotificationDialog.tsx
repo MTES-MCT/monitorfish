@@ -51,4 +51,10 @@ const StyledBody = styled(Dialog.Body)`
     color: ${p => p.theme.color.charcoal};
     font-size: 16px !important;
   }
+
+  ul {
+    list-style: disc;
+    margin-bottom: 12px;
+    padding-left: 24px;
+  }
 `

@@ -45,6 +45,8 @@ export enum HttpStatusCode {
 export enum RtkCacheTagType {
   ActiveVessels = 'ActiveVessels',
   FavoriteVessels = 'FavoriteVessels',
+  OpenVesselPhotoSubmissions = 'OpenVesselPhotoSubmissions',
+  OpenVesselPhotos = 'OpenVesselPhotos',
   PriorNotificationDocuments = 'PriorNotificationDocuments',
   PriorNotificationSubscribers = 'PriorNotificationSubscribers',
   PriorNotificationTypes = 'PriorNotificationTypes',

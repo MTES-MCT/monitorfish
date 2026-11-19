@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.AuthenticationException
@@ -25,9 +26,12 @@ import org.springframework.security.oauth2.core.OAuth2Error
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.HttpStatusEntryPoint
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
@@ -259,6 +263,8 @@ class SecurityConfig(
                         }.loginPage(oidcProperties.loginUrl)
                         .successHandler(successHandler())
                         .failureHandler(authenticationFailureHandler())
+                }.exceptionHandling { exceptionHandling ->
+                    exceptionHandling.authenticationEntryPoint(authenticationEntryPoint())
                 }.logout { logout ->
                     logout
                         .logoutSuccessHandler(oidcLogoutSuccessHandler(clientRegistrationRepository))
@@ -266,11 +272,27 @@ class SecurityConfig(
                             PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"),
                         ).invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("SESSION")
                 }
         }
 
         return http.build()
+    }
+
+    /**
+     * A redirection to the identity provider can't be followed by the frontend `fetch()` (it fails on CORS without any
+     * status): BFF requests get a 401 instead, so that the frontend redirects the user to the login page.
+     */
+    private fun authenticationEntryPoint(): AuthenticationEntryPoint {
+        val bffRequestMatcher = PathPatternRequestMatcher.withDefaults().matcher("/bff/**")
+        val unauthorizedEntryPoint = HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
+        val loginEntryPoint = LoginUrlAuthenticationEntryPoint(oidcProperties.loginUrl)
+
+        return AuthenticationEntryPoint { request, response, exception ->
+            val entryPoint = if (bffRequestMatcher.matches(request)) unauthorizedEntryPoint else loginEntryPoint
+
+            entryPoint.commence(request, response, exception)
+        }
     }
 
     @Bean

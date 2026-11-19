@@ -22,6 +22,7 @@ const UPDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu modifier le
 const GET_PRIOR_NOTIFICATION_DETAIL_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le préavis."
 const GET_PRIOR_NOTIFICATIONS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des préavis."
 const GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE = "Nous n'avons pas pu récupérer la liste des types de préavis."
+const GET_PRIOR_NOTIFICATIONS_TO_VERIFY_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les préavis à vérifier."
 const GET_PRIOR_NOTIFICATION_PDF_ERROR_MESSAGE = "Nous n'avons pas pu récupérer le PDF du préavis."
 const VERIFY_AND_SEND_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu vérifier et envoyer le préavis."
 const INVALIDATE_PRIOR_NOTIFICATION_ERROR_MESSAGE = "Nous n'avons pas pu invalider et envoyer le préavis."
@@ -134,7 +135,8 @@ export const priorNotificationApi = monitorfishApi.injectEndpoints({
     getPriorNotificationsToVerify: builder.query<Logbook.ApiListExtraData, void>({
       providesTags: () => [{ type: RtkCacheTagType.PriorNotificationsToVerify }],
       query: () => '/prior_notifications/to_verify',
-      transformErrorResponse: response => new FrontendApiError(GET_PRIOR_NOTIFICATION_TYPES_ERROR_MESSAGE, response)
+      transformErrorResponse: response =>
+        new FrontendApiError(GET_PRIOR_NOTIFICATIONS_TO_VERIFY_ERROR_MESSAGE, response)
     }),
 
     getPriorNotificationTypes: builder.query<string[], void>({

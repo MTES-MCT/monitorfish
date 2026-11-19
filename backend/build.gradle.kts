@@ -101,6 +101,7 @@ dependencies {
     api("org.springframework.security:spring-security-oauth2-resource-server:$springSecurityVersion")
     api("org.springframework.security:spring-security-oauth2-jose:$springSecurityVersion")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-session-jdbc:$springBootVersion")
     // Renamed from spring-cloud-gateway-mvc in Spring Cloud 2025.x; version managed by the BOM so it
     // stays compatible with Spring Boot 4. Keeps the org.springframework.cloud.gateway.mvc.* package.
     implementation("org.springframework.cloud:spring-cloud-gateway-proxyexchange-webmvc")

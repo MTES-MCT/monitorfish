@@ -29,8 +29,15 @@ export class FrontendApiError extends FrontendError {
     const scope = new Scope()
     scope.setTags({
       correlationId: this.originalError?.correlationId,
+      httpStatus: this.originalError?.status,
       side: 'frontend',
       type: 'api_error'
+    })
+    // A `CustomResponseError` is not an `Error`: Sentry drops it from the exception `cause`
+    scope.setContext('apiError', {
+      path: this.originalError?.path,
+      responseData: this.originalError?.responseData,
+      status: this.originalError?.status
     })
 
     return scope

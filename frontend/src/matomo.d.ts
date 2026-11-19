@@ -1,5 +1,3 @@
-export {}
-
 declare global {
   interface Window {
     _paq: MatomoQueue
@@ -26,4 +24,5 @@ declare global {
     | ['setDocumentTitle', string]
     | ['setCookieConsentGiven']
     | ['trackLink', string, string]
+    | ['trackSiteSearch', string, string?, number?]
 }

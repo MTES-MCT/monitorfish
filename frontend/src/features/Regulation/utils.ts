@@ -738,3 +738,8 @@ export const checkURL = url => {
 
   return regex.test(url)
 }
+
+export const countRegulatoryZones = (regulatoryLawTypes: RegulatoryLawTypes | undefined): number =>
+  Object.values(regulatoryLawTypes ?? {})
+    .flatMap(topics => Object.values(topics))
+    .reduce((count, zones) => count + zones.length, 0)

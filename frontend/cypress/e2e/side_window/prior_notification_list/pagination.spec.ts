@@ -94,7 +94,8 @@ context('Side Window > Prior Notification List > Pagination', () => {
           pageNumber: 0,
           pageSize: 100,
           totalLength: 100
-        }
+        },
+        delay: 1000
       }).as('getAllPriorNotifications')
 
       openSideWindowPriorNotificationListAsSuperUser()
@@ -104,11 +105,17 @@ context('Side Window > Prior Notification List > Pagination', () => {
       cy.get('label').contains('Sélectionner tous les préavis').click({ force: true })
       cy.clickButton('Télécharger 100 préavis')
 
+      cy.get('button[title="Téléchargement de 100 préavis en cours..."]').should('be.disabled')
+      cy.get('[data-cy="prior-notification-list-downloading-icon"]').should('exist')
+
       cy.wait('@getAllPriorNotifications')
 
       cy.getDownloadedFileContent(content => {
         content.should('contain', 'FAKE_REPORT_ID_0').should('contain', 'FAKE_REPORT_ID_99')
       })
+
+      cy.get('button[title="Télécharger 100 préavis"]').should('be.enabled')
+      cy.get('[data-cy="prior-notification-list-downloading-icon"]').should('not.exist')
     })
   })
 })

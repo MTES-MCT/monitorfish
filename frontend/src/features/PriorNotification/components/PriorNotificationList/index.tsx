@@ -34,6 +34,7 @@ import styled, { css } from 'styled-components'
 
 import { getTableColumns } from './columns'
 import { DEFAULT_PAGE_SIZE, SUB_MENUS_AS_OPTIONS } from './constants'
+import { DownloadingIcon } from './DownloadingIcon'
 import { FilterBar } from './FilterBar'
 import { FilterTags } from './FilterTags'
 import { Row } from './Row'
@@ -73,6 +74,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const rowSelectionAsArray = Object.keys(rowSelection).map(String)
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [lastFetchDuration, setLastFetchDuration] = useState<number | undefined>(undefined)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const { apiPaginationParams, reactTablePaginationState, setReactTablePaginationState } = useListPagination(
     DEFAULT_PAGE_SIZE,
@@ -225,7 +227,8 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
   const downloadableCount = isAllSelected && totalLength !== undefined ? totalLength : rowSelectionAsArray.length
 
   const download = () => {
-    dispatch(
+    setIsDownloading(true)
+    void dispatch(
       downloadPriorNotifications({
         apiSortingParams,
         isAllSelected,
@@ -234,7 +237,7 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
         selectedReportIds: rowSelectionAsArray,
         totalLength: totalLength ?? 0
       })
-    )
+    ).finally(() => setIsDownloading(false))
 
     trackEvent({
       action: `Export de PNOs au format CSV`,
@@ -270,10 +273,14 @@ export function PriorNotificationList({ isFromUrl }: PriorNotificationListProps)
               } préavis (tous les horaires sont en UTC) en ${isBodyLoaderVisible || isError || lastFetchDuration === undefined ? '...' : `${lastFetchDuration / 1000}s`}`}</TableLegend>
 
               <IconButton
-                disabled={!rowSelectionAsArray.length}
-                Icon={Icon.Download}
+                disabled={!rowSelectionAsArray.length || isDownloading}
+                Icon={isDownloading ? DownloadingIcon : Icon.Download}
                 onClick={download}
-                title={`Télécharger ${downloadableCount} préavis`}
+                title={
+                  isDownloading
+                    ? `Téléchargement de ${downloadableCount} préavis en cours...`
+                    : `Télécharger ${downloadableCount} préavis`
+                }
               />
               {isSuperUser && (
                 <Button

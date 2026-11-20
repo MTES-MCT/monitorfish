@@ -65,6 +65,7 @@
     "yoda": "error",
 
     "import/no-default-export": "error",
+    "import/no-duplicates": "error",
 
     "react/jsx-pascal-case": ["error", { "ignore": ["LEGACY_*"] }],
     "react/react-in-jsx-scope": "off",

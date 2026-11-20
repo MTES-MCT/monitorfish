@@ -81,6 +81,7 @@ def expected_pno_types() -> pd.DataFrame:
             ],
             "minimum_notification_period": [4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
             "has_designated_ports": [True, True, True, True, True, True, True],
+            "is_duration_class": [False] * 7,
             "pno_type_rule_id": [1, 2, 3, 4, 5, 6, 7],
             "species": [
                 ["HKE", "BSS", "COD", "ANF", "SOL"],
@@ -123,6 +124,13 @@ def expected_pno_types() -> pd.DataFrame:
             "gears": [[], [], [], [], [], [], ["SB"]],
             "flag_states": [[], [], [], [], [], ["GBR", "VEN"], []],
             "minimum_quantity_kg": [0.0, 0.0, 10000.0, 2000.0, 10000.0, 0.0, 0.0],
+            "facades": [[]] * 7,
+            "vessel_department_codes": [[]] * 7,
+            "min_vessel_length": [None] * 7,
+            "max_vessel_length": [None] * 7,
+            "min_trip_duration_hours": [None] * 7,
+            "max_trip_duration_hours": [None] * 7,
+            "has_catches_on_board": [None] * 7,
         }
     )
 
@@ -278,6 +286,48 @@ def sample_pno_catches() -> pd.DataFrame:
             "country_code_iso2": ["GB"] + ["FR"] * 11,
             "vessel_type": ["Navire polyvalent"] * 12,
             "scip_species_type": [None] * 12,
+            "trip_duration_hours": [
+                12.0,
+                36.0,
+                100.0,
+                None,
+                None,
+                None,
+                48.0,
+                48.0,
+                48.0,
+                6.5,
+                20.0,
+                2.0,
+            ],
+            "vessel_length": [
+                14.0,
+                25.0,
+                30.0,
+                11.5,
+                11.5,
+                11.5,
+                None,
+                None,
+                None,
+                18.0,
+                14.0,
+                8.0,
+            ],
+            "vessel_department_code": [
+                "29",
+                "56",
+                None,
+                "13",
+                "13",
+                "13",
+                "35",
+                "35",
+                "35",
+                "34",
+                "29",
+                "971",
+            ],
         }
     )
 
@@ -312,6 +362,7 @@ def expected_pno_catches() -> pd.DataFrame:
                 datetime(2020, 5, 6, 20, 41, 3, 340000),
                 datetime(2020, 5, 6, 20, 41, 9, 200000),
             ],
+            "trip_duration_hours": [49.0, 49.0],
             "year": [2020, 2020],
             "species": ["GHL", None],
             "trip_gears": [
@@ -325,6 +376,8 @@ def expected_pno_catches() -> pd.DataFrame:
             "facade": ["MEMN", "Hors façade"],
             "country_code_iso2": ["FR", "NO"],
             "vessel_type": [None, None],
+            "vessel_length": [None, None],
+            "vessel_department_code": [None, None],
             "scip_species_type": ["DEMERSAL", None],
         }
     )
@@ -412,6 +465,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                 datetime(2023, 5, 10),
                 datetime(2023, 5, 11),
             ],
+            "trip_duration_hours": [12.0, 36.0, 100.0, np.nan, 48.0, 6.5, 20.0, 2.0],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -431,6 +485,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -438,11 +493,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -450,11 +507,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par pavillon",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -462,6 +521,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -469,11 +529,13 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 np.nan,
@@ -483,6 +545,7 @@ def expected_computed_pno_types() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par engin",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
             ],
@@ -554,15 +617,18 @@ def pnos_to_load() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 None,
             ],
+            "trip_duration_hours": [25.5, np.nan],
             "trip_segments": [
                 None,
                 [
@@ -626,16 +692,19 @@ def expected_loaded_pnos() -> pd.DataFrame:
                     {
                         "pnoTypeName": "Préavis type 1",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                 ],
                 [],
             ],
+            "trip_duration_hours": [np.nan, 25.5, np.nan],
             "trip_segments": [
                 None,
                 [],
@@ -653,7 +722,7 @@ def expected_loaded_pnos() -> pd.DataFrame:
 
 
 @pytest.fixture
-def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame:
+def expected_loaded_pnos_bis() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "id": [8, 13, 14],
@@ -672,16 +741,19 @@ def expected_loaded_pnos_bis(pnos_to_load_bis, pno_in_test_data) -> pd.DataFrame
                     {
                         "pnoTypeName": "Préavis type 1",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                         "minimumNotificationPeriod": 4.0,
                     },
                 ],
                 [],
             ],
+            "trip_duration_hours": [np.nan, 25.5, np.nan],
             "trip_segments": [
                 None,
                 [],
@@ -735,6 +807,7 @@ def merged_pnos() -> pd.DataFrame:
                 datetime(2023, 5, 10),
                 datetime(2023, 5, 11),
             ],
+            "trip_duration_hours": [12.0, 36.0, 100.0, np.nan, 48.0, 6.5, 20.0, 2.0],
             "trip_gears": [
                 [
                     {"gear": "OTT", "mesh": 140, "dimensions": "250.0"},
@@ -754,6 +827,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -761,11 +835,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -773,11 +849,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par pavillon",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 [
@@ -785,6 +863,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
                 [
@@ -792,11 +871,13 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis type 1",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                     {
                         "pnoTypeName": "Préavis type 2",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     },
                 ],
                 np.nan,
@@ -806,6 +887,7 @@ def merged_pnos() -> pd.DataFrame:
                         "pnoTypeName": "Préavis par engin",
                         "minimumNotificationPeriod": 4.0,
                         "hasDesignatedPorts": True,
+                        "isDurationClass": False,
                     }
                 ],
             ],
@@ -963,6 +1045,163 @@ def test_compute_pno_types_with_empty_gears_list_only(
     )
 
 
+@pytest.fixture
+def pno_types_with_pno_level_criteria() -> pd.DataFrame:
+    types = [
+        # name, minimum_notification_period, rule
+        ("Sans capture", 0.5, {"min_vessel_length": 12, "has_catches_on_board": False}),
+        (
+            "NAMO - marée ≥ 96h",
+            4.0,
+            {
+                "facades": ["NAMO"],
+                "min_trip_duration_hours": 96,
+                "min_vessel_length": 12,
+                "has_catches_on_board": True,
+            },
+        ),
+        (
+            "NAMO - marée 24-96h",
+            3.0,
+            {
+                "facades": ["NAMO"],
+                "min_trip_duration_hours": 24,
+                "max_trip_duration_hours": 96,
+                "min_vessel_length": 12,
+                "has_catches_on_board": True,
+            },
+        ),
+        (
+            "NAMO - marée < 24h",
+            1.0,
+            {
+                "facades": ["NAMO"],
+                "max_trip_duration_hours": 24,
+                "min_vessel_length": 12,
+                "has_catches_on_board": True,
+            },
+        ),
+        (
+            "NAMO - CSJ",
+            0.5,
+            {
+                "species": ["SCE"],
+                "facades": ["NAMO"],
+                "vessel_department_codes": ["22", "29", "35"],
+                "min_vessel_length": 12,
+                "has_catches_on_board": True,
+            },
+        ),
+        (
+            "Espadon",
+            4.0,
+            {"species": ["SWO"], "fao_areas": ["37"], "max_vessel_length": 12},
+        ),
+        (
+            "Anchois",
+            4.0,
+            {"species": ["ANE"], "fao_areas": ["27.8"], "minimum_quantity_kg": 1000.0},
+        ),
+    ]
+    list_columns = [
+        "species",
+        "gears",
+        "fao_areas",
+        "flag_states",
+        "facades",
+        "vessel_department_codes",
+    ]
+    nullable_columns = [
+        "min_vessel_length",
+        "max_vessel_length",
+        "min_trip_duration_hours",
+        "max_trip_duration_hours",
+        "has_catches_on_board",
+    ]
+    return pd.DataFrame(
+        [
+            {
+                "pno_type_id": i,
+                "pno_type_name": name,
+                "minimum_notification_period": minimum_notification_period,
+                "has_designated_ports": False,
+                "is_duration_class": "marée" in name,
+                "pno_type_rule_id": i,
+                "minimum_quantity_kg": rule.get("minimum_quantity_kg", 0.0),
+                **{c: rule.get(c, []) for c in list_columns},
+                **{c: rule.get(c) for c in nullable_columns},
+            }
+            for i, (name, minimum_notification_period, rule) in enumerate(types, 1)
+        ]
+    )
+
+
+@pytest.fixture
+def sample_pno_catches_with_pno_level_criteria() -> pd.DataFrame:
+    # id, species, fao_area, weight, facade, country, length, duration, department
+    catches = [
+        (1, "SOL", "27.8.a", 50.0, "NAMO", "FR", 15.0, 10.0, "56"),
+        (2, "SOL", "27.8.a", 50.0, "NAMO", "FR", 15.0, 50.0, "56"),
+        # Unknown vessel length and trip duration : strictest rules apply
+        (3, "SOL", "27.8.a", 50.0, "NAMO", "FR", None, None, None),
+        (4, "SCE", "27.7.e", 300.0, "NAMO", "FR", 15.0, 10.0, "29"),
+        (5, "SCE", "27.7.e", 300.0, "NAMO", "FR", 15.0, 10.0, "56"),
+        (6, None, None, None, "NAMO", "FR", 20.0, 10.0, "29"),
+        (7, "COD", "27.4.b", 800.0, "NAMO", "FR", 20.0, 200.0, "62"),
+        (8, "SWO", "37.1.1", 20.0, "MED", "FR", 8.0, 5.0, "34"),
+        (9, "ANE", "27.8.a", 800.0, "SA", "FR", 8.0, 5.0, "64"),
+        (10, "ANE", "27.8.b", 600.0, "NAMO", "FR", 15.0, 100.0, "29"),
+        (10, "ANE", "27.8.b", 600.0, "NAMO", "FR", 15.0, 100.0, "29"),
+    ]
+    df = pd.DataFrame(
+        catches,
+        columns=[
+            "logbook_reports_pno_id",
+            "species",
+            "fao_area",
+            "weight",
+            "facade",
+            "country_code_iso2",
+            "vessel_length",
+            "trip_duration_hours",
+            "vessel_department_code",
+        ],
+    )
+    return df.assign(
+        cfr=df.logbook_reports_pno_id.map(lambda i: f"CFR{i:09}"),
+        predicted_arrival_datetime_utc=datetime(2025, 5, 2),
+        year=2025,
+        trip_gears=[[{"gear": "OTB", "mesh": 80, "dimensions": None}]] * len(df),
+        flag_state="FRA",
+        locode="FRXXX",
+    )
+
+
+def test_compute_pno_types_with_pno_level_criteria(
+    sample_pno_catches_with_pno_level_criteria, pno_types_with_pno_level_criteria
+):
+    res = compute_pno_types(
+        sample_pno_catches_with_pno_level_criteria, pno_types_with_pno_level_criteria
+    )
+    pno_type_names = res.set_index("logbook_reports_pno_id").pno_types.map(
+        lambda types: sorted(t["pnoTypeName"] for t in types),
+        na_action="ignore",
+    )
+
+    assert pno_type_names.fillna("").to_dict() == {
+        1: ["NAMO - marée < 24h"],
+        2: ["NAMO - marée 24-96h"],
+        3: ["NAMO - marée ≥ 96h"],
+        4: ["NAMO - CSJ", "NAMO - marée < 24h"],
+        5: ["NAMO - marée < 24h"],
+        6: ["Sans capture"],
+        7: ["NAMO - marée ≥ 96h"],
+        8: ["Espadon"],
+        9: "",
+        10: ["Anchois", "NAMO - marée ≥ 96h"],
+    }
+
+
 def test_compute_pno_segments(
     sample_pno_catches,
     segments,
@@ -1053,6 +1292,7 @@ def test_load_then_reset_logbook(
         "enriched, "
         "trip_gears, "
         "value->'pnoTypes' AS pno_types, "
+        "(value->>'tripDurationHours')::DOUBLE PRECISION AS trip_duration_hours, "
         "trip_segments, "
         "(value->>'isInVerificationScope')::BOOLEAN AS is_in_verification_scope, "
         "(value->>'isVerified')::BOOLEAN AS is_verified, "

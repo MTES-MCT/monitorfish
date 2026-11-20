@@ -310,6 +310,25 @@ export function getVesselIdentityFromPriorNotification(
   }
 }
 
+/**
+ * @example "Marée 24-96h (48h)" when a duration class type is attributed, "48h" otherwise, "Inconnue" if unknown.
+ */
+export function getTripDurationLabel(
+  priorNotification: Pick<PriorNotification.PriorNotification, 'tripDurationHours' | 'types'>
+) {
+  const durationClassTypeName = priorNotification.types.find(({ isDurationClass }) => isDurationClass)?.name
+  const durationLabel =
+    priorNotification.tripDurationHours !== undefined
+      ? `${Math.round(priorNotification.tripDurationHours)}h`
+      : undefined
+
+  if (durationClassTypeName && durationLabel) {
+    return `${durationClassTypeName} (${durationLabel})`
+  }
+
+  return durationClassTypeName ?? durationLabel ?? 'Inconnue'
+}
+
 export function sortPriorNotificationTypesByPriority(priorNotificationTypes: string[]) {
   const communityTypes: string[] = []
   const designatedPortsTypes: string[] = []

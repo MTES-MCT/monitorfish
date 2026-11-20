@@ -22,6 +22,13 @@ export function trackEvent({ action, category, name, value }: TrackEvent) {
   window._paq?.push(['trackEvent', category, action, name, value])
 }
 
+/**
+ * Shown in Matomo under "Comportement > Recherche interne", which lists the keywords that returned no result.
+ */
+export function trackSiteSearch(keyword: string, category: string, resultsCount: number) {
+  window._paq?.push(['trackSiteSearch', keyword, category, resultsCount])
+}
+
 export function trackPage(pageTitle: string) {
   window._paq?.push(['setDocumentTitle', pageTitle])
   window._paq?.push(['trackPageView'])

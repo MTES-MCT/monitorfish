@@ -3,7 +3,7 @@ import { regulationActions } from '@features/Regulation/slice'
 import { useListenForDrawedGeometry } from '@hooks/useListenForDrawing'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { trackEvent } from '@hooks/useTracking'
+import { trackEvent, trackSiteSearch } from '@hooks/useTracking'
 import { Accent, Icon, IconButton, SingleTag, Size, TextInput, THEME } from '@mtes-mct/monitor-ui'
 import { useCallback, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
@@ -17,8 +17,9 @@ import PolygonFilterSelectedSVG from '../../../icons/Filtre_zone_polygone_select
 import BoxFilterSVG from '../../../icons/Filtre_zone_rectangle.svg?react'
 import BoxFilterSelectedSVG from '../../../icons/Filtre_zone_rectangle_selected.svg?react'
 import { MINIMUM_SEARCH_CHARACTERS_NUMBER, searchRegulatoryLayers } from '../../useCases/searchRegulatoryLayers'
+import { countRegulatoryZones } from '../../utils'
 
-import type { ZoneFilter } from '@features/Regulation/types'
+import type { RegulatoryLawTypes, ZoneFilter } from '@features/Regulation/types'
 import type { Polygon } from 'geojson'
 
 export function SearchInput() {
@@ -31,13 +32,28 @@ export function SearchInput() {
   const selectedOrSelectingZoneIsSquare = zoneSelected?.name === InteractionType.SQUARE
   const selectedOrSelectingZoneIsPolygon = zoneSelected?.name === InteractionType.POLYGON
 
-  const saveEvent = useDebouncedCallback(() => {
-    trackEvent({
-      action: "Recherche d'une réglementation",
-      category: 'Réglementation',
-      name: isSuperUser ? 'CNSP' : 'EXT'
-    })
-  }, 2000)
+  const saveEvent = useDebouncedCallback(
+    (
+      nextSearchQuery: string | undefined,
+      nextZoneSelected: ZoneFilter | undefined,
+      foundRegulatoryLayers: RegulatoryLawTypes | undefined
+    ) => {
+      trackEvent({
+        action: "Recherche d'une réglementation",
+        category: 'Réglementation',
+        name: isSuperUser ? 'CNSP' : 'EXT'
+      })
+
+      if (nextSearchQuery && nextSearchQuery.length >= MINIMUM_SEARCH_CHARACTERS_NUMBER) {
+        trackSiteSearch(
+          nextSearchQuery.trim(),
+          nextZoneSelected ? 'Réglementation (zone définie sur la carte)' : 'Réglementation',
+          countRegulatoryZones(foundRegulatoryLayers)
+        )
+      }
+    },
+    2000
+  )
 
   const search = useCallback(
     async (nextSearchQuery: string | undefined, nextZoneSelected: ZoneFilter | undefined) => {
@@ -52,7 +68,7 @@ export function SearchInput() {
       const foundRegulatoryLayers = await dispatch(searchRegulatoryLayers(nextSearchQuery))
 
       dispatch(setRegulatoryLayersSearchResult(foundRegulatoryLayers))
-      saveEvent()
+      saveEvent(nextSearchQuery, nextZoneSelected, foundRegulatoryLayers)
     },
     [dispatch, saveEvent]
   )

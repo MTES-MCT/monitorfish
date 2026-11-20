@@ -93,8 +93,14 @@ export function isSubmissionOfVessel(submission: OpenVesselPhotoSubmission, { cf
   return (!!cfr && submission.cfr === cfr) || (!!mmsi && submission.mmsi === mmsi)
 }
 
+function getApiKeyHeaders(): HeadersInit {
+  return OPEN_VESSEL_PHOTOS_API_KEY ? { 'x-api-key': OPEN_VESSEL_PHOTOS_API_KEY } : {}
+}
+
 async function fetchFirstPhoto(keyType: 'cfr' | 'mmsi', key: string): Promise<OpenVesselPhoto | undefined> {
-  const response = await fetch(`${OPEN_VESSEL_PHOTOS_API_URL}/v1/${keyType}/${encodeURIComponent(key)}`)
+  const response = await fetch(`${OPEN_VESSEL_PHOTOS_API_URL}/v1/${keyType}/${encodeURIComponent(key)}`, {
+    headers: getApiKeyHeaders()
+  })
   if (!response.ok) {
     return undefined
   }
@@ -107,10 +113,6 @@ async function fetchFirstPhoto(keyType: 'cfr' | 'mmsi', key: string): Promise<Op
   }
 
   return { attribution: firstPhoto.attribution, url }
-}
-
-function getApiKeyHeaders(): HeadersInit {
-  return { 'x-api-key': OPEN_VESSEL_PHOTOS_API_KEY ?? '' }
 }
 
 export const openVesselPhotosApi = monitorfishApi.injectEndpoints({

@@ -196,12 +196,12 @@ context('Vessel sidebar resume tab', () => {
     cy.getDataCy('vessel-photo-missing').contains("Ce navire n'a pas encore de photo libre de droits.")
 
     cy.clickButton('Ajouter une photo du navire')
-    cy.contains('Ajouter votre photo du navire').should('be.visible')
+    cy.contains("Qu'est-ce qu'une bonne photo de navire ?").should('be.visible')
 
     cy.window().then(win => {
       cy.stub(win, 'open').as('openContributeForm')
     })
-    cy.clickButton('Ajouter la photo sur Open Vessel Photos')
+    cy.clickButton('Ajouter une photo sur Open Vessel Photos')
 
     // The application and the contributor let MonitorFish follow the review of the photo
     cy.get('@openContributeForm').should(
@@ -209,7 +209,7 @@ context('Vessel sidebar resume tab', () => {
       /^https:\/\/openvesselphotos\.org\/fr\/contribute\?cfr=FAK000999999&mmsi=224103750&app=app_[a-z0-9]{12}&contributorId=[0-9a-f]{64}$/,
       '_blank'
     )
-    cy.contains('Ajouter votre photo du navire').should('not.exist')
+    cy.contains("Qu'est-ce qu'une bonne photo de navire ?").should('not.exist')
   })
 
   it('Vessel photo Should thank the user When the photo sent is received, and show it as pending', () => {

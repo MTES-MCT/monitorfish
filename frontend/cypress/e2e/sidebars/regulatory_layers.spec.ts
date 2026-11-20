@@ -243,8 +243,8 @@ context('Sidebars > Regulatory Layers', () => {
     ).as('getFeature')
     cy.get('[title="Arbre des couches"]').click()
 
-    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
-    cy.get('*[data-cy="regulation-search-box-filter"]').click()
+    cy.get('.Component-SingleTag').should('not.exist')
+    cy.clickButton('Définir une zone de recherche sur la carte')
 
     cy.get('canvas').eq(0).click(490, 560, { force: true, timeout: 10000 })
     cy.get('canvas').eq(0).click(230, 610, { force: true, timeout: 10000 })
@@ -255,8 +255,7 @@ context('Sidebars > Regulatory Layers', () => {
       expect(response && response.statusCode).equal(200)
     })
 
-    cy.get('*[data-cy="regulation-search-box-filter"]').should('not.exist')
-    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('exist')
+    cy.contains('.Component-SingleTag', 'Zone de recherche').should('exist')
     cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 2)
     cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
     cy.get('*[data-cy="regulatory-layer-topic"]').first().click()
@@ -266,34 +265,9 @@ context('Sidebars > Regulatory Layers', () => {
     // No zoom is triggered when drawing a zone
     cy.url().should('include', '/#@-224002.65,6302673.54,8.70')
 
-    cy.contains('Effacer la zone définie').parent().find('button').click()
-    cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')
-    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
-  })
-
-  it('A regulation Should be searched with a polygon', () => {
-    cy.visit('/#@-224002.65,6302673.54,8.70')
-    cy.wait(5000)
-
-    // When
-    cy.get('[title="Arbre des couches"]').click()
-
-    cy.get('*[data-cy="regulatory-layers-advanced-search"]').click()
-    cy.get('*[data-cy="regulation-search-polygon-filter"]').click()
-
-    cy.get('canvas').eq(0).click(490, 580, { force: true, timeout: 10000 })
-    cy.get('canvas').eq(0).click(230, 630, { force: true, timeout: 10000 })
-    cy.get('canvas').eq(0).dblclick(300, 700, { force: true, timeout: 10000 })
-
-    cy.get('*[data-cy="regulation-search-polygon-filter"]').should('not.exist')
-    cy.get('*[data-cy="regulation-search-polygon-filter-selected"]').should('exist')
-    cy.get('*[data-cy="regulatory-layer-topic"]').should('have.length', 2)
-    cy.get('*[data-cy="regulatory-layer-topic"]').contains('Ouest Cotentin Bivalves')
-    cy.get('*[data-cy="regulatory-layer-topic"]').contains('Armor CSJ')
-
-    cy.contains('Effacer la zone définie').parent().find('button').click()
-    cy.get('*[data-cy="regulation-search-box-filter"]').should('exist')
-    cy.get('*[data-cy="regulation-search-box-filter-selected"]').should('not.exist')
+    cy.contains('.Component-SingleTag', 'Zone de recherche').find('[aria-label="Supprimer ce tag"]').click()
+    cy.get('.Component-SingleTag').should('not.exist')
+    cy.get('*[data-cy="regulatory-layer-topic"]').should('not.exist')
   })
 
   it('An administrative zone Should be showed and hidden', () => {

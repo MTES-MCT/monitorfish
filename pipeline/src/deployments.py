@@ -27,6 +27,7 @@ from src.flows.activity_visualizations import activity_visualizations_flow
 from src.flows.admin_areas import admin_areas_flow
 from src.flows.anchorages import anchorages_flow
 from src.flows.beacons import beacons_flow
+from src.flows.beacon_malfunction_activity_detection import beacon_malfunction_activity_detection_flow
 from src.flows.control_anteriority import control_anteriority_flow
 from src.flows.control_units import control_units_flow
 from src.flows.controls import controls_flow
@@ -107,6 +108,9 @@ flows_to_deploy = [
     FlowAndSchedules(flow=anchorages_flow),
     FlowAndSchedules(
         flow=beacons_flow, schedules=[Schedule(cron="4,14,24,34,44,54 * * * *")]
+    ),
+    FlowAndSchedules(
+        flow=beacon_malfunction_activity_detection_flow, schedules=[Schedule(cron="17 * * * *")]
     ),
     FlowAndSchedules(
         flow=control_anteriority_flow, schedules=[Schedule(cron="5 * * * *")]

@@ -1,6 +1,6 @@
 import { getOpenVesselPhotosContributeUrl, type OpenVesselPhotoKeys } from '@features/Vessel/openVesselPhotosApi'
 import { trackEvent } from '@hooks/useTracking'
-import { Accent, Button, Dialog, Icon } from '@mtes-mct/monitor-ui'
+import { Accent, Button, Dialog, Icon, Level, Link, Message } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 type AddVesselPhotoDialogProps = {
@@ -22,25 +22,42 @@ export function AddVesselPhotoDialog({ contributorId, keys, onClose }: AddVessel
 
   return (
     <StyledDialog>
-      <Dialog.Title onClose={onClose}>Ajouter votre photo du navire</Dialog.Title>
+      <Dialog.Title onClose={onClose}>Ajouter une photo du navire</Dialog.Title>
       <StyledBody>
         <p>
-          <b>La photo du navire doit avoir été prise par vous-même ou être libre de droits.</b> Elle est déposée sur{' '}
-          <b>Open Vessel Photos</b>, une photothèque ouverte de navires, sous licence libre. Une fois vérifiée, elle
-          s&apos;affichera automatiquement dans la fiche navire de MonitorFish.
+          Vous pouvez charger une photo de ce navire sur{' '}
+          <Link href="https://openvesselphotos.org/fr" target="_blank">
+            Open Vessel Photo
+          </Link>
+          , une photothèque ouverte de photos sous licence libre.{' '}
+          <b>La photo doit avoir été prise par vous-même ou être libre de droits.</b>
         </p>
         <p>
-          Le formulaire d&apos;Open Vessel Photos s&apos;ouvre dans un nouvel onglet, avec le CFR et le MMSI du navire
-          déjà renseignés.
-          {!!contributorId && <> Vous serez notifié·e dans MonitorFish une fois votre photo vérifiée.</>}
+          Le formulaire d’Open Vessel Photos s’ouvre dans un nouvel onglet, avec le CFR et le MMSI du navire déjà
+          renseignés.
+          <br />
+          Une fois la photo vérifiée,{' '}
+          <b>
+            vous en serez notifié.e directement dans MonitorFish et elle s’affichera automatiquement dans la fiche du
+            navire.
+          </b>
         </p>
+        <StyledMessage level={Level.INFO}>
+          <b>Qu&apos;est-ce qu&apos;une bonne photo de navire ?</b>
+          <ul>
+            <li>La coque entière dans le cadre, si possible de profil</li>
+            <li>Le nom ou l&apos;immatriculation lisible</li>
+            <li>Pas de visages en gros plan</li>
+          </ul>
+          <i>NB : les données de localisation (EXIF/GPS) sont supprimées de chaque photo.</i>
+        </StyledMessage>
       </StyledBody>
       <StyledAction>
         <Button accent={Accent.SECONDARY} onClick={onClose}>
           Annuler
         </Button>
         <Button accent={Accent.PRIMARY} Icon={Icon.ExternalLink} onClick={openContributeForm}>
-          Ajouter la photo sur Open Vessel Photos
+          Ajouter une photo sur Open Vessel Photos
         </Button>
       </StyledAction>
     </StyledDialog>
@@ -62,10 +79,31 @@ const StyledBody = styled(Dialog.Body)`
   padding: 20px 20px 0;
   text-align: left;
 
+  a {
+    font-size: 16px;
+  }
+
   > p {
     color: ${p => p.theme.color.gunMetal};
     line-height: 22px;
     margin-bottom: 16px;
+  }
+
+  ul {
+    margin: 4px 0 8px;
+    padding-left: 8px;
+  }
+
+  li {
+    list-style: inside;
+  }
+`
+
+const StyledMessage = styled(Message)`
+  margin-top: 8px;
+
+  b {
+    color: #45688a;
   }
 `
 

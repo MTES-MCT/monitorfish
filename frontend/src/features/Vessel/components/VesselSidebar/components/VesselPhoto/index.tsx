@@ -68,7 +68,7 @@ export function VesselPhoto() {
           Icon={Icon.Plus}
           isFullWidth
           onClick={() => setIsDialogOpen(true)}
-          size={Size.SMALL}
+          size={Size.NORMAL}
         >
           Ajouter une photo du navire
         </Button>
@@ -115,7 +115,7 @@ const Credits = styled.span`
   left: 0;
   right: 0;
   padding: 1px 8px;
-  background: ${p => getColorWithAlpha(p.theme.color.gainsboro, 0.6)};
+  background: ${p => getColorWithAlpha(p.theme.color.gainsboro, 0.7)};
   font-size: 11px;
   font-style: italic;
   overflow: hidden;
@@ -126,6 +126,6 @@ const Credits = styled.span`
 const EmptyText = styled.p`
   color: ${p => p.theme.color.slateGray};
   font-size: 13px;
-  margin: 0 0 10px;
+  margin: 6px 6px 16px;
   text-align: center;
 `

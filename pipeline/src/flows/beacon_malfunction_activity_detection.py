@@ -6,6 +6,7 @@ from prefect import flow, task, unmapped
 from src.entities.alerts import AlertType
 from src.generic_tasks import extract
 from src.helpers.dates import utcnow
+from src.sentry import report_flow_failure_to_sentry
 from src.shared_tasks.alerts import (
     extract_active_reportings,
     extract_silenced_alerts,
@@ -118,7 +119,11 @@ def add_malfunction_start_fields(vessels: pd.DataFrame) -> pd.DataFrame:
     return vessels
 
 
-@flow(name="Monitorfish - Beacon malfunction activity detection")
+@flow(
+    name="Monitorfish - Beacon malfunction activity detection",
+    on_failure=[report_flow_failure_to_sentry],
+    on_crashed=[report_flow_failure_to_sentry],
+)
 def beacon_malfunction_activity_detection_flow():
     # Extract
     vessels_with_recent_ais = extract_vessels_with_recent_ais.submit()

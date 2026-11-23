@@ -12,7 +12,6 @@ pno_type_id,species,fao_areas,cgpm_areas,gears,flag_states,minimum_quantity_kg,f
 11,[],[],[],[],"['AUT', 'BEL', 'BGR', 'HRV', 'CYP', 'CZE', 'DNK', 'EST', 'FIN', 'DEU', 'GRC', 'HUN', 'IRL', 'ITA', 'LVA', 'LTU', 'LUX', 'MLT', 'NLD', 'POL', 'PRT', 'ROU', 'SVK', 'SVN', 'ESP', 'SWE']",0,[],[],,,,,,
 12,[],[],[],['SB'],[],0,[],[],,,,,,
 13,[],[],[],[],[],0,[],[],12.0,,,,False,False
-30,[],[],[],[],[],0,[],[],,,,,False,True
 14,[],[],[],[],[],0,['MEMN'],[],12.0,,96.0,,True,
 15,[],[],[],[],[],0,['MEMN'],[],12.0,,,96.0,True,
 16,[],[],[],[],[],0,['NAMO'],[],12.0,,96.0,,True,
@@ -29,3 +28,4 @@ pno_type_id,species,fao_areas,cgpm_areas,gears,flag_states,minimum_quantity_kg,f
 27,['ANE'],"['27.7.e', '27.7.h', '27.8']",[],[],[],1000,[],[],,,,,,
 28,['SWO'],['37'],[],[],[],0,[],[],,12.0,,,,
 29,['COL'],['37'],[],[],[],0,[],[],,12.0,,,,
+30,[],[],[],[],[],0,[],[],,,,,False,True

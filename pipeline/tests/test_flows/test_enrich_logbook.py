@@ -131,6 +131,7 @@ def expected_pno_types() -> pd.DataFrame:
             "min_trip_duration_hours": [None] * 7,
             "max_trip_duration_hours": [None] * 7,
             "has_catches_on_board": [None] * 7,
+            "has_declared_catches": [None] * 7,
         }
     )
 
@@ -1049,7 +1050,16 @@ def test_compute_pno_types_with_empty_gears_list_only(
 def pno_types_with_pno_level_criteria() -> pd.DataFrame:
     types = [
         # name, minimum_notification_period, rule
-        ("Sans capture", 0.5, {"min_vessel_length": 12, "has_catches_on_board": False}),
+        (
+            "Sans capture",
+            0.5,
+            {"min_vessel_length": 12, "has_declared_catches": False},
+        ),
+        (
+            "Préavis 0",
+            0.5,
+            {"has_declared_catches": True, "has_catches_on_board": False},
+        ),
         (
             "NAMO - marée ≥ 96h",
             4.0,
@@ -1117,6 +1127,7 @@ def pno_types_with_pno_level_criteria() -> pd.DataFrame:
         "min_trip_duration_hours",
         "max_trip_duration_hours",
         "has_catches_on_board",
+        "has_declared_catches",
     ]
     return pd.DataFrame(
         [
@@ -1147,6 +1158,10 @@ def sample_pno_catches_with_pno_level_criteria() -> pd.DataFrame:
         (4, "SCE", "27.7.e", 300.0, "NAMO", "FR", 15.0, 10.0, "29"),
         (5, "SCE", "27.7.e", 300.0, "NAMO", "FR", 15.0, 10.0, "56"),
         (6, None, None, None, "NAMO", "FR", 20.0, 10.0, "29"),
+        # All catches have a weight of 0 : "Préavis 0", whatever the vessel length
+        (11, "SOL", "27.8.a", 0.0, "NAMO", "FR", 8.0, 10.0, "56"),
+        (12, "SOL", "27.8.a", 0.0, "NAMO", "FR", 20.0, 10.0, "56"),
+        (12, "COD", "27.4.b", None, "NAMO", "FR", 20.0, 10.0, "56"),
         (7, "COD", "27.4.b", 800.0, "NAMO", "FR", 20.0, 200.0, "62"),
         (8, "SWO", "37.1.1", 20.0, "MED", "FR", 8.0, 5.0, "34"),
         (9, "ANE", "27.8.a", 800.0, "SA", "FR", 8.0, 5.0, "64"),
@@ -1199,6 +1214,8 @@ def test_compute_pno_types_with_pno_level_criteria(
         8: ["Espadon"],
         9: "",
         10: ["Anchois", "NAMO - marée ≥ 96h"],
+        11: ["Préavis 0"],
+        12: ["Préavis 0"],
     }
 
 

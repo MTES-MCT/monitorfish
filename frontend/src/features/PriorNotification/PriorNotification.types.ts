@@ -13,7 +13,6 @@ export namespace PriorNotification {
     isCorrection: boolean
     isInvalidated: boolean | undefined
     isManuallyCreated: boolean
-    isPriorNotificationZero: boolean
     isVesselUnderCharter: boolean | undefined
     onBoardCatches: Logbook.Catch[]
     operationDate: string

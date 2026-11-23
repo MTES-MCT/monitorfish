@@ -37,7 +37,7 @@ def extract_pno_type_rules():
         LIBRARY_LOCATION / "data/pno_type_rules.csv",
         encoding="utf8",
         converters=dict.fromkeys(PNO_TYPE_RULES_ARRAY_COLUMNS, literal_eval),
-        dtype={"has_catches_on_board": "boolean"},
+        dtype={"has_catches_on_board": "boolean", "has_declared_catches": "boolean"},
     )
 
 

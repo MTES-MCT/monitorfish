@@ -20,7 +20,6 @@ data class PriorNotificationListItemDataOutput(
     val isCorrection: Boolean,
     val isManuallyCreated: Boolean = false,
     val isInvalidated: Boolean? = false,
-    val isPriorNotificationZero: Boolean,
     val isVesselUnderCharter: Boolean?,
     val onBoardCatches: List<LogbookMessageFishingCatchDataOutput>,
     // Used to optimize SQL query via Timescale when fetching a single prior notification from the list
@@ -86,7 +85,6 @@ data class PriorNotificationListItemDataOutput(
                 isCorrection = logbookMessage.operationType === LogbookOperationType.COR,
                 isInvalidated = message.isInvalidated,
                 isManuallyCreated = priorNotification.isManuallyCreated,
-                isPriorNotificationZero = priorNotification.isPriorNotificationZero,
                 isVesselUnderCharter = vessel.underCharter,
                 onBoardCatches = onBoardCatches,
                 operationDate = logbookMessage.operationDateTime,

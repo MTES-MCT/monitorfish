@@ -1,10 +1,7 @@
 import { getAlpha2CodeFromAlpha2or3Code } from '@components/CountryFlag/utils'
 import { buildCatchArray } from '@features/Logbook/utils'
+import { PRIOR_NOTIFICATION_ZERO_TYPE_NAME } from '@features/PriorNotification/constants'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import {
-  getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
-  isPriorNotificationZero
-} from '@features/PriorNotification/utils'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { generateHTML } from './template'
@@ -59,10 +56,7 @@ export function getHtmlContent(
     internalReferenceNumber: pno.internalReferenceNumber ?? 'Aucun',
     ircs: pno.ircs ?? 'Aucun',
     isLanding: pno.message.purpose === PriorNotification.PurposeCode.LAN,
-    isZero:
-      isPriorNotificationZero(
-        getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(pno.message.catchOnboard)
-      ) ?? false,
+    isZero: !!pno.message.pnoTypes?.some(({ pnoTypeName }) => pnoTypeName === PRIOR_NOTIFICATION_ZERO_TYPE_NAME),
     port: pno.message.port,
     portEntranceAuthorization: pno.message.hasPortEntranceAuthorization
       ? `<strong class="authorized">Autorisation donnée d'entrer au port<br/></strong>`

@@ -5,7 +5,7 @@ import { Bold } from '@components/style'
 import { priorNotificationActions } from '@features/PriorNotification/slice'
 import { invalidatePriorNotification } from '@features/PriorNotification/useCases/invalidatePriorNotification'
 import { updateManualPriorNotificationComputedValues } from '@features/PriorNotification/useCases/updateManualPriorNotificationComputedValues'
-import { getPriorNotificationIdentifier, isPriorNotificationZero } from '@features/PriorNotification/utils'
+import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Accent, Button, FormikEffect, Icon, Level, usePrevious } from '@mtes-mct/monitor-ui'
@@ -177,7 +177,6 @@ export function Content({ detail, isValidatingOnChange, onClose, onSubmit, onVer
             editedPriorNotificationComputedValues={editedPriorNotificationComputedValues}
             hasBeenComputed={!!editedPriorNotificationComputedValues}
             isNewPriorNotification={isNewPriorNotification}
-            isPriorNotificationZero={isPriorNotificationZero(values.fishingCatches)}
             isVesselUnderCharter={editedPriorNotificationComputedValues?.isVesselUnderCharter}
             riskFactor={editedPriorNotificationComputedValues?.riskFactor}
             tripSegments={editedPriorNotificationComputedValues?.tripSegments}

@@ -28,6 +28,7 @@ class ComputePnoTypes(
             return emptyList()
         }
 
+        val hasDeclaredCatches = catchToLand.isNotEmpty()
         val hasCatchesOnBoard = catchToLand.sumOf { it.weight ?: 0.0 } > 0
 
         val allPnoTypes = pnoTypeRepository.findAll()
@@ -42,6 +43,7 @@ class ComputePnoTypes(
                         vesselLength = vesselLength,
                         tripDurationHours = tripDurationHours,
                         hasCatchesOnBoard = hasCatchesOnBoard,
+                        hasDeclaredCatches = hasDeclaredCatches,
                     )
                 }
 

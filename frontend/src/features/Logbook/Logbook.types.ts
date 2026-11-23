@@ -572,7 +572,6 @@ export namespace Logbook {
     hasOneOrMoreReportings: boolean | undefined
     isInvalidated: boolean | undefined
     isLessThanTwelveMetersVessel: boolean | undefined
-    isPriorNotificationZero: boolean | undefined
     lastControlledAfter: string | undefined
     lastControlledBefore: string | undefined
     portLocodes: string[] | undefined

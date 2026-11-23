@@ -314,7 +314,9 @@ def compute_pno_types(
           - max_vessel_length `float` `12.0` (exclusive)
           - min_trip_duration_hours `float` `24.0` (inclusive)
           - max_trip_duration_hours `float` `96.0` (exclusive)
-          - has_catches_on_board `bool` `True`
+          - has_catches_on_board `bool` `True` (total weight > 0)
+          - has_declared_catches `bool` `True` (at least one catch entry, whatever
+            its weight)
 
           Empty lists and null values mean that the rule does not filter on the
           corresponding criterion.
@@ -382,7 +384,8 @@ def compute_pno_types(
                 FIRST(vessel_department_code) AS vessel_department_code,
                 COALESCE(FIRST(vessel_length), 'Infinity'::DOUBLE) AS vessel_length,
                 COALESCE(FIRST(trip_duration_hours), 'Infinity'::DOUBLE) AS trip_duration_hours,
-                SUM(COALESCE(weight, 0)) > 0 AS has_catches_on_board
+                SUM(COALESCE(weight, 0)) > 0 AS has_catches_on_board,
+                COUNT(species) > 0 AS has_declared_catches
             FROM pno_catches
             GROUP BY logbook_reports_pno_id
         ),
@@ -413,7 +416,8 @@ def compute_pno_types(
                 (p.vessel_length < t.max_vessel_length OR t.max_vessel_length IS NULL) AND
                 (p.trip_duration_hours >= t.min_trip_duration_hours OR t.min_trip_duration_hours IS NULL) AND
                 (p.trip_duration_hours < t.max_trip_duration_hours OR t.max_trip_duration_hours IS NULL) AND
-                (p.has_catches_on_board = t.has_catches_on_board OR t.has_catches_on_board IS NULL)
+                (p.has_catches_on_board = t.has_catches_on_board OR t.has_catches_on_board IS NULL) AND
+                (p.has_declared_catches = t.has_declared_catches OR t.has_declared_catches IS NULL)
         )
 
         SELECT

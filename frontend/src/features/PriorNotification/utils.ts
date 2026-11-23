@@ -124,13 +124,3 @@ export function getFormDataFishingCatchesFromFormValuesFishingCatches(
     []
   )
 }
-
-export function isPriorNotificationZero(
-  fishingCatches: PriorNotification.FormDataFishingCatch[] | undefined
-): boolean | undefined {
-  if (fishingCatches === undefined || fishingCatches.length === 0) {
-    return undefined
-  }
-
-  return fishingCatches.every(fishingCatch => fishingCatch.weight === 0)
-}

@@ -45,6 +45,8 @@ data class PnoTypeRuleEntity(
     val maxTripDurationHours: Double? = null,
     @Column(name = "has_catches_on_board")
     val hasCatchesOnBoard: Boolean? = null,
+    @Column(name = "has_declared_catches")
+    val hasDeclaredCatches: Boolean? = null,
 ) {
     fun toPnoTypeRule() =
         PnoTypeRule(
@@ -62,5 +64,6 @@ data class PnoTypeRuleEntity(
             minTripDurationHours = minTripDurationHours,
             maxTripDurationHours = maxTripDurationHours,
             hasCatchesOnBoard = hasCatchesOnBoard,
+            hasDeclaredCatches = hasDeclaredCatches,
         )
 }

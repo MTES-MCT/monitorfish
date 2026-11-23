@@ -86,7 +86,6 @@ export function getPriorNotificationsFakeResponse({
         isCorrection: false,
         isInvalidated: null,
         isManuallyCreated,
-        isPriorNotificationZero: false,
         isVesselUnderCharter: false,
         onBoardCatches: [
           {

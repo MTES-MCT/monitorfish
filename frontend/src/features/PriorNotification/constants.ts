@@ -3,6 +3,8 @@ import { PriorNotification } from '@features/PriorNotification/PriorNotification
 export const SWORDFISH_SPECY_CODE = 'SWO'
 export const BLUEFIN_TUNA_SPECY_CODE = 'BFT'
 export const BLUEFIN_TUNA_EXTENDED_SPECY_CODES = ['BF1', 'BF2', 'BF3']
+/** Name of the PNO type attributed to prior notifications whose catches all have a weight of 0. */
+export const PRIOR_NOTIFICATION_ZERO_TYPE_NAME = 'Préavis 0'
 export const BLUEFIN_TUNA_NAME_FR = `Thon rouge de l'Atlantique`
 export const BLUEFIN_TUNA_NAME_FR_SIZE_1 = `Thon rouge de l'Atlantique (Calibre 1)`
 export const BLUEFIN_TUNA_NAME_FR_SIZE_2 = `Thon rouge de l'Atlantique (Calibre 2)`

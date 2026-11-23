@@ -16,7 +16,6 @@ type CardBodyHeadProps = Readonly<{
   editedPriorNotificationComputedValues?: Undefine<PriorNotification.ManualComputedValues> | undefined
   hasBeenComputed: boolean
   isNewPriorNotification: boolean
-  isPriorNotificationZero: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   riskFactor: number | undefined
   tripSegments: Logbook.Segment[] | undefined
@@ -29,7 +28,6 @@ export function CardBodyHead({
   editedPriorNotificationComputedValues,
   hasBeenComputed,
   isNewPriorNotification,
-  isPriorNotificationZero,
   isVesselUnderCharter,
   riskFactor,
   tripSegments,
@@ -56,7 +54,6 @@ export function CardBodyHead({
       <TagBar
         hasBeenComputed={hasBeenComputed}
         isInvalidated={isInvalidated}
-        isPriorNotificationZero={isPriorNotificationZero}
         isVesselUnderCharter={isVesselUnderCharter}
         riskFactor={riskFactor}
         state={applicableState}

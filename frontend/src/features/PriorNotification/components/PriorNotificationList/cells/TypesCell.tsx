@@ -1,8 +1,5 @@
 import { Ellipsised } from '@components/Ellipsised'
-import {
-  getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
-  isPriorNotificationZero
-} from '@features/PriorNotification/utils'
+import { PRIOR_NOTIFICATION_ZERO_TYPE_NAME } from '@features/PriorNotification/constants'
 import { Tag, THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
@@ -16,14 +13,16 @@ type TypesCellProps = Readonly<{
   priorNotification: PriorNotification.PriorNotification
 }>
 export function TypesCell({ priorNotification }: TypesCellProps) {
-  const hasPriorNotificationZeroTag = isPriorNotificationZero(
-    getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(priorNotification.onBoardCatches)
+  const hasPriorNotificationZeroTag = priorNotification.types.some(
+    ({ name }) => name === PRIOR_NOTIFICATION_ZERO_TYPE_NAME
   )
 
   const durationClassTypeLabels = [
     ...new Set(priorNotification.types.filter(({ isDurationClass }) => isDurationClass).map(({ name }) => name))
   ].sort((a, b) => a.localeCompare(b))
-  const regulatoryTypes = priorNotification.types.filter(({ isDurationClass }) => !isDurationClass)
+  const regulatoryTypes = priorNotification.types.filter(
+    ({ isDurationClass, name }) => !isDurationClass && name !== PRIOR_NOTIFICATION_ZERO_TYPE_NAME
+  )
 
   const sortedTypeLabels =
     regulatoryTypes.length > 0
@@ -34,18 +33,20 @@ export function TypesCell({ priorNotification }: TypesCellProps) {
 
   return (
     <Wrapper>
-      {hasPriorNotificationZeroTag && <Tag borderColor={THEME.color.slateGray}>Préavis 0</Tag>}
+      {hasPriorNotificationZeroTag && (
+        <Tag borderColor={THEME.color.slateGray}>{PRIOR_NOTIFICATION_ZERO_TYPE_NAME}</Tag>
+      )}
       {durationClassTypeLabels.map(label => (
         <Tag key={label} borderColor={THEME.color.lightGray}>
           {label}
         </Tag>
       ))}
       {sortedTypeLabels ? (
-        <Ellipsised maxWidth={getEllipsisedMaxWidth(!!hasPriorNotificationZeroTag, durationClassTypeLabels.length)}>
+        <Ellipsised maxWidth={getEllipsisedMaxWidth(hasPriorNotificationZeroTag, durationClassTypeLabels.length)}>
           {sortedTypeLabels}
         </Ellipsised>
       ) : (
-        durationClassTypeLabels.length === 0 && <None>Aucun type</None>
+        durationClassTypeLabels.length === 0 && !hasPriorNotificationZeroTag && <None>Aucun type</None>
       )}
     </Wrapper>
   )

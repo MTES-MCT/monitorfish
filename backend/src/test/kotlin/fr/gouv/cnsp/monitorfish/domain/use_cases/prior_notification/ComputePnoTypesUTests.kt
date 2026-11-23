@@ -339,6 +339,15 @@ class ComputePnoTypesUTests {
         assertThat(computeTypeNames(sce, departmentCode = "29")).containsExactly("NAMO - CSJ", "NAMO - marée < 24h")
         assertThat(computeTypeNames(sce, departmentCode = "56")).containsExactly("NAMO - marée < 24h")
         assertThat(computeTypeNames(listOf(), length = 20.0)).containsExactly("Sans capture")
+        // Catches declared with a weight of 0 or null : "Préavis 0", whatever the vessel length
+        val zero =
+            listOf(
+                LogbookFishingCatch(species = "SOL", faoZone = "27.8.a", weight = 0.0),
+                LogbookFishingCatch(species = "COD", faoZone = "27.4.b", weight = null),
+            )
+        assertThat(computeTypeNames(zero, length = 20.0)).containsExactly("Préavis 0")
+        assertThat(computeTypeNames(zero, length = 8.0)).containsExactly("Préavis 0")
+        assertThat(computeTypeNames(listOf(), length = 8.0)).isEmpty()
         assertThat(
             computeTypeNames(
                 listOf(LogbookFishingCatch(species = "SWO", faoZone = "37.1.1", weight = 20.0)),
@@ -364,7 +373,13 @@ class ComputePnoTypesUTests {
             )
         val rules =
             listOf(
-                "Sans capture" to landingRule.copy(hasCatchesOnBoard = false),
+                "Sans capture" to landingRule.copy(hasCatchesOnBoard = null, hasDeclaredCatches = false),
+                "Préavis 0" to
+                    landingRule.copy(
+                        minVesselLength = null,
+                        hasCatchesOnBoard = false,
+                        hasDeclaredCatches = true,
+                    ),
                 "NAMO - marée ≥ 96h" to landingRule.copy(facades = listOf("NAMO"), minTripDurationHours = 96.0),
                 "NAMO - marée 24-96h" to
                     landingRule.copy(

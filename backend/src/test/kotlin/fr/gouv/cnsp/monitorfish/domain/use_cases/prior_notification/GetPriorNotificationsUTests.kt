@@ -63,7 +63,6 @@ class GetPriorNotificationsUTests {
             willArriveBefore = ZonedDateTime.parse("2099-12-31T00:00:00Z"),
         )
     private val defaultIsInvalidated = null
-    private val defaultIsPriorNotificationZero = null
     private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
@@ -159,7 +158,6 @@ class GetPriorNotificationsUTests {
             ).execute(
                 defaultFilter,
                 defaultIsInvalidated,
-                defaultIsPriorNotificationZero,
                 defaultSeafrontGroup,
                 defaultStates,
                 defaultSortColumn,
@@ -217,7 +215,6 @@ class GetPriorNotificationsUTests {
             ).execute(
                 defaultFilter,
                 defaultIsInvalidated,
-                defaultIsPriorNotificationZero,
                 defaultSeafrontGroup,
                 defaultStates,
                 defaultSortColumn,

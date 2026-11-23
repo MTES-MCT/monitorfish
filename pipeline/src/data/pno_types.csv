@@ -27,3 +27,4 @@ id,name,minimum_notification_period,has_designated_ports,is_duration_class
 27,Préavis anchois,4.0,False,False
 28,Préavis espadon,4.0,False,False
 29,Préavis corail rouge,4.0,False,False
+30,Préavis 0,0.5,False,False

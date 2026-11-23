@@ -5,8 +5,17 @@ import pandas as pd
 import requests
 from prefect import flow, task
 
-from config import FAO_SPECIES_URL, ISSCAAP_GROUPS_URL, PROXIES
+from config import (
+    FAO_SPECIES_URL,
+    IS_INTEGRATION,
+    ISSCAAP_GROUPS_URL,
+    PROXIES,
+    SPECIES_CSV_RESOURCE_ID,
+    SPECIES_CSV_RESOURCE_TITLE,
+    SPECIES_DATASET_ID,
+)
 from src.sentry import report_flow_failure_to_sentry
+from src.shared_tasks.datagouv import get_csv_file_object, update_resource
 
 
 @task
@@ -16,21 +25,16 @@ def extract_species(url: str, proxies: dict) -> pd.DataFrame:
     r.raise_for_status()
     zipobj = zipfile.ZipFile(io.BytesIO(r.content))
 
-    # Find .txt file in zipfile
-    files = zipobj.namelist()
-    txt_files = list(filter(lambda s: s.split(".")[-1] == "txt", files))
-    try:
-        assert len(txt_files) == 1
-    except AssertionError:
-        raise ValueError(f".txt file could not be identifide in {url}")
-    txt_file = txt_files[0]
+    csv_files = [f for f in zipobj.namelist() if f.lower().endswith(".csv")]
+    if len(csv_files) != 1:
+        raise ValueError(f"A single .csv file could not be identified in {url}")
 
-    # Extract .txt file from zipfile
-    species = pd.read_csv(zipobj.open(txt_file))
+    species = pd.read_csv(zipobj.open(csv_files[0]), encoding="utf-8-sig")
+    species.columns = species.columns.str.strip()
 
     species = species.rename(
         columns={
-            "ISSCAAP_Group ": "isscaap_code",
+            "ISSCAAP_Group": "isscaap_code",
             "Taxonomic_Code": "taxocode",
             "Alpha3_Code": "species_code",
             "Scientific_Name": "scientific_name",
@@ -68,7 +72,7 @@ def transform_species(
 ) -> pd.DataFrame:
     res = pd.merge(species, isscaap_groups, on="isscaap_code", how="left")
 
-    res["order"] = res.order.map(str.capitalize)
+    res["order"] = res.order.str.capitalize()
 
     column_order = [
         "species_code",
@@ -97,18 +101,28 @@ def transform_species(
     return res[column_order]
 
 
-@task
-def export_species(species: pd.DataFrame, csv_filepath: str) -> None:
-    species.to_csv(csv_filepath, index=False, encoding="utf8")
-
-
 @flow(
     name="Monitorfish - Export Species",
     on_failure=[report_flow_failure_to_sentry],
     on_crashed=[report_flow_failure_to_sentry],
 )
-def export_species_flow(csv_filepath: str):
+def export_species_flow(
+    dataset_id: str = SPECIES_DATASET_ID,
+    species_resource_id: str = SPECIES_CSV_RESOURCE_ID,
+    species_resource_title: str = SPECIES_CSV_RESOURCE_TITLE,
+    is_integration: bool = IS_INTEGRATION,
+):
     species = extract_species(url=FAO_SPECIES_URL, proxies=PROXIES)
     isscaap_groups = extract_isscaap_groups(url=ISSCAAP_GROUPS_URL, proxies=PROXIES)
     species = transform_species(species, isscaap_groups)
-    export_species(species, csv_filepath=csv_filepath)
+    species_csv_file = get_csv_file_object(species)
+
+    species_response = update_resource(
+        dataset_id=dataset_id,
+        resource_id=species_resource_id,
+        resource_title=species_resource_title,
+        resource=species_csv_file,
+        mock_update=is_integration,
+    )
+
+    return species_response, species_csv_file

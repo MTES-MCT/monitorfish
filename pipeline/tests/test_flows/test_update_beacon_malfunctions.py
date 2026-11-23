@@ -100,7 +100,11 @@ def test_extract_vessels_that_should_emit(reset_test_data):
 def test_extract_satellite_operators_statuses(reset_test_data):
     statuses = extract_satellite_operators_statuses()
     expected_statuses = pd.DataFrame(
-        {"satellite_operator_id": [1, 2], "operator_is_up": [False, False]}
+        {
+            "satellite_operator_id": [1, 1, 2, 2],
+            "is_coastal": [True, False, True, False],
+            "operator_is_up": [False, False, False, False],
+        }
     )
 
     pd.testing.assert_frame_equal(statuses, expected_statuses)
@@ -196,6 +200,7 @@ def test_get_new_malfunctions(satellite_operator_ids_contain_nulls):
             ],
             "is_at_port": [False, True, True, False, False, False, False, False, None],
             "is_manual": [True, False, False, False, False, False, False, False, None],
+            "is_coastal": [True, False, None, True, False, True, True, True, True],
             "satellite_operator_id": [
                 1,
                 2,
@@ -213,8 +218,9 @@ def test_get_new_malfunctions(satellite_operator_ids_contain_nulls):
 
     satellite_operators_statuses = pd.DataFrame(
         {
-            "satellite_operator_id": [1, 2, 3, 4, 5, 6, 7],
-            "operator_is_up": [True, True, True, True, True, True, True],
+            "satellite_operator_id": [1, 2, 3, 4, 5, 6, 7] * 2,
+            "is_coastal": [True] * 7 + [False] * 7,
+            "operator_is_up": [True] * 14,
         }
     )
 
@@ -249,6 +255,7 @@ def test_get_new_malfunctions(satellite_operator_ids_contain_nulls):
     satellite_operators_statuses = pd.DataFrame(
         {
             "satellite_operator_id": [1, 2, 3, 4, 5, 6, 7],
+            "is_coastal": [True] * 7,
             "operator_is_up": [True, None, False, True, True, True, True],
         }
     )
@@ -690,3 +697,36 @@ def test_flow_fails_if_last_positions_healthcheck_fails(reset_test_data):
     pd.testing.assert_frame_equal(
         initial_beacons_malfunctions, final_beacons_malfunctions
     )
+
+
+def test_get_new_malfunctions_uses_operator_status_of_beacon_coastal_group():
+    d = datetime(2021, 10, 8, 2, 56, 0)
+    td = timedelta(hours=1)
+    last_emissions = pd.DataFrame(
+        {
+            "beacon_number": ["A", "B", "C"],
+            "last_position_datetime_utc": [d - 8 * td] * 3,
+            "is_at_port": [False] * 3,
+            "is_manual": [False] * 3,
+            "is_coastal": [True, False, None],
+            "satellite_operator_id": [1, 1, 1],
+        }
+    )
+    # Operator 1 is up for coastal beacons only (unknown is_coastal = non-coastal)
+    satellite_operators_statuses = pd.DataFrame(
+        {
+            "satellite_operator_id": [1, 1],
+            "is_coastal": [True, False],
+            "operator_is_up": [True, False],
+        }
+    )
+
+    new_malfunctions = get_new_malfunctions(
+        last_emissions,
+        pd.DataFrame({"beacon_number": []}),
+        satellite_operators_statuses,
+        malfunction_datetime_utc_threshold_at_sea=d - 6 * td,
+        malfunction_datetime_utc_threshold_at_port=d - 24 * td,
+    )
+
+    assert new_malfunctions.beacon_number.tolist() == ["A"]

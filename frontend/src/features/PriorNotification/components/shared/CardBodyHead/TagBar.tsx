@@ -1,4 +1,7 @@
-import { PnoVerificationScopeReasonLabel } from '@features/PriorNotification/constants'
+import {
+  PnoVerificationScopeReasonLabel,
+  PRIOR_NOTIFICATION_ZERO_TYPE_NAME
+} from '@features/PriorNotification/constants'
 import { VesselRiskFactor } from '@features/RiskFactor/components/VesselRiskFactor'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -12,7 +15,6 @@ import type { Logbook } from '@features/Logbook/Logbook.types'
 type TagBarProps = Readonly<{
   hasBeenComputed?: boolean | undefined
   isInvalidated: boolean | undefined
-  isPriorNotificationZero: boolean | undefined
   isVesselUnderCharter: boolean | undefined
   riskFactor: number | undefined
   state: PriorNotification.State | undefined
@@ -23,7 +25,6 @@ type TagBarProps = Readonly<{
 export function TagBar({
   hasBeenComputed = true,
   isInvalidated,
-  isPriorNotificationZero,
   isVesselUnderCharter,
   riskFactor,
   state,
@@ -76,9 +77,9 @@ export function TagBar({
           </FixedTag>
         )}
 
-        {isPriorNotificationZero && (
+        {types?.some(({ name }) => name === PRIOR_NOTIFICATION_ZERO_TYPE_NAME) && (
           <FixedTag key="priorNotificationZero" borderColor={THEME.color.slateGray}>
-            Préavis Zéro
+            {PRIOR_NOTIFICATION_ZERO_TYPE_NAME}
           </FixedTag>
         )}
 

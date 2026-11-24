@@ -2,11 +2,7 @@ import { ErrorWall } from '@components/ErrorWall'
 import { FrontendErrorBoundary } from '@components/FrontendErrorBoundary'
 import { LogbookMessage } from '@features/Logbook/components/VesselLogbook/LogbookMessages/messages/LogbookMessage'
 import { PriorNotification } from '@features/PriorNotification/PriorNotification.types'
-import {
-  getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches,
-  getPriorNotificationTypesFromLogbookMessagePnoTypes,
-  isPriorNotificationZero
-} from '@features/PriorNotification/utils'
+import { getPriorNotificationTypesFromLogbookMessagePnoTypes } from '@features/PriorNotification/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -96,11 +92,6 @@ export function PriorNotificationCard({
             detail={detail}
             hasBeenComputed
             isNewPriorNotification={false}
-            isPriorNotificationZero={isPriorNotificationZero(
-              getPriorNotificationFishingCatchesFromLogbookMessageFishingCatches(
-                detail.logbookMessage.message.catchOnboard
-              )
-            )}
             isVesselUnderCharter={detail.isVesselUnderCharter}
             riskFactor={detail.riskFactor}
             tripSegments={detail.logbookMessage.tripSegments}

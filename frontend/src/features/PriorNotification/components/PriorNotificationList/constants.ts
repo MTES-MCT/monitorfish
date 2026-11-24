@@ -84,8 +84,6 @@ export const DESIGNATED_PORTS_PRIOR_NOTIFICATION_TYPE_PREFIX = 'Ports désignés
 
 export const IS_INVALIDATED = 'IS_INVALIDATED'
 export const IS_INVALIDATED_LABEL = 'Invalidé'
-export const IS_PRIOR_NOTIFICATION_ZERO = 'IS_PRIOR_NOTIFICATION_ZERO'
-export const IS_PRIOR_NOTIFICATION_ZERO_LABEL = 'Préavis Zéro'
 export const FILTER_STATUSES_AS_OPTIONS: Option<FilterStatus>[] = [
   { label: 'À vérifier', value: PriorNotification.State.PENDING_VERIFICATION },
   { label: 'Hors vérification', value: PriorNotification.State.OUT_OF_VERIFICATION_SCOPE },

@@ -2,6 +2,16 @@ package fr.gouv.cnsp.monitorfish.domain.entities.prior_notification
 
 import com.neovisionaries.i18n.CountryCode
 
+/**
+ * `species`, `faoAreas`, `cgpmAreas` and `minimumQuantityKg` apply to catches, the other criteria apply to the
+ * prior notification as a whole.
+ *
+ * `hasDeclaredCatches` is about the presence of catch entries, `hasCatchesOnBoard` about their total weight being
+ * positive. A PNO with entries that all weigh 0 has declared catches but no catches on board ("Préavis 0").
+ *
+ * Empty lists and `null` values mean that the rule does not filter on the corresponding criterion.
+ * Lower bounds are inclusive, upper bounds are exclusive.
+ */
 data class PnoTypeRule(
     val id: Int,
     val species: List<String>,
@@ -10,4 +20,37 @@ data class PnoTypeRule(
     val gears: List<String>,
     val flagStates: List<CountryCode>,
     val minimumQuantityKg: Double,
-)
+    val facades: List<String> = listOf(),
+    val vesselDepartmentCodes: List<String> = listOf(),
+    val minVesselLength: Double? = null,
+    val maxVesselLength: Double? = null,
+    val minTripDurationHours: Double? = null,
+    val maxTripDurationHours: Double? = null,
+    val hasCatchesOnBoard: Boolean? = null,
+    val hasDeclaredCatches: Boolean? = null,
+) {
+    /**
+     * When unknown, the vessel length and the trip duration are considered infinite, so that the strictest rules
+     * (vessels >= 12m, longest trips) apply.
+     */
+    fun appliesToPriorNotification(
+        portFacade: String?,
+        vesselDepartmentCode: String?,
+        vesselLength: Double?,
+        tripDurationHours: Double?,
+        hasCatchesOnBoard: Boolean,
+        hasDeclaredCatches: Boolean,
+    ): Boolean {
+        val length = vesselLength ?: Double.POSITIVE_INFINITY
+        val duration = tripDurationHours ?: Double.POSITIVE_INFINITY
+
+        return (facades.isEmpty() || facades.contains(portFacade)) &&
+            (vesselDepartmentCodes.isEmpty() || vesselDepartmentCodes.contains(vesselDepartmentCode)) &&
+            (minVesselLength == null || length >= minVesselLength) &&
+            (maxVesselLength == null || length < maxVesselLength) &&
+            (minTripDurationHours == null || duration >= minTripDurationHours) &&
+            (maxTripDurationHours == null || duration < maxTripDurationHours) &&
+            (this.hasCatchesOnBoard == null || this.hasCatchesOnBoard == hasCatchesOnBoard) &&
+            (this.hasDeclaredCatches == null || this.hasDeclaredCatches == hasDeclaredCatches)
+    }
+}

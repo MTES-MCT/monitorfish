@@ -79,6 +79,14 @@ context('Vessels Track', () => {
     cy.visit('/#@-824534.42,6082993.21,8.70')
     cy.wait(5000)
 
+    // The map zooms to the first track once shown, so the second vessel's pixel position moves.
+    // Keep its map coordinate now to right-click it wherever it ends up.
+    cy.window().then(win => {
+      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+      const coordinate = win.olTestUtils.monitorfishMap.getCoordinateFromPixel([504, 290])
+      cy.wrap(coordinate).as('secondVesselCoordinate')
+    })
+
     cy.log('Show a first vessel with a three day track depth')
     cy.wait(200)
     cy.get('.VESSELS_POINTS').rightclick(460, 480, { force: true, timeout: 10000 })
@@ -87,7 +95,18 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Show a second vessel with a custom date range')
-    cy.get('.VESSELS_POINTS').rightclick(504, 290, { force: true, timeout: 10000 })
+    // Wait for the map to stop moving, then locate the second vessel
+    cy.window().should(win => {
+      // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+      expect(win.olTestUtils.monitorfishMap.getView().getAnimating()).to.equal(false)
+    })
+    cy.get<number[]>('@secondVesselCoordinate').then(coordinate => {
+      cy.window().then(win => {
+        // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+        const [x, y] = win.olTestUtils.monitorfishMap.getPixelFromCoordinate(coordinate)
+        cy.get('.VESSELS_POINTS').rightclick(Math.round(x), Math.round(y), { force: true, timeout: 10000 })
+      })
+    })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })
     cy.get('.rs-picker-daterange .rs-picker-caret-icon').eq(0).click(460, 480, { force: true, timeout: 10000 })

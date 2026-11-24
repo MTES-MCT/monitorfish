@@ -86,7 +86,6 @@ export function getPriorNotificationsFakeResponse({
         isCorrection: false,
         isInvalidated: null,
         isManuallyCreated,
-        isPriorNotificationZero: false,
         isVesselUnderCharter: false,
         onBoardCatches: [
           {
@@ -115,10 +114,13 @@ export function getPriorNotificationsFakeResponse({
         seafront: Seafront.MEMN,
         sentAt: createdAt,
         state,
+        tripDurationHours: null,
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
         tripNumber: null,
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
-        types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
+        types: [
+          { hasDesignatedPorts: false, isDurationClass: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }
+        ],
         verificationReasons: [PnoVerificationReason.FOREIGN_FLAG_COUNTRY],
         vesselExternalReferenceNumber: 'EXTIMM121',
         vesselFlagCountryCode: 'FR',

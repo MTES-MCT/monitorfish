@@ -18,7 +18,6 @@ import {
   ExpectedArrivalPeriod,
   IS_INVALIDATED,
   IS_INVALIDATED_LABEL,
-  IS_PRIOR_NOTIFICATION_ZERO,
   LastControlPeriod,
   SUB_MENU_LABEL
 } from './constants'
@@ -249,15 +248,6 @@ function getStatesFromFilterStatuses(statuses: FilterStatus[] | undefined): Prio
   ]
 }
 
-function getTypesFromFilterTypes(priorNotificationTypes: string[] | undefined): string[] | undefined {
-  const withoutZero = priorNotificationTypes?.filter(val => val !== IS_PRIOR_NOTIFICATION_ZERO)
-  if (!withoutZero?.length) {
-    return undefined
-  }
-
-  return withoutZero
-}
-
 export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logbook.ApiFilter {
   return {
     flagStates: listFilter.countryCodes,
@@ -265,10 +255,8 @@ export function getStaticApiFilterFromListFilter(listFilter: ListFilter): Logboo
     // We don't want to send `false` when it's unchecked because it would exclude invalidated prior notifications
     isInvalidated: listFilter.statuses?.includes(IS_INVALIDATED) ? true : undefined,
     isLessThanTwelveMetersVessel: getMaybeBooleanFromRichBoolean(listFilter.isLessThanTwelveMetersVessel),
-    // We don't want to send `false` when it's unchecked because it would exclude "Préavis Zéro" prior notifications
-    isPriorNotificationZero: listFilter.priorNotificationTypes?.includes(IS_PRIOR_NOTIFICATION_ZERO) ? true : undefined,
     portLocodes: listFilter.portLocodes,
-    priorNotificationTypes: getTypesFromFilterTypes(listFilter.priorNotificationTypes),
+    priorNotificationTypes: listFilter.priorNotificationTypes?.length ? listFilter.priorNotificationTypes : undefined,
     seafrontGroup: listFilter.seafrontGroup,
     searchQuery: listFilter.searchQuery,
     specyCodes: listFilter.specyCodes,
@@ -308,6 +296,25 @@ export function getVesselIdentityFromPriorNotification(
     vesselLength: priorNotification.vesselLength,
     vesselName: priorNotification.vesselName
   }
+}
+
+/**
+ * @example "Marée 24-96h (48h)" when a duration class type is attributed, "48h" otherwise, "Inconnue" if unknown.
+ */
+export function getTripDurationLabel(
+  priorNotification: Pick<PriorNotification.PriorNotification, 'tripDurationHours' | 'types'>
+) {
+  const durationClassTypeName = priorNotification.types.find(({ isDurationClass }) => isDurationClass)?.name
+  const durationLabel =
+    priorNotification.tripDurationHours !== undefined
+      ? `${Math.round(priorNotification.tripDurationHours)}h`
+      : undefined
+
+  if (durationClassTypeName && durationLabel) {
+    return `${durationClassTypeName} (${durationLabel})`
+  }
+
+  return durationClassTypeName ?? durationLabel ?? 'Inconnue'
 }
 
 export function sortPriorNotificationTypesByPriority(priorNotificationTypes: string[]) {

@@ -570,6 +570,7 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         longitude: undefined,
         note: undefined,
         pnoTypes: [
+          { hasDesignatedPorts: false, minimumNotificationPeriod: 0.5, pnoTypeName: 'Préavis 0' },
           {
             hasDesignatedPorts: false,
             minimumNotificationPeriod: 4,

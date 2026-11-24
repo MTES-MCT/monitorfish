@@ -125,7 +125,7 @@ export function getTableColumns(isFromUrl: boolean): Array<ColumnDef<PriorNotifi
         <TypesCell priorNotification={info.row.original} />
       ),
       enableSorting: false,
-      header: () => 'Types de préavis',
+      header: () => 'Critères réglementaires',
       id: 'types',
       size: 244 + legacyFirefoxOffset
     },

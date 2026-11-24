@@ -42,7 +42,6 @@ class GetPriorNotifications(
     fun execute(
         filter: PriorNotificationsFilter,
         isInvalidated: Boolean?,
-        isPriorNotificationZero: Boolean?,
         seafrontGroup: SeafrontGroup,
         states: List<PriorNotificationState>?,
         sortColumn: PriorNotificationsSortColumn,
@@ -60,7 +59,7 @@ class GetPriorNotifications(
             }
         val filteredPriorNotifications =
             timed("filter") {
-                filter(allPriorNotifications, seafrontGroup, states, isInvalidated, isPriorNotificationZero)
+                filter(allPriorNotifications, seafrontGroup, states, isInvalidated)
             }
         val sortedPriorNotifications =
             timed("sort") {
@@ -104,11 +103,10 @@ class GetPriorNotifications(
         seafrontGroup: SeafrontGroup,
         states: List<PriorNotificationState>?,
         isInvalidated: Boolean?,
-        isPriorNotificationZero: Boolean?,
     ): List<PriorNotification> =
         priorNotifications.filter { pno ->
             seafrontGroup.hasSeafront(pno.seafront) &&
-                matchesStatusFilter(pno, states, isInvalidated, isPriorNotificationZero)
+                matchesStatusFilter(pno, states, isInvalidated)
         }
 
     private fun sort(
@@ -185,17 +183,12 @@ class GetPriorNotifications(
             priorNotification: PriorNotification,
             states: List<PriorNotificationState>?,
             isInvalidated: Boolean?,
-            isPriorNotificationZero: Boolean?,
         ): Boolean =
-            (states.isNullOrEmpty() && isInvalidated == null && isPriorNotificationZero == null) ||
+            (states.isNullOrEmpty() && isInvalidated == null) ||
                 (!states.isNullOrEmpty() && states.contains(priorNotification.state)) ||
                 (
                     isInvalidated != null &&
                         priorNotification.logbookMessageAndValue.value.isInvalidated == isInvalidated
-                ) ||
-                (
-                    isPriorNotificationZero != null &&
-                        priorNotification.isPriorNotificationZero == isPriorNotificationZero
                 )
 
         private fun getSortKey(

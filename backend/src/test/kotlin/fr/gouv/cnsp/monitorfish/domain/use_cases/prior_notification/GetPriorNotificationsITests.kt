@@ -59,7 +59,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
             willArriveBefore = ZonedDateTime.parse("2099-12-31T00:00:00Z"),
         )
     private val defaultIsInvalidated = null
-    private val defaultIsPriorNotificationZero = null
     private val defaultSeafrontGroup = SeafrontGroup.ALL
     private val defaultStates = null
     private val defaultSortColumn = PriorNotificationsSortColumn.EXPECTED_ARRIVAL_DATE
@@ -80,7 +79,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -112,7 +110,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -144,7 +141,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -176,7 +172,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -208,7 +203,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -237,7 +231,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -266,7 +259,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -300,7 +292,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -334,7 +325,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -365,7 +355,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     sortColumn,
@@ -395,7 +384,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     seafrontGroup,
                     defaultStates,
                     defaultSortColumn,
@@ -421,7 +409,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     states,
                     defaultSortColumn,
@@ -454,7 +441,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     isInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     defaultSortColumn,
@@ -481,7 +467,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     isInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     states,
                     defaultSortColumn,
@@ -503,114 +488,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
 
     @Test
     @Transactional
-    fun `execute Should return a list of Zero prior notifications`() {
-        // Given
-        val isPriorNotificationZero = true
-
-        // When
-        val result =
-            getPriorNotifications
-                .execute(
-                    defaultFilter,
-                    defaultIsInvalidated,
-                    isPriorNotificationZero,
-                    defaultSeafrontGroup,
-                    defaultStates,
-                    defaultSortColumn,
-                    defaultSortDirection,
-                    defaultPageNumber,
-                    defaultPageSize,
-                )
-
-        // Then
-        assertThat(result.data).hasSizeGreaterThan(0)
-        assertThat(result.data.all { it.isPriorNotificationZero == true }).isTrue()
-    }
-
-    @Test
-    @Transactional
-    fun `execute Should return a list of either pending send or Zero prior notifications`() {
-        // Given
-        val isPriorNotificationZero = true
-        val states = listOf(PriorNotificationState.FAILED_SEND)
-
-        // When
-        val result =
-            getPriorNotifications
-                .execute(
-                    defaultFilter,
-                    defaultIsInvalidated,
-                    isPriorNotificationZero,
-                    defaultSeafrontGroup,
-                    states,
-                    defaultSortColumn,
-                    defaultSortDirection,
-                    defaultPageNumber,
-                    defaultPageSize,
-                )
-
-        // Then
-        val zeroPriorNotifications = result.data.filter { it.isPriorNotificationZero == true }
-        val failedSendPriorNotifications = result.data.filter { it.state == PriorNotificationState.FAILED_SEND }
-        val failedSendPriorNotificationReportIds = failedSendPriorNotifications.map { it.reportId!! }
-        assertThat(zeroPriorNotifications).hasSizeGreaterThan(0)
-        assertThat(failedSendPriorNotifications).hasSizeGreaterThan(0)
-        assertThat(
-            zeroPriorNotifications.none { failedSendPriorNotificationReportIds.contains(it.reportId!!) },
-        ).isTrue()
-    }
-
-    @Test
-    @Transactional
-    fun `execute Should return a list of either pending send or invalidated or Zero prior notifications`() {
-        // Given
-        val isInvalidated = true
-        val isPriorNotificationZero = true
-        val states = listOf(PriorNotificationState.OUT_OF_VERIFICATION_SCOPE)
-
-        // When
-        val result =
-            getPriorNotifications
-                .execute(
-                    defaultFilter,
-                    isInvalidated,
-                    isPriorNotificationZero,
-                    defaultSeafrontGroup,
-                    states,
-                    defaultSortColumn,
-                    defaultSortDirection,
-                    defaultPageNumber,
-                    defaultPageSize,
-                )
-
-        // Then
-        val invalidatedPriorNotifications = result.data.filter { it.logbookMessageAndValue.value.isInvalidated == true }
-        val invalidatedPriorNotificationsIds = invalidatedPriorNotifications.map { it.reportId!! }
-        val zeroPriorNotifications = result.data.filter { it.isPriorNotificationZero == true }
-        val zeroPriorNotificationIds = zeroPriorNotifications.map { it.reportId!! }
-        val outOfVerificationScopePriorNotifications =
-            result.data.filter { it.state == PriorNotificationState.OUT_OF_VERIFICATION_SCOPE }
-        val outOfVerificationScopePriorNotificationReportIds =
-            outOfVerificationScopePriorNotifications.map { it.reportId!! }
-        assertThat(invalidatedPriorNotifications).hasSizeGreaterThan(0)
-        assertThat(zeroPriorNotificationIds).hasSizeGreaterThan(0)
-        assertThat(outOfVerificationScopePriorNotifications).hasSizeGreaterThan(0)
-        assertThat(
-            invalidatedPriorNotifications.none {
-                outOfVerificationScopePriorNotificationReportIds.contains(it.reportId!!) ||
-                    zeroPriorNotificationIds.contains(it.reportId)
-            },
-        ).isTrue()
-        assertThat(
-            zeroPriorNotifications.none {
-                outOfVerificationScopePriorNotificationReportIds.contains(it.reportId!!) ||
-                    invalidatedPriorNotificationsIds.contains(it.reportId)
-            },
-        ).isTrue()
-    }
-
-    @Test
-    @Transactional
     fun `execute Should exclude foreign ports unless they are French vessels`() {
         // Given
         val pageSize = 100
@@ -621,7 +498,6 @@ class GetPriorNotificationsITests : AbstractDBTests() {
                 .execute(
                     defaultFilter,
                     defaultIsInvalidated,
-                    defaultIsPriorNotificationZero,
                     defaultSeafrontGroup,
                     defaultStates,
                     defaultSortColumn,

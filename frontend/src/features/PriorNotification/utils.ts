@@ -30,8 +30,9 @@ export function getPriorNotificationIdentifier(
 export function getPriorNotificationTypesFromLogbookMessagePnoTypes(
   logbookMessagePnoTypes: Logbook.MessagePnoType[] | undefined
 ): PriorNotification.Type[] | undefined {
-  return logbookMessagePnoTypes?.map(({ pnoTypeName, ...rest }) => ({
+  return logbookMessagePnoTypes?.map(({ isDurationClass, pnoTypeName, ...rest }) => ({
     ...rest,
+    isDurationClass: isDurationClass ?? false,
     name: pnoTypeName
   }))
 }
@@ -122,14 +123,4 @@ export function getFormDataFishingCatchesFromFormValuesFishingCatches(
     },
     []
   )
-}
-
-export function isPriorNotificationZero(
-  fishingCatches: PriorNotification.FormDataFishingCatch[] | undefined
-): boolean | undefined {
-  if (fishingCatches === undefined || fishingCatches.length === 0) {
-    return undefined
-  }
-
-  return fishingCatches.every(fishingCatch => fishingCatch.weight === 0)
 }

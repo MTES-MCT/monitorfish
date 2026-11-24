@@ -13,6 +13,7 @@ import {
   displayOnboardFishingSpecies,
   getColorsFromState,
   getExpandableRowCellCustomStyle,
+  getTripDurationLabel,
   getVesselIdentityFromPriorNotification
 } from './utils'
 import { PriorNotification } from '../../PriorNotification.types'
@@ -182,6 +183,8 @@ export function Row({ row }: RowProps) {
                 <Link onClick={openCard}>Voir plus de détail</Link>
               </p>
             )}
+            <ExpandedRowLabel style={{ display: 'block', marginTop: 16 }}>Durée de marée :</ExpandedRowLabel>
+            <ExpandedRowValue>{getTripDurationLabel(priorNotification)}</ExpandedRowValue>
           </ExpandedRowCell>
           <ExpandedRowCell colSpan={2} style={{ paddingLeft: 0, paddingRight: 0, paddingTop: 12 }}>
             <>

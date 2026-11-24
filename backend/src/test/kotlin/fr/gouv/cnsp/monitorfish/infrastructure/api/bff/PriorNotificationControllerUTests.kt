@@ -133,7 +133,6 @@ class PriorNotificationControllerUTests {
             getPriorNotifications.execute(
                 any(),
                 anyOrNull(),
-                anyOrNull(),
                 any(),
                 anyOrNull(),
                 any(),

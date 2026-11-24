@@ -87,6 +87,9 @@ context('Vessels Track', () => {
     cy.get('*[data-cy^="close-vessel-track"]').should('have.length', 1)
 
     cy.log('Show a second vessel with a custom date range')
+    // The map fits the view to the first track: wait for this animation to end
+    // before right-clicking at fixed pixel coordinates (avoids a flaky missing context menu)
+    cy.wait(3000)
     cy.get('.VESSELS_POINTS').rightclick(504, 290, { force: true, timeout: 10000 })
     cy.get('*[data-cy^="show-vessel-tracks-menu-options"]').click({ force: true })
     cy.get('*[data-cy^="show-vessel-tracks-custom-period"]').click({ force: true })

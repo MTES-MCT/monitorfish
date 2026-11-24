@@ -102,8 +102,13 @@ context('Vessels Track', () => {
     })
     cy.get<number[]>('@secondVesselCoordinate').then(coordinate => {
       cy.window().then(win => {
+        // The map has been fitted to the first track: the second vessel may now be off-screen.
+        // Center the map instantly on it and force a synchronous render so hit-detection is up to date.
         // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-        const [x, y] = win.olTestUtils.monitorfishMap.getPixelFromCoordinate(coordinate)
+        const { monitorfishMap } = win.olTestUtils
+        monitorfishMap.getView().setCenter(coordinate)
+        monitorfishMap.renderSync()
+        const [x, y] = monitorfishMap.getPixelFromCoordinate(coordinate)
         cy.get('.VESSELS_POINTS').rightclick(Math.round(x), Math.round(y), { force: true, timeout: 10000 })
       })
     })

@@ -1,11 +1,22 @@
 import { getLocalizedDayjs } from '../utils/getLocalizedDayjs'
 import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
+/**
+ * Wait (with retries, until the Cypress timeout) for a vessels layer to be loaded and populated,
+ * instead of sleeping for a fixed duration that may not be enough on slow machines.
+ */
+function waitForVesselsLayer(layerName: string = 'VESSELS_POINTS') {
+  cy.window({ timeout: 30000 }).should(win => {
+    // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+    expect(win.olTestUtils?.getFeaturesFromLayer(layerName)?.length ?? 0).to.be.greaterThan(0)
+  })
+}
+
 context('Vessels Track', () => {
   it('A track Should be showed When clicking on a vessel with CTRL key pressed', () => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
+    waitForVesselsLayer()
 
     // When
     cy.wait(400)
@@ -46,7 +57,7 @@ context('Vessels Track', () => {
   it('AIS vessel tracks Should be shown and hidden individually When clicking on AIS vessels', () => {
     cy.login('superuser')
     cy.visit('/#@-1849025.62,4982527.30,8.81')
-    cy.wait(5000)
+    waitForVesselsLayer()
 
     cy.intercept('GET', '/bff/v1/vessels/ais*').as('aisVessels')
     cy.clickButton('AIS')
@@ -77,7 +88,7 @@ context('Vessels Track', () => {
   it('A track Should be showed When clicking on a vessel with the custom map menu', () => {
     cy.login('superuser')
     cy.visit('/#@-824534.42,6082993.21,8.70')
-    cy.wait(5000)
+    waitForVesselsLayer()
 
     // The map zooms to the first track once shown, so the second vessel's pixel position moves.
     // Keep its map coordinate now to right-click it wherever it ends up.

@@ -23,8 +23,5 @@ id,name,minimum_notification_period,has_designated_ports,is_duration_class
 23,Marée ≥ 24h,4.0,False,True
 24,Marée < 24h,1.0,False,True
 25,Préavis Corse,4.0,False,False
-26,Préavis thon rouge,4.0,False,False
-27,Préavis anchois,4.0,False,False
-28,Préavis espadon,4.0,False,False
-29,Préavis corail rouge,4.0,False,False
-30,Préavis 0,0.5,False,False
+26,Préavis ports désignés anchois,4.0,False,False
+27,Préavis 0,0.5,False,False

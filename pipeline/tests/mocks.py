@@ -98,8 +98,14 @@ def extract_satellite_operators_statuses_mock_factory(
     def extract_satellite_operators_statuses() -> pd.DataFrame:
         return pd.DataFrame(
             {
-                "satellite_operator_id": [1, 2],
-                "operator_is_up": [operator_1_status, operator_2_status],
+                "satellite_operator_id": [1, 1, 2, 2],
+                "is_coastal": [True, False, True, False],
+                "operator_is_up": [
+                    operator_1_status,
+                    operator_1_status,
+                    operator_2_status,
+                    operator_2_status,
+                ],
             }
         )
 

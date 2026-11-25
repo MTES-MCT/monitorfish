@@ -7,6 +7,7 @@ SELECT
     v.flag_state,
     b.beacon_number,
     b.satellite_operator_id,
+    b.is_coastal,
     b.logging_datetime_utc
 FROM beacons b
 JOIN vessels v

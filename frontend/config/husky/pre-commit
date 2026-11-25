@@ -18,3 +18,15 @@ fi
 if git diff --cached --name-only --diff-filter=ACMR -- '*.kt' '*.kts' | grep -q .; then
   npx lint-staged --cwd ./backend
 fi
+
+# Pipeline: autoflake / isort / black / flake8 on staged Python files (via the pre-commit framework).
+# pre-commit stashes unstaged changes and fails if a hook rewrote files: re-stage them and commit again.
+if git diff --cached --name-only --diff-filter=ACMR -- 'pipeline/*.py' | grep -q .; then
+  if command -v pre-commit > /dev/null; then
+    PRE_COMMIT="pre-commit"
+  else
+    PRE_COMMIT="$(poetry -C pipeline env info -p)/bin/pre-commit"
+  fi
+  $PRE_COMMIT hook-impl --config=pipeline/.pre-commit-config.yaml --hook-type=pre-commit \
+    --hook-dir "$(git rev-parse --git-path hooks)" -- 
+fi

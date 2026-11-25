@@ -125,10 +125,14 @@ def get_new_malfunctions(
     malfunction_datetime_utc_threshold_at_sea: datetime,
     malfunction_datetime_utc_threshold_at_port: datetime,
 ) -> pd.DataFrame:
+    # Satellite operators statuses are computed separately for coastal and non-coastal
+    # beacons (different thresholds). Beacons with unknown `is_coastal` are considered
+    # non-coastal.
     operators_up = set(
         satellite_operators_statuses.loc[
-            satellite_operators_statuses.operator_is_up == True, "satellite_operator_id"
-        ].values
+            satellite_operators_statuses.operator_is_up == True,
+            ["satellite_operator_id", "is_coastal"],
+        ].itertuples(index=False, name=None)
     )
 
     # Remove emissions of beacons already in malfunction
@@ -137,8 +141,18 @@ def get_new_malfunctions(
     ].copy(deep=True)
 
     # Remove emissions of beacons whose satellite operator is down
+    beacons_operator_and_coastal_status = pd.Series(
+        list(
+            zip(
+                last_emissions.satellite_operator_id,
+                last_emissions.is_coastal.map(lambda x: x is True or x == 1),
+            )
+        ),
+        index=last_emissions.index,
+        dtype=object,
+    )
     last_emissions = last_emissions.loc[
-        last_emissions.satellite_operator_id.isin(operators_up)
+        beacons_operator_and_coastal_status.isin(operators_up)
     ].copy(deep=True)
 
     new_malfunctions = (
@@ -164,7 +178,7 @@ def get_new_malfunctions(
     )
 
     new_malfunctions = new_malfunctions.drop(
-        columns=["is_manual", "satellite_operator_id"]
+        columns=["is_manual", "satellite_operator_id", "is_coastal"]
     )
 
     return new_malfunctions

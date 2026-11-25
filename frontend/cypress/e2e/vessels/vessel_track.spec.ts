@@ -2,13 +2,40 @@ import { getLocalizedDayjs } from '../utils/getLocalizedDayjs'
 import { getUtcizedDayjs } from '../utils/getUtcizedDayjs'
 
 /**
- * Wait (with retries, until the Cypress timeout) for a vessels layer to be loaded and populated,
+ * Wait (with retries, until the timeout) for a vessels layer to be loaded AND drawn,
  * instead of sleeping for a fixed duration that may not be enough on slow machines.
+ *
+ * Having features in the layer source is not enough: the WebGL layer must also have rendered them
+ * for clicks to hit them. So, when a vessel is inside the viewport, we wait for it to be found by hit-detection.
  */
 function waitForVesselsLayer(layerName: string = 'VESSELS_POINTS') {
   cy.window({ timeout: 30000 }).should(win => {
     // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
-    expect(win.olTestUtils?.getFeaturesFromLayer(layerName)?.length ?? 0).to.be.greaterThan(0)
+    const { monitorfishMap } = win.olTestUtils ?? {}
+    // @ts-ignore - olTestUtils is added to window in monitorfishMap.ts for testing
+    const features = win.olTestUtils?.getFeaturesFromLayer(layerName) ?? []
+    expect(features.length, `${layerName} features`).to.be.greaterThan(0)
+
+    const [width, height] = monitorfishMap.getSize() ?? [1280, 1024]
+    let pixelInViewport: number[] | undefined
+    for (const feature of features) {
+      const pixel = monitorfishMap.getPixelFromCoordinate(feature.getGeometry().getCoordinates())
+      if (pixel && pixel[0] >= 0 && pixel[0] <= width && pixel[1] >= 0 && pixel[1] <= height) {
+        pixelInViewport = pixel
+        break
+      }
+    }
+
+    // Some views have no vessel of this layer on screen (e.g. the AIS test): nothing to hit-detect then
+    if (!pixelInViewport) {
+      return
+    }
+
+    const hitFeature = monitorfishMap.forEachFeatureAtPixel(pixelInViewport, (feature: any) => feature, {
+      hitTolerance: 5,
+      layerFilter: (layer: any) => layer.get('code') === layerName
+    })
+    expect(hitFeature, `${layerName} drawn (hit-detection ready)`).to.exist
   })
 }
 

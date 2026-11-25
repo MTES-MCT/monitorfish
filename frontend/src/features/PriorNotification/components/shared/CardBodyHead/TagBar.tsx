@@ -1,7 +1,4 @@
-import {
-  PnoVerificationScopeReasonLabel,
-  PRIOR_NOTIFICATION_ZERO_TYPE_NAME
-} from '@features/PriorNotification/constants'
+import { PnoVerificationScopeReasonLabel } from '@features/PriorNotification/constants'
 import { VesselRiskFactor } from '@features/RiskFactor/components/VesselRiskFactor'
 import { THEME } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
@@ -77,20 +74,11 @@ export function TagBar({
           </FixedTag>
         )}
 
-        {types?.some(({ name }) => name === PRIOR_NOTIFICATION_ZERO_TYPE_NAME) && (
-          <FixedTag key="priorNotificationZero" borderColor={THEME.color.slateGray}>
-            {PRIOR_NOTIFICATION_ZERO_TYPE_NAME}
+        {types?.map(type => (
+          <FixedTag key={`type-${type.name}`} $isFullWidth backgroundColor={THEME.color.gainsboro}>
+            {type.name}
           </FixedTag>
-        )}
-
-        {types?.map(
-          type =>
-            type.hasDesignatedPorts && (
-              <FixedTag key={`type-${type.name}`} $isFullWidth backgroundColor={THEME.color.gainsboro}>
-                {type.name}
-              </FixedTag>
-            )
-        )}
+        ))}
       </Row>
     </Wrapper>
   )

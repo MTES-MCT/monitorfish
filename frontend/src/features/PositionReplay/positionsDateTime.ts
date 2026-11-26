@@ -8,15 +8,10 @@ timeago.register('fr', timeagoFrenchLocale)
 
 const OPACITY_REDUCED_AFTER_HOURS = 3
 
-/**
- * The age of a date ("il y a 2 heures"), relative to the date the positions are displayed at:
- * now, or the replayed date.
- */
 export function formatAgeAtPositionsDate(dateTime: string | number, positionsDateTime: string | undefined): string {
   return timeago.format(dateTime, 'fr', positionsDateTime ? { relativeDate: positionsDateTime } : undefined)
 }
 
-/** The positions older than this date are displayed with a reduced opacity. */
 export function getOpacityReducedEpochMilli(positionsDateTime: string | undefined): number {
   return customDayjs(positionsDateTime).subtract(OPACITY_REDUCED_AFTER_HOURS, 'hour').valueOf()
 }

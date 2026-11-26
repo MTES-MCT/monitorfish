@@ -14,8 +14,8 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
- * Get the trip during which the vessel was at sea at the replayed date.
- * Without such a trip, no trip is displayed: the current one would be read as the one of the replayed date.
+ * Without a trip at the replayed date, no trip is displayed:
+ * the current one would be read as the one of the replayed date.
  */
 export const getVesselLogbookAtDateTime =
   (vesselIdentity: Vessel.VesselIdentity, dateTime: string): MainAppThunk<Promise<void>> =>

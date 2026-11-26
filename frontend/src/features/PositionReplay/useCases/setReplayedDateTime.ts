@@ -5,10 +5,7 @@ import { positionReplayActions } from '@features/PositionReplay/slice'
 
 import type { MainAppThunk } from '@store'
 
-/**
- * Replays the positions at another date, with the logbook of the selected vessel at this date.
- * Its track follows with the positions fetched at this date.
- */
+/** The selected vessel track follows with the positions fetched at this date. */
 export const setReplayedDateTime =
   (dateTime: string | undefined): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {

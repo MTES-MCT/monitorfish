@@ -7,7 +7,6 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
- * Shows a vessel opened from live data (an alert, a prior notification...).
  * While positions are replayed, the user is asked whether to quit the replay to see the vessel as it is now.
  */
 export const showVesselFromLiveData =

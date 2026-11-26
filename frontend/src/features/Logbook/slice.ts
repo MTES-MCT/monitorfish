@@ -124,9 +124,7 @@ const logbookSlice = createSlice({
       state.nextLogbookMessages = action.payload
     },
 
-    /**
-     * The vessel has no voyage to display, e.g. when it was not at sea at the replayed date
-     */
+    /** E.g. when the vessel was not at sea at the replayed date. */
     setNoVoyage(state, action: PayloadAction<Vessel.VesselIdentity>) {
       state.displayedLogbookOverlays = []
       state.logbookMessages = undefined

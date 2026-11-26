@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 import { VESSEL_SIDEBAR_ACTION_BUTTON_SIZE } from '../constants'
 
-/** Placed in the action buttons column of `VesselSidebar`. */
 export const VesselSidebarActionButton = styled.button<{
   $backgroundColor?: string
 }>`

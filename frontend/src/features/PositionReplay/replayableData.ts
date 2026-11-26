@@ -2,7 +2,6 @@ import { selectIsPositionReplayActive } from '@features/PositionReplay/selectors
 
 import type { MainRootState } from '@store'
 
-/** The data displayed by the app. */
 export enum DataKind {
   ALERTS = 'ALERTS',
   BEACON_MALFUNCTIONS = 'BEACON_MALFUNCTIONS',
@@ -72,7 +71,6 @@ export const selectIsDataAvailablePredicate = (state: MainRootState): IsDataAvai
 export const selectIsDataAvailable = (state: MainRootState, dataKind: DataKind): boolean =>
   selectIsDataAvailablePredicate(state)(dataKind)
 
-/** For a vessel entity or feature, which is replayed or current. */
 export function isDataAvailableForVessel(vessel: { isReplayed?: boolean | undefined }, dataKind: DataKind): boolean {
   return vessel.isReplayed ? isHistorized(dataKind) : isAlwaysAvailable(dataKind)
 }

@@ -7,9 +7,6 @@ import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainRootState } from '@store'
 
-/**
- * The vessel list filters as they apply to the displayed vessels: the current ones, or the replayed ones.
- */
 export function getFilteredVesselFeatureIds(
   vessels: Vessel.DisplayedVessel[],
   state: MainRootState

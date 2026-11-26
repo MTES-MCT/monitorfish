@@ -8,10 +8,7 @@ import { skipToken } from '@reduxjs/toolkit/query'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
-/**
- * The polled active vessels, or the vessels at the replayed date.
- * While another date is fetched, the previous replayed vessels are kept.
- */
+/** While another date is fetched, the previous replayed vessels are kept. */
 export function useDisplayedVessels() {
   const isInLightMode = useIsInLightMode()
   const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)

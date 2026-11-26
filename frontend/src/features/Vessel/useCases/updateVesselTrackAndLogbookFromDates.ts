@@ -9,8 +9,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
 
 /**
- * Update from the positions panel.
- * While replaying positions, the logbook stays the one of the replayed date.
+ * Update from the positions panel
  */
 export const updateVesselTrackAndLogbookFromDates =
   (vesselIdentity: Vessel.VesselIdentity, trackRequest: TrackRequest): MainAppThunk<Promise<void>> =>

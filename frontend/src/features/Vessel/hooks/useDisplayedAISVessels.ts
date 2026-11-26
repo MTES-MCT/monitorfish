@@ -11,9 +11,6 @@ import type { MainRootState } from '@store'
 export const selectAreAISVesselsFetched = (state: MainRootState): boolean =>
   import.meta.env.FRONTEND_AIS_VESSELS_ENABLED === 'true' && state.displayedComponent.areAISVesselsDisplayed
 
-/**
- * The polled AIS vessels, or the AIS vessels at the replayed date.
- */
 export function useDisplayedAISVessels(vesselLocation: VesselLocation | undefined) {
   const areAISVesselsFetched = useMainAppSelector(selectAreAISVesselsFetched)
   const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)

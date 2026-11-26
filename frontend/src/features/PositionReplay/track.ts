@@ -47,9 +47,6 @@ export function isTrackDepthAvailable(trackDepth: VesselTrackDepth, isPositionRe
   return !isPositionReplayActive || trackDepth !== VesselTrackDepth.LAST_DEPARTURE
 }
 
-/**
- * A predefined track depth ending at the positions date: now, or the replayed date.
- */
 export function getTrackRequestEndingAt(
   trackDepth: SelectableVesselTrackDepth,
   positionsDateTime: string | undefined
@@ -102,9 +99,6 @@ export type LastVMSPosition = {
 
 const VMS_POSITION_TYPE = 'VMS'
 
-/**
- * The last VMS position of a replayed track, which ends at the replayed date.
- */
 export function getLastVMSPositionOfTrack(positions: Vessel.VesselPosition[] | null): LastVMSPosition {
   const vmsPositions = (positions ?? [])
     .filter(position => position.positionType === VMS_POSITION_TYPE)

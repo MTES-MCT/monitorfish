@@ -30,7 +30,6 @@ export function isVesselListFilterAvailable(key: keyof VesselListFilter, isDataA
   return isDataAvailable(VESSEL_LIST_FILTER_DATA_KIND[key])
 }
 
-/** The filters actually applied to the displayed vessels. */
 export function getApplicableVesselListFilter(
   filters: VesselListFilter,
   isDataAvailable: IsDataAvailable

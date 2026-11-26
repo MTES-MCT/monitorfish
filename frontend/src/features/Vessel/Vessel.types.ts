@@ -93,7 +93,6 @@ export namespace Vessel {
     lastPositionSentAt: number
   }
 
-  /** The vessels displayed on the map and in the vessel list: the active ones, or the replayed ones. */
   export type DisplayedVessel = ActiveVessel | ReplayedVessel
 
   export type VesselPosition = {

@@ -9,9 +9,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
 import java.time.ZonedDateTime
 
-/**
- * A vessel at a past date: its position, its stable identity and producer organization only.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ReplayedVesselDataOutput(
     val vesselId: Int?,

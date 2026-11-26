@@ -32,8 +32,9 @@ export function PositionReplayDialog() {
 
   const now = customDayjs()
 
-  const step = (dateTimeStep: DateTimeStep, direction: 1 | -1) =>
-    dispatch(setReplayedDateTime(stepReplayedDateTime(dateTime, dateTimeStep, direction, now)))
+  const step = (dateTimeStep: DateTimeStep, direction: 1 | -1) => {
+    void dispatch(setReplayedDateTime(stepReplayedDateTime(dateTime, dateTimeStep, direction, now)))
+  }
 
   const stepWithKeyboard = (event: KeyboardEvent) => {
     // The arrows move the caret in the date and time inputs

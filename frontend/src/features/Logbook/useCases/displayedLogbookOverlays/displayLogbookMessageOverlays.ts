@@ -15,7 +15,7 @@ import type { MainAppThunk } from '@store'
 import type { Dayjs } from 'dayjs'
 import type { Geometry } from 'ol/geom'
 
-export const displayLogbookMessageOverlays = (): MainAppThunk => async (dispatch, getState) => {
+export const displayLogbookMessageOverlays = (): MainAppThunk<Promise<void>> => async (dispatch, getState) => {
   const {
     fishingActivities: { areFishingActivitiesShowedOnMap, logbookMessages }
   } = getState()

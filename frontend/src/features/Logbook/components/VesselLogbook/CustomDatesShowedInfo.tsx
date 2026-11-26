@@ -48,7 +48,7 @@ export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
 
     const trackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
 
-    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
+    await dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
   }, [dispatch, defaultVesselTrackDepth, positionsDateTime, replayedTrackRequest, selectedVesselIdentity])
 
   return (
@@ -59,7 +59,7 @@ export function CustomDatesShowedInfo({ width }: CustomDatesShowedInfoProps) {
             Piste affichée du {getDate(selectedVesselTrackRequest?.afterDateTime.toString()).replace('/20', '/')} au{' '}
             {getDate(selectedVesselTrackRequest?.beforeDateTime.toString()).replace('/20', '/')}
           </TrackDepthInfo>
-          <ShowLastPositions data-cy="custom-dates-show-last-positions" onClick={setToDefaultTrackDepth}>
+          <ShowLastPositions data-cy="custom-dates-show-last-positions" onClick={() => void setToDefaultTrackDepth()}>
             {positionsDateTime ? 'Revenir à la date du rejeu' : 'Afficher les dernières positions'}
           </ShowLastPositions>
         </Wrapper>

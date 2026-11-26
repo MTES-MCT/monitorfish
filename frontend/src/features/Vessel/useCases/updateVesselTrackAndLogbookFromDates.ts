@@ -13,7 +13,7 @@ import type { MainAppThunk } from '@store'
  * While replaying positions, the logbook stays the one of the replayed date.
  */
 export const updateVesselTrackAndLogbookFromDates =
-  (vesselIdentity: Vessel.VesselIdentity, trackRequest: TrackRequest): MainAppThunk =>
+  (vesselIdentity: Vessel.VesselIdentity, trackRequest: TrackRequest): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     if (selectIsPositionReplayActive(getState())) {
       await dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))

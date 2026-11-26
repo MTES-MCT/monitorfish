@@ -21,7 +21,7 @@ import type { MainAppDispatch, MainAppThunk } from '@store'
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrack =
-  (vesselIdentity: Vessel.VesselIdentity, trackRequest?: TrackRequest): MainAppThunk =>
+  (vesselIdentity: Vessel.VesselIdentity, trackRequest?: TrackRequest): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     try {
       const nextTrackRequest = trackRequest ?? selectSelectedVesselTrackRequest(getState())

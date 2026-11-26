@@ -110,7 +110,7 @@ context('Favorite Vessel', () => {
      */
     // Given
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.fill('Afficher depuis', '12 heures')
+    cy.fill("Période d'affichage par défaut des pistes (VMS et AIS)", '12 heures')
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
 
     // When (PHENOMENE is the last row, list is sorted by name)
@@ -122,7 +122,7 @@ context('Favorite Vessel', () => {
     })
 
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.fill('Afficher depuis', '1 semaine')
+    cy.fill("Période d'affichage par défaut des pistes (VMS et AIS)", '1 semaine')
 
     cy.getFeaturesFromLayer('VESSEL_TRACK').should(features => {
       expect(features.length).to.be.equal(28)

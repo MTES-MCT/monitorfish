@@ -3,6 +3,7 @@ import { monitorfishMap } from '@features/Map/monitorfishMap'
 import { VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/VesselsLayer/constants'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { renderLayersDependingOnVesselLayer } from '@features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer'
+import { selectAreVesselsNotInVesselGroupsHidden } from '@features/VesselGroup/selectors'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect } from 'react'
@@ -17,9 +18,7 @@ function UnmemoizedVesselsLayer() {
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
-    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
-  )
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(selectAreVesselsNotInVesselGroupsHidden)
 
   useEffect(() => {
     const isLight = VesselFeature.iconIsLight(selectedBaseLayer)

@@ -353,4 +353,49 @@ class JpaAisPositionRepositoryITests : AbstractDBTests() {
         // Then
         assertThat(result).isEmpty()
     }
+
+    @Test
+    @Transactional
+    fun `findLastPositionOfEachVesselBetween Should return the last AIS position of each MMSI within the time range`() {
+        // Given
+        val replayedAt = ZonedDateTime.now().minusDays(2)
+        jpaAisPositionRepository.saveAll(
+            listOf(
+                AisPosition(
+                    mmsi = 999000001L,
+                    dateTime = replayedAt.minusMinutes(40),
+                    latitude = 47.0,
+                    longitude = -3.0,
+                ),
+                AisPosition(
+                    mmsi = 999000001L,
+                    dateTime = replayedAt.minusMinutes(10),
+                    latitude = 47.1,
+                    longitude = -3.1,
+                ),
+                AisPosition(
+                    mmsi = 999000001L,
+                    dateTime = replayedAt.plusMinutes(10),
+                    latitude = 47.2,
+                    longitude = -3.2,
+                ),
+                AisPosition(
+                    mmsi = 999000002L,
+                    dateTime = replayedAt.minusMinutes(20),
+                    latitude = 46.0,
+                    longitude = -2.0,
+                ),
+                AisPosition(mmsi = 999000003L, dateTime = replayedAt.minusHours(2), latitude = 45.0, longitude = -1.0),
+            ),
+        )
+
+        // When
+        val positions =
+            jpaAisPositionRepository.findLastPositionOfEachVesselBetween(replayedAt.minusHours(1), replayedAt)
+
+        // Then
+        val replayedPositions = positions.filter { it.mmsi in 999000001L..999000003L }
+        assertThat(replayedPositions.map { it.mmsi }).containsExactlyInAnyOrder(999000001L, 999000002L)
+        assertThat(replayedPositions.first { it.mmsi == 999000001L }.latitude).isEqualTo(47.1)
+    }
 }

@@ -1,9 +1,9 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { HIDDEN_ERROR } from '@features/Mission/components/MissionForm/constants'
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { VesselSearch } from '@features/Vessel/components/VesselSearch'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
-import { showVessel } from '@features/Vessel/useCases/showVessel'
 import { useGetVesselQuery } from '@features/Vessel/vesselApi'
 import { isPriorityGroup } from '@features/VesselGroup/utils/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -165,7 +165,7 @@ export function VesselField() {
   }
 
   const handleVesselLinkClick = (displayedVessel: Vessel.VesselIdentity) => {
-    void dispatch(showVessel(displayedVessel, false))
+    dispatch(showVesselFromLiveData(displayedVessel))
   }
 
   // Read from the persisted snapshot, not the live query, so a saved control keeps showing the

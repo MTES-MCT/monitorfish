@@ -1,6 +1,6 @@
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
+import { getFilteredVesselFeatureIds } from '@features/Vessel/useCases/VesselListV2/getFilteredVesselFeatureIds'
 
-import { MonitorFishWorker } from '../../../../workers/MonitorFishWorker'
 import { setFilteredVesselsFeatures, vesselActions, vesselSelectors } from '../../slice'
 
 import type { VesselListFilter } from '@features/Vessel/components/VesselList/types'
@@ -11,10 +11,9 @@ export const filterVessels =
   async (dispatch, getState) => {
     dispatch(vesselActions.setListFilterValues(updatedListFilterValue))
 
-    const { listFilterValues } = getState().vessel
     const vessels = vesselSelectors.selectAll(getState().vessel.vessels)
 
-    const filteredVesselFeatureIds = await MonitorFishWorker.getFilteredVessels(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await getFilteredVesselFeatureIds(vessels, getState())
 
     dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 

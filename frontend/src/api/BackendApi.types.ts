@@ -57,6 +57,9 @@ export namespace BackendApi {
     /** Thrown when attempting to delete an entity which has  to non-archived children. */
     FOREIGN_KEY_CONSTRAINT = 'FOREIGN_KEY_CONSTRAINT',
 
+    /** Thrown when a past date is expected but a future one is given. */
+    FUTURE_DATE_TIME = 'FUTURE_DATE_TIME',
+
     /** Thrown when entity is not found, but it may happen */
     NOT_FOUND_BUT_OK = 'NOT_FOUND_BUT_OK',
 

@@ -41,8 +41,9 @@ class GetVesselVMSAndAISPositions(
                 toDateTime = toDateTime,
             )
 
-        val aisFrom = ZonedDateTime.now(ZoneOffset.UTC).minusHours(12)
-        val aisTo = ZonedDateTime.now(ZoneOffset.UTC)
+        // AIS positions are dense: whatever the VMS track depth, only the last 12 hours of the track are fetched
+        val aisTo = if (trackDepth == VesselTrackDepth.CUSTOM) dates.to else ZonedDateTime.now(ZoneOffset.UTC)
+        val aisFrom = maxOf(aisTo.minusHours(AIS_TRACK_MAX_HOURS), dates.from)
 
         // The repositories are blocking: on the caller's dispatcher (e.g. `runBlocking`), they would run one after another
         return withContext(Dispatchers.IO) {
@@ -161,4 +162,8 @@ class GetVesselVMSAndAISPositions(
                     }
                 }
         }
+
+    companion object {
+        private const val AIS_TRACK_MAX_HOURS = 12L
+    }
 }

@@ -1,4 +1,5 @@
 import { ResetButton } from '@components/ResetButton'
+import { selectDisplayedHealthcheckTextWarning } from '@features/Healthcheck/selectors'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { countVesselListFilter } from '@features/Vessel/components/VesselList/utils'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
@@ -13,7 +14,7 @@ export function VesselFiltersHeadband() {
   const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
   const numberOfFilters = countVesselListFilter(listFilterValues)
 
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(selectDisplayedHealthcheckTextWarning)
 
   const areListFilterValuesEqualToDefaultOnes = isEqual(listFilterValues, DEFAULT_VESSEL_LIST_FILTER_VALUES)
   const hasHealthcheckWarning = !!healthcheckTextWarning.length

@@ -73,7 +73,18 @@ data class Vessel(
          *  and `getVesselCompositeIdentifier()`
          */
         fun getVesselCompositeIdentifier(position: LastPosition): String =
-            "VESSELS_POINTS:${position.internalReferenceNumber ?: "UNKNOWN"}/${position.ircs ?: "UNKNOWN"}/${position.externalReferenceNumber ?: "UNKNOWN"}"
+            getVesselCompositeIdentifier(
+                position.internalReferenceNumber,
+                position.ircs,
+                position.externalReferenceNumber,
+            )
+
+        fun getVesselCompositeIdentifier(
+            internalReferenceNumber: String?,
+            ircs: String?,
+            externalReferenceNumber: String?,
+        ): String =
+            "VESSELS_POINTS:${internalReferenceNumber ?: "UNKNOWN"}/${ircs ?: "UNKNOWN"}/${externalReferenceNumber ?: "UNKNOWN"}"
     }
 
     /**

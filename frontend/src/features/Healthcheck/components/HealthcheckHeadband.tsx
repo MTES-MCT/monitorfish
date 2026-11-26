@@ -1,5 +1,6 @@
 import { TransparentButton } from '@components/style'
 import { FIVE_MINUTES } from '@constants/index'
+import { selectDisplayedHealthcheckTextWarning } from '@features/Healthcheck/selectors'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { Level } from '@mtes-mct/monitor-ui'
 import { useEffect, useState } from 'react'
@@ -16,7 +17,7 @@ import { getHealthcheckWarnings } from '../utils'
 
 export function HealthcheckHeadband() {
   const dispatch = useMainAppDispatch()
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(selectDisplayedHealthcheckTextWarning)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
   const isOnline = useIsOnline()
   const {

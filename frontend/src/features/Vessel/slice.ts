@@ -1,3 +1,4 @@
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import { ReportingType } from '@features/Reporting/types/ReportingType'
 import { reportingIsAnInfractionSuspicion } from '@features/Reporting/utils'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
@@ -18,7 +19,7 @@ import type { VesselListFilter } from '@features/Vessel/components/VesselList/ty
 import type { ShowedVesselTrack, TrackRequest } from '@features/Vessel/types/types'
 
 export const vesselsAdapter = createEntityAdapter({
-  selectId: (vessel: Vessel.ActiveVessel) => vessel.vesselFeatureId,
+  selectId: (vessel: Vessel.DisplayedVessel) => vessel.vesselFeatureId,
   sortComparer: false
 })
 
@@ -40,7 +41,7 @@ export type VesselState = {
   selectedVesselSidebarTab: VesselSidebarTab
   selectedVesselTrackRequest: TrackRequest | null
   tripMessagesLastToFormerDEPDateTimes: any[]
-  vessels: EntityState<Vessel.ActiveVessel, Vessel.VesselFeatureId>
+  vessels: EntityState<Vessel.DisplayedVessel, Vessel.VesselFeatureId>
   vesselsEstimatedPositions: any[]
   vesselSidebarIsOpen: boolean
   vesselsTracksShowed: Record<string, ShowedVesselTrack>
@@ -90,7 +91,8 @@ const vesselSlice = createSlice({
     ) {
       const activeVessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
-      if (activeVessel) {
+      // Replayed vessels have no current reportings
+      if (activeVessel && !isReplayedVessel(activeVessel)) {
         const nextVessel = {
           ...activeVessel,
           hasInfractionSuspicion: reportingIsAnInfractionSuspicion(action.payload.reportingType)
@@ -179,7 +181,11 @@ const vesselSlice = createSlice({
     ) {
       const activeVessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
 
-      if (activeVessel && activeVessel.activityType === ActivityType.POSITION_BASED) {
+      if (
+        activeVessel &&
+        activeVessel.activityType === ActivityType.POSITION_BASED &&
+        !isReplayedVessel(activeVessel)
+      ) {
         const filteredAlerts = activeVessel?.alerts?.filter(alert => alert !== action.payload.alertName)
 
         if (action.payload.isValidated) {
@@ -248,7 +254,7 @@ const vesselSlice = createSlice({
       }
 
       const activeVessel = vesselSelectors.selectById(state.vessels, action.payload.vesselFeatureId)
-      if (activeVessel) {
+      if (activeVessel && !isReplayedVessel(activeVessel)) {
         const nextVessel = {
           ...activeVessel,
           // If the vessel sidebar is opened, we compute this property with it, if not,
@@ -374,7 +380,7 @@ const vesselSlice = createSlice({
       state.selectedVesselSidebarTab = action.payload
     },
 
-    setVessels(state, action: PayloadAction<Vessel.ActiveVessel[]>) {
+    setVessels(state, action: PayloadAction<Vessel.DisplayedVessel[]>) {
       if (!action.payload || !Array.isArray(action.payload)) {
         return
       }

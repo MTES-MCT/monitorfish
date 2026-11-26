@@ -62,7 +62,7 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
                 it.mmsi == "224136470"
             }
         assertThat(sameMMSIPositions).hasSize(1)
-        assertThat(positions).hasSize(78306)
+        assertThat(positions).hasSize(78359)
         assertThat(positions.last().dateTime.toString()).isEqualTo("1970-01-01T00:00:00.999999999Z[UTC]")
     }
 
@@ -508,5 +508,43 @@ class JpaPositionRepositoryITests : AbstractDBTests() {
 
         // Then
         assertThat(dateTime).isNotEqualTo(ZonedDateTime.parse("2100-12-21T15:01Z"))
+    }
+
+    @Test
+    @Transactional
+    fun `findLastPositionOfEachVesselBetween Should return the last position of each vessel within the time range`() {
+        // Given
+        val replayedAt = ZonedDateTime.of(LocalDate.EPOCH.plusYears(1), LocalTime.NOON, ZoneId.of("UTC"))
+
+        fun vmsPosition(
+            cfr: String,
+            dateTime: ZonedDateTime,
+        ) = Position(
+            internalReferenceNumber = cfr,
+            ircs = "IRCS_$cfr",
+            externalReferenceNumber = "EXT_$cfr",
+            positionType = PositionType.VMS,
+            latitude = 48.0,
+            longitude = -4.0,
+            speed = 5.0,
+            course = 90.0,
+            dateTime = dateTime,
+        )
+        jpaPositionRepository.save(vmsPosition("REPLAY_A", replayedAt.minusHours(3)))
+        jpaPositionRepository.save(vmsPosition("REPLAY_A", replayedAt.minusHours(1)))
+        jpaPositionRepository.save(vmsPosition("REPLAY_A", replayedAt.plusHours(1)))
+        jpaPositionRepository.save(vmsPosition("REPLAY_B", replayedAt.minusHours(2)))
+        jpaPositionRepository.save(vmsPosition("REPLAY_C", replayedAt.minusHours(7)))
+
+        // When
+        val positions = jpaPositionRepository.findLastPositionOfEachVesselBetween(replayedAt.minusHours(6), replayedAt)
+
+        // Then
+        val replayedPositions = positions.filter { it.internalReferenceNumber?.startsWith("REPLAY_") == true }
+        assertThat(
+            replayedPositions.map { it.internalReferenceNumber },
+        ).containsExactlyInAnyOrder("REPLAY_A", "REPLAY_B")
+        assertThat(replayedPositions.first { it.internalReferenceNumber == "REPLAY_A" }.dateTime.toInstant())
+            .isEqualTo(replayedAt.minusHours(1).toInstant())
     }
 }

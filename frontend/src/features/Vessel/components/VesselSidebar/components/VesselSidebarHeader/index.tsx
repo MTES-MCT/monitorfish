@@ -94,7 +94,6 @@ const VesselNameOrInput = styled(MapComponent)<{
 }>`
   display: flex;
   flex: 0 0 auto;
-  margin-left: 12px;
   position: relative;
   color: ${p => p.theme.color.gainsboro};
   text-decoration: none;
@@ -103,7 +102,7 @@ const VesselNameOrInput = styled(MapComponent)<{
   border-radius: 2px;
   padding: 0;
   transition: all 0.3s;
-  margin-right: ${p => (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH + 8 : 0)}px;
+  margin-right: ${p => (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH + 8 : 1)}px;
   z-index: 2;
 
   &:hover,

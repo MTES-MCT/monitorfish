@@ -6,6 +6,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.vessel_group.VesselLocation
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetAISVesselsAtDateTime
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
@@ -20,6 +21,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVMSAndAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyageByDates
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselsAtDateTime
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SaveVesselContactToUpdate
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import fr.gouv.cnsp.monitorfish.infrastructure.api.contract.VesselIdentityDataOutput
@@ -29,6 +31,7 @@ import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.BeaconMalfunctionsRes
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ControlledVesselDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.LastPositionAISDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.PositionDataOutput
+import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.ReplayedVesselDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.RiskFactorDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SelectedVesselAndPositionsDataOutput
 import fr.gouv.cnsp.monitorfish.infrastructure.api.outputs.SpeciesControlPrefillDataOutput
@@ -81,6 +84,8 @@ class VesselController(
     private val getHasFilledLogbookForCurrentTrip: GetHasFilledLogbookForCurrentTrip,
     private val getVesselContactToUpdateByVesselId: GetVesselContactToUpdateByVesselId,
     private val saveVesselContactToUpdate: SaveVesselContactToUpdate,
+    private val getVesselsAtDateTime: GetVesselsAtDateTime,
+    private val getAISVesselsAtDateTime: GetAISVesselsAtDateTime,
 ) {
     @GetMapping("")
     @Operation(summary = "Get all active vessels")
@@ -97,6 +102,28 @@ class VesselController(
             )
         }
     }
+
+    @GetMapping("/replay")
+    @Operation(summary = "Get the positions and identities of all vessels at a past date")
+    fun getVesselsAtDateTime(
+        @Parameter(description = "Replayed date", required = true)
+        @RequestParam(name = "dateTime")
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
+        dateTime: ZonedDateTime,
+    ): List<ReplayedVesselDataOutput> =
+        getVesselsAtDateTime.execute(dateTime).map { ReplayedVesselDataOutput.fromReplayedVessel(it) }
+
+    @GetMapping("/ais/replay")
+    @Operation(summary = "Get the AIS positions of all vessels without CFR at a past date")
+    fun getAISVesselsAtDateTime(
+        @Parameter(description = "Replayed date", required = true)
+        @RequestParam(name = "dateTime")
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
+        dateTime: ZonedDateTime,
+    ): List<LastPositionAISDataOutput> =
+        getAISVesselsAtDateTime.execute(dateTime).map {
+            LastPositionAISDataOutput.fromLastPositionAIS(it)
+        }
 
     @GetMapping("/ais")
     @Operation(summary = "Get all AIS last positions")
@@ -373,7 +400,7 @@ class VesselController(
         internalReferenceNumber: String,
         @Parameter(
             description =
-                "Voyage request (LAST, PREVIOUS or NEXT) with respect to date",
+                "Voyage request (LAST, PREVIOUS, NEXT, EQUALS or AT_DATE_TIME) with respect to date",
             required = true,
         )
         @RequestParam(name = "voyageRequest")
@@ -381,12 +408,17 @@ class VesselController(
         @Parameter(description = "Trip number")
         @RequestParam(name = "tripNumber", required = false)
         tripNumber: String?,
+        @Parameter(description = "Date of the trip, for an AT_DATE_TIME voyage request")
+        @RequestParam(name = "dateTime", required = false)
+        @DateTimeFormat(pattern = ZONE_DATE_TIME_PATTERN)
+        dateTime: ZonedDateTime?,
     ): VoyageDataOutput {
         val voyage =
             getVesselVoyage.execute(
                 internalReferenceNumber = internalReferenceNumber,
                 voyageRequest = voyageRequest,
                 tripNumber = tripNumber,
+                dateTime = dateTime,
             )
         return VoyageDataOutput.fromVoyage(voyage)
     }

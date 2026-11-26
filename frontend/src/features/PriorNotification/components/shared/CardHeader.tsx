@@ -1,10 +1,9 @@
 import { CountryFlag } from '@components/CountryFlag'
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { UNKNOWN_VESSEL } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled, { keyframes } from 'styled-components'
-
-import { showVessel } from '../../../Vessel/useCases/showVessel'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { ReactNode } from 'react'
@@ -30,7 +29,7 @@ export function CardHeader({
 
   function triggerShowVessel() {
     if (selectedVesselIdentity) {
-      dispatch(showVessel(selectedVesselIdentity, false))
+      dispatch(showVesselFromLiveData(selectedVesselIdentity))
     }
   }
 

@@ -3,6 +3,7 @@ import { getAreFirstActiveVesselsDisplayedOrFailed } from '@features/Vessel/sele
 import { updateVesselTracks } from '@features/Vessel/useCases/updateVesselTracks'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
+import { isAnyOf } from '@reduxjs/toolkit'
 import { addMainAppListener } from '@store/listenerMiddleware'
 import { useEffect } from 'react'
 
@@ -35,7 +36,10 @@ export function useMainWindowDataLoading() {
           effect: (_action, listenerApi) => {
             listenerApi.dispatch(updateVesselTracks())
           },
-          matcher: vesselApi.endpoints.getActiveVessels.matchFulfilled
+          matcher: isAnyOf(
+            vesselApi.endpoints.getActiveVessels.matchFulfilled,
+            vesselApi.endpoints.getVesselsAtDateTime.matchFulfilled
+          )
         })
       ),
     [dispatch]

@@ -45,4 +45,18 @@ interface DBAisPositionRepository : JpaRepository<AisPositionEntity, AisPosition
         from: ZonedDateTime,
         to: ZonedDateTime,
     ): List<AisPositionEntity>
+
+    @Query(
+        value = """
+            SELECT DISTINCT ON (mmsi) *
+            FROM ais_positions
+            WHERE date_time >= :from AND date_time <= :to
+            ORDER BY mmsi, date_time DESC
+        """,
+        nativeQuery = true,
+    )
+    fun findLastOfEachVesselBetween(
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<AisPositionEntity>
 }

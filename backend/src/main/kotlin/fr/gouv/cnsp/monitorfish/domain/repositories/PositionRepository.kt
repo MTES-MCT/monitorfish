@@ -34,6 +34,11 @@ interface PositionRepository {
         to: ZonedDateTime,
     ): List<Position>
 
+    fun findLastPositionOfEachVesselBetween(
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<Position>
+
     fun save(position: Position)
 
     fun findLastPositionDate(): ZonedDateTime

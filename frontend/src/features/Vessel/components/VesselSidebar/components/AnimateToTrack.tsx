@@ -5,14 +5,12 @@ import styled from 'styled-components'
 import { VesselSidebarActionButton } from './VesselSidebarActionButton'
 import ShowTrackSVG from '../../../../icons/Bouton_afficher_toute_la_piste.svg?react'
 
-export function AnimateToTrack({ isSidebarOpen }) {
+export function AnimateToTrack() {
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const vesselTrackExtent = useMainAppSelector(state => state.vessel.vesselTrackExtent)
 
   return (
     <VesselSidebarActionButton
-      $isSidebarOpen={isSidebarOpen}
-      $top={103}
       data-cy="animate-to-track"
       disabled={!selectedVesselPositions?.length}
       // eslint-disable-next-line react/jsx-no-bind

@@ -15,6 +15,8 @@ import { measurementReducer, type MeasurementState } from '@features/Measurement
 import { missionFormReducer } from '@features/Mission/components/MissionForm/slice'
 import { missionListReducer, type MissionListState } from '@features/Mission/components/MissionList/slice'
 import { newFeaturesReducer, type NewFeaturesState } from '@features/NewFeatures/slice'
+import { liveVesselConfirmationReducer } from '@features/PositionReplay/liveVesselConfirmationSlice'
+import { positionReplayReducer } from '@features/PositionReplay/slice'
 import { priorNotificationReducer, type PriorNotificationState } from '@features/PriorNotification/slice'
 import { backofficePriorNotificationReducer } from '@features/PriorNotification/slice.backoffice'
 import { backofficeProducerOrganizationMembershipReducer } from '@features/ProducerOrganizationMembership/slice.backoffice'
@@ -124,6 +126,7 @@ export const mainReducer = {
     { ...getCommonPersistReducerConfig<LayerState>('mainPersistorLayer', ['isBaseMapCachedLocally']) },
     layerReducer
   ),
+  liveVesselConfirmation: liveVesselConfirmationReducer,
   measurement: persistReducerTyped(
     { ...getCommonPersistReducerConfig<MeasurementState>('mainPersistorMeasurement', ['measurementsDrawed']) },
     measurementReducer
@@ -144,6 +147,7 @@ export const mainReducer = {
     { ...getCommonPersistReducerConfig<NewFeaturesState>('mainPersistorNewFeatures', ['checkedFeatures']) },
     newFeaturesReducer
   ),
+  positionReplay: positionReplayReducer,
   priorNotification: persistReducerTyped(
     {
       ...getCommonPersistReducerConfig<PriorNotificationState>('mainPersistorPriorNotification', ['listFilterValues'])

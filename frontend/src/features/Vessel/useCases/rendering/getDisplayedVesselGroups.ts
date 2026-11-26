@@ -1,17 +1,29 @@
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import { asArray } from 'ol/color'
 
 import type { VesselGroupDisplayInformation } from '../../../../workers/types'
 import type { Vessel } from '@features/Vessel/Vessel.types'
 
+const NO_VESSEL_GROUP_DISPLAYED: VesselGroupDisplayInformation = {
+  groupColor: [0, 0, 0],
+  groupsDisplayed: [],
+  numberOfGroupsHidden: 0
+}
+
 /**
  * Cheap enough to run on the main thread: sending the vessels to the web worker and back would cost much more.
  */
 export function getDisplayedVesselGroups(
-  vessel: Vessel.ActiveVesselEmittingPosition,
+  vessel: Vessel.ActiveVesselEmittingPosition | Vessel.ReplayedVessel,
   vesselGroupsIdsDisplayed: number[],
   vesselGroupsIdsPinned: number[],
   vesselGroupsIdsFiltered: number[]
 ): VesselGroupDisplayInformation {
+  // The vessel groups are computed with current data
+  if (isReplayedVessel(vessel)) {
+    return NO_VESSEL_GROUP_DISPLAYED
+  }
+
   const pinnedAndDisplayedVesselGroups = vesselGroupsIdsDisplayed.filter(groupId =>
     vesselGroupsIdsPinned.includes(groupId)
   )

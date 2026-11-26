@@ -10,7 +10,7 @@ context('Vessel visibility', () => {
   it('Vessels default track depth Should be taken into account', () => {
     // Given
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.fill('Afficher depuis', '1 semaine')
+    cy.fill("Période d'affichage par défaut des pistes (VMS et AIS)", '1 semaine')
     cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
 
     // When

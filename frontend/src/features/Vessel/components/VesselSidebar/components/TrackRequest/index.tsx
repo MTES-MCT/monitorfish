@@ -1,5 +1,7 @@
-import { REPORTING_MAP_FORM_WIDTH } from '@features/Reporting/components/IUUReportingMapForm/constants'
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
+import { GAP_WITH_MAP_BUTTON } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import { selectIsPositionReplayActive, selectPositionsDateTime } from '@features/PositionReplay/selectors'
+import { getSelectedTrackDepth, getTrackRequestEndingAt, isTrackDepthAvailable } from '@features/PositionReplay/track'
+import { VesselTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
 import { updateVesselTrackAndLogbookFromDates } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromDates'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -14,7 +16,7 @@ import { MapComponent } from '../../../../../commonStyles/MapComponent'
 import { VesselSidebarActionButton } from '../VesselSidebarActionButton'
 
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
-import type { TrackRequestCustom, TrackRequestPredefined } from '@features/Vessel/types/types'
+import type { TrackRequestCustom } from '@features/Vessel/types/types'
 import type { DateRange } from '@mtes-mct/monitor-ui'
 
 type TrackRequestProps = {
@@ -22,17 +24,18 @@ type TrackRequestProps = {
 }
 export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   const dispatch = useMainAppDispatch()
-  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
-  const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
   const defaultVesselTrackDepth = useMainAppSelector(state => state.map.defaultVesselTrackDepth)
   const selectedVesselTrackRequest = useMainAppSelector(state => state.vessel.selectedVesselTrackRequest)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
   const [isOpenedFromClick, setIsOpenedFromClick] = useState(false)
 
   const dateRangePickerDefaultValue =
     selectedVesselTrackRequest && selectedVesselTrackRequest.trackDepth === VesselTrackDepth.CUSTOM
       ? ([selectedVesselTrackRequest.afterDateTime, selectedVesselTrackRequest.beforeDateTime] as DateRange)
       : undefined
+  const selectedTrackDepth = getSelectedTrackDepth(selectedVesselTrackRequest ?? undefined, positionsDateTime)
   const isOpen = isSidebarOpen && isOpenedFromClick
 
   const handleDateRangeRadioChange = (nextTrackDepth: SelectableVesselTrackDepth | undefined) => {
@@ -40,13 +43,12 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
       return
     }
 
-    const trackRequest: TrackRequestPredefined = {
-      afterDateTime: null,
-      beforeDateTime: null,
-      trackDepth: nextTrackDepth
-    }
-
-    dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
+    dispatch(
+      updateVesselTrackAndLogbookFromDates(
+        selectedVesselIdentity,
+        getTrackRequestEndingAt(nextTrackDepth, positionsDateTime)
+      )
+    )
   }
 
   const handleDateRangePickerChange = (dateRange: DateRange | undefined) => {
@@ -55,7 +57,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
     }
 
     if (!dateRange) {
-      const trackRequest = getTrackRequestFromTrackDepth(VesselTrackDepth.TWELVE_HOURS)
+      const trackRequest = getTrackRequestEndingAt(VesselTrackDepth.TWELVE_HOURS, positionsDateTime)
 
       dispatch(updateVesselTrackAndLogbookFromDates(selectedVesselIdentity, trackRequest))
 
@@ -73,11 +75,9 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
   }
 
   return (
-    <>
+    <Wrapper>
       <VesselSidebarActionButton
         $backgroundColor={isOpen ? THEME.color.blueGray : THEME.color.charcoal}
-        $isSidebarOpen={isSidebarOpen}
-        $top={68}
         data-cy="vessel-track-depth-selection"
         onClick={() => setIsOpenedFromClick(!isOpenedFromClick)}
         title="Paramétrer l'affichage de la piste VMS"
@@ -85,16 +85,13 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
         <Icon.Vessel color={THEME.color.white} style={{ margin: 5 }} />
       </VesselSidebarActionButton>
       {isOpen && (
-        <TrackRequestBody
-          $isReportingOpen={isReportingMapFormDisplayed}
-          $isRightMenuOpen={rightMenuIsOpen}
-          $isSidebarOpen={isSidebarOpen}
-        >
+        <TrackRequestBody>
           <Header>Paramétrer l&apos;affichage de la piste VMS</Header>
           <Section>
             <Field>
               <TrackDepthSelection
-                defaultValue={selectedVesselTrackRequest?.trackDepth ?? defaultVesselTrackDepth}
+                defaultValue={selectedTrackDepth ?? defaultVesselTrackDepth}
+                isTrackDepthAvailable={trackDepth => isTrackDepthAvailable(trackDepth, isPositionReplayActive)}
                 label="Afficher la piste VMS depuis"
                 name="vessel-track-depth"
                 onChange={handleDateRangeRadioChange}
@@ -120,7 +117,7 @@ export function TrackRequest({ isSidebarOpen }: TrackRequestProps) {
           <PositionsTable />
         </TrackRequestBody>
       )}
-    </>
+    </Wrapper>
   )
 }
 
@@ -148,28 +145,22 @@ const Field = styled.div`
   }
 `
 
-const TrackRequestBody = styled(MapComponent)<{
-  $isReportingOpen: boolean
-  $isRightMenuOpen: boolean
-  $isSidebarOpen: boolean
-}>`
+const Wrapper = styled.div`
+  position: relative;
+  height: 30px;
+`
+
+/** Opens on the left of its button. */
+const TrackRequestBody = styled(MapComponent)`
   background: ${p => p.theme.color.white};
   border-radius: 2px;
   color: ${p => p.theme.color.slateGray};
   display: flex;
   flex-direction: column;
   font-size: 13px;
-  margin-right: 540px;
   position: absolute;
-  right: ${p => {
-    const base = p.$isRightMenuOpen && p.$isSidebarOpen ? 54 : 9
-
-    return base + (p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0)
-  }}px;
+  right: calc(100% + ${GAP_WITH_MAP_BUTTON}px);
   text-align: left;
-  top: 118px;
-  transition:
-    all 0.3s,
-    right 0.3s;
+  top: 0;
   width: 379px;
 `

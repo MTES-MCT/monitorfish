@@ -1,10 +1,13 @@
+import { getReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import {
   DEFAULT_VESSEL_LIST_FILTER_VALUES,
   LastControlPeriod,
   VesselSize
 } from '@features/Vessel/components/VesselList/constants'
+import { VesselIdentifier } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { describe, expect, it } from '@jest/globals'
+import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import { MonitorFishWebWorker } from '../MonitorFishWebWorker'
 import { DUMMY_LAST_POSITIONS, DUMMY_LOGBOOK_BASED_VESSEL } from './__mocks__/dummyLastPositions'
@@ -50,6 +53,48 @@ describe('MonitorFishWebWorker.getFilteredVessels', () => {
     const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastPositionHoursAgo: 2, vesselsLocation: [] }
     const result = MonitorFishWebWorker.getFilteredVessels(DUMMY_LAST_POSITIONS, filters)
     expect(result).toStrictEqual(['vessel1', 'vessel3'])
+  })
+
+  it('should filters by lastPositionHoursAgo relative to the replayed date When positions are replayed', () => {
+    const replayedDateTime = customDayjs().subtract(5, 'day')
+    const vessels = [
+      { ...DUMMY_LAST_POSITIONS[0]!, dateTime: replayedDateTime.subtract(1, 'hour').toISOString() },
+      { ...DUMMY_LAST_POSITIONS[1]!, dateTime: replayedDateTime.subtract(4, 'hour').toISOString() }
+    ]
+    const filters = { ...DEFAULT_VESSEL_LIST_FILTER_VALUES, lastPositionHoursAgo: 3, vesselsLocation: [] }
+
+    expect(MonitorFishWebWorker.getFilteredVessels(vessels, filters)).toStrictEqual([])
+    expect(MonitorFishWebWorker.getFilteredVessels(vessels, filters, replayedDateTime.toISOString())).toStrictEqual([
+      'vessel1'
+    ])
+  })
+
+  it('should not filter a replayed vessel on its current data', () => {
+    const replayedVessel = getReplayedVessel({
+      dateTime: customDayjs().toISOString(),
+      flagState: 'FR',
+      latitude: 48,
+      longitude: -4,
+      positionType: 'VMS',
+      producerOrganization: 'OP NORD',
+      vesselFeatureId: 'replayedVessel',
+      vesselIdentifier: VesselIdentifier.INTERNAL_REFERENCE_NUMBER
+    })
+    const filters = {
+      ...DEFAULT_VESSEL_LIST_FILTER_VALUES,
+      countryCodes: ['FR'],
+      fleetSegments: ['NWW01'],
+      riskFactors: [1],
+      vesselsLocation: []
+    }
+
+    expect(MonitorFishWebWorker.getFilteredVessels([replayedVessel], filters)).toStrictEqual(['replayedVessel'])
+    expect(
+      MonitorFishWebWorker.getFilteredVessels([replayedVessel], { ...filters, countryCodes: ['ES'] })
+    ).toStrictEqual([])
+    expect(
+      MonitorFishWebWorker.getFilteredVessels([replayedVessel], { ...filters, producerOrganizations: ['OP SUD'] })
+    ).toStrictEqual([])
   })
 
   it('should filters by riskFactors', () => {

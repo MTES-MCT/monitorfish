@@ -6,14 +6,19 @@ import styled from 'styled-components'
 import { TrackRangeModal } from './map_menu/TrackRangeModal'
 import { useClickOutsideWhenOpened } from '../../../hooks/useClickOutsideWhenOpened'
 import { useMainAppDispatch } from '../../../hooks/useMainAppDispatch'
+import { useMainAppSelector } from '../../../hooks/useMainAppSelector'
 import { addFavoriteVessel } from '../../FavoriteVessel/useCases/addFavoriteVessel'
 import ChevronIconSVG from '../../icons/Chevron_simple_gris.svg?react'
-import { getTrackRequestFromTrackDepth, VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
+import { selectIsPositionReplayActive, selectPositionsDateTime } from '../../PositionReplay/selectors'
+import { getTrackRequestEndingAt, isTrackDepthAvailable } from '../../PositionReplay/track'
+import { VesselTrackDepth } from '../../Vessel/types/vesselTrackDepth'
 import { showVesselTrack } from '../../Vessel/useCases/showVesselTrack'
 import { monitorfishMap } from '../monitorfishMap'
 
 export function RightClickMapMenuOverlay({ coordinates, vessel }) {
   const dispatch = useMainAppDispatch()
+  const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
 
   const ref = createRef()
   /** @type {React.MutableRefObject<import('ol').Overlay | undefined>} */
@@ -83,7 +88,7 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
       return
     }
 
-    const trackRequest = getTrackRequestFromTrackDepth(selectedTrackDepth)
+    const trackRequest = getTrackRequestEndingAt(selectedTrackDepth, positionsDateTime)
 
     dispatch(showVesselTrack(vessel, trackRequest, true))
 
@@ -151,9 +156,11 @@ export function RightClickMapMenuOverlay({ coordinates, vessel }) {
                 <SecondColumnMenu>
                   {vessel ? (
                     <>
-                      <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>
-                        dernier DEP
-                      </Menu>
+                      {isTrackDepthAvailable(VesselTrackDepth.LAST_DEPARTURE, isPositionReplayActive) && (
+                        <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.LAST_DEPARTURE)}>
+                          dernier DEP
+                        </Menu>
+                      )}
                       <Menu $withPadding onClick={() => setSelectedTrackDepth(VesselTrackDepth.TWELVE_HOURS)}>
                         12 heures
                       </Menu>

@@ -1,3 +1,4 @@
+import { selectDisplayedHealthcheckTextWarning } from '@features/Healthcheck/selectors'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
@@ -20,7 +21,7 @@ export function LayersSidebar() {
   const regulatoryZoneMetadataPanelIsOpen = useMainAppSelector(
     state => state.regulation.regulatoryZoneMetadataPanelIsOpen
   )
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(selectDisplayedHealthcheckTextWarning)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
   const { isOpened: isRegulationSearchOpened, isRendered: isRegulationSearchRendered } = useDisplayMapBox(
     leftMapBoxOpened === MapBox.REGULATIONS

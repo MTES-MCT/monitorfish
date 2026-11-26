@@ -1,6 +1,7 @@
 import { useMapOverlay } from '@features/Map/components/Overlay/hooks/useMapOverlay'
 import { LayerProperties } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
+import { selectIsReportingLayerDisplayed } from '@features/Reporting/selectors'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FeatureWithCodeAndEntityId } from '@libs/FeatureWithCodeAndEntityId'
@@ -24,7 +25,7 @@ export type ReportingOverlayProps = {
 }
 export function ReportingOverlay({ feature, isSelected = false, onDrag, zoomHasChanged }: ReportingOverlayProps) {
   const dispatch = useMainAppDispatch()
-  const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
+  const isReportingLayerDisplayed = useMainAppSelector(selectIsReportingLayerDisplayed)
   const selectedReportingFeatureId = useMainAppSelector(store => store.reporting.selectedReportingFeatureId)
 
   const featureId = feature?.getId()?.toString()

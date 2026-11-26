@@ -1,5 +1,6 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { selectAreVesselsEstimatedPositionsDisplayed } from '@features/Map/selectors'
 import {
   filterNonSelectedVessels,
   getVesselFeatures,
@@ -24,7 +25,8 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
   }
 
   const { selectedVesselIdentity, vesselsTracksShowed } = getState().vessel
-  const { selectedBaseLayer, showingVesselsEstimatedPositions } = getState().map
+  const { selectedBaseLayer } = getState().map
+  const areEstimatedPositionsDisplayed = selectAreVesselsEstimatedPositionsDisplayed(getState())
 
   const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
 
@@ -46,7 +48,7 @@ export const renderVesselEstimatedPositionFeatures = (): MainAppThunk => async (
   const features = vesselsFeatures
     .filter(
       feature =>
-        showingVesselsEstimatedPositions &&
+        areEstimatedPositionsDisplayed &&
         feature.get('isFiltered') &&
         (areVesselsNotInVesselGroupsHidden ? isVesselGroupColorDefined(feature) : true)
     )

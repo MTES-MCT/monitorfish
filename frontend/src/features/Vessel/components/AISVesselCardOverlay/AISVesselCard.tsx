@@ -1,19 +1,16 @@
 import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
 import { OverlayPosition } from '@features/Map/components/Overlay/types'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { formatSignalDateTime, getSignalLabel } from '@features/PositionReplay/positionsDateTime'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { getCoordinates } from '@mtes-mct/monitor-ui'
 import styled, { useTheme } from 'styled-components'
-import * as timeago from 'timeago.js'
 
 import { AIS_CARD_WIDTH, AIS_VESSEL_OVERLAY_CARD_MARGIN } from './constants'
 import { extractAISVesselPropertiesFromFeature, getAISShipTypeLabel, getFlagStateFromMmsi } from './utils'
-import { timeagoFrenchLocale } from '../../../../utils'
 
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
-
-// @ts-expect-error — timeago.js ships no locale type definitions
-timeago.register('fr', timeagoFrenchLocale)
 
 type AISVesselCardProps = {
   cardHeight: number
@@ -24,6 +21,7 @@ type AISVesselCardProps = {
 export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition }: AISVesselCardProps) {
   const theme = useTheme()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
 
   const vesselProperties = extractAISVesselPropertiesFromFeature(feature, [
     'course',
@@ -71,8 +69,8 @@ export function AISVesselCard({ cardHeight, cardWidth, feature, overlayPosition 
             </FieldValue>
           </Course>
           <Position>
-            <FieldName>Dernier signal</FieldName>
-            <FieldValue>{timeago.format(vesselProperties.dateTime, 'fr')} (AIS)</FieldValue>
+            <FieldName>{getSignalLabel(positionsDateTime, 'AIS')}</FieldName>
+            <FieldValue>{formatSignalDateTime(vesselProperties.dateTime, positionsDateTime)}</FieldValue>
             <FieldName>Destination</FieldName>
             <FieldValue>{vesselProperties.destination ?? <NoValue>-</NoValue>}</FieldValue>
           </Position>

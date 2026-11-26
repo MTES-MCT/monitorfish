@@ -11,6 +11,8 @@ type MapPropertyTriggerProps = Readonly<{
   booleanProperty: boolean
   booleanVerbs?: [string, string]
   disabled?: boolean
+  /** Displayed as the title while the trigger is disabled. */
+  disabledReason?: string | undefined
   Icon?: FunctionComponent<JSX.Element>
   // TODO Remove this legacy props
   IconSVG?: FunctionComponent<SVGProps<SVGSVGElement> & { title?: string }>
@@ -23,6 +25,7 @@ export function MapPropertyTrigger({
   booleanProperty,
   booleanVerbs = DEFAULT_BOOLEAN_VERBS,
   disabled,
+  disabledReason,
   Icon,
   IconSVG,
   inverse,
@@ -46,7 +49,7 @@ export function MapPropertyTrigger({
   const id = useId()
 
   return (
-    <Wrapper disabled={disabled} onClick={update}>
+    <Wrapper disabled={disabled} onClick={update} title={disabled ? disabledReason : undefined}>
       {!!Icon && (
         <IconButton
           aria-labelledby={id}
@@ -72,9 +75,11 @@ export function MapPropertyTrigger({
           }}
         />
       )}
-      <ShowLabelText data-cy="map-property-trigger" id={id}>
-        {booleanVerb} {text}
-      </ShowLabelText>
+      <Label>
+        <ShowLabelText data-cy="map-property-trigger" id={id}>
+          {booleanVerb} {text}
+        </ShowLabelText>
+      </Label>
     </Wrapper>
   )
 }
@@ -92,10 +97,13 @@ const Wrapper = styled.div<{
   cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
 `
 
+const Label = styled.span`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px;
+`
+
 const ShowLabelText = styled.span`
-  margin-left: 0;
   color: ${p => p.theme.color.slateGray};
-  padding: 8.5px 10px;
-  vertical-align: top;
-  display: inline-block;
 `

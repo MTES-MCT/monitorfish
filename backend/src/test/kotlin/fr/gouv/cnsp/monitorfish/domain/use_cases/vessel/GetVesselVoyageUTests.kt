@@ -226,4 +226,64 @@ class GetVesselVoyageUTests {
         assertThat(voyage.endDate).isEqualTo(endDate)
         assertThat(voyage.tripNumber).isEqualTo(tripNumber)
     }
+
+    private fun getTrip(
+        tripNumber: String,
+        startDate: String,
+        endDate: String,
+    ) = VoyageDatesAndTripNumber(
+        tripNumber = tripNumber,
+        firstOperationDateTime = ZonedDateTime.parse(startDate),
+        lastOperationDateTime = ZonedDateTime.parse(endDate),
+        startDateTime = ZonedDateTime.parse(startDate),
+        endDateTime = ZonedDateTime.parse(endDate),
+    )
+
+    @Test
+    fun `execute Should return the trip covering the date When requesting an AT_DATE_TIME voyage`() {
+        // Given
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                getTrip("trip1", "2026-11-10T00:00:00Z", "2026-11-12T00:00:00Z"),
+                getTrip("trip2", "2026-11-19T22:00:00Z", "2026-11-20T11:00:00Z"),
+                getTrip("trip3", "2026-11-25T13:00:00Z", "2026-11-25T23:00:00Z"),
+            ),
+        )
+
+        // When
+        val voyage =
+            GetVesselVoyage(logbookReportRepository, getLogbookMessages)
+                .execute("FR224226850", VoyageRequest.AT_DATE_TIME, null, ZonedDateTime.parse("2026-11-20T08:32:00Z"))
+
+        // Then
+        assertThat(voyage.tripNumber).isEqualTo("trip2")
+        assertThat(voyage.isFirstVoyage).isFalse
+        assertThat(voyage.isLastVoyage).isFalse
+    }
+
+    @Test
+    fun `execute Should not fall back to the last trip When no trip covers the date of an AT_DATE_TIME voyage`() {
+        // Given
+        given(logbookReportRepository.findAllTrips(any())).willReturn(
+            listOf(
+                getTrip("trip1", "2026-11-19T22:00:00Z", "2026-11-20T11:00:00Z"),
+                getTrip("trip2", "2026-11-25T13:00:00Z", "2026-11-25T23:00:00Z"),
+            ),
+        )
+
+        // When
+        val throwable =
+            catchThrowable {
+                GetVesselVoyage(logbookReportRepository, getLogbookMessages)
+                    .execute(
+                        "FR224226850",
+                        VoyageRequest.AT_DATE_TIME,
+                        null,
+                        ZonedDateTime.parse("2026-11-20T19:32:00Z"),
+                    )
+            }
+
+        // Then
+        assertThat(throwable.message).isEqualTo("Could not fetch voyage for request \"AT_DATE_TIME\"")
+    }
 }

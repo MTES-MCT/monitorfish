@@ -271,7 +271,7 @@ const TopBar = styled.div<{
 }>`
   align-items: center;
   display: flex;
-  gap: 4px;
+  gap: 3px;
   position: absolute;
   right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
   top: calc(${p => p.$top}px + 10px);

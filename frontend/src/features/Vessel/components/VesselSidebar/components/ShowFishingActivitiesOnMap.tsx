@@ -7,7 +7,7 @@ import { Icon, THEME } from '@mtes-mct/monitor-ui'
 
 import { VesselSidebarActionButton } from './VesselSidebarActionButton'
 
-export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
+export function ShowFishingActivitiesOnMap() {
   const dispatch = useMainAppDispatch()
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
   const areFishingActivitiesShowedOnMap = useMainAppSelector(
@@ -28,11 +28,8 @@ export function ShowFishingActivitiesOnMap({ isSidebarOpen }) {
   return (
     <VesselSidebarActionButton
       $backgroundColor={areFishingActivitiesShowedOnMap ? THEME.color.blueGray : THEME.color.charcoal}
-      $isSidebarOpen={isSidebarOpen}
-      $top={173}
       data-cy="show-all-fishing-activities-on-map"
       disabled={!selectedVesselPositions?.length}
-      isHidden={false}
       /* eslint-disable-next-line react/jsx-no-bind */
       onClick={showOrHideFishingActivities}
       title={`${areFishingActivitiesShowedOnMap ? 'Cacher' : 'Afficher'} les messages du JPE sur la piste`}

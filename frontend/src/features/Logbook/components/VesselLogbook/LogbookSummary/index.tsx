@@ -1,11 +1,12 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { getLogbookTripsOptions } from '@features/Logbook/components/VesselLogbook/LogbookMessages/utils'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { LogbookRiskElements } from '@features/RiskElement/components/LogbookRiskElements'
 import { SidebarZone } from '@features/Vessel/components/VesselSidebar/components/common/common.style'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, customDayjs, Icon, IconButton, Select, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useIsSuperUser } from 'auth/hooks/useIsSuperUser'
 import { useMemo } from 'react'
@@ -46,6 +47,7 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
   const isFirstVoyage = useMainAppSelector(state => state.fishingActivities.isFirstVoyage)
   const isLastVoyage = useMainAppSelector(state => state.fishingActivities.isLastVoyage)
   const tripNumber = useMainAppSelector(state => state.fishingActivities.tripNumber)
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
 
   const { data: logbookTrips } = useGetLogbookTripsQuery(selectedVesselIdentity?.internalReferenceNumber ?? skipToken)
 
@@ -72,7 +74,11 @@ export function LogbookSummary({ showLogbookMessages }: LogbookSummaryProps) {
           activityOrigin={selectedVessel?.activityOrigin}
           segments={selectedVessel?.riskFactor?.segments}
         />
-        <NoFishingActivities data-cy="vessel-fishing">Ce navire n’a pas envoyé de message JPE.</NoFishingActivities>
+        <NoFishingActivities data-cy="vessel-fishing">
+          {positionsDateTime
+            ? `Aucune marée en cours le ${customDayjs.utc(positionsDateTime).format('DD/MM/YYYY à HH[h]mm')} (UTC).`
+            : 'Ce navire n’a pas envoyé de message JPE.'}
+        </NoFishingActivities>
       </Body>
     )
   }

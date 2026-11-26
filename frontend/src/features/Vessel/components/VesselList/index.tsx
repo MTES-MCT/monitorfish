@@ -1,3 +1,6 @@
+import { DYNAMIC_VESSEL_GROUP_UNAVAILABLE_DURING_POSITION_REPLAY_MESSAGE } from '@features/PositionReplay/constants'
+import { DataKind, selectIsDataAvailablePredicate } from '@features/PositionReplay/replayableData'
+import { getApplicableVesselListFilter, omitUnavailableFilters } from '@features/PositionReplay/vesselListFilter'
 import { Body } from '@features/SideWindow/components/Body'
 import { ExportVesselListDialog } from '@features/Vessel/components/ExportVesselListDialog'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
@@ -52,6 +55,12 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const vessels = useGetFilteredVesselsLastPositions()
   const listFilter = useMainAppSelector(state => state.vessel.listFilterValues)
+  const isDataAvailable = useMainAppSelector(selectIsDataAvailablePredicate)
+  const areVesselGroupsAvailable = isDataAvailable(DataKind.VESSEL_GROUPS)
+  const applicableListFilter = useMemo(
+    () => getApplicableVesselListFilter(listFilter, isDataAvailable),
+    [listFilter, isDataAvailable]
+  )
   const isFilteringVesselList = useMainAppSelector(state => state.vessel.isFilteringVesselList)
   const areFiltersDisplayed = useMainAppSelector(store => store.vesselList.areFiltersDisplayed)
 
@@ -68,13 +77,13 @@ export function VesselList({ isFromUrl }: VesselListProps) {
   const [columns, tableData] = useMemo(
     () => [
       isFilteringVesselList
-        ? getTableColumns(isFromUrl, vesselListActionColumn, listFilter).map(column =>
+        ? getTableColumns(isFromUrl, vesselListActionColumn, listFilter, isDataAvailable).map(column =>
             Object.assign(column, { cell: SkeletonRow })
           )
-        : getTableColumns(isFromUrl, vesselListActionColumn, listFilter),
+        : getTableColumns(isFromUrl, vesselListActionColumn, listFilter, isDataAvailable),
       isFilteringVesselList ? Array(8).fill({}) : (vessels ?? [])
     ],
-    [isFilteringVesselList, isFromUrl, vessels, listFilter]
+    [isFilteringVesselList, isFromUrl, vessels, listFilter, isDataAvailable]
   )
 
   /**
@@ -149,8 +158,10 @@ export function VesselList({ isFromUrl }: VesselListProps) {
         <StyledFilterTags
           areMoreFiltersDisplayable
           className="vessel-list-filter-tags"
-          listFilterValues={listFilter}
-          onFilter={nextListFilterValues => dispatch(filterVessels(nextListFilterValues))}
+          listFilterValues={applicableListFilter}
+          onFilter={nextListFilterValues =>
+            dispatch(filterVessels(omitUnavailableFilters(nextListFilterValues, isDataAvailable)))
+          }
           onReset={() => dispatch(filterVessels(DEFAULT_VESSEL_LIST_FILTER_VALUES))}
         />
         <TableOuterWrapper $isFromUrl={isFromUrl}>
@@ -175,8 +186,13 @@ export function VesselList({ isFromUrl }: VesselListProps) {
                 Créer un groupe fixe <Icon.Info size={17} />
               </StyledDropdownItem>
               <StyledDropdownItem
+                disabled={!areVesselGroupsAvailable}
                 onClick={() => setIsEditDynamicVesselGroupOpened(true)}
-                title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
+                title={
+                  areVesselGroupsAvailable
+                    ? "Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
+                    : DYNAMIC_VESSEL_GROUP_UNAVAILABLE_DURING_POSITION_REPLAY_MESSAGE
+                }
               >
                 Créer un groupe dynamique <Icon.Info size={17} />
               </StyledDropdownItem>

@@ -9,6 +9,7 @@ import fr.gouv.cnsp.monitorfish.domain.repositories.LogbookReportRepository
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetLogbookMessages
 import org.slf4j.LoggerFactory
+import java.time.ZonedDateTime
 
 @UseCase
 class GetVesselVoyage(
@@ -22,6 +23,7 @@ class GetVesselVoyage(
         internalReferenceNumber: String,
         voyageRequest: VoyageRequest,
         tripNumber: String?,
+        dateTime: ZonedDateTime? = null,
     ): Voyage {
         val vesselTrips = logbookReportRepository.findAllTrips(internalReferenceNumber)
         var tripIndex: Int?
@@ -60,6 +62,20 @@ class GetVesselVoyage(
                         tripIndex = vesselTrips.indexOfFirst { it.tripNumber == tripNumber }
                         require(tripIndex >= 0) {
                             "Trip $tripNumber not found"
+                        }
+                        vesselTrips[tripIndex]
+                    }
+
+                    VoyageRequest.AT_DATE_TIME -> {
+                        require(dateTime != null) {
+                            "Date time parameter must be not null"
+                        }
+                        tripIndex =
+                            vesselTrips.indexOfLast {
+                                !it.startDateTime.isAfter(dateTime) && !it.endDateTime.isBefore(dateTime)
+                            }
+                        require(tripIndex >= 0) {
+                            "No trip found at $dateTime"
                         }
                         vesselTrips[tripIndex]
                     }

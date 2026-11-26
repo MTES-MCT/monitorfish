@@ -1,19 +1,25 @@
 import { MapPropertyTrigger } from '@features/commonComponents/MapPropertyTrigger'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
+import {
+  DISABLED_DURING_POSITION_REPLAY_MESSAGE,
+  DYNAMIC_VESSEL_GROUP_UNAVAILABLE_DURING_POSITION_REPLAY_MESSAGE
+} from '@features/PositionReplay/constants'
+import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
 import { useGetVesselGroups } from '@features/VesselGroup/components/VesselGroupMenuDialog/hooks/useGetVesselGroups'
 import { VesselGroupRow } from '@features/VesselGroup/components/VesselGroupMenuDialog/VesselGroupRow'
 import { DEFAULT_DYNAMIC_VESSEL_GROUP, DEFAULT_FIXED_VESSEL_GROUP } from '@features/VesselGroup/constants'
+import { selectAreVesselsNotInVesselGroupsHidden } from '@features/VesselGroup/selectors'
 import { vesselGroupActions } from '@features/VesselGroup/slice'
 import { GroupType, Sharing, type VesselGroup } from '@features/VesselGroup/types'
 import { hideVesselsNotInVesselGroups } from '@features/VesselGroup/useCases/hideVesselsNotInVesselGroups'
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Checkbox, Dropdown, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, Checkbox, Dropdown, Icon, Level, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -34,15 +40,13 @@ export function VesselGroupMenuDialog() {
   const dispatch = useMainAppDispatch()
   const isSuperUser = useIsSuperUser()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
-    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
-  )
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(selectAreVesselsNotInVesselGroupsHidden)
+  const areVesselGroupsAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.VESSEL_GROUPS))
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
 
   const { isOpened, isRendered } = useDisplayMapBox(rightMapBoxOpened === MapBox.VESSEL_GROUPS)
 
   const { filteredGroupType, filteredPriority, filteredSharing } = useMainAppSelector(state => state.vesselGroup)
-
   const { pinnedVesselGroups, priorityVesselGroups, unpinnedVesselGroups } = useGetVesselGroups(
     filteredGroupType,
     filteredSharing,
@@ -91,8 +95,14 @@ export function VesselGroupMenuDialog() {
           <Title>Groupes de navires</Title>
         </Header>
         <StyledBody>
+          {!areVesselGroupsAvailable && (
+            <Banner isClosable level={Level.WARNING} top="0">
+              Pas de groupes en mode rejeu
+            </Banner>
+          )}
           <FilterRow>
             <Select
+              disabled={!areVesselGroupsAvailable}
               isLabelHidden
               isLight
               label="Type de groupe"
@@ -106,6 +116,7 @@ export function VesselGroupMenuDialog() {
           {isSuperUser && (
             <FilterRow>
               <Select
+                disabled={!areVesselGroupsAvailable}
                 isLabelHidden
                 isLight
                 label="Partage"
@@ -121,6 +132,7 @@ export function VesselGroupMenuDialog() {
             <FilterRow>
               <Checkbox
                 checked={filteredPriority}
+                disabled={!areVesselGroupsAvailable}
                 label="Afficher uniquement les groupes prioritaires"
                 name="priority"
                 onChange={updateFilteredPriority}
@@ -155,8 +167,13 @@ export function VesselGroupMenuDialog() {
                 Créer un groupe fixe <Icon.Info size={17} />
               </StyledDropdownItem>
               <StyledDropdownItem
+                disabled={!areVesselGroupsAvailable}
                 onClick={createNewDynamicGroup}
-                title="Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
+                title={
+                  areVesselGroupsAvailable
+                    ? "Un groupe de navires dynamique est constitué des navires répondant aux critères des filtres que vous aurez sélectionné. Il se met automatiquement à jour selon l'évolution des données des navires."
+                    : DYNAMIC_VESSEL_GROUP_UNAVAILABLE_DURING_POSITION_REPLAY_MESSAGE
+                }
               >
                 Créer un groupe dynamique <Icon.Info size={17} />
               </StyledDropdownItem>
@@ -167,6 +184,8 @@ export function VesselGroupMenuDialog() {
           </Buttons>
           <MapPropertyTrigger
             booleanProperty={areVesselsNotInVesselGroupsHidden}
+            disabled={!areVesselGroupsAvailable}
+            disabledReason={DISABLED_DURING_POSITION_REPLAY_MESSAGE}
             Icon={areVesselsNotInVesselGroupsHidden ? Icon.Display : Icon.Hide}
             inverse
             text="les navires hors des groupes affichés"
@@ -224,6 +243,7 @@ const StyledFooter = styled(MapMenuDialog.Footer)`
 
 const StyledBody = styled(MapMenuDialog.Body)`
   padding: 16px 0 0;
+  position: relative;
 `
 
 const VesselGroupMenuDialogWrapper = styled(MapToolBox)`

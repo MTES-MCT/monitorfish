@@ -261,6 +261,8 @@ export const LogbookSpeciesPresentation = {
 }
 
 export enum NavigateTo {
+  /** The trip during which the vessel was at sea at a past date. */
+  AT_DATE_TIME = 'AT_DATE_TIME',
   EQUALS = 'EQUALS',
   LAST = 'LAST',
   NEXT = 'NEXT',

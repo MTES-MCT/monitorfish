@@ -1,5 +1,7 @@
 import { FIVE_MINUTES } from '@constants/index'
 import { NavigateTo } from '@features/Logbook/constants'
+import { getVesselLogbookAtDateTime } from '@features/Logbook/useCases/getVesselLogbookAtDateTime'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { FishingActivitiesTab, vesselsAreEquals } from '@features/Vessel/types/vessel'
 import { updateVesselTrackAndLogbookFromTrip } from '@features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
@@ -26,13 +28,15 @@ export function VesselLogbook() {
     vesselIdentity
   } = useMainAppSelector(state => state.fishingActivities)
 
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
+
   const showedLogbookIsOutdated = vesselIdentity && !vesselsAreEquals(vesselIdentity, selectedVesselIdentity)
   const [messageTypeFilter, setMessageTypeFilter] = useState<string | undefined>(undefined)
 
   // TODO This need to be moved to a RTK-Query's `pollingInterval`
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isLastVoyage) {
+      if (isLastVoyage && !positionsDateTime) {
         dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, NavigateTo.LAST, false))
       }
     }, FIVE_MINUTES)
@@ -40,7 +44,7 @@ export function VesselLogbook() {
     return () => {
       clearInterval(interval)
     }
-  }, [dispatch, isLastVoyage, selectedVesselIdentity])
+  }, [dispatch, isLastVoyage, positionsDateTime, selectedVesselIdentity])
 
   const showMessages = useCallback(
     (messageType: string | undefined) => {
@@ -55,12 +59,21 @@ export function VesselLogbook() {
       return
     }
 
-    if (showedLogbookIsOutdated) {
-      dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, undefined, true))
+    if (!showedLogbookIsOutdated || !selectedVesselIdentity) {
+      return
     }
+
+    if (positionsDateTime) {
+      dispatch(getVesselLogbookAtDateTime(selectedVesselIdentity, positionsDateTime))
+
+      return
+    }
+
+    dispatch(updateVesselTrackAndLogbookFromTrip(selectedVesselIdentity, undefined, true))
   }, [
     dispatch,
     logbookMessages,
+    positionsDateTime,
     vesselIdentity,
     loadingFishingActivities,
     selectedVesselIdentity,

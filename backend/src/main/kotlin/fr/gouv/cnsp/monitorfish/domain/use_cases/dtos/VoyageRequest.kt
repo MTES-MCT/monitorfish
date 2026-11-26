@@ -5,4 +5,7 @@ enum class VoyageRequest {
     PREVIOUS,
     NEXT,
     EQUALS,
+
+    /** The trip during which the vessel was at sea at a past date, e.g. when replaying positions. */
+    AT_DATE_TIME,
 }

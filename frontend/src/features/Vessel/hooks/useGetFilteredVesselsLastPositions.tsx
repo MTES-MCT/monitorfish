@@ -3,7 +3,7 @@ import { Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { useMemo } from 'react'
 
-export function useGetFilteredVesselsLastPositions(): Vessel.ActiveVessel[] {
+export function useGetFilteredVesselsLastPositions(): Vessel.DisplayedVessel[] {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const filteredVesselFeatureIds = useMainAppSelector(selectFilteredVesselFeatureIdsSet)
 

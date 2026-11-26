@@ -12,11 +12,19 @@ type SelectableVesselTrackDepth = Exclude<VesselTrackDepth, VesselTrackDepth.CUS
 type DateRangeRadioProps = {
   className?: string | undefined
   defaultValue?: VesselTrackDepth
+  isTrackDepthAvailable?: (trackDepth: VesselTrackDepth) => boolean
   label: string
   name: string
   onChange: (nextTrackDepth: SelectableVesselTrackDepth | undefined) => Promisable<void>
 }
-export function TrackDepthSelection({ className, defaultValue, label, name, onChange }: DateRangeRadioProps) {
+export function TrackDepthSelection({
+  className,
+  defaultValue,
+  isTrackDepthAvailable = () => true,
+  label,
+  name,
+  onChange
+}: DateRangeRadioProps) {
   const normalizedDefaultValue = defaultValue !== VesselTrackDepth.CUSTOM ? defaultValue : undefined
   const ref = useRef() as MutableRefObject<HTMLDivElement>
 
@@ -28,7 +36,7 @@ export function TrackDepthSelection({ className, defaultValue, label, name, onCh
         label={label}
         name={name}
         onChange={nextValue => onChange(nextValue as SelectableVesselTrackDepth | undefined)}
-        options={SELECT_TRACK_DEPTH_OPTIONS}
+        options={SELECT_TRACK_DEPTH_OPTIONS.filter(option => isTrackDepthAvailable(option.value))}
         value={normalizedDefaultValue}
       />
     </ColumnsBox>

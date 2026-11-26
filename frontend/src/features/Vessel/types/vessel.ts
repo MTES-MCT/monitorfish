@@ -120,7 +120,7 @@ export class VesselFeature {
       }
     }
 
-    if (isRiskFactorShowed) {
+    if (isRiskFactorShowed && feature.riskFactor !== undefined) {
       label.riskFactor = {
         detectabilityRiskFactor: feature.detectabilityRiskFactor,
         globalRisk: feature.riskFactor,

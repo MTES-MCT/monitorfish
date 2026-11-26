@@ -1,5 +1,7 @@
 import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetControlUnitsQuery } from '@features/ControlUnit/controlUnitApi'
+import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import { OBSERVATION_TITLES, OTHER_OBSERVATION_TITLE } from '@features/Reporting/components/ReportingForm/constants'
 import { FormikCoordinatesPicker } from '@features/Reporting/components/ReportingForm/FormikCoordinatesPicker'
 import {
@@ -163,10 +165,16 @@ export function Form({
     const featureId = VesselFeature.getVesselFeatureId(state.vessel.selectedVesselIdentity)
 
     const vessel = vesselSelectors.selectById(state.vessel.vessels, featureId)
+    if (!vessel || isReplayedVessel(vessel)) {
+      return false
+    }
 
-    return !!vessel?.lastLogbookMessageDateTime && !!vessel?.length && vessel.length > 12
+    return !!vessel.lastLogbookMessageDateTime && !!vessel.length && vessel.length > 12
   })
   const isDepOptionEnabled = !isIUU && selectedVesselHasLogbook
+  const isLogbookEquipmentAvailable = useMainAppSelector(state =>
+    selectIsDataAvailable(state, DataKind.LOGBOOK_EQUIPMENT)
+  )
   const isPlural = isIUU && (values.numberOfTargets ?? 1) > 1
   const infractions = isInfractionSuspicion ? (values.infractions ?? []) : []
   const infractionErrors = isInfractionSuspicion ? (errors as InfractionSuspicionFormErrors) : undefined
@@ -379,7 +387,13 @@ export function Form({
       value: ReportingValidityOption.UNTIL_NEXT_DEP
     },
     { label: "jusqu'à nouvel ordre", value: ReportingValidityOption.INDEFINITE }
-  ]
+  ].filter(
+    // Whether the vessel has a logbook is unknown while replaying, an edited reporting keeps its option
+    option =>
+      option.value !== ReportingValidityOption.UNTIL_NEXT_DEP ||
+      isLogbookEquipmentAvailable ||
+      values.validityOption === ReportingValidityOption.UNTIL_NEXT_DEP
+  )
 
   return (
     <StyledForm

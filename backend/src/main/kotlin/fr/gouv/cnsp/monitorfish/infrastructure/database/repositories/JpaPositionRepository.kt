@@ -86,6 +86,14 @@ class JpaPositionRepository(
             .findLastByExternalReferenceNumber(externalReferenceNumber, from, to)
             .map(PositionEntity::toPosition)
 
+    override fun findLastPositionOfEachVesselBetween(
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<Position> =
+        dbPositionRepository
+            .findLastOfEachVesselBetween(from, to)
+            .map(PositionEntity::toPosition)
+
     @Transactional
     override fun save(position: Position) {
         val positionEntity = PositionEntity.fromPosition(position)

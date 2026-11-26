@@ -1,20 +1,18 @@
 import { renderVesselFeatures } from '@features/Vessel/useCases/rendering/renderVesselFeatures'
+import { getFilteredVesselFeatureIds } from '@features/Vessel/useCases/VesselListV2/getFilteredVesselFeatureIds'
 import { Vessel } from '@features/Vessel/Vessel.types'
 
 import { setAreActiveVesselsDisplayed } from '../../../domain/shared_slices/Global'
-import { MonitorFishWorker } from '../../../workers/MonitorFishWorker'
 import { setFilteredVesselsFeatures, setVessels } from '../slice'
 
 import type { MainAppThunk } from '@store'
 
 export const saveActiveVesselsAndDisplayLastPositions =
-  (vessels: Vessel.ActiveVessel[]): MainAppThunk =>
+  (vessels: Vessel.DisplayedVessel[]): MainAppThunk =>
   async (dispatch, getState) => {
-    const { listFilterValues } = getState().vessel
-
     dispatch(setVessels(vessels))
 
-    const filteredVesselFeatureIds = await MonitorFishWorker.getFilteredVessels(vessels, listFilterValues)
+    const filteredVesselFeatureIds = await getFilteredVesselFeatureIds(vessels, getState())
 
     dispatch(setFilteredVesselsFeatures(filteredVesselFeatureIds))
 

@@ -33,13 +33,13 @@ export function EditFixedVesselGroupDialog({
 }: EditFixedVesselGroupDialogProps) {
   const formRef = useRef<FormikProps<CreateOrUpdateVesselGroup>>()
 
-  const selectedVessels: Vessel.ActiveVessel[] = useMainAppSelector(state => {
+  const selectedVessels: Vessel.DisplayedVessel[] = useMainAppSelector(state => {
     const entities = vesselSelectors.selectEntities(state.vessel.vessels)
 
     return (
       selectedVesselFeatureIds
         ?.map(id => entities[id])
-        ?.filter((vessel: Vessel.ActiveVessel | undefined): vessel is Vessel.ActiveVessel => !!vessel) ?? []
+        ?.filter((vessel: Vessel.DisplayedVessel | undefined): vessel is Vessel.DisplayedVessel => !!vessel) ?? []
     )
   })
   const selectedVesselIdentities = (function () {

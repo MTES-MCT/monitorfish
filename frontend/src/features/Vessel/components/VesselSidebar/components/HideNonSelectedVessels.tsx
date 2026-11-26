@@ -8,7 +8,7 @@ import { VesselSidebarActionButton } from './VesselSidebarActionButton'
 import HidingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_actif.svg?react'
 import ShowingOtherTracksSVG from '../../../../icons/Bouton_masquer_pistes_inactif.svg?react'
 
-export function HideNonSelectedVessels({ isSidebarOpen }) {
+export function HideNonSelectedVessels() {
   const dispatch = useMainAppDispatch()
   const hideNonSelectedVessels = useMainAppSelector(state => state.vessel.hideNonSelectedVessels)
   const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
@@ -16,8 +16,6 @@ export function HideNonSelectedVessels({ isSidebarOpen }) {
   return (
     <VesselSidebarActionButton
       $backgroundColor={hideNonSelectedVessels ? THEME.color.blueGray : THEME.color.charcoal}
-      $isSidebarOpen={isSidebarOpen}
-      $top={138}
       data-cy="trigger-hide-other-vessels-from-sidebar"
       disabled={!selectedVesselPositions?.length}
       onClick={() => dispatch(setHideNonSelectedVessels(!hideNonSelectedVessels))}

@@ -118,6 +118,41 @@ interface DBPositionRepository : CrudRepository<PositionEntity, Long> {
     ): List<PositionEntity>
 
     @Query(
+        value =
+            """
+            SELECT DISTINCT ON (p.internal_reference_number, p.ircs, p.external_reference_number)
+                p.internal_reference_number,
+                p.external_reference_number,
+                p.mmsi,
+                p.ircs,
+                p.id,
+                p.date_time,
+                p.vessel_name,
+                p.flag_state,
+                p.from_country,
+                p.destination_country,
+                p.trip_number,
+                p.latitude,
+                p.longitude,
+                p.speed,
+                p.course,
+                p.position_type,
+                p.is_manual,
+                p.is_fishing,
+                p.is_at_port,
+                p.network_type
+            FROM positions p
+            WHERE p.date_time >= :from AND p.date_time <= :to
+            ORDER BY p.internal_reference_number, p.ircs, p.external_reference_number, p.date_time DESC
+            """,
+        nativeQuery = true,
+    )
+    fun findLastOfEachVesselBetween(
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<PositionEntity>
+
+    @Query(
         """
             select find_last_datetime_in_positions_table()
         """,

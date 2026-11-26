@@ -13,6 +13,8 @@ const LOGBOOK_TRIPS_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les marées
 const LOGBOOK_ERROR_MESSAGE = "Nous n'avons pas pu récupérer les messages JPE de ce navire"
 
 export type GetVesselLogbookParams = {
+  /** For an `AT_DATE_TIME` voyage request. */
+  dateTime?: string | undefined
   tripNumber: string | number | undefined
   vesselIdentity: Vessel.VesselIdentity
   voyageRequest: NavigateTo | undefined
@@ -41,9 +43,10 @@ export const logbookApi = monitorfishApi.injectEndpoints({
     getVesselLogbook: builder.query<Logbook.VesselVoyage | undefined, GetVesselLogbookParams>({
       query: (params: GetVesselLogbookParams) => {
         const { internalReferenceNumber } = params.vesselIdentity
-        const { tripNumber, voyageRequest } = params
+        const { dateTime, tripNumber, voyageRequest } = params
 
         return getUrlOrPathWithQueryParams(`/vessels/logbook/find`, {
+          dateTime,
           internalReferenceNumber: internalReferenceNumber ?? '',
           tripNumber: tripNumber ?? '',
           voyageRequest: voyageRequest ?? ''

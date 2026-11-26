@@ -1,3 +1,5 @@
+import { selectDisplayedHealthcheckTextWarning } from '@features/Healthcheck/selectors'
+import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
 import { VesselSidebarTab } from '@features/Vessel/types/vessel'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -17,9 +19,13 @@ import { VesselLogbook } from '../../../../Logbook/components/VesselLogbook'
 import { VesselReportings } from '../../../../Reporting/components/VesselReportings'
 
 export function Body() {
+  const areAlertsAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.ALERTS))
+  const areBeaconMalfunctionsAvailable = useMainAppSelector(state =>
+    selectIsDataAvailable(state, DataKind.BEACON_MALFUNCTIONS)
+  )
   const isSuperUser = useIsSuperUser()
   const dispatch = useMainAppDispatch()
-  const healthcheckTextWarning = useMainAppSelector(state => state.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(selectDisplayedHealthcheckTextWarning)
   const vesselSidebarError = useMainAppSelector(state => state.displayedError.vesselSidebarError)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const selectedVesselSidebarTab = useMainAppSelector(state => state.vessel.selectedVesselSidebarTab)
@@ -44,8 +50,10 @@ export function Body() {
 
   return (
     <>
-      {isSuperUser && selectedVessel && <AlertWarning selectedVessel={selectedVessel} />}
-      {isSuperUser && selectedVessel && <BeaconMalfunctionWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && selectedVessel && areAlertsAvailable && <AlertWarning selectedVessel={selectedVessel} />}
+      {isSuperUser && selectedVessel && areBeaconMalfunctionsAvailable && (
+        <BeaconMalfunctionWarning selectedVessel={selectedVessel} />
+      )}
       <Wrapper $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
         {selectedVesselSidebarTab === VesselSidebarTab.SUMMARY && <VesselSummary />}
         {selectedVesselSidebarTab === VesselSidebarTab.IDENTITY && <VesselIdentity />}

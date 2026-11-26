@@ -1,4 +1,5 @@
 import { CoordinatesFormat, OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { DataKind } from '@features/PositionReplay/replayableData'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { customDayjs, getCoordinates } from '@mtes-mct/monitor-ui'
 import countries from 'i18n-iso-countries'
@@ -76,3 +77,14 @@ export const VESSEL_LIST_CSV_MAP_BASE: DownloadAsCsvMap<Omit<Vessel.ActiveVessel
   }
 }
 /* eslint-enable sort-keys-fix/sort-keys-fix */
+
+/** The current data exported by a column: the replayed vessels do not have it, the column is not exported while replaying. */
+export const VESSEL_LIST_CSV_COLUMN_DATA_KIND: Partial<Record<keyof typeof VESSEL_LIST_CSV_MAP_BASE, DataKind>> = {
+  gearsArray: DataKind.GEARS_ONBOARD,
+  lastControlAtQuayDateTime: DataKind.CONTROLS,
+  lastControlAtSeaDateTime: DataKind.CONTROLS,
+  lastLogbookMessageDateTime: DataKind.LOGBOOK_EQUIPMENT,
+  riskFactor: DataKind.RISK_FACTOR,
+  segments: DataKind.FLEET_SEGMENTS,
+  speciesArray: DataKind.SPECIES_ONBOARD
+}

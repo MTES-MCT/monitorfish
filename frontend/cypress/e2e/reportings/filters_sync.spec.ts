@@ -57,7 +57,7 @@ context('Reportings filters are shared by the map and the list', () => {
     cy.fill('Source', 'Alerte auto.')
     cy.wait('@displayArchivedAlertReportings')
 
-    cy.clickButton('Définir une zone de filtre manuelle')
+    cy.clickButton('Définir une zone de filtre sur la carte')
     cy.get('body').click(490, 580)
     cy.get('body').click(420, 635)
     cy.get('body').dblclick(560, 620)
@@ -66,10 +66,10 @@ context('Reportings filters are shared by the map and the list', () => {
 
     cy.get('*[data-cy="reporting-map-menu-box"]').within(() => {
       cy.contains('Zone de filtre 1').should('be.visible')
-      cy.contains('button', 'Définir une zone de filtre manuelle').should('not.be.disabled')
+      cy.contains('button', 'Définir une zone de filtre sur la carte').should('not.be.disabled')
     })
 
-    cy.clickButton('Définir une zone de filtre manuelle')
+    cy.clickButton('Définir une zone de filtre sur la carte')
     cy.get('body').click(620, 580)
     cy.get('body').click(580, 650)
     cy.get('body').dblclick(700, 630)

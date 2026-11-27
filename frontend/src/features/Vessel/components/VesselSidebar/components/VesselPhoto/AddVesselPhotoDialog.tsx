@@ -66,7 +66,7 @@ export function AddVesselPhotoDialog({ contributorId, keys, onClose }: AddVessel
 
 const StyledDialog = styled(Dialog)`
   > div:nth-child(2) {
-    width: 760px;
+    width: 648px;
   }
 
   h4 {

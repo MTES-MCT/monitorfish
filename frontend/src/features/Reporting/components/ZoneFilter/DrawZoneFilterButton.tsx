@@ -5,8 +5,13 @@ export function DrawZoneFilterButton() {
   const { drawZone } = useReportingsFilters()
 
   return (
-    <Button accent={Accent.SECONDARY} Icon={Icon.Plus} onClick={drawZone} title="Définir une zone de filtre manuelle">
-      Définir une zone de filtre manuelle
+    <Button
+      accent={Accent.SECONDARY}
+      Icon={Icon.Plus}
+      onClick={drawZone}
+      title="Définir une zone de filtre sur la carte"
+    >
+      Définir une zone de filtre sur la carte
     </Button>
   )
 }

@@ -97,7 +97,7 @@ export const generateHTML = (data: TemplateData) => `
             <img id="logo_cnsp" src="logo_cnsp.jpg" alt="Logo CNSP"/>
           </td>
           <td>
-            <img id="logo_se_mer" src="logo_se_mer.jpg" alt="Logo Secretariat d'Etat chargé de la Mer et de la Biodiversité"/>
+            <img id="logo_gouvernement" src="gouvernement.jpg" alt="Logo Gouvernement"/>
           </td>
         </tr>
       </table>
@@ -316,7 +316,7 @@ footer > p {
 #logo_cnsp {
     width: 80px;
 }
-#logo_se_mer {
+#logo_gouvernement {
     margin-left: 16px;
     width: 126.86px;
 }

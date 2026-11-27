@@ -1879,7 +1879,9 @@ def test_pre_render_pno_zero_1(
     Path("/email/fonts/location"),
 )
 @patch("src.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
-@patch("src.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.flows.distribute_pnos.GOUVERNEMENT_LOGO_PATH", Path("/gouvernement/logo/path")
+)
 @patch(
     "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
     Path("/state/flags/icons/location"),
@@ -1937,7 +1939,9 @@ def test_render_pno_1(
     Path("/email/fonts/location"),
 )
 @patch("src.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
-@patch("src.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.flows.distribute_pnos.GOUVERNEMENT_LOGO_PATH", Path("/gouvernement/logo/path")
+)
 @patch(
     "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
     Path("/state/flags/icons/location"),
@@ -1997,7 +2001,9 @@ def test_render_pno_zero_1(
     Path("/email/fonts/location"),
 )
 @patch("src.flows.distribute_pnos.CNSP_LOGO_PATH", Path("/cnsp/logo/path"))
-@patch("src.flows.distribute_pnos.SE_MER_LOGO_PATH", Path("/se_mer/logo/path"))
+@patch(
+    "src.flows.distribute_pnos.GOUVERNEMENT_LOGO_PATH", Path("/gouvernement/logo/path")
+)
 @patch(
     "src.flows.distribute_pnos.STATE_FLAGS_ICONS_LOCATION",
     Path("/state/flags/icons/location"),

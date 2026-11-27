@@ -10,9 +10,6 @@ export const selectIsPositionReplayActive = (state: MainRootState): boolean =>
 export const selectPositionsDateTime = (state: MainRootState): string | undefined =>
   state.positionReplay.status === PositionReplayStatus.REPLAYING ? state.positionReplay.dateTime : undefined
 
-export const selectIsPositionReplayHeadbandDisplayed = (state: MainRootState): boolean =>
-  state.positionReplay.status === PositionReplayStatus.REPLAYING
-
 /** Older VMS positions are not fetched while replaying. */
 export const selectMaxLastPositionHoursAgo = (state: MainRootState): number | undefined =>
   selectIsPositionReplayActive(state) ? VMS_REPLAY_LOOKBACK_IN_HOURS : undefined

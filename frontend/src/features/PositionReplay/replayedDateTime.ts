@@ -1,4 +1,3 @@
-import { AIS_POSITIONS_RETENTION_IN_MONTHS } from '@features/PositionReplay/constants'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { Dayjs, ManipulateType } from 'dayjs'
@@ -36,22 +35,13 @@ export function toReplayedDateTime(dateTime: string | Dayjs): string {
   return customDayjs(dateTime).utc().startOf('second').toISOString()
 }
 
-/** Steps from the replayed date, or from now when none is picked yet, without going past now. */
-export function stepReplayedDateTime(
-  dateTime: string | undefined,
-  step: DateTimeStep,
-  direction: 1 | -1,
-  now: Dayjs
-): string {
-  const nextDateTime = (dateTime ? customDayjs(dateTime) : now).add(direction * step.amount, step.unit)
+/** Steps from the replayed date, without going past now. */
+export function stepReplayedDateTime(dateTime: string, step: DateTimeStep, direction: 1 | -1, now: Dayjs): string {
+  const nextDateTime = customDayjs(dateTime).add(direction * step.amount, step.unit)
 
   return toReplayedDateTime(nextDateTime.isAfter(now) ? now : nextDateTime)
 }
 
-export function canStepForward(dateTime: string | undefined, step: DateTimeStep, now: Dayjs): boolean {
-  return !!dateTime && !customDayjs(dateTime).add(step.amount, step.unit).isAfter(now)
-}
-
-export function isOlderThanAISRetention(dateTime: string | undefined, now: Dayjs): boolean {
-  return !!dateTime && customDayjs(dateTime).isBefore(now.subtract(AIS_POSITIONS_RETENTION_IN_MONTHS, 'month'))
+export function canStepForward(dateTime: string, step: DateTimeStep, now: Dayjs): boolean {
+  return !customDayjs(dateTime).add(step.amount, step.unit).isAfter(now)
 }

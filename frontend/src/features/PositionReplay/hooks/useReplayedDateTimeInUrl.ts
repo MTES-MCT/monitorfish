@@ -1,6 +1,5 @@
 import { getReplayedDateTimeFromUrl, getUrlWithReplayedDateTime } from '@features/PositionReplay/replayUrl'
 import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
-import { positionReplayActions } from '@features/PositionReplay/slice'
 import { startPositionReplay } from '@features/PositionReplay/useCases/startPositionReplay'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -20,8 +19,7 @@ export function useReplayedDateTimeInUrl() {
       return
     }
 
-    dispatch(startPositionReplay())
-    dispatch(positionReplayActions.setDateTime(replayedDateTime))
+    dispatch(startPositionReplay(replayedDateTime))
   }, [dispatch])
 
   useEffect(() => {

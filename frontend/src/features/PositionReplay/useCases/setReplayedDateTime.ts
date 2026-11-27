@@ -7,7 +7,7 @@ import type { MainAppThunk } from '@store'
 
 /** The selected vessel track follows with the positions fetched at this date. */
 export const setReplayedDateTime =
-  (dateTime: string | undefined): MainAppThunk<Promise<void>> =>
+  (dateTime: string): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     dispatch(positionReplayActions.setDateTime(dateTime))
 

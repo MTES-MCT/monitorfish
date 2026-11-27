@@ -4,6 +4,7 @@ import { ControlUnitListMapButton } from '@features/ControlUnit/components/Contr
 import { LayersSidebar } from '@features/LayersSidebar/components'
 import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
+import { PositionReplayMapButton } from '@features/PositionReplay/components/PositionReplayMapButton'
 import { ReportingMapButton } from '@features/Reporting/components/ReportingMapButton'
 import { UserFeedbackMapButton } from '@features/UserFeedback/components/UserFeedbackMapButton'
 import { AISVesselsButton } from '@features/Vessel/components/AISVesselsButton'
@@ -183,6 +184,9 @@ export function MapButtons() {
           <Group>
             <MenuItem>
               <MapSettingsButton />
+            </MenuItem>
+            <MenuItem>
+              <PositionReplayMapButton />
             </MenuItem>
           </Group>
         )}

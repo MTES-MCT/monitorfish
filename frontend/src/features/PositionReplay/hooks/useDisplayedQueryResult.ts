@@ -8,26 +8,13 @@ export type QueryResult<T> = {
   isFetching: boolean
 }
 
-const NO_DATA: never[] = []
-
-/**
- * The current query result, or the replayed one while positions are replayed.
- * Nothing is displayed until a replayed date is picked.
- */
+/** The current query result, or the replayed one while positions are replayed. */
 export function selectDisplayedQueryResult<T>(
   status: PositionReplayStatus,
   currentQueryResult: QueryResult<T>,
   replayedQueryResult: QueryResult<T>
 ): QueryResult<T> {
-  switch (status) {
-    case PositionReplayStatus.OFF:
-      return currentQueryResult
-    case PositionReplayStatus.PICKING_DATE:
-      return { ...replayedQueryResult, data: NO_DATA }
-    case PositionReplayStatus.REPLAYING:
-    default:
-      return replayedQueryResult
-  }
+  return status === PositionReplayStatus.OFF ? currentQueryResult : replayedQueryResult
 }
 
 export function useDisplayedQueryResult<T>(

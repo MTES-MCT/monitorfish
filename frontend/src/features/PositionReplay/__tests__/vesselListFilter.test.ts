@@ -21,7 +21,7 @@ import type { MainRootState } from '@store'
 const getIsDataAvailable = (status: PositionReplayStatus) =>
   selectIsDataAvailablePredicate({ positionReplay: { status } } as unknown as MainRootState)
 const isAlwaysAvailable = getIsDataAvailable(PositionReplayStatus.OFF)
-const isAvailableWhileReplaying = getIsDataAvailable(PositionReplayStatus.PICKING_DATE)
+const isAvailableWhileReplaying = getIsDataAvailable(PositionReplayStatus.REPLAYING)
 
 const FILTERS: VesselListFilter = {
   ...DEFAULT_VESSEL_LIST_FILTER_VALUES,

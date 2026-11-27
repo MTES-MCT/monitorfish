@@ -3,12 +3,11 @@ import { VESSEL_LABEL_OPTIONS } from '@features/Map/components/MapSettingsButton
 import { selectAreVesselsEstimatedPositionsDisplayed, selectIsRiskFactorDisplayed } from '@features/Map/selectors'
 import { DISABLED_DURING_POSITION_REPLAY_MESSAGE } from '@features/PositionReplay/constants'
 import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
-import { startPositionReplay } from '@features/PositionReplay/useCases/startPositionReplay'
 import { TrackDepthSelection } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/TrackDepthSelection'
 import { displayVesselsEstimatedPositions } from '@features/Vessel/useCases/displayVesselEstimatedPositions'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, Icon, MapMenuDialog, MultiRadio } from '@mtes-mct/monitor-ui'
+import { Icon, MapMenuDialog, MultiRadio } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
@@ -34,11 +33,6 @@ export function MapSettings({ isOpened, onClose }) {
     selectIsDataAvailable(state, DataKind.ESTIMATED_POSITIONS)
   )
 
-  const replayPositions = () => {
-    dispatch(startPositionReplay())
-    onClose()
-  }
-
   return (
     <Wrapper isOpen={isOpened}>
       <Header>
@@ -63,15 +57,6 @@ export function MapSettings({ isOpened, onClose }) {
           onChange={nextValue => dispatch(updateDefaultVesselTrackDepth(nextValue))}
         />
         <Hint>Si le navire n'a pas de message DEP, la longueur par défaut de sa piste sera de 12 heures.</Hint>
-        <ReplayButton
-          accent={Accent.SECONDARY}
-          Icon={Icon.Clock}
-          isFullWidth
-          onClick={replayPositions}
-          title="Rejouer les positions à une date passée"
-        >
-          Rejouer les positions à une date passée
-        </ReplayButton>
       </StyledMapMenuDialogBody>
       <MapPropertyTrigger
         booleanProperty={vesselLabelsShowedOnMap}
@@ -129,12 +114,7 @@ const StyledMultiRadio = styled(MultiRadio)`
 const Hint = styled.p`
   color: ${p => p.theme.color.slateGray};
   font-style: italic;
-  margin: 4px 12px 24px 12px;
-`
-
-const ReplayButton = styled(Button)`
-  margin: 0 12px 12px 12px;
-  width: calc(100% - 24px);
+  margin: 4px 12px 12px 12px;
 `
 
 const Header = styled(MapMenuDialog.Header)<{

@@ -5,7 +5,6 @@ import {
   canStepForward,
   DATE_TIME_STEPS,
   getKeyboardStep,
-  isOlderThanAISRetention,
   stepReplayedDateTime,
   toReplayedDateTime
 } from '../replayedDateTime'
@@ -23,24 +22,13 @@ describe('PositionReplay/replayedDateTime', () => {
     expect(stepReplayedDateTime('2026-11-20T02:00:00.000Z', ONE_HOUR, 1, NOW)).toEqual('2026-11-20T03:00:00.000Z')
   })
 
-  it('stepReplayedDateTime() Should step from now When no date is replayed', () => {
-    expect(stepReplayedDateTime(undefined, ONE_HOUR, -1, NOW)).toEqual('2026-11-23T11:00:30.000Z')
-  })
-
   it('stepReplayedDateTime() Should not go past now', () => {
     expect(stepReplayedDateTime('2026-11-23T11:30:00.000Z', ONE_HOUR, 1, NOW)).toEqual('2026-11-23T12:00:30.000Z')
   })
 
-  it('canStepForward() Should be false When no date is replayed or when it would go past now', () => {
-    expect(canStepForward(undefined, ONE_HOUR, NOW)).toBe(false)
+  it('canStepForward() Should be false When it would go past now', () => {
     expect(canStepForward('2026-11-23T11:30:00.000Z', ONE_HOUR, NOW)).toBe(false)
     expect(canStepForward('2026-11-23T10:00:00.000Z', ONE_HOUR, NOW)).toBe(true)
-  })
-
-  it('isOlderThanAISRetention() Should be true When the date is older than one month', () => {
-    expect(isOlderThanAISRetention(undefined, NOW)).toBe(false)
-    expect(isOlderThanAISRetention('2026-11-01T00:00:00.000Z', NOW)).toBe(false)
-    expect(isOlderThanAISRetention('2026-10-01T00:00:00.000Z', NOW)).toBe(true)
   })
 
   it('getKeyboardStep() Should step by one hour with the arrows, and one day with Shift', () => {

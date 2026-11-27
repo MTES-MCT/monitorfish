@@ -1,32 +1,32 @@
+import { POSITION_REPLAY_BANNER_HEIGHT } from '@features/PositionReplay/constants'
 import {
   canStepForward,
   DATE_TIME_STEPS,
   getKeyboardStep,
-  isOlderThanAISRetention,
   stepReplayedDateTime,
   toReplayedDateTime
 } from '@features/PositionReplay/replayedDateTime'
-import { selectIsPositionReplayActive, selectPositionsDateTime } from '@features/PositionReplay/selectors'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { quitPositionReplay } from '@features/PositionReplay/useCases/quitPositionReplay'
 import { setReplayedDateTime } from '@features/PositionReplay/useCases/setReplayedDateTime'
 import { useGetTopOffset } from '@hooks/useGetTopOffset'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, customDayjs, DatePicker, Dialog, Icon, IconButton, Size, THEME } from '@mtes-mct/monitor-ui'
+import { Accent, Button, customDayjs, DatePicker, Icon, Size } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { ReplayedPositionsStatus } from './ReplayedPositionsStatus'
+import { ReplayedPositionsErrorBanner, ReplayedPositionsLoading } from './ReplayedPositionsStatus'
 
 import type { DateTimeStep } from '@features/PositionReplay/replayedDateTime'
 import type { KeyboardEvent } from 'react'
 
-export function PositionReplayDialog() {
+export function PositionReplayBanner() {
   const dispatch = useMainAppDispatch()
-  const isActive = useMainAppSelector(selectIsPositionReplayActive)
   const dateTime = useMainAppSelector(selectPositionsDateTime)
-  const topOffset = useGetTopOffset()
+  const topOffset = useGetTopOffset({ isPositionReplayBannerExcluded: true })
 
-  if (!isActive) {
+  // Only defined while replaying
+  if (!dateTime) {
     return null
   }
 
@@ -53,40 +53,33 @@ export function PositionReplayDialog() {
     }
 
     step(keyboardStep.dateTimeStep, keyboardStep.direction)
+    event.stopPropagation()
   }
 
   const updateDateTime = (nextDateTime: string | undefined) => {
-    dispatch(setReplayedDateTime(nextDateTime ? toReplayedDateTime(nextDateTime) : undefined))
+    // A cleared date keeps the last replayed one
+    if (!nextDateTime) {
+      return
+    }
+
+    void dispatch(setReplayedDateTime(toReplayedDateTime(nextDateTime)))
   }
 
   return (
-    // A click anywhere in the dialog focuses it, so that its keyboard shortcuts apply
-    <Wrapper $top={topOffset} data-cy="position-replay-dialog" onKeyDown={stepWithKeyboard} tabIndex={-1}>
-      {/* `Dialog` itself is a modal: its overlay would block the map during the whole replay */}
-      <Dialog.Title>
-        <Title>Vous êtes en mode “rejeu” des positions de navires</Title>
-        <IconButton
-          accent={Accent.TERTIARY}
-          color={THEME.color.white}
-          Icon={Icon.Close}
-          onClick={() => dispatch(quitPositionReplay())}
-          title="Quitter le mode rejeu des positions"
-        />
-      </Dialog.Title>
-      <Body>
-        <p>Veuillez saisir une date et une heure (UTC) de rejeu des positions.</p>
-        <Note>
-          NB : les positions AIS de plus d’un mois ne sont pas stockées dans MonitorFish.
-          {isOlderThanAISRetention(dateTime, now) && (
-            <strong> Seules les positions VMS sont affichées pour cette date.</strong>
-          )}
-        </Note>
+    <>
+      {/* A click anywhere in the banner focuses it, so that its keyboard shortcuts apply */}
+      <Wrapper $top={topOffset} data-cy="position-replay-banner" onKeyDown={stepWithKeyboard} tabIndex={-1}>
+        <Texts>
+          <Title>Vous êtes en mode rejeu des positions de navires.</Title>
+          <Note>NB : il n’y a pas de positions AIS de plus d’un mois dans MonitorFish.</Note>
+          <ReplayedPositionsLoading />
+        </Texts>
         <Fields>
           {DATE_TIME_STEPS.map((dateTimeStep, index) => (
             <StepButton
               key={`backward-${dateTimeStep.label}`}
               $isGroupStart={index > 0}
-              accent={Accent.SECONDARY}
+              accent={Accent.TERTIARY}
               aria-keyshortcuts={dateTimeStep.unit === 'day' ? 'Shift+ArrowLeft' : 'ArrowLeft'}
               Icon={Icon.Chevron}
               onClick={() => step(dateTimeStep, -1)}
@@ -94,7 +87,7 @@ export function PositionReplayDialog() {
               style={{ order: index * 3 }}
               title={`Reculer de ${dateTimeStep.label}`}
             >
-              {`-${dateTimeStep.label}`}
+              {`- ${dateTimeStep.label}`}
             </StepButton>
           ))}
           <DatePicker
@@ -111,7 +104,7 @@ export function PositionReplayDialog() {
             <StepButton
               key={`forward-${dateTimeStep.label}`}
               $isForward
-              accent={Accent.SECONDARY}
+              accent={Accent.TERTIARY}
               aria-keyshortcuts={dateTimeStep.unit === 'day' ? 'Shift+ArrowRight' : 'ArrowRight'}
               disabled={!canStepForward(dateTime, dateTimeStep, now)}
               Icon={Icon.Chevron}
@@ -120,51 +113,75 @@ export function PositionReplayDialog() {
               style={{ order: index * 3 + 2 }}
               title={`Avancer de ${dateTimeStep.label}`}
             >
-              {`+${dateTimeStep.label}`}
+              {`+ ${dateTimeStep.label}`}
             </StepButton>
           ))}
         </Fields>
-        <ReplayedPositionsStatus dateTime={dateTime} />
-      </Body>
-    </Wrapper>
+        <QuitButtonBox>
+          <Button
+            accent={Accent.SECONDARY}
+            onClick={() => dispatch(quitPositionReplay())}
+            size={Size.SMALL}
+            title="Quitter le mode rejeu des positions"
+          >
+            Quitter le mode rejeu
+          </Button>
+        </QuitButtonBox>
+      </Wrapper>
+      <ReplayedPositionsErrorBanner dateTime={dateTime} top={topOffset + POSITION_REPLAY_BANNER_HEIGHT} />
+    </>
   )
 }
-
-// `Dialog.Title` does not forward `className`, and it sets the font size of its `h4` children
-const Title = styled.span`
-  font-size: 16px;
-`
 
 const Wrapper = styled.div<{
   $top: number
 }>`
-  box-shadow: 0 3px 6px ${p => p.theme.color.slateGray};
-  left: 50%;
+  align-items: center;
+  background: ${p => p.theme.color.white};
+  box-shadow: 0 2px 4px ${p => p.theme.color.slateGray}80;
+  box-sizing: border-box;
+  display: flex;
+  height: ${POSITION_REPLAY_BANNER_HEIGHT}px;
+  left: 0;
   outline: none;
+  padding: 0 20px;
   position: absolute;
-  top: ${p => p.$top + 10}px;
-  transform: translateX(-50%);
-  width: 460px;
-  /* Same level as the map menus, rendered after it: the boxes the user opens are displayed over this dialog */
-  z-index: 1;
+  right: 0;
+  top: ${p => p.$top}px;
+  /* Over the map menus and the error banner: the date picker calendar opens over them */
+  z-index: 1001;
 `
 
-const Body = styled(Dialog.Body)`
+/** The texts and the quit button share the remaining width, so that the date and time fields stay centered. */
+const Texts = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   font-size: 13px;
-  /* The date picker calendar overflows the dialog: monitor-ui does not portal it */
-  overflow: visible;
-  padding: 24px;
+  gap: 2px;
+  min-width: 0;
 
   p {
     margin: 0;
     padding: 0;
-    font-weight: 500;
   }
 `
 
+const Title = styled.p`
+  color: ${p => p.theme.color.gunMetal};
+  font-weight: 500;
+`
+
 const Note = styled.p`
-  color: ${p => p.theme.color.slateGray} !important;
+  color: ${p => p.theme.color.slateGray};
+  font-size: 11px;
   font-style: italic;
+`
+
+const QuitButtonBox = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 `
 
 /**
@@ -176,7 +193,6 @@ const Fields = styled.div`
   align-items: center;
   display: flex;
   gap: 4px;
-  margin-top: 16px;
   position: relative;
 
   .Field-DatePicker,
@@ -214,17 +230,34 @@ const StepButton = styled(Button)<{
   $isForward?: boolean
   $isGroupStart?: boolean
 }>`
-  flex-direction: ${p => (p.$isForward ? 'row-reverse' : 'row')};
-  gap: 4px;
-  margin-left: ${p => (p.$isGroupStart ? 20 : 0)}px;
+  && {
+    background: transparent;
+    border: 0;
+    color: ${p => p.theme.color.slateGray};
+    flex-direction: ${p => (p.$isForward ? 'row-reverse' : 'row')};
+    font-size: 11px;
+    gap: 4px;
+    margin-left: ${p => (p.$isGroupStart ? 20 : 0)}px;
+    padding: 0 4px;
+
+    &:hover:not(:disabled),
+    &._hover:not(:disabled) {
+      color: ${p => p.theme.color.charcoal};
+    }
+
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
 
   .Element-IconBox {
+    color: ${p => p.theme.color.charcoal};
     margin-right: 1px;
   }
 
   svg {
-    height: 16px;
-    width: 16px;
+    height: 20px;
+    width: 20px;
     transform: rotate(${p => (p.$isForward ? -90 : 90)}deg);
   }
 `

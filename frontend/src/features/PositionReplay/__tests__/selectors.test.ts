@@ -1,16 +1,13 @@
 import { describe, expect, it } from '@jest/globals'
 
-import {
-  selectIsPositionReplayActive,
-  selectIsPositionReplayHeadbandDisplayed,
-  selectPositionsDateTime
-} from '../selectors'
+import { selectIsPositionReplayActive, selectPositionsDateTime } from '../selectors'
 import { positionReplayActions, positionReplayReducer } from '../slice'
 
 import type { UnknownAction } from '@reduxjs/toolkit'
 import type { MainRootState } from '@store'
 
 const REPLAYED_DATE_TIME = '2026-11-20T02:00:00.000Z'
+const NEXT_REPLAYED_DATE_TIME = '2026-11-20T03:00:00.000Z'
 
 const getStateAfter = (...actions: UnknownAction[]) =>
   ({
@@ -23,22 +20,22 @@ describe('PositionReplay/selectors', () => {
 
     expect(selectIsPositionReplayActive(state)).toBe(false)
     expect(selectPositionsDateTime(state)).toBeUndefined()
-    expect(selectIsPositionReplayHeadbandDisplayed(state)).toBe(false)
   })
 
-  it('Should not have any positions date While the date is picked', () => {
-    const state = getStateAfter(positionReplayActions.start())
+  it('Should have the replayed date as positions date When the replay is started', () => {
+    const state = getStateAfter(positionReplayActions.start(REPLAYED_DATE_TIME))
 
     expect(selectIsPositionReplayActive(state)).toBe(true)
-    expect(selectPositionsDateTime(state)).toBeUndefined()
-    expect(selectIsPositionReplayHeadbandDisplayed(state)).toBe(false)
+    expect(selectPositionsDateTime(state)).toEqual(REPLAYED_DATE_TIME)
   })
 
-  it('Should have the replayed date as positions date When a date is picked', () => {
-    const state = getStateAfter(positionReplayActions.start(), positionReplayActions.setDateTime(REPLAYED_DATE_TIME))
+  it('Should have the new date as positions date When the date is changed', () => {
+    const state = getStateAfter(
+      positionReplayActions.start(REPLAYED_DATE_TIME),
+      positionReplayActions.setDateTime(NEXT_REPLAYED_DATE_TIME)
+    )
 
-    expect(selectPositionsDateTime(state)).toEqual(REPLAYED_DATE_TIME)
-    expect(selectIsPositionReplayHeadbandDisplayed(state)).toBe(true)
+    expect(selectPositionsDateTime(state)).toEqual(NEXT_REPLAYED_DATE_TIME)
   })
 
   it('Should ignore a date When the replay is off', () => {
@@ -48,24 +45,10 @@ describe('PositionReplay/selectors', () => {
     expect(selectPositionsDateTime(state)).toBeUndefined()
   })
 
-  it('Should go back to picking a date When the date is cleared', () => {
-    const state = getStateAfter(
-      positionReplayActions.start(),
-      positionReplayActions.setDateTime(REPLAYED_DATE_TIME),
-      positionReplayActions.setDateTime(undefined)
-    )
-
-    expect(selectIsPositionReplayActive(state)).toBe(true)
-    expect(selectPositionsDateTime(state)).toBeUndefined()
-  })
-
   it('Should be off again When quitting', () => {
-    const state = getStateAfter(
-      positionReplayActions.start(),
-      positionReplayActions.setDateTime(REPLAYED_DATE_TIME),
-      positionReplayActions.reset()
-    )
+    const state = getStateAfter(positionReplayActions.start(REPLAYED_DATE_TIME), positionReplayActions.reset())
 
     expect(selectIsPositionReplayActive(state)).toBe(false)
+    expect(selectPositionsDateTime(state)).toBeUndefined()
   })
 })

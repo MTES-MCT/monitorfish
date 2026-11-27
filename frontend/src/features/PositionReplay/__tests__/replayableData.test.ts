@@ -21,15 +21,13 @@ describe('PositionReplay/replayableData', () => {
   })
 
   it('Should only keep the historized data When replaying', () => {
-    const isDataAvailable = getIsDataAvailable(PositionReplayStatus.PICKING_DATE)
+    const isDataAvailable = getIsDataAvailable(PositionReplayStatus.REPLAYING)
 
     expect(Object.values(DataKind).filter(isDataAvailable)).toEqual(HISTORIZED_DATA_KINDS)
   })
 
   it('Should return the same predicate between calls, to be used as a selector', () => {
-    expect(getIsDataAvailable(PositionReplayStatus.REPLAYING)).toBe(
-      getIsDataAvailable(PositionReplayStatus.PICKING_DATE)
-    )
+    expect(getIsDataAvailable(PositionReplayStatus.REPLAYING)).toBe(getIsDataAvailable(PositionReplayStatus.REPLAYING))
   })
 
   it('isDataAvailableForVessel() Should only keep the historized data of a replayed vessel', () => {

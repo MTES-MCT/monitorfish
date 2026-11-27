@@ -1,4 +1,4 @@
-import { selectIsPositionReplayHeadbandDisplayed } from '@features/PositionReplay/selectors'
+import { selectIsPositionReplayActive } from '@features/PositionReplay/selectors'
 import { quitPositionReplay } from '@features/PositionReplay/useCases/quitPositionReplay'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -10,7 +10,7 @@ type PositionReplayHeadbandProps = Readonly<{
 }>
 export function PositionReplayHeadband({ className }: PositionReplayHeadbandProps) {
   const dispatch = useMainAppDispatch()
-  const isDisplayed = useMainAppSelector(selectIsPositionReplayHeadbandDisplayed)
+  const isDisplayed = useMainAppSelector(selectIsPositionReplayActive)
 
   if (!isDisplayed) {
     return null

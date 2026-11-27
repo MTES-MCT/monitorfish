@@ -1,6 +1,3 @@
-/** See the `ais_positions` retention policy in the backend migrations. */
-export const AIS_POSITIONS_RETENTION_IN_MONTHS = 1
-
 /** LAST_DEPARTURE is relative to now: replayed tracks always span the 12 hours before the replayed date. */
 export const REPLAYED_TRACK_DEPTH_IN_HOURS = 12
 
@@ -11,3 +8,5 @@ export const DYNAMIC_VESSEL_GROUP_UNAVAILABLE_DURING_POSITION_REPLAY_MESSAGE =
 
 /** See `ReplayWindow.VMS_LOOKBACK` in the backend: older VMS positions are not replayed. */
 export const VMS_REPLAY_LOOKBACK_IN_HOURS = 6
+
+export const POSITION_REPLAY_BANNER_HEIGHT = 58

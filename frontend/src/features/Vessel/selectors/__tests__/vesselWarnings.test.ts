@@ -19,7 +19,7 @@ const getState = (isUserPreferenceEnabled: boolean, isPositionReplayActive: bool
       showingVesselsEstimatedPositions: isUserPreferenceEnabled
     },
     positionReplay: {
-      status: isPositionReplayActive ? PositionReplayStatus.PICKING_DATE : PositionReplayStatus.OFF
+      status: isPositionReplayActive ? PositionReplayStatus.REPLAYING : PositionReplayStatus.OFF
     },
     vesselGroup: { areVesselsNotInVesselGroupsHidden: isUserPreferenceEnabled }
   }) as unknown as MainRootState

@@ -29,15 +29,15 @@ context('Position replay', () => {
     cy.intercept('GET', '/bff/v1/vessels/ais/replay*').as('getReplayedAISVessels')
 
     // Given
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.clickButton('Rejouer les positions à une date passée')
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
 
-    // Then no position is displayed until a date is entered
-    cy.getDataCy('position-replay-dialog').should('be.visible')
-    cy.getDataCy('position-replay-headband').should('not.exist')
-    cy.getFeaturesFromLayer('VESSELS_POINTS').should(features => {
-      expect(features.length).to.equal(0)
+    // Then the positions are replayed now by default
+    cy.getDataCy('position-replay-banner').should('be.visible')
+    cy.wait('@getReplayedVessels').then(({ request }) => {
+      expect(customDayjs().diff(customDayjs(request.query.dateTime as string), 'minute')).to.be.within(0, 1)
     })
+    cy.wait('@getReplayedAISVessels')
+    cy.get('[title="Avancer de 1h"]').should('be.disabled')
 
     // When
     cy.fill('Date et heure de rejeu des positions', replayedAtTuple)
@@ -80,9 +80,7 @@ context('Position replay', () => {
       const aigleCalmeFeature = features.find(feature => feature.getId() === AIGLE_CALME)
       expect(aigleCalmeFeature?.get('isFiltered')).to.equal(1)
     })
-    cy.getDataCy('position-replay-headband')
-      .should('be.visible')
-      .contains('Vous affichez les pistes des navires dans le passé.')
+    cy.getDataCy('position-replay-banner').contains('Vous êtes en mode rejeu des positions de navires.')
     cy.get('[title="Avancer de 1j"]').should('not.be.disabled')
 
     /**
@@ -124,12 +122,11 @@ context('Position replay', () => {
 
     // When
     cy.intercept('GET', '/bff/v1/vessels').as('getActiveVessels')
-    cy.getDataCy('position-replay-headband').contains('Quitter le mode rejeu des positions').click()
+    cy.getDataCy('position-replay-banner').contains('Quitter le mode rejeu').click()
 
     // Then
     cy.wait('@getActiveVessels')
-    cy.getDataCy('position-replay-dialog').should('not.exist')
-    cy.getDataCy('position-replay-headband').should('not.exist')
+    cy.getDataCy('position-replay-banner').should('not.exist')
     cy.getDataCy('vessel-sidebar').should('not.exist')
     cy.getFeaturesFromLayer('VESSELS_POINTS').should(features => {
       const featureIds = features.map(feature => feature.getId())
@@ -137,37 +134,52 @@ context('Position replay', () => {
     })
   })
 
-  it('The headband Should be collapsed on demand and expanded again on the next replay', () => {
-    const { utcDateAsDayjs } = getUtcDateInMultipleFormats(customDayjs().subtract(5, 'day').toISOString())
-    const replayedAtTuple: [number, number, number, number, number] = [
-      utcDateAsDayjs.year(),
-      utcDateAsDayjs.month() + 1,
-      utcDateAsDayjs.date(),
-      utcDateAsDayjs.hour(),
-      utcDateAsDayjs.minute()
-    ]
-
+  it('The replay Should only be quit from the banner', () => {
     // Given
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.clickButton('Rejouer les positions à une date passée')
-    cy.fill('Date et heure de rejeu des positions', replayedAtTuple)
-    cy.getDataCy('position-replay-headband').should('be.visible')
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
+    cy.getDataCy('position-replay-banner').should('be.visible')
 
     // When
-    cy.getDataCy('position-replay-headband').parents('.Component-Banner').find('.banner-button').click()
-
-    // Then the headband is collapsed and the replay goes on
-    cy.getDataCy('position-replay-headband').should('not.exist')
-    cy.getDataCy('position-replay-dialog').should('be.visible')
-
-    // When
-    cy.clickButton('Quitter le mode rejeu des positions')
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.clickButton('Rejouer les positions à une date passée')
-    cy.fill('Date et heure de rejeu des positions', replayedAtTuple)
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
 
     // Then
-    cy.getDataCy('position-replay-headband').should('be.visible')
+    cy.getDataCy('position-replay-banner').should('be.visible')
+
+    // When
+    cy.clickButton('Quitter le mode rejeu')
+
+    // Then
+    cy.getDataCy('position-replay-banner').should('not.exist')
+  })
+
+  it('A closable banner Should be displayed When no position is found, and again for another date', () => {
+    cy.intercept('GET', '/bff/v1/vessels/replay*', { body: [] }).as('getReplayedVessels')
+    cy.intercept('GET', '/bff/v1/vessels/ais/replay*', { body: [] })
+
+    // When
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
+    cy.wait('@getReplayedVessels')
+
+    // Then
+    cy.getDataCy('replayed-positions-error-banner').should('be.visible').contains('Aucune position le ')
+
+    // When
+    cy.getDataCy('replayed-positions-error-banner').parents('.Component-Banner').find('.banner-button button').click()
+
+    // Then
+    cy.getDataCy('replayed-positions-error-banner').should('not.exist')
+
+    // When another date is replayed
+    cy.clickButton('Reculer de 1h')
+
+    // Then
+    cy.getDataCy('replayed-positions-error-banner').should('be.visible')
+
+    // When
+    cy.clickButton('Quitter le mode rejeu')
+
+    // Then
+    cy.getDataCy('replayed-positions-error-banner').should('not.exist')
   })
 
   it('Live-only features Should be disabled while replaying and restored as they were when quitting', () => {
@@ -179,8 +191,7 @@ context('Position replay', () => {
     cy.contains('Masquer les positions estimées des navires').should('be.visible')
 
     // When
-    cy.clickButton('Rejouer les positions à une date passée')
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
 
     // Then
     cy.contains(DISABLED_TITLE, 'Afficher la note de risque des navires').should('be.visible')
@@ -198,7 +209,7 @@ context('Position replay', () => {
     cy.get('[title="Afficher les missions (indisponible en mode rejeu des positions)"]').should('be.disabled')
 
     // When
-    cy.clickButton('Quitter le mode rejeu des positions')
+    cy.clickButton('Quitter le mode rejeu')
 
     // Then
     cy.get('[title="Cacher les missions"]').should('not.be.disabled')
@@ -209,8 +220,7 @@ context('Position replay', () => {
 
   it('The reporting layer Should be unavailable while replaying, as only the open reportings are fetched', () => {
     // Given
-    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
-    cy.clickButton('Rejouer les positions à une date passée')
+    cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
 
     // When
     cy.clickButton('Signalements')
@@ -234,11 +244,10 @@ context('Position replay', () => {
     cy.wait('@getReplayedVessels').then(({ request }) => {
       expect(request.query.dateTime).to.equal(replayedAt.toISOString())
     })
-    cy.getDataCy('position-replay-headband').should('be.visible')
-    cy.getDataCy('position-replay-dialog').should('be.visible')
+    cy.getDataCy('position-replay-banner').should('be.visible')
 
     // When
-    cy.clickButton('Quitter le mode rejeu des positions')
+    cy.clickButton('Quitter le mode rejeu')
 
     // Then
     cy.location('search').should('not.contain', 'replay=')

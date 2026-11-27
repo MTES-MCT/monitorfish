@@ -1,64 +1,63 @@
+import {
+  selectAreReplayedPositionsLoading,
+  selectHaveReplayedPositionsFailed,
+  selectReplayedPositionsErrorMessage
+} from '@features/PositionReplay/replayedPositionsQueries'
 import { selectAreAISVesselsFetched } from '@features/Vessel/hooks/useDisplayedAISVessels'
-import { useGetAISVesselsAtDateTimeQuery, useGetVesselsAtDateTimeQuery } from '@features/Vessel/vesselApi'
+import { vesselApi } from '@features/Vessel/vesselApi'
+import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { customDayjs, LinkButton } from '@mtes-mct/monitor-ui'
-import { skipToken } from '@reduxjs/toolkit/query'
+import { Banner, Level, LinkButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
-import { getNoPositionLabel } from '../replayedPositionsStatus'
-
-type ReplayedPositionsStatusProps = Readonly<{
-  dateTime: string | undefined
+type ReplayedPositionsErrorBannerProps = Readonly<{
+  dateTime: string
+  top: number
 }>
-/** Shares the cached queries of the displayed VMS and AIS vessels: no request is added. */
-export function ReplayedPositionsStatus({ dateTime }: ReplayedPositionsStatusProps) {
+export function ReplayedPositionsLoading() {
+  const areLoading = useMainAppSelector(selectAreReplayedPositionsLoading)
+
+  return areLoading ? <Loading>Chargement des positions…</Loading> : null
+}
+
+export function ReplayedPositionsErrorBanner({ dateTime, top }: ReplayedPositionsErrorBannerProps) {
+  const dispatch = useMainAppDispatch()
+  const errorMessage = useMainAppSelector(selectReplayedPositionsErrorMessage)
+  const haveFailed = useMainAppSelector(selectHaveReplayedPositionsFailed)
   const areAISVesselsFetched = useMainAppSelector(selectAreAISVesselsFetched)
-  const vmsResult = useGetVesselsAtDateTimeQuery(dateTime ?? skipToken)
-  const aisResult = useGetAISVesselsAtDateTimeQuery(dateTime ?? skipToken, { skip: !areAISVesselsFetched })
 
-  if (!dateTime) {
+  if (!errorMessage) {
     return null
   }
 
-  if (vmsResult.isFetching || aisResult.isFetching) {
-    return <Status>Chargement des positions…</Status>
-  }
-
-  if (vmsResult.isError || aisResult.isError) {
-    const refetchFailedQueries = () => {
-      if (vmsResult.isError) {
-        vmsResult.refetch()
-      }
-      if (aisResult.isError) {
-        aisResult.refetch()
-      }
+  const refetch = () => {
+    void dispatch(vesselApi.endpoints.getVesselsAtDateTime.initiate(dateTime, { forceRefetch: true, subscribe: false }))
+    if (areAISVesselsFetched) {
+      void dispatch(
+        vesselApi.endpoints.getAISVesselsAtDateTime.initiate(dateTime, { forceRefetch: true, subscribe: false })
+      )
     }
-
-    return (
-      <Status $isError>
-        Les positions n’ont pas pu être récupérées. <LinkButton onClick={refetchFailedQueries}>Réessayer</LinkButton>
-      </Status>
-    )
   }
-
-  const noPositionLabel = getNoPositionLabel(vmsResult.data, areAISVesselsFetched ? aisResult.data : undefined)
-  if (!noPositionLabel) {
-    return null
-  }
-
-  const replayedAt = customDayjs(dateTime).utc()
 
   return (
-    <Status>
-      {noPositionLabel} le {replayedAt.format('DD/MM/YYYY à HH:mm')} UTC.
-    </Status>
+    // A new message is displayed again, even after the previous one was closed
+    <Banner key={errorMessage} isClosable level={haveFailed ? Level.ERROR : Level.WARNING} top={`${top}px`}>
+      {/* `Banner` doesn't forward `data-cy` */}
+      <Message data-cy="replayed-positions-error-banner">
+        {errorMessage}
+        {haveFailed && <LinkButton onClick={refetch}>Réessayer</LinkButton>}
+      </Message>
+    </Banner>
   )
 }
 
-const Status = styled.p<{ $isError?: boolean }>`
+const Loading = styled.p`
+  color: ${p => p.theme.color.gunMetal};
+  font-size: 11px;
+`
+
+const Message = styled.span`
   align-items: center;
-  color: ${p => (p.$isError ? p.theme.color.maximumRed : p.theme.color.gunMetal)} !important;
-  display: flex;
-  gap: 4px;
-  margin-top: 16px !important;
+  display: inline-flex;
+  gap: 8px;
 `

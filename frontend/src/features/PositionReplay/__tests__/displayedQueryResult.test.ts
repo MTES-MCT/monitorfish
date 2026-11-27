@@ -11,10 +11,6 @@ describe('PositionReplay/selectDisplayedQueryResult()', () => {
     expect(selectDisplayedQueryResult(PositionReplayStatus.OFF, CURRENT, REPLAYED)).toBe(CURRENT)
   })
 
-  it('Should select no data When no replayed date is picked yet', () => {
-    expect(selectDisplayedQueryResult(PositionReplayStatus.PICKING_DATE, CURRENT, REPLAYED).data).toEqual([])
-  })
-
   it('Should select the replayed result When a date is replayed', () => {
     expect(selectDisplayedQueryResult(PositionReplayStatus.REPLAYING, CURRENT, REPLAYED)).toBe(REPLAYED)
   })

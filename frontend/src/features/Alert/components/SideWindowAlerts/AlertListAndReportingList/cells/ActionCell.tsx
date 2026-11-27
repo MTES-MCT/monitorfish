@@ -1,5 +1,5 @@
 import { validateAlert } from '@features/Alert/useCases/validateAlert'
-import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { Accent, Icon, IconButton, THEME } from '@mtes-mct/monitor-ui'
@@ -23,7 +23,7 @@ export function ActionCell({ alert, openSilenceAlertMenu }: ActionCellProps) {
         Icon={Icon.ViewOnMap}
         onClick={() => {
           const identity = extractVesselIdentityProps(alert)
-          dispatch(showVessel(identity, false))
+          dispatch(showVesselFromLiveData(identity))
         }}
         title="Voir sur la carte"
         withUnpropagatedClick

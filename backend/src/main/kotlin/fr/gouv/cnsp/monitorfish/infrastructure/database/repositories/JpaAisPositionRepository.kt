@@ -44,4 +44,9 @@ class JpaAisPositionRepository(
         dbAisPositionRepository.findLastByExternalImmatriculation(externalImmatriculation, from, to).map {
             it.toPosition()
         }
+
+    override fun findLastPositionOfEachVesselBetween(
+        from: ZonedDateTime,
+        to: ZonedDateTime,
+    ): List<AisPosition> = dbAisPositionRepository.findLastOfEachVesselBetween(from, to).map { it.toAisPosition() }
 }

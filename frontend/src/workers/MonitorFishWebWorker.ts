@@ -1,3 +1,4 @@
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import {
   FRANCE,
   getRegulatoryLawTypesFromZones,
@@ -245,8 +246,15 @@ export class MonitorFishWebWorker {
     }
   }
 
-  static getFilteredVessels(vessels: Vessel.ActiveVessel[], filters: VesselListFilter): string[] {
-    const now = customDayjs()
+  /**
+   * @param positionsReferenceDateTime The date the positions are displayed at, now when `undefined`.
+   */
+  static getFilteredVessels(
+    vessels: Vessel.DisplayedVessel[],
+    filters: VesselListFilter,
+    positionsReferenceDateTime: string | undefined = undefined
+  ): string[] {
+    const now = customDayjs(positionsReferenceDateTime)
     const vesselIsHidden = filters.lastPositionHoursAgo
       ? now.set('hour', now.get('hour') - filters.lastPositionHoursAgo)
       : now
@@ -272,7 +280,7 @@ export class MonitorFishWebWorker {
 
     // Indexing thousands of vessels is only needed when searching
     const searchedVessels = filters.searchQuery
-      ? new CustomSearch<Vessel.ActiveVessel>(
+      ? new CustomSearch<Vessel.DisplayedVessel>(
           vessels,
           [
             {
@@ -296,6 +304,120 @@ export class MonitorFishWebWorker {
         ).find(filters.searchQuery)
       : vessels
 
+    const matchesCurrentDataFilters = (vessel: Vessel.ActiveVessel): boolean => {
+      if (
+        landingPortLocodesSet &&
+        (!vessel.landingPortLocode || !landingPortLocodesSet.has(vessel.landingPortLocode))
+      ) {
+        return false
+      }
+
+      if (filters.hasLogbook !== undefined) {
+        switch (filters.hasLogbook) {
+          case true: {
+            const hasLogbook = !!vessel.lastLogbookMessageDateTime
+            if (!hasLogbook) {
+              return false
+            }
+            break
+          }
+          case false: {
+            const hasLogbook = !!vessel.lastLogbookMessageDateTime
+            if (hasLogbook) {
+              return false
+            }
+            break
+          }
+          default:
+            break
+        }
+      }
+
+      if (filters.riskFactors?.length) {
+        if (vessel.riskFactor === undefined) {
+          return false
+        }
+        const vesselRiskFactor = vessel.riskFactor
+        const isBetween = filters.riskFactors?.some(riskFactor => {
+          switch (riskFactor) {
+            case 1: {
+              return vesselRiskFactor >= 1 && vesselRiskFactor < 2
+            }
+            case 2: {
+              return vesselRiskFactor >= 2 && vesselRiskFactor < 3
+            }
+            case 3: {
+              return vesselRiskFactor >= 3 && vesselRiskFactor < 4
+            }
+            default: {
+              return true
+            }
+          }
+        })
+        if (!isBetween) {
+          return false
+        }
+      }
+
+      if (lastControlAtSeaFilter?.lastControlledBefore && !!vessel.lastControlAtSeaDateTime) {
+        const vesselDate = customDayjs(vessel.lastControlAtSeaDateTime)
+        const lastControlledBefore = customDayjs(lastControlAtSeaFilter.lastControlledBefore)
+
+        if (!vesselDate.isBefore(lastControlledBefore)) {
+          return false
+        }
+      }
+
+      if (lastControlAtSeaFilter?.lastControlledAfter) {
+        if (!vessel.lastControlAtSeaDateTime) {
+          return false
+        }
+
+        const vesselDate = customDayjs(vessel.lastControlAtSeaDateTime)
+        const lastControlledAfter = customDayjs(lastControlAtSeaFilter.lastControlledAfter)
+
+        if (!vesselDate.isAfter(lastControlledAfter)) {
+          return false
+        }
+      }
+
+      if (lastControlAtQuayFilter?.lastControlledBefore && !!vessel.lastControlAtQuayDateTime) {
+        const vesselDate = customDayjs(vessel.lastControlAtQuayDateTime)
+        const lastControlledBefore = customDayjs(lastControlAtQuayFilter.lastControlledBefore)
+
+        if (!vesselDate.isBefore(lastControlledBefore)) {
+          return false
+        }
+      }
+
+      if (lastControlAtQuayFilter?.lastControlledAfter) {
+        if (!vessel.lastControlAtQuayDateTime) {
+          return false
+        }
+
+        const vesselDate = customDayjs(vessel.lastControlAtQuayDateTime)
+        const lastControlledAfter = customDayjs(lastControlAtQuayFilter.lastControlledAfter)
+
+        if (!vesselDate.isAfter(lastControlledAfter)) {
+          return false
+        }
+      }
+
+      if (fleetSegmentsSet && !vessel.segments?.some(seg => fleetSegmentsSet.has(seg))) {
+        return false
+      }
+
+      if (gearCodesSet && !vessel.gearsArray?.some(gear => gearCodesSet.has(gear))) {
+        return false
+      }
+
+      if (specyCodesSet && !vessel.speciesArray.some(species => specyCodesSet.has(species))) {
+        return false
+      }
+
+      return true
+    }
+
     return searchedVessels
       .filter(vessel => {
         if (countrySet && !countrySet.has(vessel.flagState)) {
@@ -313,54 +435,9 @@ export class MonitorFishWebWorker {
           return false
         }
 
-        if (
-          landingPortLocodesSet &&
-          (!vessel.landingPortLocode || !landingPortLocodesSet.has(vessel.landingPortLocode))
-        ) {
+        // Replayed vessels have no current data: the filters on it are not applicable while replaying
+        if (!isReplayedVessel(vessel) && !matchesCurrentDataFilters(vessel)) {
           return false
-        }
-
-        if (filters.hasLogbook !== undefined) {
-          switch (filters.hasLogbook) {
-            case true: {
-              const hasLogbook = !!vessel.lastLogbookMessageDateTime
-              if (!hasLogbook) {
-                return false
-              }
-              break
-            }
-            case false: {
-              const hasLogbook = !!vessel.lastLogbookMessageDateTime
-              if (hasLogbook) {
-                return false
-              }
-              break
-            }
-            default:
-              break
-          }
-        }
-
-        if (filters.riskFactors?.length) {
-          const isBetween = filters.riskFactors?.some(riskFactor => {
-            switch (riskFactor) {
-              case 1: {
-                return vessel.riskFactor >= 1 && vessel.riskFactor < 2
-              }
-              case 2: {
-                return vessel.riskFactor >= 2 && vessel.riskFactor < 3
-              }
-              case 3: {
-                return vessel.riskFactor >= 3 && vessel.riskFactor < 4
-              }
-              default: {
-                return true
-              }
-            }
-          })
-          if (!isBetween) {
-            return false
-          }
         }
 
         if (filters.lastPositionHoursAgo) {
@@ -372,62 +449,6 @@ export class MonitorFishWebWorker {
           if (lastPosition.isBefore(vesselIsHidden)) {
             return false
           }
-        }
-
-        if (lastControlAtSeaFilter?.lastControlledBefore && !!vessel?.lastControlAtSeaDateTime) {
-          const vesselDate = customDayjs(vessel?.lastControlAtSeaDateTime)
-          const lastControlledBefore = customDayjs(lastControlAtSeaFilter.lastControlledBefore)
-
-          if (!vesselDate.isBefore(lastControlledBefore)) {
-            return false
-          }
-        }
-
-        if (lastControlAtSeaFilter?.lastControlledAfter) {
-          if (!vessel?.lastControlAtSeaDateTime) {
-            return false
-          }
-
-          const vesselDate = customDayjs(vessel?.lastControlAtSeaDateTime)
-          const lastControlledAfter = customDayjs(lastControlAtSeaFilter.lastControlledAfter)
-
-          if (!vesselDate.isAfter(lastControlledAfter)) {
-            return false
-          }
-        }
-
-        if (lastControlAtQuayFilter?.lastControlledBefore && !!vessel?.lastControlAtQuayDateTime) {
-          const vesselDate = customDayjs(vessel?.lastControlAtQuayDateTime)
-          const lastControlledBefore = customDayjs(lastControlAtQuayFilter.lastControlledBefore)
-
-          if (!vesselDate.isBefore(lastControlledBefore)) {
-            return false
-          }
-        }
-
-        if (lastControlAtQuayFilter?.lastControlledAfter) {
-          if (!vessel?.lastControlAtQuayDateTime) {
-            return false
-          }
-
-          const vesselDate = customDayjs(vessel?.lastControlAtQuayDateTime)
-          const lastControlledAfter = customDayjs(lastControlAtQuayFilter.lastControlledAfter)
-
-          if (!vesselDate.isAfter(lastControlledAfter)) {
-            return false
-          }
-        }
-
-        if (fleetSegmentsSet && !vessel?.segments?.some(seg => fleetSegmentsSet.has(seg))) {
-          return false
-        }
-
-        if (gearCodesSet && !vessel?.gearsArray?.some(gear => gearCodesSet.has(gear))) {
-          return false
-        }
-
-        if (specyCodesSet && !vessel?.speciesArray.some(species => specyCodesSet.has(species))) {
-          return false
         }
 
         if (vesselsLocation !== undefined) {

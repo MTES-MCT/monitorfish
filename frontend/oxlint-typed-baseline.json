@@ -394,7 +394,6 @@
     "typescript(require-await)": 1
   },
   "src/features/Vessel/components/VesselSidebar/components/Controls/Control.tsx": {
-    "typescript(await-thenable)": 1,
     "typescript(no-misused-promises)": 1
   },
   "src/features/Vessel/components/VesselSidebar/components/Controls/index.tsx": {
@@ -408,7 +407,7 @@
     "typescript(no-misused-promises)": 1
   },
   "src/features/Vessel/components/VesselSidebar/components/ShowFishingActivitiesOnMap.tsx": {
-    "typescript(await-thenable)": 2,
+    "typescript(await-thenable)": 1,
     "typescript(no-misused-promises)": 1
   },
   "src/features/Vessel/components/VesselSidebar/components/Tabs.tsx": {
@@ -452,15 +451,6 @@
   },
   "src/features/Vessel/useCases/rendering/renderVesselInfractionSuspicionFeatures.ts": {
     "typescript(require-await)": 1
-  },
-  "src/features/Vessel/useCases/showVessel.ts": {
-    "typescript(await-thenable)": 1
-  },
-  "src/features/Vessel/useCases/updateVesselTrackAndLogbookFromDates.ts": {
-    "typescript(await-thenable)": 2
-  },
-  "src/features/Vessel/useCases/updateVesselTrackAndLogbookFromTrip.ts": {
-    "typescript(await-thenable)": 1
   },
   "src/features/Vessel/vesselApi.ts": {
     "typescript(require-await)": 2

@@ -1,5 +1,7 @@
 import { MonitorFishMap } from '@features/Map/Map.types'
+import { DataKind, isDataAvailableForVessel } from '@features/PositionReplay/replayableData'
 import {
+  FLEET_SEGMENTS_SECTION_HEIGHT,
   marginsWithoutAlert,
   HIDDEN_GROUPS_ROW_HEIGHT,
   VESSEL_GROUP_ROW_HEIGHT,
@@ -22,8 +24,9 @@ export function getOverlayMargins(yOffset: number) {
 }
 
 /**
- * Computes the extra vertical pixel offset caused by superuser warning banners and vessel groups.
- * This grows the card downward and must be subtracted from the overlay margins.
+ * Computes the vertical pixel offset from the base card height: superuser warning banners and vessel groups grow
+ * the card downward, while a replayed vessel has no fleet segments section.
+ * This offset must be subtracted from the overlay margins.
  */
 export function computeYOffset(feature: Feature | null, isSuperUser: boolean): number {
   const numberOfWarnings = isSuperUser
@@ -40,5 +43,11 @@ export function computeYOffset(feature: Feature | null, isSuperUser: boolean): n
     groupsDisplayed * VESSEL_GROUP_ROW_HEIGHT
   const hiddenGroupsOffset = numberOfGroupsHidden > 0 ? HIDDEN_GROUPS_ROW_HEIGHT : 0
 
-  return warningsOffset + groupsOffset + hiddenGroupsOffset
+  const isFleetSegmentsSectionDisplayed = isDataAvailableForVessel(
+    { isReplayed: feature?.get('isReplayed') },
+    DataKind.FLEET_SEGMENTS
+  )
+  const fleetSegmentsOffset = isFleetSegmentsSectionDisplayed ? 0 : -FLEET_SEGMENTS_SECTION_HEIGHT
+
+  return warningsOffset + groupsOffset + hiddenGroupsOffset + fleetSegmentsOffset
 }

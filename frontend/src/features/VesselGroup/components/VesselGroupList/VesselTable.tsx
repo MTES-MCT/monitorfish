@@ -1,3 +1,4 @@
+import { isAlwaysAvailable } from '@features/PositionReplay/replayableData'
 import { Body } from '@features/SideWindow/components/Body'
 import { getTableColumns } from '@features/Vessel/components/VesselList/columns'
 import { Row } from '@features/Vessel/components/VesselList/Row'
@@ -81,7 +82,12 @@ export function VesselTable({
 
   // Compute columns separately (only when necessary dependencies change)
   const columns = useMemo(() => {
-    const baseColumns = getTableColumns(isFromUrl, getVesselGroupActionColumn(vesselGroupId, isFixedGroup), filters)
+    const baseColumns = getTableColumns(
+      isFromUrl,
+      getVesselGroupActionColumn(vesselGroupId, isFixedGroup),
+      filters,
+      isAlwaysAvailable
+    )
 
     if (isInitialRender) {
       return baseColumns.map(column => ({

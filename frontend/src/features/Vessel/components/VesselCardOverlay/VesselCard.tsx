@@ -1,21 +1,19 @@
 import { OverlayTrianglePointer } from '@features/Map/components/Overlay/OverlayTrianglePointer'
 import { type OverlayCardMargins, OverlayPosition } from '@features/Map/components/Overlay/types'
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { formatSignalDateTime, getSignalLabel } from '@features/PositionReplay/positionsDateTime'
+import { DataKind, isDataAvailableForVessel } from '@features/PositionReplay/replayableData'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { Square } from '@features/Regulation/components/ZonePreview'
 import { extractVesselPropertiesFromFeature } from '@features/Vessel/utils'
 import { type Vessel } from '@features/Vessel/Vessel.types'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { getCoordinates, Icon, pluralize, THEME } from '@mtes-mct/monitor-ui'
 import styled, { useTheme } from 'styled-components'
-import * as timeago from 'timeago.js'
 
 import { VESSEL_CARD_WIDTH } from './constants'
 import { useIsSuperUser } from '../../../../auth/hooks/useIsSuperUser'
-import { timeagoFrenchLocale } from '../../../../utils'
 import BeaconMalfunctionSVG from '../../../icons/Icone_VMS_dark.svg?react'
-
-// @ts-expect-error — timeago.js ships no locale type definitions
-timeago.register('fr', timeagoFrenchLocale)
 
 type VesselCardProps = {
   cardHeight: number
@@ -28,6 +26,7 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
   const theme = useTheme()
   const isSuperUser = useIsSuperUser()
   const coordinatesFormat = useMainAppSelector(state => state.map.coordinatesFormat)
+  const positionsDateTime = useMainAppSelector(selectPositionsDateTime)
 
   const vesselProperties = extractVesselPropertiesFromFeature(feature, [
     'alerts',
@@ -38,6 +37,7 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
     'flagState',
     'hasInfractionSuspicion',
     'hasCurrentTripInfractionSuspicion',
+    'isReplayed',
     'lastLogbookMessageDateTime',
     'positionType',
     'segments',
@@ -61,17 +61,18 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
             {vesselProperties.vesselName ?? 'NOM INCONNU'}{' '}
             {vesselProperties.flagState ? <>({vesselProperties.flagState.toUpperCase()})</> : ''}
           </VesselCardTitle>
-          {vesselProperties.lastLogbookMessageDateTime ? (
-            <Logbook>
-              <LogbookOK />
-              <MessageText>JPE</MessageText>
-            </Logbook>
-          ) : (
-            <Logbook>
-              <NoLogbook />
-              <MessageText>JPE</MessageText>
-            </Logbook>
-          )}
+          {isDataAvailableForVessel(vesselProperties, DataKind.LOGBOOK_EQUIPMENT) &&
+            (vesselProperties.lastLogbookMessageDateTime ? (
+              <Logbook>
+                <LogbookOK />
+                <MessageText>JPE</MessageText>
+              </Logbook>
+            ) : (
+              <Logbook>
+                <NoLogbook />
+                <MessageText>JPE</MessageText>
+              </Logbook>
+            ))}
         </VesselCardHeader>
         {isSuperUser && !!vesselProperties.alerts?.length && (
           <VesselCardAlert data-cy="vessel-card-alert">
@@ -115,10 +116,10 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
             </FieldValue>
           </Course>
           <Position>
-            <FieldName>Dernier signal</FieldName>
+            <FieldName>{getSignalLabel(positionsDateTime, vesselProperties.positionType)}</FieldName>
             <FieldValue>
               {vesselProperties.dateTime ? (
-                `${timeago.format(vesselProperties.dateTime, 'fr')} (${vesselProperties.positionType})`
+                formatSignalDateTime(vesselProperties.dateTime, positionsDateTime)
               ) : (
                 <NoValue>-</NoValue>
               )}
@@ -133,12 +134,14 @@ export function VesselCard({ cardHeight, cardWidth, feature, margins, overlayPos
             </FieldValue>
           </Position>
         </ThreeColumnsBody>
-        <FleetSegments data-cy="vessel-card-segments">
-          <Key>{pluralize('Segment', vesselProperties.segments.length)} de flotte</Key>
-          <Value>
-            {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
-          </Value>
-        </FleetSegments>
+        {isDataAvailableForVessel(vesselProperties, DataKind.FLEET_SEGMENTS) && (
+          <FleetSegments data-cy="vessel-card-segments">
+            <Key>{pluralize('Segment', vesselProperties.segments.length)} de flotte</Key>
+            <Value>
+              {vesselProperties.segments.length > 0 ? vesselProperties.segments.join(', ') : <NoValue>-</NoValue>}
+            </Value>
+          </FleetSegments>
+        )}
         {(vesselProperties.groupsDisplayed.length > 0 || vesselProperties.numberOfGroupsHidden > 0) && (
           <VesselGroups data-cy="vessel-card-groups">
             {vesselProperties.groupsDisplayed.map(vesselGroup => (

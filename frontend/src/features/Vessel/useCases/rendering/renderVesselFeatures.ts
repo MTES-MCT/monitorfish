@@ -1,3 +1,5 @@
+import { getOpacityReducedEpochMilli } from '@features/PositionReplay/positionsDateTime'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { VESSELS_VECTOR_LAYER, VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsLayer/constants'
 import { ActivityType } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { selectFilteredVesselFeatureIdsSet, vesselSelectors } from '@features/Vessel/slice'
@@ -5,7 +7,6 @@ import { getDisplayedVesselGroups } from '@features/Vessel/useCases/rendering/ge
 import { renderLayersDependingOnVesselLayer } from '@features/Vessel/useCases/rendering/renderLayersDependingOnVesselLayer'
 import { buildFeature } from '@features/Vessel/utils'
 import { selectVesselGroupsIdsFiltered } from '@features/VesselGroup/slice'
-import { customDayjs } from '@mtes-mct/monitor-ui'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
@@ -18,7 +19,8 @@ export const renderVesselFeatures = (): MainAppThunk => (dispatch, getState) => 
 
   const features = vessels
     .filter(
-      (vessel): vessel is Vessel.ActiveVesselEmittingPosition => vessel.activityType === ActivityType.POSITION_BASED
+      (vessel): vessel is Vessel.ActiveVesselEmittingPosition | Vessel.ReplayedVessel =>
+        vessel.activityType === ActivityType.POSITION_BASED
     )
     .map(vessel =>
       buildFeature(
@@ -32,7 +34,7 @@ export const renderVesselFeatures = (): MainAppThunk => (dispatch, getState) => 
   VESSELS_VECTOR_SOURCE.clear(true)
   VESSELS_VECTOR_SOURCE.addFeatures(features)
 
-  const isOpacityReducedEpochMilli = customDayjs().subtract(3, 'hour').valueOf()
+  const isOpacityReducedEpochMilli = getOpacityReducedEpochMilli(selectPositionsDateTime(getState()))
   VESSELS_VECTOR_LAYER.updateStyleVariables({
     isOpacityReducedEpochMilli
   })

@@ -2,6 +2,8 @@ import { logbookActions } from '@features/Logbook/slice'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { resetDisplayedLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/resetDisplayedLogbookMessageOverlays'
 import { getVesselLogbook, prefetchVesselLastVoyage } from '@features/Logbook/useCases/getVesselLogbook'
+import { getVesselLogbookAtDateTime } from '@features/Logbook/useCases/getVesselLogbookAtDateTime'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import { getVesselControls } from '@features/Vessel/components/VesselSidebar/useCases/getVesselControls'
 import { resetLoadingVessel } from '@features/Vessel/slice'
 import { UNKNOWN_VESSEL, VesselSidebarTab } from '@features/Vessel/types/vessel'
@@ -23,9 +25,8 @@ export const showVessel =
       return
     }
 
-    const {
-      vessel: { selectedVesselSidebarTab }
-    } = getState()
+    const { selectedVesselSidebarTab } = getState().vessel
+    const positionsDateTime = selectPositionsDateTime(getState())
 
     try {
       dispatch(logbookActions.resetNextUpdate())
@@ -33,11 +34,12 @@ export const showVessel =
       dispatch(resetDisplayedLogbookMessageOverlays())
 
       dispatch(getSidebarTabData(selectedVesselSidebarTab, vesselIdentity))
-      // Fetched in parallel to spare a round trip, but applied once the vessel is displayed
-      const lastVoyage = dispatch(prefetchVesselLastVoyage(vesselIdentity))
-      await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
 
-      await dispatch(getVesselLogbook(vesselIdentity, undefined, false, undefined, lastVoyage))
+      await dispatch(
+        positionsDateTime
+          ? displayVesselWithLogbookAtDateTime(vesselIdentity, isFromSearch, positionsDateTime)
+          : displayVesselWithLastTripLogbook(vesselIdentity, isFromSearch)
+      )
       await dispatch(displayLogbookMessageOverlays())
     } catch (error) {
       dispatch(
@@ -50,6 +52,23 @@ export const showVessel =
       )
       dispatch(resetLoadingVessel())
     }
+  }
+
+const displayVesselWithLastTripLogbook =
+  (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
+  async dispatch => {
+    // Fetched in parallel to spare a round trip, but applied once the vessel is displayed
+    const lastVoyage = dispatch(prefetchVesselLastVoyage(vesselIdentity))
+    await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
+
+    await dispatch(getVesselLogbook(vesselIdentity, undefined, false, undefined, lastVoyage))
+  }
+
+const displayVesselWithLogbookAtDateTime =
+  (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean, dateTime: string): MainAppThunk<Promise<void>> =>
+  async dispatch => {
+    await dispatch(displayVesselSidebarAndPositions(vesselIdentity, isFromSearch))
+    await dispatch(getVesselLogbookAtDateTime(vesselIdentity, dateTime))
   }
 
 const getSidebarTabData = (tab: VesselSidebarTab, vesselIdentity: Vessel.VesselIdentity) => dispatch => {

@@ -1,0 +1,22 @@
+import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
+import { getVesselLogbookAtDateTime } from '@features/Logbook/useCases/getVesselLogbookAtDateTime'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
+import { positionReplayActions } from '@features/PositionReplay/slice'
+
+import type { MainAppThunk } from '@store'
+
+/** The selected vessel track follows with the positions fetched at this date. */
+export const setReplayedDateTime =
+  (dateTime: string): MainAppThunk<Promise<void>> =>
+  async (dispatch, getState) => {
+    dispatch(positionReplayActions.setDateTime(dateTime))
+
+    const positionsDateTime = selectPositionsDateTime(getState())
+    const { selectedVesselIdentity } = getState().vessel
+    if (!positionsDateTime || !selectedVesselIdentity) {
+      return
+    }
+
+    await dispatch(getVesselLogbookAtDateTime(selectedVesselIdentity, positionsDateTime))
+    await dispatch(displayLogbookMessageOverlays())
+  }

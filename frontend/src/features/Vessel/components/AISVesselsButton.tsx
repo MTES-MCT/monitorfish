@@ -1,9 +1,8 @@
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Button, Icon } from '@mtes-mct/monitor-ui'
+import { displayedComponentActions } from 'domain/shared_slices/DisplayedComponent'
 import styled from 'styled-components'
-
-import { displayedComponentActions } from '../../../domain/shared_slices/DisplayedComponent'
 
 export function AISVesselsButton() {
   const dispatch = useMainAppDispatch()

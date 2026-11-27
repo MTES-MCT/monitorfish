@@ -1,13 +1,13 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { animateToExtent } from '@features/Map/slice'
+import { selectSelectedVesselTrackRequest } from '@features/Vessel/selectors/trackRequest'
 import {
   resetLoadingVessel,
   setSelectedVesselCustomTrackRequest,
   updateSelectedVesselPositions,
   updatingVesselTrackDepth
 } from '@features/Vessel/slice'
-import { getCustomOrDefaultTrackRequest } from '@features/Vessel/types/vesselTrackDepth'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { Level } from '@mtes-mct/monitor-ui'
 
@@ -21,15 +21,10 @@ import type { MainAppDispatch, MainAppThunk } from '@store'
  * Modify the vessel track depth on map
  */
 export const updateSelectedVesselTrack =
-  (vesselIdentity: Vessel.VesselIdentity, trackRequest?: TrackRequest): MainAppThunk =>
+  (vesselIdentity: Vessel.VesselIdentity, trackRequest?: TrackRequest): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
     try {
-      const {
-        map: { defaultVesselTrackDepth },
-        vessel: { selectedVesselTrackRequest }
-      } = getState()
-      const nextTrackRequest =
-        trackRequest ?? getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+      const nextTrackRequest = trackRequest ?? selectSelectedVesselTrackRequest(getState())
 
       dispatchIsUpdating(dispatch)
 

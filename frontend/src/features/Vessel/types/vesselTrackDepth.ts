@@ -1,5 +1,5 @@
 import type { SelectableVesselTrackDepth } from '@features/Vessel/components/VesselSidebar/components/TrackRequest/types'
-import type { TrackRequest, TrackRequestPredefined } from '@features/Vessel/types/types'
+import type { TrackRequest } from '@features/Vessel/types/types'
 
 export enum VesselTrackDepth {
   CUSTOM = 'CUSTOM',
@@ -14,26 +14,6 @@ export enum VesselTrackDepth {
   TWO_WEEK = 'TWO_WEEK'
 }
 
-/**
- * Get the custom track request if defined or build a track request from the default track depth
- *
- * TODO We should be able to remove that.
- */
-export const getCustomOrDefaultTrackRequest = (
-  customTrackRequest: TrackRequest | null,
-  defaultTrackDepth: TrackRequestPredefined['trackDepth'],
-  fullDays: boolean
-): TrackRequest => {
-  if (customTrackRequest) {
-    if (fullDays) {
-      return getUTCFullDayTrackRequest({ ...customTrackRequest })
-    }
-
-    return customTrackRequest
-  }
-
-  return getTrackRequestFromTrackDepth(defaultTrackDepth)
-}
 /**
  * Get the `TrackRequest` object from the track depth
  * @param {VesselNS.TrackRequestPredefined['trackDepth']} trackDepth

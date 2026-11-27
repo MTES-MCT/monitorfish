@@ -1,7 +1,7 @@
 import { addSilencedAlert } from '@features/Alert/useCases/addSilencedAlert'
 import { reactivateSilencedAlert } from '@features/Alert/useCases/reactivateSilencedAlert'
 import { Flag } from '@features/commonComponents/Flag'
-import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -134,7 +134,7 @@ export function SilencedAlerts() {
                       data-cy="side-window-silenced-alerts-show-vessel"
                       onClick={() => {
                         const identity = extractVesselIdentityProps(alert)
-                        dispatch(showVessel(identity, false))
+                        dispatch(showVesselFromLiveData(identity))
                       }}
                       src={`${baseUrl}/Icone_voir_sur_la_carte.png`}
                       title="Voir sur la carte"

@@ -2,6 +2,8 @@ import { EnvironmentBox } from '@components/EnvironmentBox'
 import { BannerStack } from '@features/MainWindow/components/BannerStack'
 import { useMainWindowDataLoading } from '@features/MainWindow/hooks/useMainWindowDataLoading'
 import { MainMap } from '@features/Map/components/MainMap'
+import { PositionReplayBanner } from '@features/PositionReplay/components/PositionReplayBanner'
+import { useReplayedDateTimeInUrl } from '@features/PositionReplay/hooks/useReplayedDateTimeInUrl'
 import { IUUReportingMapForm } from '@features/Reporting/components/IUUReportingMapForm'
 import { SideWindowStatus } from '@features/SideWindow/constants'
 import { StartupNotification } from '@features/StartupNotification/components'
@@ -61,6 +63,7 @@ export function MainWindow() {
   useBeforeUnload(warnOnUnload)
   useSaveUserLayersOnChange()
   useMainWindowDataLoading()
+  useReplayedDateTimeInUrl()
 
   return (
     <>
@@ -75,6 +78,7 @@ export function MainWindow() {
         <OpenVesselPhotoSubmissionNotification />
 
         <VesselFiltersHeadband />
+        <PositionReplayBanner />
 
         <LegacyRsuiteComponentsWrapper>
           <MapButtons />

@@ -25,6 +25,9 @@ enum class BackendUsageErrorCode {
     /** Thrown when a resource could not be updated. */
     COULD_NOT_UPDATE,
 
+    /** Thrown when a past date is expected but a future one is given. */
+    FUTURE_DATE_TIME,
+
     /** Thrown when a resource does not found, but it may happen. */
     NOT_FOUND_BUT_OK,
 }

@@ -2,6 +2,8 @@ import { Ellipsised } from '@components/Ellipsised'
 import { Titled } from '@components/Titled'
 import { HiddenText } from '@features/commonStyles/HiddenText'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
+import { DataKind, type IsDataAvailable } from '@features/PositionReplay/replayableData'
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
 import { DEFAULT_VESSEL_LIST_FILTER_VALUES } from '@features/Vessel/components/VesselList/constants'
 import { getLastControlDateTimeAndControlType } from '@features/Vessel/components/VesselList/utils'
 import { ActivityOrigin } from '@features/Vessel/schemas/ActiveVesselSchema'
@@ -18,15 +20,30 @@ import type { VesselListFilter } from '@features/Vessel/components/VesselList/ty
 import type { DynamicVesselGroupFilter } from '@features/VesselGroup/types'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
-export function getTableColumns(
+/** The data displayed by a column: the column is kept but emptied when this data is unavailable. */
+const COLUMN_DATA_KIND: Partial<Record<string, DataKind>> = {
+  gears: DataKind.GEARS_ONBOARD,
+  hasInfractionSuspicion: DataKind.INFRACTION_SUSPICIONS,
+  lastControlDateTime: DataKind.CONTROLS,
+  riskFactor: DataKind.RISK_FACTOR,
+  segments: DataKind.FLEET_SEGMENTS,
+  species: DataKind.SPECIES_ONBOARD
+}
+
+function getActiveVessel(vessel: Vessel.DisplayedVessel): Vessel.ActiveVessel | undefined {
+  return isReplayedVessel(vessel) ? undefined : vessel
+}
+
+export function getTableColumns<T extends Vessel.DisplayedVessel>(
   isFromUrl: boolean,
-  actionColumn: ColumnDef<Vessel.ActiveVessel, any>,
-  listFilter: VesselListFilter | DynamicVesselGroupFilter | undefined
-): Array<ColumnDef<Vessel.ActiveVessel, any>> {
+  actionColumn: ColumnDef<T, any>,
+  listFilter: VesselListFilter | DynamicVesselGroupFilter | undefined,
+  isDataAvailable: IsDataAvailable
+): Array<ColumnDef<T, any>> {
   const legacyFirefoxOffset = !isFromUrl && isLegacyFirefox() ? -32 : 0
   const actionColumnWithOffset = { ...actionColumn, size: (actionColumn.size ?? 60) + legacyFirefoxOffset }
 
-  return [
+  const columns: Array<ColumnDef<T, any>> = [
     {
       accessorFn: row => row.vesselFeatureId,
       cell: ({ getValue, row }) => (
@@ -52,12 +69,10 @@ export function getTableColumns(
       size: 25 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => row.riskFactor,
-      cell: (info: CellContext<Vessel.ActiveVessel, number | undefined>) => {
-        const vessel = info.row.original
-
-        return <VesselRiskFactor isVesselUnderCharter={vessel.underCharter} vesselRiskFactor={vessel.riskFactor} />
-      },
+      accessorFn: row => getActiveVessel(row)?.riskFactor,
+      cell: (info: CellContext<T, number | undefined>) => (
+        <VesselRiskFactor isVesselUnderCharter={info.row.original.underCharter} vesselRiskFactor={info.getValue()} />
+      ),
       enableSorting: true,
       header: () => 'Ndr',
       id: 'riskFactor',
@@ -65,7 +80,7 @@ export function getTableColumns(
     },
     {
       accessorFn: row => row.vesselName ?? (row.vesselId === -1 ? 'Navire inconnu' : '-'),
-      cell: (info: CellContext<Vessel.ActiveVessel, string>) => {
+      cell: (info: CellContext<T, string>) => {
         const vessel = info.row.original
 
         return (
@@ -82,25 +97,25 @@ export function getTableColumns(
     },
     {
       accessorFn: row => {
-        if (row.segments.length > 0) {
-          return row.segments.map(tripSegment => tripSegment).join(', ')
-        }
+        const segments = getActiveVessel(row)?.segments ?? []
 
-        return undefined
+        return segments.length > 0 ? segments.join(', ') : undefined
       },
-      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? (
+      cell: (info: CellContext<T, string | undefined>) => {
+        const activityOrigin = getActiveVessel(info.row.original)?.activityOrigin
+
+        return info.getValue() ? (
           <>
-            {info.row.original.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
+            {activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
               <Tag backgroundColor={THEME.color.mediumSeaGreen25} color={THEME.color.charcoal}>
-                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>
+                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[activityOrigin]}>
                   {info.getValue()}
                 </Ellipsised>
               </Tag>
             )}
-            {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
+            {activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
               <Tag backgroundColor={THEME.color.white} color={THEME.color.charcoal}>
-                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[info.row.original.activityOrigin]}>
+                <Ellipsised maxWidth={120} title={FLEET_SEGMENT_ORIGIN_LABEL[activityOrigin]}>
                   <i>{info.getValue()}</i>
                 </Ellipsised>
               </Tag>
@@ -108,7 +123,8 @@ export function getTableColumns(
           </>
         ) : (
           <None>Aucun segment</None>
-        ),
+        )
+      },
       enableSorting: true,
       header: () => 'Segments',
       id: 'segments',
@@ -116,29 +132,29 @@ export function getTableColumns(
     },
     {
       accessorFn: row => {
-        if (row.gearsArray.length) {
-          return row.gearsArray.join(', ')
-        }
+        const gears = getActiveVessel(row)?.gearsArray ?? []
 
-        return undefined
+        return gears.length > 0 ? gears.join(', ') : undefined
       },
-      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
-        info.getValue() ? (
+      cell: (info: CellContext<T, string | undefined>) => {
+        const activityOrigin = getActiveVessel(info.row.original)?.activityOrigin
+
+        return info.getValue() ? (
           <Ellipsised>
-            {info.row.original.activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
+            {activityOrigin === ActivityOrigin.FROM_LOGBOOK && (
               <Tag
                 backgroundColor={THEME.color.mediumSeaGreen25}
                 color={THEME.color.charcoal}
-                title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}
+                title={GEAR_ORIGIN_LABEL[activityOrigin]}
               >
                 {info.getValue()}
               </Tag>
             )}
-            {info.row.original.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
+            {activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE && (
               <Tag
                 backgroundColor={THEME.color.white}
                 color={THEME.color.charcoal}
-                title={GEAR_ORIGIN_LABEL[info.row.original.activityOrigin]}
+                title={GEAR_ORIGIN_LABEL[activityOrigin]}
               >
                 <i>{info.getValue()}</i>
               </Tag>
@@ -146,15 +162,20 @@ export function getTableColumns(
           </Ellipsised>
         ) : (
           <None>Aucun engin</None>
-        ),
+        )
+      },
       enableSorting: false,
       header: () => 'Engins',
       id: 'gears',
       size: 204 + legacyFirefoxOffset
     },
     {
-      accessorFn: row => (row.speciesArray.length > 0 ? row.speciesArray.join(', ') : undefined),
-      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) =>
+      accessorFn: row => {
+        const species = getActiveVessel(row)?.speciesArray ?? []
+
+        return species.length > 0 ? species.join(', ') : undefined
+      },
+      cell: (info: CellContext<T, string | undefined>) =>
         info.getValue() ? <Ellipsised>{info.getValue()}</Ellipsised> : <None>Le navire n&apos;a pas fait de FAR</None>,
       enableSorting: false,
       header: () => 'Espèces',
@@ -162,9 +183,9 @@ export function getTableColumns(
       size: 274 + legacyFirefoxOffset
     },
     {
-      accessorKey: 'lastControlAtSeaDateTime',
-      cell: (info: CellContext<Vessel.ActiveVessel, string | undefined>) => {
-        const vessel = info.row.original
+      accessorFn: row => getActiveVessel(row)?.lastControlAtSeaDateTime,
+      cell: (info: CellContext<T, string | undefined>) => {
+        const vessel = getActiveVessel(info.row.original)
         const hasLastControlAtSeaFilter =
           listFilter?.lastControlAtSeaPeriod !== DEFAULT_VESSEL_LIST_FILTER_VALUES.lastControlAtSeaPeriod
         const hasLastControlAtQuayFilter =
@@ -190,8 +211,8 @@ export function getTableColumns(
       size: 204 + legacyFirefoxOffset
     },
     {
-      accessorKey: 'hasInfractionSuspicion',
-      cell: (info: CellContext<Vessel.ActiveVessel, boolean>) =>
+      accessorFn: row => getActiveVessel(row)?.hasInfractionSuspicion,
+      cell: (info: CellContext<T, boolean | undefined>) =>
         info.getValue() ? (
           <Tag backgroundColor={THEME.color.maximumRed15} color={THEME.color.maximumRed}>
             Signalement(s)
@@ -206,11 +227,20 @@ export function getTableColumns(
     },
     actionColumnWithOffset
   ]
+
+  return columns.map(column => {
+    const dataKind = column.id ? COLUMN_DATA_KIND[column.id] : undefined
+    if (!dataKind || isDataAvailable(dataKind)) {
+      return column
+    }
+
+    return { ...column, cell: () => '', enableSorting: false }
+  })
 }
 
-export const vesselListActionColumn: ColumnDef<Vessel.ActiveVessel, any> = {
+export const vesselListActionColumn: ColumnDef<Vessel.DisplayedVessel, any> = {
   accessorFn: row => row.vesselFeatureId,
-  cell: (info: CellContext<Vessel.ActiveVessel, string>) => <ActionButtonsCell vessel={info.row.original} />,
+  cell: (info: CellContext<Vessel.DisplayedVessel, string>) => <ActionButtonsCell vessel={info.row.original} />,
   enableSorting: false,
   header: () => '',
   id: 'actions',

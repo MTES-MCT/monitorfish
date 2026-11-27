@@ -42,6 +42,13 @@ export type MapState = {
     zoom: null
   }
 }
+// The nationality label option was removed from the map settings
+function getStoredVesselLabel(): VesselLabel {
+  const storedVesselLabel = getLocalStorageState<VesselLabel>(VesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey)
+
+  return storedVesselLabel === VesselLabel.VESSEL_NATIONALITY ? VesselLabel.VESSEL_NAME : storedVesselLabel
+}
+
 const INITIAL_STATE: MapState = {
   animateToCoordinates: false,
   animateToExtent: false,
@@ -52,7 +59,7 @@ const INITIAL_STATE: MapState = {
   riskFactorShowedOnMap: getLocalStorageState(true, riskFactorLocalStorageKey),
   selectedBaseLayer: getLocalStorageState(BaseLayer.LIGHT.code, baseLayerLocalStorageKey),
   showingVesselsEstimatedPositions: getLocalStorageState(true, estimatedPositionsLocalStorageKey),
-  vesselLabel: getLocalStorageState(VesselLabel.VESSEL_NAME, vesselLabelLocalStorageKey),
+  vesselLabel: getStoredVesselLabel(),
   vesselLabelsShowedOnMap: getLocalStorageState(false, vesselLabelsShowedOnMapLocalStorageKey),
   view: getLocalStorageState(
     {

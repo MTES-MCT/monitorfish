@@ -1,4 +1,4 @@
-import { showVessel } from '@features/Vessel/useCases/showVessel'
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { extractVesselIdentityProps } from '@features/Vessel/utils'
 import { Vessel } from '@features/Vessel/Vessel.types'
 import { deleteVesselFromVesselGroup } from '@features/VesselGroup/useCases/deleteVesselFromVesselGroup'
@@ -18,7 +18,7 @@ export function ActionButtonsCell({ groupId, isFixedGroup, vessel }: ActionButto
   const selectMainMapVessel = async () => {
     const vesselIdentity = extractVesselIdentityProps(vessel)
 
-    dispatch(showVessel(vesselIdentity, false))
+    dispatch(showVesselFromLiveData(vesselIdentity))
   }
 
   return (

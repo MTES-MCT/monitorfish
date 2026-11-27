@@ -2,6 +2,8 @@ import { AlertAndReportingTab } from '@features/Alert/components/SideWindowAlert
 import { setSelectedTab } from '@features/Alert/components/SideWindowAlerts/slice'
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapBox } from '@features/Map/constants'
+import { DISABLED_DURING_POSITION_REPLAY_MESSAGE } from '@features/PositionReplay/constants'
+import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
 import { ReportingZoneFilter } from '@features/Reporting/components/ReportingMapMenuDialog/ReportingZoneFilter'
 import {
   IUU_OPTIONS,
@@ -16,6 +18,7 @@ import {
   getIUUValue,
   useReportingsFilters
 } from '@features/Reporting/hooks/useReportingsFilters'
+import { selectIsReportingLayerDisplayed } from '@features/Reporting/selectors'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { SideWindowMenuKey } from '@features/SideWindow/constants'
@@ -23,7 +26,7 @@ import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindow
 import { useDisplayMapBox } from '@hooks/useDisplayMapBox'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
-import { Accent, Button, DateRangePicker, Icon, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
+import { Accent, Banner, Button, DateRangePicker, Icon, Level, MapMenuDialog, Select } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { displayedComponentActions } from '../../../../domain/shared_slices/DisplayedComponent'
@@ -32,7 +35,8 @@ import { setRightMapBoxDisplayed } from '../../../../domain/use_cases/setRightMa
 export function ReportingMapMenuDialog() {
   const dispatch = useMainAppDispatch()
   const rightMapBoxOpened = useMainAppSelector(state => state.global.rightMapBoxOpened)
-  const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
+  const isReportingLayerDisplayed = useMainAppSelector(selectIsReportingLayerDisplayed)
+  const areReportingsAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.REPORTINGS))
 
   const {
     filters,
@@ -49,6 +53,10 @@ export function ReportingMapMenuDialog() {
   const toggleMenu = () => {
     dispatch(setRightMapBoxDisplayed(rightMapBoxOpened === MapBox.REPORTINGS ? undefined : MapBox.REPORTINGS))
   }
+
+  const reportingLayerVisibilityTitle = isReportingLayerDisplayed
+    ? 'Masquer les signalements'
+    : 'Afficher les signalements'
 
   const toggleReportingLayer = () => {
     dispatch(
@@ -81,16 +89,27 @@ export function ReportingMapMenuDialog() {
           <MapMenuDialog.Title>Signalements</MapMenuDialog.Title>
           <MapMenuDialog.VisibilityButton
             accent={Accent.SECONDARY}
+            disabled={!areReportingsAvailable}
             Icon={isReportingLayerDisplayed ? Icon.Display : Icon.Hide}
             onClick={toggleReportingLayer}
-            title={isReportingLayerDisplayed ? 'Masquer les signalements' : 'Afficher les signalements'}
+            title={
+              !areReportingsAvailable
+                ? `${reportingLayerVisibilityTitle} (${DISABLED_DURING_POSITION_REPLAY_MESSAGE.toLowerCase()})`
+                : reportingLayerVisibilityTitle
+            }
           />
         </Header>
         <StyledBody>
+          {!areReportingsAvailable && (
+            <Banner isClosable level={Level.WARNING} top="0">
+              Pas de signalement en mode rejeu
+            </Banner>
+          )}
           <FilterRow>
             <ReportingZoneFilter />
 
             <Select
+              disabled={!areReportingsAvailable}
               isCleanable={false}
               isLabelHidden
               isLight
@@ -105,6 +124,7 @@ export function ReportingMapMenuDialog() {
               <StyledCustomPeriodContainer>
                 <DateRangePicker
                   defaultValue={customValue}
+                  disabled={!areReportingsAvailable}
                   hasSingleCalendar
                   isCompact
                   isLabelHidden
@@ -118,6 +138,7 @@ export function ReportingMapMenuDialog() {
               </StyledCustomPeriodContainer>
             )}
             <Select
+              disabled={!areReportingsAvailable}
               isLabelHidden
               isLight
               label="Statut"
@@ -128,6 +149,7 @@ export function ReportingMapMenuDialog() {
               value={archivedValue}
             />
             <Select
+              disabled={!areReportingsAvailable}
               isLabelHidden
               isLight
               label="Type"
@@ -138,6 +160,7 @@ export function ReportingMapMenuDialog() {
               value={filters.reportingType}
             />
             <Select
+              disabled={!areReportingsAvailable}
               isLabelHidden
               isLight
               label="INN / non INN"
@@ -148,6 +171,7 @@ export function ReportingMapMenuDialog() {
               value={iuuValue}
             />
             <Select
+              disabled={!areReportingsAvailable}
               isLabelHidden
               isLight
               label="Source"
@@ -159,7 +183,12 @@ export function ReportingMapMenuDialog() {
             />
           </FilterRow>
           <StyledFooter>
-            <Button accent={Accent.PRIMARY} Icon={Icon.Plus} onClick={toggleCreateReporting}>
+            <Button
+              accent={Accent.PRIMARY}
+              disabled={!areReportingsAvailable}
+              Icon={Icon.Plus}
+              onClick={toggleCreateReporting}
+            >
               Créer un nouveau signalement INN
             </Button>
             <Button accent={Accent.SECONDARY} Icon={Icon.Expand} onClick={toggleReportingList}>
@@ -198,6 +227,8 @@ const StyledCustomPeriodContainer = styled.div`
 
 const StyledBody = styled(MapMenuDialog.Body)`
   padding: 16px 0 0;
+  /* The position replay banner overlays the filters, from just below the header */
+  position: relative;
 `
 
 const Wrapper = styled(MapToolBox)`

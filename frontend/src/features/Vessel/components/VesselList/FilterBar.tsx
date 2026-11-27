@@ -3,6 +3,13 @@ import { COUNTRIES_AS_ALPHA2_OPTIONS } from '@constants/index'
 import { useGetFleetSegmentsAsOptions } from '@features/FleetSegment/hooks/useGetFleetSegmentsAsOptions'
 import { InteractionListener } from '@features/Map/constants'
 import { MonitorFishMap } from '@features/Map/Map.types'
+import { selectIsDataAvailablePredicate } from '@features/PositionReplay/replayableData'
+import { selectMaxLastPositionHoursAgo } from '@features/PositionReplay/selectors'
+import {
+  getApplicableVesselListFilter,
+  getLastPositionHoursAgoOptions,
+  isVesselListFilterAvailable
+} from '@features/PositionReplay/vesselListFilter'
 import { BLUEFIN_TUNA_EXTENDED_SPECY_CODES, BLUEFIN_TUNA_SPECY_CODE } from '@features/PriorNotification/constants'
 import { VesselEmitsPosition, VesselLocation } from '@features/Vessel/types/vessel'
 import { filterVessels } from '@features/Vessel/useCases/VesselListV2/filterVessels'
@@ -18,8 +25,9 @@ import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Checkbox, CheckPicker, MultiCascader, Select, Size, TextInput } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
+import { DISABLED_DURING_POSITION_REPLAY_MESSAGE } from 'features/PositionReplay/constants'
 import { uniq } from 'lodash-es'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -33,10 +41,18 @@ import {
   VesselSize
 } from './constants'
 
+import type { VesselListFilter } from './types'
+
 export function FilterBar() {
   const dispatch = useMainAppDispatch()
-  const listFilterValues = useMainAppSelector(store => store.vessel.listFilterValues)
+  const storedListFilterValues = useMainAppSelector(store => store.vessel.listFilterValues)
   const areFiltersDisplayed = useMainAppSelector(store => store.vesselList.areFiltersDisplayed)
+  const isDataAvailable = useMainAppSelector(selectIsDataAvailablePredicate)
+  const maxLastPositionHoursAgo = useMainAppSelector(selectMaxLastPositionHoursAgo)
+  const listFilterValues = useMemo(
+    () => getApplicableVesselListFilter(storedListFilterValues, isDataAvailable),
+    [storedListFilterValues, isDataAvailable]
+  )
 
   const { fleetSegmentsAsOptions } = useGetFleetSegmentsAsOptions()
   const { gearsAsTreeOptions } = useGetGearsAsTreeOptions()
@@ -58,6 +74,8 @@ export function FilterBar() {
       dispatch(updateCustomZoneAndFilterVessels())
     }
   }, [dispatch, drawedGeometry])
+
+  const isAvailable = (key: keyof VesselListFilter) => isVesselListFilterAvailable(key, isDataAvailable)
 
   const speciesAsCodeOptions =
     speciesAsOptions?.map(option => ({ label: option.label, value: option.value.code })) ?? []
@@ -236,6 +254,7 @@ export function FilterBar() {
             virtualized
           />
           <CheckPicker
+            disabled={!isAvailable('riskFactors')}
             isLabelHidden
             isTransparent
             label="Note de risque"
@@ -248,11 +267,12 @@ export function FilterBar() {
               items.length > 0 ? <SelectValue>Notes de risque ({items.length})</SelectValue> : <></>
             }
             searchable
+            title={!isAvailable('riskFactors') ? DISABLED_DURING_POSITION_REPLAY_MESSAGE : undefined}
             value={listFilterValues.riskFactors}
             virtualized
           />
           <CheckPicker
-            disabled={!fleetSegmentsAsOptions}
+            disabled={!isAvailable('fleetSegments') || !fleetSegmentsAsOptions}
             isLabelHidden
             isTransparent
             label="Segments de flotte"
@@ -265,11 +285,12 @@ export function FilterBar() {
               items.length > 0 ? <SelectValue>Segments de flotte ({items.length})</SelectValue> : <></>
             }
             searchable
+            title={!isAvailable('fleetSegments') ? DISABLED_DURING_POSITION_REPLAY_MESSAGE : undefined}
             value={listFilterValues.fleetSegments}
             virtualized
           />
           <MultiCascader
-            disabled={!gearsAsTreeOptions}
+            disabled={!isAvailable('gearCodes') || !gearsAsTreeOptions}
             isLabelHidden
             isTransparent
             label="Engins utilisés"
@@ -285,7 +306,7 @@ export function FilterBar() {
             value={listFilterValues.gearCodes}
           />
           <CheckPicker
-            disabled={!speciesAsCodeOptions}
+            disabled={!isAvailable('specyCodes') || !speciesAsCodeOptions}
             isLabelHidden
             isTransparent
             label="Espèces à bord"
@@ -298,10 +319,12 @@ export function FilterBar() {
               items.length > 0 ? <SelectValue>Espèces à bord ({items.length})</SelectValue> : <></>
             }
             searchable
+            title={!isAvailable('specyCodes') ? DISABLED_DURING_POSITION_REPLAY_MESSAGE : undefined}
             value={listFilterValues.specyCodes}
             virtualized
           />
           <Select
+            disabled={!isAvailable('lastControlAtSeaPeriod')}
             isLabelHidden
             isTransparent
             label="Dernier contrôle mer"
@@ -313,6 +336,7 @@ export function FilterBar() {
             value={listFilterValues.lastControlAtSeaPeriod}
           />
           <Select
+            disabled={!isAvailable('lastControlAtQuayPeriod')}
             isLabelHidden
             isTransparent
             label="Dernier contrôle quai"
@@ -324,6 +348,7 @@ export function FilterBar() {
             value={listFilterValues.lastControlAtQuayPeriod}
           />
           <MultiCascader
+            disabled={!isAvailable('landingPortLocodes')}
             isLabelHidden
             isTransparent
             label="Ports de débarque"
@@ -339,6 +364,7 @@ export function FilterBar() {
             value={listFilterValues.landingPortLocodes}
           />
           <CheckPicker
+            disabled={!isAvailable('producerOrganizations')}
             isLabelHidden
             isTransparent
             label="Adhésion à une OP"
@@ -349,6 +375,7 @@ export function FilterBar() {
             popupWidth={320}
             renderValue={(_, items) => (items.length > 0 ? <SelectValue>OP ({items.length})</SelectValue> : <></>)}
             searchable
+            title={!isAvailable('producerOrganizations') ? DISABLED_DURING_POSITION_REPLAY_MESSAGE : undefined}
             value={listFilterValues.producerOrganizations}
           />
           <MultiCascader
@@ -406,11 +433,12 @@ export function FilterBar() {
             label="Dernière position VMS"
             name="lastPositionHoursAgo"
             onChange={updateLastPositionHoursAgo}
-            options={LAST_POSITION_AS_OPTIONS}
+            options={getLastPositionHoursAgoOptions(LAST_POSITION_AS_OPTIONS, maxLastPositionHoursAgo)}
             placeholder="Dernière position VMS"
             value={listFilterValues.lastPositionHoursAgo}
           />
           <Select
+            disabled={!isAvailable('hasLogbook')}
             isLabelHidden
             isTransparent
             label="Equipé JPE"

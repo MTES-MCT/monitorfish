@@ -42,6 +42,7 @@ import { BeaconMalfunctionBoard } from '../BeaconMalfunction/components/BeaconMa
 import { getAllBeaconMalfunctions } from '../BeaconMalfunction/useCases/getAllBeaconMalfunctions'
 import { Loader as MissionFormLoader } from '../Mission/components/MissionForm/Loader'
 import { MissionList } from '../Mission/components/MissionList'
+import { LiveVesselConfirmationDialog } from '../PositionReplay/components/LiveVesselConfirmationDialog'
 import { PriorNotificationList } from '../PriorNotification/components/PriorNotificationList'
 
 import type { MainAppAsyncThunk } from '@store'
@@ -155,6 +156,7 @@ export function SideWindow({ isFromURL }: SideWindowProps) {
             <GlobalStyle $isFromURL={isFromURL} />
             <EnvironmentBox />
             <BannerStack />
+            <LiveVesselConfirmationDialog />
 
             <Menu selectedMenu={selectedPath.menu} />
             {(selectedPath.menu === SideWindowMenuKey.BEACON_MALFUNCTION_BOARD ||

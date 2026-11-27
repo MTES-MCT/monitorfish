@@ -16,7 +16,7 @@ import type { Vessel } from '@features/Vessel/Vessel.types'
 export function RightClickMapMenu() {
   const vessels = useMainAppSelector(state => vesselSelectors.selectAll(state.vessel.vessels))
   const [coordinates, setCoordinates] = useState<number[]>([])
-  const vessel = useRef<Vessel.ActiveVesselEmittingPosition | undefined>()
+  const vessel = useRef<Vessel.ActiveVesselEmittingPosition | Vessel.ReplayedVessel | undefined>()
 
   useEffect(() => {
     function showMenu(event) {

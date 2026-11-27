@@ -1,5 +1,7 @@
 import { monitorfishApi } from '@api/api'
 import { HttpStatusCode, RtkCacheTagType } from '@api/constants'
+import { getReplayedVessel } from '@features/PositionReplay/replayedVessel'
+import { ReplayedVesselSchema } from '@features/PositionReplay/schemas/ReplayedVesselSchema'
 import { VesselReportingsSchema } from '@features/Reporting/schemas/VesselReportingsSchema'
 import { ActiveVesselSchema } from '@features/Vessel/schemas/ActiveVesselSchema'
 import { AISVesselSchema } from '@features/Vessel/schemas/AISVesselSchema'
@@ -18,6 +20,7 @@ import { getVesselIdentityFromLegacyVesselIdentity, getVesselIdentityPropsAsEmpt
 import { Vessel } from './Vessel.types'
 
 import type { Meta } from '@api/BackendApi.types'
+import type { ReplayedVesselData } from '@features/PositionReplay/types'
 import type { VesselReportings } from '@features/Reporting/types'
 import type { AISVessel } from '@features/Vessel/AISVessel.types'
 import type { TrackRequest } from '@features/Vessel/types/types'
@@ -60,6 +63,12 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 
     getAISVessels: builder.query<AISVessel.AISVessel[], VesselLocation | undefined>({
       query: vesselLocation => getUrlOrPathWithQueryParams('/vessels/ais', { vesselLocation }),
+      transformResponse: (baseQueryReturnValue: AISVessel.AISVessel[]) =>
+        parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
+    }),
+
+    getAISVesselsAtDateTime: builder.query<AISVessel.AISVessel[], string>({
+      query: dateTime => getUrlOrPathWithQueryParams('/vessels/ais/replay', { dateTime }),
       transformResponse: (baseQueryReturnValue: AISVessel.AISVessel[]) =>
         parseOrReturn<AISVessel.AISVessel>(baseQueryReturnValue, AISVesselSchema, true)
     }),
@@ -228,6 +237,16 @@ export const vesselApi = monitorfishApi.injectEndpoints({
         parseOrReturn<VesselReportings>(baseQueryReturnValue, VesselReportingsSchema, false)
     }),
 
+    getVesselsAtDateTime: builder.query<Vessel.ReplayedVessel[], string>({
+      query: dateTime => getUrlOrPathWithQueryParams('/vessels/replay', { dateTime }),
+      transformResponse: (baseQueryReturnValue: ReplayedVesselData[]) =>
+        parseSampleOrReturn<ReplayedVesselData>(
+          baseQueryReturnValue,
+          ReplayedVesselSchema,
+          ACTIVE_VESSELS_SAMPLE_SIZE
+        ).map(replayedVesselData => Object.freeze(getReplayedVessel(replayedVesselData)))
+    }),
+
     searchVessels: builder.query<Vessel.VesselIdentity[], Vessel.ApiSearchFilter>({
       query: filter => getUrlOrPathWithQueryParams('/vessels/search', filter),
       transformErrorResponse: response => new FrontendApiError(SEARCH_VESSELS_ERROR_MESSAGE, response)
@@ -247,9 +266,11 @@ export const vesselApi = monitorfishApi.injectEndpoints({
 export const {
   useCreateVesselContactMethodMutation,
   useGetActiveVesselsQuery,
+  useGetAISVesselsAtDateTimeQuery,
   useGetAISVesselsQuery,
   useGetVesselContactToUpdateQuery,
   useGetVesselQuery,
   useGetVesselReportingsByVesselIdentityQuery,
+  useGetVesselsAtDateTimeQuery,
   useUpdateVesselContactMethodMutation
 } = vesselApi

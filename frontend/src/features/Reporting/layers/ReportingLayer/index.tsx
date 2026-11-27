@@ -10,6 +10,7 @@ import {
   REPORTINGS_ZONE_FILTER_VECTOR_SOURCE
 } from '@features/Reporting/layers/ReportingLayer/constants'
 import { useDisplayReportingsQuery } from '@features/Reporting/reportingApi'
+import { selectArePinnedReportingsDisplayed, selectIsReportingLayerDisplayed } from '@features/Reporting/selectors'
 import { reportingActions } from '@features/Reporting/slice'
 import { ReportingSearchPeriod } from '@features/Reporting/types'
 import { buildReportingFeature } from '@features/Reporting/utils'
@@ -24,10 +25,12 @@ const wktFormat = new WKT()
 
 function UnmemoizedReportingLayer() {
   const dispatch = useMainAppDispatch()
-  const isReportingLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingLayerDisplayed)
+  const isReportingLayerDisplayed = useMainAppSelector(selectIsReportingLayerDisplayed)
+  const arePinnedReportingsDisplayed = useMainAppSelector(selectArePinnedReportingsDisplayed)
   const filters = useMainAppSelector(state => state.reporting.filters)
   const selectedReportingFeatureId = useMainAppSelector(state => state.reporting.selectedReportingFeatureId)
-  const { pinnedReportings, pinnedReportingsError } = usePinnedReportings()
+  const { pinnedReportings: allPinnedReportings, pinnedReportingsError } = usePinnedReportings()
+  const pinnedReportings = arePinnedReportingsDisplayed ? allPinnedReportings : undefined
 
   const selectedReportingFeatureIdRef = useRef(selectedReportingFeatureId)
   useEffect(() => {

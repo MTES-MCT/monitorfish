@@ -15,6 +15,7 @@ import { trackEvent } from '@hooks/useTracking'
 import { Accent, customDayjs, Icon, IconButton, Link, Tag, THEME } from '@mtes-mct/monitor-ui'
 import { assertNotNullish } from '@utils/assertNotNullish'
 import { downloadAsCsv } from '@utils/downloadAsCsv'
+import { selectIsPositionReplayActive } from 'features/PositionReplay/selectors'
 import { useContext, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
@@ -38,6 +39,7 @@ export function VesselGroupRow({ isLast, vesselGroup }: VesselGroupRowProps) {
   const userAccount = useContext(UserAccountContext)
   const isHardcoded = vesselGroup.type === GroupType.HARDCODED
   const isPriority = isPriorityGroup(vesselGroup)
+  const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
   const vesselGroupsIdsPinned = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsPinned)
   const isDisplayed = vesselGroupsIdsDisplayed.includes(vesselGroup.id)
@@ -166,6 +168,7 @@ export function VesselGroupRow({ isLast, vesselGroup }: VesselGroupRowProps) {
             {isDisplayed ? (
               <IconButton
                 accent={Accent.TERTIARY}
+                disabled={isPositionReplayActive}
                 Icon={Icon.Display}
                 iconSize={20}
                 onClick={hideGroup}
@@ -175,6 +178,7 @@ export function VesselGroupRow({ isLast, vesselGroup }: VesselGroupRowProps) {
               <IconButton
                 accent={Accent.TERTIARY}
                 color={THEME.color.lightGray}
+                disabled={isPositionReplayActive}
                 Icon={Icon.Hide}
                 iconSize={20}
                 onClick={showGroup}

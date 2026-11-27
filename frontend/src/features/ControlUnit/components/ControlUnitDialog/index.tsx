@@ -1,3 +1,4 @@
+import { selectDisplayedHealthcheckTextWarning } from '@features/Healthcheck/selectors'
 import { Accent, Button, ControlUnit, Icon, MapMenuDialog } from '@mtes-mct/monitor-ui'
 import { Formik } from 'formik'
 import { noop } from 'lodash-es'
@@ -25,7 +26,7 @@ export function ControlUnitDialog() {
   if (!controlUnitId) {
     throw new FrontendError('`store.controlUnitDialog.controlUnitId` is undefined.')
   }
-  const healthcheckTextWarning = useMainAppSelector(store => store.global.healthcheckTextWarning)
+  const healthcheckTextWarning = useMainAppSelector(selectDisplayedHealthcheckTextWarning)
 
   const { data: controlUnit, error: getControlControlUnitError } = useGetControlUnitQuery(
     controlUnitId,
@@ -81,7 +82,7 @@ export function ControlUnitDialog() {
   if (!controlUnit) {
     return (
       <NoRsuiteOverrideWrapper>
-        <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning}>
+        <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}>
           <MapMenuDialog.Header>
             <MapMenuDialog.Title>Chargement en cours...</MapMenuDialog.Title>
             <MapMenuDialog.CloseButton Icon={Icon.Close} onClick={close} title="Fermer" />
@@ -93,7 +94,10 @@ export function ControlUnitDialog() {
 
   return (
     <NoRsuiteOverrideWrapper>
-      <StyledMapMenuDialogContainer $hasHealthcheckTextWarning={!!healthcheckTextWarning} data-cy="ControlUnitDialog">
+      <StyledMapMenuDialogContainer
+        $hasHealthcheckTextWarning={!!healthcheckTextWarning.length}
+        data-cy="ControlUnitDialog"
+      >
         <MapMenuDialog.Header>
           <MapMenuDialog.Title title={`${controlUnit.name} (${controlUnit.administration.name})`}>
             <b>{controlUnit.name}</b> ({controlUnit.administration.name})

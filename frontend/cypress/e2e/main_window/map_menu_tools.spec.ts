@@ -33,11 +33,11 @@ context('Map menu tools', () => {
       .filter(':contains("étiquettes des navires")')
       .should('be.visible')
     cy.getDataCy('vessel-sidebar').should('not.exist')
-    cy.get('body').contains('Afficher depuis').should('be.visible')
+    cy.get('body').contains("Période d'affichage par défaut des pistes").should('be.visible')
 
     // Vessel groups
     cy.clickButton('Groupes de navires', { withoutScroll: true })
-    cy.get('body').contains('Afficher depuis').should('not.exist')
+    cy.get('body').contains("Période d'affichage par défaut des pistes").should('not.exist')
     cy.getDataCy('vessel-groups-menu-box').should('be.visible')
 
     // Account

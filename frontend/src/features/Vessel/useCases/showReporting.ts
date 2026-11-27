@@ -3,6 +3,7 @@ import { LayerProperties, OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '@featu
 import { animateToVesselCoordinates } from '@features/Map/useCases/animateMap'
 import { reportingActions } from '@features/Reporting/slice'
 import { editReportingFromMap } from '@features/Reporting/useCases/editReportingFromMap'
+import { selectSelectedVesselTrackRequest } from '@features/Vessel/selectors/trackRequest'
 import { closeVesselSidebar, loadingVessel, resetLoadingVessel, setSelectedVessel } from '@features/Vessel/slice'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
 import { displayedComponentActions } from 'domain/shared_slices/DisplayedComponent'
@@ -12,7 +13,6 @@ import { openVesselSidebarTab } from './openVesselSidebarTab'
 import { unselectVessel } from './unselectVessel'
 import { displayOrLogError } from '../../../domain/use_cases/error/displayOrLogError'
 import { UNKNOWN_VESSEL, VesselSidebarTab } from '../types/vessel'
-import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 import { extractVesselIdentityProps } from '../utils'
 import { vesselApi } from '../vesselApi'
 
@@ -75,12 +75,7 @@ async function showReportingWithKnownVessel(
   const vesselIdentity = extractVesselIdentityProps(reporting)
   dispatch(loadingVessel(vesselIdentity))
 
-  const {
-    map: { defaultVesselTrackDepth },
-    vessel: { selectedVesselTrackRequest }
-  } = getState()
-
-  const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+  const nextTrackRequest = selectSelectedVesselTrackRequest(getState())
   const { vesselAndPositions } = await dispatch(
     vesselApi.endpoints.getVesselAndPositions.initiate(
       { trackRequest: nextTrackRequest, vesselIdentity },

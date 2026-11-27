@@ -2,6 +2,7 @@ import { LayerProperties } from '@features/Map/constants'
 import { useGetLineFeatureIdToCoordinates } from '@features/Map/layers/hooks/useGetLineFeatureIdToCoordinates'
 import { useIsZooming } from '@features/Map/layers/hooks/useIsZooming'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { selectIsMissionsLayerDisplayed } from '@features/Mission/selectors'
 import { getLabelLineStyle } from '@features/Vessel/layers/VesselsLabelsLayer/style'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
@@ -22,7 +23,7 @@ const MIN_ZOOM = 7
 
 export function MissionsLabelsLayer({ mapMovingAndZoomEvent }) {
   const isSuperUser = useIsSuperUser()
-  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
+  const isMissionsLayerDisplayed = useMainAppSelector(selectIsMissionsLayerDisplayed)
   const [featuresAndLabels, setFeaturesAndLabels] = useState<FeatureAndLabel[]>([])
   const isZooming = useIsZooming(monitorfishMap, mapMovingAndZoomEvent)
   const previousFeaturesAndLabels = usePrevious(featuresAndLabels)

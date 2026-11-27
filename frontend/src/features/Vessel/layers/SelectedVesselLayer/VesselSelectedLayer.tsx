@@ -4,6 +4,7 @@ import {
   SELECTED_VESSEL_VECTOR_SOURCE
 } from '@features/Vessel/layers/SelectedVesselLayer/constants'
 import { getSelectedVesselStyle } from '@features/Vessel/layers/SelectedVesselLayer/style'
+import { selectSelectedVesselMarkerPosition } from '@features/Vessel/selectors/selectedVesselMarkerPosition'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import Feature from 'ol/Feature'
@@ -14,7 +15,7 @@ import React, { useEffect } from 'react'
 import { OPENLAYERS_PROJECTION, WSG84_PROJECTION } from '../../../Map/constants'
 
 function VesselSelectedLayerUnmemoized() {
-  const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const selectedVesselMarkerPosition = useMainAppSelector(selectSelectedVesselMarkerPosition)
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
   const isLight = VesselFeature.iconIsLight(selectedBaseLayer)
@@ -28,14 +29,14 @@ function VesselSelectedLayerUnmemoized() {
   useEffect(() => {
     SELECTED_VESSEL_VECTOR_SOURCE.clear(true)
 
-    if (selectedVessel && selectedVessel.lastPositionLongitude && selectedVessel.lastPositionLatitude) {
+    if (selectedVesselMarkerPosition) {
       const coordinates = transform(
-        [selectedVessel.lastPositionLongitude, selectedVessel.lastPositionLatitude],
+        [selectedVesselMarkerPosition.longitude, selectedVesselMarkerPosition.latitude],
         WSG84_PROJECTION,
         OPENLAYERS_PROJECTION
       )
       const feature = new Feature({
-        course: selectedVessel.lastPositionCourse,
+        course: selectedVesselMarkerPosition.course,
         geometry: new Point(coordinates)
       })
       SELECTED_VESSEL_VECTOR_SOURCE.addFeature(feature)
@@ -54,7 +55,7 @@ function VesselSelectedLayerUnmemoized() {
       })
       SELECTED_VESSEL_VECTOR_SOURCE.addFeatures(features)
     }
-  }, [selectedVessel, vesselsTracksShowed])
+  }, [selectedVesselMarkerPosition, vesselsTracksShowed])
 
   return null
 }

@@ -8,6 +8,7 @@ import { ContactMethodSchema } from '@features/Vessel/schemas/ContactMethodSchem
 import { VesselIdentitySchema } from '@features/Vessel/schemas/VesselIdentitySchema'
 import { z } from 'zod'
 
+import type { ReplayedVesselData } from '@features/PositionReplay/types'
 import type { ControlledVesselSchema } from '@features/Vessel/schemas/ControlledVesselSchema'
 import type { VesselSchema } from '@features/Vessel/schemas/VesselSchema'
 import type Feature from 'ol/Feature'
@@ -78,6 +79,22 @@ export namespace Vessel {
   export type ActiveVesselEmittingPosition = z.infer<typeof ActiveVesselEmittingPositionSchema>
   export type ActiveVessel = z.infer<typeof ActiveVesselSchema>
 
+  /**
+   * A vessel at the replayed date: only its identity and its position are known.
+   * Unlike an active vessel, it has none of the current-only data, see `PositionReplay/replayableData.ts`.
+   */
+  export type ReplayedVessel = Omit<ReplayedVesselData, 'coordinates' | 'flagState' | 'isAtPort'> & {
+    activityType: 'POSITION_BASED'
+    coordinates: number[] | null
+    emitsPositions: true
+    flagState: string
+    isAtPort: boolean
+    isReplayed: true
+    lastPositionSentAt: number
+  }
+
+  export type DisplayedVessel = ActiveVessel | ReplayedVessel
+
   export type VesselPosition = {
     course: number
     dateTime: string
@@ -137,6 +154,7 @@ export namespace Vessel {
     Vessel.ActiveVesselEmittingPosition & {
       color: string | undefined
       groupsDisplayed: VesselGroupOfActiveVessel[]
+      isReplayed: boolean
       numberOfGroupsHidden: number
     }
 

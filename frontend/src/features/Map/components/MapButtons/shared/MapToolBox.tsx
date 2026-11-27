@@ -5,10 +5,41 @@ import styled from 'styled-components'
 
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 
-const GAP_WITH_MAP_BUTTON = 4
+export const GAP_WITH_MAP_BUTTON = 4
 const MAP_BUTTON_WIDTH = 40
 const SHRINKED_MAP_BUTTON_WIDTH = 5
 const RIGHT_MENU_OFFSET = 10
+
+/** Distance between the right edge of the map and the right edge of an opened, right-side, tool box. */
+export function getOpenedMapToolBoxRight({
+  isAnchoredToMapEdge,
+  isReportingOpen,
+  isRightMenuShrinked
+}: {
+  isAnchoredToMapEdge: boolean
+  isReportingOpen: boolean
+  isRightMenuShrinked: boolean
+}): number {
+  return (
+    getMapToolBoxRight(isAnchoredToMapEdge, isReportingOpen, isRightMenuShrinked) +
+    getMapToolBoxMargin(isRightMenuShrinked)
+  )
+}
+
+function getMapToolBoxMargin(isRightMenuShrinked: boolean | undefined): number {
+  return (isRightMenuShrinked ? SHRINKED_MAP_BUTTON_WIDTH : MAP_BUTTON_WIDTH) + GAP_WITH_MAP_BUTTON
+}
+
+function getMapToolBoxRight(
+  isAnchoredToMapEdge: boolean,
+  isReportingOpen: boolean | undefined,
+  isRightMenuShrinked: boolean | undefined
+): number {
+  const reportingOffset = isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0
+  const rightMenuOffset = isAnchoredToMapEdge && !isRightMenuShrinked ? RIGHT_MENU_OFFSET : 0
+
+  return rightMenuOffset + reportingOffset
+}
 
 type MapToolBoxProps = ComponentPropsWithoutRef<'div'> & {
   children?: ReactNode
@@ -70,9 +101,7 @@ const StyledMapToolBox = styled(MapComponent)<{
       return `margin-left: ${p.$isOpen ? '45px' : '-420px'};`
     }
 
-    const margin = (p.$isRightMenuShrinked ? SHRINKED_MAP_BUTTON_WIDTH : MAP_BUTTON_WIDTH) + GAP_WITH_MAP_BUTTON
-
-    return `margin-right: ${p.$isOpen ? `${margin}px` : '-420px'};`
+    return `margin-right: ${p.$isOpen ? `${getMapToolBoxMargin(p.$isRightMenuShrinked)}px` : '-420px'};`
   }}
 
   opacity: ${p => (p.$isOpen ? '1' : '0')};
@@ -82,10 +111,7 @@ const StyledMapToolBox = styled(MapComponent)<{
       return 'left: 6px;'
     }
 
-    const reportingOffset = p.$isReportingOpen ? REPORTING_MAP_FORM_WIDTH : 0
-    const rightMenuOffset = p.$isAnchoredToMapEdge && !p.$isRightMenuShrinked ? RIGHT_MENU_OFFSET : 0
-
-    return `right: ${rightMenuOffset + reportingOffset}px;`
+    return `right: ${getMapToolBoxRight(p.$isAnchoredToMapEdge, p.$isReportingOpen, p.$isRightMenuShrinked)}px;`
   }}
 
   border-radius: 2px;

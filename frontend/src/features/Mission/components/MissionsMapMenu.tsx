@@ -1,7 +1,10 @@
 import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { MapToolButton } from '@features/Map/components/MapButtons/shared/MapToolButton'
 import { MapBox } from '@features/Map/constants'
+import { selectIsMissionsLayerDisplayed } from '@features/Mission/selectors'
 import { addMission } from '@features/Mission/useCases/addMission'
+import { DISABLED_DURING_POSITION_REPLAY_MESSAGE } from '@features/PositionReplay/constants'
+import { selectIsPositionReplayActive } from '@features/PositionReplay/selectors'
 import { SideWindowMenuKey, SideWindowStatus } from '@features/SideWindow/constants'
 import { sideWindowActions } from '@features/SideWindow/slice'
 import { openSideWindowPath } from '@features/SideWindow/useCases/openSideWindowPath'
@@ -18,7 +21,8 @@ export function MissionsMapMenu() {
   const dispatch = useMainAppDispatch()
   const sideWindow = useMainAppSelector(state => state.sideWindow)
   const leftMapBoxOpened = useMainAppSelector(state => state.global.leftMapBoxOpened)
-  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
+  const isMissionsLayerDisplayed = useMainAppSelector(selectIsMissionsLayerDisplayed)
+  const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)
 
   const isActive =
     sideWindow.status !== SideWindowStatus.CLOSED && sideWindow.selectedPath.menu === SideWindowMenuKey.MISSION_LIST
@@ -43,6 +47,8 @@ export function MissionsMapMenu() {
     dispatch(setLeftMapBoxOpened(leftMapBoxOpened === MapBox.MISSIONS ? undefined : MapBox.MISSIONS))
   }
 
+  const missionsLayerVisibilityTitle = isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'
+
   const toggleMissionsLayer = () => {
     dispatch(setDisplayedComponents({ isMissionsLayerDisplayed: !isMissionsLayerDisplayed }))
   }
@@ -66,9 +72,14 @@ export function MissionsMapMenu() {
               <MapMenuDialog.Title>Missions et contrôles</MapMenuDialog.Title>
               <MapMenuDialog.VisibilityButton
                 accent={Accent.SECONDARY}
+                disabled={isPositionReplayActive}
                 Icon={isMissionsLayerDisplayed ? Icon.Display : Icon.Hide}
                 onClick={toggleMissionsLayer}
-                title={isMissionsLayerDisplayed ? 'Cacher les missions' : 'Afficher les missions'}
+                title={
+                  isPositionReplayActive
+                    ? `${missionsLayerVisibilityTitle} (${DISABLED_DURING_POSITION_REPLAY_MESSAGE.toLowerCase()})`
+                    : missionsLayerVisibilityTitle
+                }
               />
             </Header>
             <MissionsMenuBody>

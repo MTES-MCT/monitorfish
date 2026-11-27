@@ -1,5 +1,6 @@
 import { RTK_FORCE_REFETCH_QUERY_OPTIONS } from '@api/constants'
 import { animateToCoordinates } from '@features/Map/slice'
+import { selectSelectedVesselTrackRequest } from '@features/Vessel/selectors/trackRequest'
 import { loadingVessel, setSelectedVessel } from '@features/Vessel/slice'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { DisplayedErrorKey } from '@libs/DisplayedError/constants'
@@ -8,7 +9,6 @@ import { displayBannerWarningFromAPIFeedback } from './displayBannerWarningFromA
 import { displayedErrorActions } from '../../../domain/shared_slices/DisplayedError'
 import { addSearchedVessel } from '../../../domain/shared_slices/Global'
 import { setRightMapBoxDisplayed } from '../../../domain/use_cases/setRightMapBoxDisplayed'
-import { getCustomOrDefaultTrackRequest } from '../types/vesselTrackDepth'
 
 import type { Vessel } from '@features/Vessel/Vessel.types'
 import type { MainAppThunk } from '@store'
@@ -19,15 +19,10 @@ import type { MainAppThunk } from '@store'
 export const displayVesselSidebarAndPositions =
   (vesselIdentity: Vessel.VesselIdentity, isFromSearch: boolean): MainAppThunk<Promise<void>> =>
   async (dispatch, getState) => {
-    const {
-      map: { defaultVesselTrackDepth },
-      vessel: { selectedVesselTrackRequest }
-    } = getState()
-
     dispatch(setRightMapBoxDisplayed(undefined))
     dispatch(animateToCoordinates())
     dispatch(loadingVessel(vesselIdentity))
-    const nextTrackRequest = getCustomOrDefaultTrackRequest(selectedVesselTrackRequest, defaultVesselTrackDepth, false)
+    const nextTrackRequest = selectSelectedVesselTrackRequest(getState())
 
     if (isFromSearch) {
       dispatch(addSearchedVessel(vesselIdentity))

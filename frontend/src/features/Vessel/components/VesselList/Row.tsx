@@ -2,6 +2,9 @@ import { RedCircle } from '@features/commonStyles/Circle.style'
 import { useGetFleetSegmentsQuery } from '@features/FleetSegment/apis'
 import { getSegmentInfo } from '@features/FleetSegment/components/FleetSegmentsWithTooltip/utils'
 import { FLEET_SEGMENT_ORIGIN_LABEL, GEAR_ORIGIN_LABEL } from '@features/FleetSegment/constants'
+import { formatSignalDateTime, getSignalLabel } from '@features/PositionReplay/positionsDateTime'
+import { isReplayedVessel } from '@features/PositionReplay/replayedVessel'
+import { selectPositionsDateTime } from '@features/PositionReplay/selectors'
 import {
   displayOnboardFishingSpecies,
   getExpandableRowCellCustomStyle
@@ -15,12 +18,14 @@ import { Icon, pluralize, TableWithSelectableRows, type Undefine } from '@mtes-m
 import { type Column, flexRender, type Row as RowType } from '@tanstack/react-table'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
-import * as timeago from 'timeago.js'
 
 import { None } from './styles'
 
 import type { Gear } from '../../../../domain/types/Gear'
 import type { FleetSegment } from '@features/FleetSegment/types'
+
+/** The "Navire" column, after the selection and risk factor ones. */
+const VESSEL_DETAILS_CELL_INDEX = 2
 
 type RowProps = Readonly<{
   hasWhiteBackground?: boolean
@@ -28,10 +33,12 @@ type RowProps = Readonly<{
   /**
    * All properties may be undefined when searching
    * */
-  row: RowType<Vessel.ActiveVessel | Undefine<Vessel.ActiveVessel>>
+  row: RowType<Vessel.DisplayedVessel | Undefine<Vessel.ActiveVessel>>
 }>
 export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackground = false, index, row }, ref) => {
   const vessel = row.original
+  const activeVessel = isReplayedVessel(vessel) ? undefined : vessel
+  const positionsReferenceDateTime = useMainAppSelector(selectPositionsDateTime)
   const listFilter = useMainAppSelector(store => store.vessel.listFilterValues)
   const gearsByCode = useMainAppSelector(state => state.gear.gearsByCode)
   const speciesByCode = useMainAppSelector(state => state.species.speciesByCode)
@@ -43,7 +50,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
   const { lastControlDateTime } = getLastControlDateTimeAndControlType(
     hasLastControlAtSeaFilter,
     hasLastControlAtQuayFilter,
-    vessel
+    activeVessel
   )
 
   const gears = (function () {
@@ -51,7 +58,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
       return []
     }
 
-    return vessel.gearsArray?.map(getGearListElement(gearsByCode)) ?? []
+    return activeVessel?.gearsArray?.map(getGearListElement(gearsByCode)) ?? []
   })()
 
   const segments = (function () {
@@ -59,7 +66,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
       return []
     }
 
-    return vessel.segments?.map(getSegmentListElement(fleetSegments, vessel.activityOrigin)) ?? []
+    return activeVessel?.segments?.map(getSegmentListElement(fleetSegments, activeVessel.activityOrigin)) ?? []
   })()
 
   const speciesOnboardWithName = (function () {
@@ -68,7 +75,7 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
     }
 
     return (
-      vessel.speciesOnboard?.map(specyOnboard => {
+      activeVessel?.speciesOnboard?.map(specyOnboard => {
         const name = speciesByCode?.[specyOnboard.species]?.name
 
         return {
@@ -79,6 +86,35 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
     )
   })()
 
+  const isPositionBased = vessel.activityType === ActivityType.POSITION_BASED
+  const positionType = isPositionBased ? vessel.positionType : undefined
+  const lastPositionSentAt = isPositionBased ? vessel.lastPositionSentAt : undefined
+
+  const vesselDetails = (
+    <>
+      <p>
+        {!!vessel.internalReferenceNumber && (
+          <ExpandedRowValue $isLight>{vessel.internalReferenceNumber} (CFR)</ExpandedRowValue>
+        )}
+        {!!vessel.ircs && <ExpandedRowValue $isLight>{vessel.ircs} (Call sign)</ExpandedRowValue>}
+        {!!vessel.externalReferenceNumber && (
+          <ExpandedRowValue $isLight>{vessel.externalReferenceNumber} (Marq. ext.)</ExpandedRowValue>
+        )}
+        {!!vessel.mmsi && <ExpandedRowValue $isLight>{vessel.mmsi} (MMSI)</ExpandedRowValue>}
+      </p>
+      <p>
+        <ExpandedRowLabel>Longueur du navire :</ExpandedRowLabel>
+        <ExpandedRowValue>{vessel.length ? `${vessel.length} m` : '-'}</ExpandedRowValue>
+      </p>
+      <p>
+        <ExpandedRowLabel>{`${getSignalLabel(positionsReferenceDateTime, positionType)} :`}</ExpandedRowLabel>
+        <ExpandedRowValue>
+          {lastPositionSentAt && formatSignalDateTime(lastPositionSentAt, positionsReferenceDateTime)}
+        </ExpandedRowValue>
+      </p>
+    </>
+  )
+
   return (
     <>
       <TableWithSelectableRows.BodyTr ref={ref} data-id={row.id} data-index={index}>
@@ -88,68 +124,66 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             $hasRightBorder={['hasInfractionSuspicion'].includes(cell.column.id)}
             $hasWhiteBackground={hasWhiteBackground}
             onClick={() => row.toggleExpanded()}
-            style={getExpandableRowCellCustomStyle(cell.column as Column<Vessel.ActiveVessel, any>)}
+            style={getExpandableRowCellCustomStyle(cell.column as Column<Vessel.DisplayedVessel, any>)}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </ExpandableRowCell>
         ))}
       </TableWithSelectableRows.BodyTr>
 
-      {row.getIsExpanded() && (
+      {row.getIsExpanded() && !activeVessel && (
+        <ExpandedRow $hasWhiteBackground={hasWhiteBackground} data-id={`${row.id}-expanded`}>
+          <ExpandedRowCell />
+          <ExpandedRowCell />
+          <ExpandedRowCell>{vesselDetails}</ExpandedRowCell>
+          {row
+            .getVisibleCells()
+            .slice(VESSEL_DETAILS_CELL_INDEX + 1)
+            .map(cell => (
+              <ExpandedRowCell key={cell.id} />
+            ))}
+        </ExpandedRow>
+      )}
+      {row.getIsExpanded() && !!activeVessel && (
         <ExpandedRow $hasWhiteBackground={hasWhiteBackground} data-id={`${row.id}-expanded`}>
           <ExpandedRowCell />
           <ExpandedRowCell />
           <ExpandedRowCell>
-            <p>
-              {!!vessel.internalReferenceNumber && (
-                <ExpandedRowValue $isLight>{vessel.internalReferenceNumber} (CFR)</ExpandedRowValue>
-              )}
-              {!!vessel.ircs && <ExpandedRowValue $isLight>{vessel.ircs} (Call sign)</ExpandedRowValue>}
-              {!!vessel.externalReferenceNumber && (
-                <ExpandedRowValue $isLight>{vessel.externalReferenceNumber} (Marq. ext.)</ExpandedRowValue>
-              )}
-              {!!vessel.mmsi && <ExpandedRowValue $isLight>{vessel.mmsi} (MMSI)</ExpandedRowValue>}
-            </p>
-            <p>
-              <ExpandedRowLabel>Longueur du navire :</ExpandedRowLabel>
-              <ExpandedRowValue>{vessel.length ? `${vessel.length} m` : '-'}</ExpandedRowValue>
-            </p>
-            <p>
-              <ExpandedRowLabel>Dernier signal :</ExpandedRowLabel>
-              <ExpandedRowValue>
-                {vessel.activityType === ActivityType.POSITION_BASED
-                  ? vessel.lastPositionSentAt && timeago.format(vessel.lastPositionSentAt, 'fr')
-                  : undefined}
-                {vessel.activityType === ActivityType.POSITION_BASED ? ` (${vessel.positionType})` : undefined}
-              </ExpandedRowValue>
-            </p>
+            {vesselDetails}
             <p>
               <ExpandedRowLabel>Statut de JPE :</ExpandedRowLabel>
-              <ExpandedRowValue>{vessel.lastLogbookMessageDateTime ? 'Equipé' : 'Non équipé'}</ExpandedRowValue>
+              <ExpandedRowValue>{activeVessel.lastLogbookMessageDateTime ? 'Equipé' : 'Non équipé'}</ExpandedRowValue>
             </p>
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>
-              {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
-                `${pluralize('Segment', vessel.segments?.length ?? 0)} ${pluralize('actuel', vessel.segments?.length ?? 0)}`}
-              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
-                `${pluralize('Segment', vessel.segments?.length ?? 0)} ${pluralize('récent', vessel.segments?.length ?? 0)}`}
+              {activeVessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
+                `${pluralize('Segment', activeVessel.segments?.length ?? 0)} ${pluralize('actuel', activeVessel.segments?.length ?? 0)}`}
+              {activeVessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
+                `${pluralize('Segment', activeVessel.segments?.length ?? 0)} ${pluralize('récent', activeVessel.segments?.length ?? 0)}`}
               <StyledIconInfo
                 size={16}
-                title={vessel.activityOrigin && FLEET_SEGMENT_ORIGIN_LABEL[vessel.activityOrigin]}
+                title={activeVessel.activityOrigin && FLEET_SEGMENT_ORIGIN_LABEL[activeVessel.activityOrigin]}
               />
             </ExpandedRowLabel>
-            {vessel.segments?.length ? <ExpandedRowList>{segments}</ExpandedRowList> : <None>Aucun segment.</None>}
+            {activeVessel.segments?.length ? (
+              <ExpandedRowList>{segments}</ExpandedRowList>
+            ) : (
+              <None>Aucun segment.</None>
+            )}
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>
-              {vessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
-                `${pluralize('Engin', vessel.gearsArray?.length ?? 0)} à bord`}
-              {vessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
-                `${pluralize('Engin', vessel.gearsArray?.length ?? 0)} ${pluralize('récent', vessel.gearsArray?.length ?? 0)}`}
-              <StyledIconInfo size={16} title={vessel.activityOrigin && GEAR_ORIGIN_LABEL[vessel.activityOrigin]} />
+              {activeVessel.activityOrigin === ActivityOrigin.FROM_LOGBOOK &&
+                `${pluralize('Engin', activeVessel.gearsArray?.length ?? 0)} à bord`}
+              {activeVessel.activityOrigin === ActivityOrigin.FROM_RECENT_PROFILE &&
+                `${pluralize('Engin', activeVessel.gearsArray?.length ?? 0)} ${pluralize('récent', activeVessel.gearsArray?.length ?? 0)}`}
+              <StyledIconInfo
+                size={16}
+                title={activeVessel.activityOrigin && GEAR_ORIGIN_LABEL[activeVessel.activityOrigin]}
+              />
             </ExpandedRowLabel>
-            {vessel.gearsArray?.length ? <ExpandedRowList>{gears}</ExpandedRowList> : <None>Aucun engin.</None>}
+            {activeVessel.gearsArray?.length ? <ExpandedRowList>{gears}</ExpandedRowList> : <None>Aucun engin.</None>}
           </ExpandedRowCell>
           <ExpandedRowCell>
             <ExpandedRowLabel>
@@ -169,9 +203,9 @@ export const Row = forwardRef<HTMLTableRowElement, RowProps>(({ hasWhiteBackgrou
             {lastControlDateTime && (
               <>
                 <ExpandedRowLabel>
-                  Résultat du contrôle {vessel.lastControlInfraction && <RedCircle $margin="2" />}
+                  Résultat du contrôle {activeVessel.lastControlInfraction && <RedCircle $margin="2" />}
                 </ExpandedRowLabel>
-                {vessel.lastControlInfraction ? '1 infraction' : "Pas d'infraction"}
+                {activeVessel.lastControlInfraction ? '1 infraction' : "Pas d'infraction"}
               </>
             )}
           </ExpandedRowCell>

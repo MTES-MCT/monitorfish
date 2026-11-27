@@ -1,13 +1,13 @@
-import { TWO_MINUTES } from '@constants/index'
 import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindowBanner'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { useDisplayedAISVessels } from '@features/Vessel/hooks/useDisplayedAISVessels'
 import { AIS_VESSELS_VECTOR_LAYER } from '@features/Vessel/layers/AISVesselsLayer/constants'
 import { getWebGLAISVesselStyleVariables } from '@features/Vessel/layers/AISVesselsLayer/style'
 import { VesselFeature } from '@features/Vessel/types/vessel'
 import { hideAISVesselTrack } from '@features/Vessel/useCases/hideAISVesselTrack'
 import { renderAISVesselFeatures } from '@features/Vessel/useCases/rendering/renderAISVesselFeatures'
-import { useGetAISVesselsQuery } from '@features/Vessel/vesselApi'
+import { selectAreVesselsNotInVesselGroupsHidden } from '@features/VesselGroup/selectors'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { Level } from '@mtes-mct/monitor-ui'
@@ -23,21 +23,12 @@ function UnmemoizedAISVesselsLayer() {
   const selectedAISVessels = useMainAppSelector(state => state.vessel.selectedAISVessels)
   const listFilterValues = useMainAppSelector(state => state.vessel.listFilterValues)
   const selectedBaseLayer = useMainAppSelector(state => state.map.selectedBaseLayer)
-  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
-    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
-  )
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(selectAreVesselsNotInVesselGroupsHidden)
 
   const vesselLocation =
     listFilterValues.vesselsLocation?.length === 1 ? listFilterValues.vesselsLocation[0] : undefined
 
-  const {
-    data: vessels,
-    error,
-    isError
-  } = useGetAISVesselsQuery(vesselLocation, {
-    pollingInterval: TWO_MINUTES,
-    skip: import.meta.env.FRONTEND_AIS_VESSELS_ENABLED !== 'true' || !areAISVesselsDisplayed
-  })
+  const { data: vessels, error, isError } = useDisplayedAISVessels(vesselLocation)
 
   useEffect(() => {
     if (isError || !vessels) {

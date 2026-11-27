@@ -1,3 +1,4 @@
+import { PositionReplayHeadband } from '@features/PositionReplay/components/PositionReplayHeadband'
 import { Header } from '@features/SideWindow/components/Header'
 import { Page } from '@features/SideWindow/components/Page'
 import { SideWindowMenuKey, SideWindowMenuLabel } from '@features/SideWindow/constants'
@@ -18,6 +19,7 @@ export function VesselListAndGroups({ isFromUrl }: VesselListAndGroupsProps) {
 
   return (
     <Page>
+      <PositionReplayHeadband />
       <StyledHeader>
         <StyledTitle
           $isSelected={selectedPath.menu === SideWindowMenuKey.VESSEL_LIST}

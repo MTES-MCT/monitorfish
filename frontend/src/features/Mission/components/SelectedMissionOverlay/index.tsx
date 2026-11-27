@@ -1,4 +1,5 @@
 import { OPENLAYERS_PROJECTION } from '@features/Map/constants'
+import { selectIsMissionsLayerDisplayed } from '@features/Mission/selectors'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import GeoJSON from 'ol/format/GeoJSON'
 import { useMemo } from 'react'
@@ -7,7 +8,7 @@ import { MissionOverlay } from '../MissionOverlay'
 
 export function SelectedMissionOverlay() {
   const selectedMissionGeoJSON = useMainAppSelector(store => store.missionForm.selectedMissionGeoJSON)
-  const isMissionsLayerDisplayed = useMainAppSelector(store => store.displayedComponent.isMissionsLayerDisplayed)
+  const isMissionsLayerDisplayed = useMainAppSelector(selectIsMissionsLayerDisplayed)
 
   const selectedMission = useMemo(() => {
     if (!selectedMissionGeoJSON || !isMissionsLayerDisplayed) {

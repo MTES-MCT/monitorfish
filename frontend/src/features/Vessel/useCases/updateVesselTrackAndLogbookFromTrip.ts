@@ -1,6 +1,7 @@
 import { NavigateTo } from '@features/Logbook/constants'
 import { displayLogbookMessageOverlays } from '@features/Logbook/useCases/displayedLogbookOverlays/displayLogbookMessageOverlays'
 import { getVesselLogbook } from '@features/Logbook/useCases/getVesselLogbook'
+import { selectIsPositionReplayActive } from '@features/PositionReplay/selectors'
 import { getTrackRequestFromDates, getTrackRequestFromTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
 import { updateSelectedVesselTrack } from '@features/Vessel/useCases/updateSelectedVesselTrack'
 import { customDayjs } from '@mtes-mct/monitor-ui'
@@ -33,7 +34,10 @@ export const updateVesselTrackAndLogbookFromTrip =
     }
 
     if (isFromUserAction) {
-      await dispatch(displayVesselTrack(voyage, vesselIdentity, defaultVesselTrackDepth))
+      // While replaying positions, a default track depth would end now
+      const isTrackOfTripDates = !voyage.isLastVoyage || selectIsPositionReplayActive(getState())
+
+      await dispatch(displayVesselTrack(voyage, vesselIdentity, defaultVesselTrackDepth, isTrackOfTripDates))
     }
 
     await dispatch(displayLogbookMessageOverlays())
@@ -42,7 +46,8 @@ export const updateVesselTrackAndLogbookFromTrip =
 function displayVesselTrack(
   voyage: Logbook.VesselVoyage,
   vesselIdentity: Vessel.VesselIdentity,
-  defaultVesselTrackDepth: SelectableVesselTrackDepth
+  defaultVesselTrackDepth: SelectableVesselTrackDepth,
+  isTrackOfTripDates: boolean
 ) {
   return async dispatch => {
     if (!voyage.startDate && !voyage.endDate) {
@@ -50,9 +55,9 @@ function displayVesselTrack(
     }
 
     const { afterDateTime, beforeDateTime } = getDateRangeMinusFourHoursPlusOneHour(voyage.startDate, voyage.endDate)
-    const trackRequest = voyage.isLastVoyage
-      ? getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
-      : getTrackRequestFromDates(afterDateTime, beforeDateTime)
+    const trackRequest = isTrackOfTripDates
+      ? getTrackRequestFromDates(afterDateTime, beforeDateTime)
+      : getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
 
     await dispatch(updateSelectedVesselTrack(vesselIdentity, trackRequest))
   }

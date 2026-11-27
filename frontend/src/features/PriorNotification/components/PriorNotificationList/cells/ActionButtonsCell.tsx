@@ -1,3 +1,4 @@
+import { showVesselFromLiveData } from '@features/PositionReplay/useCases/showVesselFromLiveData'
 import { openLogbookPriorNotificationForm } from '@features/PriorNotification/useCases/openLogbookPriorNotificationForm'
 import { openManualPriorNotificationForm } from '@features/PriorNotification/useCases/openManualPriorNotificationForm'
 import { getPriorNotificationIdentifier } from '@features/PriorNotification/utils'
@@ -7,7 +8,6 @@ import { Accent, Icon, IconButton } from '@mtes-mct/monitor-ui'
 import styled from 'styled-components'
 
 import { useIsSuperUser } from '../../../../../auth/hooks/useIsSuperUser'
-import { showVessel } from '../../../../Vessel/useCases/showVessel'
 import { openPriorNotificationCard } from '../../../useCases/openPriorNotificationCard'
 import { getVesselIdentityFromPriorNotification } from '../utils'
 
@@ -51,7 +51,7 @@ export function ActionButtonsCell({ priorNotification }: ActionButtonsCellProps)
   const selectMainMapVessel = async () => {
     const vesselIdentity = getVesselIdentityFromPriorNotification(priorNotification)
 
-    dispatch(showVessel(vesselIdentity, false))
+    dispatch(showVesselFromLiveData(vesselIdentity))
   }
 
   return (

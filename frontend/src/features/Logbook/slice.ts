@@ -124,6 +124,20 @@ const logbookSlice = createSlice({
       state.nextLogbookMessages = action.payload
     },
 
+    /** E.g. when the vessel was not at sea at the replayed date. */
+    setNoVoyage(state, action: PayloadAction<Vessel.VesselIdentity>) {
+      state.displayedLogbookOverlays = []
+      state.logbookMessages = undefined
+      state.vesselIdentity = action.payload
+      state.nextLogbookMessages = null
+
+      state.isFirstVoyage = null
+      state.isLastVoyage = null
+      state.tripNumber = null
+      state.software = undefined
+      state.loadingFishingActivities = false
+    },
+
     /**
      * Show the specified fishing activities tab (Resume or All messages)
      * @param {Object=} state

@@ -7,6 +7,17 @@ export const NEW_FEATURES: Array<MonitorFishFeature> = isCypress()
   ? dummyNewFeatures
   : [
       {
+        date: '2026-11-27',
+        description: `Vous pouvez désormais **afficher les positions des navires à une date passée** (VMS, et AIS sur le dernier mois), avec le bouton « horloge » du menu de droite de la carte.
+
+Les pistes et les JPE des navires sélectionnés sont alors ceux de cette date.
+
+Astuces : les flèches ← et → du clavier reculent ou avancent d'une heure (d'un jour avec Maj), et l'URL de la page contient la date rejouée, pour la partager.`,
+        for: 'ALL',
+        title: `Carte – Rejeu des positions des navires`,
+        type: 'NEW_FEATURE'
+      },
+      {
         date: '2026-11-19',
         description: `Les photos des navires sont de retour dans l'onglet « Résumé » de la fiche navire. Elles proviennent désormais d'[Open Vessel Photos](https://openvesselphotos.org/fr), une photothèque ouverte de navires sous licence libre, et sont affichées avec leurs crédits.
 

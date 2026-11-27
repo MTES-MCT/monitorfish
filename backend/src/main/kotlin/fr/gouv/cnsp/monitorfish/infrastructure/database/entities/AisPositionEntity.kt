@@ -1,9 +1,7 @@
 package fr.gouv.cnsp.monitorfish.infrastructure.database.entities
 
-import com.neovisionaries.i18n.CountryCode
 import fr.gouv.cnsp.monitorfish.domain.entities.ais_position.AisPosition
 import fr.gouv.cnsp.monitorfish.domain.entities.position.Position
-import fr.gouv.cnsp.monitorfish.domain.entities.position.PositionType
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EmbeddedId
@@ -54,29 +52,27 @@ data class AisPositionEntity(
     @Column(name = "length")
     val length: Double? = null,
 ) {
-    fun toPosition(): Position =
-        Position(
-            id = null,
-            internalReferenceNumber = cfr,
-            mmsi = pk.mmsi.toString(),
-            ircs = ircs,
-            externalReferenceNumber = externalImmatriculation,
-            vesselName = vesselName,
-            flagState = flagState?.let { runCatching { CountryCode.valueOf(it) }.getOrElse { CountryCode.UNDEFINED } },
-            positionType = PositionType.AIS,
-            isManual = null,
-            isFishing = null,
-            isAtPort = null,
+    fun toAisPosition(): AisPosition =
+        AisPosition(
+            mmsi = pk.mmsi,
+            dateTime = pk.dateTime,
             latitude = latitude,
             longitude = longitude,
             speed = speed,
             course = course,
-            dateTime = pk.dateTime,
-            from = null,
-            destination = null,
-            tripNumber = null,
-            networkType = null,
+            status = status,
+            imo = imo,
+            shipType = shipType,
+            destination = destination,
+            cfr = cfr,
+            externalImmatriculation = externalImmatriculation,
+            vesselName = vesselName,
+            ircs = ircs,
+            flagState = flagState,
+            length = length,
         )
+
+    fun toPosition(): Position = toAisPosition().toPosition()
 
     companion object {
         fun fromAisPosition(position: AisPosition): AisPositionEntity =

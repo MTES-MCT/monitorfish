@@ -47,6 +47,7 @@ import fr.gouv.cnsp.monitorfish.domain.entities.risk_factor.VesselRiskFactor
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ControlledVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.EnrichedActiveVesselWithPositions
+import fr.gouv.cnsp.monitorfish.domain.entities.vessel.ReplayedVessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.Vessel
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselAndBeacon
 import fr.gouv.cnsp.monitorfish.domain.entities.vessel.VesselIdentifier
@@ -59,6 +60,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.authorization.GetIsAuthorizedUs
 import fr.gouv.cnsp.monitorfish.domain.use_cases.dtos.VoyageRequest
 import fr.gouv.cnsp.monitorfish.domain.use_cases.logbook.GetHasFilledLogbookForCurrentTrip
 import fr.gouv.cnsp.monitorfish.domain.use_cases.reporting.GetVesselReportings
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetAISVesselsAtDateTime
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetActiveVessels
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetControlledVesselById
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetLastPositionsAIS
@@ -73,6 +75,7 @@ import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselTripNumbers
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVMSAndAISPositions
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyage
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselVoyageByDates
+import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.GetVesselsAtDateTime
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SaveVesselContactToUpdate
 import fr.gouv.cnsp.monitorfish.domain.use_cases.vessel.SearchVessels
 import fr.gouv.cnsp.monitorfish.fakers.VesselContactToUpdateFaker
@@ -124,6 +127,12 @@ class VesselControllerITests {
 
     @MockitoBean
     private lateinit var getLastPositionsAIS: GetLastPositionsAIS
+
+    @MockitoBean
+    private lateinit var getVesselsAtDateTime: GetVesselsAtDateTime
+
+    @MockitoBean
+    private lateinit var getAISVesselsAtDateTime: GetAISVesselsAtDateTime
 
     @MockitoBean
     private lateinit var getVessel: GetVessel
@@ -788,7 +797,7 @@ class VesselControllerITests {
                 software = "FT/",
                 logbookMessages = TestUtils.getDummyLogbookMessages(),
             )
-        given(this.getVesselVoyage.execute(any(), any(), anyOrNull())).willReturn(voyage)
+        given(this.getVesselVoyage.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
 
         // When
         api
@@ -820,14 +829,14 @@ class VesselControllerITests {
                 ),
             )
 
-        Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null)
+        Mockito.verify(getVesselVoyage).execute("FR224226850", VoyageRequest.LAST, null, null)
     }
 
     @Test
     fun `getVesselVoyage() Should return NOT_FOUND When not found`() {
         // Given
         given(
-            this.getVesselVoyage.execute(any(), any(), any()),
+            this.getVesselVoyage.execute(any(), any(), anyOrNull(), anyOrNull()),
         ).willThrow(BackendUsageException(BackendUsageErrorCode.NOT_FOUND_BUT_OK))
 
         // When
@@ -855,7 +864,7 @@ class VesselControllerITests {
                 software = "FT/",
                 logbookMessages = TestUtils.getDummyLogbookMessages(),
             )
-        given(this.getVesselVoyage.execute(any(), any(), any())).willReturn(voyage)
+        given(this.getVesselVoyage.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
 
         // When
         api.perform(
@@ -868,6 +877,41 @@ class VesselControllerITests {
             "FR224226850",
             VoyageRequest.PREVIOUS,
             "12345",
+            null,
+        )
+    }
+
+    @Test
+    fun `Should find the logbook messages of the trip at a replayed date`() {
+        // Given
+        val voyage =
+            Voyage(
+                isLastVoyage = false,
+                isFirstVoyage = false,
+                startDate = ZonedDateTime.parse("2026-11-19T22:32:00Z"),
+                endDate = ZonedDateTime.parse("2026-11-20T19:32:00Z"),
+                tripNumber = "20261101",
+                software = "FT/",
+                logbookMessages = TestUtils.getDummyLogbookMessages(),
+            )
+        given(this.getVesselVoyage.execute(any(), any(), anyOrNull(), anyOrNull())).willReturn(voyage)
+
+        // When
+        api
+            .perform(
+                get(
+                    "/bff/v1/vessels/logbook/find?internalReferenceNumber=FR224226850&voyageRequest=AT_DATE_TIME&dateTime=2026-11-20T08:32:00.000Z",
+                ).with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.tripNumber", equalTo("20261101")))
+
+        Mockito.verify(getVesselVoyage).execute(
+            "FR224226850",
+            VoyageRequest.AT_DATE_TIME,
+            null,
+            ZonedDateTime.parse("2026-11-20T08:32:00Z"),
         )
     }
 
@@ -1373,6 +1417,48 @@ class VesselControllerITests {
             )
             // Then
             .andExpect(status().isCreated)
+    }
+
+    @Test
+    fun `Should get the replayed vessels`() {
+        // Given
+        val replayedAt = ZonedDateTime.parse("2026-11-20T02:00:00Z")
+        given(getVesselsAtDateTime.execute(any())).willReturn(
+            listOf(
+                ReplayedVessel(
+                    position =
+                        Position(
+                            internalReferenceNumber = "FR224226850",
+                            ircs = "IRCS",
+                            externalReferenceNumber = "EXT",
+                            positionType = PositionType.VMS,
+                            latitude = 48.0,
+                            longitude = -4.0,
+                            speed = 5.0,
+                            course = 90.0,
+                            dateTime = replayedAt.minusHours(1),
+                        ),
+                    vessel = null,
+                ),
+            ),
+        )
+
+        // When
+        api
+            .perform(
+                get("/bff/v1/vessels/replay?dateTime=2026-11-20T02:00:00.000Z")
+                    .with(authenticatedRequest()),
+            )
+            // Then
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()", equalTo(1)))
+            .andExpect(jsonPath("$[0].vesselFeatureId", equalTo("VESSELS_POINTS:FR224226850/IRCS/EXT")))
+            .andExpect(jsonPath("$[0].latitude", equalTo(48.0)))
+            .andExpect(jsonPath("$[0].vesselIdentifier", equalTo("INTERNAL_REFERENCE_NUMBER")))
+            .andExpect(jsonPath("$[0].positionType", equalTo("VMS")))
+            .andExpect(jsonPath("$[0].riskFactor").doesNotExist())
+
+        Mockito.verify(getVesselsAtDateTime).execute(replayedAt)
     }
 
     @Test

@@ -3,9 +3,9 @@ import { addMainWindowBanner } from '@features/MainWindow/useCases/addMainWindow
 import { animateToVesselCoordinates } from '@features/Map/useCases/animateMap'
 import { AIS_VESSELS_VECTOR_SOURCE } from '@features/Vessel/layers/AISVesselsLayer/constants'
 import { VESSEL_TRACK_VECTOR_SOURCE } from '@features/Vessel/layers/VesselsTracksLayer/constants'
+import { selectDefaultTrackRequest } from '@features/Vessel/selectors/trackRequest'
 import { addSelectedAISVessel, resetLoadingVessel } from '@features/Vessel/slice'
 import { getFeaturesFromPositions } from '@features/Vessel/types/track'
-import { getTrackRequestFromTrackDepth } from '@features/Vessel/types/vesselTrackDepth'
 import { unselectVessel } from '@features/Vessel/useCases/unselectVessel'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { Level } from '@mtes-mct/monitor-ui'
@@ -25,9 +25,8 @@ export const showAISVesselTrack =
     }
 
     try {
-      const { defaultVesselTrackDepth } = getState().map
       // For now, only the default track request is used
-      const nextTrackRequest = getTrackRequestFromTrackDepth(defaultVesselTrackDepth)
+      const nextTrackRequest = selectDefaultTrackRequest(getState())
 
       const positions = await dispatch(
         vesselApi.endpoints.getVesselAISPositions.initiate(

@@ -1,4 +1,8 @@
-import { MapToolBox } from '@features/Map/components/MapButtons/shared/MapToolBox'
+import {
+  GAP_WITH_MAP_BUTTON,
+  getOpenedMapToolBoxRight,
+  MapToolBox
+} from '@features/Map/components/MapButtons/shared/MapToolBox'
 import { AnimateToTrack } from '@features/Vessel/components/VesselSidebar/components/AnimateToTrack'
 import { HideNonSelectedVessels } from '@features/Vessel/components/VesselSidebar/components/HideNonSelectedVessels'
 import { ShowFishingActivitiesOnMap } from '@features/Vessel/components/VesselSidebar/components/ShowFishingActivitiesOnMap'
@@ -10,12 +14,19 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { Body } from './Body'
+import {
+  VESSEL_SIDEBAR_ACTION_BUTTON_SIZE,
+  VESSEL_SIDEBAR_TABS_HEIGHT,
+  VESSEL_SIDEBAR_TOP,
+  VESSEL_SIDEBAR_WIDTH
+} from '../constants'
 import { Tabs } from './Tabs'
 
 export function VesselSidebar() {
   const isFocusedOnVesselSearch = useMainAppSelector(state => state.vessel.isFocusedOnVesselSearch)
   const isReportingMapFormDisplayed = useMainAppSelector(state => state.displayedComponent.isReportingMapFormDisplayed)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
+  const rightMenuIsOpen = useMainAppSelector(state => state.global.rightMenuIsOpen)
   const { trackPage } = useTracking()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -40,10 +51,19 @@ export function VesselSidebar() {
 
   return (
     <>
-      <TrackRequest isSidebarOpen={isOpen} />
-      <AnimateToTrack isSidebarOpen={isOpen} />
-      <HideNonSelectedVessels isSidebarOpen={isOpen} />
-      <ShowFishingActivitiesOnMap isSidebarOpen={isOpen} />
+      <ActionButtons
+        $isOpen={isOpen}
+        $sidebarRight={getOpenedMapToolBoxRight({
+          isAnchoredToMapEdge: true,
+          isReportingOpen: isReportingMapFormDisplayed,
+          isRightMenuShrinked: !rightMenuIsOpen
+        })}
+      >
+        <TrackRequest isSidebarOpen={isOpen} />
+        <AnimateToTrack />
+        <HideNonSelectedVessels />
+        <ShowFishingActivitiesOnMap />
+      </ActionButtons>
       <Wrapper
         data-cy="vessel-sidebar"
         isAnchoredToMapEdge
@@ -88,16 +108,31 @@ const GrayOverlay = styled.div<{
   }
 `
 
+const ActionButtons = styled.div<{
+  $isOpen: boolean
+  $sidebarRight: number
+}>`
+  display: flex;
+  flex-direction: column;
+  gap: ${GAP_WITH_MAP_BUTTON}px;
+  opacity: ${p => (p.$isOpen ? 1 : 0)};
+  position: absolute;
+  right: ${p =>
+    p.$isOpen ? p.$sidebarRight + VESSEL_SIDEBAR_WIDTH + GAP_WITH_MAP_BUTTON : -VESSEL_SIDEBAR_ACTION_BUTTON_SIZE}px;
+  top: ${VESSEL_SIDEBAR_TOP + VESSEL_SIDEBAR_TABS_HEIGHT}px;
+  transition: all 0.3s;
+`
+
 const Wrapper = styled(MapToolBox)`
   background: ${p => p.theme.color.gainsboro};
   max-height: 93vh;
   overflow: hidden;
   padding: 0;
-  top: 40px;
+  top: ${VESSEL_SIDEBAR_TOP}px;
   transition:
     all 0.3s,
     right 0.3s,
     opacity 0.3s;
-  width: 500px;
+  width: ${VESSEL_SIDEBAR_WIDTH}px;
   z-index: 1;
 `

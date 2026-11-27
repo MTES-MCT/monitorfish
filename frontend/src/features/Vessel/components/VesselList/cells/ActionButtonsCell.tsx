@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { showVessel } from '../../../useCases/showVessel'
 
 type ActionButtonsCellProps = Readonly<{
-  vessel: Vessel.ActiveVessel
+  vessel: Vessel.DisplayedVessel
 }>
 export function ActionButtonsCell({ vessel }: ActionButtonsCellProps) {
   const dispatch = useMainAppDispatch()

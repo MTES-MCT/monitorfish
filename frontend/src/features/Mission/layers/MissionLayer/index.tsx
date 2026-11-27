@@ -1,6 +1,7 @@
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { useWebGLLayerVisibility } from '@features/Map/hooks/useWebGLLayerVisibility'
 import { NEW_MISSION_ID } from '@features/Mission/layers/constants'
+import { selectIsMissionsLayerDisplayed } from '@features/Mission/selectors'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { memo, useEffect, useMemo } from 'react'
@@ -14,7 +15,7 @@ import type { Point } from 'ol/geom'
 
 function UnmemoizedMissionLayer() {
   const dispatch = useMainAppDispatch()
-  const isMissionsLayerDisplayed = useMainAppSelector(state => state.displayedComponent.isMissionsLayerDisplayed)
+  const isMissionsLayerDisplayed = useMainAppSelector(selectIsMissionsLayerDisplayed)
   const draft = useMainAppSelector(store => store.missionForm.draft)
   const missionId = useMainAppSelector(store => store.sideWindow.selectedPath.id)
   const { missions } = useGetFilteredMissionsQuery()

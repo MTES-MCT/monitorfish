@@ -1,5 +1,9 @@
 import { VesselSidebarFleetSegments } from '@features/FleetSegment/components/VesselSidebarFleetSegments'
 import { WSG84_PROJECTION } from '@features/Map/constants'
+import { UnavailableDuringPositionReplay } from '@features/PositionReplay/components/UnavailableDuringPositionReplay'
+import { DataKind, selectIsDataAvailable } from '@features/PositionReplay/replayableData'
+import { selectIsPositionReplayActive } from '@features/PositionReplay/selectors'
+import { getLastVMSPositionOfTrack } from '@features/PositionReplay/track'
 import { RiskFactorResume } from '@features/RiskFactor/components/RiskFactorResume'
 import { VesselPhoto } from '@features/Vessel/components/VesselSidebar/components/VesselPhoto'
 import { VesselProfile } from '@features/Vessel/components/VesselSidebar/components/VesselProfile'
@@ -8,7 +12,7 @@ import { SelectedVesselGroups } from '@features/VesselGroup/components/SelectedV
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { FingerprintLoader, getCoordinates, THEME } from '@mtes-mct/monitor-ui'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import * as timeago from 'timeago.js'
 
@@ -26,14 +30,32 @@ export function VesselSummary() {
   const loadingVessel = useMainAppSelector(state => state.vessel.loadingVessel)
   const selectedVessel = useMainAppSelector(state => state.vessel.selectedVessel)
   const selectedVesselIdentity = useMainAppSelector(state => state.vessel.selectedVesselIdentity)
+  const selectedVesselPositions = useMainAppSelector(state => state.vessel.selectedVesselPositions)
+  const isPositionReplayActive = useMainAppSelector(selectIsPositionReplayActive)
+  const isRiskFactorAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.RISK_FACTOR))
+  const areFleetSegmentsAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.FLEET_SEGMENTS))
+  const areVesselGroupsAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.VESSEL_GROUPS))
+  const isVesselProfileAvailable = useMainAppSelector(state => selectIsDataAvailable(state, DataKind.VESSEL_PROFILE))
+
+  // The selected vessel last position is the current one: the replayed one ends the replayed track
+  const lastPosition = useMemo(
+    () =>
+      isPositionReplayActive
+        ? getLastVMSPositionOfTrack(selectedVesselPositions)
+        : {
+            course: selectedVessel?.lastPositionCourse,
+            dateTime: selectedVessel?.lastPositionDateTime,
+            emissionPeriod: selectedVessel?.emissionPeriod,
+            latitude: selectedVessel?.lastPositionLatitude,
+            longitude: selectedVessel?.lastPositionLongitude,
+            speed: selectedVessel?.lastPositionSpeed
+          },
+    [isPositionReplayActive, selectedVesselPositions, selectedVessel]
+  )
 
   const coordinates =
-    !Number.isNaN(selectedVessel?.lastPositionLatitude) && !Number.isNaN(selectedVessel?.lastPositionLongitude)
-      ? getCoordinates(
-          [selectedVessel?.lastPositionLongitude, selectedVessel?.lastPositionLatitude],
-          WSG84_PROJECTION,
-          coordinatesFormat
-        )
+    !Number.isNaN(lastPosition.latitude) && !Number.isNaN(lastPosition.longitude)
+      ? getCoordinates([lastPosition.longitude, lastPosition.latitude], WSG84_PROJECTION, coordinatesFormat)
       : undefined
 
   useEffect(() => {
@@ -57,27 +79,19 @@ export function VesselSummary() {
         <Course>
           <FieldName>Route</FieldName>
           <FieldValue>
-            {!Number.isNaN(selectedVessel?.lastPositionCourse) ? (
-              <>{selectedVessel?.lastPositionCourse}°</>
-            ) : (
-              <NoValue>-</NoValue>
-            )}
+            {!Number.isNaN(lastPosition.course) ? <>{lastPosition.course}°</> : <NoValue>-</NoValue>}
           </FieldValue>
           <FieldName>Vitesse</FieldName>
           <FieldValue>
-            {!Number.isNaN(selectedVessel?.lastPositionSpeed) ? (
-              <>{selectedVessel?.lastPositionSpeed} Nds</>
-            ) : (
-              <NoValue>-</NoValue>
-            )}
+            {!Number.isNaN(lastPosition.speed) ? <>{lastPosition.speed} Nds</> : <NoValue>-</NoValue>}
           </FieldValue>
         </Course>
         <Position>
           <FieldName>Dernier signal VMS</FieldName>
           <FieldValue>
-            {selectedVessel?.lastPositionDateTime ? (
+            {lastPosition.dateTime ? (
               <>
-                {getDateTime(selectedVessel?.lastPositionDateTime, true)} <Gray>(UTC)</Gray>
+                {getDateTime(lastPosition.dateTime, true)} <Gray>(UTC)</Gray>
               </>
             ) : (
               <NoValue>-</NoValue>
@@ -87,23 +101,44 @@ export function VesselSummary() {
             Dernier cadencement <Info title="Cette valeur est calculée à partir des 2 dernières positions VMS reçues" />
           </FieldName>
           <FieldValue>
-            {selectedVessel?.emissionPeriod ? (
-              <>1 signal toutes les {selectedVessel.emissionPeriod / 60} minutes</>
+            {lastPosition.emissionPeriod ? (
+              <>1 signal toutes les {lastPosition.emissionPeriod / 60} minutes</>
             ) : (
               <NoValue>-</NoValue>
             )}
           </FieldValue>
         </Position>
       </ZoneWithoutBackground>
-      {isSuperUser && <RiskFactorResume />}
-      {!isSuperUser && (
-        <VesselSidebarFleetSegments
-          activityOrigin={selectedVessel?.activityOrigin}
-          segments={selectedVessel?.riskFactor?.segments}
+      {isSuperUser &&
+        (isRiskFactorAvailable ? (
+          <RiskFactorResume />
+        ) : (
+          <UnavailableDuringPositionReplay
+            message="En mode rejeu, la note de risque n'est pas calculée."
+            title="Note de risque globale"
+          />
+        ))}
+      {!isSuperUser &&
+        (areFleetSegmentsAvailable ? (
+          <VesselSidebarFleetSegments
+            activityOrigin={selectedVessel?.activityOrigin}
+            segments={selectedVessel?.riskFactor?.segments}
+          />
+        ) : (
+          <UnavailableDuringPositionReplay
+            message="En mode rejeu, les segments de flotte ne sont pas calculés."
+            title="Segments de flotte"
+          />
+        ))}
+      {areVesselGroupsAvailable ? (
+        <SelectedVesselGroups />
+      ) : (
+        <UnavailableDuringPositionReplay
+          message="En mode rejeu, les groupes du navire ne sont pas affichés."
+          title="Groupes du navire"
         />
       )}
-      <SelectedVesselGroups />
-      <VesselProfile />
+      {isVesselProfileAvailable && <VesselProfile />}
     </Body>
   ) : (
     <FingerprintLoader className="radar" color={THEME.color.charcoal} />

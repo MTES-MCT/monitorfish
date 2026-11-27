@@ -4,6 +4,7 @@ import { ControlUnitListMapButton } from '@features/ControlUnit/components/Contr
 import { LayersSidebar } from '@features/LayersSidebar/components'
 import { RightMenuOnHoverArea } from '@features/Map/components/MapButtons/shared/RightMenuOnHoverArea'
 import { NewFeatures } from '@features/NewFeatures/components/NewFeatures'
+import { PositionReplayMapButton } from '@features/PositionReplay/components/PositionReplayMapButton'
 import { ReportingMapButton } from '@features/Reporting/components/ReportingMapButton'
 import { UserFeedbackMapButton } from '@features/UserFeedback/components/UserFeedbackMapButton'
 import { AISVesselsButton } from '@features/Vessel/components/AISVesselsButton'
@@ -184,6 +185,9 @@ export function MapButtons() {
             <MenuItem>
               <MapSettingsButton />
             </MenuItem>
+            <MenuItem>
+              <PositionReplayMapButton />
+            </MenuItem>
           </Group>
         )}
 
@@ -271,7 +275,7 @@ const TopBar = styled.div<{
 }>`
   align-items: center;
   display: flex;
-  gap: 4px;
+  gap: 3px;
   position: absolute;
   right: ${p => (p.$isRightMenuOpen ? 10 : 0)}px;
   top: calc(${p => p.$top}px + 10px);

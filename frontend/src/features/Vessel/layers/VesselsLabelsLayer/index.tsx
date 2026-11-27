@@ -1,5 +1,6 @@
 import { useMapLayer } from '@features/Map/hooks/useMapLayer'
 import { monitorfishMap } from '@features/Map/monitorfishMap'
+import { selectIsRiskFactorDisplayed } from '@features/Map/selectors'
 import { getLabelLineCoordinates } from '@features/Vessel/label.utils'
 import {
   filterNonSelectedVessels,
@@ -11,6 +12,7 @@ import {
   VESSELS_LABEL_VECTOR_SOURCE
 } from '@features/Vessel/layers/VesselsLabelsLayer/constants'
 import { getLabelFromFeatures } from '@features/Vessel/layers/VesselsLabelsLayer/utils'
+import { selectAreVesselsNotInVesselGroupsHidden } from '@features/VesselGroup/selectors'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
 import { usePrevious } from '@mtes-mct/monitor-ui'
 import LineString from 'ol/geom/LineString'
@@ -37,11 +39,9 @@ export function VesselsLabelsLayer({ mapMovingAndZoomEvent }) {
   const vesselsTracksShowed = useMainAppSelector(state => state.vessel.vesselsTracksShowed)
   const areVesselsDisplayed = useMainAppSelector(state => state.displayedComponent.areVesselsDisplayed)
   const previewFilteredVesselsMode = useMainAppSelector(state => state.global.previewFilteredVesselsMode)
-  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(
-    state => state.vesselGroup.areVesselsNotInVesselGroupsHidden
-  )
+  const areVesselsNotInVesselGroupsHidden = useMainAppSelector(selectAreVesselsNotInVesselGroupsHidden)
   const vesselGroupsIdsDisplayed = useMainAppSelector(state => state.vesselGroup.vesselGroupsIdsDisplayed)
-  const riskFactorShowedOnMap = useMainAppSelector(state => state.map.riskFactorShowedOnMap)
+  const riskFactorShowedOnMap = useMainAppSelector(selectIsRiskFactorDisplayed)
   const vesselLabel = useMainAppSelector(state => state.map.vesselLabel)
   const vesselLabelsShowedOnMap = useMainAppSelector(state => state.map.vesselLabelsShowedOnMap)
 

@@ -36,7 +36,6 @@ export function CardBodyHead({
 }: CardBodyHeadProps) {
   const [isSentMessageListExpanded, setIsSentMessageListExpanded] = useState(false)
   const { forceUpdate } = useForceUpdate()
-  const hasDesignatedPorts = detail?.logbookMessage.message.pnoTypes?.find(type => type.hasDesignatedPorts)
   const isInvalidated = detail?.logbookMessage.message.isInvalidated
   const isPendingVerification = detail?.state === PriorNotification.State.PENDING_VERIFICATION
 
@@ -76,7 +75,7 @@ export function CardBodyHead({
       )}
       {(!!editedPriorNotificationComputedValues || !!detail) && (
         <Intro $withTopMargin={!isNewPriorNotification && isPendingVerification}>
-          Le navire doit respecter un délai d’envoi{hasDesignatedPorts && ' et débarquer dans un port désigné'}.
+          Le navire doit respecter un délai d’envoi.
         </Intro>
       )}
 

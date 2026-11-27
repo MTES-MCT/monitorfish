@@ -29,6 +29,7 @@ context('Position replay', () => {
     cy.intercept('GET', '/bff/v1/vessels/ais/replay*').as('getReplayedAISVessels')
 
     // Given
+    cy.clickButton('AIS', { withoutScroll: true })
     cy.clickButton('Rejouer les positions à une date passée', { withoutScroll: true })
 
     // Then the positions are replayed now by default
@@ -213,6 +214,8 @@ context('Position replay', () => {
 
     // Then
     cy.get('[title="Cacher les missions"]').should('not.be.disabled')
+    // The vessel groups box replaced the map settings box
+    cy.clickButton('Affichage des dernières positions', { withoutScroll: true })
     cy.contains('Masquer la note de risque des navires').should('be.visible')
     cy.contains('Masquer les positions estimées des navires').should('be.visible')
     cy.get(DISABLED_TITLE).should('not.exist')

@@ -293,7 +293,7 @@ context('Map world wrap', () => {
     cy.get('*[data-cy="reporting-map-menu-box"]').should('be.visible')
 
     // When
-    cy.clickButton('Définir une zone de filtre manuelle')
+    cy.clickButton('Définir une zone de filtre sur la carte')
     cy.get('body').click(490, 580)
     cy.get('body').click(420, 635)
     cy.get('body').dblclick(560, 620)

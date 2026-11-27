@@ -30,7 +30,7 @@ export function PositionReplayMapButton() {
   return (
     <MapToolButton
       data-cy="position-replay-map-button"
-      Icon={Icon.Clock}
+      Icon={Icon.History}
       isActive={isActive}
       onClick={start}
       title="Rejouer les positions à une date passée"

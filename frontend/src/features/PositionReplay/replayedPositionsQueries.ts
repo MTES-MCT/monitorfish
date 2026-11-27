@@ -3,8 +3,6 @@ import { selectAreAISVesselsFetched } from '@features/Vessel/hooks/useDisplayedA
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { customDayjs } from '@mtes-mct/monitor-ui'
 
-import { getNoPositionLabel } from './replayedPositionsStatus'
-
 import type { MainRootState } from '@store'
 
 /** Reads the cached queries of the displayed VMS and AIS vessels: no request is added. */
@@ -31,7 +29,7 @@ export const selectAreReplayedPositionsLoading = (state: MainRootState): boolean
 export const selectHaveReplayedPositionsFailed = (state: MainRootState): boolean => {
   const queries = selectReplayedQueries(state)
 
-  return !!queries && (queries.vms.isError || !!queries.ais?.isError)
+  return !!queries && queries.vms.isError
 }
 
 export const selectReplayedPositionsErrorMessage = (state: MainRootState): string | undefined => {
@@ -44,10 +42,9 @@ export const selectReplayedPositionsErrorMessage = (state: MainRootState): strin
     return 'Les positions n’ont pas pu être récupérées.'
   }
 
-  const noPositionLabel = getNoPositionLabel(queries.vms.data, queries.ais?.data)
-  if (!noPositionLabel) {
+  if (queries.vms.data?.length !== 0) {
     return undefined
   }
 
-  return `${noPositionLabel} le ${customDayjs(queries.dateTime).utc().format('DD/MM/YYYY à HH:mm')} UTC.`
+  return `Aucune position VMS le ${customDayjs(queries.dateTime).utc().format('DD/MM/YYYY à HH:mm')} UTC.`
 }

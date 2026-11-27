@@ -3,7 +3,6 @@ import {
   selectHaveReplayedPositionsFailed,
   selectReplayedPositionsErrorMessage
 } from '@features/PositionReplay/replayedPositionsQueries'
-import { selectAreAISVesselsFetched } from '@features/Vessel/hooks/useDisplayedAISVessels'
 import { vesselApi } from '@features/Vessel/vesselApi'
 import { useMainAppDispatch } from '@hooks/useMainAppDispatch'
 import { useMainAppSelector } from '@hooks/useMainAppSelector'
@@ -24,7 +23,6 @@ export function ReplayedPositionsErrorBanner({ dateTime, top }: ReplayedPosition
   const dispatch = useMainAppDispatch()
   const errorMessage = useMainAppSelector(selectReplayedPositionsErrorMessage)
   const haveFailed = useMainAppSelector(selectHaveReplayedPositionsFailed)
-  const areAISVesselsFetched = useMainAppSelector(selectAreAISVesselsFetched)
 
   if (!errorMessage) {
     return null
@@ -32,11 +30,6 @@ export function ReplayedPositionsErrorBanner({ dateTime, top }: ReplayedPosition
 
   const refetch = () => {
     void dispatch(vesselApi.endpoints.getVesselsAtDateTime.initiate(dateTime, { forceRefetch: true, subscribe: false }))
-    if (areAISVesselsFetched) {
-      void dispatch(
-        vesselApi.endpoints.getAISVesselsAtDateTime.initiate(dateTime, { forceRefetch: true, subscribe: false })
-      )
-    }
   }
 
   return (

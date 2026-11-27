@@ -161,7 +161,7 @@ context('Position replay', () => {
     cy.wait('@getReplayedVessels')
 
     // Then
-    cy.getDataCy('replayed-positions-error-banner').should('be.visible').contains('Aucune position le ')
+    cy.getDataCy('replayed-positions-error-banner').should('be.visible').contains('Aucune position VMS le ')
 
     // When
     cy.getDataCy('replayed-positions-error-banner').parents('.Component-Banner').find('.banner-button button').click()

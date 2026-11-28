@@ -11,7 +11,6 @@ object TestUtils {
                 id = 1,
                 name = "Préavis type 1",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -60,7 +59,6 @@ object TestUtils {
                 id = 2,
                 name = "Préavis type 2",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -105,7 +103,6 @@ object TestUtils {
                 id = 3,
                 name = "Préavis par pavillon",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -125,7 +122,6 @@ object TestUtils {
                 id = 4,
                 name = "Préavis par engin",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -145,7 +141,6 @@ object TestUtils {
                 id = 5,
                 name = "Préavis par engin et pavillon",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -165,7 +160,6 @@ object TestUtils {
                 id = 6,
                 name = "Préavis par espèce, fao et pavillon",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -185,7 +179,6 @@ object TestUtils {
                 id = 7,
                 name = "Préavis type 7",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(

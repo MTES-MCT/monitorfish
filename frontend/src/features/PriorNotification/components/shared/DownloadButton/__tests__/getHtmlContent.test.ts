@@ -149,11 +149,10 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         note: undefined,
         pnoTypes: [
           {
-            hasDesignatedPorts: false,
             minimumNotificationPeriod: 4,
             pnoTypeName: 'Préavis type A'
           },
-          { hasDesignatedPorts: true, minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
+          { minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
         ],
         port: 'FRVNE',
         portName: 'Vannes',
@@ -372,11 +371,10 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         note: undefined,
         pnoTypes: [
           {
-            hasDesignatedPorts: false,
             minimumNotificationPeriod: 4,
             pnoTypeName: 'Préavis type A'
           },
-          { hasDesignatedPorts: true, minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
+          { minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
         ],
         port: 'FRVNE',
         portName: 'Vannes',
@@ -570,13 +568,12 @@ describe('PriorNotificationCard/utils.getHtmlContent()', () => {
         longitude: undefined,
         note: undefined,
         pnoTypes: [
-          { hasDesignatedPorts: false, minimumNotificationPeriod: 0.5, pnoTypeName: 'Préavis 0' },
+          { minimumNotificationPeriod: 0.5, pnoTypeName: 'Préavis 0' },
           {
-            hasDesignatedPorts: false,
             minimumNotificationPeriod: 4,
             pnoTypeName: 'Préavis type A'
           },
-          { hasDesignatedPorts: true, minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
+          { minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
         ],
         port: 'FRVNE',
         portName: 'Vannes',

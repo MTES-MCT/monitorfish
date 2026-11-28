@@ -118,9 +118,7 @@ export function getPriorNotificationsFakeResponse({
         tripGears: [{ dimensions: null, gear: 'OTT', gearName: null, mesh: null }],
         tripNumber: null,
         tripSegments: [{ code: 'MED01', name: 'All Trawls 1' }],
-        types: [
-          { hasDesignatedPorts: false, isDurationClass: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }
-        ],
+        types: [{ isDurationClass: false, minimumNotificationPeriod: 4.0, name: 'Préavis type A' }],
         verificationReasons: [PnoVerificationReason.FOREIGN_FLAG_COUNTRY],
         vesselExternalReferenceNumber: 'EXTIMM121',
         vesselFlagCountryCode: 'FR',
@@ -237,7 +235,7 @@ export function getPriorNotificationFakeResponse({
         latitude: null,
         longitude: null,
         note: null,
-        pnoTypes: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4.0, pnoTypeName: 'Préavis type A' }],
+        pnoTypes: [{ minimumNotificationPeriod: 4.0, pnoTypeName: 'Préavis type A' }],
         port: 'FRMRS',
         portName: 'Marseille',
         predictedArrivalDatetimeUtc: expectedArrivalDate,

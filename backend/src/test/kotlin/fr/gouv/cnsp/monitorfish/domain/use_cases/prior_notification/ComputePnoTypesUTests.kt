@@ -288,7 +288,6 @@ class ComputePnoTypesUTests {
                 id = 8,
                 name = "Préavis sans règle",
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = true,
                 pnoTypeRules =
                     listOf(
                         PnoTypeRule(
@@ -409,7 +408,6 @@ class ComputePnoTypesUTests {
                 id = index + 1,
                 name = name,
                 minimumNotificationPeriod = 4.0,
-                hasDesignatedPorts = false,
                 pnoTypeRules = listOf(rule.copy(id = index + 1)),
             )
         }

@@ -6,7 +6,7 @@ import ora from 'ora'
 import postgres from 'postgres'
 
 const BATCH_SIZE = 1000
-const BATCH_SKELETON = new Array(BATCH_SIZE).fill(null)
+const BATCH_SKELETON = Array.from({ length: BATCH_SIZE }, () => null)
 const START_DATE = dayjs().subtract(6, 'months').toDate()
 const END_DATE = dayjs().add(6, 'months').toDate()
 
@@ -86,7 +86,6 @@ function getFakePnoLogbookReports(index) {
         ],
         pnoTypes: [
           {
-            hasDesignatedPorts: false,
             minimumNotificationPeriod: 4,
             pnoTypeName: 'Préavis type Z'
           }

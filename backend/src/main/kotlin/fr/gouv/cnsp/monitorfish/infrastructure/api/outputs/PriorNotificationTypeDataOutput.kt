@@ -4,7 +4,6 @@ import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PnoType
 import fr.gouv.cnsp.monitorfish.domain.entities.prior_notification.PriorNotificationType
 
 class PriorNotificationTypeDataOutput(
-    val hasDesignatedPorts: Boolean,
     val isDurationClass: Boolean,
     val minimumNotificationPeriod: Double,
     val name: String,
@@ -12,7 +11,6 @@ class PriorNotificationTypeDataOutput(
     companion object {
         fun fromPriorNotificationType(priorNotificationType: PriorNotificationType): PriorNotificationTypeDataOutput =
             PriorNotificationTypeDataOutput(
-                hasDesignatedPorts = priorNotificationType.hasDesignatedPorts,
                 isDurationClass = priorNotificationType.isDurationClass,
                 minimumNotificationPeriod = priorNotificationType.minimumNotificationPeriod,
                 name = priorNotificationType.name ?: "Type de préavis inconnu",
@@ -20,7 +18,6 @@ class PriorNotificationTypeDataOutput(
 
         fun fromPnoType(pnoType: PnoType): PriorNotificationTypeDataOutput =
             PriorNotificationTypeDataOutput(
-                hasDesignatedPorts = pnoType.hasDesignatedPorts,
                 isDurationClass = pnoType.isDurationClass,
                 minimumNotificationPeriod = pnoType.minimumNotificationPeriod,
                 name = pnoType.name,

@@ -142,7 +142,6 @@ export namespace PriorNotification {
   }
 
   export type Type = {
-    hasDesignatedPorts: boolean
     /** `true` for types only describing the trip duration class (ex: "Marée < 24h"). */
     isDurationClass: boolean
     minimumNotificationPeriod: number

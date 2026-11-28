@@ -28,7 +28,7 @@ const PRIOR_NOTIFICATION = {
   tripGears: [{ gear: 'OTB' }, { gear: 'OTB' }, { gear: 'GNS' }] as Logbook.Gear[],
   tripNumber: '20260042',
   tripSegments: [{ code: 'SWW01', name: 'Segment' }],
-  types: [{ hasDesignatedPorts: false, minimumNotificationPeriod: 4, name: 'Préavis type A' }],
+  types: [{ minimumNotificationPeriod: 4, name: 'Préavis type A' }],
   vesselFlagCountryCode: 'FR'
 } as PriorNotification.PriorNotification
 

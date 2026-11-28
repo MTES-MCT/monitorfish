@@ -139,11 +139,10 @@ export const correctedPNOMessage: Logbook.PnoMessage = {
     note: undefined,
     pnoTypes: [
       {
-        hasDesignatedPorts: false,
         minimumNotificationPeriod: 4,
         pnoTypeName: 'Préavis type A'
       },
-      { hasDesignatedPorts: true, minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
+      { minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
     ],
     port: 'AEJAZ',
     portName: 'Al Jazeera Port',
@@ -707,11 +706,10 @@ export const dummyLogbookMessages: Logbook.Message[] = [
       note: undefined,
       pnoTypes: [
         {
-          hasDesignatedPorts: false,
           minimumNotificationPeriod: 4,
           pnoTypeName: 'Préavis type A'
         },
-        { hasDesignatedPorts: true, minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
+        { minimumNotificationPeriod: 8, pnoTypeName: 'Préavis type B' }
       ],
       port: 'AEJAZ',
       portName: 'Al Jazeera Port',

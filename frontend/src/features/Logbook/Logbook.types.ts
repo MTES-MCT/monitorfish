@@ -307,7 +307,6 @@ export namespace Logbook {
   }
 
   export type MessagePnoType = {
-    hasDesignatedPorts: boolean
     /** Absent from legacy messages. */
     isDurationClass?: boolean
     minimumNotificationPeriod: number
